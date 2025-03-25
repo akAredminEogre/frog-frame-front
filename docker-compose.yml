@@ -7,5 +7,7 @@ services:
     volumes:
       - ./host-frontend-root:/opt/frontend-container-app-root/
     environment:
-      - HOST=localhost
+      - HOST=0.0.0.0
+      - CHROME_WS_HOST=host.docker.internal
+      - CHROME_WS_PORT=3000
     network_mode: host
