@@ -7,7 +7,7 @@ export default defineConfig({
   manifest: {
     permissions: ['contextMenus', 'storage'],
     content_security_policy: {
-      extension_pages: "script-src 'self' 'unsafe-eval'; object-src 'self'"
+      extension_pages: "script-src 'self'; object-src 'self'"
     }
   },
   dev: {
