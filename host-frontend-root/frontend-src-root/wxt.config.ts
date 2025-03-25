@@ -9,7 +9,7 @@ export default defineConfig({
   },
   dev: {
     server: {
-      hostname: 'localhost',
+      hostname: '0.0.0.0',
       port: 3000,
     }
   },
@@ -18,7 +18,7 @@ export default defineConfig({
   },
   vite:() =>  ({
     server: {
-      host: 'localhost',
+      host: '0.0.0.0',
       port: 3000,
       strictPort: true, 
       hmr: {

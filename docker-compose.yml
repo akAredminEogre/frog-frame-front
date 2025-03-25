@@ -7,5 +7,5 @@ services:
     volumes:
       - ./host-frontend-root:/opt/frontend-container-app-root/
     environment:
-      - HOST=localhost
-    network_mode: host
+      - HOST=0.0.0.0
+    network_mode: bridge
