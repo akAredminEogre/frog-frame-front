@@ -6,6 +6,9 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   manifest: {
     permissions: ['contextMenus', 'storage'],
+    content_security_policy: {
+      extension_pages: "script-src 'self' 'unsafe-eval'; object-src 'self'"
+    }
   },
   dev: {
     server: {
