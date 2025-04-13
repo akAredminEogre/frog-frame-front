@@ -47,14 +47,14 @@ export default defineContentScript({
         return;
       }
       // itemsの形: { [id]: { id, pattern, newText, ... }, ... }
-      const ruleList = Object.values(items);
-      if (!ruleList.length) {
+      const rewriteRules = Object.values(items);
+      if (!rewriteRules.length) {
         console.log('[content] No rewrite rules found.');
         return;
       }
 
       // URLパターンで絞り込む場合はここで window.location.href と比較するなど可能
-      ruleList.forEach((ruleObj) => {
+      rewriteRules.forEach((ruleObj) => {
         if (!ruleObj || typeof ruleObj !== 'object') return;
 
         const { pattern, newText } = ruleObj as {
