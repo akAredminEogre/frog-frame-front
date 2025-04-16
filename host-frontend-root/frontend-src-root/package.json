@@ -13,8 +13,7 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
-    "postinstall": "wxt prepare",
-    "eslint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "postinstall": "wxt prepare"
   },
   "dependencies": {
     "react": "^18.3.1",
