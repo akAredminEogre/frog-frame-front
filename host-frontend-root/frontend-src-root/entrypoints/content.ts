@@ -108,7 +108,7 @@ export default defineContentScript({
       // 3) ポップアップからの書き換えルール適用メッセージを受信
       else if (request.type === 'applyRewriteRule') {
         const { rule } = request;
-        if (rule && rule.pattern && rule.newText) {
+        if (rule && rule.pattern && rule.newText !== undefined && rule.newText !== null) {
           try {
             const regex = new RegExp(rule.pattern, 'g');
             replaceTextInNode(document.body, regex, rule.newText);

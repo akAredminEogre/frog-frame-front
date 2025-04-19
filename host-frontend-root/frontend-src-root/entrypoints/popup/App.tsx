@@ -46,7 +46,13 @@ function App() {
       alert('保存しました！');
 
       // ルールを適用するためにメッセージを送信
-      chrome.runtime.sendMessage({ type: 'applyRewriteRule', rule: ruleToSave });
+      chrome.runtime.sendMessage({ type: 'applyRewriteRule', rule: ruleToSave }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.error('Failed to send message:', chrome.runtime.lastError.message);
+        } else {
+          console.log('Message sent successfully:', response);
+        }
+      });
 
     } catch (error) {
       console.error('Failed to save:', error);
