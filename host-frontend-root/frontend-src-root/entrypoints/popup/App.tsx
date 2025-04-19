@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 /** 書き換えルールの型定義（暫定） */
@@ -44,10 +44,44 @@ function App() {
 
       // 簡易的な完了通知（ここでアラート）
       alert('保存しました！');
+
+      // ルールを適用するためにメッセージを送信
+      chrome.runtime.sendMessage({ type: 'applyRewriteRule', rule: ruleToSave }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.error('Failed to send message:', chrome.runtime.lastError.message);
+        } else {
+          console.log('Message sent successfully:', response);
+        }
+      });
+
     } catch (error) {
       console.error('Failed to save:', error);
     }
   };
+
+  /** ルールに基づいてDOMのテキストを置換する関数 */
+  const updateElements = (rule: RewriteRule) => {
+    const regex = new RegExp(rule.pattern, 'g');
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+    let textNode: Node | null;
+    while ((textNode = walker.nextNode())) {
+      const oldText = textNode.nodeValue;
+      if (oldText) {
+        const newText = oldText.replace(regex, rule.newText);
+        if (newText !== oldText) {
+          textNode.nodeValue = newText;
+        }
+      }
+    }
+  };
+
+  /** コンポーネントがマウントされたときにルールを適用 */
+  useEffect(() => {
+    chrome.storage.local.get(null, (items) => {
+      const rewriteRules = Object.values(items) as RewriteRule[];
+      rewriteRules.forEach(updateElements);
+    });
+  }, []);
 
   return (
     <div style={{ width: 300, padding: 10 }}>
