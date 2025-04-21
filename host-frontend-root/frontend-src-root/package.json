@@ -13,7 +13,7 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
-    "postinstall": "wxt prepare"
+    "postinstall": "echo 'Skipping wxt prepare during build process'"
   },
   "dependencies": {
     "react": "^18.3.1",
