@@ -1,10 +1,12 @@
-FROM node:23.0-alpine3.19
+FROM node:23.11-alpine
 
 WORKDIR /opt/frontend-container-app-root/frontend-src-root
 
 # Chromiumのインストール
 RUN apk add --no-cache \
-  chromium
+  chromium \
+  && apk add --no-cache \
+  curl
 
 COPY ./host-frontend-root/frontend-src-root/package*.json ./
 
