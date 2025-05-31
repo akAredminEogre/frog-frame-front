@@ -42,20 +42,42 @@ function App() {
       // フォームをリセット
       setRewriteRule({ newText: '', pattern: '' });
 
-      // 簡易的な完了通知（ここでアラート）
-      alert('保存しました！');
-
-      // ルールを適用するためにメッセージを送信
-      chrome.runtime.sendMessage({ type: 'applyRewriteRule', rule: ruleToSave }, (response) => {
-        if (chrome.runtime.lastError) {
-          console.error('Failed to send message:', chrome.runtime.lastError.message);
+      // 現在アクティブなタブにメッセージを送信して即時に変更を反映
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
+        if (tabs[0]?.id) {
+          chrome.tabs.sendMessage(
+            tabs[0].id,
+            { type: 'applyRewriteRule', rule: ruleToSave },
+            (response: any) => {
+              if (chrome.runtime.lastError) {
+                console.error('Failed to send message to tab:', chrome.runtime.lastError.message);
+              } else {
+                console.log('Rule applied to current tab:', response);
+              }
+              
+              // 簡易的な完了通知（ここでアラート）
+              alert('保存して適用しました！');
+            }
+          );
         } else {
-          console.log('Message sent successfully:', response);
+          console.error('No active tab found');
+          // タブが見つからない場合でも保存は完了しているのでアラート表示
+          alert('保存しました！（現在のタブへの適用に失敗しました）');
+        }
+      });
+
+      // バックグラウンドスクリプトにも通知（他のタブなど用）
+      chrome.runtime.sendMessage({ type: 'applyRewriteRule', rule: ruleToSave }, (response: any) => {
+        if (chrome.runtime.lastError) {
+          console.error('Failed to send message to background:', chrome.runtime.lastError.message);
+        } else {
+          console.log('Message sent to background successfully:', response);
         }
       });
 
     } catch (error) {
       console.error('Failed to save:', error);
+      alert('保存に失敗しました。');
     }
   };
 
@@ -77,7 +99,7 @@ function App() {
 
   /** コンポーネントがマウントされたときにルールを適用 */
   useEffect(() => {
-    chrome.storage.local.get(null, (items) => {
+    chrome.storage.local.get(null, (items: Record<string, any>) => {
       const rewriteRules = Object.values(items) as RewriteRule[];
       rewriteRules.forEach(updateElements);
     });
