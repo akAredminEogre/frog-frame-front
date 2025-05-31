@@ -3,8 +3,8 @@
     "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "types": [
-      "vitest/globals",
-      "chrome"
+      "chrome",
+      "vitest/globals"
     ]
   }
 }
