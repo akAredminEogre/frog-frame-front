@@ -6,6 +6,8 @@ services:
     tty: true
     volumes:
       - ./host-frontend-root:/opt/frontend-container-app-root/
+      - ./fix-permissions.sh:/fix-permissions.sh
     environment:
       - HOST=localhost
     network_mode: host
+    entrypoint: ["/bin/sh", "-c", "/fix-permissions.sh && /bin/sh"]
