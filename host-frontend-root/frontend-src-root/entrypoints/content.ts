@@ -34,7 +34,9 @@ function replaceTextInNode(root: Node, pattern: RegExp, replacement: string) {
 }
 
 export default defineContentScript({
-  matches: ['https://qiita.com/akAredminEogre/items/73b97b12ee5db94552af'],
+  matches: ['https://qiita.com/*'],
+  // ベースのマッチングはQiitaのままにしておき、他のURLでも動作するようにする
+  // バックグラウンドスクリプトで動的に他のURLにも挿入される
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
   main() {
@@ -57,11 +59,22 @@ export default defineContentScript({
       rewriteRules.forEach((ruleObj) => {
         if (!ruleObj || typeof ruleObj !== 'object') return;
 
-        const { pattern, newText } = ruleObj as {
+        const { pattern, newText, urlPattern } = ruleObj as {
           pattern?: string;
           newText?: string;
+          urlPattern?: string;
         };
         if (!pattern || !newText) return; // 必要情報が無い場合はスキップ
+
+        // URLパターンがある場合は、現在のURLと前方一致で比較
+        if (urlPattern) {
+          const currentUrl = window.location.href;
+          // 前方一致チェック
+          if (!currentUrl.startsWith(urlPattern)) {
+            // URLが一致しない場合はこのルールを適用しない
+            return;
+          }
+        }
 
         try {
           // 大文字小文字を区別しない場合は 'gi' など適宜指定
@@ -109,10 +122,21 @@ export default defineContentScript({
       else if (request.type === 'applyRewriteRule') {
         const { rule } = request;
         if (rule && rule.pattern && rule.newText !== undefined && rule.newText !== null) {
+          // URLパターンがある場合、現在のURLと照合
+          if (rule.urlPattern) {
+            const currentUrl = window.location.href;
+            // 前方一致チェック
+            if (!currentUrl.startsWith(rule.urlPattern)) {
+              sendResponse({ success: false, reason: 'URL pattern mismatch' });
+              return false;
+            }
+          }
+          
           try {
             const regex = new RegExp(rule.pattern, 'g');
             replaceTextInNode(document.body, regex, rule.newText);
             console.log(`[content] Applied rewrite rule: /${rule.pattern}/g → "${rule.newText}"`);
+            sendResponse({ success: true });
           } catch (err) {
             console.warn('[content] Invalid pattern or error:', rule.pattern, err);
           }

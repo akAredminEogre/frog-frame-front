@@ -7,6 +7,7 @@ type RewriteRule = {
   id?: string;   // UUIDなど一意識別子
   newText: string;
   pattern: string;
+  urlPattern?: string; // URLの前方一致パターン
 };
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
   const [rewriteRule, setRewriteRule] = useState<RewriteRule>({
     newText: '',
     pattern: '',
+    urlPattern: '',
   });
 
   /** フォームの入力値を変更するハンドラ */
@@ -41,38 +43,73 @@ function App() {
       console.log('Saved rewrite rule:', ruleToSave);
 
       // フォームをリセット
-      setRewriteRule({ newText: '', pattern: '' });
+      setRewriteRule({ newText: '', pattern: '', urlPattern: '' });
 
-      // 現在アクティブなタブにメッセージを送信して即時に変更を反映
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
-        if (tabs[0]?.id) {
-          chrome.tabs.sendMessage(
-            tabs[0].id,
-            { type: 'applyRewriteRule', rule: ruleToSave },
-            (response: any) => {
-              if (chrome.runtime.lastError) {
-                console.error('Failed to send message to tab:', chrome.runtime.lastError.message);
-              } else {
-                console.log('Rule applied to current tab:', response);
-              }
-              
-              // 簡易的な完了通知（ここでアラート）
-              alert('保存して適用しました！');
-            }
-          );
-        } else {
+      // 現在アクティブなタブの情報を取得
+      chrome.tabs.query({ active: true, currentWindow: true }, async (tabs: chrome.tabs.Tab[]) => {
+        const currentTab = tabs[0];
+        if (!currentTab?.id) {
           console.error('No active tab found');
-          // タブが見つからない場合でも保存は完了しているのでアラート表示
           alert('保存しました！（現在のタブへの適用に失敗しました）');
+          return;
         }
-      });
 
-      // バックグラウンドスクリプトにも通知（他のタブなど用）
-      chrome.runtime.sendMessage({ type: 'applyRewriteRule', rule: ruleToSave }, (response: any) => {
-        if (chrome.runtime.lastError) {
-          console.error('Failed to send message to background:', chrome.runtime.lastError.message);
+        const currentUrl = currentTab.url || '';
+        
+        // ルールで指定されたURLパターンと現在のURLを比較
+        let shouldApplyToCurrentTab = true;
+        if (ruleToSave.urlPattern && currentUrl) {
+          shouldApplyToCurrentTab = currentUrl.startsWith(ruleToSave.urlPattern);
+        }
+
+        if (shouldApplyToCurrentTab) {
+          // 現在のタブにルールを適用
+          try {
+            // まず、バックグラウンドスクリプトに通知して処理を依頼
+            await new Promise<void>((resolve) => {
+              chrome.runtime.sendMessage(
+                { 
+                  type: 'applyRewriteRule', 
+                  rule: ruleToSave,
+                  targetTabId: currentTab.id  // 対象タブIDを明示的に指定
+                }, 
+                (response: any) => {
+                  if (chrome.runtime.lastError) {
+                    console.error('Failed to send message to background:', chrome.runtime.lastError.message);
+                  }
+                  resolve();
+                }
+              );
+            });
+
+            // 次に、コンテンツスクリプトに直接メッセージを送信（currentTab.idは既にnullチェック済み）
+            await new Promise<void>((resolve) => {
+              if (currentTab.id) {
+                chrome.tabs.sendMessage(
+                  currentTab.id,
+                  { type: 'applyRewriteRule', rule: ruleToSave },
+                  (response: any) => {
+                    if (chrome.runtime.lastError) {
+                      // コンテンツスクリプトがまだロードされていない場合は正常
+                    }
+                    resolve();
+                  }
+                );
+              } else {
+                console.error('Tab ID is unexpectedly undefined');
+                resolve(); // 解決してループを続行
+              }
+            });
+
+            // 完了通知
+            alert('保存して適用しました！');
+          } catch (error) {
+            console.error('Error applying rule:', error);
+            alert('保存しましたが、適用中にエラーが発生しました。');
+          }
         } else {
-          console.log('Message sent to background successfully:', response);
+          // URLパターンが一致しない場合
+          alert('保存しました！（現在のURLにはパターンが一致しないため適用されません）');
         }
       });
 
@@ -134,6 +171,23 @@ function App() {
             style={{ marginLeft: 4 }}
           />
         </label>
+      </div>
+
+      <div style={{ marginBottom: 8 }}>
+        <label>
+          URLパターン (前方一致):
+          <input
+            type="text"
+            name="urlPattern"
+            value={rewriteRule.urlPattern}
+            onChange={handleChange}
+            style={{ marginLeft: 4 }}
+            placeholder="例: https://qiita.com/"
+          />
+        </label>
+        <div style={{ fontSize: '0.8em', color: '#666', marginTop: 2 }}>
+          ※ URLを指定することで任意のサイトで適用できます
+        </div>
       </div>
 
       <button onClick={handleSave}>保存</button>
