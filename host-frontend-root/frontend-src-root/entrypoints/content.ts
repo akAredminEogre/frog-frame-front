@@ -40,7 +40,6 @@ export default defineContentScript({
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
   main() {
-    console.log('Hello content. (from wxt defineContentScript hmr dev)');
 
     // ---- A) ページ再訪問時の書き換えロジック ----
     chrome.storage.local.get(null, (items) => {
@@ -78,12 +77,8 @@ export default defineContentScript({
           // 大文字小文字を区別しない場合は 'gi' など適宜指定
           const regex = new RegExp(pattern, 'g');
           replaceTextInNode(document.body, regex, newText);
-
-          console.log(
-            `[content] Rewrote texts matching /${pattern}/g → "${newText}"`
-          );
         } catch (err) {
-          console.warn('[content] Invalid pattern or error:', pattern, err);
+          // エラーは無視
         }
       });
     });
@@ -94,8 +89,7 @@ export default defineContentScript({
       if (request.type === 'getPageInfo') {
         const title = document.title;
         const firstH1 = document.querySelector('h1')?.textContent || '(no <h1> found)';
-        console.log('contentScript: getPageInfo request received. Returning data...');
-
+        
         sendResponse({
           title,
           firstH1,
@@ -105,13 +99,10 @@ export default defineContentScript({
 
         // 2) 「この要素を登録」メニューから呼ばれた場合
       else if (request.type === 'registerElement') {
-        console.log('[contentScript] Received "registerElement":', request.info);
-
         // ドラッグ選択したテキストがある場合、選択範囲のHTMLを取得して返す
         const { selectionText } = request.info;
         if (selectionText) {
           const selectedHtml = getSelectedHtml();
-          console.log('[contentScript] selected HTML:', selectedHtml);
           sendResponse({ selectedHtml });
         }
       }
@@ -133,10 +124,9 @@ export default defineContentScript({
           try {
             const regex = new RegExp(rule.pattern, 'g');
             replaceTextInNode(document.body, regex, rule.newText);
-            console.log(`[content] Applied rewrite rule: /${rule.pattern}/g → "${rule.newText}"`);
             sendResponse({ success: true });
           } catch (err) {
-            console.warn('[content] Invalid pattern or error:', rule.pattern, err);
+            // エラーは無視
           }
         }
       }

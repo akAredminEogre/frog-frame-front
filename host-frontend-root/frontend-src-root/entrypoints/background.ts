@@ -109,8 +109,7 @@ export default defineBackground({
                           }
                           
                           replaceTextInNode(document.body, pattern, newText);
-                        } catch (err) {
-                        }
+                        } catch (err) { /* エラー処理は不要 */ }
                       });
                     });
                   }
@@ -207,15 +206,11 @@ export default defineBackground({
                       if (replaceCount > 0) {
                         appliedRulesCount++;
                       }
-                    } catch (err) {
-                    }
+                    } catch (err) { /* エラー処理は不要 */ }
                   });
                 });
               }
-            }).catch(err => {
-            });
-          } else {
-            // No matching rules for this URL
+            }).catch(err => { /* エラー処理は不要 */ });
           }
         });
       }
