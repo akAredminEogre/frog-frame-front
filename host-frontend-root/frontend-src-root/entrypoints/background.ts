@@ -84,7 +84,6 @@ export default defineBackground({
                           }
                         }
                         
-                        try {
                           // テキスト置換を行う
                           
                           // DOMツリーを走査し、テキストノードを正規表現で置換する関数
@@ -109,7 +108,6 @@ export default defineBackground({
                           }
                           
                           replaceTextInNode(document.body, pattern, newText);
-                        } catch (err) { /* エラー処理は不要 */ }
                       });
                     });
                   }
@@ -178,7 +176,6 @@ export default defineBackground({
                       return;
                     }
                     
-                    try {
                       // DOMツリーを走査し、テキストノードを正規表現で置換する関数
                       function replaceTextInNode(root: Node, pattern: string, replacement: string): number {
                         const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
@@ -206,7 +203,6 @@ export default defineBackground({
                       if (replaceCount > 0) {
                         appliedRulesCount++;
                       }
-                    } catch (err) { /* エラー処理は不要 */ }
                   });
                 });
               }
