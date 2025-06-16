@@ -34,22 +34,21 @@ function replaceTextInNode(root: Node, pattern: RegExp, replacement: string) {
 }
 
 export default defineContentScript({
-  matches: ['https://qiita.com/akAredminEogre/items/73b97b12ee5db94552af'],
+  matches: ['https://qiita.com/*'],
+  // ベースのマッチングはQiitaのままにしておき、他のURLでも動作するようにする
+  // バックグラウンドスクリプトで動的に他のURLにも挿入される
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
   main() {
-    console.log('Hello content. (from wxt defineContentScript hmr dev)');
 
     // ---- A) ページ再訪問時の書き換えロジック ----
     chrome.storage.local.get(null, (items) => {
       if (chrome.runtime.lastError) {
-        console.error('Failed to get storage:', chrome.runtime.lastError);
         return;
       }
       // itemsの形: { [id]: { id, pattern, newText, ... }, ... }
       const rewriteRules = Object.values(items);
       if (!rewriteRules.length) {
-        console.log('[content] No rewrite rules found.');
         return;
       }
 
@@ -57,23 +56,26 @@ export default defineContentScript({
       rewriteRules.forEach((ruleObj) => {
         if (!ruleObj || typeof ruleObj !== 'object') return;
 
-        const { pattern, newText } = ruleObj as {
+        const { pattern, newText, urlPattern } = ruleObj as {
           pattern?: string;
           newText?: string;
+          urlPattern?: string;
         };
         if (!pattern || !newText) return; // 必要情報が無い場合はスキップ
 
-        try {
-          // 大文字小文字を区別しない場合は 'gi' など適宜指定
-          const regex = new RegExp(pattern, 'g');
-          replaceTextInNode(document.body, regex, newText);
-
-          console.log(
-            `[content] Rewrote texts matching /${pattern}/g → "${newText}"`
-          );
-        } catch (err) {
-          console.warn('[content] Invalid pattern or error:', pattern, err);
+        // URLパターンがある場合は、現在のURLと前方一致で比較
+        if (urlPattern) {
+          const currentUrl = window.location.href;
+          // 前方一致チェック
+          if (!currentUrl.startsWith(urlPattern)) {
+            // URLが一致しない場合はこのルールを適用しない
+            return;
+          }
         }
+
+        // 大文字小文字を区別しない場合は 'gi' など適宜指定
+        const regex = new RegExp(pattern, 'g');
+        replaceTextInNode(document.body, regex, newText);
       });
     });
 
@@ -83,8 +85,7 @@ export default defineContentScript({
       if (request.type === 'getPageInfo') {
         const title = document.title;
         const firstH1 = document.querySelector('h1')?.textContent || '(no <h1> found)';
-        console.log('contentScript: getPageInfo request received. Returning data...');
-
+        
         sendResponse({
           title,
           firstH1,
@@ -94,13 +95,10 @@ export default defineContentScript({
 
         // 2) 「この要素を登録」メニューから呼ばれた場合
       else if (request.type === 'registerElement') {
-        console.log('[contentScript] Received "registerElement":', request.info);
-
         // ドラッグ選択したテキストがある場合、選択範囲のHTMLを取得して返す
         const { selectionText } = request.info;
         if (selectionText) {
           const selectedHtml = getSelectedHtml();
-          console.log('[contentScript] selected HTML:', selectedHtml);
           sendResponse({ selectedHtml });
         }
       }
@@ -109,13 +107,19 @@ export default defineContentScript({
       else if (request.type === 'applyRewriteRule') {
         const { rule } = request;
         if (rule && rule.pattern && rule.newText !== undefined && rule.newText !== null) {
-          try {
-            const regex = new RegExp(rule.pattern, 'g');
-            replaceTextInNode(document.body, regex, rule.newText);
-            console.log(`[content] Applied rewrite rule: /${rule.pattern}/g → "${rule.newText}"`);
-          } catch (err) {
-            console.warn('[content] Invalid pattern or error:', rule.pattern, err);
+          // URLパターンがある場合、現在のURLと照合
+          if (rule.urlPattern) {
+            const currentUrl = window.location.href;
+            // 前方一致チェック
+            if (!currentUrl.startsWith(rule.urlPattern)) {
+              sendResponse({ success: false, reason: 'URL pattern mismatch' });
+              return false;
+            }
           }
+          
+          const regex = new RegExp(rule.pattern, 'g');
+          replaceTextInNode(document.body, regex, rule.newText);
+          sendResponse({ success: true });
         }
       }
 
