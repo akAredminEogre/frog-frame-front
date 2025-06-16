@@ -30,7 +30,6 @@ function App() {
   /** 保存ボタンを押したとき、chrome.storage.localへ書き込み */
   const handleSave = async () => {
     try {
-      console.log('Saving rewrite rule:', rewriteRule);
       // 一意のID（UUID）を仮に発行
       const id = crypto.randomUUID();
 
@@ -40,8 +39,6 @@ function App() {
       // chrome.storage.localに保存
       await chrome.storage.local.set({ [id]: ruleToSave });
 
-      console.log('Saved rewrite rule:', ruleToSave);
-
       // フォームをリセット
       setRewriteRule({ newText: '', pattern: '', urlPattern: '' });
 
@@ -49,7 +46,6 @@ function App() {
       chrome.tabs.query({ active: true, currentWindow: true }, async (tabs: chrome.tabs.Tab[]) => {
         const currentTab = tabs[0];
         if (!currentTab?.id) {
-          console.error('No active tab found');
           alert('保存しました！（現在のタブへの適用に失敗しました）');
           return;
         }
@@ -75,7 +71,7 @@ function App() {
                 }, 
                 (response: any) => {
                   if (chrome.runtime.lastError) {
-                    console.error('Failed to send message to background:', chrome.runtime.lastError.message);
+                    // エラーは無視
                   }
                   resolve();
                 }
@@ -96,7 +92,7 @@ function App() {
                   }
                 );
               } else {
-                console.error('Tab ID is unexpectedly undefined');
+                // ここに到達することはないはず（前のチェックでID存在確認済み）
                 resolve(); // 解決してループを続行
               }
             });
@@ -104,7 +100,6 @@ function App() {
             // 完了通知
             alert('保存して適用しました！');
           } catch (error) {
-            console.error('Error applying rule:', error);
             alert('保存しましたが、適用中にエラーが発生しました。');
           }
         } else {
@@ -114,7 +109,6 @@ function App() {
       });
 
     } catch (error) {
-      console.error('Failed to save:', error);
       alert('保存に失敗しました。');
     }
   };
