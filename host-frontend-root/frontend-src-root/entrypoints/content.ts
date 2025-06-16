@@ -73,13 +73,9 @@ export default defineContentScript({
           }
         }
 
-        try {
-          // 大文字小文字を区別しない場合は 'gi' など適宜指定
-          const regex = new RegExp(pattern, 'g');
-          replaceTextInNode(document.body, regex, newText);
-        } catch (err) {
-          // エラーは無視
-        }
+        // 大文字小文字を区別しない場合は 'gi' など適宜指定
+        const regex = new RegExp(pattern, 'g');
+        replaceTextInNode(document.body, regex, newText);
       });
     });
 
@@ -121,13 +117,9 @@ export default defineContentScript({
             }
           }
           
-          try {
-            const regex = new RegExp(rule.pattern, 'g');
-            replaceTextInNode(document.body, regex, rule.newText);
-            sendResponse({ success: true });
-          } catch (err) {
-            // エラーは無視
-          }
+          const regex = new RegExp(rule.pattern, 'g');
+          replaceTextInNode(document.body, regex, rule.newText);
+          sendResponse({ success: true });
         }
       }
 
