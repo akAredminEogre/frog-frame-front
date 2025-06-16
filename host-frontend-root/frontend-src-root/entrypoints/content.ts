@@ -45,13 +45,11 @@ export default defineContentScript({
     // ---- A) ページ再訪問時の書き換えロジック ----
     chrome.storage.local.get(null, (items) => {
       if (chrome.runtime.lastError) {
-        console.error('Failed to get storage:', chrome.runtime.lastError);
         return;
       }
       // itemsの形: { [id]: { id, pattern, newText, ... }, ... }
       const rewriteRules = Object.values(items);
       if (!rewriteRules.length) {
-        console.log('[content] No rewrite rules found.');
         return;
       }
 

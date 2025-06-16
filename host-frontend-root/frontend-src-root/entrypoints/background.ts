@@ -15,7 +15,6 @@ export default defineBackground({
     const injectContentScriptsBasedOnRules = () => {
       chrome.storage.local.get(null, (items) => {
         if (chrome.runtime.lastError) {
-          console.error('[background] Failed to get storage:', chrome.runtime.lastError);
           return;
         }
 
@@ -58,7 +57,6 @@ export default defineBackground({
                     // ストレージからルールを取得して適用する
                     chrome.storage.local.get(null, (items) => {
                       if (chrome.runtime.lastError) {
-                        console.error('Failed to get storage:', chrome.runtime.lastError);
                         return;
                       }
                       
@@ -112,7 +110,6 @@ export default defineBackground({
                           
                           replaceTextInNode(document.body, pattern, newText);
                         } catch (err) {
-                          console.error('Error applying rule:', err);
                         }
                       });
                     });
@@ -142,7 +139,6 @@ export default defineBackground({
         // URLパターンに基づいて保存されたルールを確認
         chrome.storage.local.get(null, (items) => {
           if (chrome.runtime.lastError) {
-            console.error('[background] Failed to get storage:', chrome.runtime.lastError);
             return;
           }
           
@@ -163,7 +159,6 @@ export default defineBackground({
                 // ストレージからルールを取得して適用する
                 chrome.storage.local.get(null, (items) => {
                   if (chrome.runtime.lastError) {
-                    console.error('Failed to get storage:', chrome.runtime.lastError);
                     return;
                   }
                   
@@ -213,13 +208,11 @@ export default defineBackground({
                         appliedRulesCount++;
                       }
                     } catch (err) {
-                      console.error('Error applying rule:', err);
                     }
                   });
                 });
               }
             }).catch(err => {
-              console.error(`[background] Error injecting script on tab reload: ${err}`);
             });
           } else {
             // No matching rules for this URL
