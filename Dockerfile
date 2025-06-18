@@ -1,14 +1,17 @@
-FROM node:23.11-alpine
+FROM node:22-bookworm-slim
 
 WORKDIR /opt/frontend-container-app-root/frontend-src-root
 
-# Chromiumのインストール
-RUN apk add --no-cache \
+# 必要なパッケージを apt でインストール
+RUN apt-get update && \
+  apt-get install -y \
+  # Chromium 本体（Playwright等の E2E テスト用）
   chromium \
-  && apk add --no-cache \
+  # HTTP クライアント
   curl \
-  && apk add --no-cache \
-  sudo
+  # sudo 権限付与用ツール
+  sudo \
+  && rm -rf /var/lib/apt/lists/*
 
 COPY ./host-frontend-root/frontend-src-root/package*.json ./
 
