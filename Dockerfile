@@ -21,8 +21,15 @@ COPY ./host-frontend-root/frontend-src-root /opt/frontend-container-app-root/fro
 
 RUN npx wxt prepare
 
-# ビルド時に権限を設定
-RUN chown -R 1000:1000 /opt/frontend-container-app-root/frontend-src-root
+# ノードユーザーのUIDとGIDをホストの一般的なユーザーIDに変更
+RUN usermod -u 1000 node && groupmod -g 1000 node
+
+# ディレクトリの所有権を明示的に設定
+RUN chown -R node:node /opt/frontend-container-app-root
 
 # コンテナが起動するユーザーに sudo 権限を付与
-RUN echo 'node ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/node
+RUN echo 'node ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/node \
+    && chmod 0440 /etc/sudoers.d/node
+
+# nodeユーザーで実行
+USER node
