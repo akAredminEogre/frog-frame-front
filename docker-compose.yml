@@ -10,4 +10,4 @@ services:
     environment:
       - HOST=localhost
     network_mode: host
-    entrypoint: ["/bin/sh", "-c", "/fix-permissions.sh && /bin/sh"]
+    entrypoint: ["/bin/sh", "-c", "chmod +x /fix-permissions.sh && /fix-permissions.sh && /bin/sh"]
