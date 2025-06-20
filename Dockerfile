@@ -14,7 +14,6 @@ RUN apt-get update && \
   && rm -rf /var/lib/apt/lists/*
 
 COPY ./host-frontend-root/frontend-src-root/package*.json ./
-
 RUN npm install
 
 COPY ./host-frontend-root/frontend-src-root /opt/frontend-container-app-root/frontend-src-root
@@ -31,5 +30,9 @@ RUN chown -R node:node /opt/frontend-container-app-root
 RUN echo 'node ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/node \
     && chmod 0440 /etc/sudoers.d/node
 
-# nodeユーザーで実行
+# Playwright 本体とテストランナーをインストール
 USER node
+RUN npm install -D @playwright/test
+
+# Playwright が動作するためのブラウザと依存ライブラリを一括インストール
+RUN npx playwright install --with-deps
