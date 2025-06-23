@@ -1,4 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+// ESモジュールで__dirnameの代替を作成
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   // Playwright のテストを置くディレクトリ
@@ -18,11 +24,12 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        headless: false,
+        headless: true,
+        channel: 'chromium',
         launchOptions: {
           args: [
-            `--disable-extensions-except=${process.cwd()}/.output/chrome-mv3-dev`,
-            `--load-extension=${process.cwd()}/.output/chrome-mv3-dev`
+            `--disable-extensions-except=${path.resolve(__dirname, '.output/chrome-mv3-dev')}`,
+            `--load-extension=${path.resolve(__dirname, '.output/chrome-mv3-dev')}`
           ]
         }
       },
