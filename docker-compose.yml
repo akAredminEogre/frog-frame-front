@@ -10,4 +10,5 @@ services:
     environment:
       - HOST=localhost
     network_mode: host
+    ipc: host  # Playwrightのためのipc共有設定
     entrypoint: ["/bin/sh", "-c", "chmod +x /fix-permissions.sh && /fix-permissions.sh && /bin/sh"]
