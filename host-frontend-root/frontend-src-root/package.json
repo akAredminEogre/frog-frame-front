@@ -10,16 +10,19 @@
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
     "test": "vitest",
+    "test:e2e": "playwright test",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
-    "postinstall": "echo 'Skipping wxt prepare during build process'"
+    "postinstall": "echo 'Skipping wxt prepare during build process'",
+    "playwright:install": "npx playwright install --with-deps"
   },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.53.1",
     "@types/chrome": "^0.0.326",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
