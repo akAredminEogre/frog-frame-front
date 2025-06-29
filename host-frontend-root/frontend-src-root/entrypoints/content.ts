@@ -34,9 +34,9 @@ function replaceTextInNode(root: Node, pattern: RegExp, replacement: string) {
 }
 
 export default defineContentScript({
-  matches: ['https://qiita.com/*'],
-  // ベースのマッチングはQiitaのままにしておき、他のURLでも動作するようにする
-  // バックグラウンドスクリプトで動的に他のURLにも挿入される
+  matches: process.env.NODE_ENV === 'development' 
+    ? ['https://qiita.com/*']  // 開発時は特定URLのみ（リロード負荷を軽減）
+    : ['*://*/*'],             // 本番時は全URL対応
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
   main() {
