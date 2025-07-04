@@ -13,25 +13,7 @@ function getSelectedHtml(): string {
   return container.innerHTML;
 }
 
-/**
- * DOMツリーを走査し、テキストノードを正規表現で置換する関数
- * @param root     ルートノード (例: document.body)
- * @param pattern  置換対象の正規表現
- * @param replacement  置換後の文字列
- */
-function replaceTextInNode(root: Node, pattern: RegExp, replacement: string) {
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
-  let textNode: Node | null;
-  while ((textNode = walker.nextNode())) {
-    const oldText = textNode.nodeValue;
-    if (oldText) {
-      const newText = oldText.replace(pattern, replacement);
-      if (newText !== oldText) {
-        textNode.nodeValue = newText;
-      }
-    }
-  }
-}
+import { replaceTextInNode } from '../utils/domUtils';
 
 export default defineContentScript({
   matches: process.env.NODE_ENV === 'development' 
