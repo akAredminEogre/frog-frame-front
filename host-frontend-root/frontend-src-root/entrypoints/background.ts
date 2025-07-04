@@ -1,3 +1,5 @@
+import { replaceTextInNode } from '../utils/domUtils';
+
 // 書き換えルールの型定義
 type RewriteRule = {
   id?: string;
@@ -85,28 +87,6 @@ export default defineBackground({
                         }
                         
                           // テキスト置換を行う
-                          
-                          // DOMツリーを走査し、テキストノードを正規表現で置換する関数
-                          function replaceTextInNode(root: Node, pattern: string, replacement: string): number {
-                            const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
-                            let textNode: Node | null;
-                            let replaceCount = 0;
-                            
-                            while ((textNode = walker.nextNode())) {
-                              const oldText = textNode.nodeValue;
-                              if (oldText) {
-                                const regex = new RegExp(pattern, 'g');
-                                const newText = oldText.replace(regex, replacement);
-                                if (newText !== oldText) {
-                                  textNode.nodeValue = newText;
-                                  replaceCount++;
-                                }
-                              }
-                            }
-                            
-                            return replaceCount;
-                          }
-                          
                           replaceTextInNode(document.body, pattern, newText);
                       });
                     });
@@ -176,28 +156,6 @@ export default defineBackground({
                       return;
                     }
                     
-                      // DOMツリーを走査し、テキストノードを正規表現で置換する関数
-                      function replaceTextInNode(root: Node, pattern: string, replacement: string): number {
-                        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
-                        let textNode: Node | null;
-                        let replaceCount = 0;
-                        
-                        while ((textNode = walker.nextNode())) {
-                          const oldText = textNode.nodeValue;
-                          if (oldText) {
-                            const regex = new RegExp(pattern, 'g');
-                            const newText = oldText.replace(regex, replacement);
-                            if (newText !== oldText) {
-                              textNode.nodeValue = newText;
-                              replaceCount++;
-                            }
-                          }
-                        }
-                        
-                        return replaceCount;
-                      }
-                      
-                      const regex = new RegExp(pattern, 'g');
                       const replaceCount = replaceTextInNode(document.body, pattern, newText);
                       
                       if (replaceCount > 0) {
@@ -261,27 +219,6 @@ export default defineBackground({
             chrome.scripting.executeScript({
               target: { tabId },
               func: (rule) => {
-                
-                // DOMツリーを走査し、テキストノードを正規表現で置換する関数
-                function replaceTextInNode(root: Node, pattern: string, replacement: string): number {
-                  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
-                  let textNode: Node | null;
-                  let replaceCount = 0;
-                  
-                  while ((textNode = walker.nextNode())) {
-                    const oldText = textNode.nodeValue;
-                    if (oldText) {
-                      const regex = new RegExp(pattern, 'g');
-                      const newText = oldText.replace(regex, replacement);
-                      if (newText !== oldText) {
-                        textNode.nodeValue = newText;
-                        replaceCount++;
-                      }
-                    }
-                  }
-                  
-                  return replaceCount;
-                }
                 
                 try {
                   const { pattern, newText } = rule;
