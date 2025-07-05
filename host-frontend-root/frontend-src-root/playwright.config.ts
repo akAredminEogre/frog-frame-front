@@ -10,6 +10,9 @@ export default defineConfig({
   // Playwright のテストを置くディレクトリ
   testDir: './e2e',
 
+  // .spec.tsファイルのみを対象とする
+  testMatch: '**/*.spec.ts',
+
   // Vitest のテストフォルダを完全に無視
   // ※必要に応じて他のパターンも追加してください
   forbidOnly: !!process.env.CI,
