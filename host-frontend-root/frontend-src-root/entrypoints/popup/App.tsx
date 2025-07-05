@@ -131,20 +131,41 @@ function App() {
 
   /** コンポーネントがマウントされたときにルールを適用 */
   useEffect(() => {
-    // 現在のタブのURLを取得してurlPatternに設定
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]?.url) {
-        try {
-          const url = new URL(tabs[0].url);
+    const setUrlPattern = async () => {
+      try {
+        // E2Eテスト用にクエリパラメータからURLを取得
+        const queryParams = new URLSearchParams(window.location.search);
+        const testUrl = queryParams.get('url');
+
+        if (testUrl) {
+          // テスト用のURLが指定されている場合
+          const url = new URL(testUrl);
           setRewriteRule((prev) => ({
             ...prev,
             urlPattern: url.origin,
           }));
-        } catch (e) {
-          // URLのパースに失敗した場合は何もしない
+        } else {
+          // 通常の利用時：最後にフォーカスされたウィンドウからURLを取得
+          const window = await chrome.windows.getLastFocused({ populate: true, windowTypes: ['normal'] });
+          if (window && window.tabs) {
+            const activeTab = window.tabs.find(tab => tab.active);
+            if (activeTab?.url) {
+              const url = new URL(activeTab.url);
+              if (url.protocol === 'http:' || url.protocol === 'https:') {
+                setRewriteRule((prev) => ({
+                  ...prev,
+                  urlPattern: url.origin,
+                }));
+              }
+            }
+          }
         }
+      } catch (error) {
+        console.error('Error setting URL pattern:', error);
       }
-    });
+    };
+
+    setUrlPattern();
 
     chrome.storage.local.get(null, (items: Record<string, any>) => {
       const rewriteRules = Object.values(items) as RewriteRule[];
