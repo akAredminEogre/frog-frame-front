@@ -131,6 +131,21 @@ function App() {
 
   /** コンポーネントがマウントされたときにルールを適用 */
   useEffect(() => {
+    // 現在のタブのURLを取得してurlPatternに設定
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]?.url) {
+        try {
+          const url = new URL(tabs[0].url);
+          setRewriteRule((prev) => ({
+            ...prev,
+            urlPattern: url.origin,
+          }));
+        } catch (e) {
+          // URLのパースに失敗した場合は何もしない
+        }
+      }
+    });
+
     chrome.storage.local.get(null, (items: Record<string, any>) => {
       const rewriteRules = Object.values(items) as RewriteRule[];
       rewriteRules.forEach(updateElements);
