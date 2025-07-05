@@ -67,3 +67,52 @@ test('拡張機能のポップアップが正しく表示される', async () =>
     await context.close();
   }
 });
+
+/**
+ * URLパターンの自動入力テスト
+ * このテストでは、特定のページを開いた状態でポップアップを開いた際に、
+ * URLパターンの入力欄にそのページのドメインが自動で入力されることを確認します
+ */
+test('ポップアップを開くとURLパターンに現在のページのドメインが入力される', async () => {
+  // 永続コンテキストで拡張機能を読み込んで起動
+  const pathToExtension = process.cwd() + '/.output/chrome-mv3-dev';
+  const context = await chromium.launchPersistentContext('', {
+    headless: true,
+    args: [
+      `--disable-extensions-except=${pathToExtension}`,
+      `--load-extension=${pathToExtension}`
+    ]
+  });
+
+  try {
+    // 拡張機能IDの取得
+    let [serviceWorker] = context.serviceWorkers();
+    if (!serviceWorker) {
+      serviceWorker = await context.waitForEvent('serviceworker');
+    }
+    const extensionId = new URL(serviceWorker.url()).hostname;
+
+    // テスト用のページを開く
+    const page = await context.newPage();
+    const testUrl = 'https://www.google.com';
+    await page.goto(testUrl);
+
+    // ポップアップを開く際に、クエリパラメータで現在のURLを渡す
+    const popup = await context.newPage();
+    const popupUrl = `chrome-extension://${extensionId}/popup.html?url=${encodeURIComponent(testUrl)}`;
+    await popup.goto(popupUrl);
+
+    // URLパターンの入力欄を取得
+    const urlPatternInput = popup.locator('input[name="urlPattern"]');
+
+    // 入力欄の値が現在のページのオリジンと一致することを確認
+    const expectedOrigin = new URL(testUrl).origin;
+    await expect(urlPatternInput).toHaveValue(expectedOrigin);
+    
+    console.log(`URLパターンが正しく自動入力されました: ${expectedOrigin}`);
+
+  } finally {
+    // コンテキストを閉じる
+    await context.close();
+  }
+});
