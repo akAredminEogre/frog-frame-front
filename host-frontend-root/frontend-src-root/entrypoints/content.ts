@@ -14,10 +14,11 @@ function getSelectedHtml(): string {
 }
 
 import { replaceTextInNode } from '../utils/domUtils';
+import { matchUrl } from '../utils/matchUrl';
 
 export default defineContentScript({
   matches: process.env.NODE_ENV === 'development' 
-    ? ['https://qiita.com/*']  // 開発時は特定URLのみ（リロード負荷を軽減）
+    ? matchUrl  // 開発時は特定URLのみ（リロード負荷を軽減）
     : ['*://*/*'],             // 本番時は全URL対応
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
