@@ -178,16 +178,18 @@ export default defineBackground({
     chrome.runtime.onInstalled.addListener(() => {
       // 既存のメニューがある場合は衝突を防ぐため removeAll
       chrome.contextMenus.removeAll(() => {
-        // wxtがpackage.jsonのnameから親メニューを自動生成するため、ここではサブメニューのみを作成する
+        // 親メニューを作成
         chrome.contextMenus.create({
-          id: 'replace-text',
-          title: 'このテキストを置換',
+          id: 'favorite-keyword-link-frog-parent',
+          title: 'favorite-keyword-link-frog',
           contexts: ['selection'],
         });
+        // サブメニューを作成
         chrome.contextMenus.create({
-          id: 'fklf-register-element',
-          title: 'fklf: この要素を登録',
-          contexts: ['selection', 'link'], // テキスト選択時 と リンク上 でのみ表示
+          id: 'replace-text',
+          parentId: 'favorite-keyword-link-frog-parent',
+          title: 'このテキストを置換',
+          contexts: ['selection'],
         });
       });
     });
@@ -270,14 +272,6 @@ export default defineBackground({
           });
         }
         return;
-      }
-      // IDをチェックし、該当メニューならコンテントスクリプトにメッセージを送る
-      if (info.menuItemId === 'fklf-register-element' && tab?.id != null) {
-        // 選択テキストなどが info に格納される
-        chrome.tabs.sendMessage(tab.id, {
-          type: 'registerElement',
-          info, // { selectionText, linkUrl, srcUrl, ... } 等
-        });
       }
     });
   },
