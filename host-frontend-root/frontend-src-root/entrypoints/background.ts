@@ -178,6 +178,12 @@ export default defineBackground({
     chrome.runtime.onInstalled.addListener(() => {
       // 既存のメニューがある場合は衝突を防ぐため removeAll
       chrome.contextMenus.removeAll(() => {
+        // wxtがpackage.jsonのnameから親メニューを自動生成するため、ここではサブメニューのみを作成する
+        chrome.contextMenus.create({
+          id: 'replace-text',
+          title: 'このテキストを置換',
+          contexts: ['selection'],
+        });
         chrome.contextMenus.create({
           id: 'fklf-register-element',
           title: 'fklf: この要素を登録',
@@ -255,6 +261,16 @@ export default defineBackground({
 
     // 2) コンテキストメニュークリック時の処理
     chrome.contextMenus.onClicked.addListener((info, tab) => {
+      if (info.menuItemId === 'replace-text' && tab?.id != null) {
+        if (info.selectionText) {
+          // 選択したテキストを一時的にストレージに保存
+          chrome.storage.local.set({ tempSelectedText: info.selectionText }, () => {
+            // ポップアップを開く
+            chrome.action.openPopup();
+          });
+        }
+        return;
+      }
       // IDをチェックし、該当メニューならコンテントスクリプトにメッセージを送る
       if (info.menuItemId === 'fklf-register-element' && tab?.id != null) {
         // 選択テキストなどが info に格納される
