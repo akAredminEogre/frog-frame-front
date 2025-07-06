@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
+import { getActiveTabOrigin } from '../../utils/tabUtils';
 
 /** 書き換えルールの型定義（暫定） */
 type RewriteRule = {
@@ -131,41 +132,17 @@ function App() {
 
   /** コンポーネントがマウントされたときにルールを適用 */
   useEffect(() => {
-    const setUrlPattern = async () => {
-      try {
-        // E2Eテスト用にクエリパラメータからURLを取得
-        const queryParams = new URLSearchParams(window.location.search);
-        const testUrl = queryParams.get('url');
-
-        if (testUrl) {
-          // テスト用のURLが指定されている場合
-          const url = new URL(testUrl);
-          setRewriteRule((prev) => ({
-            ...prev,
-            urlPattern: url.origin,
-          }));
-        } else {
-          // 通常の利用時：最後にフォーカスされたウィンドウからURLを取得
-          const window = await chrome.windows.getLastFocused({ populate: true, windowTypes: ['normal'] });
-          if (window && window.tabs) {
-            const activeTab = window.tabs.find(tab => tab.active);
-            if (activeTab?.url) {
-              const url = new URL(activeTab.url);
-              if (url.protocol === 'http:' || url.protocol === 'https:') {
-                setRewriteRule((prev) => ({
-                  ...prev,
-                  urlPattern: url.origin,
-                }));
-              }
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error setting URL pattern:', error);
+    const setUrlPatternFromActiveTab = async () => {
+      const origin = await getActiveTabOrigin();
+      if (origin) {
+        setRewriteRule((prev) => ({
+          ...prev,
+          urlPattern: origin,
+        }));
       }
     };
 
-    setUrlPattern();
+    setUrlPatternFromActiveTab();
 
     chrome.storage.local.get(null, (items: Record<string, any>) => {
       const rewriteRules = Object.values(items) as RewriteRule[];
