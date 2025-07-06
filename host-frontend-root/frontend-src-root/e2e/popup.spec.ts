@@ -67,4 +67,3 @@ test('拡張機能のポップアップが正しく表示される', async () =>
     await context.close();
   }
 });
-
