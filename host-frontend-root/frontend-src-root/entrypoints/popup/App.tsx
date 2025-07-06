@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
+import { getActiveTabOrigin } from '../../utils/tabUtils';
 
 /** 書き換えルールの型定義（暫定） */
 type RewriteRule = {
@@ -131,6 +132,18 @@ function App() {
 
   /** コンポーネントがマウントされたときにルールを適用 */
   useEffect(() => {
+    const setUrlPatternFromActiveTab = async () => {
+      const origin = await getActiveTabOrigin();
+      if (origin) {
+        setRewriteRule((prev) => ({
+          ...prev,
+          urlPattern: origin,
+        }));
+      }
+    };
+
+    setUrlPatternFromActiveTab();
+
     chrome.storage.local.get(null, (items: Record<string, any>) => {
       const rewriteRules = Object.values(items) as RewriteRule[];
       rewriteRules.forEach(updateElements);
