@@ -45,8 +45,31 @@ export function replaceInNode(
 
     // oldStringをDOMノードに変換
     const parser = new DOMParser();
-    const oldDoc = parser.parseFromString(oldString, 'text/html');
-    const oldNode = oldDoc.body.firstChild;
+    let context = null;
+    // テーブル関連要素の場合、適切なコンテキストでラップする
+    if (['td', 'th', 'tr'].includes(tagName.toLowerCase())) {
+      context = document.createElement('table');
+      if (tagName.toLowerCase() === 'tr') {
+        context.innerHTML = oldString;
+      } else {
+        context.innerHTML = `<tbody><tr>${oldString}</tr></tbody>`;
+      }
+    }
+    
+    const oldDoc = context 
+      ? parser.parseFromString(context.outerHTML, 'text/html')
+      : parser.parseFromString(oldString, 'text/html');
+
+    let oldNode: Node | null = null;
+    if (context) {
+      if (tagName.toLowerCase() === 'tr') {
+        oldNode = oldDoc.querySelector('tr');
+      } else {
+        oldNode = oldDoc.querySelector(tagName);
+      }
+    } else {
+      oldNode = oldDoc.body.firstChild;
+    }
 
     if (!oldNode) return 0;
     
