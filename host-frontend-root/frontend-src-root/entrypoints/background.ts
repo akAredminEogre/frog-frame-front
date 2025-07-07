@@ -1,3 +1,4 @@
+import { handleReplaceTextClick } from '../utils/contextMenuUtils';
 import { replaceTextInNode } from '../utils/domUtils';
 
 // 書き換えルールの型定義
@@ -178,10 +179,18 @@ export default defineBackground({
     chrome.runtime.onInstalled.addListener(() => {
       // 既存のメニューがある場合は衝突を防ぐため removeAll
       chrome.contextMenus.removeAll(() => {
+        // 親メニューを作成
         chrome.contextMenus.create({
-          id: 'fklf-register-element',
-          title: 'fklf: この要素を登録',
-          contexts: ['selection', 'link'], // テキスト選択時 と リンク上 でのみ表示
+          id: 'favorite-keyword-link-frog-parent',
+          title: 'favorite-keyword-link-frog',
+          contexts: ['selection'],
+        });
+        // サブメニューを作成
+        chrome.contextMenus.create({
+          id: 'replace-text',
+          parentId: 'favorite-keyword-link-frog-parent',
+          title: 'このテキストを置換',
+          contexts: ['selection'],
         });
       });
     });
@@ -255,13 +264,9 @@ export default defineBackground({
 
     // 2) コンテキストメニュークリック時の処理
     chrome.contextMenus.onClicked.addListener((info, tab) => {
-      // IDをチェックし、該当メニューならコンテントスクリプトにメッセージを送る
-      if (info.menuItemId === 'fklf-register-element' && tab?.id != null) {
-        // 選択テキストなどが info に格納される
-        chrome.tabs.sendMessage(tab.id, {
-          type: 'registerElement',
-          info, // { selectionText, linkUrl, srcUrl, ... } 等
-        });
+      if (info.menuItemId === 'replace-text' && tab?.id != null) {
+        handleReplaceTextClick(info.selectionText);
+        return;
       }
     });
   },

@@ -114,40 +114,29 @@ function App() {
     }
   };
 
-  /** ルールに基づいてDOMのテキストを置換する関数 */
-  const updateElements = (rule: RewriteRule) => {
-    const regex = new RegExp(rule.pattern, 'g');
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
-    let textNode: Node | null;
-    while ((textNode = walker.nextNode())) {
-      const oldText = textNode.nodeValue;
-      if (oldText) {
-        const newText = oldText.replace(regex, rule.newText);
-        if (newText !== oldText) {
-          textNode.nodeValue = newText;
-        }
-      }
-    }
-  };
-
   /** コンポーネントがマウントされたときにルールを適用 */
   useEffect(() => {
-    const setUrlPatternFromActiveTab = async () => {
-      const origin = await getActiveTabOrigin();
-      if (origin) {
-        setRewriteRule((prev) => ({
-          ...prev,
-          urlPattern: origin,
-        }));
+    const initForm = async () => {
+      // ストレージから一時的な選択テキストを取得
+      const { tempSelectedText } = await chrome.storage.local.get('tempSelectedText');
+      
+      let selectedText = '';
+      if (tempSelectedText) {
+        selectedText = tempSelectedText;
+        // 取得後は不要なので削除
+        await chrome.storage.local.remove('tempSelectedText');
       }
+
+      const origin = await getActiveTabOrigin();
+
+      setRewriteRule((prev) => ({
+        ...prev,
+        pattern: selectedText || prev.pattern,
+        urlPattern: origin || prev.urlPattern,
+      }));
     };
 
-    setUrlPatternFromActiveTab();
-
-    chrome.storage.local.get(null, (items: Record<string, any>) => {
-      const rewriteRules = Object.values(items) as RewriteRule[];
-      rewriteRules.forEach(updateElements);
-    });
+    initForm();
   }, []);
 
   return (
