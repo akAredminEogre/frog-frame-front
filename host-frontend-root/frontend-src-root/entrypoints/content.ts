@@ -1,19 +1,39 @@
 /**
- * ドラッグ選択したテキストのHTMLを取得するサンプル関数
+ * 選択範囲のHTMLまたはテキストを取得する
  */
-function getSelectedHtml(): string {
+function getSelectionInfo(): { selection: string } {
   const selection = window.getSelection();
   if (!selection || selection.rangeCount === 0) {
-    return '';
+    return { selection: '' };
   }
+
+  const range = selection.getRangeAt(0);
+  const { commonAncestorContainer } = range;
+
+  // 選択範囲が単一の要素を完全に含んでいるかチェック
+  const parentElement = commonAncestorContainer.nodeType === Node.ELEMENT_NODE 
+    ? commonAncestorContainer as Element
+    : commonAncestorContainer.parentElement;
+
+  if (parentElement && range.toString().trim() === parentElement.textContent?.trim()) {
+    // 要素全体が選択されている場合
+    return { selection: parentElement.outerHTML };
+  }
+
+  // 部分的な選択の場合、選択内容をHTMLとして取得
   const container = document.createElement('div');
-  for (let i = 0; i < selection.rangeCount; i++) {
-    container.appendChild(selection.getRangeAt(i).cloneContents());
+  container.appendChild(range.cloneContents());
+  
+  // コンテナに子要素が1つだけで、それがテキストノードでない場合、その要素のouterHTMLを返す
+  if (container.children.length === 1 && container.firstChild?.nodeType !== Node.TEXT_NODE) {
+    return { selection: container.children[0].outerHTML };
   }
-  return container.innerHTML;
+
+  // それ以外の場合は、選択されたテキストを返す
+  return { selection: selection.toString() };
 }
 
-import { replaceTextInNode } from '../utils/domUtils';
+import { replaceInNode } from '../utils/domUtils';
 import { matchUrl } from '../utils/matchUrl';
 
 export default defineContentScript({
@@ -23,49 +43,40 @@ export default defineContentScript({
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
   main() {
-
-    // ---- A) ページ再訪問時の書き換えロジック ----
-    chrome.storage.local.get(null, (items) => {
-      if (chrome.runtime.lastError) {
-        return;
-      }
-      // itemsの形: { [id]: { id, oldTextPattern, newTextValue, ... }, ... }
-      const rewriteRules = Object.values(items);
-      if (!rewriteRules.length) {
-        return;
-      }
-
-      // URLパターンで絞り込む場合はここで window.location.href と比較するなど可能
-      rewriteRules.forEach((ruleObj) => {
-        if (!ruleObj || typeof ruleObj !== 'object') return;
-
-        const { oldTextPattern, newTextValue, urlPattern } = ruleObj as {
-          oldTextPattern?: string;
-          newTextValue?: string;
-          urlPattern?: string;
-        };
-        if (!oldTextPattern || !newTextValue) return; // 必要情報が無い場合はスキップ
-
-        // URLパターンがある場合は、現在のURLと前方一致で比較
-        if (urlPattern) {
-          const currentUrl = window.location.href;
-          // 前方一致チェック
-          if (!currentUrl.startsWith(urlPattern)) {
-            // URLが一致しない場合はこのルールを適用しない
-            return;
-          }
+    const applyAllRules = () => {
+      chrome.storage.local.get(null, (items) => {
+        if (chrome.runtime.lastError) {
+          return;
         }
+        const rewriteRules = Object.values(items);
+        if (!rewriteRules.length) {
+          return;
+        }
+        rewriteRules.forEach((ruleObj) => {
+          if (!ruleObj || typeof ruleObj !== 'object') return;
+          const { oldString, newString, urlPattern } = ruleObj as any;
+          if (!oldString || !newString) return;
 
-        // 大文字小文字を区別しない場合は 'gi' など適宜指定
-        const regex = new RegExp(oldTextPattern, 'g');
-        replaceTextInNode(document.body, regex, newTextValue);
+          if (urlPattern) {
+            const currentUrl = window.location.href;
+            if (!currentUrl.startsWith(urlPattern)) {
+              return;
+            }
+          }
+          replaceInNode(document.body, oldString, newString);
+        });
       });
-    });
+    };
 
-    // ---- B) メッセージ受信ロジック ----
+    // メッセージ受信ロジック
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      // 1) ページタイトルや任意の要素を取得
-      if (request.type === 'getPageInfo') {
+      // 1) 選択範囲の取得
+      if (request.type === 'getSelection') {
+        sendResponse(getSelectionInfo());
+        return true; // 非同期応答
+      }
+      // 2) ページタイトルや任意の要素を取得
+      else if (request.type === 'getPageInfo') {
         const title = document.title;
         const firstH1 = document.querySelector('h1')?.textContent || '(no <h1> found)';
         
@@ -76,38 +87,24 @@ export default defineContentScript({
         });
       }
 
-        // 2) 「この要素を登録」メニューから呼ばれた場合
-      else if (request.type === 'registerElement') {
-        // ドラッグ選択したテキストがある場合、選択範囲のHTMLを取得して返す
-        const { selectionText } = request.info;
-        if (selectionText) {
-          const selectedHtml = getSelectedHtml();
-          sendResponse({ selectedHtml });
-        }
-      }
-
-      // 3) ポップアップからの書き換えルール適用メッセージを受信
-      else if (request.type === 'applyRewriteRule') {
+      // 3) ポップアップからの単一ルール適用メッセージ
+      else if (request.type === 'applySingleRule') {
         const { rule } = request;
-        if (rule && rule.oldTextPattern && rule.newTextValue !== undefined && rule.newTextValue !== null) {
-          // URLパターンがある場合、現在のURLと照合
-          if (rule.urlPattern) {
-            const currentUrl = window.location.href;
-            // 前方一致チェック
-            if (!currentUrl.startsWith(rule.urlPattern)) {
-              sendResponse({ success: false, reason: 'URL pattern mismatch' });
-              return false;
-            }
-          }
-          
-          const regex = new RegExp(rule.oldTextPattern, 'g');
-          replaceTextInNode(document.body, regex, rule.newTextValue);
+        if (rule && rule.oldString && rule.newString !== undefined && rule.newString !== null) {
+          replaceInNode(document.body, rule.oldString, rule.newString);
           sendResponse({ success: true });
         }
+        return true;
+      }
+      // 4) backgroundからの全ルール適用メッセージ
+      else if (request.type === 'applyAllRules') {
+        applyAllRules();
+        sendResponse({ success: true });
+        return true;
       }
 
-      // 非同期応答を使わない限り、false を返してリスナー終了
-      return false;
+      // 非同期応答を使う場合は true を返す必要がある
+      return true;
     });
   },
 });

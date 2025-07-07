@@ -1,11 +1,10 @@
-import { handleReplaceTextClick } from '../utils/contextMenuUtils';
-import { replaceTextInNode } from '../utils/domUtils';
+import { replaceInNode } from '../utils/domUtils';
 
 // 書き換えルールの型定義
 type RewriteRule = {
   id?: string;
-  oldTextPattern: string; // 置換前の正規表現パターン
-  newTextValue: string; // 置換後のテキスト
+  oldString: string; // 置換前のテキストまたはHTML
+  newString: string; // 置換後のテキストまたはHTML
   urlPattern?: string;
 };
 
@@ -14,165 +13,28 @@ export default defineBackground({
   type: 'module',
 
   main() {
-    // 保存されているルールからURLパターンを取得し、それらのページにもコンテンツスクリプトを挿入する
-    const injectContentScriptsBasedOnRules = () => {
-      chrome.storage.local.get(null, (items) => {
-        if (chrome.runtime.lastError) {
-          return;
-        }
+    // タブの更新（リロードを含む）を監視し、ルールを適用する
+    chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+      if (changeInfo.status === 'complete' && tab.id && tab.url) {
+        // content.tsにメッセージを送信して、全ルールの適用を依頼する
+        chrome.tabs.sendMessage(tabId, { type: 'applyAllRules' })
+          .catch(() => { /* コンテンツスクリプト未注入時のエラーは無視 */ });
+      }
+    });
 
-        // 保存されているルールからURLパターンを取得
-        const rewriteRules = Object.values(items) as RewriteRule[];
-        const uniqueUrlPatterns = new Set<string>();
-        
-        rewriteRules.forEach((rule) => {
-          if (rule.urlPattern) {
-            uniqueUrlPatterns.add(rule.urlPattern);
-          }
-        });
-
-      // 各URLパターンに対して、アクティブなタブを検索し、一致するものにコンテンツスクリプトを挿入
-      uniqueUrlPatterns.forEach((urlPattern) => {
-        // 前方一致検索用のパターンを作成
-        const urlMatchPattern = urlPattern + '*';
-        
-        // chrome.scripting APIを使用してコンテンツスクリプトを動的に挿入
-          
-          // 既存のタブで該当するURLを開いているものがあれば、スクリプトを挿入
-          chrome.tabs.query({}, (tabs) => {
-            tabs.forEach((tab) => {
-              if (tab.url && tab.id && tab.url.startsWith(urlPattern)) {
-                
-                // 注入するルールをまとめて取得
-                const relevantRules = rewriteRules.filter(rule => 
-                  rule.urlPattern && tab.url?.startsWith(rule.urlPattern)
-                );
-                
-                if (relevantRules.length === 0) {
-                  return;
-                }
-                
-                // WXTのコンテンツスクリプトを実行するために、正しい機能を使用
-                chrome.scripting.executeScript({
-                  target: { tabId: tab.id },
-                  // function引数を使って直接コンテンツスクリプトの機能を注入
-                  func: () => {
-                    // ストレージからルールを取得して適用する
-                    chrome.storage.local.get(null, (items) => {
-                      if (chrome.runtime.lastError) {
-                        return;
-                      }
-                      
-                      // ルールがない場合は終了
-                      const rewriteRules = Object.values(items);
-                      if (!rewriteRules.length) {
-                        return;
-                      }
-                      
-                      // URLパターンで絞り込み
-                      const currentUrl = window.location.href;
-                      
-                      rewriteRules.forEach((ruleObj) => {
-                        if (!ruleObj || typeof ruleObj !== 'object') return;
-                        
-                        const { oldTextPattern, newTextValue, urlPattern } = ruleObj as any;
-                        if (!oldTextPattern || !newTextValue) {
-                          return;
-                        }
-                        
-                        // URLパターンチェック
-                        if (urlPattern) {
-                          if (!currentUrl.startsWith(urlPattern)) {
-                            return;
-                          }
-                        }
-                        
-                          // テキスト置換を行う
-                          replaceTextInNode(document.body, oldTextPattern, newTextValue);
-                      });
-                    });
-                  }
-                }).catch((err) => {
-                  console.error(`[background] Failed to inject script to tab ${tab.id}:`, err);
-                });
-              }
-            });
-          });
-        });
-      });
-    };
-
-    // ストレージの変更を監視し、URLパターンが変更されたらコンテンツスクリプトを再挿入
+    // ストレージの変更を監視し、アクティブなタブにルールを再適用する
     chrome.storage.onChanged.addListener((changes, namespace) => {
       if (namespace === 'local') {
-        injectContentScriptsBasedOnRules();
-      }
-    });
-
-    // タブの更新（リロードを含む）を監視
-    chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-      // タブの読み込みが完了したら
-      if (changeInfo.status === 'complete' && tab.url) {
-        
-        // URLパターンに基づいて保存されたルールを確認
-        chrome.storage.local.get(null, (items) => {
-          if (chrome.runtime.lastError) {
-            return;
-          }
-          
-          // 保存されているルールを取得
-          const rewriteRules = Object.values(items) as RewriteRule[];
-          
-          // 現在のURLに一致するルールがあるか確認
-          const matchingRules = rewriteRules.filter(rule => 
-            rule.urlPattern && tab.url?.startsWith(rule.urlPattern)
-          );
-          
-          if (matchingRules.length > 0) {
-            
-            // コンテンツスクリプトを挿入して、保存されたルールを適用
-            chrome.scripting.executeScript({
-              target: { tabId },
-              func: () => {
-                // ストレージからルールを取得して適用する
-                chrome.storage.local.get(null, (items) => {
-                  if (chrome.runtime.lastError) {
-                    return;
-                  }
-                  
-                  const currentUrl = window.location.href;
-                  
-                  // ルールを適用
-                  const rewriteRules = Object.values(items);
-                  let appliedRulesCount = 0;
-                  
-                  rewriteRules.forEach((ruleObj: any) => {
-                    if (!ruleObj || typeof ruleObj !== 'object') return;
-                    
-                    const { oldTextPattern, newTextValue, urlPattern } = ruleObj;
-                    if (!oldTextPattern || !newTextValue) return;
-                    
-                    // URLパターンチェック
-                    if (urlPattern && !currentUrl.startsWith(urlPattern)) {
-                      return;
-                    }
-                    
-                      const replaceCount = replaceTextInNode(document.body, oldTextPattern, newTextValue);
-                      
-                      if (replaceCount > 0) {
-                        appliedRulesCount++;
-                      }
-                  });
-                });
-              }
-            }).catch(err => { /* エラー処理は不要 */ });
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          const currentTab = tabs[0];
+          if (currentTab && currentTab.id) {
+            // アクティブなタブに全ルール適用を依頼
+            chrome.tabs.sendMessage(currentTab.id, { type: 'applyAllRules' })
+              .catch(() => { /* エラーは無視 */ });
           }
         });
       }
     });
-
-    // 初期化時にもルールベースのコンテンツスクリプト挿入を実行
-    injectContentScriptsBasedOnRules();
 
     // Executed when background is loaded, CANNOT BE ASYNC
     // 1) 拡張がインストール or 更新されたタイミングでコンテキストメニューを登録
@@ -189,7 +51,7 @@ export default defineBackground({
         chrome.contextMenus.create({
           id: 'replace-text',
           parentId: 'favorite-keyword-link-frog-parent',
-          title: 'このテキストを置換',
+          title: 'この部分を置換',
           contexts: ['selection'],
         });
       });
@@ -224,25 +86,14 @@ export default defineBackground({
               return;
             }
 
-            // コンテンツスクリプトを挿入
-            chrome.scripting.executeScript({
-              target: { tabId },
-              func: (rule) => {
-                
-                try {
-                  const { oldTextPattern, newTextValue } = rule;
-                  const replaceCount = replaceTextInNode(document.body, oldTextPattern, newTextValue);
-                  return { success: true, replaceCount };
-                } catch (err) {
-                  return { success: false, error: String(err) };
-                }
-              },
-              args: [request.rule]
-            }).then((results) => {
-              sendResponse({ success: true, results });
-            }).catch((err) => {
-              console.error(`[background] Failed to inject script to tab ${tabId}:`, err);
-              sendResponse({ success: false, error: String(err) });
+            // コンテンツスクリプトにメッセージを送信して、単一ルールの適用を依頼
+            chrome.tabs.sendMessage(tabId, { type: 'applySingleRule', rule: request.rule }, (response) => {
+              if (chrome.runtime.lastError) {
+                console.error(`[background] Failed to send message to tab ${tabId}:`, chrome.runtime.lastError.message);
+                sendResponse({ success: false, error: chrome.runtime.lastError.message });
+                return;
+              }
+              sendResponse({ success: true, response });
             });
             
             // 非同期応答を使う
@@ -265,8 +116,27 @@ export default defineBackground({
     // 2) コンテキストメニュークリック時の処理
     chrome.contextMenus.onClicked.addListener((info, tab) => {
       if (info.menuItemId === 'replace-text' && tab?.id != null) {
-        handleReplaceTextClick(info.selectionText);
-        return;
+        // content scriptにメッセージを送り、選択範囲のHTMLを取得する
+        chrome.tabs.sendMessage(tab.id, { type: 'getSelection' }, (response) => {
+          if (chrome.runtime.lastError) {
+            // エラー処理
+            console.error(chrome.runtime.lastError.message);
+            // 選択テキストだけでも処理を続行
+            if (info.selectionText) {
+              chrome.storage.local.set({ tempSelectedText: info.selectionText }, () => {
+                chrome.action.openPopup();
+              });
+            }
+            return;
+          }
+          
+          if (response && response.selection) {
+            // 取得したHTMLをストレージに保存してポップアップを開く
+            chrome.storage.local.set({ tempSelectedText: response.selection }, () => {
+              chrome.action.openPopup();
+            });
+          }
+        });
       }
     });
   },
