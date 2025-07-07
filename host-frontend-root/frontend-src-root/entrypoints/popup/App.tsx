@@ -3,24 +3,24 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import { getActiveTabOrigin } from '../../utils/tabUtils';
 
-/** 書き換えルールの型定義（暫定） */
+/** 書き換えルールの型定義 */
 type RewriteRule = {
   id?: string;   // UUIDなど一意識別子
-  oldTextPattern: string; // 置換前の正規表現パターン
-  newTextValue: string; // 置換後のテキスト
+  oldString: string; // 置換前のテキストまたはHTML
+  newString: string; // 置換後のテキストまたはHTML
   urlPattern?: string; // URLの前方一致パターン
 };
 
 function App() {
   // フォーム入力を管理するState
   const [rewriteRule, setRewriteRule] = useState<RewriteRule>({
-    oldTextPattern: '',
-    newTextValue: '',
+    oldString: '',
+    newString: '',
     urlPattern: '',
   });
 
   /** フォームの入力値を変更するハンドラ */
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setRewriteRule((prev) => ({
       ...prev,
@@ -41,7 +41,7 @@ function App() {
       await chrome.storage.local.set({ [id]: ruleToSave });
 
       // フォームをリセット
-      setRewriteRule({ oldTextPattern: '', newTextValue: '', urlPattern: '' });
+      setRewriteRule({ oldString: '', newString: '', urlPattern: '' });
 
       // 現在アクティブなタブの情報を取得
       chrome.tabs.query({ active: true, currentWindow: true }, async (tabs: chrome.tabs.Tab[]) => {
@@ -62,40 +62,21 @@ function App() {
         if (shouldApplyToCurrentTab) {
           // 現在のタブにルールを適用
           try {
-            // まず、バックグラウンドスクリプトに通知して処理を依頼
-            await new Promise<void>((resolve) => {
+            // バックグラウンドスクリプトに通知して処理を依頼
+            await new Promise<void>((resolve, reject) => {
               chrome.runtime.sendMessage(
-                { 
-                  type: 'applyRewriteRule', 
+                {
+                  type: 'applyRewriteRule', // このタイプ名はbackground.tsで定義されているもの
                   rule: ruleToSave,
-                  targetTabId: currentTab.id  // 対象タブIDを明示的に指定
-                }, 
+                  targetTabId: currentTab.id
+                },
                 (response: any) => {
-                  if (chrome.runtime.lastError) {
-                    // エラーは無視
+                  if (chrome.runtime.lastError || !response?.success) {
+                    // エラーは無視して次に進む
                   }
                   resolve();
                 }
               );
-            });
-
-            // 次に、コンテンツスクリプトに直接メッセージを送信（currentTab.idは既にnullチェック済み）
-            await new Promise<void>((resolve) => {
-              if (currentTab.id) {
-                chrome.tabs.sendMessage(
-                  currentTab.id,
-                  { type: 'applyRewriteRule', rule: ruleToSave },
-                  (response: any) => {
-                    if (chrome.runtime.lastError) {
-                      // コンテンツスクリプトがまだロードされていない場合は正常
-                    }
-                    resolve();
-                  }
-                );
-              } else {
-                // ここに到達することはないはず（前のチェックでID存在確認済み）
-                resolve(); // 解決してループを続行
-              }
             });
 
             // 完了通知
@@ -131,7 +112,7 @@ function App() {
 
       setRewriteRule((prev) => ({
         ...prev,
-        oldTextPattern: selectedText || prev.oldTextPattern,
+        oldString: selectedText || prev.oldString,
         urlPattern: origin || prev.urlPattern,
       }));
     };
@@ -146,12 +127,11 @@ function App() {
       <div style={{ marginBottom: 8 }}>
         <label>
           置換前:
-          <input
-            type="text"
-            name="oldTextPattern"
-            value={rewriteRule.oldTextPattern}
+          <textarea
+            name="oldString"
+            value={rewriteRule.oldString}
             onChange={handleChange}
-            style={{ marginLeft: 4 }}
+            style={{ marginLeft: 4, width: '95%', minHeight: '60px', verticalAlign: 'top' }}
           />
         </label>
       </div>
@@ -159,12 +139,11 @@ function App() {
       <div style={{ marginBottom: 8 }}>
         <label>
           置換後:
-          <input
-            type="text"
-            name="newTextValue"
-            value={rewriteRule.newTextValue}
+          <textarea
+            name="newString"
+            value={rewriteRule.newString}
             onChange={handleChange}
-            style={{ marginLeft: 4 }}
+            style={{ marginLeft: 4, width: '95%', minHeight: '60px', verticalAlign: 'top' }}
           />
         </label>
       </div>
