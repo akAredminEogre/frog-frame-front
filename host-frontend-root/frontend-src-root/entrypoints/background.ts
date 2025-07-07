@@ -1,3 +1,4 @@
+import { handleReplaceTextClick } from '../utils/contextMenuUtils';
 import { replaceTextInNode } from '../utils/domUtils';
 
 // 書き換えルールの型定義
@@ -264,13 +265,7 @@ export default defineBackground({
     // 2) コンテキストメニュークリック時の処理
     chrome.contextMenus.onClicked.addListener((info, tab) => {
       if (info.menuItemId === 'replace-text' && tab?.id != null) {
-        if (info.selectionText) {
-          // 選択したテキストを一時的にストレージに保存
-          chrome.storage.local.set({ tempSelectedText: info.selectionText }, () => {
-            // ポップアップを開く
-            chrome.action.openPopup();
-          });
-        }
+        handleReplaceTextClick(info.selectionText);
         return;
       }
     });

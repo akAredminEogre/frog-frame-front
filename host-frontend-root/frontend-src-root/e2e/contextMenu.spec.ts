@@ -51,32 +51,41 @@ test.describe('コンテキストメニューからのテキスト置換機能',
     const selectedText = await page.evaluate(() => window.getSelection()?.toString());
     expect(selectedText).toBe('これはテスト用のテキストです。');
 
-    // 3. コンテキストメニュークリックをシミュレートする
-    //    - background scriptのロジックを直接呼び出すのは困難
-    //    - 代わりに、クリック時に実行されるはずのstorageへの保存処理を直接実行し、
-    //      ポップアップを開いて状態を確認する
+    // 3. コンテキストメニュークリック処理を実行（実際のプロダクション関数を使用）
     const background = context.serviceWorkers()[0];
+    
+    // 実際のプロダクション関数を実行（ストレージ保存 + ポップアップ自動オープン）
+    // Note: Playwright環境では chrome.action.openPopup() が新しいページイベントを発火しない可能性があるため、
+    // ストレージへの保存を確認し、その後手動でポップアップを開いてデータが正しく読み込まれることをテスト
     await background.evaluate((text: string) => {
-        // background.tsのonClickedリスナー内のロジックを模倣
+        // utils/contextMenuUtils.ts でグローバルに公開された完全な関数を呼び出し
         // @ts-ignore
-        chrome.storage.local.set({ tempSelectedText: text });
+        globalThis.handleReplaceTextClick(text);
     }, selectedText);
 
-    // 4. ポップアップを開く
-    const popup = await context.newPage();
-    await popup.goto(`chrome-extension://${extensionId}/popup.html`);
-
-    // 5. 正規表現パターン入力欄に選択したテキストが設定されていることを確認
-    const patternInput = popup.locator('input[name="pattern"]');
-    await expect(patternInput).toHaveValue('これはテスト用のテキストです。');
-
-    // 6. ストレージから一時データが削除されていることを確認
-    // App.tsxのuseEffectで非同期に削除されるため、少し待つ
-    await popup.waitForTimeout(100); 
-    const storage = await background.evaluate(() => {
+    // 4. ストレージにデータが保存されていることを確認（chrome.action.openPopup()の効果をテスト）
+    await page.waitForTimeout(100); // 非同期処理の完了を待機
+    const storageData = await background.evaluate(() => {
         // @ts-ignore
         return chrome.storage.local.get('tempSelectedText');
     });
-    expect(storage.tempSelectedText).toBeUndefined();
+    expect(storageData.tempSelectedText).toBe('これはテスト用のテキストです。');
+
+    // 5. ポップアップを開いて実際のユーザーフローをテスト
+    const popup = await context.newPage();
+    await popup.goto(`chrome-extension://${extensionId}/popup.html`);
+
+    // 6. 正規表現パターン入力欄に選択したテキストが設定されていることを確認
+    const patternInput = popup.locator('input[name="pattern"]');
+    await expect(patternInput).toHaveValue('これはテスト用のテキストです。');
+
+    // 7. ストレージから一時データが削除されていることを確認
+    // App.tsxのuseEffectで非同期に削除されるため、少し待つ
+    await popup.waitForTimeout(100); 
+    const finalStorage = await background.evaluate(() => {
+        // @ts-ignore
+        return chrome.storage.local.get('tempSelectedText');
+    });
+    expect(finalStorage.tempSelectedText).toBeUndefined();
   });
 });
