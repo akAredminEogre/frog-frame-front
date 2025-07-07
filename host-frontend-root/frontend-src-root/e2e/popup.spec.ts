@@ -36,13 +36,13 @@ test('拡張機能のポップアップが正しく表示される', async () =>
     const title = await popup.title();
     console.log(`ポップアップのタイトル: ${title}`);
     
-    // テスト2: ポップアップに「変更後のテキスト」の文字列が含まれている
-    const newTextLabel = popup.locator('text=変更後のテキスト');
-    await expect(newTextLabel).toBeVisible();
+    // テスト2: ポップアップに「置換前」の文字列が含まれている
+    const oldTextPatternLabel = popup.locator('text=置換前');
+    await expect(oldTextPatternLabel).toBeVisible();
     
-    // テスト3: ポップアップに「正規表現パターン」の文字列が含まれている
-    const patternLabel = popup.locator('text=正規表現パターン');
-    await expect(patternLabel).toBeVisible();
+    // テスト3: ポップアップに「置換後」の文字列が含まれている
+    const newTextValueLabel = popup.locator('text=置換後');
+    await expect(newTextValueLabel).toBeVisible();
     
     // テスト4: ポップアップに「URLパターン (前方一致)」の文字列が含まれている
     const urlPatternLabel = popup.locator('text=URLパターン (前方一致)');
@@ -53,8 +53,8 @@ test('拡張機能のポップアップが正しく表示される', async () =>
     await expect(header).toBeVisible();
     
     // 入力フィールドが存在することを確認
-    await expect(popup.locator('input[name="newText"]')).toBeVisible();
-    await expect(popup.locator('input[name="pattern"]')).toBeVisible();
+    await expect(popup.locator('input[name="oldTextPattern"]')).toBeVisible();
+    await expect(popup.locator('input[name="newTextValue"]')).toBeVisible();
     await expect(popup.locator('input[name="urlPattern"]')).toBeVisible();
     
     // 保存ボタンが存在することを確認

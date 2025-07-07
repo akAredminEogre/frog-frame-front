@@ -29,7 +29,7 @@ export default defineContentScript({
       if (chrome.runtime.lastError) {
         return;
       }
-      // itemsの形: { [id]: { id, pattern, newText, ... }, ... }
+      // itemsの形: { [id]: { id, oldTextPattern, newTextValue, ... }, ... }
       const rewriteRules = Object.values(items);
       if (!rewriteRules.length) {
         return;
@@ -39,12 +39,12 @@ export default defineContentScript({
       rewriteRules.forEach((ruleObj) => {
         if (!ruleObj || typeof ruleObj !== 'object') return;
 
-        const { pattern, newText, urlPattern } = ruleObj as {
-          pattern?: string;
-          newText?: string;
+        const { oldTextPattern, newTextValue, urlPattern } = ruleObj as {
+          oldTextPattern?: string;
+          newTextValue?: string;
           urlPattern?: string;
         };
-        if (!pattern || !newText) return; // 必要情報が無い場合はスキップ
+        if (!oldTextPattern || !newTextValue) return; // 必要情報が無い場合はスキップ
 
         // URLパターンがある場合は、現在のURLと前方一致で比較
         if (urlPattern) {
@@ -57,8 +57,8 @@ export default defineContentScript({
         }
 
         // 大文字小文字を区別しない場合は 'gi' など適宜指定
-        const regex = new RegExp(pattern, 'g');
-        replaceTextInNode(document.body, regex, newText);
+        const regex = new RegExp(oldTextPattern, 'g');
+        replaceTextInNode(document.body, regex, newTextValue);
       });
     });
 
@@ -89,7 +89,7 @@ export default defineContentScript({
       // 3) ポップアップからの書き換えルール適用メッセージを受信
       else if (request.type === 'applyRewriteRule') {
         const { rule } = request;
-        if (rule && rule.pattern && rule.newText !== undefined && rule.newText !== null) {
+        if (rule && rule.oldTextPattern && rule.newTextValue !== undefined && rule.newTextValue !== null) {
           // URLパターンがある場合、現在のURLと照合
           if (rule.urlPattern) {
             const currentUrl = window.location.href;
@@ -100,8 +100,8 @@ export default defineContentScript({
             }
           }
           
-          const regex = new RegExp(rule.pattern, 'g');
-          replaceTextInNode(document.body, regex, rule.newText);
+          const regex = new RegExp(rule.oldTextPattern, 'g');
+          replaceTextInNode(document.body, regex, rule.newTextValue);
           sendResponse({ success: true });
         }
       }

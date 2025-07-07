@@ -6,16 +6,16 @@ import { getActiveTabOrigin } from '../../utils/tabUtils';
 /** 書き換えルールの型定義（暫定） */
 type RewriteRule = {
   id?: string;   // UUIDなど一意識別子
-  newText: string;
-  pattern: string;
+  oldTextPattern: string; // 置換前の正規表現パターン
+  newTextValue: string; // 置換後のテキスト
   urlPattern?: string; // URLの前方一致パターン
 };
 
 function App() {
   // フォーム入力を管理するState
   const [rewriteRule, setRewriteRule] = useState<RewriteRule>({
-    newText: '',
-    pattern: '',
+    oldTextPattern: '',
+    newTextValue: '',
     urlPattern: '',
   });
 
@@ -41,7 +41,7 @@ function App() {
       await chrome.storage.local.set({ [id]: ruleToSave });
 
       // フォームをリセット
-      setRewriteRule({ newText: '', pattern: '', urlPattern: '' });
+      setRewriteRule({ oldTextPattern: '', newTextValue: '', urlPattern: '' });
 
       // 現在アクティブなタブの情報を取得
       chrome.tabs.query({ active: true, currentWindow: true }, async (tabs: chrome.tabs.Tab[]) => {
@@ -131,7 +131,7 @@ function App() {
 
       setRewriteRule((prev) => ({
         ...prev,
-        pattern: selectedText || prev.pattern,
+        oldTextPattern: selectedText || prev.oldTextPattern,
         urlPattern: origin || prev.urlPattern,
       }));
     };
@@ -145,11 +145,11 @@ function App() {
 
       <div style={{ marginBottom: 8 }}>
         <label>
-          変更後のテキスト:
+          置換前:
           <input
             type="text"
-            name="newText"
-            value={rewriteRule.newText}
+            name="oldTextPattern"
+            value={rewriteRule.oldTextPattern}
             onChange={handleChange}
             style={{ marginLeft: 4 }}
           />
@@ -158,11 +158,11 @@ function App() {
 
       <div style={{ marginBottom: 8 }}>
         <label>
-          正規表現パターン:
+          置換後:
           <input
             type="text"
-            name="pattern"
-            value={rewriteRule.pattern}
+            name="newTextValue"
+            value={rewriteRule.newTextValue}
             onChange={handleChange}
             style={{ marginLeft: 4 }}
           />
