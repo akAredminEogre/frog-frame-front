@@ -4,8 +4,8 @@ import { replaceTextInNode } from '../utils/domUtils';
 // 書き換えルールの型定義
 type RewriteRule = {
   id?: string;
-  newText: string;
-  pattern: string;
+  oldTextPattern: string; // 置換前の正規表現パターン
+  newTextValue: string; // 置換後のテキスト
   urlPattern?: string;
 };
 
@@ -75,8 +75,8 @@ export default defineBackground({
                       rewriteRules.forEach((ruleObj) => {
                         if (!ruleObj || typeof ruleObj !== 'object') return;
                         
-                        const { pattern, newText, urlPattern } = ruleObj as any;
-                        if (!pattern || !newText) {
+                        const { oldTextPattern, newTextValue, urlPattern } = ruleObj as any;
+                        if (!oldTextPattern || !newTextValue) {
                           return;
                         }
                         
@@ -88,7 +88,7 @@ export default defineBackground({
                         }
                         
                           // テキスト置換を行う
-                          replaceTextInNode(document.body, pattern, newText);
+                          replaceTextInNode(document.body, oldTextPattern, newTextValue);
                       });
                     });
                   }
@@ -149,15 +149,15 @@ export default defineBackground({
                   rewriteRules.forEach((ruleObj: any) => {
                     if (!ruleObj || typeof ruleObj !== 'object') return;
                     
-                    const { pattern, newText, urlPattern } = ruleObj;
-                    if (!pattern || !newText) return;
+                    const { oldTextPattern, newTextValue, urlPattern } = ruleObj;
+                    if (!oldTextPattern || !newTextValue) return;
                     
                     // URLパターンチェック
                     if (urlPattern && !currentUrl.startsWith(urlPattern)) {
                       return;
                     }
                     
-                      const replaceCount = replaceTextInNode(document.body, pattern, newText);
+                      const replaceCount = replaceTextInNode(document.body, oldTextPattern, newTextValue);
                       
                       if (replaceCount > 0) {
                         appliedRulesCount++;
@@ -230,8 +230,8 @@ export default defineBackground({
               func: (rule) => {
                 
                 try {
-                  const { pattern, newText } = rule;
-                  const replaceCount = replaceTextInNode(document.body, pattern, newText);
+                  const { oldTextPattern, newTextValue } = rule;
+                  const replaceCount = replaceTextInNode(document.body, oldTextPattern, newTextValue);
                   return { success: true, replaceCount };
                 } catch (err) {
                   return { success: false, error: String(err) };

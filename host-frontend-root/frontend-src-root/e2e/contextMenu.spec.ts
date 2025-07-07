@@ -75,11 +75,14 @@ test.describe('コンテキストメニューからのテキスト置換機能',
     const popup = await context.newPage();
     await popup.goto(`chrome-extension://${extensionId}/popup.html`);
 
-    // 6. 正規表現パターン入力欄に選択したテキストが設定されていることを確認
-    const patternInput = popup.locator('input[name="pattern"]');
-    await expect(patternInput).toHaveValue('これはテスト用のテキストです。');
+    // 6. App.tsxのuseEffectが完了するまで待機
+    await popup.waitForTimeout(500);
 
-    // 7. ストレージから一時データが削除されていることを確認
+    // 7. 置換前入力欄に選択したテキストが設定されていることを確認
+    const oldTextPatternInput = popup.locator('input[name="oldTextPattern"]');
+    await expect(oldTextPatternInput).toHaveValue('これはテスト用のテキストです。');
+
+    // 8. ストレージから一時データが削除されていることを確認
     // App.tsxのuseEffectで非同期に削除されるため、少し待つ
     await popup.waitForTimeout(100); 
     const finalStorage = await background.evaluate(() => {
