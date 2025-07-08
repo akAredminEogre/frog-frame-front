@@ -10,9 +10,9 @@
 
 ### タスク
 
-- [ ] `host-frontend-root/frontend-src-root`配下に`src`ディレクトリを新規作成する
-- [ ] `wxt.config.ts`を更新し、`srcDir: 'src'`と`entrypointsDir: 'entrypoints'`を設定する
-- [ ] `src`配下に`domain/entities`と`domain/entities/__tests__`ディレクトリを作成する
+- [x] `host-frontend-root/frontend-src-root`配下に`src`ディレクトリを新規作成する
+- [x] `wxt.config.ts`を更新し、`srcDir: 'src'`と`entrypointsDir: 'entrypoints'`を設定する
+- [x] `src`配下に`domain/entities`と`domain/entities/__tests__`ディレクトリを作成する
 - [ ] HTMLコンテンツの比較ロジックを扱う`HtmlContent`ドメインオブジェクトを`src/domain/entities/HtmlContent.ts`に作成する
 - [ ] `HtmlContent`のユニットテストを`src/domain/entities/__tests__/HtmlContent.test.ts`に作成する
 - [ ] テキストの置換ロジックを扱う`TextReplacer`ドメインオブジェクトを`src/domain/entities/TextReplacer.ts`に作成する
