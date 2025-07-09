@@ -1,9 +1,8 @@
 import { defineConfig } from 'wxt';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  srcDir: 'src',
-  entrypointsDir: 'entrypoints',
   modules: ['@wxt-dev/module-react'],
   manifest: {
     permissions: ['contextMenus', 'storage', 'tabs', 'scripting'],
@@ -19,6 +18,7 @@ export default defineConfig({
     disabled: true,
   },
   vite:() =>  ({
+    plugins: [tsconfigPaths()],
     server: {
       host: 'localhost',
       port: 3000,
