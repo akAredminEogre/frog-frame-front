@@ -26,4 +26,4 @@ test-results
 *.sln
 *.sw?
 
-utils/matchUrl.ts
+src/utils/matchUrl.ts
