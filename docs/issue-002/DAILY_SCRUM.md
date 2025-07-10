@@ -159,3 +159,40 @@ VS Codeのソース管理で実際に差分がないファイルが変更とし�
 - [x] 作業を始める前に、ユーザとデイリースクラムを実施した
 - [x] 作業完了後、PROGRESS.mdに進捗を記載し、レビューを依頼した
 - [x] レビュー通過後、振り返りを実施し、RETROSPECTIVE.md, PLAN.md を更新した
+
+---
+
+# DAILY SCRUM
+
+## 日付
+
+2025/07/11 (1回目)
+
+## 今日の作業予定
+
+Story-1: 開発者として、NodeTextReplacerの責務を分割し、コードの保守性を向上させる
+
+-   [ ] `NodeTextReplacer` をリファクタリングし、`ReplacementValue` を使って処理を `TextReplacer` または `HtmlReplacer` に委譲するファサードにする。
+-   [ ] `NodeTextReplacer` の既存のユニットテストを、リファクタリング後の構造に合わせて修正する。
+-   [ ] 既存のE2Eテストがすべて通過することを確認する。
+
+## 修正予定のファイル
+
+-   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/NodeTextReplacer.ts`
+-   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/NodeTextReplacer.test.ts`
+
+## 相談事項
+
+特にありません。計画通りに進めます。
+
+## 一言コメント
+
+いよいよリファクタリングの最終段階です。`NodeTextReplacer` を綺麗なファサードにして、このチケットを完了させます！
+
+## チェックリスト
+
+以下の作業を実施したらチェックをつけてください。全てにチェックがついたらタスクを完了できます。
+
+- [ ] 作業を始める前に、ユーザとデイリースクラムを実施した
+- [ ] 作業完了後、PROGRESS.mdに進捗を記載し、レビューを依頼した
+- [ ] レビュー通過後、振り返りを実施し、RETROSPECTIVE.md, PLAN.md を更新した
