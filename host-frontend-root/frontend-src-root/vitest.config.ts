@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [WxtVitest()],
   test: {
     globals: true,
+    environment: 'happy-dom',
     // Vitestテストファイルのみを対象とする
     include: ['**/*.test.ts'],
     // Playwrightテストファイルとnode_modulesを明示的に除外

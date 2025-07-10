@@ -33,8 +33,9 @@ function getSelectionInfo(): { selection: string } {
   return { selection: selection.toString() };
 }
 
-import { replaceInNode } from '../utils/domUtils';
-import { matchUrl } from '../utils/matchUrl';
+import { matchUrl } from '../src/utils/matchUrl';
+import { NodeTextReplacer } from '../src/domain/entities/NodeTextReplacer';
+import { RewriteRule } from '../src/domain/entities/RewriteRule';
 
 export default defineContentScript({
   matches: process.env.NODE_ENV === 'development' 
@@ -43,6 +44,8 @@ export default defineContentScript({
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
   main() {
+    const replacer = new NodeTextReplacer();
+
     const applyAllRules = () => {
       chrome.storage.local.get(null, (items) => {
         if (chrome.runtime.lastError) {
@@ -54,16 +57,16 @@ export default defineContentScript({
         }
         rewriteRules.forEach((ruleObj) => {
           if (!ruleObj || typeof ruleObj !== 'object') return;
-          const { oldString, newString, urlPattern } = ruleObj as any;
-          if (!oldString || !newString) return;
+          const rule = ruleObj as RewriteRule;
+          if (!rule.oldString || !rule.newString) return;
 
-          if (urlPattern) {
+          if (rule.urlPattern) {
             const currentUrl = window.location.href;
-            if (!currentUrl.startsWith(urlPattern)) {
+            if (!currentUrl.startsWith(rule.urlPattern)) {
               return;
             }
           }
-          replaceInNode(document.body, oldString, newString);
+          replacer.replace(document.body, rule);
         });
       });
     };
@@ -91,7 +94,7 @@ export default defineContentScript({
       else if (request.type === 'applySingleRule') {
         const { rule } = request;
         if (rule && rule.oldString && rule.newString !== undefined && rule.newString !== null) {
-          replaceInNode(document.body, rule.oldString, rule.newString);
+          replacer.replace(document.body, rule);
           sendResponse({ success: true });
         }
         return true;
