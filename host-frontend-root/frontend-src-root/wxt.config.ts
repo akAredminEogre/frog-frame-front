@@ -1,4 +1,5 @@
 import { defineConfig } from 'wxt';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -17,6 +18,7 @@ export default defineConfig({
     disabled: true,
   },
   vite:() =>  ({
+    plugins: [tsconfigPaths()],
     server: {
       host: 'localhost',
       port: 3000,

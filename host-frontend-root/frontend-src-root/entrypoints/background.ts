@@ -1,5 +1,3 @@
-import { replaceInNode } from '../utils/domUtils';
-
 // 書き換えルールの型定義
 type RewriteRule = {
   id?: string;
