@@ -1,4 +1,4 @@
-3.1. プロジェクト構造のマッピング
+# 3.1. プロジェクト構造のマッピング
 コードの肥大化を防ぎ、関心事を明確に分離するためには、物理的なファイル構造がアーキテクチャを反映していることが重要です。`wxt.config.ts`で`srcDir: 'src'`を設定し、  
 `src`ディレクトリ以下にレイヤーごとのフォルダを配置することを強く推奨します。
 
@@ -60,3 +60,13 @@
 | Interface Adapters       | `src/presentation/`, `src/infrastructure/`           | 内側と外側のレイヤーを接続。UIコンポーネント、リポジトリ実装、メッセージングブリッジなど。Application層とDomain層に依存。 | NoteEditor.vue, BrowserStorageNoteRepository.ts, bridge.ts |
 | Frameworks & Drivers     | Project Root, `src/presentation/entrypoints/`, `src/infrastructure/di/` | フレームワークやドライバ、DI設定、エントリポイントなど。                       | wxt.config.ts, container.ts, background.ts |
 
+# オブジェクト指向ルール
+- 1.1つのメソッドにつきインデントは1段階までにすること
+- 2.else句を使用しないこと
+- 3.すべてのプリミティブ型と文字列型をラップすること
+- 4.1行につきドットは1つまでにすること
+- 5.名前を省略しないこと
+- 6.すべてのエンティティを小さくすること
+- 7.1つのクラスにつきインスタンス変数は2つまでにすること
+- 8.ファーストクラスコレクションを使用すること
+- 9.Getter、Setter、プロパティを使用しないこと
