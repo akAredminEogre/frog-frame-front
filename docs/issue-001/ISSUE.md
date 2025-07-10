@@ -19,10 +19,11 @@ export function replaceInNodeがファットになってきたので、CODING_ST
 
 # タスク
 <!-- チケットの見積もりを行うために、必要なタスクを列挙します -->
-- [ ]`wxt.config.ts`で`srcDir: 'src'`を設定し、  
+- [x]`wxt.config.ts`で`srcDir: 'src'`を設定し、  
 `src`ディレクトリ以下にレイヤーごとのフォルダを配置する
-- [ ] replaceInNodeの実装をDomainオブジェクトに移行する
-- [ ] replaceInNodeのユニットテストを作成する
+- [x] replaceInNodeの実装をDomainオブジェクトに移行する
+- [x] replaceInNodeのユニットテストを作成する
+- [x] `@/src/domain/entities/NodeTextReplacer`を使用するように、`content.ts`を修正する
 
 # 成果物
 <!-- PR以外の成果物のリンクを記載 -->
