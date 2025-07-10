@@ -13,9 +13,10 @@
 - [x] `host-frontend-root/frontend-src-root`配下に`src`ディレクトリを新規作成する
 - [x] `wxt.config.ts`を更新し、`srcDir: 'src'`と`entrypointsDir: 'entrypoints'`を設定する
 - [x] `src`配下に`domain/entities`と`domain/entities/__tests__`ディレクトリを作成する
-- [ ] HTMLコンテンツの比較ロジックを扱う`HtmlContent`ドメインオブジェクトを`src/domain/entities/HtmlContent.ts`に作成する
-- [ ] `HtmlContent`のユニットテストを`src/domain/entities/__tests__/HtmlContent.test.ts`に作成する
-- [ ] テキストの置換ロジックを扱う`TextReplacer`ドメインオブジェクトを`src/domain/entities/TextReplacer.ts`に作成する
-- [ ] `TextReplacer`のユニットテストを`src/domain/entities/__tests__/TextReplacer.test.ts`に作成する
-- [ ] `frontend-src-root/utils/domUtils.ts`の`replaceInNode`関数をリファクタリングし、新しく作成したドメインオブジェクトを利用するように変更する
-- [ ] `frontend-src-root/utils/__tests__/domUtils.test.ts`を更新し、リファクタリング後の`replaceInNode`が正しく動作することを確認する
+- [x] 書き換えルールを扱う`RewriteRule`エンティティを`src/domain/entities/RewriteRule.ts`に作成する
+- [x] テキスト置換ロジックを扱う`NodeTextReplacer`ドメインサービスを`src/domain/entities/NodeTextReplacer.ts`に作成する
+- [x] `NodeTextReplacer`のユニットテストを`src/domain/entities/__tests__/NodeTextReplacer.test.ts`に作成し、全テストが通ることを確認する
+- [x] `entrypoints/content.ts`で新しい`NodeTextReplacer`サービスを利用するように修正する
+- [x] 不要になった`utils/domUtils.ts`およびそのテストファイルを削除する
+- [x] 単体テストの失敗問題を修正し、全てのテストが通るようにする
+- [x] e2eテストの失敗問題を修正し、全てのテストが通るようにする
