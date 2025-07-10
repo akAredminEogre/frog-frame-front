@@ -10,8 +10,8 @@ NodeTextReplacerのリファクタリング計画を立てます。CODING_STYLE.
 
 -   [x] `RewriteRule` の `oldString` がHTML文字列かプレーンテキストかを判定するロジックを持つ `ReplacementValue` ValueObjectを作成する。
 -   [x] `ReplacementValue` のユニットテストを作成する。
--   [ ] プレーンテキストの置換ロジック責務を持つ `TextReplacer` クラスを作成する。
--   [ ] `TextReplacer` のユニットテストを作成する。
+-   [x] プレーンテキストの置換ロジック責務を持つ `TextReplacer` クラスを作成する。
+-   [x] `TextReplacer` のユニットテストを作成する。
 -   [ ] HTML要素の置換ロジック責務を持つ `HtmlReplacer` クラスを作成する。
 -   [ ] `HtmlReplacer` のユニットテストを作成する。
 -   [ ] `NodeTextReplacer` をリファクタリングし、`ReplacementValue` を使って処理を `TextReplacer` または `HtmlReplacer` に委譲するファサードにする。
