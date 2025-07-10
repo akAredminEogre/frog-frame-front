@@ -78,6 +78,7 @@ describe('getActiveTabOrigin', () => {
   });
 
   it('アクティブなタブのURLが無効な場合にnullを返すこと', async () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const mockWindow = {
       tabs: [{ active: true, url: 'invalid-url' }],
     };
@@ -85,6 +86,9 @@ describe('getActiveTabOrigin', () => {
 
     const origin = await getActiveTabOrigin();
     expect(origin).toBeNull();
+    expect(console.error).toHaveBeenCalledWith('Error getting active tab origin:', expect.any(Error));
+    
+    consoleErrorSpy.mockRestore();
   });
 
   it('APIがエラーをスローした場合にnullを返すこと', async () => {
