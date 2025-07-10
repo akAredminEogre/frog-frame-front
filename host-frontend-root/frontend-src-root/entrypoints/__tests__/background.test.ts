@@ -4,26 +4,48 @@ import background from '../background';
 
 // fakeBrowserを拡張して、未実装のAPIをモックする
 const browserWithMocks = {
-  ...fakeBrowser,
-  contextMenus: {
-    ...fakeBrowser.contextMenus,
-    onClicked: {
-      ...fakeBrowser.contextMenus?.onClicked,
-      addListener: vi.fn(),
+    ...fakeBrowser,
+    contextMenus: {
+      ...fakeBrowser.contextMenus,
+      onClicked: {
+        ...fakeBrowser.contextMenus?.onClicked,
+        addListener: vi.fn(),
+      },
     },
-  },
-  storage: {
-    ...fakeBrowser.storage,
-    local: {
-      ...fakeBrowser.storage.local,
-      set: vi.fn(),
+    storage: {
+      ...fakeBrowser.storage,
+      local: {
+        ...fakeBrowser.storage.local,
+        set: vi.fn((items, callback) => {
+          // storage.local.setが呼び出されたら、そのコールバックをすぐに実行する
+          if (callback) {
+            callback();
+          }
+        }),
+      },
     },
-  },
-  action: {
-    ...fakeBrowser.action,
-    openPopup: vi.fn(),
-  },
-};
+    action: {
+      ...fakeBrowser.action,
+      openPopup: vi.fn(),
+    },
+    tabs: {
+      ...fakeBrowser.tabs,
+      sendMessage: vi.fn((tabId, message, callback) => {
+        if (message.type === 'getSelection') {
+          // getSelectionメッセージに対する応答をシミュレート
+          const response = { selection: 'テスト用の選択HTML' };
+          if (callback) {
+            callback(response);
+          }
+        }
+        return Promise.resolve();
+      }),
+    },
+    runtime: {
+      ...fakeBrowser.runtime,
+      lastError: null, // エラーが発生しないことを示す
+    },
+  };
 
 // グローバルなchromeオブジェクトをモック
 vi.stubGlobal('chrome', browserWithMocks);
@@ -64,18 +86,21 @@ describe('Background Script', () => {
     const onClickedCallback = vi.mocked(chrome.contextMenus.onClicked.addListener).mock.calls[0][0];
     await onClickedCallback(info, tab);
 
-    // THEN: chrome.storage.local.set が正しい引数で呼び出される
+    // THEN: chrome.tabs.sendMessage が正しい引数で呼び出される
+    expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(
+      tab.id,
+      { type: 'getSelection' },
+      expect.any(Function)
+    );
+
+    // AND: chrome.storage.local.set が正しい引数で呼び出される
     expect(chrome.storage.local.set).toHaveBeenCalledWith(
-      { tempSelectedText: 'テスト用の選択テキスト' },
+      { tempSelectedText: 'テスト用の選択HTML' }, // sendMessageのモックで設定した応答
       expect.any(Function) // 第2引数はコールバック関数
     );
 
     // AND: chrome.action.openPopup が呼び出される
-    // storage.local.setのコールバック内で呼ばれるため、コールバックを直接実行する
-    const callback = vi.mocked(chrome.storage.local.set).mock.calls[0][1];
-    if (callback) {
-      callback();
-    }
+    // storage.local.setのモック内でコールバックが実行されるため、ここでは直接expectする
     expect(chrome.action.openPopup).toHaveBeenCalled();
   });
 });
