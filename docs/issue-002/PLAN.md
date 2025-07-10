@@ -14,6 +14,6 @@ NodeTextReplacerのリファクタリング計画を立てます。CODING_STYLE.
 -   [x] `TextReplacer` のユニットテストを作成する。
 -   [x] HTML要素の置換ロジック責務を持つ `HtmlReplacer` クラスを作成する。
 -   [x] `HtmlReplacer` のユニットテストを作成する。
--   [ ] `NodeTextReplacer` をリファクタリングし、`ReplacementValue` を使って処理を `TextReplacer` または `HtmlReplacer` に委譲するファサードにする。
--   [ ] `NodeTextReplacer` の既存のユニットテストを、リファクタリング後の構造に合わせて修正する。
+-   [x] `NodeTextReplacer` をリファクタリングし、`ReplacementValue` を使って処理を `TextReplacer` または `HtmlReplacer` に委譲するファサードにする。
+-   [x] `NodeTextReplacer` の既存のユニットテストを、リファクタリング後の構造に合わせて修正する。
 -   [ ] 既存のE2Eテストがすべて通過することを確認する。
