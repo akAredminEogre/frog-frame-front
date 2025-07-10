@@ -77,7 +77,7 @@ OKです！今回の作業は終了にします。振り返りを行い、PROGRE
   rule: { id: '1', oldString: 'world', newString: 'test' },
   expectedCount: 1,
   expectedHtml: '<div>hello test, good test</div>',
-},
+}
 ```
 ここのexpectedCountは2になるのではないでしょうか
 
@@ -129,5 +129,21 @@ VS Codeのソース管理で実際に差分がないファイルが変更とし�
 - **結果**: git statusで実際に内容が変更されたファイルのみが表示されるようになった
 
 ### 2025/07/11 (追加作業) のレビューコメント
+
+<!-- ここはユーザが書くので空欄にしておいてください。 -->
+
+---
+
+## 2025/07/11 (1回目) の進捗
+
+`PLAN.md` に基づき、`NodeTextReplacer` のリファクタリングとテストの修正を実施しました。
+
+-   `NodeTextReplacer` をリファクタリングし、`ReplacementValue` を使って処理を `TextReplacer` または `HtmlReplacer` に委譲するファサードにしました。
+    -   `src/domain/entities/NodeTextReplacer.ts`
+-   `NodeTextReplacer` の既存のユニットテストを、リファクタリング後の構造に合わせて修正しました。
+    -   `src/domain/entities/__tests__/NodeTextReplacer.test.ts`
+-   すべてのユニットテストが通過することを確認しました。
+
+### 2025/07/11 (1回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
