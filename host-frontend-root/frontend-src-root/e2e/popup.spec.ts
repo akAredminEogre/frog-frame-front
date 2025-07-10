@@ -53,8 +53,8 @@ test('拡張機能のポップアップが正しく表示される', async () =>
     await expect(header).toBeVisible();
     
     // 入力フィールドが存在することを確認
-    await expect(popup.locator('input[name="oldTextPattern"]')).toBeVisible();
-    await expect(popup.locator('input[name="newTextValue"]')).toBeVisible();
+    await expect(popup.locator('textarea[name="oldString"]')).toBeVisible();
+    await expect(popup.locator('textarea[name="newString"]')).toBeVisible();
     await expect(popup.locator('input[name="urlPattern"]')).toBeVisible();
     
     // 保存ボタンが存在することを確認
