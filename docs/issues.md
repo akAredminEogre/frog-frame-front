@@ -1,3 +1,4 @@
 - [ ] NodeTextReplacerのリファクタリング
 - [ ] 右クリックで要素をフォームに適用
 - [ ] eslint導入
+- [ ] RewriteRuleをtypeではなく、ValueObjectとして定義
