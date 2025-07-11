@@ -4,3 +4,4 @@
 - [ ] RewriteRuleをtypeではなく、ValueObjectとして定義
 - [ ] 権限が変わってしまう問題
 - [ ] entityのネスト問題解消
+- [ ] backgroud.tsのファット解消
