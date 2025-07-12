@@ -1,24 +1,34 @@
 import { RewriteRule } from './RewriteRule';
+import { HtmlString } from '../value-objects/HtmlString';
 
 export class HtmlReplacer {
   replace(root: Node, rule: RewriteRule): number {
-    const { oldString, newString } = rule;
+    let oldHtml: HtmlString;
+    let newHtml: HtmlString;
+    try {
+      oldHtml = new HtmlString(rule.oldString);
+      newHtml = new HtmlString(rule.newString);
+    } catch (error) {
+      // oldString or newString is invalid, so no replacement is possible.
+      return 0;
+    }
+
     const rootElement = root as Element;
 
     if (!rootElement.innerHTML) {
-        return 0;
+      return 0;
     }
 
     const originalHtml = rootElement.innerHTML;
-    rootElement.innerHTML = originalHtml.split(oldString).join(newString);
-    
-    if (originalHtml === rootElement.innerHTML) {
-        return 0;
+    const replacedHtml = originalHtml.split(oldHtml.toString()).join(newHtml.toString());
+
+    if (originalHtml === replacedHtml) {
+      return 0;
     }
 
-    // innerHTMLの置換では、正確な置換回数を数えるのは難しいので、
-    // 変更があった場合は1を返すことにする。
-    // 厳密な置換回数が必要な場合は、より高度なDOM操作が必要。
-    return (originalHtml.match(new RegExp(oldString, 'g')) || []).length;
+    rootElement.innerHTML = replacedHtml;
+
+    // `split`と`join`による置換回数は、`split`後の配列の長さ - 1 で計算できる
+    return originalHtml.split(oldHtml.toString()).length - 1;
   }
 }
