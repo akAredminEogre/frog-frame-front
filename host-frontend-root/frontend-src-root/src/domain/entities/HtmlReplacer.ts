@@ -3,6 +3,12 @@ import { HtmlString } from '../value-objects/HtmlString';
 
 export class HtmlReplacer {
   replace(root: Node, rule: RewriteRule): number {
+    const rootElement = root as Element;
+
+    if (!rootElement.innerHTML) {
+      return 0;
+    }
+
     let oldHtml: HtmlString;
     let newHtml: HtmlString;
     try {
@@ -13,14 +19,13 @@ export class HtmlReplacer {
       return 0;
     }
 
-    const rootElement = root as Element;
-
-    if (!rootElement.innerHTML) {
-      return 0;
-    }
-
     const originalHtml = rootElement.innerHTML;
-    const replacedHtml = originalHtml.split(oldHtml.toString()).join(newHtml.toString());
+    const regex = new RegExp(oldHtml.toString().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+    let matchCount = 0;
+    const replacedHtml = originalHtml.replace(regex, (match) => {
+      matchCount++;
+      return newHtml.toString();
+    });
 
     if (originalHtml === replacedHtml) {
       return 0;
@@ -28,7 +33,6 @@ export class HtmlReplacer {
 
     rootElement.innerHTML = replacedHtml;
 
-    // `split`と`join`による置換回数は、`split`後の配列の長さ - 1 で計算できる
-    return originalHtml.split(oldHtml.toString()).length - 1;
+    return matchCount;
   }
 }
