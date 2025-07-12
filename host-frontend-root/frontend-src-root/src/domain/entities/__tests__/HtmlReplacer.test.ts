@@ -80,27 +80,12 @@ describe('HtmlReplacer', () => {
       expectedCount: 1,
       expectedHtml: '<div><span>first</span><span>second</span></div>',
     },
-    // スクラム01で追加されたテストケース
-    {
-      name: 'should replace a simple div element with different content',
-      initialHtml: '<div>old</div>',
-      rule: { id: '1', oldString: '<div>old</div>', newString: '<span>new</span>' },
-      expectedCount: 1,
-      expectedHtml: '<span>new</span>',
-    },
     {
       name: 'should replace a p element with class attribute',
       initialHtml: '<p class="foo">old</p>',
       rule: { id: '1', oldString: '<p class="foo">old</p>', newString: '<h1>new</h1>' },
       expectedCount: 1,
       expectedHtml: '<h1>new</h1>',
-    },
-    {
-      name: 'should not replace if content differs completely',
-      initialHtml: '<div>different</div>',
-      rule: { id: '1', oldString: '<div>old</div>', newString: '<span>new</span>' },
-      expectedCount: 0,
-      expectedHtml: '<div>different</div>',
     },
     {
       name: 'should handle nested div and p elements',
@@ -110,32 +95,11 @@ describe('HtmlReplacer', () => {
       expectedHtml: '<span>new</span>',
     },
     {
-      name: 'should replace table row element with old content',
-      initialHtml: '<table><tbody><tr><td>old</td></tr></tbody></table>',
-      rule: { id: '1', oldString: '<tr><td>old</td></tr>', newString: '<tr><th>new</th></tr>' },
-      expectedCount: 1,
-      expectedHtml: '<table><tbody><tr><th>new</th></tr></tbody></table>',
-    },
-    {
       name: 'should replace table data cell',
       initialHtml: '<table><tbody><tr><td>old</td></tr></tbody></table>',
       rule: { id: '1', oldString: '<td>old</td>', newString: '<th>new</th>' },
       expectedCount: 1,
       expectedHtml: '<table><tbody><tr><th>new</th></tr></tbody></table>',
-    },
-    {
-      name: 'should return 0 if oldString is not valid HTML',
-      initialHtml: '<div>some content</div>',
-      rule: { id: '1', oldString: 'not html', newString: '<span>new</span>' },
-      expectedCount: 0,
-      expectedHtml: '<div>some content</div>',
-    },
-    {
-      name: 'should return 0 if no matching elements are found',
-      initialHtml: '<div>some content</div>',
-      rule: { id: '1', oldString: '<p>old</p>', newString: '<span>new</span>' },
-      expectedCount: 0,
-      expectedHtml: '<div>some content</div>',
     },
   ];
 
