@@ -17,8 +17,9 @@
 ## 4. タスク一覧
 
 ### Step 1: 準備とキャラクターテストの作成
-- [ ] `HtmlReplacer.ts`の既存の振る舞いをカバーする単体テスト（キャラクターテスト）を作成する。
-    - `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlReplacer.spec.ts` を作成・編集する。
+- [x] `HtmlReplacer.ts`の既存の振る舞いをカバーするように、`HtmlReplacer.test.ts`の単体テスト（キャラクターテスト）を拡充する。
+    - `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlReplacer.test.ts` を編集し、テストケースを網羅させる。
+    - ✅ **完了**: 既存のtestCases配列形式に統合し、重複テストケースを統廃合（17個→12個）。全テストが成功することを確認済み。
 
 ### Step 2: 値オブジェクトの導入
 - [ ] `HtmlString.ts`: HTML文字列を扱う値オブジェクトを作成する。DOMノードへの変換ロジックも担当させる。
