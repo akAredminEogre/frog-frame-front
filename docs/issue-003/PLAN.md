@@ -22,11 +22,12 @@
     - ✅ **完了**: 既存のtestCases配列形式に統合し、重複テストケースを統廃合（17個→12個）。全テストが成功することを確認済み。
 
 ### Step 2: 値オブジェクトの導入
-- [ ] `HtmlString.ts`: HTML文字列を扱う値オブジェクトを作成する。DOMノードへの変換ロジックも担当させる。
+- [x] `HtmlString.ts`: HTML文字列を扱う値オブジェクトを作成する。DOMノードへの変換ロジックも担当させる。
     - `src/domain/value-objects/HtmlString.ts`
-- [ ] `TagName.ts`: タグ名を扱う値オブジェクトを作成する。
+- [x] `TagName.ts`: タグ名を扱う値オブジェクトを作成する。
     - `src/domain/value-objects/TagName.ts`
-- [ ] 上記値オブジェクトの単体テストを作成する。
+- [x] 上記値オブジェクトの単体テストを作成する。
+    - ✅ **完了**: `HtmlString`と`TagName`値オブジェクト、およびそれらの単体テストを作成。`HtmlReplacer`に適用し、すべてのテストが成功することを確認済み。
 
 ### Step 3: 変換ロジックの分離 (Strategyパターン)
 - [ ] HTML文字列からDOMノードへの変換ロジックを、ポリモーフィズムを用いて分離する。
