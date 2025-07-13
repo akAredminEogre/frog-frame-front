@@ -22,6 +22,6 @@ export class TagName {
   }
 
   isTableRelated(): boolean {
-    return ['tbody', 'thead', 'tfoot', 'tr', 'td', 'th', 'caption'].includes(this.value);
+    return ['table', 'tbody', 'thead', 'tfoot', 'tr', 'td', 'th', 'caption'].includes(this.value);
   }
 }
