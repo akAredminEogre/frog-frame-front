@@ -26,3 +26,18 @@ favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entit
 を参考に共通化してください。
 kk=04
 実装が完了したらPROGRESS-04.mdを追記してコードレビューを依頼してください
+---
+
+## スクラム04-2回目の進捗
+
+- `DefaultDomConverter.test.ts` のテストケースを、`HtmlReplacer.test.ts` を参考に共通化しました。
+- すべての単体テストが通過することを確認しました。
+
+### スクラム04-2回目のレビューコメント
+
+<!-- ここはユーザが書くので空欄にしておいてください。 -->
+のテストケースを、
+favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlReplacer.test.ts
+を参考に共通化してください。
+kk=04
+実装が完了したらPROGRESS-04.mdを追記してコードレビューを依頼してください
