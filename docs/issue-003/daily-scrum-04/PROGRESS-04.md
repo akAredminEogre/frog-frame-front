@@ -36,8 +36,24 @@ kk=04
 ### スクラム04-2回目のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-のテストケースを、
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlReplacer.test.ts
-を参考に共通化してください。
+- TableDomConverter.test.ts のテストケースを、`HtmlReplacer.test.ts` を参考に共通化してください。
+- テストを実行するときは、
+```
+cd ~/home/akaredmineogre/akAredminEogre-project/favorite-keyword-link-frog/host-frontend-root/frontend-src-root && docker compose exec frontend npm run test
+```
+によってDockerコンテナ内で実行してください。
+kk=04
+実装が完了したらPROGRESS-04.mdを追記してコードレビューを依頼してください
+
+---
+
+## スクラム04-3回目の進捗
+
+- `TableDomConverter.test.ts` のテストケースを、`HtmlReplacer.test.ts` を参考に共通化しました。
+- Dockerコンテナ内で全ての単体テストが通過することを確認しました。
+
+### スクラム04-3回目のレビューコメント
+
+<!-- ここはユーザが書くので空欄にしておいてください。 -->
 kk=04
 実装が完了したらPROGRESS-04.mdを追記してコードレビューを依頼してください
