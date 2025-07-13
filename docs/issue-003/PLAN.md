@@ -30,12 +30,13 @@
     - ✅ **完了**: `HtmlString`と`TagName`値オブジェクト、およびそれらの単体テストを作成。`HtmlReplacer`に適用し、すべてのテストが成功することを確認済み。
 
 ### Step 3: 変換ロジックの分離 (Strategyパターン)
-- [ ] HTML文字列からDOMノードへの変換ロジックを、ポリモーフィズムを用いて分離する。
-    - [ ] `DomConverterStrategy.ts`: 変換戦略のインターフェースを定義する。
-    - [ ] `DefaultDomConverter.ts`: 一般的な要素の変換戦略を実装する。
-    - [ ] `TableDomConverter.ts`: テーブル関連要素の変換戦略を実装する。
-    - [ ] `DomConverterFactory.ts`: タグ名に応じて適切な変換戦略を返すファクトリを作成する。
-- [ ] 上記クラス群の単体テストを作成する。
+- [x] HTML文字列からDOMノードへの変換ロジックを、ポリモーフィズムを用いて分離する。
+    - [x] `DomConverterStrategy.ts`: 変換戦略のインターフェースを定義する。
+    - [x] `DefaultDomConverter.ts`: 一般的な要素の変換戦略を実装する。
+    - [x] `TableDomConverter.ts`: テーブル関連要素の変換戦略を実装する。
+    - [x] `DomConverterFactory.ts`: タグ名に応じて適切な変換戦略を返すファクトリを作成する。
+- [x] 上記クラス群の単体テストを作成する。
+    - ✅ **完了**: Strategyパターンによる変換ロジックの分離を実装。`HtmlReplacer`をリファクタリングし、新しいクラス群を適用。テストケースの共通化も完了し、すべてのテストが成功することを確認済み。
 
 ### Step 4: HtmlReplacerのリファクタリング
 - [x] `HtmlReplacer.ts`を、新しく作成したクラスを利用するように書き換える。
@@ -43,6 +44,13 @@
     - `cleanNode`のようなプライベートメソッドを、責務が適切なクラス（例：`HtmlString`や新しい`CleanedNode`クラス）に移動または削除する。
 - [x] `HtmlReplacer`の単体テストをリファクタリング後の実装に合わせて修正する。
     - ✅ **完了**: `HtmlReplacer.ts`の`replace`メソッドをリファクタリングし、ネストを解消、可読性を向上させた。単体テストもパスすることを確認済み。
+
+### 追加タスク
+- [x] テストケースの整理
+    - [x] DefaultDomConverter
+    - [x] TableDomConverter
+    - ✅ **完了**: テストケースを`testCases`配列形式に統一し、共通化を実施。
+    
 
 ### Step 5: 最終確認
 - [ ] すべての単体テストがパスすることを確認する。
