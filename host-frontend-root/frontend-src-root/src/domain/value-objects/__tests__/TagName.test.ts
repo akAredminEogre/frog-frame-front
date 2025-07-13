@@ -48,7 +48,7 @@ describe('TagName', () => {
 
   describe('isTableRelated', () => {
     it('should return true for table related tags', () => {
-      const tags = ['tr', 'td', 'th', 'tbody', 'thead', 'tfoot', 'caption'];
+      const tags = ['table', 'tr', 'td', 'th', 'tbody', 'thead', 'tfoot', 'caption'];
       tags.forEach(tag => {
         const tagName = new TagName(tag);
         expect(tagName.isTableRelated()).toBe(true);
