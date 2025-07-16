@@ -1,4 +1,3 @@
-import { HtmlString } from '../value-objects/HtmlString';
 import { RewriteRule } from './RewriteRule';
 
 export class ReplaceResult {
@@ -16,14 +15,20 @@ export class HtmlContent {
   }
 
   public replaceWith(rule: RewriteRule): ReplaceResult {
-    const oldHtml = new HtmlString(rule.oldString);
-    const newHtml = new HtmlString(rule.newString);
+    const oldString = rule.oldString;
+    const newString = rule.newString;
 
-    const regex = new RegExp(oldHtml.toString().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+    const regex = rule.isRegex
+      ? new RegExp(oldString, 'g')
+      : new RegExp(oldString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+
     let matchCount = 0;
-    const replacedHtml = this.originalHtml.replace(regex, () => {
+    const replacedHtml = this.originalHtml.replace(regex, (...args) => {
       matchCount++;
-      return newHtml.toString();
+      // newString内の$1, $2などを後方参照で置換する
+      return newString.replace(/\$(\d)/g, (_, index) => {
+        return args[index] || '';
+      });
     });
 
     return new ReplaceResult(replacedHtml, matchCount);
