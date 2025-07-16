@@ -63,9 +63,11 @@ docs/issue-nnn/PULL_REQUEST.mdをもとに、ghコマンドを使ってdevelop�
 
 ## PRクローズ時の指示
 ```
+nnn=
 pr_no=
 pr_noのプルリクエストをマージします。次の手順でマージしてください。
-- 現在のブランチで残っている変更をすべてコミットする
+- issue-nnnのディレクトリを、completed/issue-nnnに移動する
+- 現在のブランチで残っている変更をすべてコミットしてプッシュ
   - コミットメッセージは「issue-nnn: プルリクエストの内容を反映」
-- プルリクエストをマージする
+- プルリクエストを`create a merge commit`でマージする
 ```
