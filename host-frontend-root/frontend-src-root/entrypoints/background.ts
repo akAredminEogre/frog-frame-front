@@ -1,11 +1,3 @@
-// 書き換えルールの型定義
-type RewriteRule = {
-  id?: string;
-  oldString: string; // 置換前のテキストまたはHTML
-  newString: string; // 置換後のテキストまたはHTML
-  urlPattern?: string;
-};
-
 export default defineBackground({
   // Set manifest options
   type: 'module',
