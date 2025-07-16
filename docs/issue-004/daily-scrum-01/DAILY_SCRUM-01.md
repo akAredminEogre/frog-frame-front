@@ -1,19 +1,24 @@
-# デイリースクラム 2025/07/16
+# DAILY SCRUM-01回目
 
-## スクラムマスター
-- akAredminEogre
+## 本スクラムの作業予定
+- `PLAN.md` の「4.1. ドメイン層の修正」に取り組みます。
 
-## 開発者
-- Cline
+## 修正予定のファイル
+- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts`
+- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlContent.ts`
+- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlContent.test.ts`
 
-## 本日の計画
-- `PLAN.md` に基づき、ドメイン層の修正に着手する。
-  - `RewriteRule.ts` に `isRegex?: boolean` プロパティを追加する。
-  - `HtmlContent.ts` の `replaceWith` メソッドを修正し、正規表現置換に対応させる。
-  - `HtmlContent.test.ts` に正規表現置換のテストケースを追加する。
+## 相談事項
+- ドメイン層の実装が完了しましたので、レビューをお願いいたします。
+- 特に、`HtmlContent.ts` の正規表現置換ロジックが、要件を満たし、かつ堅牢であるかをご確認いただきたいです。
 
-## 困っていること
-- 特になし
+## 一言コメント
+- フォーマットの確認を徹底します。
 
-## 昨日やったこと
-- (スクラム初回のため、なし)
+## チェックリスト
+
+以下の作業を実施したらチェックをつけてください。全てにチェックがついたらタスクを完了できます。
+
+- [x] 作業を始める前に、ユーザとデイリースクラムを実施した
+- [x] 作業完了後、PROGRESS-01.mdに進捗を記載し、レビューを依頼した
+- [x] レビュー通過後、振り返りを実施し、RETROSPECTIVE.md, PLAN.md を更新した
