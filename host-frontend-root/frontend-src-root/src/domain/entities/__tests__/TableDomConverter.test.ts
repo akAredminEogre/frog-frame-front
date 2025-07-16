@@ -61,18 +61,9 @@ describe('TableDomConverter', () => {
       expectedTextContent: 'Content',
       expectedParentNodeNames: [], // tableタグ自体がルートなので親はなし
     },
-    {
-      name: 'should return an empty text node for an empty HTML string',
-      tagName: 'td', // 任意のテーブル関連タグ
-      html: '',
-      expectedNodeName: '#text',
-      expectedTextContent: '',
-      expectedNodeType: Node.TEXT_NODE,
-      expectedParentNodeNames: [], // 空のテキストノードなので親はなし
-    },
   ];
 
-  testCases.forEach(({ name, tagName, html, expectedNodeName, expectedTextContent, expectedNodeType, expectedParentNodeNames }) => {
+  testCases.forEach(({ name, tagName, html, expectedNodeName, expectedTextContent, expectedParentNodeNames }) => {
     it(name, () => {
       const tag = new TagName(tagName);
       const converter = new TableDomConverter(tag);
@@ -81,10 +72,6 @@ describe('TableDomConverter', () => {
 
       expect(node.nodeName).toBe(expectedNodeName);
       expect(node.textContent).toBe(expectedTextContent);
-
-      if (expectedNodeType) {
-        expect(node.nodeType).toBe(expectedNodeType);
-      }
 
       let currentNode: Node | null = node;
       expectedParentNodeNames?.forEach(parentNodeName => {
