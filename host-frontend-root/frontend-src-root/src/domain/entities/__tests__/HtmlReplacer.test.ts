@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { HtmlReplacer } from '../HtmlReplacer';
-import { RewriteRule } from '../RewriteRule';
+import type { RewriteRule } from '../RewriteRule';
 
 describe('HtmlReplacer', () => {
   let replacer: HtmlReplacer;
@@ -79,6 +79,27 @@ describe('HtmlReplacer', () => {
       rule: { id: '1', oldString: '<p>replace me</p>', newString: '<span>first</span><span>second</span>' },
       expectedCount: 1,
       expectedHtml: '<div><span>first</span><span>second</span></div>',
+    },
+    {
+      name: 'should replace a p element with class attribute',
+      initialHtml: '<p class="foo">old</p>',
+      rule: { id: '1', oldString: '<p class="foo">old</p>', newString: '<h1>new</h1>' },
+      expectedCount: 1,
+      expectedHtml: '<h1>new</h1>',
+    },
+    {
+      name: 'should handle nested div and p elements',
+      initialHtml: '<div><p>old</p></div>',
+      rule: { id: '1', oldString: '<div><p>old</p></div>', newString: '<span>new</span>' },
+      expectedCount: 1,
+      expectedHtml: '<span>new</span>',
+    },
+    {
+      name: 'should replace table data cell',
+      initialHtml: '<table><tbody><tr><td>old</td></tr></tbody></table>',
+      rule: { id: '1', oldString: '<td>old</td>', newString: '<th>new</th>' },
+      expectedCount: 1,
+      expectedHtml: '<table><tbody><tr><th>new</th></tr></tbody></table>',
     },
   ];
 
