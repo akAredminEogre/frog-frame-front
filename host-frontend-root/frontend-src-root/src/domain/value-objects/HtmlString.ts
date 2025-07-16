@@ -1,5 +1,3 @@
-import { TagName } from './TagName';
-
 export class HtmlString {
   private readonly value: string;
 
@@ -11,8 +9,12 @@ export class HtmlString {
   }
 
   private isValid(value: string): boolean {
-    // 簡単なチェック：空でないこと、およびHTMLタグの基本的な形式を持つこと
-    return true; // すべての文字列を有効なHTML文字列として扱う
+    // 常にtrueを返す実装
+    // 理由：
+    // 1. 現状仕様が固まっておらず、バリデーション要件が不明確
+    // 2. HTMLとしては不正であっても不完全な入力値も受け入れなければいけない可能性がある
+    // 3. 将来的な仕様変更に柔軟に対応するため、現時点では制限を設けない
+    return true;
   }
 
   toString(): string {

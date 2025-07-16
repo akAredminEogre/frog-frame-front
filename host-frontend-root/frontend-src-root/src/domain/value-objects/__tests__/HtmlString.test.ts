@@ -7,6 +7,14 @@ describe('HtmlString', () => {
       expect(() => new HtmlString('<div>hello</div>')).not.toThrow();
     });
 
+    it('should create an instance for an empty string', () => {
+      expect(() => new HtmlString('')).not.toThrow();
+    });
+
+    it('should create an instance for plain text', () => {
+      expect(() => new HtmlString('hello world')).not.toThrow();
+    });
+
   });
 
   describe('toString', () => {
