@@ -156,11 +156,6 @@ function App() {
             style={{ marginLeft: 4, width: '95%', minHeight: '60px', verticalAlign: 'top' }}
           />
         </label>
-        {rewriteRule.isRegex && (
-          <div style={{ fontSize: '0.8em', color: '#666', marginTop: 2, marginLeft: 4 }}>
-            キャプチャグループは <code>$1</code>, <code>$2</code> などで参照できます。
-          </div>
-        )}
       </div>
 
       <div style={{ marginBottom: 8 }}>
