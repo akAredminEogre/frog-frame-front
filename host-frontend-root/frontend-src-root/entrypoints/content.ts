@@ -56,9 +56,13 @@ export default defineContentScript({
           return;
         }
         rewriteRules.forEach((ruleObj) => {
-          if (!ruleObj || typeof ruleObj !== 'object') return;
+          if (!ruleObj || typeof ruleObj !== 'object') {
+            return;
+          }
           const rule = ruleObj as RewriteRule;
-          if (!rule.oldString || !rule.newString) return;
+          if (!rule.oldString || !rule.newString) {
+            return;
+          }
 
           if (rule.urlPattern) {
             const currentUrl = window.location.href;
