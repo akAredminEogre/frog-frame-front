@@ -114,4 +114,54 @@ describe('HtmlReplacer', () => {
     });
   });
 
+  describe('with regex patterns', () => {
+    it('should replace h1 tag with regex pattern', () => {
+      container.innerHTML = '<h1>アジャイルソフトウェア開発宣言</h1>';
+      
+      const rule: RewriteRule = {
+        id: '1',
+        oldString: '<h1>(.+?)</h1>',
+        newString: '<h2>$1</h2>',
+        isRegex: true
+      };
+      
+      const replaceCount = replacer.replace(container, rule);
+      
+      expect(replaceCount).toBe(1);
+      expect(container.innerHTML).toBe('<h2>アジャイルソフトウェア開発宣言</h2>');
+    });
+
+    it('should replace multiple h1 tags with regex pattern', () => {
+      container.innerHTML = '<h1>Title 1</h1><h1>Title 2</h1>';
+      
+      const rule: RewriteRule = {
+        id: '1',
+        oldString: '<h1>(.+?)</h1>',
+        newString: '<h2>$1</h2>',
+        isRegex: true
+      };
+      
+      const replaceCount = replacer.replace(container, rule);
+      
+      expect(replaceCount).toBe(2);
+      expect(container.innerHTML).toBe('<h2>Title 1</h2><h2>Title 2</h2>');
+    });
+
+    it('should not replace if regex pattern does not match', () => {
+      container.innerHTML = '<div>No h1 tags here</div>';
+      
+      const rule: RewriteRule = {
+        id: '1',
+        oldString: '<h1>(.+?)</h1>',
+        newString: '<h2>$1</h2>',
+        isRegex: true
+      };
+      
+      const replaceCount = replacer.replace(container, rule);
+      
+      expect(replaceCount).toBe(0);
+      expect(container.innerHTML).toBe('<div>No h1 tags here</div>');
+    });
+  });
+
 });
