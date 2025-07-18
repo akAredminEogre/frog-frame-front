@@ -1,9 +1,9 @@
-- [x] NodeTextReplacerのリファクタリング
 - [ ] 右クリックで要素をフォームに適用
 - [ ] eslint導入
 - [ ] RewriteRuleをtypeではなく、ValueObjectとして定義
-- [ ] 権限が変わってしまう問題
 - [ ] NodeTextReplacerのリファクタリング
 - [ ] background.tsのファット解消
-- [ ] <td>要素を置換できない
 - [ ] HtmlStringの仕様変更
+- [ ] 正規表現のヘルプテキスト
+- [ ] バリデーション
+- [ ] replacewithをリファクタリング
