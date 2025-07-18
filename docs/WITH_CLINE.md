@@ -2,12 +2,19 @@
 ## ISSUE開始時：人間
 - issue-nnnディレクトリを作成する
 - ISSUE.mdの `# 概要` 、 `# 受け入れ条件` 、 `# タスク`(任意) を記載する
+- ドキュメントをコミット
+  - コミットメッセージ
+    - docs: issue-開始時のドキュメント
 
 ## ISSUE 開始時の指示
 ```
 nnn=
 issue-nnnを開始します。PLANモードでdocs/issue-nnn/ISSUE.mdを参照して実装計画を立てPLAN.mdを作成してください。
-``` 
+```
+
+- ドキュメントをコミット
+  - コミットメッセージ
+    - docs: PLAN.mdを作成
 
 # DAILY SCRUM単位
 ## DAILY SCRUM 開始時の指示
@@ -23,9 +30,12 @@ kk=
 
 ## DAILY_SCRUM-kk.md作成後の指示
 - ドキュメントをコミット
+  - コミットメッセージ
+    - docs: デイリースクラムkk回目開始時のドキュメント
 ```
-kk=05
-ACTモードに切り替えて作業を開始してください。実装が完了したらPROGRESS-kk.mdを追記してコードレビューを依頼してください
+kk=
+ACTモードに切り替えて、DAILY_SCRUM-kk.mdの作業を開始してください。
+実装が完了したらPROGRESS-kk.mdのフォーマットに従って、PROGRESS-kk.mdを追記してコードレビューを依頼してください
 ```
 
 - コードレビューする
@@ -33,10 +43,13 @@ ACTモードに切り替えて作業を開始してください。実装が完�
 ## DAILY_SCRUM.md実装終了後
 
 - 人間がコードをコミット
+  - コミットメッセージ
+    - docs: スクラムkk回目の進捗
+
 
 ### 指示
 ```
-kk=05
+kk=
 ありがとうございました。今回の作業は終了にします。振り返りを行い、PLAN.md/RETROSPECTIVE.md/DAILY_SCRUM.mdを更新してください
 - PLAN.md
   - チェックリストの更新
@@ -46,6 +59,8 @@ kk=05
   - チェックリストを更新
 ```
 - 人間がドキュメントをコミット
+  - コミットメッセージ
+    - docs: スクラムkk回目の終了、振り返り
 
 ## PR作成時の指示
 
@@ -54,11 +69,30 @@ nnn=
 issue-nnnのプルリクエストの本文を作成し、docs/issue-nnn/PULL_REQUEST.mdに保存してください。
 ```
 
+- ドキュメントをコミット
+  - コミットメッセージ
+    - docs: PULL_REQUEST.mdを作成
+
 ```
-nnn=003
+nnn=
 docs/issue-nnn/PULL_REQUEST.mdをもとに、ghコマンドを使ってdevelopブランチにプルリクエストを作成してください。
+- push先リポジトリ akAredminEogre/favorite-keyword-link-frog
+- base branch: develop
 
 コミットされていない変更はそのままで、プルリクエストを作成してください。
+
+作成後webでそのPRのURLを開いてください
+```
+## PRクローズ準備
+- issues.md
+  - ドキュメントをコミット
+    - コミットメッセージ
+      - docs: 新規・追加・残タスク
+- WITH_CLINE.md
+  - ドキュメントをコミット
+    - コミットメッセージ
+      - docs: CLINEへの指示改善
+
 ```
 
 ## PRクローズ時の指示
