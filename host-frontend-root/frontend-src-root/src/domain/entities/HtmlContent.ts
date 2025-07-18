@@ -19,17 +19,18 @@ export class HtmlContent {
     const newString = rule.newString;
 
     const regex = rule.isRegex
-      ? new RegExp(oldString, 'g')
+      ? new RegExp(oldString, 'gs')
       : new RegExp(oldString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
 
-    let matchCount = 0;
-    const replacedHtml = this.originalHtml.replace(regex, (...args) => {
-      matchCount++;
-      // newString内の$1, $2などを後方参照で置換する
-      return newString.replace(/\$(\d)/g, (_, index) => {
-        return args[index] || '';
-      });
-    });
+    const matches = [...this.originalHtml.matchAll(regex)];
+    const matchCount = matches.length;
+
+    if (matchCount === 0) {
+      return new ReplaceResult(this.originalHtml, 0);
+    }
+    
+    // The native replace method handles back-references like $1 automatically.
+    const replacedHtml = this.originalHtml.replace(regex, newString);
 
     return new ReplaceResult(replacedHtml, matchCount);
   }
