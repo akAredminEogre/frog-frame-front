@@ -3,4 +3,5 @@ export type RewriteRule = {
   oldString: string;
   newString: string;
   urlPattern?: string;
+  isRegex?: boolean;
 };

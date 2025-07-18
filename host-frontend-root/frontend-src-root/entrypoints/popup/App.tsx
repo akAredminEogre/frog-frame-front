@@ -2,29 +2,25 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
 import { getActiveTabOrigin } from '../../utils/tabUtils';
-
-/** 書き換えルールの型定義 */
-type RewriteRule = {
-  id?: string;   // UUIDなど一意識別子
-  oldString: string; // 置換前のテキストまたはHTML
-  newString: string; // 置換後のテキストまたはHTML
-  urlPattern?: string; // URLの前方一致パターン
-};
+import { RewriteRule } from '../../src/domain/entities/RewriteRule';
 
 function App() {
   // フォーム入力を管理するState
-  const [rewriteRule, setRewriteRule] = useState<RewriteRule>({
+  const [rewriteRule, setRewriteRule] = useState<Omit<RewriteRule, 'id'>>({
     oldString: '',
     newString: '',
     urlPattern: '',
+    isRegex: false,
   });
 
   /** フォームの入力値を変更するハンドラ */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    const isCheckbox = type === 'checkbox';
+    
     setRewriteRule((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: isCheckbox ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
@@ -41,7 +37,12 @@ function App() {
       await chrome.storage.local.set({ [id]: ruleToSave });
 
       // フォームをリセット
-      setRewriteRule({ oldString: '', newString: '', urlPattern: '' });
+      setRewriteRule({
+        oldString: '',
+        newString: '',
+        urlPattern: '',
+        isRegex: false,
+      });
 
       // 現在アクティブなタブの情報を取得
       chrome.tabs.query({ active: true, currentWindow: true }, async (tabs: chrome.tabs.Tab[]) => {
@@ -127,6 +128,15 @@ function App() {
       <div style={{ marginBottom: 8 }}>
         <label>
           置換前:
+          <label style={{ marginLeft: 8, cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              name="isRegex"
+              checked={rewriteRule.isRegex}
+              onChange={handleChange}
+            />
+            正規表現を使う
+          </label>
           <textarea
             name="oldString"
             value={rewriteRule.oldString}

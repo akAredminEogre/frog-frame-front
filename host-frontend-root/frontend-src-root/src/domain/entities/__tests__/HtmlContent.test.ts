@@ -37,5 +37,93 @@ describe('HtmlContent', () => {
       const content = new HtmlContent(html);
       expect(() => content.replaceWith(rule)).not.toThrow();
     });
+
+    describe('with regex rule', () => {
+      it('should replace based on regex pattern', () => {
+        const html = '<h1>hello</h1><h2>world</h2>';
+        const rule: RewriteRule = {
+          id: '1',
+          oldString: '<h1>(.*?)</h1>',
+          newString: '<h3>$1</h3>',
+          isRegex: true,
+        };
+        const content = new HtmlContent(html);
+        const result = content.replaceWith(rule);
+        expect(result.replacedHtml).toBe('<h3>hello</h3><h2>world</h2>');
+        expect(result.matchCount).toBe(1);
+      });
+
+      it('should handle multiple matches', () => {
+        const html = '<h1>hello</h1><h1>world</h1>';
+        const rule: RewriteRule = {
+          id: '1',
+          oldString: '<h1>(.*?)</h1>',
+          newString: '<h3>$1</h3>',
+          isRegex: true,
+        };
+        const content = new HtmlContent(html);
+        const result = content.replaceWith(rule);
+        expect(result.replacedHtml).toBe('<h3>hello</h3><h3>world</h3>');
+        expect(result.matchCount).toBe(2);
+      });
+
+      it('should not replace if pattern does not match', () => {
+        const html = '<div>hello</div>';
+        const rule: RewriteRule = {
+          id: '1',
+          oldString: '<h1>(.*?)</h1>',
+          newString: '<h3>$1</h3>',
+          isRegex: true,
+        };
+        const content = new HtmlContent(html);
+        const result = content.replaceWith(rule);
+        expect(result.replacedHtml).toBe(html);
+        expect(result.matchCount).toBe(0);
+      });
+
+      it('should handle the manual test case pattern', () => {
+        const html = '<h1>アジャイルソフトウェア開発宣言</h1>';
+        const rule: RewriteRule = {
+          id: '1',
+          oldString: '<h1>(.+?)</h1>',
+          newString: '<h2>$1</h2>',
+          isRegex: true,
+        };
+        const content = new HtmlContent(html);
+        const result = content.replaceWith(rule);
+        expect(result.replacedHtml).toBe('<h2>アジャイルソフトウェア開発宣言</h2>');
+        expect(result.matchCount).toBe(1);
+      });
+
+  it('should handle the incorrect manual test case pattern', () => {
+    const html = '<h1>アジャイルソフトウェア開発宣言</h1>';
+    const rule: RewriteRule = {
+      id: '1',
+      oldString: '<h1>(.+?)</h1>',
+      newString: '<h1>$1</h1>',  // 手動テストでの誤った設定
+      isRegex: true,
+    };
+    const content = new HtmlContent(html);
+    const result = content.replaceWith(rule);
+    expect(result.replacedHtml).toBe('<h1>アジャイルソフトウェア開発宣言</h1>');
+    expect(result.matchCount).toBe(1);
+  });
+
+  it('should handle multiline HTML tags with s flag', () => {
+    const html = `<h1>アジャイルソフトウェア開発宣言
+</h1>`;
+    const rule: RewriteRule = {
+      id: '1',
+      oldString: '<h1>(.+?)</h1>',
+      newString: '<h2>$1</h2>',
+      isRegex: true,
+    };
+    const content = new HtmlContent(html);
+    const result = content.replaceWith(rule);
+    expect(result.replacedHtml).toBe(`<h2>アジャイルソフトウェア開発宣言
+</h2>`);
+    expect(result.matchCount).toBe(1);
+  });
+    });
   });
 });
