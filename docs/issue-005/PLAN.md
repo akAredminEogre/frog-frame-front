@@ -21,11 +21,11 @@
 
 ### タスク
 
-- [ ] content.tsに`getElementSelectionInfo()`関数を実装
-- [ ] `window.getSelection()`を使用して選択範囲を取得
-- [ ] `commonAncestorContainer`で共通祖先要素を特定
-- [ ] テキストノードの場合は親要素を取得するロジックを実装
-- [ ] 対象要素の`outerHTML`を返す処理を実装
+- [x] content.tsに`getElementSelectionInfo()`関数を実装 ✅ スクラム01完了
+- [x] `window.getSelection()`を使用して選択範囲を取得 ✅ スクラム01完了
+- [x] `commonAncestorContainer`で共通祖先要素を特定 ✅ スクラム01完了
+- [x] テキストノードの場合は親要素を取得するロジックを実装 ✅ スクラム01完了
+- [x] 対象要素の`outerHTML`を返す処理を実装 ✅ スクラム01完了
 
 ## Story-3: システムとして新しいメッセージタイプを処理することにより、背景スクリプトとコンテンツスクリプト間の通信を実現する
 
@@ -34,10 +34,10 @@ background.tsとcontent.ts間で新しい機能のためのメッセージ通信
 
 ### タスク
 
-- [ ] background.tsの`chrome.contextMenus.onClicked.addListener`で`replace-element`メニューの処理を追加
-- [ ] content.tsに`getElementSelection`メッセージタイプのハンドラを追加
-- [ ] 既存の`getSelection`処理と区別して実装
-- [ ] エラーハンドリングを適切に実装
+- [x] background.tsの`chrome.contextMenus.onClicked.addListener`で`context-menu-replace-dom-element`メニューの処理を追加 ✅ スクラム01完了
+- [x] content.tsに`getElementSelection`メッセージタイプのハンドラを追加 ✅ スクラム01完了
+- [x] 既存の`getSelection`処理と区別して実装 ✅ スクラム01完了
+- [x] エラーハンドリングを適切に実装 ✅ スクラム01完了
 
 ## Story-4: 開発者として単体テストを実装することにより、新機能の品質を保証する
 
