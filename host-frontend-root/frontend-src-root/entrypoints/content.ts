@@ -1,5 +1,13 @@
 /**
- * 選択範囲のHTMLまたはテキストを取得する
+ * 選択されたテキストを含む最小のHTML要素を特定する
+ */
+function getElementSelectionInfo(): { selection: string } {
+  const elementSelector = new ElementSelector();
+  return { selection: elementSelector.getElementFromSelection() };
+}
+
+/**
+ * 選択範囲のHTMLまたはテキストを取得する（既存の部分置換機能用）
  */
 function getSelectionInfo(): { selection: string } {
   const selection = window.getSelection();
@@ -36,6 +44,7 @@ function getSelectionInfo(): { selection: string } {
 import { matchUrl } from '../src/utils/matchUrl';
 import { NodeTextReplacer } from '../src/domain/entities/NodeTextReplacer';
 import { RewriteRule } from '../src/domain/entities/RewriteRule';
+import { ElementSelector } from '../src/domain/entities/ElementSelector';
 
 export default defineContentScript({
   matches: process.env.NODE_ENV === 'development' 
@@ -73,9 +82,14 @@ export default defineContentScript({
 
     // メッセージ受信ロジック
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      // 1) 選択範囲の取得
+      // 1) 選択範囲の取得（部分置換用）
       if (request.type === 'getSelection') {
         sendResponse(getSelectionInfo());
+        return true; // 非同期応答
+      }
+      // 1-2) 要素選択の取得（要素置換用）
+      else if (request.type === 'getElementSelection') {
+        sendResponse(getElementSelectionInfo());
         return true; // 非同期応答
       }
       // 2) ページタイトルや任意の要素を取得
