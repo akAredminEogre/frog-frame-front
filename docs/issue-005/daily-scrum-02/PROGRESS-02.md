@@ -45,7 +45,34 @@ kk=02
 
 ## スクラム02-02回目 の進捗
 
-<!-- ここに進捗を記載 -->
+**実装完了: background.test.tsの単体テスト修正**
+
+### 実装内容：
+1. **テストとの不整合問題を修正**
+   - `menuItemId`の不整合：テストでは`'replace-text'`を使用していたが、実際の実装では`'context-menu-replace-dom-element'`を使用
+   - `messageType`の不整合：テストでは`'getSelection'`を期待していたが、実際の実装では`'getElementSelection'`を送信
+
+2. **テストコードの修正内容**
+   - `menuItemId`を`'replace-text'`から`'context-menu-replace-dom-element'`に変更
+   - `messageType`を`'getSelection'`から`'getElementSelection'`に変更
+   - 実際の実装と完全に一致するよう調整
+
+3. **修正結果**
+   - `background.test.ts`が正常に通過
+   - 全てのテスト（91個）が引き続き正常に通過
+   - ファイルを削除することなく、適切なテスト修正で問題解決
+
+### 実装したファイル：
+- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/__tests__/background.test.ts`
+  - テストコードと実装の整合性を確保
+  - テスト通過率：16ファイル全通/91テスト全通
+
+### 技術的な詳細：
+- テストコードが古い実装に基づいていた問題を特定
+- 実装コードとテストコードの同期を確保
+- ファイル削除ではなく適切な修正によりテスト品質を維持
+
+**コードレビューを依頼します。**
 
 ### スクラム02-02回目 のレビューコメント
 
