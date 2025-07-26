@@ -39,9 +39,9 @@ export default defineBackground({
         });
         // サブメニューを作成
         chrome.contextMenus.create({
-          id: 'replace-text',
+          id: 'context-menu-replace-dom-element',
           parentId: 'favorite-keyword-link-frog-parent',
-          title: 'この部分を置換',
+          title: 'この要素を置換',
           contexts: ['selection'],
         });
       });
@@ -105,9 +105,9 @@ export default defineBackground({
 
     // 2) コンテキストメニュークリック時の処理
     chrome.contextMenus.onClicked.addListener((info, tab) => {
-      if (info.menuItemId === 'replace-text' && tab?.id != null) {
-        // content scriptにメッセージを送り、選択範囲のHTMLを取得する
-        chrome.tabs.sendMessage(tab.id, { type: 'getSelection' }, (response) => {
+      if (info.menuItemId === 'context-menu-replace-dom-element' && tab?.id != null) {
+        // content scriptにメッセージを送り、選択範囲の最小のHTML要素を取得する
+        chrome.tabs.sendMessage(tab.id, { type: 'getElementSelection' }, (response) => {
           if (chrome.runtime.lastError) {
             // エラー処理
             console.error(chrome.runtime.lastError.message);
