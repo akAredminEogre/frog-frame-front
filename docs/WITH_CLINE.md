@@ -14,7 +14,7 @@ issue-nnnを開始します。PLANモードでdocs/issue-nnn/ISSUE.mdを参照�
 
 - ドキュメントをコミット
   - コミットメッセージ
-    - docs: PLAN.mdを作成
+    - docs: issue-のPLAN.mdを作成
 
 # DAILY SCRUM単位
 ## DAILY SCRUM 開始時の指示
@@ -39,6 +39,9 @@ ACTモードに切り替えて、DAILY_SCRUM-kk.mdの作業を開始してくだ
 ```
 
 - コードレビューする
+- ドキュメントをコミット
+  - コミットメッセージ
+    - docs: issue-のスクラムkk 回目のコードレビュー
 
 ## DAILY_SCRUM.md実装終了後
 

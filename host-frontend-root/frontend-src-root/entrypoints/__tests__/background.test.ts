@@ -31,8 +31,8 @@ const browserWithMocks = {
     tabs: {
       ...fakeBrowser.tabs,
       sendMessage: vi.fn((tabId, message, callback) => {
-        if (message.type === 'getSelection') {
-          // getSelectionメッセージに対する応答をシミュレート
+        if (message.type === 'getElementSelection') {
+          // getElementSelectionメッセージに対する応答をシミュレート
           const response = { selection: 'テスト用の選択HTML' };
           if (callback) {
             callback(response);
@@ -61,7 +61,7 @@ describe('Background Script', () => {
   test('コンテキストメニュークリックで選択テキストがストレージに保存される', async () => {
     // GIVEN: テスト用のクリック情報
     const info: chrome.contextMenus.OnClickData = {
-      menuItemId: 'replace-text', // `このテキストを置換` メニューのID
+      menuItemId: 'context-menu-replace-dom-element', // `この要素を置換` メニューのID
       selectionText: 'テスト用の選択テキスト',
       editable: false,
       pageUrl: 'https://example.com',
@@ -89,7 +89,7 @@ describe('Background Script', () => {
     // THEN: chrome.tabs.sendMessage が正しい引数で呼び出される
     expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(
       tab.id,
-      { type: 'getSelection' },
+      { type: 'getElementSelection' },
       expect.any(Function)
     );
 
