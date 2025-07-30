@@ -1,6 +1,10 @@
 # ISSUE 単位
 ## ISSUE開始時：人間
 - issue-nnnディレクトリを作成する
+```
+cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
+cp -r docs/issue- docs/issue-008
+```
 - ISSUE.mdの `# 概要` 、 `# 受け入れ条件` 、 `# タスク`(任意) を記載する
 - ドキュメントをコミット
   - コミットメッセージ
@@ -8,7 +12,7 @@
 
 ## ISSUE 開始時の指示
 ```
-nnn=
+nnn=008
 issue-nnnを開始します。PLANモードでdocs/issue-nnn/ISSUE.mdを参照して実装計画を立てPLAN.mdを作成してください。
 ```
 
