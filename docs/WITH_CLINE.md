@@ -3,7 +3,7 @@
 - issue-nnnディレクトリを作成する
 ```
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
-cp -r docs/issue- docs/issue-008
+cp -r docs/issue- docs/issue-
 ```
 - ISSUE.mdの `# 概要` 、 `# 受け入れ条件` 、 `# タスク`(任意) を記載する
 - ドキュメントをコミット
