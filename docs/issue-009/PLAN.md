@@ -69,10 +69,10 @@ const context = await chromium.launchPersistentContext('', {
 - [x] 4. ポップアップページ用fixtureを実装
 
 ### Phase 2: popup.spec.ts修正
-1. fixtures.tsをimport
-2. テスト関数でfixtureを使用するように修正
-3. 手動でのブラウザコンテキスト管理を削除
-4. cleanup処理を削除（fixtureが自動処理）
+- [x] 1. fixtures.tsをimport
+- [x] 2. テスト関数でfixtureを使用するように修正
+- [x] 3. 手動でのブラウザコンテキスト管理を削除
+- [x] 4. cleanup処理を削除（fixtureが自動処理）
 
 ### Phase 3: テスト実行・確認
 1. `npm run test:e2e`でテスト実行
@@ -105,7 +105,7 @@ const context = await chromium.launchPersistentContext('', {
 ## 受け入れ条件の確認
 
 - [x] fixtures.tsが実装されている
-- [ ] 既存のe2eテスト `popup.spec.ts` のテストが、fixtures.tsを使った形に修正される
+- [x] 既存のe2eテスト `popup.spec.ts` のテストが、fixtures.tsを使った形に修正される
 - [x] 修正されたテストコードのテストシナリオは変更されていない（開発者が確認）
 - [x] e2eテストが正常に動作することを確認する
 
