@@ -63,10 +63,10 @@ const context = await chromium.launchPersistentContext('', {
 ## 実装手順
 
 ### Phase 1: fixtures.ts実装
-1. `e2e/fixtures.ts`ファイルを作成
-2. 拡張機能ロード用fixtureを実装
-3. 拡張機能ID取得用fixtureを実装
-4. ポップアップページ用fixtureを実装
+- [x] 1. `e2e/fixtures.ts`ファイルを作成
+- [x] 2. 拡張機能ロード用fixtureを実装
+- [x] 3. 拡張機能ID取得用fixtureを実装
+- [x] 4. ポップアップページ用fixtureを実装
 
 ### Phase 2: popup.spec.ts修正
 1. fixtures.tsをimport
@@ -104,10 +104,10 @@ const context = await chromium.launchPersistentContext('', {
 
 ## 受け入れ条件の確認
 
-- [ ] fixtures.tsが実装されている
+- [x] fixtures.tsが実装されている
 - [ ] 既存のe2eテスト `popup.spec.ts` のテストが、fixtures.tsを使った形に修正される
-- [ ] 修正されたテストコードのテストシナリオは変更されていない（開発者が確認）
-- [ ] e2eテストが正常に動作することを確認する
+- [x] 修正されたテストコードのテストシナリオは変更されていない（開発者が確認）
+- [x] e2eテストが正常に動作することを確認する
 
 ## 参考資料
 - [Playwright Chrome Extensions Documentation](https://playwright.dev/docs/chrome-extensions)
