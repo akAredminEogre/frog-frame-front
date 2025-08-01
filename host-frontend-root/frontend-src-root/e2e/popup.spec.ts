@@ -5,11 +5,8 @@ import { test, expect } from './fixtures';
  * このテストでは拡張機能のポップアップが正しく表示され、
  * 必要な要素が含まれていることを確認します
  */
-test('拡張機能のポップアップが正しく表示される', async ({ context, extensionId }) => {
-  // 拡張機能のポップアップを別タブで開く
-  const popup = await context.newPage();
-  await popup.goto(`chrome-extension://${extensionId}/popup.html`);
-    
+test('拡張機能のポップアップが正しく表示される', async ({ popupPage }) => {
+  const popup = popupPage;
   // テスト1: ポップアップがエラーなく表示される
   await expect(popup.locator('body')).toBeVisible();
     
