@@ -4,7 +4,11 @@
 
 ## スクラム01-(1回目) の進捗
 
-<!-- ここに進捗を記載 -->
+- `host-frontend-root/frontend-src-root/e2e/fixtures.ts` を作成し、Playwrightのe2eテストでChrome拡張機能を扱うためのfixtureを実装しました。
+  - `context`: 拡張機能を読み込んだブラウザコンテキストを提供します。
+  - `extensionId`: 拡張機能のIDを提供します。
+- `host-frontend-root/frontend-src-root/e2e/popup.spec.ts` を修正し、作成したfixtureを利用してテストを実行するように変更しました。
+- `npm run test:e2e` を実行し、テストが正常にパスすることを確認しました。
 
 ### スクラム01-(1回目) のレビューコメント
 
