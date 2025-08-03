@@ -73,7 +73,17 @@ kk=
 
 ```
 nnn=
-issue-nnnのプルリクエストの本文を作成し、docs/issue-nnn/PULL_REQUEST.mdに保存してください。
+issue-nnnのプルリクエストの本文を作成してください。
+
+反映すべき内容：
+favorite-keyword-link-frog/docs/issue-nnn/
+以下のドキュメント群
+
+従うべきフォーマット：
+favorite-keyword-link-frog/docs/issue-/PULL_REQUEST.md
+
+保存先：
+docs/issue-nnn/PULL_REQUEST.md
 ```
 
 - ドキュメントをコミット
@@ -83,30 +93,32 @@ issue-nnnのプルリクエストの本文を作成し、docs/issue-nnn/PULL_REQ
 ```
 nnn=
 docs/issue-nnn/PULL_REQUEST.mdをもとに、ghコマンドを使ってdevelopブランチにプルリクエストを作成してください。
-- push先リポジトリ akAredminEogre/favorite-keyword-link-frog
-- base branch: develop
+- 現時点のブランチをpush
+  - コミットされていない変更はそのまま
+  - push先リポジトリ akAredminEogre/favorite-keyword-link-frog
+- PRリクエスト作成
+  - base branch: develop
+  - title: `PULL REQUEST.md`の`## タイトル`を利用
 
 コミットされていない変更はそのままで、プルリクエストを作成してください。
-
-作成後webでそのPRのURLを開いてください
 ```
 ## PRクローズ準備
-- issues.md
-  - ドキュメントをコミット
-    - コミットメッセージ
-      - docs: 新規・追加・残タスク
 - WITH_CLINE.md
-  - ドキュメントをコミット
-    - コミットメッセージ
-      - docs: CLINEへの指示改善
+  - 変更整理
 
-```
 
 ## PRクローズ時の指示
 ```
 nnn=
 pr_no=
 pr_noのプルリクエストをマージします。次の手順でマージしてください。
+- 下記のファイルでコミットされていない物があればコミット
+  - issues.md
+    - コミットメッセージ
+      - docs: 新規・追加・残タスク
+  - WITH_CLINE.md
+    - コミットメッセージ
+      - docs: CLINEへの指示改善
 - issue-nnnのディレクトリを、completed/issue-nnnに移動する
 - 現在のブランチで残っている変更があればすべてコミットしてプッシュ
   - コミットメッセージは「issue-nnn: プルリクエストの内容を反映」
