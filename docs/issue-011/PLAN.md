@@ -116,11 +116,24 @@ cd ~/akAredminEogre-project/favorite-keyword-link-frog && docker compose exec fr
 
 ### 7. 実装順序
 
-1. **Phase 1**: `save-and-replace.spec.ts`の既存コメント削除と基本構造実装
-2. **Phase 2**: テストケースの詳細実装（DOM確認、フォーム操作）
-3. **Phase 3**: Assert部分の実装（モーダル確認、DOM置換確認）
-4. **Phase 4**: テスト実行と動作確認
-5. **Phase 5**: 既存テストとの整合性確認
+- [x] **Phase 1**: `save-and-replace.spec.ts`の既存コメント削除と基本構造実装
+- [x] **Phase 2**: テストケースの詳細実装（DOM確認、フォーム操作）
+- [x] **Phase 3**: Assert部分の実装（モーダル確認、DOM置換確認）
+- [x] **Phase 4**: テスト実行と動作確認
+- [x] **Phase 5**: 既存テストとの整合性確認
+
+### 8. 実装完了チェックリスト
+
+- [x] save-and-replace.spec.tsの既存コメント削除
+- [x] DOM置換機能のe2eテスト実装
+- [x] agilemanifesto.orgページでのテスト実行
+- [x] フォーム操作の実装（URLパターン、置換前後の入力）
+- [x] 保存ボタンクリックの実装
+- [x] DOM状態確認のデバッグ機能追加
+- [x] 全テスト通過確認（3 passed）
+- [x] 既存テストとの整合性確認
+- [x] PROGRESS-01.mdでの進捗報告
+- [x] ユーザーレビュー完了
 
 ### 8. リスク管理
 
