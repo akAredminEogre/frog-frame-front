@@ -39,9 +39,11 @@ test('DOM置換機能のe2eテスト', async ({ page, popupPage }) => {
   // 4. Act: 置換設定の入力
   const beforeInput = popupPage.getByLabel('置換前：');
   const afterInput = popupPage.getByLabel('置換後：');
+  const regexCheckbox = popupPage.getByLabel('正規表現を使う');
   
-  await beforeInput.fill('<h1>アジャイルソフトウェア開発宣言</h1>');
-  await afterInput.fill('<h2>アジャイルソフトウェア開発宣言</h2>');
+  await beforeInput.fill('<h1>(.+?)</h1>');
+  await afterInput.fill('<h2>$1</h2>');
+  await regexCheckbox.check(); // 正規表現を使うにチェックを入れる
   
   // 5. 保存ボタンクリック
   const saveButton = popupPage.getByRole('button', { name: '保存' });
