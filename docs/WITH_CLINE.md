@@ -1,11 +1,11 @@
 # ISSUE 単位
 ## ISSUE開始時
 ```cline-instructions
-nnn=
+nnn=011
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue- docs/issue-nnn
 を実行し、その後
-issue-nnn-test-e2e-get-origin
+issue-nnn-test-e2e-dom-replace
 ブランチを作成してください
 ```
 
