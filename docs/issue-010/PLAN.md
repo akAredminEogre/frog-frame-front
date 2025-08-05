@@ -8,24 +8,24 @@
 `ISSUE.md`に基づき、以下のタスクを順番に実行します。
 
 ### 2.1. E2Eテストの実装 (`get-origin.spec.ts`)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/e2e/get-origin.spec.ts` を開きます。
-- `test('ポップアップを開くと、URLパターンのフォームにブラウザに表示されているページのURLのドメインが自動入力されている')` のテストケース内に、`ISSUE.md`で示されたユースケースをテストするコードを実装します。
-- 具体的な手順は以下の通りです。
+- [x] `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/e2e/get-origin.spec.ts` を開きます。
+- [x] `test('ポップアップを開くと、URLパターンのフォームにブラウザに表示されているページのURLのドメインが自動入力されている')` のテストケース内に、`ISSUE.md`で示されたユースケースをテストするコードを実装します。
+- [x] 具体的な手順は以下の通りです。
   1. `https://agilemanifesto.org/iso/ja/manifesto.html` にアクセスします。
   2. 拡張機能のポップアップを開きます。
   3. `URLパターン (前方一致):` というラベルを持つフォームの値が `https://agilemanifesto.org` であることをアサーションで確認します。
-- 実装にあたっては、同ファイル内にコメントアウトされているサンプルコードと、`fixtures.ts` を参考にします。
+- [x] 実装にあたっては、同ファイル内にコメントアウトされているサンプルコードと、`fixtures.ts` を参考にします。
 
 ### 2.2. `fixtures.ts` の修正
-- `get-origin.spec.ts` の実装に伴い、`favorite-keyword-link-frog/host-frontend-root/frontend-src-root/e2e/fixtures.ts` に修正が必要な場合は、適切な変更を加えます。
-- 現状では、ポップアップページを取得するためのフィクスチャが定義されています。新しいテストで追加のフィクスチャが必要になるかを確認し、必要であれば追加します。
+- [x] `get-origin.spec.ts` の実装に伴い、`favorite-keyword-link-frog/host-frontend-root/frontend-src-root/e2e/fixtures.ts` に修正が必要な場合は、適切な変更を加えます。
+- [x] 現状では、ポップアップページを取得するためのフィクスチャが定義されています。新しいテストで追加のフィクスチャが必要になるかを確認し、必要であれば追加します。
 
 ### 2.3. テストの実行と確認
-- 新しく作成したE2Eテストを実行し、正常にパスすることを確認します。
+- [x] 新しく作成したE2Eテストを実行し、正常にパスすることを確認します。
   ```bash
   cd favorite-keyword-link-frog && docker compose exec frontend npm run e2e -- get-origin.spec.ts
   ```
-- 既存のすべてのE2Eテストを実行し、影響（デグレード）がないことを確認します。
+- [x] 既存のすべてのE2Eテストを実行し、影響（デグレード）がないことを確認します。
   ```bash
   cd favorite-keyword-link-frog && docker compose exec frontend npm run e2e
   ```
