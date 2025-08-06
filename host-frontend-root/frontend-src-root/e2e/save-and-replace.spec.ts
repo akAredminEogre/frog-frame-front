@@ -24,14 +24,21 @@ test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, po
   await afterInput.fill('<h2>$1</h2>');
   await regexCheckbox.check();
   
-  // 5. 保存ボタンクリック
+  // 5. アラートダイアログの処理設定
+  let alertMessage = '';
+  popupPage.on('dialog', async dialog => {
+    alertMessage = dialog.message();
+    await dialog.accept();
+  });
+  
+  // 6. 保存ボタンクリック
   const saveButton = popupPage.locator('button:has-text("保存")');
   await saveButton.click();
   
-  // 6. Assert: モーダル表示の確認（モーダルの正確なテキスト調査が必要）
-  // await expect(popupPage.locator('text=保存して適用しました！')).toBeVisible({ timeout: 5000 });
+  // 7. Assert: アラートダイアログの確認
+  await expect.poll(() => alertMessage).toBe('保存して適用しました！');
   
-  // 7. Assert: DOM置換結果の確認
+  // 8. Assert: DOM置換結果の確認
   await expect(page.locator('h2')).toHaveText('アジャイルソフトウェア開発宣言', { timeout: 10000 });
   await expect(page.locator('h1')).toHaveCount(0);
 });
