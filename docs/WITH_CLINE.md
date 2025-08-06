@@ -1,7 +1,7 @@
 # ISSUE 単位
 ## ISSUE開始時
 ```cline-instructions
-nnn=011
+nnn=
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue- docs/issue-nnn
 を実行し、その後
@@ -17,7 +17,7 @@ issue-nnn-test-e2e-dom-replace
 ## ISSUE 開始時の指示
 ```
 nnn=(カレントブランチ名からissue番号を取得)
-issue-nnnを開始します。PLANモードでdocs/issue-nnn/ISSUE.mdを参照して実装計画を立てPLAN.mdを作成してください。
+issue-nnnを開始します。docs/issue-nnn/ISSUE.mdを参照して実装計画を立てPLAN.mdを作成してください。
 ```
 
 - ドキュメントをコミット
@@ -28,7 +28,7 @@ issue-nnnを開始します。PLANモードでdocs/issue-nnn/ISSUE.mdを参照�
 ## DAILY SCRUM 開始時の指示
 ```
 nnn=(カレントブランチ名からissue番号を取得)
-kk=(docs/issue-nnn/daily-scrum-ディレクトリの数+1)
+kk=(docs/issue-nnn/daily-scrum-のディレクトリナンバーの最大数+1)
 スクラムkk回目の作業を計画を立ててもらいます。
 
 - favorite-keyword-link-frog/docs/issue-/daily-scrum-をコピーして、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kkディレクトリを作成
@@ -49,7 +49,7 @@ ACTモードに切り替えて、DAILY_SCRUM-kk.mdの作業を開始してくだ
 - コードレビューする
 - ドキュメントをコミット
   - コミットメッセージ
-    - docs: issue-のスクラムkk 回目のコードレビュー
+    - docs: スクラムkk ii回目のコードレビュー
 
 ## DAILY_SCRUM.md実装終了後
 
@@ -96,7 +96,12 @@ docs/issue-nnn/PULL_REQUEST.md
 
 ```
 nnn=(カレントブランチ名からissue番号を取得)
-docs/issue-nnn/PULL_REQUEST.mdをもとに、ghコマンドを使ってdevelopブランチにプルリクエストを作成してください。
+PULL_REQUEST.mdのレビューが完了しました。
+まず、下記の内容でコミットしてください。
+- favorite-keyword-link-frog/docs/issue-nnn/PULL_REQUEST.md
+  - コミットメッセージ
+    - docs: PULL_REQUEST.mdの作成、レビュー完了
+次に、docs/issue-nnn/PULL_REQUEST.mdをもとに、ghコマンドを使ってdevelopブランチにプルリクエストを作成してください。
 - 現時点のブランチをpush
   - コミットされていない変更はそのまま
   - push先リポジトリ akAredminEogre/favorite-keyword-link-frog
