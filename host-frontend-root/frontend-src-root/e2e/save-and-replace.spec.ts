@@ -18,9 +18,15 @@ test('DOM置換機能のe2eテスト', async ({ page, popupPage }) => {
   // 4. Act: 置換設定の入力
   const beforeInput = popupPage.locator('textarea[name="oldString"]');
   const afterInput = popupPage.locator('textarea[name="newString"]');
+  const regexCheckbox = popupPage.locator('input[type="checkbox"]').filter({ hasText: '正規表現を使う' }).or(
+    popupPage.locator('input[name*="regex"]')
+  ).or(
+    popupPage.getByLabel('正規表現を使う')
+  ).first();
   
-  await beforeInput.fill('<h1>アジャイルソフトウェア開発宣言</h1>');
-  await afterInput.fill('<h2>アジャイルソフトウェア開発宣言</h2>');
+  await beforeInput.fill('<h1>(.+?)</h1>');
+  await afterInput.fill('<h2>$1</h2>');
+  await regexCheckbox.check(); // 正規表現を使うにチェックを入れる
   
   // 5. 保存ボタンクリック
   const saveButton = popupPage.locator('button:has-text("保存")');
