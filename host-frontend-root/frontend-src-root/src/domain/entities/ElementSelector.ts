@@ -1,10 +1,11 @@
 /**
- * 選択されたテキストを含む最小のHTML要素を特定するドメインエンティティ
+ * ユーザーのテキスト選択範囲から、置換対象となる最適なHTML要素を特定するドメインエンティティ。
+ * 複雑なDOM構造や複数ノードにまたがる選択に対応し、最小かつ意味のある要素を返却します。
  */
 export class ElementSelector {
   /**
-   * 選択されたテキストを含む最小のHTML要素を特定する
-   * @returns 選択されたHTML要素のouterHTMLまたはフォールバック文字列
+   * 現在の選択範囲から最適なHTML要素を取得します。
+   * @returns 発見された要素のouterHTML。適切な要素が見つからない場合は選択範囲のテキストを返します。
    */
   public getElementFromSelection(): string {
     const selection = window.getSelection();
@@ -13,196 +14,120 @@ export class ElementSelector {
     }
 
     const range = selection.getRangeAt(0);
+    const element = this.findOptimalElement(range, selection);
+
+    return element ? element.outerHTML : selection.toString();
+  }
+
+  /**
+   * 指定されたRangeとSelectionから最適な要素を見つけ出します。
+   * @param range - ユーザーの選択範囲。
+   * @param selection - 現在のSelectionオブジェクト。
+   * @returns 最適なHTML要素。見つからない場合はnull。
+   */
+  private findOptimalElement(range: Range, selection: Selection): Element | null {
     const { commonAncestorContainer } = range;
 
-    // 共通祖先が適切でない場合（ドキュメントルートなど）の処理
-    if (commonAncestorContainer === document || commonAncestorContainer === document.body) {
-      return this.getFirstElementFromSelection(range, selection);
+    if (this.isInvalidAncestor(commonAncestorContainer)) {
+      return this.getFallbackElement(range);
     }
 
-    // 選択範囲を含む最適な要素を特定
-    const targetElement = this.findContainingElement(range, commonAncestorContainer);
-
-    if (targetElement) {
-      return targetElement.outerHTML;
-    }
-
-    // フォールバック：選択範囲の最初の要素のみを対象
-    return this.getFallbackElement(range, selection);
+    return this.findContainingElement(range, commonAncestorContainer);
   }
 
   /**
-   * 選択範囲の最初の要素を返す（共通祖先が適切でない場合）
+   * 共通祖先コンテナが無効（documentやbody）かどうかを判定します。
+   * @param container - 判定対象のノード。
+   * @returns 無効な場合はtrue。
    */
-  private getFirstElementFromSelection(range: Range, selection: Selection): string {
-    const startContainer = range.startContainer;
-    const targetElement = startContainer.nodeType === Node.TEXT_NODE 
-      ? startContainer.parentElement 
-      : startContainer as Element;
-    
-    if (targetElement && targetElement !== document.body) {
-      return targetElement.outerHTML;
-    }
-    return selection.toString();
+  private isInvalidAncestor(container: Node): boolean {
+    return container === document || container === document.body;
   }
 
   /**
-   * 選択範囲を含む最適な要素を特定する
-   * span要素内の複数テキストノードに対応し、適切な親要素を遡及する
+   * 選択範囲を完全に包含する、最も内側にある適切な要素を見つけます。
+   * @param range - ユーザーの選択範囲。
+   * @param container - 共通祖先コンテナ。
+   * @returns 発見されたHTML要素。見つからない場合はnull。
    */
-  private findContainingElement(range: Range, commonAncestorContainer: Node): Element | null {
-    // 共通祖先がテキストノードの場合は親要素を取得
-    if (commonAncestorContainer.nodeType === Node.TEXT_NODE) {
-      return this.findTargetElementFromTextNode(commonAncestorContainer);
+  private findContainingElement(range: Range, container: Node): Element | null {
+    if (container.nodeType === Node.TEXT_NODE) {
+      return this.findTargetElement(container.parentElement);
     }
-    
-    // 共通祖先が要素ノードの場合
-    const ancestorElement = commonAncestorContainer as Element;
-    
-    // 複数要素にまたがる選択の場合、共通祖先を優先
+
+    const element = container as Element;
     if (this.isMultiElementSelection(range)) {
-      return ancestorElement;
+      return this.findTargetElement(element);
     }
-    
-    // span要素など特定のインライン要素の場合はそのまま返す
-    if (this.isTargetElement(ancestorElement)) {
-      return ancestorElement;
-    }
-    
-    // 選択範囲の開始点から適切な親要素を探す
-    return this.findTargetElementFromRange(range);
+
+    const startElement = this.getStartElement(range);
+    return this.findTargetElement(startElement);
   }
 
   /**
-   * テキストノードから適切な親要素を特定する
+   * 指定された要素またはその祖先から、置換対象として適切な要素を探します。
+   * @param element - 探索を開始する要素。
+   * @returns 発見されたHTML要素。見つからない場合は探索開始要素。
    */
-  private findTargetElementFromTextNode(textNode: Node): Element | null {
-    const parentElement = (textNode as Text).parentElement;
-    if (!parentElement) {
-      return null;
-    }
-    
-    // span要素など、置換対象として適切な要素の場合はそれを返す
-    if (this.isTargetElement(parentElement)) {
-      return parentElement;
-    }
-    
-    // より上位の親要素を探す
-    return this.findParentTargetElement(parentElement);
-  }
-
-  /**
-   * 選択範囲から適切な要素を特定する
-   */
-  private findTargetElementFromRange(range: Range): Element | null {
-    const startContainer = range.startContainer;
-    
-    if (startContainer.nodeType === Node.TEXT_NODE) {
-      return this.findTargetElementFromTextNode(startContainer);
-    }
-    
-    const startElement = startContainer as Element;
-    
-    if (this.isTargetElement(startElement)) {
-      return startElement;
-    }
-    
-    return this.findParentTargetElement(startElement);
-  }
-
-  /**
-   * 親要素を遡って適切なターゲット要素を見つける
-   */
-  private findParentTargetElement(element: Element): Element | null {
-    let currentElement: Element | null = element;
-    
-    while (currentElement && currentElement !== document.body) {
-      if (this.isTargetElement(currentElement)) {
-        return currentElement;
+  private findTargetElement(element: Element | null): Element | null {
+    let current = element;
+    while (current && current !== document.body) {
+      if (this.isSuitableAsTarget(current)) {
+        return current;
       }
-      currentElement = currentElement.parentElement;
+      current = current.parentElement;
     }
-    
-    // 適切なターゲット要素が見つからない場合は最初の要素を返す
-    return element;
+    return element; // 見つからなければ元の要素を返す
   }
 
   /**
-   * 複数要素にまたがる選択かを判定する
+   * 選択範囲の開始コンテナから要素を取得します。
+   * @param range - ユーザーの選択範囲。
+   * @returns 開始要素。
+   */
+  private getStartElement(range: Range): Element | null {
+    const { startContainer } = range;
+    if (startContainer.nodeType === Node.TEXT_NODE) {
+      return startContainer.parentElement;
+    }
+    return startContainer as Element;
+  }
+
+  /**
+   * 選択が複数の要素にまたがっているかを判定します。
+   * @param range - ユーザーの選択範囲。
+   * @returns 複数要素にまたがる場合はtrue。
    */
   private isMultiElementSelection(range: Range): boolean {
-    const startContainer = range.startContainer;
-    const endContainer = range.endContainer;
-    
-    // 開始と終了が異なるコンテナの場合は複数要素選択
-    if (startContainer !== endContainer) {
-      return true;
-    }
-    
-    // 開始と終了が同じでも、親要素が異なる場合は複数要素選択の可能性
-    if (startContainer.nodeType === Node.TEXT_NODE && endContainer.nodeType === Node.TEXT_NODE) {
-      const startParent = (startContainer as Text).parentElement;
-      const endParent = (endContainer as Text).parentElement;
-      return startParent !== endParent;
-    }
-    
-    return false;
+    return range.startContainer !== range.endContainer;
   }
 
   /**
-   * 要素が置換対象として適切かを判定する
+   * 指定された要素が置換対象として適切かどうかを判定します。
+   * インライン要素や属性を持つ要素を優先します。
+   * @param element - 判定対象の要素。
+   * @returns 適切な場合はtrue。
    */
-  private isTargetElement(element: Element): boolean {
+  private isSuitableAsTarget(element: Element): boolean {
     const tagName = element.tagName?.toLowerCase();
-    
-    // span要素は常に対象
-    if (tagName === 'span') {
-      return true;
-    }
-    
-    // その他のインライン要素も対象とする
-    const inlineElements = ['a', 'strong', 'b', 'em', 'i', 'code', 'small', 'mark'];
+    const inlineElements = ['span', 'a', 'strong', 'b', 'em', 'i', 'code', 'small', 'mark'];
+
     if (inlineElements.includes(tagName)) {
       return true;
     }
-    
-    // classやid等の属性がある要素も対象とする
-    if (typeof element.hasAttributes === 'function' && element.hasAttributes()) {
-      return true;
-    }
-    
-    // hasAttributesメソッドが存在しない場合は、attributes lengthで判定
-    if (element.attributes && element.attributes.length > 0) {
-      return true;
-    }
-    
-    return false;
+    return element.hasAttributes() && element.attributes.length > 0;
   }
 
   /**
-   * 共通祖先からターゲット要素を取得
+   * フォールバックとして、選択範囲の開始点にある要素を取得します。
+   * @param range - ユーザーの選択範囲。
+   * @returns フォールバック用のHTML要素。
    */
-  private getTargetElement(commonAncestorContainer: Node): Element | null {
-    if (commonAncestorContainer.nodeType === Node.TEXT_NODE) {
-      return commonAncestorContainer.parentElement;
-    } else {
-      return commonAncestorContainer as Element;
+  private getFallbackElement(range: Range): Element | null {
+    const element = this.getStartElement(range);
+    if (element && element !== document.body) {
+      return element;
     }
-  }
-
-  /**
-   * フォールバック処理：選択範囲の最初の要素のみを対象とする
-   */
-  private getFallbackElement(range: Range, selection: Selection): string {
-    const startContainer = range.startContainer;
-    const fallbackElement = startContainer.nodeType === Node.TEXT_NODE 
-      ? startContainer.parentElement 
-      : startContainer as Element;
-    
-    if (fallbackElement && fallbackElement !== document.body) {
-      return fallbackElement.outerHTML;
-    }
-
-    return selection.toString();
+    return null;
   }
 }
