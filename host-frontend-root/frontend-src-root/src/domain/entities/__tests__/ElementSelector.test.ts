@@ -101,7 +101,10 @@ describe('ElementSelector', () => {
 
     it('共通祖先がテキストノードの場合、親要素のouterHTMLを返す', () => {
       const mockParentElement = {
-        outerHTML: '<span>selected text</span>'
+        outerHTML: '<span>selected text</span>',
+        tagName: 'SPAN',
+        hasAttributes: () => false,
+        attributes: []
       };
 
       const mockTextNode = {
@@ -127,7 +130,9 @@ describe('ElementSelector', () => {
       const mockElement = {
         nodeType: 1, // ELEMENT_NODE
         outerHTML: '<div>element content</div>',
-        tagName: 'DIV'
+        tagName: 'DIV',
+        hasAttributes: () => false,
+        attributes: []
       };
 
       const mockRangeForElement = {
@@ -172,7 +177,9 @@ describe('ElementSelector', () => {
       const mockSpanElement = {
         nodeType: 1, // ELEMENT_NODE
         outerHTML: '<span class="inline-flex">商品番号：</span>',
-        tagName: 'SPAN'
+        tagName: 'SPAN',
+        hasAttributes: () => true,
+        attributes: [{ name: 'class', value: 'inline-flex' }]
       };
 
       const mockTextNode1 = {
@@ -208,7 +215,9 @@ describe('ElementSelector', () => {
       const mockSpanElement = {
         nodeType: 1, // ELEMENT_NODE
         outerHTML: '<span class="inline-flex">商品番号：</span>',
-        tagName: 'SPAN'
+        tagName: 'SPAN',
+        hasAttributes: () => true,
+        attributes: [{ name: 'class', value: 'inline-flex' }]
       };
 
       const mockTextNode = {
@@ -238,21 +247,27 @@ describe('ElementSelector', () => {
       const mockParentDiv = {
         nodeType: 1, // ELEMENT_NODE
         outerHTML: '<div><span>span1</span><span>span2</span></div>',
-        tagName: 'DIV'
+        tagName: 'DIV',
+        hasAttributes: () => true,
+        attributes: [{ name: 'class', value: 'parent' }]
       };
 
       const mockSpan1 = {
         nodeType: 1, // ELEMENT_NODE
         outerHTML: '<span>span1</span>',
         tagName: 'SPAN',
-        parentElement: mockParentDiv
+        parentElement: mockParentDiv,
+        hasAttributes: () => false,
+        attributes: []
       };
 
       const mockSpan2 = {
         nodeType: 1, // ELEMENT_NODE
         outerHTML: '<span>span2</span>',
         tagName: 'SPAN',
-        parentElement: mockParentDiv
+        parentElement: mockParentDiv,
+        hasAttributes: () => false,
+        attributes: []
       };
 
       // 複数span要素をまたぐ選択の共通祖先
