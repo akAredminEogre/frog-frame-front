@@ -1,6 +1,7 @@
 FROM node:20-bullseye
 
-WORKDIR /opt/frontend-container-app-root/frontend-src-root
+ARG FRONTEND_WORKDIR
+WORKDIR ${FRONTEND_WORKDIR}
 
 # 必要なパッケージを apt でインストール
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,18 +14,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   sudo \
   && rm -rf /var/lib/apt/lists/*
 
-COPY ./host-frontend-root/frontend-src-root/package*.json ./
+ARG HOST_FRONTEND_ROOT_PATH
+ARG CONTAINER_APP_ROOT
+COPY ${HOST_FRONTEND_ROOT_PATH}/frontend-src-root/package*.json ./
 RUN npm install
 
-COPY ./host-frontend-root/frontend-src-root /opt/frontend-container-app-root/frontend-src-root
+COPY ${HOST_FRONTEND_ROOT_PATH}/frontend-src-root ${CONTAINER_APP_ROOT}/frontend-src-root
 
 RUN npx wxt prepare
 
 # ノードユーザーのUIDとGIDをホストの一般的なユーザーIDに変更
-RUN usermod -u 1000 node && groupmod -g 1000 node
+ARG FRONTEND_UID
+ARG FRONTEND_GID
+ARG CONTAINER_APP_ROOT
+RUN usermod -u ${FRONTEND_UID} node && groupmod -g ${FRONTEND_GID} node
 
 # ディレクトリの所有権を明示的に設定
-RUN chown -R node:node /opt/frontend-container-app-root
+RUN chown -R node:node ${CONTAINER_APP_ROOT}
 
 # コンテナが起動するユーザーに sudo 権限を付与
 RUN echo 'node ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/node \
