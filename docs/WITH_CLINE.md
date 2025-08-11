@@ -1,28 +1,35 @@
 # ISSUE 単位
 ## ISSUE開始時
 ```cline-instructions
-nnn=
+nnn=013
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue- docs/issue-nnn
 を実行し、その後
-issue-nnn-test-e2e-dom-replace
+issue-nnn-feat-right-click-span
 ブランチを作成してください
 ```
 
 - ISSUE.mdの `# 概要` 、 `# 受け入れ条件` 、 `# タスク`(任意) を記載する
-- ドキュメントをコミット
-  - コミットメッセージ
-    - docs: issue-開始時のドキュメント
 
 ## ISSUE 開始時の指示
-```
+```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
-issue-nnnを開始します。docs/issue-nnn/ISSUE.mdを参照して実装計画を立てPLAN.mdを作成してください。
+issue-nnnを開始します。
+まず、下記の内容でコミットしてください。
+- 対象：変更中のファイルで、`WITH_CLINE.md`、`issues.md`を除くすべてのファイル
+- コミットメッセージ
+  - docs: issue-nnnの開始時のドキュメント
+次に、docs/issue-nnn/ISSUE.mdを参照して実装計画を立てPLAN.mdを作成してください。
 ```
 
-- ドキュメントをコミット
-  - コミットメッセージ
-    - docs: issue-のPLAN.mdを作成
+```cline-instructions
+nnn=(カレントブランチ名からissue番号を取得)
+PLAN.mdのレビューが完了しました。
+まず、下記の内容でコミットしてください。
+- 対象：docs/issue-nnn/PLAN.md
+- コミットメッセージ
+  - docs: issue-nnnのPLAN.mdの作成、レビュー完了
+```
 
 # DAILY SCRUM単位
 ## DAILY SCRUM 開始時の指示
@@ -30,18 +37,27 @@ issue-nnnを開始します。docs/issue-nnn/ISSUE.mdを参照して実装計画
 nnn=(カレントブランチ名からissue番号を取得)
 kk=(docs/issue-nnn/daily-scrum-のディレクトリナンバーの最大数+1)
 スクラムkk回目の作業を計画を立ててもらいます。
+- 下記コマンドを実行
+```bash
+cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
+mkdir -p docs/issue-nnn/daily-scrum-kk/ && \
+cp -r docs/issue-/daily-scrum- docs/issue-nnn/daily-scrum-kk/
+```
 
-- favorite-keyword-link-frog/docs/issue-/daily-scrum-をコピーして、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kkディレクトリを作成
 - docs/issue-nnnのドキュメントを読み込み、スクラムkk回目の作業を計画を立てデイリースクラムを実施。
 - その内容に基づき、favorite-keyword-link-frog/docs/issue-/daily-scrum-/DAILY_SCRUM-kk.mdのフォーマットに従って、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdを作成してください。
 ```
 
 ## DAILY_SCRUM-kk.md作成後の指示
-- ドキュメントをコミット
-  - コミットメッセージ
-    - docs: デイリースクラムkk回目開始時のドキュメント
-```
+```cline-instructions
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
+デイリースクラムの計画をレビューしました。
+まず、下記の内容でコミットしてください。
+- 対象：変更中のファイルで、`WITH_CLINE.md`、`issues.md`を除くすべてのファイル
+- コミットメッセージ
+  - docs: デイリースクラムkk回目開始時のドキュメント
+
+それが終わったら、
 ACTモードに切り替えて、DAILY_SCRUM-kk.mdの作業を開始してください。
 実装が完了したらPROGRESS-kk.mdのフォーマットに従って、PROGRESS-kk.mdを追記してコードレビューを依頼してください
 ```
@@ -54,14 +70,19 @@ ACTモードに切り替えて、DAILY_SCRUM-kk.mdの作業を開始してくだ
 ## DAILY_SCRUM.md実装終了後
 
 - 人間がコードをコミット
-  - コミットメッセージ
-    - docs: スクラムkk回目の進捗
 
 
 ### 指示
-```
+```cline-instructions
+nnn=(カレントブランチ名からissue番号を取得)
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
-ありがとうございました。今回の作業は終了にします。振り返りを行い、PLAN.md/RETROSPECTIVE.md/DAILY_SCRUM.mdを更新してください
+ありがとうございました。今回の作業は終了にします。
+まず、下記の内容でコミットしてください。
+- 対象：docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.md
+- コミットメッセージ
+  - docs: スクラムkk回目の進捗
+
+次に、振り返りを行い、PLAN.md/RETROSPECTIVE.md/DAILY_SCRUM.mdを更新してください
 - PLAN.md
   - チェックリストの更新
 - RETROSPECTIVE.md
@@ -90,11 +111,7 @@ favorite-keyword-link-frog/docs/issue-/PULL_REQUEST.md
 docs/issue-nnn/PULL_REQUEST.md
 ```
 
-- ドキュメントをコミット
-  - コミットメッセージ
-    - docs: PULL_REQUEST.mdを作成
-
-```
+```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
 PULL_REQUEST.mdのレビューが完了しました。
 まず、下記の内容でコミットしてください。
@@ -121,6 +138,7 @@ PULL_REQUEST.mdのレビューが完了しました。
 nnn=(カレントブランチ名からissue番号を取得)
 pr_no=(カレントブランチが出しているプルリクエストの番号)
 pr_noのプルリクエストをマージします。次の手順でマージしてください。
+- ドキュメントテンプレートの削除
 - 下記のファイルでコミットされていない物があればコミット
   - issues.md
     - コミットメッセージ
