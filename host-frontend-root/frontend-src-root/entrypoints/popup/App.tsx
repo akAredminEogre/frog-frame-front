@@ -82,7 +82,7 @@ function App() {
 
             // 完了通知
             alert('保存して適用しました！');
-          } catch (error) {
+          } catch {
             alert('保存しましたが、適用中にエラーが発生しました。');
           }
         } else {
@@ -91,7 +91,7 @@ function App() {
         }
       });
 
-    } catch (error) {
+    } catch {
       alert('保存に失敗しました。');
     }
   };

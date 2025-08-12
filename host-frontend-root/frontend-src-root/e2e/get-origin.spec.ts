@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures';
 
-test('ポップアップを開くと、URLパターンのフォームにブラウザに表示されているページのURLのドメインが自動入力されている', async ({ page, context, popupPage }) => {
+test('ポップアップを開くと、URLパターンのフォームにブラウザに表示されているページのURLのドメインが自動入力されている', async ({ page, popupPage }) => {
 
   // メインページに移動し、フォーカスを当てる
   await page.goto('https://agilemanifesto.org/iso/ja/manifesto.html');
