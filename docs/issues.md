@@ -1,4 +1,3 @@
-- [ ] 右クリックで要素をフォームに適用
 - [ ] eslint導入
 - [ ] RewriteRuleをtypeではなく、ValueObjectとして定義
 - [ ] NodeTextReplacerのリファクタリング
@@ -9,7 +8,10 @@
 - [ ] replacewithをリファクタリング
 - [ ] クエリが含まれていると、最初だけうまくいかない
 - [ ] applyRulesのリファクタリング
-- [ ] Docker設定の環境変数分離
+- [x] Docker設定の環境変数分離
 - [ ] 選択されたテキストが複数のHTML要素にまたがる場合の処理方針について
 - [ ] 右クリック入力のロジック分離
 - [ ] タグ前後の改行、空白の処理
+- [ ] issue-012: 右クリック入力のe2eテスト
+- [ ] ElementSelectorの返り値をValueObjectに変更
+- [ ] window.getSelection()の戻り値を分離
