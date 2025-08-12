@@ -27,4 +27,3 @@ test-results
 *.sw?
 
 src/utils/matchUrl.ts
-.env
