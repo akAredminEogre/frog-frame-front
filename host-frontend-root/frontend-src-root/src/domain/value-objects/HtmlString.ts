@@ -8,7 +8,7 @@ export class HtmlString {
     this.value = value;
   }
 
-  private isValid(value: string): boolean {
+  private isValid(_value: string): boolean {
     // 常にtrueを返す実装
     // 理由：
     // 1. 現状仕様が固まっておらず、バリデーション要件が不明確
