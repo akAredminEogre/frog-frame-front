@@ -1,6 +1,10 @@
 import { defineConfig } from 'wxt';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
+// 環境変数から開発サーバー設定を取得
+const devHost = process.env.WXT_DEV_HOST || 'localhost';
+const devPort = process.env.WXT_DEV_PORT ? parseInt(process.env.WXT_DEV_PORT, 10) : 3000;
+
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   modules: ['@wxt-dev/module-react'],
@@ -10,8 +14,8 @@ export default defineConfig({
   },
   dev: {
     server: {
-      host: 'localhost',
-      port: 3000,
+      host: devHost,
+      port: devPort,
     }
   },
   webExt: {
@@ -20,11 +24,11 @@ export default defineConfig({
   vite:() =>  ({
     plugins: [tsconfigPaths()],
     server: {
-      host: 'localhost',
-      port: 3000,
+      host: devHost,
+      port: devPort,
       strictPort: true, 
       hmr: {
-        port: 3000,
+        port: devPort,
       }
     }
   }),
