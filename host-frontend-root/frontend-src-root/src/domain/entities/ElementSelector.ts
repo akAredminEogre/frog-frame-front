@@ -1,22 +1,33 @@
+import { SelectionService } from '../../infrastructure/selection/SelectionService';
+
 /**
  * ユーザーのテキスト選択範囲から、置換対象となる最適なHTML要素を特定するドメインエンティティ。
  * 複雑なDOM構造や複数ノードにまたがる選択に対応し、最小かつ意味のある要素を返却します。
  */
 export class ElementSelector {
+  private selectionService: SelectionService;
+
+  constructor(selectionService?: SelectionService) {
+    this.selectionService = selectionService || new SelectionService();
+  }
   /**
    * 現在の選択範囲から最適なHTML要素を取得します。
    * @returns 発見された要素のouterHTML。適切な要素が見つからない場合は選択範囲のテキストを返します。
    */
   public getElementFromSelection(): string {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) {
+    const selection = this.selectionService.getCurrentSelection();
+    if (!this.selectionService.hasValidSelection()) {
       return '';
     }
 
-    const range = selection.getRangeAt(0);
+    const range = this.selectionService.getFirstRange();
+    if (!range || !selection) {
+      return '';
+    }
+
     const element = this.findOptimalElement(range, selection);
 
-    return element ? element.outerHTML : selection.toString();
+    return element ? element.outerHTML : this.selectionService.getSelectedText();
   }
 
   /**
