@@ -34,9 +34,9 @@
    - モックされた`SelectionService`を依存性注入してテスト実行
 
 ## 受け入れ条件の確認
-- [ ] `ElementSelector.test.ts`において、`window.getSelection as any`の記述がすべて削除されること
-- [ ] `ElementSelector`のテストがすべて通ること（10/10 テストケース）
-- [ ] 既存のvitest、playwrightのテストがすべて通ること
+- [x] `ElementSelector.test.ts`において、`window.getSelection as any`の記述がすべて削除されること
+- [x] `ElementSelector`のテストがすべて通ること（10/10 テストケース）
+- [x] 既存のvitest、playwrightのテストがすべて通ること
 
 ## 相談事項
 - SelectionServiceの各メソッド（`getCurrentSelection()`, `hasValidSelection()`, `getFirstRange()`, `getSelectedText()`）のモック戦略
