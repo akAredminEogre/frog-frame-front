@@ -2,16 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ElementSelector } from '../ElementSelector';
 
 // DOM環境のモック
-const mockSelection = {
-  rangeCount: 0,
-  getRangeAt: vi.fn(),
-  toString: vi.fn()
-};
-
-const mockRange = {
-  startContainer: null,
-  commonAncestorContainer: null
-};
 
 // window.getSelectionのモック
 Object.defineProperty(window, 'getSelection', {
@@ -185,12 +175,6 @@ describe('ElementSelector', () => {
       const mockTextNode1 = {
         nodeType: 3, // TEXT_NODE
         textContent: '商品番号',
-        parentElement: mockSpanElement
-      };
-
-      const mockTextNode2 = {
-        nodeType: 3, // TEXT_NODE
-        textContent: '：',
         parentElement: mockSpanElement
       };
 
