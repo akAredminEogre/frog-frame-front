@@ -25,11 +25,11 @@ export class SelectionService {
    * @returns 最初のRangeオブジェクト。選択が存在しない場合はnull。
    */
   public getFirstRange(): Range | null {
-    const selection = this.getCurrentSelection();
-    if (!selection || selection.rangeCount === 0) {
+    if (!this.hasValidSelection()) {
       return null;
     }
-    return selection.getRangeAt(0);
+    const selection = this.getCurrentSelection();
+    return selection!.getRangeAt(0);
   }
 
   /**
