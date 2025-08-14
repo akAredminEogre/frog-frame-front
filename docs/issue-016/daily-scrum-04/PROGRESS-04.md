@@ -51,4 +51,6 @@ issue-016は完全に実装完了状態に達しています。
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 `ElementSelector`の `getFirstRange` メソッドと `getValidFirstRange` メソッドのロジックは完全に一致していませんか？もしそうであれば、`getValidFirstRange` の実装を `getFirstRange` に統合することを検討してみてください。これにより、コードの重複を減らし、可読性が向上する可能性があります。
-また
+また、getValidFirstRange を使用している箇所があれば、`getFirstRange` に置き換えることも検討してください。
+
+getValidFirstRangeを削除するようであれば、ElementSelector.test.tsの該当箇所も修正する必要があります。
