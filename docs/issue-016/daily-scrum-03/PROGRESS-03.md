@@ -43,4 +43,30 @@ Phase 1〜3を通じて、window.getSelection()の抽象化というissue-016の
 content.tsにおいて
 selection || selection.rangeCount === 0
 のロジックが、selectionServiceのものと重複しているので、
-selectionServiceを利用するようにリファクタリングすることを提案します。
+selectionServiceを利用するようにリファクタリングをお願いします
+
+---
+
+## スクラム03-2回目 の進捗
+
+**ユーザーレビューコメントに基づくリファクタリング** が正常に完了しました。
+
+### 実施した作業
+**content.tsのロジック重複解決**
+- `!selection || selection.rangeCount === 0` → `selectionService.hasValidSelection()` に変更
+- `selection.getRangeAt(0)` → `selectionService.getFirstRange()` に変更  
+- `selection.toString()` → `selectionService.getSelectedText()` に変更
+
+### 達成結果
+- ✅ content.tsとSelectionServiceの重複ロジックを解決
+- ✅ SelectionServiceのメソッドを活用した統一的な実装
+- ✅ vitestテスト: 16ファイル、94テスト全て通過
+- ✅ playwrightテスト: 3テスト全て通過
+
+### 振り返り
+ユーザーのレビューコメントにより、コードの重複を排除し、より一貫性のある実装となりました。SelectionServiceの各メソッドを適切に活用することで、保守性がさらに向上しました。
+
+### スクラム03-2回目 のレビューコメント
+
+修正いただいた内容は問題ありません。ありがとうございます。
+また追加で申し訳ありません。`SelectionService`の中で、`getFirstRange()` の中で `hasValidSelection()` を呼び出せば類似ロジックの重複を避けられると思います。リファクタリングをお願いします
