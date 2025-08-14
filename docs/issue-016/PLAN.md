@@ -83,7 +83,8 @@ export class SelectionService {
 - [x] 既存のvitest、playwrightのテストがすべて通る
 
 ### issueを進める中で発生した追加タスク
-- [ ] SelectionServiceのモック方法を確認
+- [ ] SelectionServiceの変更に合わせて、`ElementSelector.test.ts`のモックを修正
+- [ ] `ElementSelector`のマジックナンバーを定数化し、可読性を向上
 
 ## リスク軽減策
 
