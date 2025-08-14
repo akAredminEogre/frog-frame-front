@@ -18,11 +18,7 @@ import { SelectionService } from '../src/infrastructure/selection/SelectionServi
 function getSelectionInfo(): { selection: string } {
   const selectionService = new SelectionService();
   
-  if (!selectionService.hasValidSelection()) {
-    return { selection: '' };
-  }
-
-  const range = selectionService.getFirstRange();
+  const range = selectionService.getValidFirstRange();
   if (!range) {
     return { selection: '' };
   }

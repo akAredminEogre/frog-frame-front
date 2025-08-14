@@ -40,4 +40,16 @@ export class SelectionService {
     const selection = this.getCurrentSelection();
     return selection ? selection.toString() : '';
   }
+
+  /**
+   * 有効な選択範囲があるかチェックし、あれば最初のRangeを取得します。
+   * @returns 最初のRangeオブジェクト。有効な選択が存在しない場合はnull。
+   */
+  public getValidFirstRange(): Range | null {
+    if (!this.hasValidSelection()) {
+      return null;
+    }
+    const selection = this.getCurrentSelection();
+    return selection!.getRangeAt(0);
+  }
 }
