@@ -77,10 +77,10 @@ export class SelectionService {
 
 ## 受け入れ条件の達成
 
-- [ ] `window.getSelection()` の記述が`src/infrastructure/selection/SelectionService.ts`のみに存在
+- [x] `window.getSelection()` の記述が`src/infrastructure/selection/SelectionService.ts`のみに存在
 - [x] `ElementSelector.test.ts` において、`window.getSelection as any` の記述が削除されている
 - [x] `ElementSelector` のテストが通る
-- [ ] 既存のvitest、playwrightのテストがすべて通る
+- [x] 既存のvitest、playwrightのテストがすべて通る
 
 ### issueを進める中で発生した追加タスク
 - [ ] SelectionServiceのモック方法を確認
