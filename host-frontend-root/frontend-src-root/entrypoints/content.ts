@@ -17,12 +17,16 @@ import { SelectionService } from '../src/infrastructure/selection/SelectionServi
  */
 function getSelectionInfo(): { selection: string } {
   const selectionService = new SelectionService();
-  const selection = selectionService.getCurrentSelection();
-  if (!selection || selection.rangeCount === 0) {
+  
+  if (!selectionService.hasValidSelection()) {
     return { selection: '' };
   }
 
-  const range = selection.getRangeAt(0);
+  const range = selectionService.getFirstRange();
+  if (!range) {
+    return { selection: '' };
+  }
+
   const { commonAncestorContainer } = range;
 
   // 選択範囲が単一の要素を完全に含んでいるかチェック
@@ -45,7 +49,7 @@ function getSelectionInfo(): { selection: string } {
   }
 
   // それ以外の場合は、選択されたテキストを返す
-  return { selection: selection.toString() };
+  return { selection: selectionService.getSelectedText() };
 }
 
 export default defineContentScript({
