@@ -70,3 +70,39 @@ selectionServiceを利用するようにリファクタリングをお願いし�
 
 修正いただいた内容は問題ありません。ありがとうございます。
 また追加で申し訳ありません。`SelectionService`の中で、`getFirstRange()` の中で `hasValidSelection()` を呼び出せば類似ロジックの重複を避けられると思います。リファクタリングをお願いします
+
+---
+
+## スクラム03-3回目 の進捗
+
+**SelectionService内の重複ロジック解決リファクタリング** が正常に完了しました。
+
+### 実施した作業
+**SelectionService.getFirstRange()の改善**
+- `!selection || selection.rangeCount === 0` → `!this.hasValidSelection()` に変更
+- `hasValidSelection()`メソッドを活用することで重複ロジックを排除
+- 一貫性のあるValidation処理の実現
+
+### 達成結果
+- ✅ SelectionService内の重複ロジックを完全解決
+- ✅ hasValidSelection()メソッドの再利用による統一性向上
+- ✅ vitestテスト: 16ファイル、94テスト全て通過
+- ✅ playwrightテスト: 3テスト全て通過
+
+### 振り返り
+ユーザーの的確なレビューコメントにより、SelectionService内部でもコードの重複を排除し、より一貫性のある実装となりました。hasValidSelection()メソッドを中心とした統一的なvalidation処理により、保守性がさらに向上しました。
+
+### スクラム03-3回目 のレビューコメント
+
+`content.ts` において、
+```
+  if (!selectionService.hasValidSelection()) {
+    return { selection: '' };
+  }
+
+  const range = selectionService.getFirstRange();
+  if (!range) {
+    return { selection: '' };
+  }
+```
+のロジックは、`SelectionService` のロジックを流用できないでしょうか。検討の上リファクタリングをお願いします
