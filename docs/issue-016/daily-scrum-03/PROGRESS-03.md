@@ -106,3 +106,28 @@ selectionServiceを利用するようにリファクタリングをお願いし�
   }
 ```
 のロジックは、`SelectionService` のロジックを流用できないでしょうか。検討の上リファクタリングをお願いします
+
+---
+
+## スクラム03-4回目 の進捗
+
+**content.tsの二重チェック解決リファクタリング** が正常に完了しました。
+
+### 実施した作業
+**SelectionService.getValidFirstRange()の新規追加**
+- `hasValidSelection()`と`getFirstRange()`を統合する新メソッドを実装
+- content.tsでの二重チェックを単一チェックに変更
+- `selectionService.getValidFirstRange()` 一発で有効な範囲取得を実現
+
+### 達成結果
+- ✅ content.tsの二重チェックロジックを完全解決
+- ✅ SelectionServiceの新メソッドによる統合的な処理
+- ✅ vitestテスト: 16ファイル、94テスト全て通過
+- ✅ playwrightテスト: 3テスト全て通過
+
+### 振り返り
+ユーザーの鋭い指摘により、`hasValidSelection()`が`true`の場合`getFirstRange()`は必ず有効な値を返すという論理的関係に基づいて、冗長な二重チェックを統合的なメソッドで解決できました。これにより、コードの簡潔性と論理的一貫性がさらに向上しました。
+
+### スクラム03-4回目 のレビューコメント
+
+<!-- ここはユーザが書くので空欄にしておいてください。 -->
