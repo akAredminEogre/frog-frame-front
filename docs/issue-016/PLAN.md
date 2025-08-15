@@ -78,13 +78,15 @@ export class SelectionService {
 ## 受け入れ条件の達成
 
 - [x] `window.getSelection()` の記述が`src/infrastructure/selection/SelectionService.ts`のみに存在
-- [ ] `ElementSelector.test.ts` において、`window.getSelection as any` の記述が削除されている
-- [ ] `ElementSelector` のテストが通る
-- [ ] 既存のvitest、playwrightのテストがすべて通る
+- [x] `ElementSelector.test.ts` において、`window.getSelection as any` の記述が削除されている
+- [x] `ElementSelector` のテストが通る
+- [x] 既存のvitest、playwrightのテストがすべて通る
 
 ### issueを進める中で発生した追加タスク
-- [ ] SelectionServiceの変更に合わせて、`ElementSelector.test.ts`のモックを修正
-- [ ] `ElementSelector`のマジックナンバーを定数化し、可読性を向上
+- [x] SelectionServiceの変更に合わせて、`ElementSelector.test.ts`のモックを修正
+- [x] `ElementSelector`のマジックナンバーを定数化し、可読性を向上
+- [x] 重複コード削除：`getValidFirstRange`と`getFirstRange`の統合（DRY原則の遵守）
+- [x] テストファイル内のマジックナンバー定数化：`ElementSelector.test.ts`の可読性・保守性向上
 
 ## リスク軽減策
 
