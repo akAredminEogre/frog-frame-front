@@ -1,11 +1,15 @@
 # ISSUE 単位
 ## ISSUE開始時
 ```cline-instructions
-nnn=013
+issue番号の採番：
+- fetchしてリモートブランチとローカルブランチを同期
+- issue-mmm(mmmは任意の数字)で始まるブランチの中で、最も大きい数字+1をnnnとする
+
+nnn=(上記で採番したissue番号)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue- docs/issue-nnn
 を実行し、その後
-issue-nnn-feat-right-click-span
+issue-nnn-refactor-separate-windows-selection
 ブランチを作成してください
 ```
 
@@ -40,12 +44,11 @@ kk=(docs/issue-nnn/daily-scrum-のディレクトリナンバーの最大数+1)
 - 下記コマンドを実行
 ```bash
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
-mkdir -p docs/issue-nnn/daily-scrum-kk/ && \
-cp -r docs/issue-/daily-scrum- docs/issue-nnn/daily-scrum-kk/
+mkdir -p docs/issue-nnn/daily-scrum-kk/
 ```
 
 - docs/issue-nnnのドキュメントを読み込み、スクラムkk回目の作業を計画を立てデイリースクラムを実施。
-- その内容に基づき、favorite-keyword-link-frog/docs/issue-/daily-scrum-/DAILY_SCRUM-kk.mdのフォーマットに従って、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdを作成してください。
+- その内容に基づき、favorite-keyword-link-frog/docs/issue-/daily-scrum-/DAILY_SCRUM-.mdのフォーマットに従って、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdを作成してください。
 ```
 
 ## DAILY_SCRUM-kk.md作成後の指示
@@ -56,10 +59,12 @@ kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 - 対象：変更中のファイルで、`WITH_CLINE.md`、`issues.md`を除くすべてのファイル
 - コミットメッセージ
   - docs: デイリースクラムkk回目開始時のドキュメント
+```
 
-それが終わったら、
-ACTモードに切り替えて、DAILY_SCRUM-kk.mdの作業を開始してください。
-実装が完了したらPROGRESS-kk.mdのフォーマットに従って、PROGRESS-kk.mdを追記してコードレビューを依頼してください
+```cline-instructions
+kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
+DAILY_SCRUM-kk.mdの作業を開始してください。
+実装が完了したらPROGRESS-.mdのフォーマットに従って、PROGRESS-kk.mdを追記してコードレビューを依頼してください
 ```
 
 - コードレビューする

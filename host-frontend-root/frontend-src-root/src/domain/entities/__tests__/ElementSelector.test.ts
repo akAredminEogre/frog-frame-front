@@ -1,13 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ElementSelector } from '../ElementSelector';
 
-// DOM環境のモック
-
-// window.getSelectionのモック
-Object.defineProperty(window, 'getSelection', {
-  writable: true,
-  value: vi.fn()
-});
+// SelectionServiceのモック
+vi.mock('../../../infrastructure/selection/SelectionService');
 
 // Nodeのモック
 Object.defineProperty(global, 'Node', {
@@ -19,15 +14,22 @@ Object.defineProperty(global, 'Node', {
 
 describe('ElementSelector', () => {
   let elementSelector: ElementSelector;
+  let mockSelectionService: any;
 
   beforeEach(() => {
-    elementSelector = new ElementSelector();
+    mockSelectionService = {
+      getCurrentSelection: vi.fn(),
+      hasValidSelection: vi.fn(),
+      getFirstRange: vi.fn(),
+      getSelectedText: vi.fn()
+    };
+    elementSelector = new ElementSelector(mockSelectionService);
     vi.clearAllMocks();
   });
 
   describe('getElementFromSelection', () => {
     it('選択範囲がない場合、空文字列を返す', () => {
-      (window.getSelection as any).mockReturnValue(null);
+      mockSelectionService.hasValidSelection.mockReturnValue(false);
 
       const result = elementSelector.getElementFromSelection();
 
@@ -35,9 +37,7 @@ describe('ElementSelector', () => {
     });
 
     it('選択範囲のカウントが0の場合、空文字列を返す', () => {
-      (window.getSelection as any).mockReturnValue({
-        rangeCount: 0
-      });
+      mockSelectionService.hasValidSelection.mockReturnValue(false);
 
       const result = elementSelector.getElementFromSelection();
 
@@ -46,7 +46,7 @@ describe('ElementSelector', () => {
 
     it('共通祖先がdocumentの場合、フォールバック処理を実行する', () => {
       const mockTextNode = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         parentElement: {
           outerHTML: '<p>test content</p>'
         }
@@ -57,10 +57,11 @@ describe('ElementSelector', () => {
         commonAncestorContainer: document
       };
 
-      (window.getSelection as any).mockReturnValue({
-        rangeCount: 1,
-        getRangeAt: vi.fn().mockReturnValue(mockRangeForDocument)
-      });
+      const mockSelection = {};
+
+      mockSelectionService.hasValidSelection.mockReturnValue(true);
+      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
+      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForDocument);
 
       const result = elementSelector.getElementFromSelection();
 
@@ -69,7 +70,7 @@ describe('ElementSelector', () => {
 
     it('共通祖先がdocument.bodyの場合、フォールバック処理を実行する', () => {
       const mockElement = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<div>test content</div>'
       };
 
@@ -78,11 +79,12 @@ describe('ElementSelector', () => {
         commonAncestorContainer: document.body
       };
 
-      (window.getSelection as any).mockReturnValue({
-        rangeCount: 1,
-        getRangeAt: vi.fn().mockReturnValue(mockRangeForBody),
-        toString: vi.fn().mockReturnValue('test content')
-      });
+      const mockSelection = {};
+
+      mockSelectionService.hasValidSelection.mockReturnValue(true);
+      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
+      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForBody);
+      mockSelectionService.getSelectedText.mockReturnValue('test content');
 
       const result = elementSelector.getElementFromSelection();
 
@@ -98,7 +100,7 @@ describe('ElementSelector', () => {
       };
 
       const mockTextNode = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         parentElement: mockParentElement
       };
 
@@ -106,10 +108,11 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockTextNode
       };
 
-      (window.getSelection as any).mockReturnValue({
-        rangeCount: 1,
-        getRangeAt: vi.fn().mockReturnValue(mockRangeForText)
-      });
+      const mockSelection = {};
+
+      mockSelectionService.hasValidSelection.mockReturnValue(true);
+      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
+      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForText);
 
       const result = elementSelector.getElementFromSelection();
 
@@ -118,7 +121,7 @@ describe('ElementSelector', () => {
 
     it('共通祖先が要素ノードの場合、そのouterHTMLを返す', () => {
       const mockElement = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<div>element content</div>',
         tagName: 'DIV',
         hasAttributes: () => false,
@@ -130,10 +133,11 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockElement
       };
 
-      (window.getSelection as any).mockReturnValue({
-        rangeCount: 1,
-        getRangeAt: vi.fn().mockReturnValue(mockRangeForElement)
-      });
+      const mockSelection = {};
+
+      mockSelectionService.hasValidSelection.mockReturnValue(true);
+      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
+      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForElement);
 
       const result = elementSelector.getElementFromSelection();
 
@@ -142,7 +146,7 @@ describe('ElementSelector', () => {
 
     it('ターゲット要素がnullの場合、フォールバック処理を実行する', () => {
       const mockTextNodeWithoutParent = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         parentElement: null
       };
 
@@ -151,11 +155,12 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockTextNodeWithoutParent
       };
 
-      (window.getSelection as any).mockReturnValue({
-        rangeCount: 1,
-        getRangeAt: vi.fn().mockReturnValue(mockRangeForOrphanText),
-        toString: vi.fn().mockReturnValue('orphan text')
-      });
+      const mockSelection = {};
+
+      mockSelectionService.hasValidSelection.mockReturnValue(true);
+      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
+      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForOrphanText);
+      mockSelectionService.getSelectedText.mockReturnValue('orphan text');
 
       const result = elementSelector.getElementFromSelection();
 
@@ -165,7 +170,7 @@ describe('ElementSelector', () => {
     it('span要素内の複数テキストノード選択時、span要素全体を取得する', () => {
       // span要素内の複数テキストノード（"商品番号" + "："）をモック
       const mockSpanElement = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<span class="inline-flex">商品番号：</span>',
         tagName: 'SPAN',
         hasAttributes: () => true,
@@ -173,7 +178,7 @@ describe('ElementSelector', () => {
       };
 
       const mockTextNode1 = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         textContent: '商品番号',
         parentElement: mockSpanElement
       };
@@ -185,10 +190,11 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockSpanElement // 共通祖先はspan要素
       };
 
-      (window.getSelection as any).mockReturnValue({
-        rangeCount: 1,
-        getRangeAt: vi.fn().mockReturnValue(mockRangeForSpanText)
-      });
+      const mockSelection = {};
+
+      mockSelectionService.hasValidSelection.mockReturnValue(true);
+      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
+      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForSpanText);
 
       const result = elementSelector.getElementFromSelection();
 
@@ -197,7 +203,7 @@ describe('ElementSelector', () => {
 
     it('span要素内テキストノードの一部選択時、親要素まで遡及してspan要素を取得する', () => {
       const mockSpanElement = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<span class="inline-flex">商品番号：</span>',
         tagName: 'SPAN',
         hasAttributes: () => true,
@@ -205,7 +211,7 @@ describe('ElementSelector', () => {
       };
 
       const mockTextNode = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         textContent: '商品番号：',
         parentElement: mockSpanElement
       };
@@ -217,10 +223,11 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockTextNode
       };
 
-      (window.getSelection as any).mockReturnValue({
-        rangeCount: 1,
-        getRangeAt: vi.fn().mockReturnValue(mockRangeForPartialText)
-      });
+      const mockSelection = {};
+
+      mockSelectionService.hasValidSelection.mockReturnValue(true);
+      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
+      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForPartialText);
 
       const result = elementSelector.getElementFromSelection();
 
@@ -229,7 +236,7 @@ describe('ElementSelector', () => {
 
     it('複数のspan要素にまたがる選択の場合、適切な共通祖先要素を取得する', () => {
       const mockParentDiv = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<div><span>span1</span><span>span2</span></div>',
         tagName: 'DIV',
         hasAttributes: () => true,
@@ -237,7 +244,7 @@ describe('ElementSelector', () => {
       };
 
       const mockSpan1 = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<span>span1</span>',
         tagName: 'SPAN',
         parentElement: mockParentDiv,
@@ -246,7 +253,7 @@ describe('ElementSelector', () => {
       };
 
       const mockSpan2 = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<span>span2</span>',
         tagName: 'SPAN',
         parentElement: mockParentDiv,
@@ -261,10 +268,11 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockParentDiv
       };
 
-      (window.getSelection as any).mockReturnValue({
-        rangeCount: 1,
-        getRangeAt: vi.fn().mockReturnValue(mockRangeForMultiSpan)
-      });
+      const mockSelection = {};
+
+      mockSelectionService.hasValidSelection.mockReturnValue(true);
+      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
+      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForMultiSpan);
 
       const result = elementSelector.getElementFromSelection();
 
