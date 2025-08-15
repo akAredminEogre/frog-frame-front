@@ -23,28 +23,22 @@ export class ElementSelector {
    * @returns 発見された要素のouterHTML。適切な要素が見つからない場合は選択範囲のテキストを返します。
    */
   public getElementFromSelection(): string {
-    const selection = this.selectionService.getCurrentSelection();
-    if (!this.selectionService.hasValidSelection()) {
-      return '';
-    }
-
     const range = this.selectionService.getFirstRange();
-    if (!range || !selection) {
+    if (!range) {
       return '';
     }
 
-    const element = this.findOptimalElement(range, selection);
+    const element = this.findOptimalElement(range);
 
     return element ? element.outerHTML : this.selectionService.getSelectedText();
   }
 
   /**
-   * 指定されたRangeとSelectionから最適な要素を見つけ出します。
+   * 指定されたRangeから最適な要素を見つけ出します。
    * @param range - ユーザーの選択範囲。
-   * @param selection - 現在のSelectionオブジェクト。
    * @returns 最適なHTML要素。見つからない場合はnull。
    */
-  private findOptimalElement(range: Range, selection: Selection): Element | null {
+  private findOptimalElement(range: Range): Element | null {
     const { commonAncestorContainer } = range;
 
     if (this.isInvalidAncestor(commonAncestorContainer)) {

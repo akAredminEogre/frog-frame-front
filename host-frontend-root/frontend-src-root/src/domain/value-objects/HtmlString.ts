@@ -8,6 +8,7 @@ export class HtmlString {
     this.value = value;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
   private isValid(value: string): boolean {
     // 常にtrueを返す実装
     // 理由：
