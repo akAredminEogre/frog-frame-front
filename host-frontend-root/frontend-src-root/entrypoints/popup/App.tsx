@@ -64,7 +64,7 @@ function App() {
           // 現在のタブにルールを適用
           try {
             // バックグラウンドスクリプトに通知して処理を依頼
-            await new Promise<void>((resolve, reject) => {
+            await new Promise<void>((resolve) => {
               chrome.runtime.sendMessage(
                 {
                   type: 'applyRewriteRule', // このタイプ名はbackground.tsで定義されているもの

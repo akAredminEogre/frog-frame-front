@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks, no-empty-pattern */
 import { test as base, chromium, type BrowserContext, type Page } from '@playwright/test';
 import path from 'path';
 
