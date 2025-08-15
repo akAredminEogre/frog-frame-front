@@ -46,7 +46,7 @@ describe('ElementSelector', () => {
 
     it('共通祖先がdocumentの場合、フォールバック処理を実行する', () => {
       const mockTextNode = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         parentElement: {
           outerHTML: '<p>test content</p>'
         }
@@ -70,7 +70,7 @@ describe('ElementSelector', () => {
 
     it('共通祖先がdocument.bodyの場合、フォールバック処理を実行する', () => {
       const mockElement = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<div>test content</div>'
       };
 
@@ -100,7 +100,7 @@ describe('ElementSelector', () => {
       };
 
       const mockTextNode = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         parentElement: mockParentElement
       };
 
@@ -121,7 +121,7 @@ describe('ElementSelector', () => {
 
     it('共通祖先が要素ノードの場合、そのouterHTMLを返す', () => {
       const mockElement = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<div>element content</div>',
         tagName: 'DIV',
         hasAttributes: () => false,
@@ -146,7 +146,7 @@ describe('ElementSelector', () => {
 
     it('ターゲット要素がnullの場合、フォールバック処理を実行する', () => {
       const mockTextNodeWithoutParent = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         parentElement: null
       };
 
@@ -170,7 +170,7 @@ describe('ElementSelector', () => {
     it('span要素内の複数テキストノード選択時、span要素全体を取得する', () => {
       // span要素内の複数テキストノード（"商品番号" + "："）をモック
       const mockSpanElement = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<span class="inline-flex">商品番号：</span>',
         tagName: 'SPAN',
         hasAttributes: () => true,
@@ -178,7 +178,7 @@ describe('ElementSelector', () => {
       };
 
       const mockTextNode1 = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         textContent: '商品番号',
         parentElement: mockSpanElement
       };
@@ -203,7 +203,7 @@ describe('ElementSelector', () => {
 
     it('span要素内テキストノードの一部選択時、親要素まで遡及してspan要素を取得する', () => {
       const mockSpanElement = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<span class="inline-flex">商品番号：</span>',
         tagName: 'SPAN',
         hasAttributes: () => true,
@@ -211,7 +211,7 @@ describe('ElementSelector', () => {
       };
 
       const mockTextNode = {
-        nodeType: 3, // TEXT_NODE
+        nodeType: Node.TEXT_NODE,
         textContent: '商品番号：',
         parentElement: mockSpanElement
       };
@@ -236,7 +236,7 @@ describe('ElementSelector', () => {
 
     it('複数のspan要素にまたがる選択の場合、適切な共通祖先要素を取得する', () => {
       const mockParentDiv = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<div><span>span1</span><span>span2</span></div>',
         tagName: 'DIV',
         hasAttributes: () => true,
@@ -244,7 +244,7 @@ describe('ElementSelector', () => {
       };
 
       const mockSpan1 = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<span>span1</span>',
         tagName: 'SPAN',
         parentElement: mockParentDiv,
@@ -253,7 +253,7 @@ describe('ElementSelector', () => {
       };
 
       const mockSpan2 = {
-        nodeType: 1, // ELEMENT_NODE
+        nodeType: Node.ELEMENT_NODE,
         outerHTML: '<span>span2</span>',
         tagName: 'SPAN',
         parentElement: mockParentDiv,
