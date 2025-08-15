@@ -49,8 +49,47 @@ issue-016は完全に実装完了状態に達しています。
 
 ### スクラム04-1回目 のレビューコメント
 
-<!-- ここはユーザが書くので空欄にしておいてください。 -->
 `ElementSelector`の `getFirstRange` メソッドと `getValidFirstRange` メソッドのロジックは完全に一致していませんか？もしそうであれば、`getValidFirstRange` の実装を `getFirstRange` に統合することを検討してみてください。これにより、コードの重複を減らし、可読性が向上する可能性があります。
 また、getValidFirstRange を使用している箇所があれば、`getFirstRange` に置き換えることも検討してください。
 
 getValidFirstRangeを削除するようであれば、ElementSelector.test.tsの該当箇所も修正する必要があります。
+
+## スクラム04-2回目 の進捗
+
+**レビューコメントを受けた重複コードの削除作業** が完了しました。
+
+### 実施した作業
+1. **重複メソッドの特定と削除**
+   - `getFirstRange` と `getValidFirstRange` のロジックが完全に同一であることを確認
+   - SelectionService.tsから`getValidFirstRange`メソッドを削除
+   - コードの重複を解消し、可読性を向上
+
+2. **使用箇所の置き換え**
+   - `content.ts`: `getValidFirstRange()` → `getFirstRange()` に変更
+   - `ElementSelector.test.ts`: モックから`getValidFirstRange: vi.fn()`を削除
+   - 全ての使用箇所で統一された`getFirstRange`を使用
+
+3. **テスト実行による動作確認**
+   - vitestテスト: 16ファイル、94テスト全て通過（Duration: 30.82s）
+   - 既存機能への影響なし
+   - 全ての修正が正常に動作
+
+### 達成結果
+- ✅ 重複コードの完全削除（DRY原則の遵守）
+- ✅ コードの可読性向上
+- ✅ メンテナンス性の向上
+- ✅ APIの一貫性確保
+- ✅ 既存機能の正常動作確認
+
+### 最終的なSelectionServiceのメソッド構成
+- `getCurrentSelection()`: Selectionオブジェクト取得
+- `hasValidSelection()`: 有効な選択範囲の確認
+- `getFirstRange()`: 最初のRangeオブジェクト取得（統合後の単一メソッド）
+- `getSelectedText()`: 選択されたテキスト取得
+
+### 振り返り
+ユーザーからの的確なレビューコメントにより、重複していたメソッドを特定し削除することができました。これにより、SelectionServiceがより簡潔で保守しやすいインターフェースになり、DRY原則に準拠したクリーンなコードとなりました。重複削除後もテストが全て通過しており、機能的な問題もありません。
+
+### スクラム04-2回目 のレビューコメント
+
+<!-- ここはユーザが書くので空欄にしておいてください。 -->
