@@ -6,16 +6,23 @@ function getElementSelectionInfo(): { selection: string } {
   return { selection: elementSelector.getElementFromSelection() };
 }
 
+import { matchUrl } from '../src/utils/matchUrl';
+import { NodeTextReplacer } from '../src/domain/entities/NodeTextReplacer';
+import { RewriteRule } from '../src/domain/entities/RewriteRule';
+import { ElementSelector } from '../src/domain/entities/ElementSelector';
+import { SelectionService } from '../src/infrastructure/selection/SelectionService';
+
 /**
  * 選択範囲のHTMLまたはテキストを取得する（既存の部分置換機能用）
  */
 function getSelectionInfo(): { selection: string } {
-  const selection = window.getSelection();
-  if (!selection || selection.rangeCount === 0) {
+  const selectionService = new SelectionService();
+  
+  const range = selectionService.getFirstRange();
+  if (!range) {
     return { selection: '' };
   }
 
-  const range = selection.getRangeAt(0);
   const { commonAncestorContainer } = range;
 
   // 選択範囲が単一の要素を完全に含んでいるかチェック
@@ -38,13 +45,8 @@ function getSelectionInfo(): { selection: string } {
   }
 
   // それ以外の場合は、選択されたテキストを返す
-  return { selection: selection.toString() };
+  return { selection: selectionService.getSelectedText() };
 }
-
-import { matchUrl } from '../src/utils/matchUrl';
-import { NodeTextReplacer } from '../src/domain/entities/NodeTextReplacer';
-import { RewriteRule } from '../src/domain/entities/RewriteRule';
-import { ElementSelector } from '../src/domain/entities/ElementSelector';
 
 export default defineContentScript({
   matches: process.env.NODE_ENV === 'development' 
