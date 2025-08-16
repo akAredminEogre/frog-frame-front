@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   // Playwright のテストを置くディレクトリ
-  testDir: './e2e',
+  testDir: './tests/e2e',
 
   // .spec.tsファイルのみを対象とする
   testMatch: '**/*.spec.ts',

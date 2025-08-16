@@ -7,7 +7,7 @@
 以下に、クリーンアーキテクチャとDDDを適用したWXTプロジェクトの推奨ディレクトリ構造を示します。ValueObjectを格納するための`value-objects`ディレクトリをdomain層に追加しています。
 
 ```
-.
+host-frontend-root/frontend-src-root
 ├── .wxt/
 ├── node_modules/
 ├── public/
