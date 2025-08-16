@@ -20,3 +20,4 @@
 - [ ] 未使用functionの削除npm導入
 - [ ] mockSelectionServiceが変更可能なのは大丈夫か確認
 - [ ] ElementSelectorの詳細テスト追加
+- [ ] --project tsconfig.tsr.json の統一
