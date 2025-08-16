@@ -1,5 +1,5 @@
-import { DefaultDomConverter } from '../DefaultDomConverter';
-import { HtmlString } from '../../value-objects/HtmlString';
+import { DefaultDomConverter } from 'src/domain/entities/DefaultDomConverter';
+import { HtmlString } from 'src/domain/value-objects/HtmlString';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('DefaultDomConverter', () => {

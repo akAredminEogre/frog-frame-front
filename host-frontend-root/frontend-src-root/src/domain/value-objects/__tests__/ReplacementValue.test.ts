@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ReplacementValue } from '../ReplacementValue';
+import { ReplacementValue } from 'src/domain/value-objects/ReplacementValue';
 
 describe('ReplacementValue', () => {
   it('should return true for HTML string', () => {
