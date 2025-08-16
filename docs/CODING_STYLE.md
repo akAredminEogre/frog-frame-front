@@ -12,38 +12,56 @@
 ├── node_modules/
 ├── public/
 ├── src/
-│   ├── application/
-│   │   └── usecases/
-│   │       └── note/
-│   │           └── SaveNoteUseCase.ts
-│   ├── domain/
-│   │   ├── entities/
+│   ├── domain/                         # ドメイン（純粋なビジネスルール）
+│   │   ├── entities/                   # ← ここがファット化しやすい
 │   │   │   └── Note.ts
-│   │   ├── value-objects/  <-- ValueObjectを配置
+│   │   ├── value-objects/
 │   │   │   ├── NoteText.ts
 │   │   │   └── PageUrl.ts
-│   │   └── repositories/
+│   │   ├── services/                   # 複数エンティティに跨るロジック
+│   │   └── policies/                   # ビジネスポリシー
+│   │       └── NoteTitlePolicy.ts
+│   ├── application/                    # アプリケーション（ユースケース/ポート）
+│   │   ├── usecases/
+│   │   │   └── note/
+│   │   │       └── SaveNoteUseCase.ts
+│   │   └── ports/                      # Repository等のポートはここ
 │   │       └── INoteRepository.ts
-│   ├── infrastructure/
+│   ├── infrastructure/                 # 技術的詳細（実装/アダプタ/DI）
 │   │   ├── di/
 │   │   │   └── container.ts
 │   │   ├── persistence/
-│   │   │   └── BrowserStorageNoteRepository.ts
-│   │   └── messaging/
-│   │       └── bridge.ts
-│   ├── presentation/
-│   │   ├── components/  (WXT auto-import)
+│   │   │   └── BrowserStorageNoteRepository.ts  ← portsを実装
+│   │   ├── messaging/
+│   │   │   └── bridge.ts
+│   │   └── browser/
+│   │       └── selection.ts
+│   ├── presentation/                   # UI（フレームワーク/コンポーネント）
+│   │   ├── components/
 │   │   │   └── NoteEditor.vue
-│   │   └── entrypoints/ (WXT entrypoints)
-│   │       ├── background.ts
-│   │       ├── popup/
-│   │       │   ├── index.html
-│   │       │   └── main.ts
-│   │       └── content/
-│   │           └── index.ts
+│   │   └── adapters/                   # ViewModel変換/マッピング（任意）
+│   ├── entrypoints/                    # WXT entrypoints
+│   │   ├── background.ts               # Composition Root
+│   │   ├── popup/
+│   │   │   ├── index.html
+│   │   │   └── main.ts
+│   │   └── content/
+│   │       └── index.ts
 │   └── shared/
-│       ├── tokens.ts
-│       └── utils/       (WXT auto-import)
+│       ├── tokens.ts                   # DIトークン等（共通）
+│       └── utils/
+│
+├── tests/                              # テスト（レイヤーに対応した配置）
+│   ├── unit/
+│   │   ├── domain/
+│   │   ├── application/
+│   │   └── infrastructure/
+│   ├── integration/
+│   │   ├── infrastructure/
+│   │   └── messaging/
+│   └── e2e/
+│       └── popup-flow.spec.ts
+│
 ├── package.json
 ├── tsconfig.json
 └── wxt.config.ts
