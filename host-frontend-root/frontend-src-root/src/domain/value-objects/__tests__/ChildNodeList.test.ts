@@ -1,4 +1,4 @@
-import { ChildNodeList } from '../ChildNodeList';
+import { ChildNodeList } from 'src/domain/value-objects/ChildNodeList';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('ChildNodeList', () => {

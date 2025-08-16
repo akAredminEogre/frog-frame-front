@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { HtmlReplacer } from '../HtmlReplacer';
-import type { RewriteRule } from '../RewriteRule';
+import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
+import type { RewriteRule } from 'src/domain/entities/RewriteRule';
 
 describe('HtmlReplacer', () => {
   let replacer: HtmlReplacer;

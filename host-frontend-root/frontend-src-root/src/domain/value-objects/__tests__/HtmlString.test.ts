@@ -1,4 +1,4 @@
-import { HtmlString } from '../HtmlString';
+import { HtmlString } from 'src/domain/value-objects/HtmlString';
 import { describe, it, expect } from 'vitest';
 
 describe('HtmlString', () => {

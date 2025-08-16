@@ -1,4 +1,4 @@
-import { TagName } from '../TagName';
+import { TagName } from 'src/domain/value-objects/TagName';
 import { describe, it, expect } from 'vitest';
 
 describe('TagName', () => {

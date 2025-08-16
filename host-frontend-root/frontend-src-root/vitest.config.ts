@@ -1,8 +1,14 @@
 import { defineConfig } from 'vitest/config';
 import { WxtVitest } from 'wxt/testing';
+import path from 'path';
 
 export default defineConfig({
   plugins: [WxtVitest()],
+  resolve: {
+    alias: {
+      'src': path.resolve(__dirname, './src')
+    }
+  },
   test: {
     globals: true,
     environment: 'happy-dom',
