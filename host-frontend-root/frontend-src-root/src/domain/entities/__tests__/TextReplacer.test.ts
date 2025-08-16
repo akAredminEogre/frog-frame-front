@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Window } from 'happy-dom';
-import { TextReplacer } from '../TextReplacer';
+import { TextReplacer } from 'src/domain/entities/TextReplacer';
 
 // ヘルパー関数
 const createTextReplacer = () => {

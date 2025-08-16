@@ -1,7 +1,7 @@
-import { DomConverterFactory } from '../DomConverterFactory';
-import { DefaultDomConverter } from '../DefaultDomConverter';
-import { TableDomConverter } from '../TableDomConverter';
-import { TagName } from '../../value-objects/TagName';
+import { DomConverterFactory } from 'src/domain/entities/DomConverterFactory';
+import { DefaultDomConverter } from 'src/domain/entities/DefaultDomConverter';
+import { TableDomConverter } from 'src/domain/entities/TableDomConverter';
+import { TagName } from 'src/domain/value-objects/TagName';
 
 describe('DomConverterFactory', () => {
   it('should return a DefaultDomConverter for non-table related tags', () => {

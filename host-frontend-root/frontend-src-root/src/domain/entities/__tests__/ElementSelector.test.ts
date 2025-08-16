@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ElementSelector } from '../ElementSelector';
+import { ElementSelector } from 'src/domain/entities/ElementSelector';
 
 // SelectionServiceのモック
-vi.mock('../../../infrastructure/selection/SelectionService');
+vi.mock('src/infrastructure/selection/SelectionService');
 
 // Nodeのモック
 Object.defineProperty(global, 'Node', {
