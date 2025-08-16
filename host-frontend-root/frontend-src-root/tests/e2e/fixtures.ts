@@ -9,7 +9,7 @@ export const test = base.extend<{
   page: Page;
 }>({
   context: async ({}, use) => {
-    const pathToExtension = path.join(process.cwd(), './.output/chrome-mv3-dev');
+    const pathToExtension = path.join(process.cwd(), '.output/chrome-mv3-dev');
     const context = await chromium.launchPersistentContext('', {
       headless: true,
       args: [
