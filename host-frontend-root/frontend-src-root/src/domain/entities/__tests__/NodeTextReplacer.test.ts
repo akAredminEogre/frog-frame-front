@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Window } from 'happy-dom';
-import { NodeTextReplacer } from '../NodeTextReplacer';
-import { RewriteRule } from '../RewriteRule';
-import { TextReplacer } from '../TextReplacer';
-import { HtmlReplacer } from '../HtmlReplacer';
+import { NodeTextReplacer } from 'src/domain/entities/NodeTextReplacer';
+import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { TextReplacer } from 'src/domain/entities/TextReplacer';
+import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
 
 // モックの設定
-vi.mock('../TextReplacer');
-vi.mock('../HtmlReplacer');
+vi.mock('src/domain/entities/TextReplacer');
+vi.mock('src/domain/entities/HtmlReplacer');
 
 describe('NodeTextReplacer', () => {
   const window = new Window();

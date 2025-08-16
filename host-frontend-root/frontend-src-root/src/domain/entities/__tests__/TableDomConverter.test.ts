@@ -1,6 +1,6 @@
-import { TableDomConverter } from '../TableDomConverter';
-import { HtmlString } from '../../value-objects/HtmlString';
-import { TagName } from '../../value-objects/TagName';
+import { TableDomConverter } from 'src/domain/entities/TableDomConverter';
+import { HtmlString } from 'src/domain/value-objects/HtmlString';
+import { TagName } from 'src/domain/value-objects/TagName';
 import { describe, it, expect } from 'vitest';
 
 describe('TableDomConverter', () => {
