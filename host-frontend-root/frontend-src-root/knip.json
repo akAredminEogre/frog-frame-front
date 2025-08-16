@@ -3,18 +3,11 @@
   "entry": [
     "entrypoints/**/*.{ts,tsx}",
     "src/**/*.{ts,tsx}",
-    "utils/**/*.{ts,tsx}",
-    "e2e/**/*.{ts,tsx}",
-    "wxt.config.ts",
-    "vitest.config.ts",
-    "eslint.config.js",
-    "playwright.config.ts"
+    "wxt.config.ts"
   ],
   "project": [
     "src/**/*.{ts,tsx}",
-    "entrypoints/**/*.{ts,tsx}",
-    "utils/**/*.{ts,tsx}",
-    "e2e/**/*.{ts,tsx}"
+    "entrypoints/**/*.{ts,tsx}"
   ],
   "ignore": [
     ".output/**",
@@ -25,7 +18,10 @@
     "build/**",
     "vitest.config.ts",
     "eslint.config.js",
-    "playwright.config.ts"
+    "playwright.config.ts",
+    "entrypoints/background.ts",
+    "entrypoints/content.ts",
+    "wxt.config.ts"
   ],
   "ignoreDependencies": [
     "@wxt-dev/module-react"
@@ -37,12 +33,7 @@
       "entry": [
         "entrypoints/**/*.{ts,tsx}",
         "src/**/*.{ts,tsx}",
-        "utils/**/*.{ts,tsx}",
-        "e2e/**/*.{ts,tsx}",
-        "wxt.config.ts",
-        "vitest.config.ts",
-        "eslint.config.js",
-        "playwright.config.ts"
+        "wxt.config.ts"
       ]
     }
   }
