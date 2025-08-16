@@ -12,8 +12,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
-    // Vitestテストファイルのみを対象とする
-    include: ['**/*.test.ts'],
+    // tests/ ディレクトリのVitestテストファイルのみを対象とする
+    include: ['tests/**/*.test.ts'],
     // Playwrightテストファイルとnode_modulesを明示的に除外
     exclude: ['**/*.spec.ts', 'e2e/**/*', 'node_modules/**/*']
   },
