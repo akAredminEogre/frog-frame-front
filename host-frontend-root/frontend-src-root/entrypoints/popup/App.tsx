@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
-import { getActiveTabOrigin } from '../../utils/tabUtils';
+import { getActiveTabOrigin } from '../../src/domain/entities/tabUtils';
 import { RewriteRule } from '../../src/domain/entities/RewriteRule';
 
 function App() {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getActiveTabOrigin } from '../tabUtils';
+import { getActiveTabOrigin } from 'src/domain/entities/tabUtils';
 
 // chrome APIのモック
 const mockChrome = {
