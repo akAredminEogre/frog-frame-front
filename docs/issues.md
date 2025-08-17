@@ -13,7 +13,6 @@
 - [ ] issue-012: 右クリック入力のe2eテスト
 - [ ] ElementSelectorの返り値をValueObjectに変更
 - [ ] no-consoleも無視しない
-- [ ] unused-vars対応
 - [ ] PLAN.mdの改善
 - [ ] SelectionServiceのテストケース追加
 - [ ] NODE_TYPESの共通化

@@ -26,16 +26,12 @@
     "report:unused": "echo 'Unused variables report:' && npm run find:unused || echo 'No unused variables found!'",
     "check:unused": "eslint . --ext .ts,.tsx,.js,.jsx --rule '@typescript-eslint/no-unused-vars: error'",
     "knip": "knip",
-    "knip:production": "knip --production",
-    "knip:report": "knip --reporter json > knip-report.json && echo 'Knip report saved to knip-report.json'",
-    "tsr": "tsr --project tsconfig.tsr.json 'src/.*\\.(ts|tsx)$'",
     "tsr:check": "tsr --project tsconfig.tsr.json 'src/.*\\.(ts|tsx)$'",
     "tsr:write": "tsr --write --project tsconfig.tsr.json 'src/.*\\.(ts|tsx)$'",
     "depcheck": "depcheck",
     "depcheck:report": "depcheck --json > depcheck-report.json && echo 'Depcheck report saved to depcheck-report.json'",
-    "analyze:unused": "npm run knip",
     "unused:all": "npm run knip && npm run tsr:check && npm run depcheck",
-    "unused:fix": "npm run tsr && npm run lint:fix"
+    "unused:fix": "npm run tsr:write && npm run lint:fix"
   },
   "dependencies": {
     "react": "^18.3.1",
