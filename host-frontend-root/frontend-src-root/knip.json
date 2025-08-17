@@ -1,10 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
-  "entry": [
-    "entrypoints/**/*.{ts,tsx}",
-    "src/**/*.{ts,tsx}",
-    "wxt.config.ts"
-  ],
   "project": [
     "src/**/*.{ts,tsx}",
     "entrypoints/**/*.{ts,tsx}"
