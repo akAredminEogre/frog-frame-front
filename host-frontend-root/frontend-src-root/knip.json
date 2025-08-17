@@ -1,0 +1,35 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "project": [
+    "src/**/*.{ts,tsx}",
+    "entrypoints/**/*.{ts,tsx}"
+  ],
+  "ignore": [
+    ".output/**",
+    ".wxt/**",
+    "test-results/**",
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "vitest.config.ts",
+    "eslint.config.js",
+    "playwright.config.ts",
+    "entrypoints/background.ts",
+    "entrypoints/content.ts",
+    "wxt.config.ts"
+  ],
+  "ignoreDependencies": [
+    "@wxt-dev/module-react"
+  ],
+  "ignoreExportsUsedInFile": true,
+  "includeEntryExports": true,
+  "workspaces": {
+    ".": {
+      "entry": [
+        "entrypoints/**/*.{ts,tsx}",
+        "src/**/*.{ts,tsx}",
+        "wxt.config.ts"
+      ]
+    }
+  }
+}
