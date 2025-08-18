@@ -132,7 +132,7 @@ export class ElementSelector {
    * @returns テーブル内にある場合はtrue。
    */
   private isWithinTable(element: Element): boolean {
-    let current = element;
+    let current: Element | null = element;
     while (current && current !== document.body) {
       if (current.tagName?.toLowerCase() === 'table') {
         return true;
