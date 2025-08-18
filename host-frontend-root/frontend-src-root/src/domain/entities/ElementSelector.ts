@@ -155,18 +155,8 @@ export class ElementSelector {
 
     // テーブル内の場合の特別処理
     if (this.isWithinTable(element)) {
-      // テーブル要素の優先順位: tr > td/th > tbody/thead/tfoot
-      if (tagName === 'tr') {
-        return true;
-      }
-      if (tagName === 'td' || tagName === 'th') {
-        return true;
-      }
-      if (tagName === 'tbody' || tagName === 'thead' || tagName === 'tfoot') {
-        return true;
-      }
-      // テーブル内のインライン要素も対象とする
-      if (inlineElements.includes(tagName)) {
+      // テーブル要素またはインライン要素の場合
+      if (this.isTableElement(element) || inlineElements.includes(tagName)) {
         return true;
       }
     }
