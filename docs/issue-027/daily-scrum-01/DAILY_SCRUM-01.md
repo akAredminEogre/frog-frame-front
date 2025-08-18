@@ -57,10 +57,10 @@
 以下の作業を実施したらチェックをつけてください。全てにチェックがついたらタスクを完了できます。
 
 - [x] 作業を始める前に、ユーザとデイリースクラムを実施した
-- [ ] ElementSelectorクラスにテーブル要素判定メソッドを追加した
-- [ ] テーブル内判定メソッドを追加した  
-- [ ] isSuitableAsTargetメソッドを修正した
-- [ ] findTargetElementメソッドの動作確認をした
-- [ ] 実装の動作テストを実施した
-- [ ] 作業完了後、PROGRESS-01.mdに進捗を記載し、レビューを依頼した
-- [ ] レビュー通過後、振り返りを実施し、RETROSPECTIVE.md, PLAN.md を更新した
+- [x] ElementSelectorクラスにテーブル要素判定メソッドを追加した
+- [x] テーブル内判定メソッドを追加した  
+- [x] isSuitableAsTargetメソッドを修正した
+- [x] findTargetElementメソッドの動作確認をした
+- [x] 実装の動作テストを実施した
+- [x] 作業完了後、PROGRESS-01.mdに進捗を記載し、レビューを依頼した
+- [x] レビュー通過後、振り返りを実施し、RETROSPECTIVE.md, PLAN.md を更新した
