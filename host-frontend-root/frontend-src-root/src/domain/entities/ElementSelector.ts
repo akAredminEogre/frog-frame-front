@@ -116,8 +116,36 @@ export class ElementSelector {
   }
 
   /**
+   * 指定された要素がテーブル要素かどうかを判定します。
+   * @param element - 判定対象の要素。
+   * @returns テーブル要素の場合はtrue。
+   */
+  private isTableElement(element: Element): boolean {
+    const tagName = element.tagName?.toLowerCase();
+    const tableElements = ['table', 'tr', 'td', 'th', 'tbody', 'thead', 'tfoot'];
+    return tableElements.includes(tagName);
+  }
+
+  /**
+   * 指定された要素がテーブル内にあるかどうかを判定します。
+   * @param element - 判定対象の要素。
+   * @returns テーブル内にある場合はtrue。
+   */
+  private isWithinTable(element: Element): boolean {
+    let current: Element | null = element;
+    while (current && current !== document.body) {
+      if (current.tagName?.toLowerCase() === 'table') {
+        return true;
+      }
+      current = current.parentElement;
+    }
+    return false;
+  }
+
+  /**
    * 指定された要素が置換対象として適切かどうかを判定します。
    * インライン要素や属性を持つ要素を優先します。
+   * テーブル内の場合は特別な処理を行います。
    * @param element - 判定対象の要素。
    * @returns 適切な場合はtrue。
    */
@@ -125,6 +153,23 @@ export class ElementSelector {
     const tagName = element.tagName?.toLowerCase();
     const inlineElements = ['span', 'a', 'strong', 'b', 'em', 'i', 'code', 'small', 'mark'];
 
+    // テーブル内の場合の特別処理
+    if (this.isWithinTable(element)) {
+      // テーブル内ではtr要素のみを適切とする
+      if (tagName === 'tr') {
+        return true;
+      }
+      // tr要素以外のテーブル要素（table, td, th, tbody, thead, tfoot）は適切でない
+      if (this.isTableElement(element)) {
+        return false;
+      }
+      // テーブル内のインライン要素も適切でない（tr要素まで遡及させる）
+      if (inlineElements.includes(tagName)) {
+        return false;
+      }
+    }
+
+    // 通常の処理
     if (inlineElements.includes(tagName)) {
       return true;
     }
