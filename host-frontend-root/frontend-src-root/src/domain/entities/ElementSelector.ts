@@ -155,9 +155,17 @@ export class ElementSelector {
 
     // テーブル内の場合の特別処理
     if (this.isWithinTable(element)) {
-      // テーブル要素またはインライン要素の場合
-      if (this.isTableElement(element) || inlineElements.includes(tagName)) {
+      // テーブル内ではtr要素のみを適切とする
+      if (tagName === 'tr') {
         return true;
+      }
+      // tr要素以外のテーブル要素（table, td, th, tbody, thead, tfoot）は適切でない
+      if (this.isTableElement(element)) {
+        return false;
+      }
+      // テーブル内のインライン要素も適切でない（tr要素まで遡及させる）
+      if (inlineElements.includes(tagName)) {
+        return false;
       }
     }
 
