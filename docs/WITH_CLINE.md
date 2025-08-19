@@ -2,14 +2,15 @@
 ## ISSUE開始時
 ```cline-instructions
 issue番号の採番：
-- fetchしてリモートブランチとローカルブランチを同期
-- issue-mmm(mmmは任意の数字)で始まるブランチの中で、最も大きい数字+1をnnnとする
-
-nnn=(上記で採番したissue番号)
+```
+git fetch
+git branch --list 'issue-*' | sort -r | head -n 1
+```
+nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue- docs/issue-nnn
 を実行し、その後
-issue-nnn-refactor-separate-windows-selection
+issue-nnn-feat-right-click-table-dom
 ブランチを作成してください
 ```
 
@@ -37,9 +38,9 @@ PLAN.mdのレビューが完了しました。
 
 # DAILY SCRUM単位
 ## DAILY SCRUM 開始時の指示
-```
+```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
-kk=(docs/issue-nnn/daily-scrum-のディレクトリナンバーの最大数+1)
+kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナンバーの最大数+1)
 スクラムkk回目の作業を計画を立ててもらいます。
 - 下記コマンドを実行
 ```bash
@@ -48,7 +49,8 @@ mkdir -p docs/issue-nnn/daily-scrum-kk/
 ```
 
 - docs/issue-nnnのドキュメントを読み込み、スクラムkk回目の作業を計画を立てデイリースクラムを実施。
-- その内容に基づき、favorite-keyword-link-frog/docs/issue-/daily-scrum-/DAILY_SCRUM-.mdのフォーマットに従って、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdを作成してください。
+- その内容に基づき、favorite-keyword-link-frog/docs/issue-/daily-scrum-00/DAILY_SCRUM-.mdのフォーマットに従って、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdを作成してください。
+- `## 相談事項` のセクションに記入があった場合は、その旨をチャットにも記入してください
 ```
 
 ## DAILY_SCRUM-kk.md作成後の指示
@@ -64,7 +66,7 @@ kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 ```cline-instructions
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 DAILY_SCRUM-kk.mdの作業を開始してください。
-実装が完了したらPROGRESS-.mdのフォーマットに従って、PROGRESS-kk.mdを追記してコードレビューを依頼してください
+実装が完了したら `favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-00/PROGRESS-.md` のフォーマットに従って、favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.mdを追記してコードレビューを依頼してください
 ```
 
 - コードレビューする
@@ -144,7 +146,7 @@ nnn=(カレントブランチ名からissue番号を取得)
 pr_no=(カレントブランチが出しているプルリクエストの番号)
 pr_noのプルリクエストをマージします。次の手順でマージしてください。
 - ドキュメントテンプレートの削除
-  - docs/issue-nnn/daily-scrum-/ (本issue内のテンプレートのディレクトリ、番号がついているものは残す)を削除
+  - docs/issue-nnn/daily-scrum-00/ (本issue内のテンプレートのディレクトリ、番号がついているものは残す)を削除
     - コミットメッセージ
       - docs: issue-nnnのテンプレートファイルを削除
 - 下記のファイルでコミットされていない物があればコミット
@@ -158,4 +160,8 @@ pr_noのプルリクエストをマージします。次の手順でマージし
 - 現在のブランチで残っている変更があればすべてコミットしてプッシュ
   - コミットメッセージは「issue-nnn: プルリクエストの内容を反映」
 - プルリクエストを`create a merge commit`でマージする
+- Clineが開いたターミナルをすべて閉じる
+- VSCodeで開かれているエディタータブをすべて閉じる
+- View Git Graphを開く
+- developにチェックアウトし、pullする
 ```
