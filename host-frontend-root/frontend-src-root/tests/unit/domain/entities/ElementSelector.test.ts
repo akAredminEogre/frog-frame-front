@@ -4,14 +4,6 @@ import { ElementSelector } from 'src/domain/entities/ElementSelector';
 // SelectionServiceのモック
 vi.mock('src/infrastructure/selection/SelectionService');
 
-// Nodeのモック
-Object.defineProperty(global, 'Node', {
-  value: {
-    TEXT_NODE: 3,
-    ELEMENT_NODE: 1
-  }
-});
-
 describe('ElementSelector', () => {
   let elementSelector: ElementSelector;
   let mockSelectionService: any;
