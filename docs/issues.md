@@ -15,8 +15,10 @@
 - [ ] no-consoleも無視しない
 - [ ] PLAN.mdの改善
 - [ ] SelectionServiceのテストケース追加
-- [ ] NODE_TYPESの共通化
 - [ ] 未使用functionの削除npm導入
 - [ ] mockSelectionServiceが変更可能なのは大丈夫か確認
 - [ ] ElementSelectorの詳細テスト追加
 - [ ] --project tsconfig.tsr.json の統一
+- [ ] ElementSelector.test.tsのテストケース分割
+- [ ] isInvalidAncestor、getStartElementの切り出し
+- [ ] isMultiElementSelection、findOptimalElementのif文整理
