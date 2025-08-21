@@ -79,6 +79,7 @@ host-frontend-root/frontend-src-root
 | Frameworks & Drivers     | Project Root, `src/presentation/entrypoints/`, `src/infrastructure/di/` | フレームワークやドライバ、DI設定、エントリポイントなど。                       | wxt.config.ts, container.ts, background.ts |
 
 # オブジェクト指向ルール
+## ThoughtWorksアンソロジー：オブジェクト指向エクササイズ
 - 1.1つのメソッドにつきインデントは1段階までにすること
 - 2.else句を使用しないこと
 - 3.すべてのプリミティブ型と文字列型をラップすること
@@ -88,3 +89,7 @@ host-frontend-root/frontend-src-root
 - 7.1つのクラスにつきインスタンス変数は2つまでにすること
 - 8.ファーストクラスコレクションを使用すること
 - 9.Getter、Setter、プロパティを使用しないこと
+
+## 現場で役立つシステム設計の原則
+### 第3章：業務ロジックをわかりやすく整理する
+- メソッドは必ずインスタンス変数を使う
