@@ -3,6 +3,7 @@
 ```cline-instructions
 issue番号の採番：
 ```
+git checkout develop && git pull
 git fetch
 git branch --list 'issue-*' | sort -r | head -n 1
 ```
@@ -10,7 +11,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue- docs/issue-nnn
 を実行し、その後
-issue-nnn-feat-right-click-table-dom
+issue-nnn-refactor-node-magic-number
 ブランチを作成してください
 ```
 
