@@ -1,5 +1,6 @@
 import { RewriteRule } from './RewriteRule';
 import { NormalizedString } from '../value-objects/NormalizedString';
+import { TextRange } from '../value-objects/TextRange';
 
 export class ReplaceResult {
   constructor(
@@ -45,16 +46,18 @@ export class HtmlContent {
       let matchCount = 0;
       
       while (true) {
-        const matchResult = this.findNormalizedMatch(workingHtml);
-        
-        if (matchResult === null) {
+        // マッチが存在するかをチェック
+        if (!this.hasNormalizedMatchInHtml(workingHtml)) {
           break;
         }
         
+        // マッチの範囲を取得
+        const matchRange = this.findActualRangeInString(workingHtml);
+
         // 新しいHTMLを作成（元の変数を再利用せずに新しい変数に代入）
-        const updatedHtml = workingHtml.substring(0, matchResult.start) + 
+        const updatedHtml = workingHtml.substring(0, matchRange.start) + 
                            newString + 
-                           workingHtml.substring(matchResult.end);
+          workingHtml.substring(matchRange.end);
         
         workingHtml = updatedHtml;
         matchCount++;
@@ -126,27 +129,36 @@ export class HtmlContent {
     return actualIndex;
   }
 
-  private findActualRangeInString(html: string, normalizedStart: number, normalizedLength: number): { start: number, end: number } {
+  private findActualRangeInString(html: string): TextRange {
+    // 正規化されたインデックスを取得
+    const normalizedStart = this.findNormalizedIndexInHtml(html);
+
     // 開始位置を取得
     const start = this.findActualIndexFromNormalizedIndex(html, normalizedStart);
     
+    // 正規化された文字列の長さを取得
+    const normalizedOldString = new NormalizedString(this.rule.oldString);
+    const normalizedLength = normalizedOldString.toString().length;
+
     // 終了位置を取得（正規化された開始位置 + 長さ）
     const end = this.findActualIndexFromNormalizedIndex(html, normalizedStart + normalizedLength);
     
-    return { start, end };
+    return new TextRange(start, end);
   }
 
-  private findNormalizedMatch(html: string): { start: number, end: number } | null {
+  /**
+   * 正規化されたHTMLで検索文字列のインデックスを取得
+   */
+  private findNormalizedIndexInHtml(html: string): number {
     const normalizedHtml = new NormalizedString(html);
     const normalizedOldString = new NormalizedString(this.rule.oldString);
-    const index = normalizedHtml.indexOf(normalizedOldString);
-    
-    if (index === -1) {
-      return null;
-    }
-    
-    // 正規化されたインデックスを実際のHTMLのインデックスにマッピング
-    const range = this.findActualRangeInString(html, index, normalizedOldString.toString().length);
-    return range;
+    return normalizedHtml.indexOf(normalizedOldString);
+  }
+
+  /**
+   * 正規化されたマッチが存在するかを確認
+   */
+  private hasNormalizedMatchInHtml(html: string): boolean {
+    return this.findNormalizedIndexInHtml(html) !== -1;
   }
 }
