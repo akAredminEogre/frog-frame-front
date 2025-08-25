@@ -6,8 +6,8 @@ export class NormalizedString {
   }
 
   private normalize(text: string): string {
-    // すべての空白文字（改行、タブ、空白）を完全に除去して比較用の文字列を作成
-    return text.replace(/\s+/g, '');
+    // HTMLタグの前後の空白のみを除去（属性やテキスト内容は保持）
+    return text.replace(/\s*</g, '<').replace(/>\s*/g, '>');
   }
 
   equals(other: NormalizedString): boolean {
