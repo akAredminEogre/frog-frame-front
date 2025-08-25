@@ -41,21 +41,22 @@ export class HtmlContent {
       const wouldCauseInfiniteLoop = this.rule.wouldCauseInfiniteLoop();
       
       // 全ての一致箇所を見つけて置換
-      let currentHtml = this.originalHtml;
+      let workingHtml = this.originalHtml;
       let matchCount = 0;
       
       while (true) {
-        const matchResult = this.findNormalizedMatch(currentHtml);
+        const matchResult = this.findNormalizedMatch(workingHtml);
         
         if (matchResult === null) {
           break;
         }
         
-        // 元のHTMLの該当範囲を新しい文字列で置換
-        currentHtml = currentHtml.substring(0, matchResult.start) + 
-                      newString + 
-                      currentHtml.substring(matchResult.end);
+        // 新しいHTMLを作成（元の変数を再利用せずに新しい変数に代入）
+        const updatedHtml = workingHtml.substring(0, matchResult.start) + 
+                           newString + 
+                           workingHtml.substring(matchResult.end);
         
+        workingHtml = updatedHtml;
         matchCount++;
         
         // 新しい文字列が検索対象を含む場合は無限ループになるので一度だけ置換して終了
@@ -64,7 +65,7 @@ export class HtmlContent {
         }
       }
       
-      return new ReplaceResult(currentHtml, matchCount);
+      return new ReplaceResult(workingHtml, matchCount);
     }
   }
 
@@ -94,13 +95,17 @@ export class HtmlContent {
     return />\s/.test(twoLetters);
   }
 
-  private findActualRangeInString(html: string, normalizedStart: number, normalizedLength: number): { start: number, end: number } {
-    // 限定的正規化のマッピング：HTMLタグの前後の空白のみを除去
+  /**
+   * 正規化されたインデックスから実際のHTML文字列内のインデックスを取得
+   * @param html 対象のHTML文字列
+   * @param normalizedIndex 正規化された文字列でのインデックス
+   * @returns 実際のHTML文字列内のインデックス
+   */
+  private findActualIndexFromNormalizedIndex(html: string, normalizedIndex: number): number {
     let actualIndex = 0;
-    let normalizedIndex = 0;
+    let currentNormalizedIndex = 0;
     
-    // normalizedStartまでの実際の位置を特定
-    while (normalizedIndex < normalizedStart && actualIndex < html.length) {
+    while (currentNormalizedIndex < normalizedIndex && actualIndex < html.length) {
       // '<'の前の空白をスキップ
       if (this.isWhitespaceBeforeTag(html, actualIndex)) {
         actualIndex++;
@@ -114,33 +119,21 @@ export class HtmlContent {
       }
       
       // 通常の文字はカウントして進む
-      normalizedIndex++;
+      currentNormalizedIndex++;
       actualIndex++;
     }
     
-    const start = actualIndex;
+    return actualIndex;
+  }
+
+  private findActualRangeInString(html: string, normalizedStart: number, normalizedLength: number): { start: number, end: number } {
+    // 開始位置を取得
+    const start = this.findActualIndexFromNormalizedIndex(html, normalizedStart);
     
-    // normalizedLengthに対応する実際の終了位置を特定
-    let remainingLength = normalizedLength;
-    while (remainingLength > 0 && actualIndex < html.length) {
-      // '<'の前の空白をスキップ
-      if (this.isWhitespaceBeforeTag(html, actualIndex)) {
-        actualIndex++;
-        continue;
-      }
-      
-      // '>'の後の空白をスキップ
-      if (this.isWhitespaceAfterTag(html, actualIndex)) {
-        actualIndex++;
-        continue;
-      }
-      
-      // 通常の文字はカウントして進む
-      remainingLength--;
-      actualIndex++;
-    }
+    // 終了位置を取得（正規化された開始位置 + 長さ）
+    const end = this.findActualIndexFromNormalizedIndex(html, normalizedStart + normalizedLength);
     
-    return { start, end: actualIndex };
+    return { start, end };
   }
 
   private findNormalizedMatch(html: string): { start: number, end: number } | null {
