@@ -37,6 +37,9 @@ export class HtmlContent {
         return new ReplaceResult(this.originalHtml, 0);
       }
       
+      // 無限ループチェックを先に実行（ループ中に値は変化しないため）
+      const wouldCauseInfiniteLoop = this.rule.wouldCauseInfiniteLoop();
+      
       // 全ての一致箇所を見つけて置換
       let currentHtml = this.originalHtml;
       let matchCount = 0;
@@ -55,11 +58,8 @@ export class HtmlContent {
         
         matchCount++;
         
-        // 置換により文字列の長さが変わる可能性があるため、
-        // 次の検索は置換後の位置から開始する
-        // ただし、無限ループを避けるため、新しい文字列が元の文字列を含まない場合のみ続行
-        if (newString.includes(oldString)) {
-          // 新しい文字列が検索対象を含む場合は無限ループになるので終了
+        // 新しい文字列が検索対象を含む場合は無限ループになるので一度だけ置換して終了
+        if (wouldCauseInfiniteLoop) {
           break;
         }
       }
