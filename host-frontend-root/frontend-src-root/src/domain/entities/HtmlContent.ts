@@ -10,16 +10,18 @@ export class ReplaceResult {
 
 export class HtmlContent {
   private readonly originalHtml: string;
+  private readonly rule: RewriteRule;
 
-  constructor(html: string) {
+  constructor(html: string, rule: RewriteRule) {
     this.originalHtml = html;
+    this.rule = rule;
   }
 
-  public replaceWith(rule: RewriteRule): ReplaceResult {
-    const oldString = rule.oldString;
-    const newString = rule.newString;
+  public replace(): ReplaceResult {
+    const oldString = this.rule.oldString;
+    const newString = this.rule.newString;
 
-    if (rule.isRegex) {
+    if (this.rule.isRegex) {
       // 既存の正規表現ロジック（変更なし）
       const regex = new RegExp(oldString, 'gs');
       const matches = [...this.originalHtml.matchAll(regex)];
