@@ -36,7 +36,7 @@ export class HtmlContent {
       return new ReplaceResult(replacedHtml, matchCount);
     } else {
       // 新しい改行コード無視ロジック
-      if (!this.hasNormalizedMatch()) {
+      if (!this.hasNormalizedMatchInHtml(this.originalHtml)) {
         return new ReplaceResult(this.originalHtml, 0);
       }
       
@@ -73,13 +73,6 @@ export class HtmlContent {
       return new ReplaceResult(workingHtml, matchCount);
     }
   }
-
-  private hasNormalizedMatch(): boolean {
-    const normalizedHtml = new NormalizedString(this.originalHtml);
-    
-    return normalizedHtml.indexOf(this.normalizedOldString) !== -1;
-  }
-
 
   /**
    * 指定されたインデックスから始まる2文字が'空白+<'のパターンかを判定
