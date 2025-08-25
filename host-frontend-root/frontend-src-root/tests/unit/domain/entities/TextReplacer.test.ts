@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Window } from 'happy-dom';
 import { TextReplacer } from 'src/domain/entities/TextReplacer';
+import { RewriteRule } from 'src/domain/entities/RewriteRule';
 
 // ヘルパー関数
 const createTextReplacer = () => {
@@ -47,7 +48,12 @@ describe('TextReplacer', () => {
     it(name, () => {
       const { document, replacer } = createTextReplacer();
       document.body.innerHTML = initialHtml;
-      const count = replacer.replace(document.body, rule);
+      const rewriteRule = new RewriteRule(
+        rule.id,
+        rule.oldString,
+        rule.newString
+      );
+      const count = replacer.replace(document.body, rewriteRule);
       expect(count).toBe(expectedCount);
       expect(document.body.innerHTML).toBe(expectedHtml);
     });
