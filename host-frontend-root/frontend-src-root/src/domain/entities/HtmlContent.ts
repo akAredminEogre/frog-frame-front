@@ -12,10 +12,12 @@ export class ReplaceResult {
 export class HtmlContent {
   private readonly originalHtml: string;
   private readonly rule: RewriteRule;
+  private readonly normalizedOldString: NormalizedString;
 
   constructor(html: string, rule: RewriteRule) {
     this.originalHtml = html;
     this.rule = rule;
+    this.normalizedOldString = new NormalizedString(rule.oldString);
   }
 
   public replace(): ReplaceResult {
@@ -74,9 +76,8 @@ export class HtmlContent {
 
   private hasNormalizedMatch(): boolean {
     const normalizedHtml = new NormalizedString(this.originalHtml);
-    const normalizedSearchString = new NormalizedString(this.rule.oldString);
     
-    return normalizedHtml.indexOf(normalizedSearchString) !== -1;
+    return normalizedHtml.indexOf(this.normalizedOldString) !== -1;
   }
 
 
@@ -137,8 +138,7 @@ export class HtmlContent {
     const start = this.findActualIndexFromNormalizedIndex(html, normalizedStart);
     
     // 正規化された文字列の長さを取得
-    const normalizedOldString = new NormalizedString(this.rule.oldString);
-    const normalizedLength = normalizedOldString.toString().length;
+    const normalizedLength = this.normalizedOldString.toString().length;
 
     // 終了位置を取得（正規化された開始位置 + 長さ）
     const end = this.findActualIndexFromNormalizedIndex(html, normalizedStart + normalizedLength);
@@ -151,8 +151,7 @@ export class HtmlContent {
    */
   private findNormalizedIndexInHtml(html: string): number {
     const normalizedHtml = new NormalizedString(html);
-    const normalizedOldString = new NormalizedString(this.rule.oldString);
-    return normalizedHtml.indexOf(normalizedOldString);
+    return normalizedHtml.indexOf(this.normalizedOldString);
   }
 
   /**
