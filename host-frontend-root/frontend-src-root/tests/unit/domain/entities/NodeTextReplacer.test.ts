@@ -23,7 +23,7 @@ describe('NodeTextReplacer', () => {
   });
 
   it('should delegate to TextReplacer for plain text', () => {
-    const rule: RewriteRule = { id: '1', oldString: 'world', newString: 'test' };
+    const rule: RewriteRule = new RewriteRule('1', 'world', 'test');
     const replacer = new NodeTextReplacer(mockTextReplacer, mockHtmlReplacer);
     mockTextReplacer.replace = vi.fn().mockReturnValue(1);
 
@@ -35,11 +35,11 @@ describe('NodeTextReplacer', () => {
   });
 
   it('should delegate to HtmlReplacer for HTML string', () => {
-    const rule: RewriteRule = {
-      id: '1',
-      oldString: '<p>hello</p>',
-      newString: '<b>replaced</b>',
-    };
+    const rule: RewriteRule = new RewriteRule(
+      '1',
+      '<p>hello</p>',
+      '<b>replaced</b>'
+    );
     const replacer = new NodeTextReplacer(mockTextReplacer, mockHtmlReplacer);
     mockHtmlReplacer.replace = vi.fn().mockReturnValue(1);
 
