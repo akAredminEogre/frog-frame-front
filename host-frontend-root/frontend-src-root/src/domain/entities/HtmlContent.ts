@@ -71,9 +71,6 @@ export class HtmlContent {
     }
   }
 
-  private findActualRange(normalizedStart: number, normalizedLength: number): { start: number, end: number } {
-    return this.findActualRangeInString(this.originalHtml, normalizedStart, normalizedLength);
-  }
 
   private findActualRangeInString(html: string, normalizedStart: number, normalizedLength: number): { start: number, end: number } {
     // 正規化されたインデックスを元のHTMLのインデックスにマッピング
@@ -120,13 +117,6 @@ export class HtmlContent {
     
     // 正規化されたインデックスを実際のHTMLのインデックスにマッピング
     const range = this.findActualRangeInString(html, index, normalizedOldString.toString().length);
-    console.log('Debug - html:', JSON.stringify(html));
-    console.log('Debug - oldString:', JSON.stringify(oldString));
-    console.log('Debug - normalizedHtml:', JSON.stringify(normalizedHtml.toString()));
-    console.log('Debug - normalizedOldString:', JSON.stringify(normalizedOldString.toString()));
-    console.log('Debug - index:', index);
-    console.log('Debug - range:', range);
-    console.log('Debug - substring:', JSON.stringify(html.substring(range.start, range.end)));
     return range;
   }
 }
