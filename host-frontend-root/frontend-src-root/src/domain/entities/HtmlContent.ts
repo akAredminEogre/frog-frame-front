@@ -73,21 +73,28 @@ export class HtmlContent {
 
 
   private findActualRangeInString(html: string, normalizedStart: number, normalizedLength: number): { start: number, end: number } {
-    // 正規化されたインデックスを元のHTMLのインデックスにマッピング
+    // 限定的正規化のマッピング：HTMLタグの前後の空白のみを除去
     let actualIndex = 0;
     let normalizedIndex = 0;
     
     // normalizedStartまでの実際の位置を特定
     while (normalizedIndex < normalizedStart && actualIndex < html.length) {
       const char = html[actualIndex];
-      if (!/\s/.test(char)) {
-        normalizedIndex++;
+      
+      // '<'の前の空白をスキップ
+      if (/\s/.test(char) && actualIndex + 1 < html.length && html[actualIndex + 1] === '<') {
+        actualIndex++;
+        continue;
       }
-      actualIndex++;
-    }
-    
-    // normalizedStartに達した時、現在位置が空白の場合は次の非空白文字まで進む
-    while (actualIndex < html.length && /\s/.test(html[actualIndex])) {
+      
+      // '>'の後の空白をスキップ
+      if (/\s/.test(char) && actualIndex > 0 && html[actualIndex - 1] === '>') {
+        actualIndex++;
+        continue;
+      }
+      
+      // 通常の文字はカウントして進む
+      normalizedIndex++;
       actualIndex++;
     }
     
@@ -97,9 +104,21 @@ export class HtmlContent {
     let remainingLength = normalizedLength;
     while (remainingLength > 0 && actualIndex < html.length) {
       const char = html[actualIndex];
-      if (!/\s/.test(char)) {
-        remainingLength--;
+      
+      // '<'の前の空白をスキップ
+      if (/\s/.test(char) && actualIndex + 1 < html.length && html[actualIndex + 1] === '<') {
+        actualIndex++;
+        continue;
       }
+      
+      // '>'の後の空白をスキップ
+      if (/\s/.test(char) && actualIndex > 0 && html[actualIndex - 1] === '>') {
+        actualIndex++;
+        continue;
+      }
+      
+      // 通常の文字はカウントして進む
+      remainingLength--;
       actualIndex++;
     }
     
