@@ -76,6 +76,24 @@ export class HtmlContent {
   }
 
 
+  /**
+   * 指定されたインデックスから始まる2文字が'空白+<'のパターンかを判定
+   */
+  private isWhitespaceBeforeTag(html: string, index: number): boolean {
+    if (index + 1 >= html.length) return false;
+    const twoLetters = html.substring(index, index + 2);
+    return /\s</.test(twoLetters);
+  }
+
+  /**
+   * 指定されたインデックスの前の文字から2文字が'>+空白'のパターンかを判定
+   */
+  private isWhitespaceAfterTag(html: string, index: number): boolean {
+    if (index <= 0) return false;
+    const twoLetters = html.substring(index - 1, index + 1);
+    return />\s/.test(twoLetters);
+  }
+
   private findActualRangeInString(html: string, normalizedStart: number, normalizedLength: number): { start: number, end: number } {
     // 限定的正規化のマッピング：HTMLタグの前後の空白のみを除去
     let actualIndex = 0;
@@ -83,16 +101,14 @@ export class HtmlContent {
     
     // normalizedStartまでの実際の位置を特定
     while (normalizedIndex < normalizedStart && actualIndex < html.length) {
-      const char = html[actualIndex];
-      
       // '<'の前の空白をスキップ
-      if (/\s/.test(char) && actualIndex + 1 < html.length && html[actualIndex + 1] === '<') {
+      if (this.isWhitespaceBeforeTag(html, actualIndex)) {
         actualIndex++;
         continue;
       }
       
       // '>'の後の空白をスキップ
-      if (/\s/.test(char) && actualIndex > 0 && html[actualIndex - 1] === '>') {
+      if (this.isWhitespaceAfterTag(html, actualIndex)) {
         actualIndex++;
         continue;
       }
@@ -107,16 +123,14 @@ export class HtmlContent {
     // normalizedLengthに対応する実際の終了位置を特定
     let remainingLength = normalizedLength;
     while (remainingLength > 0 && actualIndex < html.length) {
-      const char = html[actualIndex];
-      
       // '<'の前の空白をスキップ
-      if (/\s/.test(char) && actualIndex + 1 < html.length && html[actualIndex + 1] === '<') {
+      if (this.isWhitespaceBeforeTag(html, actualIndex)) {
         actualIndex++;
         continue;
       }
       
       // '>'の後の空白をスキップ
-      if (/\s/.test(char) && actualIndex > 0 && html[actualIndex - 1] === '>') {
+      if (this.isWhitespaceAfterTag(html, actualIndex)) {
         actualIndex++;
         continue;
       }
