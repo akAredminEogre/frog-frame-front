@@ -42,7 +42,7 @@ export class HtmlContent {
       let matchCount = 0;
       
       while (true) {
-        const matchResult = this.findNormalizedMatch(currentHtml, oldString);
+        const matchResult = this.findNormalizedMatch(currentHtml);
         
         if (matchResult === null) {
           break;
@@ -129,9 +129,9 @@ export class HtmlContent {
     return { start, end: actualIndex };
   }
 
-  private findNormalizedMatch(html: string, oldString: string): { start: number, end: number } | null {
+  private findNormalizedMatch(html: string): { start: number, end: number } | null {
     const normalizedHtml = new NormalizedString(html);
-    const normalizedOldString = new NormalizedString(oldString);
+    const normalizedOldString = new NormalizedString(this.rule.oldString);
     const index = normalizedHtml.indexOf(normalizedOldString);
     
     if (index === -1) {
