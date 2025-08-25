@@ -33,10 +33,7 @@ export class HtmlContent {
       return new ReplaceResult(replacedHtml, matchCount);
     } else {
       // 新しい改行コード無視ロジック
-      const normalizedHtml = new NormalizedString(this.originalHtml);
-      const normalizedOldString = new NormalizedString(oldString);
-      
-      if (normalizedHtml.indexOf(normalizedOldString) === -1) {
+      if (!this.hasNormalizedMatch(this.originalHtml, oldString)) {
         return new ReplaceResult(this.originalHtml, 0);
       }
       
@@ -61,9 +58,7 @@ export class HtmlContent {
         // 置換により文字列の長さが変わる可能性があるため、
         // 次の検索は置換後の位置から開始する
         // ただし、無限ループを避けるため、新しい文字列が元の文字列を含まない場合のみ続行
-        const newNormalized = new NormalizedString(newString);
-        const oldNormalized = new NormalizedString(oldString);
-        if (newNormalized.indexOf(oldNormalized) !== -1) {
+        if (this.hasNormalizedMatch(newString, oldString)) {
           // 新しい文字列が検索対象を含む場合は無限ループになるので終了
           break;
         }
@@ -71,6 +66,13 @@ export class HtmlContent {
       
       return new ReplaceResult(currentHtml, matchCount);
     }
+  }
+
+  private hasNormalizedMatch(html: string, searchString: string): boolean {
+    const normalizedHtml = new NormalizedString(html);
+    const normalizedSearchString = new NormalizedString(searchString);
+    
+    return normalizedHtml.indexOf(normalizedSearchString) !== -1;
   }
 
 
@@ -128,13 +130,13 @@ export class HtmlContent {
   }
 
   private findNormalizedMatch(html: string, oldString: string): { start: number, end: number } | null {
-    const normalizedHtml = new NormalizedString(html);
-    const normalizedOldString = new NormalizedString(oldString);
-    
-    const index = normalizedHtml.indexOf(normalizedOldString);
-    if (index === -1) {
+    if (!this.hasNormalizedMatch(html, oldString)) {
       return null;
     }
+    
+    const normalizedHtml = new NormalizedString(html);
+    const normalizedOldString = new NormalizedString(oldString);
+    const index = normalizedHtml.indexOf(normalizedOldString);
     
     // 正規化されたインデックスを実際のHTMLのインデックスにマッピング
     const range = this.findActualRangeInString(html, index, normalizedOldString.toString().length);
