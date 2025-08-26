@@ -1,6 +1,5 @@
 import { RewriteRule } from './RewriteRule';
 import { NormalizedString } from '../value-objects/NormalizedString';
-import { TextRange } from '../value-objects/TextRange';
 import { WorkingHtml } from '../value-objects/WorkingHtml';
 
 export class ReplaceResult {
@@ -52,15 +51,12 @@ export class HtmlContent {
       const wouldCauseInfiniteLoop = this.rule.wouldCauseInfiniteLoop();
       
       // 全ての一致箇所を見つけて置換
-      let workingHtml = new WorkingHtml(this.originalHtml);
+      let workingHtml = new WorkingHtml(this.originalHtml, this.rule);
       let matchCount = 0;
       
       while (this.hasNormalizedMatchInHtml(workingHtml.toString())) {
-        // マッチの範囲を取得
-        const matchRange = this.findActualRangeInString(workingHtml.toString());
-
-        // WorkingHtmlのreplaceRangeメソッドを使用して置換
-        workingHtml = workingHtml.replaceRange(matchRange, newString);
+        // WorkingHtmlのreplaceByNormalizedPositionメソッドを使用して置換
+        workingHtml = workingHtml.replaceByNormalizedPosition();
         matchCount++;
         
         // 新しい文字列が検索対象を含む場合は無限ループになるので一度だけ置換して終了
@@ -71,31 +67,6 @@ export class HtmlContent {
       
       return new ReplaceResult(workingHtml.toString(), matchCount);
     }
-  }
-
-  /**
-   * HTML文字列内で実際の置換範囲を特定する
-   * @param html 検索対象のHTML文字列
-   * @returns TextRange 実際の開始・終了位置を含む範囲オブジェクト
-   * 使用するメンバ変数: normalizedOldString
-   */
-  private findActualRangeInString(html: string): TextRange {
-    const workingHtml = new WorkingHtml(html);
-    const normalizedHtml = new NormalizedString(html);
-
-    // 正規化されたインデックスを取得
-    const normalizedStart = normalizedHtml.indexOf(this.normalizedOldString);
-
-    // 開始位置を取得
-    const start = workingHtml.findActualIndexFromNormalizedIndex(normalizedStart);
-
-    // 正規化された文字列の長さを取得
-    const normalizedLength = this.normalizedOldString.toString().length;
-
-    // 終了位置を取得（正規化された開始位置 + 長さ）
-    const end = workingHtml.findActualIndexFromNormalizedIndex(normalizedStart + normalizedLength);
-
-    return new TextRange(start, end);
   }
 
 

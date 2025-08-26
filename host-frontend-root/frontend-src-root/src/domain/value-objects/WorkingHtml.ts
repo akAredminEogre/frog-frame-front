@@ -1,4 +1,6 @@
 import { TextRange } from './TextRange';
+import { RewriteRule } from '../entities/RewriteRule';
+import { NormalizedString } from './NormalizedString';
 
 /**
  * 置換処理中のHTML文字列を表すValue Object
@@ -6,9 +8,13 @@ import { TextRange } from './TextRange';
  */
 export class WorkingHtml {
   private readonly value: string;
+  private readonly rule: RewriteRule;
+  private readonly normalizedOldString: NormalizedString;
 
-  constructor(value: string) {
+  constructor(value: string, rule: RewriteRule) {
     this.value = value;
+    this.rule = rule;
+    this.normalizedOldString = new NormalizedString(rule.oldString);
   }
 
   /**
@@ -28,7 +34,38 @@ export class WorkingHtml {
     const updatedHtml = this.value.substring(0, matchRange.start) + 
                        newString + 
                        this.value.substring(matchRange.end);
-    return new WorkingHtml(updatedHtml);
+    return new WorkingHtml(updatedHtml, this.rule);
+  }
+
+  /**
+   * RewriteRuleに基づいて最初に見つかったマッチ箇所を置換
+   * 正規化されたインデックスの計算からTextRangeの作成まで全てを内部で処理
+   * @returns 置換後の新しいWorkingHtmlオブジェクト
+   */
+  replaceByNormalizedPosition(): WorkingHtml {
+    // 正規化されたHTML文字列を作成してマッチ位置を特定
+    const normalizedHtml = new NormalizedString(this.value);
+    const normalizedStart = normalizedHtml.indexOf(this.normalizedOldString);
+    
+    if (normalizedStart === -1) {
+      // マッチが見つからない場合は現在のオブジェクトをそのまま返す
+      return new WorkingHtml(this.value, this.rule);
+    }
+    
+    // 正規化された文字列の長さを取得
+    const normalizedLength = this.normalizedOldString.toString().length;
+    
+    // 正規化されたインデックスから実際のインデックスを取得
+    const start = this.findActualIndexFromNormalizedIndex(normalizedStart);
+    const end = this.findActualIndexFromNormalizedIndex(normalizedStart + normalizedLength);
+    
+    // TextRangeを内部で作成して置換
+    const range = new TextRange(start, end);
+    const replacedHtml = this.value.substring(0, range.start) + 
+                        this.rule.newString + 
+                        this.value.substring(range.end);
+    
+    return new WorkingHtml(replacedHtml, this.rule);
   }
 
   /**
