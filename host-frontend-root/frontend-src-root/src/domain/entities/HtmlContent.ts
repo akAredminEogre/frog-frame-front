@@ -14,12 +14,23 @@ export class HtmlContent {
   private readonly rule: RewriteRule;
   private readonly normalizedOldString: NormalizedString;
 
+  /**
+   * HtmlContentクラスのコンストラクタ
+   * @param html 置換対象のHTML文字列
+   * @param rule 置換ルール（RewriteRuleオブジェクト）
+   * 使用するメンバ変数: originalHtml, rule, normalizedOldString（初期化）
+   */
   constructor(html: string, rule: RewriteRule) {
     this.originalHtml = html;
     this.rule = rule;
     this.normalizedOldString = new NormalizedString(rule.oldString);
   }
 
+  /**
+   * HTMLコンテンツの置換を実行する
+   * @returns ReplaceResult 置換結果（置換後HTML文字列とマッチ数）
+   * 使用するメンバ変数: originalHtml, rule, normalizedOldString
+   */
   public replace(): ReplaceResult {
     const oldString = this.rule.oldString;
     const newString = this.rule.newString;
@@ -65,6 +76,12 @@ export class HtmlContent {
     }
   }
 
+  /**
+   * HTML文字列内で実際の置換範囲を特定する
+   * @param html 検索対象のHTML文字列
+   * @returns TextRange 実際の開始・終了位置を含む範囲オブジェクト
+   * 使用するメンバ変数: normalizedOldString
+   */
   private findActualRangeInString(html: string): TextRange {
     const normalizedHtml = new NormalizedString(html);
 
@@ -88,6 +105,7 @@ export class HtmlContent {
    * @param html 対象のHTML文字列
    * @param normalizedIndex 正規化された文字列でのインデックス
    * @returns 実際のHTML文字列内のインデックス
+   * 使用するメンバ変数: なし（このメソッドはヘルパーメソッドisWhitespaceBeforeTag, isWhitespaceAfterTagを呼び出す）
    */
   private findActualIndexFromNormalizedIndex(html: string, normalizedIndex: number): number {
     let actualIndex = 0;
@@ -114,9 +132,12 @@ export class HtmlContent {
     return actualIndex;
   }
 
-
   /**
    * 指定されたインデックスから始まる2文字が'空白+<'のパターンかを判定
+   * @param html 対象のHTML文字列
+   * @param index 判定開始位置のインデックス
+   * @returns boolean 空白+<のパターンの場合はtrue
+   * 使用するメンバ変数: なし
    */
   private isWhitespaceBeforeTag(html: string, index: number): boolean {
     if (index + 1 >= html.length) return false;
@@ -126,6 +147,10 @@ export class HtmlContent {
 
   /**
    * 指定されたインデックスの前の文字から2文字が'>+空白'のパターンかを判定
+   * @param html 対象のHTML文字列
+   * @param index 判定対象位置のインデックス
+   * @returns boolean >+空白のパターンの場合はtrue
+   * 使用するメンバ変数: なし
    */
   private isWhitespaceAfterTag(html: string, index: number): boolean {
     if (index <= 0) return false;
@@ -136,6 +161,9 @@ export class HtmlContent {
 
   /**
    * 正規化されたマッチが存在するかを確認
+   * @param html 検索対象のHTML文字列
+   * @returns boolean マッチが存在する場合はtrue
+   * 使用するメンバ変数: normalizedOldString
    */
   private hasNormalizedMatchInHtml(html: string): boolean {
     const normalizedHtml = new NormalizedString(html);
