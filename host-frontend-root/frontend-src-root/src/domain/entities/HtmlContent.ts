@@ -65,22 +65,22 @@ export class HtmlContent {
     }
   }
 
-  /**
-   * 指定されたインデックスから始まる2文字が'空白+<'のパターンかを判定
-   */
-  private isWhitespaceBeforeTag(html: string, index: number): boolean {
-    if (index + 1 >= html.length) return false;
-    const twoLetters = html.substring(index, index + 2);
-    return /\s</.test(twoLetters);
-  }
+  private findActualRangeInString(html: string): TextRange {
+    const normalizedHtml = new NormalizedString(html);
 
-  /**
-   * 指定されたインデックスの前の文字から2文字が'>+空白'のパターンかを判定
-   */
-  private isWhitespaceAfterTag(html: string, index: number): boolean {
-    if (index <= 0) return false;
-    const twoLetters = html.substring(index - 1, index + 1);
-    return />\s/.test(twoLetters);
+    // 正規化されたインデックスを取得
+    const normalizedStart = normalizedHtml.indexOf(this.normalizedOldString);
+
+    // 開始位置を取得
+    const start = this.findActualIndexFromNormalizedIndex(html, normalizedStart);
+
+    // 正規化された文字列の長さを取得
+    const normalizedLength = this.normalizedOldString.toString().length;
+
+    // 終了位置を取得（正規化された開始位置 + 長さ）
+    const end = this.findActualIndexFromNormalizedIndex(html, normalizedStart + normalizedLength);
+
+    return new TextRange(start, end);
   }
 
   /**
@@ -114,22 +114,23 @@ export class HtmlContent {
     return actualIndex;
   }
 
-  private findActualRangeInString(html: string): TextRange {
-    const normalizedHtml = new NormalizedString(html);
 
-    // 正規化されたインデックスを取得
-    const normalizedStart = normalizedHtml.indexOf(this.normalizedOldString);
+  /**
+   * 指定されたインデックスから始まる2文字が'空白+<'のパターンかを判定
+   */
+  private isWhitespaceBeforeTag(html: string, index: number): boolean {
+    if (index + 1 >= html.length) return false;
+    const twoLetters = html.substring(index, index + 2);
+    return /\s</.test(twoLetters);
+  }
 
-    // 開始位置を取得
-    const start = this.findActualIndexFromNormalizedIndex(html, normalizedStart);
-    
-    // 正規化された文字列の長さを取得
-    const normalizedLength = this.normalizedOldString.toString().length;
-
-    // 終了位置を取得（正規化された開始位置 + 長さ）
-    const end = this.findActualIndexFromNormalizedIndex(html, normalizedStart + normalizedLength);
-    
-    return new TextRange(start, end);
+  /**
+   * 指定されたインデックスの前の文字から2文字が'>+空白'のパターンかを判定
+   */
+  private isWhitespaceAfterTag(html: string, index: number): boolean {
+    if (index <= 0) return false;
+    const twoLetters = html.substring(index - 1, index + 1);
+    return />\s/.test(twoLetters);
   }
 
 
