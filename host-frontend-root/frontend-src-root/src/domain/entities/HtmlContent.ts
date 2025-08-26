@@ -36,10 +36,6 @@ export class HtmlContent {
       return new ReplaceResult(replacedHtml, matchCount);
     } else {
       // 新しい改行コード無視ロジック
-      if (!this.hasNormalizedMatchInHtml(this.originalHtml)) {
-        return new ReplaceResult(this.originalHtml, 0);
-      }
-      
       // 無限ループチェックを先に実行（ループ中に値は変化しないため）
       const wouldCauseInfiniteLoop = this.rule.wouldCauseInfiniteLoop();
       
