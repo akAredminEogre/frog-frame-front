@@ -124,8 +124,10 @@ export class HtmlContent {
   }
 
   private findActualRangeInString(html: string): TextRange {
+    const normalizedHtml = new NormalizedString(html);
+
     // 正規化されたインデックスを取得
-    const normalizedStart = this.findNormalizedIndexInHtml(html);
+    const normalizedStart = normalizedHtml.indexOf(this.normalizedOldString);
 
     // 開始位置を取得
     const start = this.findActualIndexFromNormalizedIndex(html, normalizedStart);
@@ -139,18 +141,12 @@ export class HtmlContent {
     return new TextRange(start, end);
   }
 
-  /**
-   * 正規化されたHTMLで検索文字列のインデックスを取得
-   */
-  private findNormalizedIndexInHtml(html: string): number {
-    const normalizedHtml = new NormalizedString(html);
-    return normalizedHtml.indexOf(this.normalizedOldString);
-  }
 
   /**
    * 正規化されたマッチが存在するかを確認
    */
   private hasNormalizedMatchInHtml(html: string): boolean {
-    return this.findNormalizedIndexInHtml(html) !== -1;
+    const normalizedHtml = new NormalizedString(html);
+    return normalizedHtml.indexOf(this.normalizedOldString) !== -1;
   }
 }
