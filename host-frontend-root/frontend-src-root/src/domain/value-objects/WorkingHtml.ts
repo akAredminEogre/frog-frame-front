@@ -43,15 +43,10 @@ export class WorkingHtml {
    * @returns 置換後の新しいWorkingHtmlオブジェクト
    */
   replaceByNormalizedPosition(): WorkingHtml {
-    // 正規化されたHTML文字列を作成してマッチ位置を特定
+    // 正規化されたHTML文字列を作成して、正規化された置換前テキストとのマッチ位置を特定
     const normalizedHtml = new NormalizedString(this.value);
     const normalizedStart = normalizedHtml.indexOf(this.normalizedOldString);
-    
-    if (normalizedStart === -1) {
-      // マッチが見つからない場合は現在のオブジェクトをそのまま返す
-      return new WorkingHtml(this.value, this.rule);
-    }
-    
+
     // 正規化された文字列の長さを取得
     const normalizedLength = this.normalizedOldString.toString().length;
     
@@ -59,13 +54,9 @@ export class WorkingHtml {
     const start = this.findActualIndexFromNormalizedIndex(normalizedStart);
     const end = this.findActualIndexFromNormalizedIndex(normalizedStart + normalizedLength);
     
-    // TextRangeを内部で作成して置換
+    // TextRangeを内部で作成して、replaceRangeメソッドを使用して置換
     const range = new TextRange(start, end);
-    const replacedHtml = this.value.substring(0, range.start) + 
-                        this.rule.newString + 
-                        this.value.substring(range.end);
-    
-    return new WorkingHtml(replacedHtml, this.rule);
+    return this.replaceRange(range, this.rule.newString);
   }
 
   /**
