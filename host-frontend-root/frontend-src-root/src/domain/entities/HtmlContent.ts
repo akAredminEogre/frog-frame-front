@@ -60,9 +60,7 @@ export class HtmlContent {
         matchCount++;
         
         // 新しい文字列が検索対象を含む場合は無限ループになるので一度だけ置換して終了
-        if (wouldCauseInfiniteLoop) {
-          break;
-        }
+        if (wouldCauseInfiniteLoop) break;
       }
       
       return new ReplaceResult(workingHtml.toString(), matchCount);
