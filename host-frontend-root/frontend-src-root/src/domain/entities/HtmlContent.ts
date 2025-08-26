@@ -47,12 +47,7 @@ export class HtmlContent {
       let workingHtml = this.originalHtml;
       let matchCount = 0;
       
-      while (true) {
-        // マッチが存在するかをチェック
-        if (!this.hasNormalizedMatchInHtml(workingHtml)) {
-          break;
-        }
-        
+      while (this.hasNormalizedMatchInHtml(workingHtml)) {
         // マッチの範囲を取得
         const matchRange = this.findActualRangeInString(workingHtml);
 
