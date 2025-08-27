@@ -11,7 +11,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue- docs/issue-nnn
 を実行し、その後
-issue-nnn-refactor-node-magic-number
+issue-nnn-feat-ignore-crlf
 ブランチを作成してください
 ```
 
