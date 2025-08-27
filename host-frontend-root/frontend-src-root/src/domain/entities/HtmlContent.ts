@@ -68,21 +68,8 @@ export class HtmlContent {
   }
 
   /**
-   * 指定した範囲を新しい文字列で置換
-   * @param html 置換対象のHTML文字列
-   * @param matchRange 置換対象の範囲
-   * @param newString 置換する新しい文字列
-   * @returns 置換後の文字列
-   */
-  private replaceRange(html: string, matchRange: TextRange, newString: string): string {
-    return html.substring(0, matchRange.start) + 
-           newString + 
-           html.substring(matchRange.end);
-  }
-
-  /**
    * RewriteRuleに基づいて最初に見つかったマッチ箇所を置換
-   * 冗長化された正規表現を使用してHTMLから直接マッチ位置を取得
+   * 冗長化された正規表現を使用してHTMLから直接置換を実行
    * @param html 置換対象のHTML文字列
    * @returns 置換後の文字列
    */
@@ -90,19 +77,8 @@ export class HtmlContent {
     // rule.oldStringを冗長化した正規表現を作成
     const redundantPattern = this.createRedundantPattern(this.rule.oldString);
     
-    // 正規化前のHTMLから直接マッチ位置を取得
-    const match = html.match(redundantPattern);
-    if (!match) {
-      // マッチしない場合は元のHTMLをそのまま返す
-      return html;
-    }
-    
-    const start = match.index!;
-    const end = start + match[0].length;
-    
-    // TextRangeを内部で作成して、replaceRangeメソッドを使用して置換
-    const range = new TextRange(start, end);
-    return this.replaceRange(html, range, this.rule.newString);
+    // 正規表現の置換を使用して最初のマッチのみを置換
+    return html.replace(redundantPattern, this.rule.newString);
   }
 
   /**
