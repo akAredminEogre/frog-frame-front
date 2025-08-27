@@ -39,24 +39,44 @@ export class WorkingHtml {
 
   /**
    * RewriteRuleに基づいて最初に見つかったマッチ箇所を置換
-   * 正規化されたインデックスの計算からTextRangeの作成まで全てを内部で処理
+   * 冗長化された正規表現を使用して元のHTMLから直接マッチ位置を取得
    * @returns 置換後の新しいWorkingHtmlオブジェクト
    */
   replaceByNormalizedPosition(): WorkingHtml {
-    // 正規化されたHTML文字列を作成して、正規化された置換前テキストとのマッチ位置を特定
-    const normalizedHtml = new NormalizedString(this.value);
-    const normalizedStart = normalizedHtml.indexOf(this.normalizedOldString);
-
-    // 正規化された文字列の長さを取得
-    const normalizedLength = this.normalizedOldString.toString().length;
+    // rule.oldStringを冗長化した正規表現を作成
+    const redundantPattern = this.createRedundantPattern(this.rule.oldString);
     
-    // 正規化されたインデックスから実際のインデックスを取得
-    const start = this.findActualIndexFromNormalizedIndex(normalizedStart);
-    const end = this.findActualIndexFromNormalizedIndex(normalizedStart + normalizedLength);
+    // 正規化前のHTMLから直接マッチ位置を取得
+    const match = this.value.match(redundantPattern);
+    if (!match) {
+      // マッチしない場合は元のHTMLをそのまま返す
+      return this;
+    }
+    
+    const start = match.index!;
+    const end = start + match[0].length;
     
     // TextRangeを内部で作成して、replaceRangeメソッドを使用して置換
     const range = new TextRange(start, end);
     return this.replaceRange(range, this.rule.newString);
+  }
+
+  /**
+   * rule.oldStringを冗長化した正規表現パターンを作成
+   * `<` → `\\s*<`、`>` → `>\\s*` の変換を行う
+   * @param oldString 元の検索文字列
+   * @returns 冗長化された正規表現
+   */
+  private createRedundantPattern(oldString: string): RegExp {
+    // 正規表現の特殊文字をエスケープ
+    const escaped = oldString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    
+    // `<` → `\\s*<`、`>` → `>\\s*` の変換を適用
+    const redundantPattern = escaped
+      .replace(/</g, '\\s*<')
+      .replace(/>/g, '>\\s*');
+    
+    return new RegExp(redundantPattern);
   }
 
   /**
