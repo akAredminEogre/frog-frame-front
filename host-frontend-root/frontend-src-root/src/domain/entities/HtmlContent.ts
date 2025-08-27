@@ -1,6 +1,4 @@
 import { RewriteRule } from './RewriteRule';
-import { NormalizedString } from '../value-objects/NormalizedString';
-import { TextRange } from '../value-objects/TextRange';
 
 export class ReplaceResult {
   constructor(
@@ -26,6 +24,8 @@ export class HtmlContent {
 
   /**
    * HTMLコンテンツの置換を実行する
+   * 正規表現ルールの場合は通常の正規表現置換を行い、
+   * 通常ルールの場合は改行コードを無視する冗長化パターンマッチングを使用する
    * @returns ReplaceResult 置換結果（置換後HTML文字列とマッチ数）
    * 使用するメンバ変数: originalHtml, rule
    */
@@ -34,7 +34,7 @@ export class HtmlContent {
     const newString = this.rule.newString;
 
     if (this.rule.isRegex) {
-      // 既存の正規表現ロジック（変更なし）
+      // 正規表現ルールの場合：通常の正規表現置換
       const regex = new RegExp(oldString, 'gs');
       const matches = [...this.originalHtml.matchAll(regex)];
       const matchCount = matches.length;
@@ -44,14 +44,14 @@ export class HtmlContent {
       const replacedHtml = this.originalHtml.replace(regex, newString);
       return new ReplaceResult(replacedHtml, matchCount);
     } else {
-      // 新しい改行コード無視ロジック
+      // 通常ルールの場合：改行コードを無視する冗長化パターンマッチング
       // 無限ループチェックを先に実行（ループ中に値は変化しないため）
       const wouldCauseInfiniteLoop = this.rule.wouldCauseInfiniteLoop();
       
-      // 冗長化された正規表現パターンを作成
+      // 冗長化された正規表現パターンを作成（改行コード無視）
       const redundantPattern = this.createRedundantPattern(this.rule.oldString);
       
-      // 全ての一致箇所を見つけて置換
+      // whileループで冗長化パターンによる条件確認と置換を実行
       let currentHtml = this.originalHtml;
       let matchCount = 0;
       
@@ -70,9 +70,11 @@ export class HtmlContent {
 
   /**
    * rule.oldStringを冗長化した正規表現パターンを作成
-   * `<` → `\\s*<`、`>` → `>\\s*` の変換を行う
+   * 改行コードやスペースを無視するために以下の変換を行う：
+   * - 正規表現の特殊文字をエスケープ
+   * - `<` → `\\\\s*<`、`>` → `>\\\\s*` の変換でHTML要素間の改行コードを無視
    * @param oldString 元の検索文字列
-   * @returns 冗長化された正規表現
+   * @returns 冗長化された正規表現オブジェクト
    */
   private createRedundantPattern(oldString: string): RegExp {
     // 正規表現の特殊文字をエスケープ
