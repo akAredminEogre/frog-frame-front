@@ -12,24 +12,22 @@ export class ReplaceResult {
 export class HtmlContent {
   private readonly originalHtml: string;
   private readonly rule: RewriteRule;
-  private readonly normalizedOldString: NormalizedString;
 
   /**
    * HtmlContentクラスのコンストラクタ
    * @param html 置換対象のHTML文字列
    * @param rule 置換ルール（RewriteRuleオブジェクト）
-   * 使用するメンバ変数: originalHtml, rule, normalizedOldString（初期化）
+   * 使用するメンバ変数: originalHtml, rule
    */
   constructor(html: string, rule: RewriteRule) {
     this.originalHtml = html;
     this.rule = rule;
-    this.normalizedOldString = new NormalizedString(rule.oldString);
   }
 
   /**
    * HTMLコンテンツの置換を実行する
    * @returns ReplaceResult 置換結果（置換後HTML文字列とマッチ数）
-   * 使用するメンバ変数: originalHtml, rule, normalizedOldString
+   * 使用するメンバ変数: originalHtml, rule
    */
   public replace(): ReplaceResult {
     const oldString = this.rule.oldString;
@@ -50,13 +48,16 @@ export class HtmlContent {
       // 無限ループチェックを先に実行（ループ中に値は変化しないため）
       const wouldCauseInfiniteLoop = this.rule.wouldCauseInfiniteLoop();
       
+      // 冗長化された正規表現パターンを作成
+      const redundantPattern = this.createRedundantPattern(this.rule.oldString);
+      
       // 全ての一致箇所を見つけて置換
       let currentHtml = this.originalHtml;
       let matchCount = 0;
       
-      while (this.hasNormalizedMatchInHtml(currentHtml)) {
-        // RewriteRuleに基づいて最初に見つかったマッチ箇所を置換
-        currentHtml = this.replaceByNormalizedPosition(currentHtml);
+      while (redundantPattern.test(currentHtml)) {
+        // 正規表現の置換を使用して最初のマッチのみを置換
+        currentHtml = currentHtml.replace(redundantPattern, this.rule.newString);
         matchCount++;
         
         // 新しい文字列が検索対象を含む場合は無限ループになるので一度だけ置換して終了
@@ -65,20 +66,6 @@ export class HtmlContent {
       
       return new ReplaceResult(currentHtml, matchCount);
     }
-  }
-
-  /**
-   * RewriteRuleに基づいて最初に見つかったマッチ箇所を置換
-   * 冗長化された正規表現を使用してHTMLから直接置換を実行
-   * @param html 置換対象のHTML文字列
-   * @returns 置換後の文字列
-   */
-  private replaceByNormalizedPosition(html: string): string {
-    // rule.oldStringを冗長化した正規表現を作成
-    const redundantPattern = this.createRedundantPattern(this.rule.oldString);
-    
-    // 正規表現の置換を使用して最初のマッチのみを置換
-    return html.replace(redundantPattern, this.rule.newString);
   }
 
   /**
@@ -97,17 +84,5 @@ export class HtmlContent {
       .replace(/>/g, '>\\s*');
     
     return new RegExp(redundantPattern);
-  }
-
-
-  /**
-   * 正規化されたマッチが存在するかを確認
-   * @param html 検索対象のHTML文字列
-   * @returns boolean マッチが存在する場合はtrue
-   * 使用するメンバ変数: normalizedOldString
-   */
-  private hasNormalizedMatchInHtml(html: string): boolean {
-    const normalizedHtml = new NormalizedString(html);
-    return normalizedHtml.indexOf(this.normalizedOldString) !== -1;
   }
 }
