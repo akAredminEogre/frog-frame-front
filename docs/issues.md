@@ -1,4 +1,3 @@
-- [ ] RewriteRuleをtypeではなく、ValueObjectとして定義
 - [ ] NodeTextReplacerのリファクタリング
 - [ ] background.tsのファット解消、テストコード作成
 - [ ] HtmlStringの仕様変更
@@ -15,10 +14,19 @@
 - [ ] no-consoleも無視しない
 - [ ] PLAN.mdの改善
 - [ ] SelectionServiceのテストケース追加
+  - [ ] hasValidSelectionのテストと、ElementSelector.test.tsの重複削除
 - [ ] 未使用functionの削除npm導入
+- [ ] 使用条件からテストファイルを除く
 - [ ] mockSelectionServiceが変更可能なのは大丈夫か確認
 - [ ] ElementSelectorの詳細テスト追加
 - [ ] --project tsconfig.tsr.json の統一
 - [ ] ElementSelector.test.tsのテストケース分割
 - [ ] isInvalidAncestor、getStartElementの切り出し
 - [ ] isMultiElementSelection、findOptimalElementのif文整理
+- [ ] clineがデフォルトで確認する指示書
+- [ ] fromPlainObjectを廃止
+- [ ] '@'記法をsrcに変更、設定廃止
+- [ ] ReplaceResultのmatchCountが数字を返す必要があるか検証
+- [ ] `/s*`の厳密化
+- [ ] HtmlContentのif-else解消
+- [ ] RewriteRuleのTodo解消

@@ -9,8 +9,8 @@ export class HtmlReplacer {
       return 0;
     }
 
-    const content = new HtmlContent(rootElement.innerHTML);
-    const result = content.replaceWith(rule);
+    const content = new HtmlContent(rootElement.innerHTML, rule);
+    const result = content.replace();
 
     if (result.matchCount === 0) {
       return 0;

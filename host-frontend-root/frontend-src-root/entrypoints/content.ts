@@ -8,7 +8,7 @@ function getElementSelectionInfo(): { selection: string } {
 
 import { matchUrl } from '../src/utils/matchUrl';
 import { NodeTextReplacer } from '../src/domain/entities/NodeTextReplacer';
-import { RewriteRule } from '../src/domain/entities/RewriteRule';
+import { RewriteRule, RewriteRulePlainObject } from '../src/domain/entities/RewriteRule';
 import { ElementSelector } from '../src/domain/entities/ElementSelector';
 
 
@@ -32,8 +32,12 @@ export default defineContentScript({
         }
         rewriteRules.forEach((ruleObj) => {
           if (!ruleObj || typeof ruleObj !== 'object') return;
-          const rule = ruleObj as RewriteRule;
-          if (!rule.oldString || !rule.newString) return;
+          
+          // プレーンオブジェクトをRewriteRuleインスタンスに変換
+          const plainRule = ruleObj as RewriteRulePlainObject;
+          if (!plainRule.oldString || !plainRule.newString) return;
+          
+          const rule = RewriteRule.fromPlainObject(plainRule);
 
           if (rule.urlPattern) {
             const currentUrl = window.location.href;
