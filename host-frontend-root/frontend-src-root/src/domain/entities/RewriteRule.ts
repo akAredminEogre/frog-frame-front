@@ -15,33 +15,4 @@ export class RewriteRule {
     return this.newString.includes(this.oldString);
   }
 
-  /**
-   * プレーンオブジェクトからRewriteRuleインスタンスを作成するファクトリメソッド
-   */
-  static fromPlainObject(obj: {
-    id: string;
-    oldString: string;
-    newString: string;
-    urlPattern?: string;
-    isRegex?: boolean;
-  }): RewriteRule {
-    return new RewriteRule(
-      obj.id,
-      obj.oldString,
-      obj.newString,
-      obj.urlPattern,
-      obj.isRegex
-    );
-  }
 }
-
-/**
- * プレーンオブジェクトの型定義（JSONから取得される形式）
- */
-export type RewriteRulePlainObject = {
-  id: string;
-  oldString: string;
-  newString: string;
-  urlPattern?: string;
-  isRegex?: boolean;
-};
