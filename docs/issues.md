@@ -30,3 +30,4 @@
 - [ ] `/s*`の厳密化
 - [ ] HtmlContentのif-else解消
 - [ ] RewriteRuleのTodo解消
+- [ ] getPageInfo使ってなさそう

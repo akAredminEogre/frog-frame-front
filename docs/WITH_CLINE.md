@@ -11,7 +11,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue- docs/issue-nnn
 を実行し、その後
-issue-nnn-feat-ignore-crlf
+issue-nnn-refactor-discard-plain-object
 ブランチを作成してください
 ```
 
@@ -55,6 +55,7 @@ mkdir -p docs/issue-nnn/daily-scrum-kk/
 ```
 
 ## DAILY_SCRUM-kk.md作成後の指示
+
 ```cline-instructions
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 デイリースクラムの計画をレビューしました。
@@ -77,6 +78,24 @@ DAILY_SCRUM-kk.mdの作業を開始してください。
 
 ## DAILY_SCRUM.md実装終了後
 
+### 最初にプラン作成を指示しなかった時
+```cline-instructions
+nnn=(カレントブランチ名からissue番号を取得)
+kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナンバーの最大数+1)
+作業ありがとうございました。今回の作業を
+スクラムkk回目として記録します。
+まずディレクトリの作成を行います
+- 下記コマンドを実行
+```bash
+cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
+mkdir -p docs/issue-nnn/daily-scrum-kk/
+```
+
+- 今回の作業内容に基づき、favorite-keyword-link-frog/docs/issue-/daily-scrum-00/DAILY_SCRUM-.mdのフォーマットに従って、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdを作成してください。
+
+```
+
+
 - 人間がコードをコミット
 
 
@@ -87,10 +106,13 @@ kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 ありがとうございました。今回の作業は終了にします。
 下記の内容でコミットしてください。
 - 対象：docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.md
+  - 存在しなければコミットはスキップ
 - コミットメッセージ
   - docs: スクラムkk回目の進捗
 
-次に、振り返りを行い、PLAN.md/RETROSPECTIVE.md/DAILY_SCRUM.mdを更新してください
+次に、
+docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
+をみながら振り返りを行い、PLAN.md/RETROSPECTIVE.md/DAILY_SCRUM.mdを更新してください
 - PLAN.md
   - チェックリストの更新
 - RETROSPECTIVE.md
@@ -119,7 +141,7 @@ issue-nnnのプルリクエストの本文を作成してください。
 
 反映すべき内容：
 favorite-keyword-link-frog/docs/issue-nnn/
-以下のドキュメント群(ない場合はdeveloppとの比較で変更があるもの)
+以下のドキュメント群(ない場合はdevelopとの比較で変更があるもの)
 
 従うべきフォーマット：
 favorite-keyword-link-frog/docs/issue-/PULL_REQUEST.md
