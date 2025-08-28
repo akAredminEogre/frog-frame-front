@@ -11,7 +11,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue- docs/issue-nnn
 を実行し、その後
-issue-nnn-refactor-node-magic-number
+issue-nnn-feat-ignore-crlf
 ブランチを作成してください
 ```
 
@@ -102,6 +102,15 @@ kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
   - コミットメッセージ
     - docs: スクラムkk回目の終了、振り返り
 
+
+## PR作成前の確認
+```cline-instructions
+nnn=(カレントブランチ名からissue番号を取得)
+
+現在のブランチと、現在のdevelopを比較し、変更内容が、CODING_STYLE.mdの `# オブジェクト指向ルール` に従っていることを確認してください。
+合致しない部分には、`TODO:` のコメントを入れてください
+```
+
 ## PR作成時の指示
 
 ```
@@ -110,7 +119,7 @@ issue-nnnのプルリクエストの本文を作成してください。
 
 反映すべき内容：
 favorite-keyword-link-frog/docs/issue-nnn/
-以下のドキュメント群
+以下のドキュメント群(ない場合はdeveloppとの比較で変更があるもの)
 
 従うべきフォーマット：
 favorite-keyword-link-frog/docs/issue-/PULL_REQUEST.md
