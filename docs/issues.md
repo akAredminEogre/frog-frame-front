@@ -16,6 +16,7 @@
 - [ ] SelectionServiceのテストケース追加
   - [ ] hasValidSelectionのテストと、ElementSelector.test.tsの重複削除
 - [ ] 未使用functionの削除npm導入
+- [ ] 使用条件からテストファイルを除く
 - [ ] mockSelectionServiceが変更可能なのは大丈夫か確認
 - [ ] ElementSelectorの詳細テスト追加
 - [ ] --project tsconfig.tsr.json の統一
@@ -28,3 +29,4 @@
 - [ ] ReplaceResultのmatchCountが数字を返す必要があるか検証
 - [ ] `/s*`の厳密化
 - [ ] HtmlContentのif-else解消
+- [ ] RewriteRuleのTodo解消
