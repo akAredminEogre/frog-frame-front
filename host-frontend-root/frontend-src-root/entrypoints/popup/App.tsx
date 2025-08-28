@@ -2,11 +2,15 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
 import { getActiveTabOrigin } from '../../src/domain/entities/tabUtils';
-import { RewriteRulePlainObject } from '../../src/domain/entities/RewriteRule';
 
 function App() {
   // フォーム入力を管理するState
-  const [rewriteRule, setRewriteRule] = useState<Omit<RewriteRulePlainObject, 'id'>>({
+  const [rewriteRule, setRewriteRule] = useState<{
+    oldString: string;
+    newString: string;
+    urlPattern?: string;
+    isRegex?: boolean;
+  }>({
     oldString: '',
     newString: '',
     urlPattern: '',
