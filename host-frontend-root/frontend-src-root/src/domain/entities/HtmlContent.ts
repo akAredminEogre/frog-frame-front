@@ -32,10 +32,8 @@ export class HtmlContent {
     const oldString = this.rule.oldString;
     const newString = this.rule.newString;
 
-    // 正規表現ルールか通常ルールかに応じてパターンを作成
-    const regexPattern = this.rule.isRegex 
-      ? this.createRedundantRegexPattern(oldString)
-      : this.createRedundantPattern(oldString);
+    // 統合されたパターン作成メソッドを使用
+    const regexPattern = this.createRedundantPattern(oldString, this.rule.isRegex ?? false);
     
     const regex = new RegExp(regexPattern, 'gs');
     const replacedHtml = this.originalHtml.replace(regex, newString);
@@ -43,35 +41,21 @@ export class HtmlContent {
   }
 
   /**
-   * 正規表現パターンを改行コードを無視するように変換
-   * 正規表現内の `<` → `\\s*<`、`>` → `>\\s*` の変換でHTML要素間の改行コードを無視
-   * @param regexPattern 元の正規表現パターン文字列
+   * パターンを改行コードを無視するように変換する統合メソッド
+   * 正規表現ルールと通常ルールの両方に対応し、改行コードやスペースを無視する変換を行う
+   * @param pattern 元のパターン文字列（正規表現または通常文字列）
+   * @param isRegex パターンが正規表現かどうかのフラグ
    * @returns 改行コードを無視する正規表現パターン文字列
    */
-  private createRedundantRegexPattern(regexPattern: string): string {
-    // `<` → `\\s*<`、`>` → `>\\s*` の変換を適用
-    return regexPattern
+  private createRedundantPattern(pattern: string, isRegex: boolean): string {
+    // 正規表現でない場合は特殊文字をエスケープ
+    const processedPattern = isRegex 
+      ? pattern 
+      : pattern.replace(/[.*+?^${}()|\\[\]]/g, '\\$&');
+    
+    // `<` → `\s*<`、`>` → `>\s*` の変換でHTML要素間の改行コードを無視
+    return processedPattern
       .replace(/</g, '\\s*<')
       .replace(/>/g, '>\\s*');
-  }
-
-  /**
-   * rule.oldStringを冗長化した正規表現パターンを作成
-   * 改行コードやスペースを無視するために以下の変換を行う：
-   * - 正規表現の特殊文字をエスケープ
-   * - `<` → `\\\\\\\\s*<`、`>` → `>\\\\\\\\s*` の変換でHTML要素間の改行コードを無視
-   * @param oldString 元の検索文字列
-   * @returns 冗長化された正規表現パターン文字列
-   */
-  private createRedundantPattern(oldString: string): string {
-    // 正規表現の特殊文字をエスケープ
-    const escaped = oldString.replace(/[.*+?^${}()|\\[\]]/g, '\\$&');
-    
-    // `<` → `\\s*<`、`>` → `>\\s*` の変換を適用
-    const redundantPattern = escaped
-      .replace(/</g, '\\s*<')
-      .replace(/>/g, '>\\s*');
-    
-    return redundantPattern;
   }
 }
