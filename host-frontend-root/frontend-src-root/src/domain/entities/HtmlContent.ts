@@ -33,8 +33,10 @@ export class HtmlContent {
     const newString = this.rule.newString;
 
     if (this.rule.isRegex) {
-      // 正規表現ルールの場合：通常の正規表現置換
-      const regex = new RegExp(oldString, 'gs');
+      // 正規表現ルールの場合：改行コードを無視する正規表現置換
+      // 正規表現パターンに対して改行コードを無視する変換を適用
+      const redundantRegexPattern = this.createRedundantRegexPattern(oldString);
+      const regex = new RegExp(redundantRegexPattern, 'gs');
       const replacedHtml = this.originalHtml.replace(regex, newString);
       return new ReplaceResult(replacedHtml);
     } else {
@@ -58,6 +60,19 @@ export class HtmlContent {
       
       return new ReplaceResult(currentHtml);
     }
+  }
+
+  /**
+   * 正規表現パターンを改行コードを無視するように変換
+   * 正規表現内の `<` → `\\s*<`、`>` → `>\\s*` の変換でHTML要素間の改行コードを無視
+   * @param regexPattern 元の正規表現パターン文字列
+   * @returns 改行コードを無視する正規表現パターン文字列
+   */
+  private createRedundantRegexPattern(regexPattern: string): string {
+    // `<` → `\\s*<`、`>` → `>\\s*` の変換を適用
+    return regexPattern
+      .replace(/</g, '\\s*<')
+      .replace(/>/g, '>\\s*');
   }
 
   /**
