@@ -40,25 +40,13 @@ export class HtmlContent {
       const replacedHtml = this.originalHtml.replace(regex, newString);
       return new ReplaceResult(replacedHtml);
     } else {
-      // 通常ルールの場合：改行コードを無視する冗長化パターンマッチング
-      // 無限ループチェックを先に実行（ループ中に値は変化しないため）
-      const wouldCauseInfiniteLoop = this.rule.wouldCauseInfiniteLoop();
       
       // 冗長化された正規表現パターンを作成（改行コード無視）
       const redundantPattern = this.createRedundantPattern(this.rule.oldString);
       
-      // whileループで冗長化パターンによる条件確認と置換を実行
-      let currentHtml = this.originalHtml;
-      
-      while (redundantPattern.test(currentHtml)) {
-        // 正規表現の置換を使用して最初のマッチのみを置換
-        currentHtml = currentHtml.replace(redundantPattern, this.rule.newString);
-        
-        // 新しい文字列が検索対象を含む場合は無限ループになるので一度だけ置換して終了
-        if (wouldCauseInfiniteLoop) break;
-      }
-      
-      return new ReplaceResult(currentHtml);
+      const regex = new RegExp(redundantPattern, 'gs');
+      const replacedHtml = this.originalHtml.replace(regex, newString);
+      return new ReplaceResult(replacedHtml);
     }
   }
 
