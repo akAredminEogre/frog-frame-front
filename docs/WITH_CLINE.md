@@ -10,7 +10,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue-000 docs/issue-nnn
 を実行し、その後
-issue-nnn-refactor-discard-match-count
+issue-nnn-refactor-discard-get-page-info
 ブランチを作成してください
 ```
 
@@ -93,7 +93,7 @@ mkdir -p docs/issue-nnn/daily-scrum-kk/
 - 今回の作業内容に基づき、favorite-keyword-link-frog/docs/issue-/daily-scrum-00/DAILY_SCRUM-.mdのフォーマットに従って、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdを作成してください。
 
 ```
-
+```
 
 - 人間がコードをコミット
 
@@ -191,8 +191,5 @@ pr_noのプルリクエストをマージします。次の手順でマージし
 - 現在のブランチで残っている変更があればすべてコミットしてプッシュ
   - コミットメッセージは「issue-nnn: プルリクエストの内容を反映」
 - プルリクエストを`create a merge commit`でマージする
-- Clineが開いたターミナルをすべて閉じる
-- VSCodeで開かれているエディタータブをすべて閉じる
-- View Git Graphを開く
 - developにチェックアウトし、pullする
 ```
