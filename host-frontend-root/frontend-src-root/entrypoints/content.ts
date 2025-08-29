@@ -68,18 +68,6 @@ export default defineContentScript({
         sendResponse(getElementSelectionInfo());
         return true; // 非同期応答
       }
-      // 2) ページタイトルや任意の要素を取得
-      else if (request.type === 'getPageInfo') {
-        const title = document.title;
-        const firstH1 = document.querySelector('h1')?.textContent || '(no <h1> found)';
-        
-        sendResponse({
-          title,
-          firstH1,
-          // 必要に応じて追加情報
-        });
-      }
-
       // 3) ポップアップからの単一ルール適用メッセージ
       else if (request.type === 'applySingleRule') {
         const { rule } = request;
