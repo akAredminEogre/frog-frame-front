@@ -1,8 +1,7 @@
 import { RewriteRule } from './RewriteRule';
 
 export class TextReplacer {
-  replace(root: Node, rule: RewriteRule): number {
-    let replaceCount = 0;
+  replace(root: Node, rule: RewriteRule): void {
     const { oldString, newString } = rule;
 
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
@@ -19,7 +18,6 @@ export class TextReplacer {
         while ((match = regex.exec(oldText)) !== null) {
           newText += oldText.substring(lastIndex, match.index) + newString;
           lastIndex = regex.lastIndex;
-          replaceCount++;
           replacedInNode = true;
         }
         if (replacedInNode) {
@@ -28,6 +26,5 @@ export class TextReplacer {
         }
       }
     }
-    return replaceCount;
   }
 }

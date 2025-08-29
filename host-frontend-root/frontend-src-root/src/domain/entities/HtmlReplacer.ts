@@ -3,17 +3,17 @@ import { ChildNodeList } from '../value-objects/ChildNodeList';
 import { HtmlContent } from './HtmlContent';
 
 export class HtmlReplacer {
-  replace(root: Node, rule: RewriteRule): number {
+  replace(root: Node, rule: RewriteRule): void {
     const rootElement = root as Element;
     if (!rootElement.innerHTML) {
-      return 0;
+      return;
     }
 
     const content = new HtmlContent(rootElement.innerHTML, rule);
     const result = content.replace();
 
-    if (result.matchCount === 0) {
-      return 0;
+    if (result.replacedHtml === rootElement.innerHTML) {
+      return;
     }
 
     const htmlParserContainer = document.createElement('div');
@@ -23,7 +23,5 @@ export class HtmlReplacer {
 
     const childNodes = new ChildNodeList(htmlParserContainer.childNodes);
     childNodes.appendAllTo(rootElement);
-
-    return result.matchCount;
   }
 }

@@ -25,13 +25,12 @@ describe('NodeTextReplacer', () => {
   it('should delegate to TextReplacer for plain text', () => {
     const rule: RewriteRule = new RewriteRule('1', 'world', 'test');
     const replacer = new NodeTextReplacer(mockTextReplacer, mockHtmlReplacer);
-    mockTextReplacer.replace = vi.fn().mockReturnValue(1);
+    mockTextReplacer.replace = vi.fn();
 
-    const count = replacer.replace(document.body, rule);
+    replacer.replace(document.body, rule);
 
     expect(mockTextReplacer.replace).toHaveBeenCalledWith(document.body, rule);
     expect(mockHtmlReplacer.replace).not.toHaveBeenCalled();
-    expect(count).toBe(1);
   });
 
   it('should delegate to HtmlReplacer for HTML string', () => {
@@ -41,12 +40,11 @@ describe('NodeTextReplacer', () => {
       '<b>replaced</b>'
     );
     const replacer = new NodeTextReplacer(mockTextReplacer, mockHtmlReplacer);
-    mockHtmlReplacer.replace = vi.fn().mockReturnValue(1);
+    mockHtmlReplacer.replace = vi.fn();
 
-    const count = replacer.replace(document.body, rule);
+    replacer.replace(document.body, rule);
 
     expect(mockHtmlReplacer.replace).toHaveBeenCalledWith(document.body, rule);
     expect(mockTextReplacer.replace).not.toHaveBeenCalled();
-    expect(count).toBe(1);
   });
 });

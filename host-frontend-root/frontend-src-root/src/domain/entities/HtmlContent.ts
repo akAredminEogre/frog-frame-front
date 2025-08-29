@@ -3,7 +3,6 @@ import { RewriteRule } from './RewriteRule';
 export class ReplaceResult {
   constructor(
     public readonly replacedHtml: string,
-    public readonly matchCount: number,
   ) {}
 }
 
@@ -26,7 +25,7 @@ export class HtmlContent {
    * HTMLコンテンツの置換を実行する
    * 正規表現ルールの場合は通常の正規表現置換を行い、
    * 通常ルールの場合は改行コードを無視する冗長化パターンマッチングを使用する
-   * @returns ReplaceResult 置換結果（置換後HTML文字列とマッチ数）
+   * @returns ReplaceResult 置換結果（置換後HTML文字列）
    * 使用するメンバ変数: originalHtml, rule
    */
   public replace(): ReplaceResult {
@@ -36,13 +35,8 @@ export class HtmlContent {
     if (this.rule.isRegex) {
       // 正規表現ルールの場合：通常の正規表現置換
       const regex = new RegExp(oldString, 'gs');
-      const matches = [...this.originalHtml.matchAll(regex)];
-      const matchCount = matches.length;
-      if (matchCount === 0) {
-        return new ReplaceResult(this.originalHtml, 0);
-      }
       const replacedHtml = this.originalHtml.replace(regex, newString);
-      return new ReplaceResult(replacedHtml, matchCount);
+      return new ReplaceResult(replacedHtml);
     } else {
       // 通常ルールの場合：改行コードを無視する冗長化パターンマッチング
       // 無限ループチェックを先に実行（ループ中に値は変化しないため）
@@ -53,18 +47,16 @@ export class HtmlContent {
       
       // whileループで冗長化パターンによる条件確認と置換を実行
       let currentHtml = this.originalHtml;
-      let matchCount = 0;
       
       while (redundantPattern.test(currentHtml)) {
         // 正規表現の置換を使用して最初のマッチのみを置換
         currentHtml = currentHtml.replace(redundantPattern, this.rule.newString);
-        matchCount++;
         
         // 新しい文字列が検索対象を含む場合は無限ループになるので一度だけ置換して終了
         if (wouldCauseInfiniteLoop) break;
       }
       
-      return new ReplaceResult(currentHtml, matchCount);
+      return new ReplaceResult(currentHtml);
     }
   }
 
