@@ -15,13 +15,13 @@ export class NodeTextReplacer {
     this.htmlReplacer = htmlReplacer;
   }
 
-  replace(root: Node, rule: RewriteRule): number {
+  replace(root: Node, rule: RewriteRule): void {
     const replacementValue = new ReplacementValue(rule.oldString);
 
     if (replacementValue.isHtml()) {
-      return this.htmlReplacer.replace(root, rule);
+      this.htmlReplacer.replace(root, rule);
     } else {
-      return this.textReplacer.replace(root, rule);
+      this.textReplacer.replace(root, rule);
     }
   }
 }
