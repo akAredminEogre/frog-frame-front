@@ -26,9 +26,6 @@
 - [ ] clineがデフォルトで確認する指示書
 - [ ] fromPlainObjectを廃止
 - [ ] '@'記法をsrcに変更、設定廃止
-- [x] ReplaceResultのmatchCountが数字を返す必要があるか検証
-- [ ] `/s*`の厳密化
 - [ ] HtmlContentのif-else解消
 - [ ] RewriteRuleのTodo解消
-- [ ] getPageInfo使ってなさそう
 - [ ] replacementValue.isHtml() 不要では
