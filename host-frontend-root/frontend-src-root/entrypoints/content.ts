@@ -7,7 +7,7 @@ function getElementSelectionInfo(): { selection: string } {
 }
 
 import { matchUrl } from '../src/utils/matchUrl';
-import { NodeTextReplacer } from '../src/domain/entities/NodeTextReplacer';
+import { HtmlReplacer } from '../src/domain/entities/HtmlReplacer';
 import { RewriteRule } from '../src/domain/entities/RewriteRule';
 import { ElementSelector } from '../src/domain/entities/ElementSelector';
 
@@ -19,7 +19,7 @@ export default defineContentScript({
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
   main() {
-    const replacer = new NodeTextReplacer();
+    const replacer = new HtmlReplacer();
 
     const applyAllRules = () => {
       chrome.storage.local.get(null, (items) => {
