@@ -22,24 +22,24 @@ describe('NodeTextReplacer', () => {
     mockHtmlReplacer = new (vi.mocked(HtmlReplacer))();
   });
 
-  it('should delegate to TextReplacer for plain text', () => {
+  it('should always delegate to HtmlReplacer for plain text', () => {
     const rule: RewriteRule = new RewriteRule('1', 'world', 'test');
-    const replacer = new NodeTextReplacer(mockTextReplacer, mockHtmlReplacer);
-    mockTextReplacer.replace = vi.fn();
+    const replacer = new NodeTextReplacer(mockHtmlReplacer);
+    mockHtmlReplacer.replace = vi.fn();
 
     replacer.replace(document.body, rule);
 
-    expect(mockTextReplacer.replace).toHaveBeenCalledWith(document.body, rule);
-    expect(mockHtmlReplacer.replace).not.toHaveBeenCalled();
+    expect(mockHtmlReplacer.replace).toHaveBeenCalledWith(document.body, rule);
+    expect(mockTextReplacer.replace).not.toHaveBeenCalled();
   });
 
-  it('should delegate to HtmlReplacer for HTML string', () => {
+  it('should always delegate to HtmlReplacer for HTML string', () => {
     const rule: RewriteRule = new RewriteRule(
       '1',
       '<p>hello</p>',
       '<b>replaced</b>'
     );
-    const replacer = new NodeTextReplacer(mockTextReplacer, mockHtmlReplacer);
+    const replacer = new NodeTextReplacer(mockHtmlReplacer);
     mockHtmlReplacer.replace = vi.fn();
 
     replacer.replace(document.body, rule);
