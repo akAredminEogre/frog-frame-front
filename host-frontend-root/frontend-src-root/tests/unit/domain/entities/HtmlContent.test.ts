@@ -82,8 +82,7 @@ describe('HtmlContent', () => {
     const rule = new RewriteRule('1', '<h1>(.+?)</h1>', '<h2>$1</h2>', undefined, true);
     const content = new HtmlContent(html, rule);
     const result = content.replace();
-    expect(result.replacedHtml).toBe(`<h2>アジャイルソフトウェア開発宣言
-</h2>`);
+    expect(result.replacedHtml).toBe(`<h2>アジャイルソフトウェア開発宣言</h2>`);
   });
     });
   });

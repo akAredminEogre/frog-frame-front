@@ -29,3 +29,6 @@
 - [ ] HtmlContentのif-else解消
 - [ ] RewriteRuleのTodo解消
 - [ ] replacementValue.isHtml() 不要では
+- [ ] HtmlContetnまでの導線をリファクタリング
+- [ ] test:allのコマンド作成
+- [ ] createRedundantPatternはRewriteRuleに取り込む
