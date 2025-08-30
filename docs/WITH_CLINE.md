@@ -10,7 +10,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue-000 docs/issue-nnn
 を実行し、その後
-issue-nnn-refactor-discard-get-page-info
+issue-nnn-feat-ignore-crlf-when-regex
 ブランチを作成してください
 ```
 
@@ -143,7 +143,7 @@ favorite-keyword-link-frog/docs/issue-nnn/
 以下のドキュメント群(ない場合はdevelopとの比較で変更があるもの)
 
 従うべきフォーマット：
-favorite-keyword-link-frog/docs/issue-/PULL_REQUEST.md
+favorite-keyword-link-frog/docs/issue-000/PULL_REQUEST.md
 
 保存先：
 docs/issue-nnn/PULL_REQUEST.md
