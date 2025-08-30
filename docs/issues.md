@@ -24,11 +24,8 @@
 - [ ] isInvalidAncestor、getStartElementの切り出し
 - [ ] isMultiElementSelection、findOptimalElementのif文整理
 - [ ] clineがデフォルトで確認する指示書
-- [ ] fromPlainObjectを廃止
 - [ ] '@'記法をsrcに変更、設定廃止
-- [ ] HtmlContentのif-else解消
 - [ ] RewriteRuleのTodo解消
-- [ ] replacementValue.isHtml() 不要では
-- [ ] HtmlContetnまでの導線をリファクタリング
 - [ ] test:allのコマンド作成
 - [ ] createRedundantPatternはRewriteRuleに取り込む
+- [ ] HtmlReplacerのメンバ変数化
