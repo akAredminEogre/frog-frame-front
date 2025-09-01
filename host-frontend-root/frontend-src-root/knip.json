@@ -1,9 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
-  "project": [
-    "src/**/*.{ts,tsx}",
-    "entrypoints/**/*.{ts,tsx}"
-  ],
   "ignore": [
     ".output/**",
     ".wxt/**",
@@ -21,15 +17,15 @@
   "ignoreDependencies": [
     "@wxt-dev/module-react"
   ],
-  "ignoreExportsUsedInFile": true,
+  "ignoreExportsUsedInFile": false,
   "includeEntryExports": true,
-  "workspaces": {
-    ".": {
-      "entry": [
-        "entrypoints/**/*.{ts,tsx}",
-        "src/**/*.{ts,tsx}",
-        "wxt.config.ts"
-      ]
-    }
-  }
+  "entry": [
+    "entrypoints/**/*.{ts,tsx}!",
+    "wxt.config.ts"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx}!",
+    "entrypoints/**/*.{ts,tsx}!",
+    "wxt.config.ts"
+  ]
 }
