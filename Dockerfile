@@ -8,6 +8,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 \
     libcups2 libdrm2 libxkbcommon0 libxcomposite1 \
     libxdamage1 libxrandr2 libxfixes3 libgbm1 libasound2 \
+    # Playwright が要求する基本依存関係
+    libxcursor1 libxi6 libgtk-3-0 \
+    # Playwright WebKit用の追加依存関係
+    libwoff1 libopus0 flite1-dev espeak-data \
+    libharfbuzz-icu0 libenchant-2-2 libsecret-1-0 libhyphen0 \
+    libmanette-0.2-0 libdw1 libegl1-mesa libgudev-1.0-0 \
+    libgles2-mesa libx264-dev \
+    # 追加のWebKit関連依存関係
+    libharfbuzz-gobject0 \
   # HTTP クライアント
   curl \
   # sudo 権限付与用ツール
