@@ -7,12 +7,4 @@ export class RewriteRule {
     public readonly isRegex?: boolean
   ) {}
 
-  /**
-   * 新しい文字列が検索対象文字列を含んでいるかを判定する
-   * 無限ループを防ぐために使用される
-   */
-  public wouldCauseInfiniteLoop(): boolean {
-    return this.newString.includes(this.oldString);
-  }
-
 }
