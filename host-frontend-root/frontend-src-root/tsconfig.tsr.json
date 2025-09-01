@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.json",
+"extends": "./tsconfig.json",
   "include": [
     "src/**/*",
     "entrypoints/**/*"
@@ -9,10 +9,6 @@
     "src/**/*.test.tsx",
     "src/**/*.spec.ts",
     "src/**/*.spec.tsx",
-    "src/**/__tests__/**/*",
-    "entrypoints/background.ts",
-    "entrypoints/content.ts",
-    "entrypoints/popup/main.tsx",
-    "entrypoints/popup/App.tsx"
+    "src/**/__tests__/**/*"
   ]
 }
