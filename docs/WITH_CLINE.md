@@ -4,13 +4,13 @@
 issue番号の採番：
 ```
 git checkout develop && git pull && \
-git branch --list 'issue-*' | sort -r | head -n 1
+git fetch --prune && git branch --list -a | grep 'origin/issue-*' | sort -r | head -n 1
 ```
 nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue-000 docs/issue-nnn
 を実行し、その後
-issue-nnn-refactor-discard-text-replacer
+issue-nnn-feat-ignore-test-file
 ブランチを作成してください
 ```
 
