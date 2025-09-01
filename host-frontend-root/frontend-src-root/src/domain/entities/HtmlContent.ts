@@ -1,6 +1,6 @@
 import { RewriteRule } from './RewriteRule';
 
-export class ReplaceResult {
+class ReplaceResult {
   constructor(
     public readonly replacedHtml: string,
   ) {}

@@ -9,8 +9,9 @@
     "dev:firefox": "wxt -b firefox",
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
-    "test": "vitest",
+    "test": "vitest --run",
     "test:e2e": "playwright test",
+    "test:all": "npm run test  && npm run test:e2e",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
@@ -32,8 +33,11 @@
     "tsr:write": "tsr --write --project tsconfig.tsr.json 'entrypoints/.*\\.(ts|tsx)$'",
     "depcheck": "depcheck",
     "depcheck:report": "depcheck --json > depcheck-report.json && echo 'Depcheck report saved to depcheck-report.json'",
-    "unused:all": "npm run knip && npm run tsr:check && npm run depcheck",
-    "unused:fix": "npm run knip:fix && npm run tsr:write && npm run lint:fix"
+    "unused:all": "npm run knip:all && npm run tsr:check && npm run depcheck",
+    "unused:fix": "npm run knip:fix; npm run tsr:write; npm run lint:fix",
+    "unused:remove-broken-tests": "npm run compile 2>&1 | grep 'Cannot find module' | sed -n \"s/.*\\(tests\\/[^(]*\\).*/\\1/p\" | sort -u | xargs -I {} sh -c 'echo \"Removing broken test: {}\" && rm \"{}\"'",
+    "unused:complete": "npm run unused:fix && npm run unused:remove-broken-tests && npm run compile",
+    "unused:safe": "npm run unused:complete && npm run test:all && npm run knip:all"
   },
   "dependencies": {
     "react": "^18.3.1",

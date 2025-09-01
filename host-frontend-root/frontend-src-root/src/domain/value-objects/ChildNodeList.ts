@@ -16,8 +16,4 @@ export class ChildNodeList {
       parentElement.removeChild(parentElement.firstChild);
     }
   }
-
-  get length(): number {
-    return this.nodes.length;
-  }
 }
