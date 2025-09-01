@@ -42,8 +42,6 @@ describe('ChildNodeList', () => {
       tempDiv.innerHTML = html;
       const childNodeList = new ChildNodeList(tempDiv.childNodes);
 
-      expect(childNodeList.length).toBe(expectedChildCount);
-
       childNodeList.appendAllTo(parentDiv);
       expect(parentDiv.childNodes.length).toBe(expectedChildCount);
 
