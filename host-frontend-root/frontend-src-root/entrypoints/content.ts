@@ -8,8 +8,8 @@ function getElementSelectionInfo(): { selection: string } {
 
 import { matchUrl } from '../src/utils/matchUrl';
 import { HtmlReplacer } from '../src/domain/entities/HtmlReplacer';
-import { RewriteRule } from '../src/domain/entities/RewriteRule';
 import { ElementSelector } from '../src/domain/entities/ElementSelector';
+import { RuleApplicationService } from 'src/application/RuleApplicationService';
 
 
 export default defineContentScript({
@@ -20,46 +20,7 @@ export default defineContentScript({
 
   main() {
     const replacer = new HtmlReplacer();
-
-    const applyAllRules = () => {
-      chrome.storage.local.get(null, (items) => {
-        if (chrome.runtime.lastError) {
-          return;
-        }
-        const rewriteRules = Object.values(items);
-        if (!rewriteRules.length) {
-          return;
-        }
-        rewriteRules.forEach((ruleObj) => {
-          if (!ruleObj || typeof ruleObj !== 'object') return;
-          
-          // プレーンオブジェクトをRewriteRuleインスタンスに変換
-          const plainRule = ruleObj as {
-            id: string;
-            oldString: string;
-            newString: string;
-            urlPattern?: string;
-            isRegex?: boolean;
-          };
-          if (!plainRule.oldString || !plainRule.newString) return;
-          
-          const id = plainRule.id;
-          const oldString = plainRule.oldString;
-          const newString = plainRule.newString;
-          const urlPattern = plainRule.urlPattern;
-          const isRegex = plainRule.isRegex;
-          const rule = new RewriteRule(id, oldString, newString, urlPattern, isRegex);
-
-          if (rule.urlPattern) {
-            const currentUrl = window.location.href;
-            if (!currentUrl.startsWith(rule.urlPattern)) {
-              return;
-            }
-          }
-          replacer.replace(document.body, rule);
-        });
-      });
-    };
+    const ruleApplicationService = new RuleApplicationService(replacer);
 
     // メッセージ受信ロジック
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -79,8 +40,9 @@ export default defineContentScript({
       }
       // 4) backgroundからの全ルール適用メッセージ
       else if (request.type === 'applyAllRules') {
-        applyAllRules();
-        sendResponse({ success: true });
+        ruleApplicationService.applyAllRules().then(() => {
+          sendResponse({ success: true });
+        });
         return true;
       }
 
