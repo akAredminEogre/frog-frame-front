@@ -25,3 +25,4 @@
 - [ ] RewriteRuleのTodo解消
 - [ ] createRedundantPatternはRewriteRuleに取り込む
 - [ ] HtmlReplacerのメンバ変数化
+- [ ] playwright更新
