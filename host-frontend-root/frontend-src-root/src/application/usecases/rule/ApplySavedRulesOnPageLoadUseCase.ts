@@ -1,7 +1,7 @@
-import { HtmlReplacer } from '../domain/entities/HtmlReplacer';
-import { RewriteRule } from '../domain/entities/RewriteRule';
+import { HtmlReplacer } from '../../../domain/entities/HtmlReplacer';
+import { RewriteRule } from '../../../domain/entities/RewriteRule';
 
-export class RuleApplicationService {
+export class ApplySavedRulesOnPageLoadUseCase {
   constructor(private replacer: HtmlReplacer) {}
 
   /**
