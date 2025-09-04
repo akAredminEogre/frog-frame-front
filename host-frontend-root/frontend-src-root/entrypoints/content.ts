@@ -1,15 +1,7 @@
-/**
- * 選択されたテキストを含む最小のHTML要素を特定する
- */
-function getElementSelectionInfo(): { selection: string } {
-  const elementSelector = new ElementSelector();
-  return { selection: elementSelector.getElementFromSelection() };
-}
-
 import { matchUrl } from '../src/utils/matchUrl';
 import { HtmlReplacer } from '../src/domain/entities/HtmlReplacer';
-import { ElementSelector } from '../src/domain/entities/ElementSelector';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
+import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
 
 
 export default defineContentScript({
@@ -21,12 +13,13 @@ export default defineContentScript({
   main() {
     const replacer = new HtmlReplacer();
     const applySavedRulesOnPageLoadUseCase = new ApplySavedRulesOnPageLoadUseCase(replacer);
+    const getElementSelectionUseCase = new GetElementSelectionUseCase();
 
     // メッセージ受信ロジック
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       // 1) 要素選択の取得（要素置換用）
       if (request.type === 'getElementSelection') {
-        sendResponse(getElementSelectionInfo());
+        sendResponse(getElementSelectionUseCase.getElementSelectionInfo());
         return true; // 非同期応答
       }
       // 2) backgroundからの全ルール適用メッセージ

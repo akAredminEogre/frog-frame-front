@@ -1,28 +1,22 @@
-import { SelectionService } from '../../infrastructure/selection/SelectionService';
-
 /**
  * ユーザーのテキスト選択範囲から、置換対象となる最適なHTML要素を特定するドメインエンティティ。
  * 複雑なDOM構造や複数ノードにまたがる選択に対応し、最小かつ意味のある要素を返却します。
  */
 export class ElementSelector {
-  private selectionService: SelectionService;
-
-  constructor(selectionService?: SelectionService) {
-    this.selectionService = selectionService || new SelectionService();
-  }
   /**
-   * 現在の選択範囲から最適なHTML要素を取得します。
+   * 指定された選択範囲から最適なHTML要素を取得します。
+   * @param range - ユーザーの選択範囲
+   * @param selectedText - 選択されたテキスト（フォールバック用）
    * @returns 発見された要素のouterHTML。適切な要素が見つからない場合は選択範囲のテキストを返します。
    */
-  public getElementFromSelection(): string {
-    const range = this.selectionService.getFirstRange();
+  public getElementFromSelection(range: Range | null, selectedText: string): string {
     if (!range) {
       return '';
     }
 
     const element = this.findOptimalElement(range);
 
-    return element ? element.outerHTML : this.selectionService.getSelectedText();
+    return element ? element.outerHTML : selectedText;
   }
 
   /**
