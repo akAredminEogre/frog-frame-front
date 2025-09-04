@@ -76,8 +76,8 @@ export default defineBackground({
               return;
             }
 
-            // コンテンツスクリプトにメッセージを送信して、単一ルールの適用を依頼
-            chrome.tabs.sendMessage(tabId, { type: 'applySingleRule', rule: request.rule }, (response) => {
+            // コンテンツスクリプトにメッセージを送信して、全ルールの適用を依頼
+            chrome.tabs.sendMessage(tabId, { type: 'applyAllRules' }, (response) => {
               if (chrome.runtime.lastError) {
                 console.error(`[background] Failed to send message to tab ${tabId}:`, chrome.runtime.lastError.message);
                 sendResponse({ success: false, error: chrome.runtime.lastError.message });
