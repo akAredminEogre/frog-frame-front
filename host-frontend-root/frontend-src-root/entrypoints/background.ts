@@ -1,3 +1,5 @@
+import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
+
 export default defineBackground({
   // Set manifest options
   type: 'module',
@@ -104,29 +106,11 @@ export default defineBackground({
     });
 
     // 2) コンテキストメニュークリック時の処理
-    chrome.contextMenus.onClicked.addListener((info, tab) => {
+    chrome.contextMenus.onClicked.addListener(async (info, tab) => {
       if (info.menuItemId === 'context-menu-replace-dom-element' && tab?.id != null) {
-        // content scriptにメッセージを送り、選択範囲の最小のHTML要素を取得する
-        chrome.tabs.sendMessage(tab.id, { type: 'getElementSelection' }, (response) => {
-          if (chrome.runtime.lastError) {
-            // エラー処理
-            console.error(chrome.runtime.lastError.message);
-            // 選択テキストだけでも処理を続行
-            if (info.selectionText) {
-              chrome.storage.local.set({ tempSelectedText: info.selectionText }, () => {
-                chrome.action.openPopup();
-              });
-            }
-            return;
-          }
-          
-          if (response && response.selection) {
-            // 取得したHTMLをストレージに保存してポップアップを開く
-            chrome.storage.local.set({ tempSelectedText: response.selection }, () => {
-              chrome.action.openPopup();
-            });
-          }
-        });
+        // Application層のUseCaseを使用してコンテキストメニュー選択処理を実行
+        const contextMenuUseCase = new HandleContextMenuReplaceDomElement();
+        await contextMenuUseCase.execute(tab.id, info.selectionText);
       }
     });
   },
