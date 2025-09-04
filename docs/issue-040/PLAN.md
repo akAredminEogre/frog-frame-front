@@ -14,3 +14,18 @@ getElementSelectionロジックが現在content.ts内で直接実装されてい
 - [x] content.tsでGetElementSelectionUseCaseを使用するように修正
 - [x] ビルドテストの実施
 - [x] 動作確認
+
+## Story-2: 開発者としてElementSelectorのinfrastructure依存を削除することにより、Clean Architectureに完全準拠したドメイン層を得る
+
+ElementSelectorがdomain層にありながらinfrastructure層のSelectionServiceを直接呼び出しており、Clean Architectureの原則に違反している。
+この依存関係をGetElementSelectionUseCase層に移管し、適切な層分離を実現する。
+
+### タスク
+
+- [x] ElementSelectorからSelectionService依存を削除
+- [x] getElementFromSelection メソッドのAPI変更（パラメータでrangeとselectedTextを受け取るように修正）
+- [x] GetElementSelectionUseCaseでinfrastructure呼び出しを担当するように修正
+- [x] ElementSelector.test.tsの全テストケース修正（14個のテスト）
+- [x] TypeScriptコンパイル確認
+- [x] ビルドテスト実施
+- [x] 動作確認
