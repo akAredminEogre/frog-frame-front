@@ -1,8 +1,12 @@
-import { HtmlReplacer } from '../../../domain/entities/HtmlReplacer';
-import { RewriteRule } from '../../../domain/entities/RewriteRule';
+import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
+import { RewriteRule } from 'src/domain/entities/RewriteRule';
 
 export class ApplySavedRulesOnPageLoadUseCase {
-  constructor(private replacer: HtmlReplacer) {}
+  private replacer: HtmlReplacer;
+
+  constructor() {
+    this.replacer = new HtmlReplacer();
+  }
 
   /**
    * ストレージに保存されている全てのルールを取得して適用する
