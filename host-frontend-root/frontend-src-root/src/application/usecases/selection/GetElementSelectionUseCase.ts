@@ -1,13 +1,16 @@
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
+import { SelectionService } from 'src/infrastructure/selection/SelectionService';
 
 /**
  * 要素選択情報を取得するユースケース
  */
 export class GetElementSelectionUseCase {
   private elementSelector: ElementSelector;
+  private selectionService: SelectionService;
 
-  constructor() {
+  constructor(selectionService?: SelectionService) {
     this.elementSelector = new ElementSelector();
+    this.selectionService = selectionService || new SelectionService();
   }
 
   /**
@@ -15,6 +18,11 @@ export class GetElementSelectionUseCase {
    * @returns 選択された要素の情報
    */
   getElementSelectionInfo(): { selection: string } {
-    return { selection: this.elementSelector.getElementFromSelection() };
+    const range = this.selectionService.getFirstRange();
+    const selectedText = this.selectionService.getSelectedText();
+
+    return {
+      selection: this.elementSelector.getElementFromSelection(range, selectedText)
+    };
   }
 }
