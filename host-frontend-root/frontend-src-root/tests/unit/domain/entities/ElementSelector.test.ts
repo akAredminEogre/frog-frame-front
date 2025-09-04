@@ -1,37 +1,23 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
 
-// SelectionServiceのモック
-vi.mock('src/infrastructure/selection/SelectionService');
-
 describe('ElementSelector', () => {
   let elementSelector: ElementSelector;
-  let mockSelectionService: any;
 
   beforeEach(() => {
-    mockSelectionService = {
-      getCurrentSelection: vi.fn(),
-      hasValidSelection: vi.fn(),
-      getFirstRange: vi.fn(),
-      getSelectedText: vi.fn()
-    };
-    elementSelector = new ElementSelector(mockSelectionService);
+    elementSelector = new ElementSelector();
     vi.clearAllMocks();
   });
 
   describe('getElementFromSelection', () => {
     it('選択範囲がない場合、空文字列を返す', () => {
-      mockSelectionService.hasValidSelection.mockReturnValue(false);
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(null, '');
 
       expect(result).toBe('');
     });
 
     it('選択範囲のカウントが0の場合、空文字列を返す', () => {
-      mockSelectionService.hasValidSelection.mockReturnValue(false);
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(null, 'fallback text');
 
       expect(result).toBe('');
     });
@@ -49,13 +35,7 @@ describe('ElementSelector', () => {
         commonAncestorContainer: document
       };
 
-      const mockSelection = {};
-
-      mockSelectionService.hasValidSelection.mockReturnValue(true);
-      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForDocument);
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(mockRangeForDocument as any, 'test content');
 
       expect(result).toBe('<p>test content</p>');
     });
@@ -71,14 +51,7 @@ describe('ElementSelector', () => {
         commonAncestorContainer: document.body
       };
 
-      const mockSelection = {};
-
-      mockSelectionService.hasValidSelection.mockReturnValue(true);
-      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForBody);
-      mockSelectionService.getSelectedText.mockReturnValue('test content');
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(mockRangeForBody as any, 'test content');
 
       expect(result).toBe('<div>test content</div>');
     });
@@ -100,13 +73,7 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockTextNode
       };
 
-      const mockSelection = {};
-
-      mockSelectionService.hasValidSelection.mockReturnValue(true);
-      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForText);
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(mockRangeForText as any, 'selected text');
 
       expect(result).toBe('<span>selected text</span>');
     });
@@ -125,13 +92,7 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockElement
       };
 
-      const mockSelection = {};
-
-      mockSelectionService.hasValidSelection.mockReturnValue(true);
-      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForElement);
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(mockRangeForElement as any, 'element content');
 
       expect(result).toBe('<div>element content</div>');
     });
@@ -147,14 +108,7 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockTextNodeWithoutParent
       };
 
-      const mockSelection = {};
-
-      mockSelectionService.hasValidSelection.mockReturnValue(true);
-      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForOrphanText);
-      mockSelectionService.getSelectedText.mockReturnValue('orphan text');
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(mockRangeForOrphanText as any, 'orphan text');
 
       expect(result).toBe('orphan text');
     });
@@ -182,13 +136,7 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockSpanElement // 共通祖先はspan要素
       };
 
-      const mockSelection = {};
-
-      mockSelectionService.hasValidSelection.mockReturnValue(true);
-      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForSpanText);
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(mockRangeForSpanText as any, '商品番号');
 
       expect(result).toBe('<span class="inline-flex">商品番号：</span>');
     });
@@ -215,13 +163,7 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockTextNode
       };
 
-      const mockSelection = {};
-
-      mockSelectionService.hasValidSelection.mockReturnValue(true);
-      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForPartialText);
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(mockRangeForPartialText as any, '商品番号：');
 
       expect(result).toBe('<span class="inline-flex">商品番号：</span>');
     });
@@ -260,13 +202,7 @@ describe('ElementSelector', () => {
         commonAncestorContainer: mockParentDiv
       };
 
-      const mockSelection = {};
-
-      mockSelectionService.hasValidSelection.mockReturnValue(true);
-      mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-      mockSelectionService.getFirstRange.mockReturnValue(mockRangeForMultiSpan);
-
-      const result = elementSelector.getElementFromSelection();
+      const result = elementSelector.getElementFromSelection(mockRangeForMultiSpan as any, 'span1span2');
 
       expect(result).toBe('<div><span>span1</span><span>span2</span></div>');
     });
@@ -486,13 +422,7 @@ describe('ElementSelector', () => {
           commonAncestorContainer: mockSpanElement
         };
 
-        const mockSelection = {};
-
-        mockSelectionService.hasValidSelection.mockReturnValue(true);
-        mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-        mockSelectionService.getFirstRange.mockReturnValue(mockRangeForTableText);
-
-        const result = elementSelector.getElementFromSelection();
+        const result = elementSelector.getElementFromSelection(mockRangeForTableText as any, '商品番号：moge-1234');
 
         expect(result).toBe('<tr><td><span class="product-id">商品番号：moge-1234</span></td></tr>');
       });
@@ -536,13 +466,7 @@ describe('ElementSelector', () => {
           commonAncestorContainer: mockTrElement
         };
 
-        const mockSelection = {};
-
-        mockSelectionService.hasValidSelection.mockReturnValue(true);
-        mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-        mockSelectionService.getFirstRange.mockReturnValue(mockRangeForMultiCell);
-
-        const result = elementSelector.getElementFromSelection();
+        const result = elementSelector.getElementFromSelection(mockRangeForMultiCell as any, 'セル1セル2');
 
         expect(result).toBe('<tr><td>セル1</td><td>セル2</td></tr>');
       });
@@ -571,13 +495,7 @@ describe('ElementSelector', () => {
           commonAncestorContainer: mockSpanElement
         };
 
-        const mockSelection = {};
-
-        mockSelectionService.hasValidSelection.mockReturnValue(true);
-        mockSelectionService.getCurrentSelection.mockReturnValue(mockSelection);
-        mockSelectionService.getFirstRange.mockReturnValue(mockRangeForNonTable);
-
-        const result = elementSelector.getElementFromSelection();
+        const result = elementSelector.getElementFromSelection(mockRangeForNonTable as any, '通常のspan');
 
         expect(result).toBe('<span class="non-table">通常のspan</span>');
       });
