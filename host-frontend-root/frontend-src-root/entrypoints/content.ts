@@ -29,14 +29,7 @@ export default defineContentScript({
         sendResponse(getElementSelectionInfo());
         return true; // 非同期応答
       }
-      // 3) ポップアップからの単一ルール適用メッセージ
-      else if (request.type === 'applySingleRule') {
-        applySavedRulesOnPageLoadUseCase.applyAllRules().then(() => {
-          sendResponse({ success: true });
-        });
-        return true;
-      }
-      // 4) backgroundからの全ルール適用メッセージ
+      // 2) backgroundからの全ルール適用メッセージ
       else if (request.type === 'applyAllRules') {
         applySavedRulesOnPageLoadUseCase.applyAllRules().then(() => {
           sendResponse({ success: true });
