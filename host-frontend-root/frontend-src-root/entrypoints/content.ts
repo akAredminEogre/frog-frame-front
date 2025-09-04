@@ -1,5 +1,4 @@
 import { matchUrl } from '../src/utils/matchUrl';
-import { HtmlReplacer } from '../src/domain/entities/HtmlReplacer';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
 
@@ -11,8 +10,7 @@ export default defineContentScript({
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
   main() {
-    const replacer = new HtmlReplacer();
-    const applySavedRulesOnPageLoadUseCase = new ApplySavedRulesOnPageLoadUseCase(replacer);
+    const applySavedRulesOnPageLoadUseCase = new ApplySavedRulesOnPageLoadUseCase();
     const getElementSelectionUseCase = new GetElementSelectionUseCase();
 
     // メッセージ受信ロジック
