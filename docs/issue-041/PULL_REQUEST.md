@@ -1,0 +1,20 @@
+# ISSUE-041 HtmlReplacerクラスのリファクタリング
+
+## タイトル
+HtmlReplacerの責務をApplySavedRulesOnPageLoadUseCaseに移管
+
+## 概要と理由
+HtmlReplacerクラスのインスタンス化と管理をcontent.tsからApplySavedRulesOnPageLoadUseCaseクラスに移管し、より適切なアーキテクチャに改善しました。これまでは依存性注入パターンを使用していましたが、HtmlReplacerの責務とライフサイクルを考慮して、自己完結型のパターンに変更することでコードの保守性を向上させました。
+
+## 主な変更点
+- content.tsからHtmlReplacerのimportを削除し、ApplySavedRulesOnPageLoadUseCaseのコンストラクタ引数を削除
+- ApplySavedRulesOnPageLoadUseCaseでHtmlReplacerを内部生成するように修正し、依存性注入から自己完結型に変更
+- importパスを相対パスから絶対パス（src/...）に統一
+
+## テスト方法
+1. Chrome拡張機能をビルドして読み込み
+2. ページ読み込み時に保存されたルールが正常に適用されることを確認
+3. HtmlReplacerの機能（キーワード置換など）が従来通り動作することを確認
+
+## 補足
+この変更により、HtmlReplacerの責務がより適切に配置され、コードの結合度が下がりました。ApplySavedRulesOnPageLoadUseCaseがHtmlReplacerの生成を担当することで、使用箇所での依存関係がシンプルになり、保守性が向上しています。
