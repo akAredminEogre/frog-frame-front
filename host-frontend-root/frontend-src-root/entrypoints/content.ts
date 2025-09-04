@@ -31,11 +31,9 @@ export default defineContentScript({
       }
       // 3) ポップアップからの単一ルール適用メッセージ
       else if (request.type === 'applySingleRule') {
-        const { rule } = request;
-        if (rule && rule.oldString && rule.newString !== undefined && rule.newString !== null) {
-          replacer.replace(document.body, rule);
+        applySavedRulesOnPageLoadUseCase.applyAllRules().then(() => {
           sendResponse({ success: true });
-        }
+        });
         return true;
       }
       // 4) backgroundからの全ルール適用メッセージ
