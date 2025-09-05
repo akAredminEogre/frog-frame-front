@@ -10,7 +10,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
 cp -r docs/issue-000 docs/issue-nnn
 を実行し、その後
-issue-nnn-refactor-context-menu-replace-dom-element
+issue-nnn-refactor-apply-rewrite-rule
 ブランチを作成してください
 ```
 

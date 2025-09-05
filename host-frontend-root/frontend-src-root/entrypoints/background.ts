@@ -1,4 +1,5 @@
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
+import { ApplyRewriteRuleToTabUseCase } from 'src/application/usecases/rule/ApplyRewriteRuleToTabUseCase';
 
 export default defineBackground({
   // Set manifest options
@@ -53,44 +54,18 @@ export default defineBackground({
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       // ポップアップからの書き換えルール適用メッセージを受信
       if (request.type === 'applyRewriteRule') {
-        // 特定のタブIDが指定されている場合は、そのタブに直接スクリプトを挿入
+        // 特定のタブIDが指定されている場合は、Application層のUseCaseを使用
         if (request.targetTabId) {
-          const tabId = request.targetTabId;
+          const applyRewriteRuleUseCase = new ApplyRewriteRuleToTabUseCase();
           
-          // タブ情報を取得
-          chrome.tabs.get(tabId, (tab) => {
-            if (chrome.runtime.lastError) {
-              console.error(`[background] Failed to get tab ${tabId}:`, chrome.runtime.lastError);
-              sendResponse({ success: false, error: chrome.runtime.lastError.message });
-              return;
-            }
-
-            if (!tab.url) {
-              console.error(`[background] Tab ${tabId} has no URL`);
-              sendResponse({ success: false, error: 'Tab has no URL' });
-              return;
-            }
-
-            // URLパターンをチェック
-            const { urlPattern } = request.rule;
-            if (urlPattern && !tab.url.startsWith(urlPattern)) {
-              sendResponse({ success: false, reason: 'URL pattern mismatch' });
-              return;
-            }
-
-            // コンテンツスクリプトにメッセージを送信して、全ルールの適用を依頼
-            chrome.tabs.sendMessage(tabId, { type: 'applyAllRules' }, (response) => {
-              if (chrome.runtime.lastError) {
-                console.error(`[background] Failed to send message to tab ${tabId}:`, chrome.runtime.lastError.message);
-                sendResponse({ success: false, error: chrome.runtime.lastError.message });
-                return;
-              }
-              sendResponse({ success: true, response });
+          applyRewriteRuleUseCase.execute(request.targetTabId, request.rule)
+            .then((result) => {
+              sendResponse(result);
+            })
+            .catch((error) => {
+              console.error('[background] ApplyRewriteRuleToTabUseCase error:', error);
+              sendResponse({ success: false, error: error.message });
             });
-            
-            // 非同期応答を使う
-            return true;
-          });
           
           // 非同期応答を使う
           return true;
