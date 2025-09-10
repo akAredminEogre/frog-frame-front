@@ -1,6 +1,7 @@
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { ApplyRewriteRuleToTabUseCase } from 'src/application/usecases/rule/ApplyRewriteRuleToTabUseCase';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
+import { HandleStorageChangedUseCase } from 'src/application/usecases/rule/HandleStorageChangedUseCase';
 
 export default defineBackground({
   // Set manifest options
@@ -18,16 +19,8 @@ export default defineBackground({
 
     // ストレージの変更を監視し、アクティブなタブにルールを再適用する
     chrome.storage.onChanged.addListener((changes, namespace) => {
-      if (namespace === 'local') {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          const currentTab = tabs[0];
-          if (currentTab && currentTab.id) {
-            // アクティブなタブに全ルール適用を依頼
-            chrome.tabs.sendMessage(currentTab.id, { type: 'applyAllRules' })
-              .catch(() => { /* エラーは無視 */ });
-          }
-        });
-      }
+      const handleStorageChangedUseCase = new HandleStorageChangedUseCase();
+      handleStorageChangedUseCase.execute(changes, namespace);
     });
 
     // Executed when background is loaded, CANNOT BE ASYNC
