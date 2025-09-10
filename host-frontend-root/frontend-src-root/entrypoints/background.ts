@@ -1,5 +1,6 @@
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { ApplyRewriteRuleToTabUseCase } from 'src/application/usecases/rule/ApplyRewriteRuleToTabUseCase';
+import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 
 export default defineBackground({
   // Set manifest options
@@ -32,22 +33,9 @@ export default defineBackground({
     // Executed when background is loaded, CANNOT BE ASYNC
     // 1) 拡張がインストール or 更新されたタイミングでコンテキストメニューを登録
     chrome.runtime.onInstalled.addListener(() => {
-      // 既存のメニューがある場合は衝突を防ぐため removeAll
-      chrome.contextMenus.removeAll(() => {
-        // 親メニューを作成
-        chrome.contextMenus.create({
-          id: 'favorite-keyword-link-frog-parent',
-          title: 'favorite-keyword-link-frog',
-          contexts: ['selection'],
-        });
-        // サブメニューを作成
-        chrome.contextMenus.create({
-          id: 'context-menu-replace-dom-element',
-          parentId: 'favorite-keyword-link-frog-parent',
-          title: 'この要素を置換',
-          contexts: ['selection'],
-        });
-      });
+      // Application層のUseCaseを使用してコンテキストメニューを設定
+      const contextMenuSetupUseCase = new ContextMenuSetupUseCase();
+      contextMenuSetupUseCase.execute();
     });
 
     // メッセージリスナーを追加 (ポップアップからのメッセージを受け取る)
