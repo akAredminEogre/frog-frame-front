@@ -10,7 +10,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 (cdコマンドでリポジトリルートに移動)
 mkdir docs/issue-nnn/daily-scrum-00
 を実行し、その後
-issue-nnn-refactor-background
+issue-nnn-feat-storage-set
 ブランチを作成してください
 ```
 
@@ -115,7 +115,7 @@ kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
 をみながら振り返りを行い、PLAN.md/RETROSPECTIVE.md/DAILY_SCRUM.mdを更新してください
 - PLAN.md
-  - チェックリストの更新
+  - チェックリストの更新(なければスキップ)
 - RETROSPECTIVE.md
   - スクラムkkの振り返りを記載
 ```
