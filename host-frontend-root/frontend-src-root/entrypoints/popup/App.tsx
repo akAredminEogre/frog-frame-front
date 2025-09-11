@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
 import { getActiveTabOrigin } from '../../src/domain/entities/tabUtils';
+import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository';
 
 function App() {
   // フォーム入力を管理するState
@@ -28,17 +30,27 @@ function App() {
     }));
   };
 
-  /** 保存ボタンを押したとき、chrome.storage.localへ書き込み */
+  /** 保存ボタンを押したとき、Repositoryを通して保存 */
   const handleSave = async () => {
     try {
       // 一意のID（UUID）を仮に発行
       const id = crypto.randomUUID();
 
-      // 保存する書き換えルール
+      // RewriteRuleエンティティを作成
+      const rule = new RewriteRule(
+        id,
+        rewriteRule.oldString,
+        rewriteRule.newString,
+        rewriteRule.urlPattern,
+        rewriteRule.isRegex
+      );
+
+      // 保存する書き換えルール（バックグラウンドスクリプトとの互換性のため）
       const ruleToSave = { ...rewriteRule, id };
 
-      // chrome.storage.localに保存
-      await chrome.storage.local.set({ [id]: ruleToSave });
+      // Repositoryを通してストレージに保存
+      const repository = new ChromeStorageRewriteRuleRepository();
+      await repository.save(rule);
 
       // フォームをリセット
       setRewriteRule({
