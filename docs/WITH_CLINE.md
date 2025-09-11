@@ -7,10 +7,10 @@ git checkout develop && git pull && \
 git fetch --prune && git branch --list -a | grep 'origin/issue-*' | sort -r | head -n 1
 ```
 nnn=(上記で表示されたブランチ名からissue番号+1を取得)
-cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
-cp -r docs/issue-000 docs/issue-nnn
+(cdコマンドでリポジトリルートに移動)
+mkdir docs/issue-nnn/daily-scrum-00
 を実行し、その後
-issue-nnn-refactor-storage-on-changed
+issue-nnn-refactor-background
 ブランチを作成してください
 ```
 
@@ -118,8 +118,6 @@ docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
   - チェックリストの更新
 - RETROSPECTIVE.md
   - スクラムkkの振り返りを記載
-- DAILY_SCRUM-kk.md
-  - チェックリストを更新
 ```
 - 人間がドキュメントをコミット
   - コミットメッセージ
