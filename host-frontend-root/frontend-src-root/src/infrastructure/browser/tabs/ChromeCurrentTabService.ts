@@ -29,10 +29,6 @@ export class ChromeCurrentTabService implements ICurrentTabService {
       throw new Error('Active tab has no ID');
     }
 
-    if (!tab.url) {
-      throw new Error('Active tab has no URL');
-    }
-
-    return new CurrentTab(tab.url, tab.id);
+    return new CurrentTab(tab.id);
   }
 }
