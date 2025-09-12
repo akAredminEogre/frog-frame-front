@@ -2,8 +2,10 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
 import { getActiveTabOrigin } from '../../src/domain/entities/tabUtils';
-import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository';
+import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
+import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 
 function App() {
   // フォーム入力を管理するState
@@ -30,85 +32,31 @@ function App() {
     }));
   };
 
-  /** 保存ボタンを押したとき、Repositoryを通して保存 */
+  /** 保存ボタンを押したとき、UseCaseを通して保存・適用処理を実行 */
   const handleSave = async () => {
-    try {
-      // 一意のID（UUID）を仮に発行
-      const id = crypto.randomUUID();
+    // 依存性を組み立て
+    const repository = new ChromeStorageRewriteRuleRepository();
+    const currentTabService = new ChromeCurrentTabService();
+    const chromeRuntimeService = new ChromeRuntimeService();
+    const saveUseCase = new SaveRewriteRuleAndApplyToCurrentTabUseCase(
+      repository,
+      currentTabService,
+      chromeRuntimeService
+    );
 
-      // RewriteRuleエンティティを作成
-      const rule = new RewriteRule(
-        id,
-        rewriteRule.oldString,
-        rewriteRule.newString,
-        rewriteRule.urlPattern,
-        rewriteRule.isRegex
-      );
+    const result = await saveUseCase.execute(rewriteRule);
 
-      // 保存する書き換えルール（バックグラウンドスクリプトとの互換性のため）
-      const ruleToSave = { ...rewriteRule, id };
+    // 結果をユーザーに通知
+    alert(result.message);
 
-      // Repositoryを通してストレージに保存
-      const repository = new ChromeStorageRewriteRuleRepository();
-      await repository.save(rule);
-
-      // フォームをリセット
+    // 成功時はフォームをリセット
+    if (result.shouldResetForm) {
       setRewriteRule({
         oldString: '',
         newString: '',
         urlPattern: '',
         isRegex: false,
       });
-
-      // 現在アクティブなタブの情報を取得
-      chrome.tabs.query({ active: true, currentWindow: true }, async (tabs: chrome.tabs.Tab[]) => {
-        const currentTab = tabs[0];
-        if (!currentTab?.id) {
-          alert('保存しました！（現在のタブへの適用に失敗しました）');
-          return;
-        }
-
-        const currentUrl = currentTab.url || '';
-        
-        // ルールで指定されたURLパターンと現在のURLを比較
-        let shouldApplyToCurrentTab = true;
-        if (ruleToSave.urlPattern && currentUrl) {
-          shouldApplyToCurrentTab = currentUrl.startsWith(ruleToSave.urlPattern);
-        }
-
-        if (shouldApplyToCurrentTab) {
-          // 現在のタブにルールを適用
-          try {
-            // バックグラウンドスクリプトに通知して処理を依頼
-            await new Promise<void>((resolve) => {
-              chrome.runtime.sendMessage(
-                {
-                  type: 'applyRewriteRule', // このタイプ名はbackground.tsで定義されているもの
-                  rule: ruleToSave,
-                  targetTabId: currentTab.id
-                },
-                (response: any) => {
-                  if (chrome.runtime.lastError || !response?.success) {
-                    // エラーは無視して次に進む
-                  }
-                  resolve();
-                }
-              );
-            });
-
-            // 完了通知
-            alert('保存して適用しました！');
-          } catch {
-            alert('保存しましたが、適用中にエラーが発生しました。');
-          }
-        } else {
-          // URLパターンが一致しない場合
-          alert('保存しました！（現在のURLにはパターンが一致しないため適用されません）');
-        }
-      });
-
-    } catch {
-      alert('保存に失敗しました。');
     }
   };
 
