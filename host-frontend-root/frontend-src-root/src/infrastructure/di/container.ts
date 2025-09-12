@@ -22,11 +22,11 @@ export const container = new SimpleContainer();
 
 // Register services
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
-import { ApplyRewriteRuleToTabUseCase } from 'src/application/usecases/rule/ApplyRewriteRuleToTabUseCase';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 import { HandleStorageChangedUseCase } from 'src/application/usecases/rule/HandleStorageChangedUseCase';
+import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 
 container.register(HandleContextMenuReplaceDomElement, () => new HandleContextMenuReplaceDomElement());
-container.register(ApplyRewriteRuleToTabUseCase, () => new ApplyRewriteRuleToTabUseCase());
 container.register(ContextMenuSetupUseCase, () => new ContextMenuSetupUseCase());
 container.register(HandleStorageChangedUseCase, () => new HandleStorageChangedUseCase());
+container.register(ChromeTabsService, () => new ChromeTabsService());
