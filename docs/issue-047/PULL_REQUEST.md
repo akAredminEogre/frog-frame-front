@@ -28,13 +28,25 @@ App.tsxでChrome APIを直接呼び出していた設計をClean Architectureの
   - `CurrentTab`, `TabId`の統合と最適化
   - 型安全性の向上
 
+- **Infrastructure層の包括的テスト実装**
+  - Chrome Extension APIの適切なモック化対応
+  - DAILY_SCRUM-01で変更されたinfrastructure層クラスの全テストコード作成
+  - CODING_STYLE.mdに完全準拠したテストファイル構造の実現
+  - メソッド単位でのテストファイル分割とディレクトリ階層化
+
+### 作成されたテストファイル
+- `tests/unit/infrastructure/browser/tabs/ChromeTabsService/sendMessage.test.ts`
+- `tests/unit/infrastructure/browser/runtime/ChromeRuntimeService/sendApplyRewriteRuleMessage.test.ts`
+- `tests/unit/infrastructure/di/SimpleContainer/register.test.ts`
+- `tests/unit/infrastructure/di/SimpleContainer/resolve.test.ts`
+- `tests/unit/infrastructure/browser/router/handlers/applyAllRules.test.ts`
+- `tests/unit/infrastructure/browser/router/handlers/ping.test.ts`
+- `tests/unit/infrastructure/browser/listeners/registerTabsOnUpdated/registerTabsOnUpdated.test.ts`
+
 ## テスト方法
 動作確認の手順：
 - [ ] `docker compose exec frontend npm run unused:safe` が成功すること
   - 既存自動テストとlinterを同時に確認
-- [ ] ビルドが成功すること（Total size 170.67 kB程度）
-- [ ] TypeScriptエラーがないこと
-- [ ] Knipテストがすべてパスすること
 - [ ] Chrome拡張機能として正常に動作すること
 
 ## 補足
