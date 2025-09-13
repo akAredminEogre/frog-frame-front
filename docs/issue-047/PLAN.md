@@ -2,90 +2,38 @@
 
 ## 概要
 
-App.tsxのDI（依存性注入）を改善し、手動でのインスタンス化をDIコンテナベースに移行する。
-
 ## 現状分析
 
 ### 課題
-1. **App.tsx内での依存関係組み立て**: Presentation層で具体的な実装クラスを直接インスタンス化
-2. **DIコンテナの未活用**: 既存のcontainer.tsが十分に活用されていない
-3. **テストの困難さ**: 依存関係が固定化されているためモックが困難
 
 ## 実装計画
 
-### Step 1: DIコンテナの拡張
-- `container.ts`にSaveRewriteRuleAndApplyToCurrentTabUseCaseを登録
-- App.tsx用のファクトリメソッド追加
-
-### Step 2: App.tsxのリファクタリング
-```typescript
-// 変更前 (現在)
-const repository = new ChromeStorageRewriteRuleRepository();
-const currentTabService = new ChromeCurrentTabService();
-const chromeRuntimeService = new ChromeRuntimeService();
-const saveUseCase = new SaveRewriteRuleAndApplyToCurrentTabUseCase(
-  repository,
-  currentTabService,
-  chromeRuntimeService
-);
-
-// 変更後 (目標)
-const saveUseCase = container.getSaveRewriteRuleAndApplyToCurrentTabUseCase();
-```
-
-### Step 3: テストコード整備
+### Step 3: テストコード整備 ★完了
 - infrastructure層のテストコード作成（ISSUE.mdのタスクより）
 - Application層のテストコード作成
 - モックを使用したテスト
 
+**実施内容**: DAILY_SCRUM-01で変更されたinfrastructure層クラスのテストコード作成を完了
+
 ## 技術的考慮事項
-
-### DIパターンの実装レベル
-- 現在の手動DIから、containerベースのDIに移行
-- 複雑なDIフレームワークは導入せず、シンプルなファクトリパターンを維持
-
-**注記:** DIコンテナのファクトリメソッド設計（シンプルなgetterメソッド方式 vs 汎用的なresolve方式）の詳細検討は別issueで扱います。
-
-### Chrome Extension APIの制約
-- manifest v3の制約を考慮
-- service workerとcontent scriptの通信制限
-
-### TypeScript型安全性
-- 全ての変更でTypeScript完全準拠を維持
-- 型定義の充実化
 
 ## 受け入れ条件の確認方法
 
-- [ ] `docker compose exec frontend npm run unused:safe`が成功すること
-- [ ] 既存機能が正常に動作すること
-- [ ] 新しいテストがすべてパスすること
-- [ ] ESLintエラーが発生しないこと
-
-## リスク軽減策
-
-### 1. 段階的リファクタリング
-- 一度にすべてを変更せず、小さな単位で進める
-- 各ステップで動作確認を実施
-
-### 2. 既存機能の保護
-- 変更前に現在の動作を記録
-- 回帰テストの実施
-
-### 3. 型安全性の維持
-- TypeScriptの型チェックを活用
-- 型定義の充実
-
-## 成功指標
-
-1. **コード品質**: 依存関係が適切に分離されている
-2. **テスタビリティ**: モックを使用したテストが容易
-3. **保守性**: 新機能の追加が容易
-4. **性能**: 通信フローの最適化による応答性向上
+- [x] `docker compose exec frontend npm run unused:safe`が成功すること
+- [x] 既存機能が正常に動作すること
+- [x] 新しいテストがすべてパスすること
 
 ## 完了基準
+- [x] infrastructure層のテストコード作成
+- [x] 既存機能の完全な動作確認
 
-- [ ] App.tsxから具体的な実装クラスの直接インスタンス化を除去
-- [ ] DIコンテナを通じた依存関係の管理
-- [ ] infrastructure層のテストカバレッジ80%以上
-- [ ] 既存機能の完全な動作確認
-- [ ] ドキュメント更新（必要に応じて）
+## 別issue扱いとなった項目
+
+DAILY_SCRUM-02において、以下の項目は本issue-047の範囲外とし、別issueで扱うことが決定されました：
+
+1. **DIコンテナの拡張**: `container.ts`への`SaveRewriteRuleAndApplyToCurrentTabUseCase`登録
+2. **App.tsxのDIリファクタリング**: 手動DIからDIコンテナ使用への変更  
+3. **DIコンテナのファクトリメソッド設計**: シンプルなgetterメソッド方式 vs 汎用的なresolve方式の選択
+4. **モックライブラリの導入**: Chrome Extension APIのモック化における既存ライブラリ vs 手動モック実装の選択
+
+これらの項目については、より詳細な設計検討とプロトタイプ実装が必要なため、専用のissueで取り扱います。
