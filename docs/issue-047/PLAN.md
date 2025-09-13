@@ -44,6 +44,8 @@ const saveUseCase = container.getSaveRewriteRuleAndApplyToCurrentTabUseCase();
 - 現在の手動DIから、containerベースのDIに移行
 - 複雑なDIフレームワークは導入せず、シンプルなファクトリパターンを維持
 
+**注記:** DIコンテナのファクトリメソッド設計（シンプルなgetterメソッド方式 vs 汎用的なresolve方式）の詳細検討は別issueで扱います。
+
 ### Chrome Extension APIの制約
 - manifest v3の制約を考慮
 - service workerとcontent scriptの通信制限
