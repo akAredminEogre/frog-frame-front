@@ -1,4 +1,4 @@
-import type { SimpleContainer } from 'src/infrastructure/di/container';
+import { container } from 'src/infrastructure/di/container';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
@@ -7,10 +7,9 @@ type Message =
   | { type: 'ping' };
 
 /**
- * @param container 
- * @returns 
+ * Message handlers using tsyringe DI container
  */
-export const handlers = (container: SimpleContainer) => ({
+export const handlers = {
   applyAllRules: async (msg: Extract<Message, { type: 'applyAllRules' }>) => {
     try {
       const { currentTab } = msg;
@@ -27,4 +26,4 @@ export const handlers = (container: SimpleContainer) => ({
     }
   },
   ping: async () => ({ pong: true }),
-});
+};
