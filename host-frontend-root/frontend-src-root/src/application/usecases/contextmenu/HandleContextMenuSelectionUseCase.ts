@@ -1,7 +1,9 @@
+import { autoInjectable } from 'tsyringe';
 
 /**
  * コンテキストメニューからのDOM要素置換処理を扱うユースケース
  */
+@autoInjectable()
 export class HandleContextMenuReplaceDomElement {
   
   /**
