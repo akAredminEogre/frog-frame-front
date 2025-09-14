@@ -1,32 +1,20 @@
-// Simple DI container without external dependencies for now
-type ServiceResolver<T = any> = () => T;
-type Constructor<T = any> = new (...args: any[]) => T;
+import 'reflect-metadata';
+import { container } from 'tsyringe';
 
-export class SimpleContainer {
-  private services = new Map<Constructor, ServiceResolver>();
+// Export the tsyringe container for use throughout the application
+export { container };
 
-  register<T>(constructor: Constructor<T>, resolver: ServiceResolver<T>): void {
-    this.services.set(constructor, resolver);
-  }
-
-  resolve<T>(constructor: Constructor<T>): T {
-    const resolver = this.services.get(constructor);
-    if (!resolver) {
-      throw new Error(`Service ${constructor.name} not found`);
-    }
-    return resolver() as T;
-  }
-}
-
-export const container = new SimpleContainer();
-
-// Register services
+// Register services with tsyringe
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 import { HandleStorageChangedUseCase } from 'src/application/usecases/rule/HandleStorageChangedUseCase';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 
-container.register(HandleContextMenuReplaceDomElement, () => new HandleContextMenuReplaceDomElement());
-container.register(ContextMenuSetupUseCase, () => new ContextMenuSetupUseCase());
-container.register(HandleStorageChangedUseCase, () => new HandleStorageChangedUseCase());
-container.register(ChromeTabsService, () => new ChromeTabsService());
+// Register implementations for interfaces (抽象化のため)
+container.register<IChromeTabsService>('IChromeTabsService', { useClass: ChromeTabsService });
+
+// Register concrete classes (@injectable デコレーターがあれば自動解決されるが、明示性のため記載)
+container.register(HandleContextMenuReplaceDomElement, { useClass: HandleContextMenuReplaceDomElement });
+container.register(ContextMenuSetupUseCase, { useClass: ContextMenuSetupUseCase });
+container.register(HandleStorageChangedUseCase, { useClass: HandleStorageChangedUseCase });
