@@ -77,31 +77,3 @@ host-frontend-root/frontend-src-root
 | Application              | `src/application/`                                   | アプリケーション固有のユースケースを実装。Domain層にのみ依存。                | SaveNoteUseCase.ts                         |
 | Interface Adapters       | `src/presentation/`, `src/infrastructure/`           | 内側と外側のレイヤーを接続。UIコンポーネント、リポジトリ実装、メッセージングブリッジなど。Application層とDomain層に依存。 | NoteEditor.vue, BrowserStorageNoteRepository.ts, bridge.ts |
 | Frameworks & Drivers     | Project Root, `src/presentation/entrypoints/`, `src/infrastructure/di/` | フレームワークやドライバ、DI設定、エントリポイントなど。                       | wxt.config.ts, container.ts, background.ts |
-
-# オブジェクト指向ルール
-## ThoughtWorksアンソロジー：オブジェクト指向エクササイズ
-- 1.1つのメソッドにつきインデントは1段階までにすること
-- 2.else句を使用しないこと
-- 3.すべてのプリミティブ型と文字列型をラップすること
-- 4.1行につきドットは1つまでにすること
-- 5.名前を省略しないこと
-- 6.すべてのエンティティを小さくすること
-- 7.1つのクラスにつきインスタンス変数は2つまでにすること
-- 8.ファーストクラスコレクションを使用すること
-- 9.Getter、Setter、プロパティを使用しないこと
-
-## 現場で役立つシステム設計の原則
-### 第3章：業務ロジックをわかりやすく整理する
-- メソッドは必ずインスタンス変数を使う
-
-## 変更・実装時のルール
-- メソッドを追加・変更する場合は、インスタンス変数を使うものに変更すること
-- クラスを新規追加する場合は、単体テストも追加すること。
-- 使われないメソッドを作らないこと
-  - いつか使うだろうで、isValideやequalsを乱造しない。
-
-### テストファイル(追加、変更があったもの)
-- テストファイルは必ず対応する実装ファイルと同じディレクトリ構造を持つこと
-- 単体テストは、1メソッドごとに1ファイル以上にすること
-  - クラス単位でまとめない
-  - 1メソッドでもあっても、ケースの内容や量によっては、適切に複数ファイルに分割すること

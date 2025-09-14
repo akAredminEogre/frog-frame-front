@@ -1,4 +1,3 @@
-import { container } from 'src/infrastructure/di/container';
 import { registerTabsOnUpdated } from 'src/infrastructure/browser/listeners/tabs.onUpdated';
 import { registerStorageOnChanged } from 'src/infrastructure/browser/listeners/storage.onChanged';
 import { registerRuntimeOnInstalled } from 'src/infrastructure/browser/listeners/runtime.onInstalled';
@@ -13,9 +12,9 @@ export default defineBackground({
     // DI準備は container側で完了済み
     // 各イベントリスナーを登録（Composition Root）
     registerTabsOnUpdated();
-    registerStorageOnChanged(container);
-    registerRuntimeOnInstalled(container);
+    registerStorageOnChanged();
+    registerRuntimeOnInstalled();
     registerRuntimeOnMessage();
-    registerContextMenusOnClicked(container);
+    registerContextMenusOnClicked();
   },
 });

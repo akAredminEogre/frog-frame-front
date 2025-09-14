@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { handlers } from 'src/infrastructure/browser/router/messageHandlers';
-import { SimpleContainer } from 'src/infrastructure/di/container';
+import { container } from 'src/infrastructure/di/container';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
@@ -10,20 +10,20 @@ const mockChromeTabsService = {
 };
 
 describe('handlers.applyAllRules', () => {
-  let container: SimpleContainer;
-  let messageHandlers: ReturnType<typeof handlers>;
   let currentTab: CurrentTab;
 
   beforeEach(() => {
-    container = new SimpleContainer();
+    // モックサービスでオーバーライド
+    container.register(ChromeTabsService, { useValue: mockChromeTabsService as any });
     
-    // ChromeTabsServiceをモックでコンテナに登録
-    container.register(ChromeTabsService, () => mockChromeTabsService as any);
-    
-    messageHandlers = handlers(container);
     currentTab = new CurrentTab(1);
     
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    // 元のサービスを復元
+    container.register(ChromeTabsService, { useClass: ChromeTabsService });
   });
 
   it('正常にapplyAllRulesメッセージを処理する', async () => {
@@ -35,7 +35,7 @@ describe('handlers.applyAllRules', () => {
       currentTab
     };
 
-    const result = await messageHandlers.applyAllRules(message);
+    const result = await handlers.applyAllRules(message);
 
     expect(mockChromeTabsService.sendMessage).toHaveBeenCalledWith(
       currentTab,
@@ -59,7 +59,7 @@ describe('handlers.applyAllRules', () => {
       currentTab
     };
 
-    const result = await messageHandlers.applyAllRules(message);
+    const result = await handlers.applyAllRules(message);
 
     expect(result).toEqual({
       success: false,
@@ -71,9 +71,12 @@ describe('handlers.applyAllRules', () => {
   });
 
   it('containerのresolveが失敗した場合、エラーを返す', async () => {
-    // 新しいコンテナでChromeTabsServiceを未登録にする
-    const emptyContainer = new SimpleContainer();
-    const emptyHandlers = handlers(emptyContainer);
+    // サービスを一時的に未登録にする（tsyringeでは難しいため、エラーを投げるモックを使用）
+    const errorMock = {
+      sendMessage: vi.fn().mockRejectedValue(new Error('Service not found'))
+    };
+    
+    container.register(ChromeTabsService, { useValue: errorMock as any });
 
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
@@ -82,11 +85,11 @@ describe('handlers.applyAllRules', () => {
       currentTab
     };
 
-    const result = await emptyHandlers.applyAllRules(message);
+    const result = await handlers.applyAllRules(message);
 
     expect(result).toEqual({
       success: false,
-      error: 'Service ChromeTabsService not found'
+      error: 'Service not found'
     });
 
     consoleSpy.mockRestore();

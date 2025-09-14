@@ -1,11 +1,8 @@
-import type { SimpleContainer } from 'src/infrastructure/di/container';
 import { handlers } from 'src/infrastructure/browser/router/messageHandlers';
 
-export function createMessageRouter(container: SimpleContainer) {
-  const messageHandlers = handlers(container);
-  
+export function createMessageRouter() {
   return async (message: any) => {
-    if (!message?.type || !(message.type in messageHandlers)) {
+    if (!message?.type || !(message.type in handlers)) {
       return { error: 'Unknown message' };
     }
     
@@ -19,7 +16,7 @@ export function createMessageRouter(container: SimpleContainer) {
       // @ts-ignore - Dynamic handler access
       const messageType = message.type;
       // @ts-ignore - Dynamic handler access
-      const handler = messageHandlers[messageType];
+      const handler = handlers[messageType];
       const result = await handler(message);
       return result;
     } catch (error: any) {
