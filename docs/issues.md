@@ -19,7 +19,6 @@
 - [ ] RewriteRuleのTodo解消
 - [ ] createRedundantPatternはRewriteRuleに取り込む
 - [ ] HtmlReplacerのメンバ変数化
-- [ ] di/container代わりにtsyringe か awilix を使う
 - [ ] application層からinfrastructureの実装をしているのを解消
 - [ ] importをアルファベット順にソートするnpm
 - [ ] createMessageRouterの堅牢化
