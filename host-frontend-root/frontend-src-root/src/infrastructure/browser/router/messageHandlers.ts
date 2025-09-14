@@ -1,26 +1,29 @@
 import type { SimpleContainer } from 'src/infrastructure/di/container';
-import { ApplyRewriteRuleToTabUseCase } from 'src/application/usecases/rule/ApplyRewriteRuleToTabUseCase';
+import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
+import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 type Message =
-  | { type: 'applyRewriteRule'; targetTabId?: number; rule: any }
+  | { type: 'applyAllRules'; currentTab: CurrentTab }
   | { type: 'ping' };
 
+/**
+ * @param container 
+ * @returns 
+ */
 export const handlers = (container: SimpleContainer) => ({
-  applyRewriteRule: async (msg: Extract<Message, { type: 'applyRewriteRule' }>) => {
-    if (msg.targetTabId) {
-      const applyRewriteRuleUseCase = container.resolve(ApplyRewriteRuleToTabUseCase);
+  applyAllRules: async (msg: Extract<Message, { type: 'applyAllRules' }>) => {
+    try {
+      const { currentTab } = msg;
+
+      // Infrastructure層のサービスを使用してcontent scriptにメッセージを転送
+      const chromeTabsService = container.resolve(ChromeTabsService);
+      const response = await chromeTabsService.sendMessage(currentTab, { type: 'applyAllRules' });
       
-      try {
-        const result = await applyRewriteRuleUseCase.execute(msg.targetTabId, msg.rule);
-        return result;
-      } catch (error: any) {
-        console.error('[background] ApplyRewriteRuleToTabUseCase error:', error);
-        return { success: false, error: error.message };
-      }
-    } else {
-      // 特定のタブIDが指定されていない場合は、ストレージの変更をトリガーとしてinjectContentScriptsBasedOnRulesが呼ばれるので、
-      // ここでは単に成功を返す
-      return { success: true };
+      return { success: true, response };
+
+    } catch (error: any) {
+      console.error('[background] applyAllRules error:', error);
+      return { success: false, error: error.message };
     }
   },
   ping: async () => ({ pong: true }),
