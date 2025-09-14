@@ -10,7 +10,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 (cdコマンドでリポジトリルートに移動)
 mkdir docs/issue-nnn/daily-scrum-00
 を実行し、その後
-issue-nnn-refactor-app-tsx
+issue-nnn-feat-ts-syringe
 ブランチを作成してください
 ```
 
@@ -93,6 +93,11 @@ favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.md
 ## DAILY_SCRUM.md実装終了後
 
 ### 最初にプラン作成を指示しなかった時
+
+```
+作業完了（事後記録）
+```
+
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
 kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナンバーの最大数+1)
@@ -116,6 +121,11 @@ cp docs/issue-000/daily-scrum-00/DAILY_SCRUM-.md docs/issue-nnn/daily-scrum-kk/D
 
 
 ### 指示
+
+```
+デイリースクラムレビュー通過
+```
+
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
@@ -149,6 +159,8 @@ nnn=(カレントブランチ名からissue番号を取得)
 
 ## PR作成時の指示
 
+`PULL_REQUEST.md作成`
+
 ```
 nnn=(カレントブランチ名からissue番号を取得)
 issue-nnnのプルリクエストの本文を作成してください。
@@ -163,6 +175,8 @@ favorite-keyword-link-frog/docs/issue-000/PULL_REQUEST.md
 保存先：
 docs/issue-nnn/PULL_REQUEST.md
 ```
+
+`PR作成`
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
