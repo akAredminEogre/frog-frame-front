@@ -56,6 +56,8 @@ mkdir -p docs/issue-nnn/daily-scrum-kk/
 
 ## DAILY_SCRUM-kk.md作成後の指示
 
+`作業事後記録`
+
 ```cline-instructions
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 デイリースクラムの計画をレビューしました。
@@ -233,6 +235,9 @@ nnn=(カレントブランチ名からissue番号を取得)
 
 
 ## PRクローズ時の指示
+
+`PRクローズ`
+
 ```
 nnn=(カレントブランチ名からissue番号を取得)
 pr_no=(カレントブランチが出しているプルリクエストの番号)
