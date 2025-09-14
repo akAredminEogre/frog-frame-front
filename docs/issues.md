@@ -4,11 +4,9 @@
 - [ ] applyRulesのリファクタリング
 - [ ] 選択されたテキストが複数のHTML要素にまたがる場合の処理方針について
 - [ ] 右クリック入力のロジック分離
-- [ ] タグ前後の改行、空白の処理
 - [ ] issue-012: 右クリック入力のe2eテスト
 - [ ] ElementSelectorの返り値をValueObjectに変更
 - [ ] no-consoleも無視しない
-- [ ] PLAN.mdの改善
 - [ ] SelectionServiceのテストケース追加
   - [ ] hasValidSelectionのテストと、ElementSelector.test.tsの重複削除
 - [ ] mockSelectionServiceが変更可能なのは大丈夫か確認
@@ -27,3 +25,6 @@
 - [ ] importをアルファベット順にソートするnpm
 - [ ] createMessageRouterの堅牢化
 - [ ] entrypointsをsrc/entrypointsに移動
+- [ ] `container.ts`への`SaveRewriteRuleAndApplyToCurrentTabUseCase`登録
+- [ ] App.tsxのDIリファクタリング**: 手動DIからDIコンテナ使用への変更
+- [ ] UseCaseレベルでのテスト作成
