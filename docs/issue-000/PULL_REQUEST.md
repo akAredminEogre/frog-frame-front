@@ -11,7 +11,7 @@
 
 ## テスト方法
 [動作確認の手順]
-- [ ] `docker compose exec frontend npm run unused:safe` が成功すること
+- `docker compose exec frontend npm run unused:safe` で回帰テスト通過・未使用コードがないことを確認
   - 既存自動テストとlinterを同時に確認
 
 ## 補足
