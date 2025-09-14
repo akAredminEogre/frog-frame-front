@@ -15,7 +15,7 @@ export default defineBackground({
     registerTabsOnUpdated();
     registerStorageOnChanged(container);
     registerRuntimeOnInstalled(container);
-    registerRuntimeOnMessage(container);
+    registerRuntimeOnMessage();
     registerContextMenusOnClicked(container);
   },
 });

@@ -1,7 +1,12 @@
-import type { SimpleContainer } from 'src/infrastructure/di/container';
 import { createMessageRouter } from 'src/infrastructure/browser/router/messageRouter';
+import { container } from 'src/infrastructure/di/container';
 
-export function registerRuntimeOnMessage(container: SimpleContainer) {
+/**
+ * 呼び出し元: entrypoints/background.ts
+ * 
+ * runtime.onMessageリスナーを登録し、メッセージをルーティングする
+ */
+export function registerRuntimeOnMessage() {
   const route = createMessageRouter(container);
 
   chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {

@@ -10,7 +10,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 (cdコマンドでリポジトリルートに移動)
 mkdir docs/issue-nnn/daily-scrum-00
 を実行し、その後
-issue-nnn-feat-storage-set
+issue-nnn-refactor-app-tsx
 ブランチを作成してください
 ```
 
@@ -52,6 +52,7 @@ mkdir -p docs/issue-nnn/daily-scrum-kk/
 - その内容に基づき、favorite-keyword-link-frog/docs/issue-000/daily-scrum-00/DAILY_SCRUM-.mdのフォーマットに従って、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdを作成してください。
 - `## 相談事項` のセクションに記入があった場合は、その旨をチャットにも記入してください
 ```
+```
 
 ## DAILY_SCRUM-kk.md作成後の指示
 
@@ -65,6 +66,7 @@ kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 ```
 
 ```cline-instructions
+nnn=(カレントブランチ名からissue番号を取得)
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 DAILY_SCRUM-kk.mdの作業を開始してください。
 実装が完了したら `favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-00/PROGRESS-.md` のフォーマットに従って、favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.mdを追記してコードレビューを依頼してください
@@ -74,6 +76,19 @@ DAILY_SCRUM-kk.mdの作業を開始してください。
 - ドキュメントをコミット
   - コミットメッセージ
     - docs: スクラムkk ii回目のコードレビュー
+
+```cline-instructions
+nnn=(カレントブランチ名からissue番号を取得)
+kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
+ii=01
+favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.md
+に、
+### スクラムkk-(ii回目) のレビューコメント
+としてレビューコメントを記載しました。
+
+その内容に沿って、修正を行ってください。
+実装が完了したら `favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-00/PROGRESS-.md` のフォーマットに従って、favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.mdに、ii=ii+1として、進捗を追記してコードレビューを依頼してください
+```
 
 ## DAILY_SCRUM.md実装終了後
 
@@ -92,7 +107,7 @@ mkdir -p docs/issue-nnn/daily-scrum-kk/
 cp docs/issue-000/daily-scrum-00/DAILY_SCRUM-.md docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
 ```
 
-- 今回の作業内容に基づき、favorite-keyword-link-frog/docs/issue-000/daily-scrum-00/DAILY_SCRUM-.mdのフォーマットに従って、先ほどコピーしたdocs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdに記入してください。
+- 今回の作業内容、チャットスレッドの内容に基づき、favorite-keyword-link-frog/docs/issue-000/daily-scrum-00/DAILY_SCRUM-.mdのフォーマットに従って、先ほどコピーしたdocs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdに記入してください。
 
 ```
 ```
@@ -166,6 +181,38 @@ PULL_REQUEST.mdのレビューが完了しました。
 
 コミットされていない変更はそのままで、プルリクエストを作成してください。
 ```
+## PR変更時の指示
+
+```
+nnn=(カレントブランチ名からissue番号を取得)
+issue-nnnのプルリクエストの本文を変更してください。
+
+反映すべき内容：
+favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-02/
+以下のドキュメント群(ない場合はdevelopとの比較で変更があるもの)
+
+従うべきフォーマット：
+favorite-keyword-link-frog/docs/issue-000/PULL_REQUEST.md
+
+保存先：
+docs/issue-nnn/PULL_REQUEST.md
+```
+
+```cline-instructions
+nnn=(カレントブランチ名からissue番号を取得)
+変更後のPULL_REQUEST.mdのレビューが完了しました。
+まず、下記の内容でコミットしてください。
+- favorite-keyword-link-frog/docs/issue-nnn/PULL_REQUEST.md
+  - コミットメッセージ
+    - docs: PULL_REQUEST.mdの変更、レビュー完了
+次に、docs/issue-nnn/PULL_REQUEST.mdをもとに、ghコマンドを使ってプルリクエストを変更してください。
+- 現時点のブランチをpush
+  - コミットされていない変更はそのまま
+  - push先リポジトリ akAredminEogre/favorite-keyword-link-frog
+- PRリクエスト変更
+  - 変更後のPULL_REQUEST.mdの記述を、当該PRの説明文に上書き
+```
+
 ## PRクローズ準備
 - WITH_CLINE.md
   - 変更整理
