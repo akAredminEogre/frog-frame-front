@@ -5,7 +5,7 @@ export function registerContextMenusOnClicked() {
   chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === 'context-menu-replace-dom-element' && tab?.id != null) {
       const contextMenuUseCase = container.resolve(HandleContextMenuReplaceDomElement);
-      await contextMenuUseCase.execute(tab.id, info.selectionText);
+      await contextMenuUseCase.execute(tab.id);
     }
   });
 }
