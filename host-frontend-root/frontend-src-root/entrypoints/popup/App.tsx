@@ -64,13 +64,13 @@ function App() {
   useEffect(() => {
     const initForm = async () => {
       // ストレージから一時的な選択テキストを取得
-      const { tempSelectedText } = await chrome.storage.local.get('tempSelectedText');
+      const { selectedPageText } = await chrome.storage.local.get('selectedPageText');
       
       let selectedText = '';
-      if (tempSelectedText) {
-        selectedText = tempSelectedText;
+      if (selectedPageText) {
+        selectedText = selectedPageText;
         // 取得後は不要なので削除
-        await chrome.storage.local.remove('tempSelectedText');
+        await chrome.storage.local.remove('selectedPageText');
       }
 
       const origin = await getActiveTabOrigin();
