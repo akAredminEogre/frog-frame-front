@@ -73,68 +73,49 @@ git checkout -b issue-049-feat-authentication
 ## DAILY_SCRUM.md実装終了後
 ### 最初にプラン作成を指示しなかった時
 
-#### 作業事後記録トリガー
 
-「作業事後記録」と入力された場合、以下の自動化処理を実行します：
 
-```cline-instructions
-kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
-デイリースクラムの計画をレビューしました。
-まず、下記の内容でコミットしてください。
-- 対象：変更中のファイルで、`WITH_CLINE.md`、`issues.md`を除くすべてのファイル
-- コミットメッセージ
-  - docs: デイリースクラムkk回目開始時のドキュメント
-```
+
+
+## プロジェクト固有の品質チェック
+
+### タスク完了確認
+
+「タスク完了確認」と入力された場合、以下のプロジェクト固有チェックを実行します：
 
 ```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
-kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
-DAILY_SCRUM-kk.mdの作業を開始してください。
-実装が完了したら `favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-00/PROGRESS-.md` のフォーマットに従って、favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.mdを追記してコードレビューを依頼してください
+タスクの最終確認を行います。まず、プロジェクト固有の未使用コードチェックを実行してください。
+
+# プロジェクト固有の未使用コードチェック
+(cd で絶対パスでfavorite-keyword-link-frogに移動) && \
+docker compose exec frontend npm run unused:safe
+
+エラーや未使用コードが検出された場合は、修正してから再度チェックを実行してください。
+すべてのチェックが正常に完了したら、タスクが完了したことを報告してください。
 ```
 
-##### 処理詳細
+#### 処理詳細
 
-1. **第1段階: デイリースクラム開始時ドキュメントのコミット**
-   - **パラメータ自動取得**
-     - `kk`: docs/issue-nnn/daily-scrum-ディレクトリ内の最大番号を自動取得
-   - **コミット対象**
-     - 変更中のファイルから `WITH_CLINE.md`、`issues.md` を除外したすべてのファイル
-   - **コミットメッセージ**
-     - `docs: デイリースクラムkk回目開始時のドキュメント`
+1. **未使用コードチェック実行**
+   - `npm run unused:safe` コマンドを実行
+   - エラーや未使用コードの検出
 
-2. **第2段階: DAILY_SCRUM-kk.md作業開始とPROGRESS作成**
-   - **パラメータ自動取得**
-     - `nnn`: カレントブランチ名からissue番号を自動取得
-     - `kk`: docs/issue-nnn/daily-scrum-ディレクトリ内の最大番号を取得
-   - **作業開始**
-     - `DAILY_SCRUM-kk.md` の内容に基づいて実装作業を開始
-   - **PROGRESS作成**
-     - 実装完了後、`docs/issue-nnn/daily-scrum-00/PROGRESS-.md` のフォーマットを参照
-     - `docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.md` を作成
-     - コードレビューを依頼
+2. **エラー対応**
+   - 検出された問題の修正
+   - 修正後の再チェック
 
-##### 使用方法
+3. **完了確認**
+   - すべてのチェックが正常に完了した場合のみタスク完了とする
 
-デイリースクラム作業の事後記録を開始する際に以下を入力：
+#### 使用方法
+
+タスク作業完了時に以下を入力：
 
 ```
-作業事後記録
+タスク完了確認
 ```
 
-この一言で自動的に以下が順次実行されます：
-1. 現在の変更をコミット（特定ファイルを除外）
-2. デイリースクラム番号の特定
-3. DAILY_SCRUM-kk.mdに基づく実装作業の開始
-4. 完了後のPROGRESS-kk.md作成とレビュー依頼
-
-##### 前提条件
-
-- 適切なissueブランチ上で作業していること
-- `docs/issue-nnn/daily-scrum-*` ディレクトリ構造が存在すること
-- `docs/issue-nnn/daily-scrum-00/PROGRESS-.md` テンプレートが存在すること
-
-
+この一言で自動的にプロジェクト固有の品質チェックが実行されます。
 
 ## デイリースクラムレビュー通過時の指示
 
@@ -191,7 +172,33 @@ docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
 
 ## PR作成前の確認
 
-（将来的に追加予定）
+### PR作成前確認
+
+「PR作成前確認」と入力された場合、以下の自動化処理を実行します：
+
+```cline-instructions
+プルリクエスト作成前の最終確認を行います。
+
+1. プロジェクト固有の未使用コードチェック：
+   (cd で絶対パスでfavorite-keyword-link-frogに移動) && \
+   docker compose exec frontend npm run unused:safe
+
+2. その他の品質チェック：
+   - コンパイルエラーの確認
+   - テストの実行確認
+   - 必要なドキュメントの更新確認
+
+すべてのチェックが正常に完了したら、PR作成準備が完了したことを報告してください。
+エラーがある場合は、修正してから再度確認を実行してください。
+```
+
+#### 使用方法
+
+PR作成準備時に以下を入力：
+
+```
+PR作成前確認
+```
 
 ## PR作成時の指示
 
@@ -250,7 +257,7 @@ PULL_REQUEST.md作成
 
 ### PR作成
 
-「PR作成」と入力された場合、以下の自動化処理を実行します：
+「workflow:PR作成」と入力された場合、以下の自動化処理を実行します：
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
@@ -294,7 +301,7 @@ PULL_REQUEST.mdのレビューが完了しました。
 PULL_REQUEST.mdのレビュー完了後に以下を入力：
 
 ```
-PR作成
+workflow:PR作成
 ```
 
 この一言で自動的にコミット、push、プルリクエスト作成が実行されます。
