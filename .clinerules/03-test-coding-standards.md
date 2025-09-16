@@ -92,8 +92,20 @@ describe('SelectedPageTextService.setSelectedPageText - 正常系', () => {
 - 1ケースにつき1行でまとめる
 - テストの実際の動作を正確に説明
   - 入出力値とそこから考えられるテストの目的
-- 配列ベースのテストの場合はその旨を記載
 - 抽象的な表現を避け、具体的な検証内容を記述
+
+#### 例
+```typescript
+/**
+ * 1. 空文字列の保存処理
+ * 2. 特殊文字・Unicodeの保存処理
+ * 3. 長文テキストの保存処理  
+ * 4. 改行・制御文字の保存処理
+ */
+describe('SelectedPageTextService.setSelectedPageText - エッジケース', () => {
+  // 各ケースの実装
+});
+```
 
 ## 3. モックとテストセットアップ
 

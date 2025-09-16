@@ -24,5 +24,8 @@
 - [ ] createMessageRouterの堅牢化
 - [ ] entrypointsをsrc/entrypointsに移動
 - [ ] `container.ts`への`SaveRewriteRuleAndApplyToCurrentTabUseCase`登録
-- [ ] App.tsxのDIリファクタリング**: 手動DIからDIコンテナ使用への変更
 - [ ] UseCaseレベルでのテスト作成
+- [ ] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
+- [ ] CurrentTabのテストコード
+- [ ] HandleContextMenuReplaceDomElemenのテストコード
+

@@ -38,12 +38,23 @@
 - コンテンツスクリプトは`content/`ディレクトリ
 
 
-### プロジェクト固有コマンド
-タスク完了前に下記を実行し、エラーがないことを確認。
-未使用コードやエラーが出た場合は、再度修正してから次に進み、改めて実行。
-```bash
-# プロジェクト固有の未使用コードチェック
-cd favorite-keyword-link-frog && \
-docker compose exec frontend npm run unused:safe
-```
+### タスク完了前の必須チェック
 
+**IMPORTANT: attempt_completionツールを使用する前に、必ず以下のプロジェクト固有チェックを実行すること。**
+
+1. **未使用コードチェックの実行**
+   ```bash
+   (cd で絶対パスでfavorite-keyword-link-frogに移動) && \
+   docker compose exec frontend npm run unused:safe
+   ```
+
+2. **チェック結果の確認**
+   - エラーや未使用コードが検出された場合は、必ず修正してから再度チェックを実行
+   - すべてのチェックが正常に完了した場合のみ、attempt_completionツールを使用可能
+
+3. **修正が必要な場合の手順**
+   - 検出された問題を修正
+   - 再度同じコマンドを実行してチェック
+   - エラーがなくなるまで修正とチェックを繰り返す
+
+**このチェックを実行せずにattempt_completionツールを使用することは禁止されています。**
