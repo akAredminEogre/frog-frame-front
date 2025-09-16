@@ -1,63 +1,38 @@
-import { autoInjectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
+import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
+import { IPopupService } from 'src/application/ports/IPopupService';
+import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 /**
  * コンテキストメニューからのDOM要素置換処理を扱うユースケース
  */
-@autoInjectable()
+@injectable()
 export class HandleContextMenuReplaceDomElement {
+  constructor(
+    @inject('IChromeTabsService') private readonly tabsService: IChromeTabsService,
+    @inject('ISelectedPageTextService') private readonly selectedPageTextService: ISelectedPageTextService,
+    @inject('IPopupService') private readonly popupService: IPopupService
+  ) { }
   
   /**
    * コンテキストメニュー選択時の処理
    * @param tabId 対象タブのID
-   * @param selectionText 選択されたテキスト（フォールバック用）
    * @returns Promise<void>
    */
-  async execute(tabId: number, selectionText?: string): Promise<void> {
-    try {
-      // content scriptにメッセージを送信して選択要素を取得
-      const response = await this.sendMessageToTab(tabId, { type: 'getElementSelection' });
-      
-      if (response && response.selection) {
-        // 取得したHTMLをストレージに保存してポップアップを開く
-        await this.saveSelectionAndOpenPopup(response.selection);
-      }
-    } catch (error) {
-      console.error('Failed to get element selection:', error);
-      // エラー時は選択テキストでフォールバック
-      if (selectionText) {
-        await this.saveSelectionAndOpenPopup(selectionText);
-      }
-    }
+  async execute(tabId: number): Promise<void> {
+    const currentTab = new CurrentTab(tabId);
+    const response = await this.tabsService.sendMessage(currentTab, { type: 'getElementSelection' });
+
+    await this.saveSelectionAndOpenPopup(response.selection);
   }
 
-  /**
-   * タブにメッセージを送信
-   */
-  private sendMessageToTab(tabId: number, message: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      chrome.tabs.sendMessage(tabId, message, (response) => {
-        if (chrome.runtime.lastError) {
-          reject(new Error(chrome.runtime.lastError.message));
-          return;
-        }
-        resolve(response);
-      });
-    });
-  }
 
   /**
    * 選択内容をストレージに保存してポップアップを開く
    */
-  private saveSelectionAndOpenPopup(selection: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      chrome.storage.local.set({ tempSelectedText: selection }, () => {
-        if (chrome.runtime.lastError) {
-          reject(new Error(chrome.runtime.lastError.message));
-          return;
-        }
-        chrome.action.openPopup();
-        resolve();
-      });
-    });
+  private async saveSelectionAndOpenPopup(selection: string): Promise<void> {
+    await this.selectedPageTextService.setSelectedPageText(selection);
+    await this.popupService.openPopup();
   }
 }

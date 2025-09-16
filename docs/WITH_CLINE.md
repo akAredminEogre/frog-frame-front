@@ -10,7 +10,7 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 (cdコマンドでリポジトリルートに移動)
 mkdir docs/issue-nnn/daily-scrum-00
 を実行し、その後
-issue-nnn-feat-ts-syringe
+issue-nnn-fix-apply-all-rules
 ブランチを作成してください
 ```
 
@@ -97,7 +97,7 @@ favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.md
 ### 最初にプラン作成を指示しなかった時
 
 ```
-作業完了（事後記録）
+作業事後記録(準備中)
 ```
 
 ```cline-instructions
@@ -163,22 +163,9 @@ nnn=(カレントブランチ名からissue番号を取得)
 
 `PULL_REQUEST.md作成`
 
-```
-nnn=(カレントブランチ名からissue番号を取得)
-issue-nnnのプルリクエストの本文を作成してください。
+ .clinerules/02-workflow-automation.mdの指示に従い、`PULL_REQUEST.md`を作成してください
 
-反映すべき内容：
-favorite-keyword-link-frog/docs/issue-nnn/
-以下のドキュメント群(ない場合はdevelopとの比較で変更があるもの)
-
-従うべきフォーマット：
-favorite-keyword-link-frog/docs/issue-000/PULL_REQUEST.md
-
-保存先：
-docs/issue-nnn/PULL_REQUEST.md
-```
-
-`PR作成`
+`workflow:PR作成`
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
