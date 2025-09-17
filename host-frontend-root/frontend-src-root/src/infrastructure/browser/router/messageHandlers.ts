@@ -3,19 +3,20 @@ import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsSer
 import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 type Message =
-  | { type: 'applyAllRules'; currentTab: { tabId: number } }
+  | { type: 'applyAllRules'; tabId: number }
   | { type: 'ping' };
 
 /**
  * Message handlers using tsyringe DI container
+ * sendMessageの受信側であるcontent scriptにメッセージを転送する
  */
 export const handlers = {
   applyAllRules: async (msg: Extract<Message, { type: 'applyAllRules' }>) => {
     try {
-      const { currentTab: currentTabData } = msg;
+      const { tabId } = msg;
 
-      // 受信したプレーンオブジェクトからCurrentTabインスタンスを作成
-      const currentTab = new CurrentTab(currentTabData.tabId);
+      // プリミティブ値からCurrentTabインスタンスを作成
+      const currentTab = new CurrentTab(tabId);
 
       // Infrastructure層のサービスを使用してcontent scriptにメッセージを転送
       const chromeTabsService = container.resolve(ChromeTabsService);

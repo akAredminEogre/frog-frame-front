@@ -32,7 +32,7 @@ describe('handlers.applyAllRules', () => {
 
     const message = {
       type: 'applyAllRules' as const,
-      currentTab
+      tabId: currentTab.tabId
     };
 
     const result = await handlers.applyAllRules(message);
@@ -56,7 +56,7 @@ describe('handlers.applyAllRules', () => {
 
     const message = {
       type: 'applyAllRules' as const,
-      currentTab
+      tabId: currentTab.tabId
     };
 
     const result = await handlers.applyAllRules(message);
@@ -82,7 +82,7 @@ describe('handlers.applyAllRules', () => {
 
     const message = {
       type: 'applyAllRules' as const,
-      currentTab
+      tabId: currentTab.tabId
     };
 
     const result = await handlers.applyAllRules(message);
