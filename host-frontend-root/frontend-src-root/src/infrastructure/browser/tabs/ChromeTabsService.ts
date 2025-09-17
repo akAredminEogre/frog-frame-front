@@ -1,17 +1,15 @@
 import { injectable } from 'tsyringe';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
+import { TabId } from 'src/domain/value-objects/TabId';
 
 /**
  * Chrome Tabs APIを使用して現在のタブにメッセージを送信するサービスの実装
  */
 @injectable()
 export class ChromeTabsService implements IChromeTabsService {
-  async sendMessage(currentTab: CurrentTab, message: any): Promise<any> {
+  async sendMessage(tabId: TabId, message: any): Promise<any> {
     try {
-      const tabId = currentTab.tabId;
-      
-      const response = await chrome.tabs.sendMessage(tabId, message);
+      const response = await chrome.tabs.sendMessage(tabId.value, message);
       return response;
     } catch (error) {
       console.error('[ChromeTabsService] sendMessage error:', error);
