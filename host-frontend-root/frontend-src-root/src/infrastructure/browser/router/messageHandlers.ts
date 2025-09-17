@@ -3,7 +3,7 @@ import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsSer
 import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 type Message =
-  | { type: 'applyAllRules'; currentTab: CurrentTab }
+  | { type: 'applyAllRules'; currentTab: { tabId: number } }
   | { type: 'ping' };
 
 /**
@@ -12,7 +12,10 @@ type Message =
 export const handlers = {
   applyAllRules: async (msg: Extract<Message, { type: 'applyAllRules' }>) => {
     try {
-      const { currentTab } = msg;
+      const { currentTab: currentTabData } = msg;
+
+      // 受信したプレーンオブジェクトからCurrentTabインスタンスを作成
+      const currentTab = new CurrentTab(currentTabData.tabId);
 
       // Infrastructure層のサービスを使用してcontent scriptにメッセージを転送
       const chromeTabsService = container.resolve(ChromeTabsService);

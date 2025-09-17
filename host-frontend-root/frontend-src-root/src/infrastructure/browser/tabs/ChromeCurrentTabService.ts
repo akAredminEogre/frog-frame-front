@@ -25,10 +25,20 @@ export class ChromeCurrentTabService implements ICurrentTabService {
       throw new Error('No active tab found');
     }
 
-    if (!tab.id) {
-      throw new Error('Active tab has no ID');
+    const tabId = tab.id;
+    if (tabId === undefined || tabId === null) {
+      throw new Error(`Active tab has invalid ID: ${tabId}`);
     }
 
-    return new CurrentTab(tab.id);
+    if (typeof tabId !== 'number') {
+      throw new Error(`Active tab ID is not a number: ${typeof tabId} (${tabId})`);
+    }
+
+    if (tabId <= 0) {
+      throw new Error(`Active tab ID is not positive: ${tabId}`);
+    }
+
+    console.log(`[ChromeCurrentTabService] Creating CurrentTab with tabId: ${tabId}`);
+    return new CurrentTab(tabId);
   }
 }
