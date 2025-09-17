@@ -3,7 +3,6 @@ import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/con
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 import { IPopupService } from 'src/application/ports/IPopupService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 /**
  * 1. tabId=1(最小有効値)での正常処理とCurrentTab.tabId検証
@@ -59,8 +58,10 @@ describe('HandleContextMenuReplaceDomElement.execute - エッジケース', () =
     await useCase.execute(tabId);
 
     // Assert
-    const currentTabArg = vi.mocked(mockTabsService.sendMessage).mock.calls[0][0] as CurrentTab;
-    expect(currentTabArg.tabId).toBe(tabId);
+    expect(mockTabsService.sendMessage).toHaveBeenCalledWith(
+      tabId,
+      { type: 'getElementSelection' }
+    );
     expect(mockSelectedPageTextService.setSelectedPageText).toHaveBeenCalledWith('test');
     expect(mockPopupService.openPopup).toHaveBeenCalledTimes(1);
   });
