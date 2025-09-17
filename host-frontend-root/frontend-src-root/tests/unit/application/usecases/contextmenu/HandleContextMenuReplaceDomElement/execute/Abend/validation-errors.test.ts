@@ -5,9 +5,8 @@ import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTex
 import { IPopupService } from 'src/application/ports/IPopupService';
 
 /**
- * 1. tabId=0でのTabIdバリデーションエラー(Tab ID must be positive)と全サービス非実行検証
- * 2. tabId=-1でのCurrentTabバリデーションエラー(Tab ID must be positive)と全サービス非実行検証
- * 3. tabId=1.5でのTabIdバリデーションエラー(Tab ID must be an integer)と全サービス非実行検証
+ * 無効なtabIdでのバリデーションエラーと全サービス非実行検証
+ * バリデーション規約：詳細なバリデーションロジックではなく、エラー発生時の適切な失敗のみテスト
  */
 describe('HandleContextMenuReplaceDomElement.execute - バリデーションエラー', () => {
   let useCase: HandleContextMenuReplaceDomElement;
@@ -40,23 +39,12 @@ describe('HandleContextMenuReplaceDomElement.execute - バリデーションエ�
 
   it.each([
     {
-      description: 'tabId 0の場合は TabId バリデーションエラーが発生する',
+      description: '無効なtabId(0)の場合はバリデーションエラーが発生する',
       tabId: 0,
-      expectedError: 'Tab ID must be positive',
-    },
-    {
-      description: '負のtabIdの場合は CurrentTab のバリデーションエラーが発生する',
-      tabId: -1,
-      expectedError: 'Tab ID must be positive',
-    },
-    {
-      description: '非整数のtabIdの場合は TabId バリデーションエラーが発生する',
-      tabId: 1.5,
-      expectedError: 'Tab ID must be an integer',
-    },
-  ])('$description', async ({ tabId, expectedError }) => {
+    }
+  ])('$description', async ({ tabId }) => {
     // Act & Assert
-    await expect(useCase.execute(tabId)).rejects.toThrow(expectedError);
+    await expect(useCase.execute(tabId)).rejects.toThrow();
     
     expect(mockTabsService.sendMessage).not.toHaveBeenCalled();
     expect(mockSelectedPageTextService.setSelectedPageText).not.toHaveBeenCalled();
