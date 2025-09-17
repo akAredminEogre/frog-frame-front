@@ -1,6 +1,22 @@
 import { test, expect } from './fixtures';
 
 test('改行コードを無視した正規表現による置換機能のe2eテスト', async ({ page, popupPage }) => {
+  // コンソールエラーメッセージを記録するための配列
+  const consoleMessages: string[] = [];
+  
+  // ページとポップアップページのコンソールメッセージを監視
+  page.on('console', msg => {
+    if (msg.type() === 'error') {
+      consoleMessages.push(msg.text());
+    }
+  });
+  
+  popupPage.on('console', msg => {
+    if (msg.type() === 'error') {
+      consoleMessages.push(msg.text());
+    }
+  });
+
   // 1. Arrange: テスト対象ページに移動
   await page.goto('https://agilemanifesto.org/iso/ja/manifesto.html');
   await page.bringToFront();
@@ -48,4 +64,7 @@ test('改行コードを無視した正規表現による置換機能のe2eテ�
   // 8. Assert: DOM置換結果の確認（改行コードを無視して置換されている）
   await expect(page.locator('h2')).toHaveText('agileソフトウェア開発宣言', { timeout: 10000 });
   await expect(page.locator('h1')).toHaveCount(0);
+  
+  // 9. Assert: コンソールエラーが発生していないことを確認
+  expect(consoleMessages).toHaveLength(0);
 });

@@ -1,6 +1,22 @@
 import { test, expect } from './fixtures';
 
 test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, popupPage }) => {
+  // コンソールエラーメッセージを記録するための配列
+  const consoleMessages: string[] = [];
+  
+  // ページとポップアップページのコンソールメッセージを監視
+  page.on('console', msg => {
+    if (msg.type() === 'error') {
+      consoleMessages.push(msg.text());
+    }
+  });
+  
+  popupPage.on('console', msg => {
+    if (msg.type() === 'error') {
+      consoleMessages.push(msg.text());
+    }
+  });
+
   // 1. Arrange: テスト対象ページに移動
   await page.goto('https://agilemanifesto.org/iso/ja/manifesto.html');
   await page.bringToFront();
@@ -41,4 +57,7 @@ test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, po
   // 8. Assert: DOM置換結果の確認
   await expect(page.locator('h2')).toHaveText('アジャイルソフトウェア開発宣言', { timeout: 10000 });
   await expect(page.locator('h1')).toHaveCount(0);
+  
+  // 9. Assert: コンソールエラーが発生していないことを確認
+  expect(consoleMessages).toHaveLength(0);
 });
