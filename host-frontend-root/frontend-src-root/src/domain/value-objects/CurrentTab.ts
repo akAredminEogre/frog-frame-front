@@ -11,7 +11,7 @@ export class CurrentTab {
     }
   }
 
-  get tabId(): number {
-    return this._tabId.value;
+  getTabId(): TabId {
+    return this._tabId;
   }
 }

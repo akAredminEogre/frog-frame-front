@@ -62,7 +62,7 @@ export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
 
   private async processRuleApplication(currentTab: CurrentTab): Promise<SaveRewriteRuleAndApplyResult> {
 
-    const applyResult = await this.chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
+    const applyResult = await this.chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab.getTabId());
     if (!applyResult.success) {
       return this.createSuccessResult('保存しましたが、適用に失敗しました。', true);
     }

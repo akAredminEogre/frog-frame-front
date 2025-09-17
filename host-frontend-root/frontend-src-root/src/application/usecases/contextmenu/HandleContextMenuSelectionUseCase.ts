@@ -2,7 +2,6 @@ import { inject, injectable } from 'tsyringe';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 import { IPopupService } from 'src/application/ports/IPopupService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 /**
  * コンテキストメニューからのDOM要素置換処理を扱うユースケース
@@ -20,9 +19,8 @@ export class HandleContextMenuReplaceDomElement {
    * @param tabId 対象タブのID
    * @returns Promise<void>
    */
-  async execute(tabId: number): Promise<void> {
-    const currentTab = new CurrentTab(tabId);
-    const response = await this.tabsService.sendMessage(currentTab, { type: 'getElementSelection' });
+  async execute(tabId: number): Promise<void> {    
+    const response = await this.tabsService.sendMessage(tabId, { type: 'getElementSelection' });
 
     await this.saveSelectionAndOpenPopup(response.selection);
   }
