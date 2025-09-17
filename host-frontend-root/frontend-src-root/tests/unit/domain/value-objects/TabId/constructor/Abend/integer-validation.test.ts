@@ -2,11 +2,11 @@ import { TabId } from 'src/domain/value-objects/TabId';
 import { describe, it, expect } from 'vitest';
 
 /**
- * 1. 小数の場合のエラー処理
- * 2. 負の小数の場合のエラー処理
- * 3. NaNの場合のエラー処理
- * 4. Infinityの場合のエラー処理
- * 5. -Infinityの場合のエラー処理
+ * 1. 小数の場合はエラーをthrowする
+ * 2. 負の小数の場合はエラーをthrowする
+ * 3. NaNの場合はエラーをthrowする
+ * 4. Infinityの場合はエラーをthrowする
+ * 5. -Infinityの場合はエラーをthrowする
  */
 describe('TabId.constructor - 整数バリデーション', () => {
   it('小数の場合はエラーをthrowする', () => {

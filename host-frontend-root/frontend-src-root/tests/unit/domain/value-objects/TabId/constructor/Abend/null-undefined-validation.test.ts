@@ -2,8 +2,8 @@ import { TabId } from 'src/domain/value-objects/TabId';
 import { describe, it, expect } from 'vitest';
 
 /**
- * 1. undefinedの場合のエラー処理
- * 2. nullの場合のエラー処理
+ * 1. undefinedの場合はエラーをthrowする
+ * 2. nullの場合はエラーをthrowする
  */
 describe('TabId.constructor - null/undefinedバリデーション', () => {
   it('undefinedの場合はエラーをthrowする', () => {

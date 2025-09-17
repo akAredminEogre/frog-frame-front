@@ -2,12 +2,12 @@ import { TabId } from 'src/domain/value-objects/TabId';
 import { describe, it, expect } from 'vitest';
 
 /**
- * 1. 文字列型の場合のエラー処理
- * 2. 文字列数値の場合のエラー処理
- * 3. boolean型の場合のエラー処理
- * 4. オブジェクト型の場合のエラー処理
- * 5. 配列型の場合のエラー処理
- * 6. 関数型の場合のエラー処理
+ * 1. 文字列の場合はエラーをthrowする
+ * 2. 文字列数値の場合はエラーをthrowする
+ * 3. booleanの場合はエラーをthrowする
+ * 4. オブジェクトの場合はエラーをthrowする
+ * 5. 配列の場合はエラーをthrowする
+ * 6. 関数の場合はエラーをthrowする
  */
 describe('TabId.constructor - 型バリデーション', () => {
   it('文字列の場合はエラーをthrowする', () => {
