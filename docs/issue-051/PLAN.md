@@ -5,7 +5,7 @@
 ## 残タスク
 - [x] e2eテストに、エラーが発生しないことを確認するassertを追加
 - [x] CurrentTabのコンストラクタをリファクタリング
-- [ ] CurrentTabあるいはIDの受け渡しを考慮
+- [x] CurrentTabあるいはIDの受け渡しを考慮
 
 ### 完了したタスク（Daily Scrum 01）
 - Chrome拡張機能のtabs.sendMessageエラーの解決
@@ -25,3 +25,10 @@
 - 更新されたテストコーディング規約に従ってテストコードを整理
 - TabId以外でTabIdのバリデーション詳細をテストしている重複コードの廃止
 - バリデーション責務の適切な分離を実現
+
+### 完了したタスク（Daily Scrum 04）
+- Infrastructure層からDomain層へのバリデーション責務の移譲
+- ChromeCurrentTabServiceとChromeTabsServiceでのバリデーション処理をDomain層に委譲
+- content.tsへのメッセージ送信でプリミティブ型を使用するよう改善
+- メッセージ送信時のシリアライゼーション問題の解決
+- アーキテクチャの整理と責務分離の改善
