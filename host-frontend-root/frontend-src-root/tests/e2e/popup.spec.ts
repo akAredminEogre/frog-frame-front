@@ -6,16 +6,6 @@ import { test, expect } from './fixtures';
  * 必要な要素が含まれていることを確認します
  */
 test('拡張機能のポップアップが正しく表示される', async ({ popupPage }) => {
-  // コンソールエラーメッセージを記録するための配列
-  const consoleMessages: string[] = [];
-  
-  // ポップアップページのコンソールメッセージを監視
-  popupPage.on('console', msg => {
-    if (msg.type() === 'error') {
-      consoleMessages.push(msg.text());
-    }
-  });
-
   const popup = popupPage;
   // テスト1: ポップアップがエラーなく表示される
   await expect(popup.locator('body')).toBeVisible();
@@ -50,6 +40,16 @@ test('拡張機能のポップアップが正しく表示される', async ({ po
   await expect(saveButton).toBeVisible();
     
   console.log('ポップアップテスト完了: すべての要素が正しく表示されています');
+  
+  // コンソールエラーメッセージを記録するための配列
+  const consoleMessages: string[] = [];
+  
+  // ポップアップページのコンソールメッセージを監視
+  popupPage.on('console', msg => {
+    if (msg.type() === 'error') {
+      consoleMessages.push(msg.text());
+    }
+  });
   
   // Assert: コンソールエラーが発生していないことを確認
   expect(consoleMessages).toHaveLength(0);
