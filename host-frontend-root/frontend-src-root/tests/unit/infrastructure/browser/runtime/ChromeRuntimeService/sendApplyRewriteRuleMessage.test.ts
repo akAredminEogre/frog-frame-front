@@ -34,7 +34,7 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
     expect(mockChrome.runtime.sendMessage).toHaveBeenCalledWith(
       {
         type: 'applyAllRules',
-        currentTab: currentTab
+        currentTab: { tabId: currentTab.tabId }
       },
       expect.any(Function)
     );
@@ -85,7 +85,7 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
     expect(mockChrome.runtime.sendMessage).toHaveBeenCalledWith(
       {
         type: 'applyAllRules',
-        currentTab: differentTab
+        currentTab: { tabId: differentTab.tabId }
       },
       expect.any(Function)
     );

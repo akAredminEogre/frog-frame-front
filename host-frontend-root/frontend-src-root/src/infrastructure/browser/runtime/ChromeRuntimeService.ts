@@ -8,7 +8,9 @@ export class ChromeRuntimeService implements IChromeRuntimeService {
         chrome.runtime.sendMessage(
           {
             type: 'applyAllRules',
-            currentTab: currentTab
+            currentTab: {
+              tabId: currentTab.tabId
+            }
           },
           () => {
             // エラーは無視して処理を続行
