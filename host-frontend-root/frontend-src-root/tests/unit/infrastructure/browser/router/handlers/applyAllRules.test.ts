@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { handlers } from 'src/infrastructure/browser/router/messageHandlers';
 import { container } from 'src/infrastructure/di/container';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 // Chrome APIのモック
 const mockChromeTabsService = {
@@ -10,13 +9,11 @@ const mockChromeTabsService = {
 };
 
 describe('handlers.applyAllRules', () => {
-  let currentTab: CurrentTab;
+  const tabId = 1;
 
   beforeEach(() => {
     // モックサービスでオーバーライド
     container.register(ChromeTabsService, { useValue: mockChromeTabsService as any });
-    
-    currentTab = new CurrentTab(1);
     
     vi.clearAllMocks();
   });
@@ -32,13 +29,13 @@ describe('handlers.applyAllRules', () => {
 
     const message = {
       type: 'applyAllRules' as const,
-      tabId: currentTab.tabId
+      tabId: tabId
     };
 
     const result = await handlers.applyAllRules(message);
 
     expect(mockChromeTabsService.sendMessage).toHaveBeenCalledWith(
-      currentTab,
+      tabId,
       { type: 'applyAllRules' }
     );
     expect(result).toEqual({
@@ -56,7 +53,7 @@ describe('handlers.applyAllRules', () => {
 
     const message = {
       type: 'applyAllRules' as const,
-      tabId: currentTab.tabId
+      tabId: tabId
     };
 
     const result = await handlers.applyAllRules(message);
@@ -82,7 +79,7 @@ describe('handlers.applyAllRules', () => {
 
     const message = {
       type: 'applyAllRules' as const,
-      tabId: currentTab.tabId
+      tabId: tabId
     };
 
     const result = await handlers.applyAllRules(message);

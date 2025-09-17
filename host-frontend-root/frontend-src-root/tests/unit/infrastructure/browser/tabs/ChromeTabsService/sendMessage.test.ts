@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 // Chrome APIのモック
 const mockChrome = {
@@ -14,11 +13,10 @@ global.chrome = mockChrome as any;
 
 describe('ChromeTabsService.sendMessage', () => {
   let chromeTabsService: ChromeTabsService;
-  let currentTab: CurrentTab;
+  const tabId = 1;
 
   beforeEach(() => {
     chromeTabsService = new ChromeTabsService();
-    currentTab = new CurrentTab(1);
     vi.clearAllMocks();
   });
 
@@ -27,21 +25,9 @@ describe('ChromeTabsService.sendMessage', () => {
     mockChrome.tabs.sendMessage.mockResolvedValue(expectedResponse);
 
     const message = { type: 'testMessage', payload: 'test' };
-    const result = await chromeTabsService.sendMessage(currentTab, message);
+    const result = await chromeTabsService.sendMessage(tabId, message);
 
     expect(mockChrome.tabs.sendMessage).toHaveBeenCalledWith(1, message);
-    expect(result).toEqual(expectedResponse);
-  });
-
-  it('異なるCurrentTabでも正常に動作する', async () => {
-    const differentTab = new CurrentTab(999);
-    const expectedResponse = { success: true };
-    mockChrome.tabs.sendMessage.mockResolvedValue(expectedResponse);
-
-    const message = { type: 'anotherMessage' };
-    const result = await chromeTabsService.sendMessage(differentTab, message);
-
-    expect(mockChrome.tabs.sendMessage).toHaveBeenCalledWith(999, message);
     expect(result).toEqual(expectedResponse);
   });
 
@@ -54,7 +40,7 @@ describe('ChromeTabsService.sendMessage', () => {
 
     const message = { type: 'failMessage' };
 
-    await expect(chromeTabsService.sendMessage(currentTab, message)).rejects.toThrow('Tab not found');
+    await expect(chromeTabsService.sendMessage(tabId, message)).rejects.toThrow('Tab not found');
     
     expect(consoleSpy).toHaveBeenCalledWith('[ChromeTabsService] sendMessage error:', error);
     
@@ -73,7 +59,7 @@ describe('ChromeTabsService.sendMessage', () => {
     mockChrome.tabs.sendMessage.mockResolvedValue({ success: true });
 
     for (const message of testCases) {
-      await chromeTabsService.sendMessage(currentTab, message);
+      await chromeTabsService.sendMessage(tabId, message);
       expect(mockChrome.tabs.sendMessage).toHaveBeenCalledWith(1, message);
     }
 
@@ -87,7 +73,7 @@ describe('ChromeTabsService.sendMessage', () => {
     );
 
     const message = { type: 'delayed' };
-    const result = await chromeTabsService.sendMessage(currentTab, message);
+    const result = await chromeTabsService.sendMessage(tabId, message);
 
     expect(result).toEqual(delayedResponse);
     expect(mockChrome.tabs.sendMessage).toHaveBeenCalledWith(1, message);
