@@ -1,6 +1,5 @@
 import { container } from 'src/infrastructure/di/container';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 type Message =
   | { type: 'applyAllRules'; tabId: number }
@@ -15,12 +14,9 @@ export const handlers = {
     try {
       const { tabId } = msg;
 
-      // プリミティブ値からCurrentTabインスタンスを作成
-      const currentTab = new CurrentTab(tabId);
-
       // Infrastructure層のサービスを使用してcontent scriptにメッセージを転送
       const chromeTabsService = container.resolve(ChromeTabsService);
-      const response = await chromeTabsService.sendMessage(currentTab, { type: 'applyAllRules' });
+      const response = await chromeTabsService.sendMessage(tabId, { type: 'applyAllRules' });
       
       return { success: true, response };
 
