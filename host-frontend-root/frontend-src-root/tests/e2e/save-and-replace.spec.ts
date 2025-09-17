@@ -1,8 +1,6 @@
 import { test, expect } from './fixtures';
 
 test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, popupPage }) => {
-
-
   // 1. Arrange: テスト対象ページに移動
   await page.goto('https://agilemanifesto.org/iso/ja/manifesto.html');
   await page.bringToFront();
