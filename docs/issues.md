@@ -28,4 +28,5 @@
 - [ ] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 - [ ] CurrentTabのテストコード
 - [ ] HandleContextMenuReplaceDomElemenのテストコード
+- [ ] registerTabsOnUpdatedの'complete'ハードコード解消
 
