@@ -1,7 +1,6 @@
 import { test, expect } from './fixtures';
 
 test('ポップアップを開くと、URLパターンのフォームにブラウザに表示されているページのURLのドメインが自動入力されている', async ({ page, popupPage }) => {
-
   // メインページに移動し、フォーカスを当てる
   await page.goto('https://agilemanifesto.org/iso/ja/manifesto.html');
   await page.bringToFront();
@@ -14,4 +13,23 @@ test('ポップアップを開くと、URLパターンのフォームにブラ�
   
   // 値が設定されるまで、デフォルトより長いタイムアウトを設定して待機
   await expect(urlPatternInput).toHaveValue('https://agilemanifesto.org', { timeout: 10000 });
+  
+  // コンソールエラーメッセージを記録するための配列
+  const consoleMessages: string[] = [];
+  
+  // ページとポップアップページのコンソールメッセージを監視
+  page.on('console', msg => {
+    if (msg.type() === 'error') {
+      consoleMessages.push(msg.text());
+    }
+  });
+  
+  popupPage.on('console', msg => {
+    if (msg.type() === 'error') {
+      consoleMessages.push(msg.text());
+    }
+  });
+  
+  // Assert: コンソールエラーが発生していないことを確認
+  expect(consoleMessages).toHaveLength(0);
 });

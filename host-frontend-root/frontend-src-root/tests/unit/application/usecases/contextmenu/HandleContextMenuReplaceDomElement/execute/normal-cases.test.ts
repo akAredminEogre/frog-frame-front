@@ -3,7 +3,6 @@ import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/con
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 import { IPopupService } from 'src/application/ports/IPopupService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 /**
  * 1. tabId=123, selection=\"selected text\"での正常処理とサービス実行順序検証
@@ -75,13 +74,9 @@ describe('HandleContextMenuReplaceDomElement.execute - 正常系', () => {
     // Assert
     expect(mockTabsService.sendMessage).toHaveBeenCalledTimes(1);
     expect(mockTabsService.sendMessage).toHaveBeenCalledWith(
-      expect.any(CurrentTab),
+      tabId,
       { type: 'getElementSelection' }
     );
-    
-    // CurrentTabオブジェクトの検証
-    const currentTabArg = vi.mocked(mockTabsService.sendMessage).mock.calls[0][0] as CurrentTab;
-    expect(currentTabArg.tabId).toBe(tabId);
 
     expect(mockSelectedPageTextService.setSelectedPageText).toHaveBeenCalledTimes(1);
     expect(mockSelectedPageTextService.setSelectedPageText).toHaveBeenCalledWith(selection);
