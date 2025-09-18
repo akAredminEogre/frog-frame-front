@@ -48,14 +48,20 @@ export class HtmlContent {
    * @returns 改行コードを無視する正規表現パターン文字列
    */
   private createRedundantPattern(pattern: string, isRegex: boolean): string {
-    // 正規表現でない場合は特殊文字をエスケープ
-    const processedPattern = isRegex 
-      ? pattern 
-      : pattern.replace(/[.*+?^${}()|\\[\]]/g, '\\$&');
+    let processedPattern: string;
     
-    // `<` → `\s*<`、`>` → `>\s*` の変換でHTML要素間の改行コードを無視
+    if (isRegex) {
+      // 正規表現の場合はそのまま使用
+      processedPattern = pattern;
+    } else {
+      // 通常文字列の場合は特殊文字をエスケープ
+      processedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    // `<` → `(?:\s*)<`、`>` → `>(?:\s*)` の変換でHTML要素間の改行コードを無視
+    // 非キャプチャグループ(?:\s*)を使用してユーザーのキャプチャグループ番号がずれないよう実装
     return processedPattern
-      .replace(/</g, '\\s*<')
-      .replace(/>/g, '>\\s*');
+      .replace(/</g, '(?:\\s*)<')
+      .replace(/>/g, '>(?:\\s*)');
   }
 }
