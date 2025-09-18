@@ -47,4 +47,23 @@ test('改行コードを無視した文字列置換機能のe2eテスト', async
   // 8. Assert: DOM置換結果の確認（改行コードを無視して置換されている）
   await expect(page.locator('h2')).toHaveText('アジャイルソフトウェア開発宣言', { timeout: 10000 });
   await expect(page.locator('h1')).toHaveCount(0);
+  
+  // コンソールエラーメッセージを記録するための配列
+  const consoleMessages: string[] = [];
+  
+  // ページとポップアップページのコンソールメッセージを監視
+  page.on('console', msg => {
+    if (msg.type() === 'error') {
+      consoleMessages.push(msg.text());
+    }
+  });
+  
+  popupPage.on('console', msg => {
+    if (msg.type() === 'error') {
+      consoleMessages.push(msg.text());
+    }
+  });
+  
+  // 9. Assert: コンソールエラーが発生していないことを確認
+  expect(consoleMessages).toHaveLength(0);
 });

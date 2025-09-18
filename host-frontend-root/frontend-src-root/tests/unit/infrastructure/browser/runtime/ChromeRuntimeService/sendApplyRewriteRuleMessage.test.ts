@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
+import { TabId } from 'src/domain/value-objects/TabId';
 
 // Chrome APIのモック
 const mockChrome = {
@@ -14,11 +14,11 @@ global.chrome = mockChrome as any;
 
 describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
   let chromeRuntimeService: ChromeRuntimeService;
-  let currentTab: CurrentTab;
+  let tabId: TabId;
 
   beforeEach(() => {
     chromeRuntimeService = new ChromeRuntimeService();
-    currentTab = new CurrentTab(1);
+    tabId = new TabId(1);
     vi.clearAllMocks();
   });
 
@@ -29,12 +29,12 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
       setTimeout(() => callback(), 0);
     });
 
-    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
+    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(tabId);
 
     expect(mockChrome.runtime.sendMessage).toHaveBeenCalledWith(
       {
         type: 'applyAllRules',
-        currentTab: currentTab
+        tabId: tabId.value
       },
       expect.any(Function)
     );
@@ -49,7 +49,7 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
       throw error;
     });
 
-    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
+    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(tabId);
 
     expect(result).toEqual({ 
       success: false, 
@@ -65,7 +65,7 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
       throw errorMessage;
     });
 
-    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
+    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(tabId);
 
     expect(result).toEqual({ 
       success: false, 
@@ -73,24 +73,6 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
     });
   });
 
-  it('異なるCurrentTabオブジェクトでも正常に動作する', async () => {
-    const differentTab = new CurrentTab(99);
-    
-    mockChrome.runtime.sendMessage.mockImplementation((message, callback) => {
-      setTimeout(() => callback(), 0);
-    });
-
-    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(differentTab);
-
-    expect(mockChrome.runtime.sendMessage).toHaveBeenCalledWith(
-      {
-        type: 'applyAllRules',
-        currentTab: differentTab
-      },
-      expect.any(Function)
-    );
-    expect(result).toEqual({ success: true });
-  });
 
   it('コールバックが呼ばれてもエラーを無視して成功を返す', async () => {
     // コールバック内でchrome.runtime.lastErrorがあってもエラーを無視する設計のテスト
@@ -104,7 +86,7 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
       }, 0);
     });
 
-    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
+    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(tabId);
 
     expect(result).toEqual({ success: true });
   });
