@@ -13,8 +13,8 @@ export class HandleStorageChangedUseCase {
         const currentTab = tabs[0];
         if (currentTab && currentTab.id) {
           // アクティブなタブに全ルール適用を依頼
-          chrome.tabs.sendMessage(currentTab.id, { type: 'applyAllRules' })
-            .catch(() => { /* エラーは無視 */ });
+          //chrome.tabs.sendMessage(currentTab.id, { type: 'applyAllRules' })
+          //.catch(() => { /* エラーは無視 */ });
         }
       });
     }
