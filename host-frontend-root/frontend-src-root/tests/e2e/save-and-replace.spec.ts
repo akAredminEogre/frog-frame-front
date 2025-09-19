@@ -45,12 +45,7 @@ test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, po
   // コンソールエラーメッセージを記録するための配列
   const consoleMessages: string[] = [];
 
-  // ページとポップアップページのコンソールメッセージを監視
-  page.on('console', msg => {
-    if (msg.type() === 'error') {
-      consoleMessages.push(msg.text());
-    }
-  });
+  // ポップアップページのコンソールメッセージを監視
 
   popupPage.on('console', msg => {
     if (msg.type() === 'error') {
