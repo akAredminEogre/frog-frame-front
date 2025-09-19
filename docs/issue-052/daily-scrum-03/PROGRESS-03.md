@@ -99,4 +99,118 @@ favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entit
         .replace(/</g, '(?:\\s*)<')
         .replace(/>/g, '>(?:\\s*)');
 が重複しています。重複を避けるために、共通処理としてメソッドに切り出してください。
+## スクラム-03(4回目) の進捗
+
+### レビューコメント対応完了
+
+**✅ 重複処理の共通メソッド化**
+- HTML要素間改行コード無視処理の重複を解消
+- 新しく`addHtmlWhitespaceIgnoringPattern`プライベートメソッドを作成
+- `createRedundantPattern`メソッドから重複コードを削除し、共通メソッドを呼び出すように変更
+
+**✅ 実装詳細**
+- addHtmlWhitespaceIgnoringPattern(): HTML要素間の改行コードとスペースを無視するパターンを追加する共通処理
+- 正規表現パターンと通常文字列パターンの両方で同一の処理を利用
+- DRY原則に従い、重複コードを排除してコードの保守性を向上
+
+**✅ 品質確認**
+- 全単体テスト176個通過
+- knip未使用コードチェック通過
+- ESLintルール適合確認済み
+- コンパイルエラーなし
+
+重複処理の共通化により、より保守性の高いコードに改善されました。
+
+### スクラム-03(4回目) のレビューコメント
+
+```
+public createRedundantPattern(): string {
+```
+で、if句を使わないようにしてください。Stragegyパターン、FactoryMethod、Sigletoneパターンなどから、適切なものを選んで、リファクタリングを試みてください。RewriteRuleクラスに今後別のフラグも増える予定なので、それに対応できるようにしてください。
+
+## スクラム-03(5回目) の進捗
+
+### レビューコメント対応完了
+
+**✅ Strategyパターンによるif句除去**
+- createRedundantPattern()メソッドからif句を完全に除去
+- PatternProcessingStrategyインターフェースを作成し、Strategy patternを実装
+- 将来のフラグ拡張に対応可能な設計に変更
+
+**✅ 実装詳細**
+- PatternProcessingStrategy: パターン処理戦略の共通インターフェース
+- RegexPatternProcessingStrategy: 正規表現パターン処理戦略
+- StringPatternProcessingStrategy: 文字列パターン処理戦略
+- PatternProcessingStrategyFactory: フラグに基づく適切な戦略の生成
+- RewriteRule: Factoryを使用してStrategyを取得し、if句なしで処理を委譲
+
+**✅ 設計の利点**
+- Open/Closed Principle: 新しいフラグ追加時もRewriteRuleクラスを変更せずに対応可能
+- Single Responsibility Principle: 各Strategyクラスが単一の処理方式に責任を持つ
+- 条件分岐のロジックをFactoryに集約し、RewriteRuleから除去
+
+**✅ 品質確認**
+- 全単体テスト176個通過
+- 全E2Eテスト通過
+- knip未使用コードチェック通過
+- ESLintルール適合確認済み
+
+Strategyパターンの導入により、if句を除去し、将来のフラグ拡張に柔軟に対応できる拡張性の高い設計に改善されました。
+
+### スクラム-03(5回目) のレビューコメント
+
+今回作成したクラスのテストコードも作成してください。
+```
+  private addHtmlWhitespaceIgnoringPattern(pattern: string): string {
+    return pattern
+      .replace(/</g, '(?:\\\\s*)<')
+      .replace(/>/g, '>(?:\\\\s*)');
+  }
+```
+は、重複しているので、別メソッド(別クラスでも可)に切り出してください
+
+## スクラム-03(6回目) の進捗
+
+### レビューコメント対応完了
+
+**✅ 重複処理の共通化とテストコード作成**
+- RegexPatternProcessingStrategyとStringPatternProcessingStrategyの重複処理を解消
+- HtmlWhitespacePatternProcessorユーティリティクラスを新規作成
+- HTML要素間改行コード無視処理を共通化し、各Strategyクラスから重複コードを除去
+
+**✅ 実装詳細**
+- HtmlWhitespacePatternProcessor: HTML要素間の改行コードとスペースを無視するパターン処理ユーティリティ
+- RegexPatternProcessingStrategy: HtmlWhitespacePatternProcessorを使用するように修正
+- StringPatternProcessingStrategy: HtmlWhitespacePatternProcessorを使用するように修正
+- 各クラスの包括的なテストコード作成
+
+**✅ テストコード作成**
+- tests/unit/domain/utils/HtmlWhitespacePatternProcessor.test.ts（6テストケース）
+- tests/unit/domain/strategies/RegexPatternProcessingStrategy.test.ts（3テストケース）
+- tests/unit/domain/strategies/StringPatternProcessingStrategy.test.ts（5テストケース）
+- tests/unit/domain/factories/PatternProcessingStrategyFactory.test.ts（3テストケース）
+
+**✅ 品質確認**
+- 全単体テスト192個通過
+- 全E2Eテスト6個通過
+- knip未使用コードチェック通過
+- ESLintルール適合確認済み
+- 「recursive test passed and knip passed, so no unused code remains!」
+
+重複処理の共通化により、DRY原則に従い、より保守性の高いコードに改善されました。包括的なテストコードも作成し、品質が向上しました。
+
+### スクラム-03(6回目) のレビューコメント
+
+<!-- ここはユーザが書くので空欄にしておいてください。 -->
+<!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
+public readonly isRegex?: boolean
+はtrueでない場合にfalseを設定してください。undefinedは許容しないでください。
+
+export interface PatternProcessingStrategy は、 HtmlWhitespacePatternProcessorをメンバ変数として持つことを明示してください。
+
+HtmlWhitespacePatternProcessor
+において、`pattern: string`はメンバ変数として持ってください。
+
+
+
 ---
