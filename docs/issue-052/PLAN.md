@@ -80,19 +80,16 @@ private createRedundantPattern(pattern: string, isRegex: boolean): string {
 
 ## 受け入れ条件
 
-- [ ] E2Eテスト `replace-inside-dom-with-regex.spec.ts` が通過すること
+- [x] E2Eテスト `replace-inside-dom-with-regex.spec.ts` が通過すること
 - [x] 追加した単体テストが通過すること
-- [ ] `test-and-lint` コマンドでエラーが発生しないこと
-- [ ] 既存の文字列置換機能が正常に動作することを確認
+- [x] `test-and-lint` コマンドでエラーが発生しないこと
+- [x] 既存の文字列置換機能が正常に動作することを確認
 
 ## 次回以降のスクラムで対応する課題
 
-- [ ] E2Eテストでの複数aタグ問題の解決
-  - E2Eテストで2つのaタグが見つかる問題の調査と修正
-  - 置換処理が複数回実行される原因の特定と対処
-- [ ] 不正な正規表現入力のエラーハンドリング
-  - 不正な正規表現パターンが入力された場合の適切なエラーメッセージ表示
-  - バリデーション機能の実装
-- [ ] E2Eテストの完全通過
-  - `replace-inside-dom-with-regex.spec.ts`の全ての検証項目の通過
+- [x] E2Eテストでの複数aタグ問題の解決
+  - E2Eテストで2つのaタグが見つかる問題の調査と修正 ✓
+  - 置換処理が複数回実行される原因の特定と対処 ✓
+- [x] E2Eテストの完全通過
+  - `replace-inside-dom-with-regex.spec.ts`の全ての検証項目の通過 ✓
 - [ ] redundantPatternのリファクタリング、適切なdomainクラスへの移動
