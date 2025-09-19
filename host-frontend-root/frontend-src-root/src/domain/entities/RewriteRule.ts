@@ -4,7 +4,7 @@ export class RewriteRule {
     public readonly oldString: string,
     public readonly newString: string,
     public readonly urlPattern?: string,
-    public readonly isRegex?: boolean
+    public readonly isRegex: boolean = false
   ) {}
 
   /**
