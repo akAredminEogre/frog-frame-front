@@ -1,4 +1,5 @@
 import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { RegexConstants } from 'src/domain/constants/RegexConstants';
 
 class ReplaceResult {
   constructor(
@@ -34,7 +35,7 @@ export class HtmlContent {
     // RewriteRuleのパターン処理メソッドを直接使用
     const regexPattern = this.rule.createRedundantPattern();
     
-    const regex = new RegExp(regexPattern, 'gs');
+    const regex = new RegExp(regexPattern, RegexConstants.REGEX_FLAGS_GLOBAL_MULTILINE);
     const replacedHtml = this.originalHtml.replace(regex, newString);
     return new ReplaceResult(replacedHtml);
   }
