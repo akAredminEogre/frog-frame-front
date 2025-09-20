@@ -1,4 +1,5 @@
 import { PatternProcessingStrategy } from "src/domain/strategies/PatternProcessingStrategy";
+import { RegexConstants } from "src/domain/constants/RegexConstants";
 
 /**
  * 文字列パターン処理戦略
@@ -28,6 +29,9 @@ export class StringPatternProcessingStrategy implements PatternProcessingStrateg
    * @returns エスケープされた文字列
    */
   private escapeRegexSpecialCharacters(pattern: string): string {
-    return pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return pattern.replace(
+      RegexConstants.REGEX_SPECIAL_CHARACTERS_PATTERN,
+      RegexConstants.ESCAPED_SPECIAL_CHARACTER_REPLACEMENT
+    );
   }
 }
