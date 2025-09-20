@@ -92,4 +92,5 @@ private createRedundantPattern(pattern: string, isRegex: boolean): string {
   - 置換処理が複数回実行される原因の特定と対処 ✓
 - [x] E2Eテストの完全通過
   - `replace-inside-dom-with-regex.spec.ts`の全ての検証項目の通過 ✓
-- [ ] redundantPatternのリファクタリング、適切なdomainクラスへの移動
+- [x] redundantPatternのリファクタリング、適切なdomainクラスへの移動
+- [ ] regex関係の定数クラス作成
