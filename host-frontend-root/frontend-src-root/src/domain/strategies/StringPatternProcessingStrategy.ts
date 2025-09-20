@@ -1,36 +1,33 @@
 import { PatternProcessingStrategy } from "src/domain/strategies/PatternProcessingStrategy";
-import { HtmlWhitespacePatternProcessor } from "src/domain/utils/HtmlWhitespacePatternProcessor";
 
 /**
  * 文字列パターン処理戦略
- * 正規表現フラグがfalseまたは未定義の場合のパターン処理を担当
+ * 正規表現フラグがfalseの場合のパターン処理を担当
  */
 export class StringPatternProcessingStrategy implements PatternProcessingStrategy {
-  public readonly htmlWhitespaceProcessor: HtmlWhitespacePatternProcessor;
+  private readonly oldString: string;
 
-  constructor(pattern: string) {
-    this.htmlWhitespaceProcessor = new HtmlWhitespacePatternProcessor(pattern);
+  constructor(oldString: string) {
+    this.oldString = oldString;
   }
 
   /**
-   * 文字列パターンを改行コード無視パターンに変換する
-   * 通常文字列の場合は特殊文字をエスケープしてから変換する
-   * @param pattern 文字列パターン
-   * @returns HTML要素間改行コード無視処理を適用したパターン文字列
-   * 使用するメンバ変数: htmlWhitespaceProcessor
+   * 文字列パターンを処理する
+   * 文字列の場合は正規表現特殊文字をエスケープして返す
+   * メンバ変数として保持したoldStringを使用
+   * @returns エスケープされたパターン文字列
+   * 使用するメンバ変数: oldString
    */
-  public processPattern(pattern: string): string {
-    const escapedPattern = this.escapeRegexSpecialChars(pattern);
-    const processor = new HtmlWhitespacePatternProcessor(escapedPattern);
-    return processor.addHtmlWhitespaceIgnoringPattern();
+  public processPattern(): string {
+    return this.escapeRegexSpecialCharacters(this.oldString);
   }
 
   /**
-   * 正規表現特殊文字をエスケープする
-   * @param input エスケープ対象の文字列
+   * 正規表現の特殊文字をエスケープする
+   * @param pattern エスケープ対象の文字列
    * @returns エスケープされた文字列
    */
-  private escapeRegexSpecialChars(input: string): string {
-    return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  private escapeRegexSpecialCharacters(pattern: string): string {
+    return pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 }

@@ -17,6 +17,18 @@ export class RewriteRule {
    */
   public createRedundantPattern(): string {
     const strategy = PatternProcessingStrategyFactory.createStrategy(this.isRegex, this.oldString);
-    return strategy.processPattern(this.oldString);
+    const processedPattern = strategy.processPattern();
+    return this.addHtmlWhitespaceIgnoringPattern(processedPattern);
+  }
+
+  /**
+   * HTML要素間の改行コードとスペースを無視するパターンを追加する
+   * @param pattern 処理対象のパターン文字列
+   * @returns HTML要素間改行コード無視処理を適用したパターン文字列
+   */
+  private addHtmlWhitespaceIgnoringPattern(pattern: string): string {
+    return pattern
+      .replace(/</g, '(?:\\s*)<')
+      .replace(/>/g, '>(?:\\s*)');
   }
 }
