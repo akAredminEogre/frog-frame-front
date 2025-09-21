@@ -5,7 +5,7 @@
  * 3. 特殊文字含有文字列パターンでのエスケープ付き冗長パターン生成処理
  */
 import { describe, it, expect } from 'vitest';
-import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 const createRedundantPatternCases = [
   {

@@ -9,7 +9,7 @@
  * 7. 特殊文字・属性を含むHTML要素パターンの空白無視処理追加
  */
 import { describe, it, expect } from 'vitest';
-import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 const addHtmlWhitespaceIgnoringPatternCases = [
   {

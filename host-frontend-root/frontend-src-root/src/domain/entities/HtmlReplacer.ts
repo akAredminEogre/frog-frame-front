@@ -1,4 +1,4 @@
-import { RewriteRule } from './RewriteRule';
+import { RewriteRule } from './RewriteRule/RewriteRule';
 import { ChildNodeList } from '../value-objects/ChildNodeList';
 import { HtmlContent } from './HtmlContent';
 

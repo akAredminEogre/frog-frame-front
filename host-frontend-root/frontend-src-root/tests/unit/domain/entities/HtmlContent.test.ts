@@ -1,5 +1,5 @@
 import { HtmlContent } from 'src/domain/entities/HtmlContent';
-import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { describe, it, expect } from 'vitest';
 
 describe('HtmlContent', () => {
