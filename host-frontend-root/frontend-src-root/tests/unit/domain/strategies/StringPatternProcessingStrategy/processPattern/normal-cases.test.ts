@@ -7,7 +7,7 @@
  * 5. HTML要素を含むパターンでの角括弧の適切な処理
  */
 import { describe, it, expect } from 'vitest';
-import { StringPatternProcessingStrategy } from 'src/domain/strategies/StringPatternProcessingStrategy';
+import { StringPatternProcessingStrategy } from 'src/domain/entities/RewriteRule/StringPatternProcessingStrategy';
 
 const stringPatternProcessingCases = [
   {

@@ -6,7 +6,7 @@
  * 3. 正規表現特殊文字の保持確認
  */
 import { describe, it, expect } from 'vitest';
-import { RegexPatternProcessingStrategy } from 'src/domain/strategies/RegexPatternProcessingStrategy';
+import { RegexPatternProcessingStrategy } from 'src/domain/entities/RewriteRule/RegexPatternProcessingStrategy';
 
 const regexPatternProcessingCases = [
   {
