@@ -1,4 +1,4 @@
-import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RegexConstants } from 'src/domain/constants/RegexConstants';
 
 class ReplaceResult {

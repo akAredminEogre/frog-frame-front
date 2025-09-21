@@ -5,7 +5,7 @@
  * 3. isRegexデフォルト値の確認
  */
 import { describe, it, expect } from 'vitest';
-import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 describe('RewriteRule.constructor - 正常系', () => {
   it('should create RewriteRule instance with required parameters', () => {
