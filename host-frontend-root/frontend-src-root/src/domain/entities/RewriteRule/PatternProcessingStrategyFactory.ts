@@ -1,6 +1,6 @@
-import { PatternProcessingStrategy } from "src/domain/strategies/PatternProcessingStrategy";
-import { RegexPatternProcessingStrategy } from "src/domain/strategies/RegexPatternProcessingStrategy";
-import { StringPatternProcessingStrategy } from "src/domain/strategies/StringPatternProcessingStrategy";
+import { PatternProcessingStrategy } from "./PatternProcessingStrategy";
+import { RegexPatternProcessingStrategy } from "./RegexPatternProcessingStrategy";
+import { StringPatternProcessingStrategy } from "./StringPatternProcessingStrategy";
 
 /**
  * パターン処理戦略のファクトリクラス
