@@ -1,4 +1,4 @@
-import { PatternProcessingStrategyFactory } from "src/domain/factories/PatternProcessingStrategyFactory";
+import { PatternProcessingStrategyFactory } from "./PatternProcessingStrategyFactory";
 import { RegexConstants } from "src/domain/constants/RegexConstants";
 
 export class RewriteRule {
