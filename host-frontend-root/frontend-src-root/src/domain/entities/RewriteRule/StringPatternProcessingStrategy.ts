@@ -1,4 +1,4 @@
-import { PatternProcessingStrategy } from "src/domain/strategies/PatternProcessingStrategy";
+import { PatternProcessingStrategy } from "./PatternProcessingStrategy";
 import { RegexConstants } from "src/domain/constants/RegexConstants";
 
 /**
