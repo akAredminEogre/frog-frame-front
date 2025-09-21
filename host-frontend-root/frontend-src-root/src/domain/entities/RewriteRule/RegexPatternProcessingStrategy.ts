@@ -1,4 +1,4 @@
-import { PatternProcessingStrategy } from "src/domain/strategies/PatternProcessingStrategy";
+import { PatternProcessingStrategy } from "./PatternProcessingStrategy";
 
 /**
  * 正規表現パターン処理戦略
