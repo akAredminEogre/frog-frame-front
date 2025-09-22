@@ -14,7 +14,9 @@ mkdir -p docs/issue-nnn/daily-scrum-kk/
 cp docs/issue-000/daily-scrum-00/DAILY_SCRUM-.md docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
 ```
 
-- 今回の作業内容、チャットスレッドの内容に基づき、
+- 今回の作業内容、チャットスレッドの内容、
+`git --no-pager diff --name-only develop`
+の出力結果に基づき、
 workflow:record-progress に従って、docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-ii.mdを作成してください。
 
 ```
