@@ -1,4 +1,5 @@
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RegexConstants } from 'src/domain/constants/RegexConstants';
 
 class ReplaceResult {
   constructor(
@@ -29,33 +30,13 @@ export class HtmlContent {
    * 使用するメンバ変数: originalHtml, rule
    */
   public replace(): ReplaceResult {
-    const oldString = this.rule.oldString;
     const newString = this.rule.newString;
 
-    // 統合されたパターン作成メソッドを使用
-    const regexPattern = this.createRedundantPattern(oldString, this.rule.isRegex ?? false);
+    // RewriteRuleのパターン処理メソッドを直接使用
+    const regexPattern = this.rule.createRedundantPattern();
     
-    const regex = new RegExp(regexPattern, 'gs');
+    const regex = new RegExp(regexPattern, RegexConstants.REGEX_FLAGS_GLOBAL_MULTILINE);
     const replacedHtml = this.originalHtml.replace(regex, newString);
     return new ReplaceResult(replacedHtml);
-  }
-
-  /**
-   * パターンを改行コードを無視するように変換する統合メソッド
-   * 正規表現ルールと通常ルールの両方に対応し、改行コードやスペースを無視する変換を行う
-   * @param pattern 元のパターン文字列（正規表現または通常文字列）
-   * @param isRegex パターンが正規表現かどうかのフラグ
-   * @returns 改行コードを無視する正規表現パターン文字列
-   */
-  private createRedundantPattern(pattern: string, isRegex: boolean): string {
-    // 正規表現でない場合は特殊文字をエスケープ
-    const processedPattern = isRegex 
-      ? pattern 
-      : pattern.replace(/[.*+?^${}()|\\[\]]/g, '\\$&');
-    
-    // `<` → `\s*<`、`>` → `>\s*` の変換でHTML要素間の改行コードを無視
-    return processedPattern
-      .replace(/</g, '\\s*<')
-      .replace(/>/g, '>\\s*');
   }
 }
