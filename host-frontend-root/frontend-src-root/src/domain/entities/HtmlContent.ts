@@ -1,4 +1,4 @@
-import { RewriteRule } from './RewriteRule';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 class ReplaceResult {
   constructor(

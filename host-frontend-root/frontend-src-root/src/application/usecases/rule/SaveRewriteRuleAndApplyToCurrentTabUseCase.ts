@@ -1,4 +1,4 @@
-import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
