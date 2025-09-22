@@ -47,17 +47,3 @@
 ### 実装時の必須チェック
 - **追加、変更があったメソッドには必ず単体テストを追加**
 - **PRレビュー前に必ずテストを実行して通ることを確認**
-
-## タスク完了前の強制チェック
-
-**CRITICAL: attempt_completionツールを使用する前に、以下を必ず実行する：**
-
-```bash
-(cd で絶対パスでfavorite-keyword-link-frogに移動) && \
-docker compose exec frontend npm run unused:safe
-```
-
-- エラーまたは未使用コードが検出された場合は修正が必須
-- 修正後、再度チェックを実行
-- すべて正常になってからのみattempt_completion可能
-- **このチェックなしでのタスク完了報告は禁止**
