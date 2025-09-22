@@ -8,6 +8,17 @@ E2Eテスト `replace-inside-dom-with-regex.spec.ts` を通過するための正
 
 また、プロジェクト全体の保守性向上のため、散在していた正規表現パターンとマジックナンバーを統一的に管理するRegex定数クラスを新規作成し、既存コードのリファクタリングを実施しました。
 
+### 補足
+上記実装を行ったが、PRとしては巨大なものになったため、以下のPRに分割してマージ済み
+https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/99
+https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/100
+https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/101
+https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/102
+https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/103
+
+本PRはドキュメントの更新と最終的な修正を含むもの
+
+
 ## 主な変更点
 ### 正規表現機能実装
 - **HtmlContent.ts**: 正規表現パターンの場合、改行コード無視変換をスキップするよう修正
