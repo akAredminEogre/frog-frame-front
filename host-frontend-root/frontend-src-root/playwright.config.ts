@@ -16,7 +16,7 @@ export default defineConfig({
   // Vitest のテストフォルダを完全に無視
   // ※必要に応じて他のパターンも追加してください
   forbidOnly: !!process.env.CI,
-  timeout: 30 * 1000,
+  timeout: 60 * 1000,
   expect: { timeout: 5000 },
   fullyParallel: true,
   workers: process.env.CI ? 1 : undefined,

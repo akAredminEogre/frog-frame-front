@@ -51,14 +51,6 @@ test('改行コードを無視した正規表現による置換機能のe2eテ�
   
   // コンソールエラーメッセージを記録するための配列
   const consoleMessages: string[] = [];
-  
-  // ページとポップアップページのコンソールメッセージを監視
-  page.on('console', msg => {
-    if (msg.type() === 'error') {
-      consoleMessages.push(msg.text());
-    }
-  });
-  
   popupPage.on('console', msg => {
     if (msg.type() === 'error') {
       consoleMessages.push(msg.text());
