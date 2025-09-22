@@ -4,7 +4,6 @@
  */
 export interface PatternProcessingStrategy {
   /**
-   * パターン文字列を処理して改行コード無視パターンに変換する
    * メンバ変数として保持したoldStringを参照して処理を行う
    * @returns 変換されたパターン文字列
    */
