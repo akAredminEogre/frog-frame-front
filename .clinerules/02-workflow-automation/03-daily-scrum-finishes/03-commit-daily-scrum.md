@@ -5,7 +5,7 @@ nnn=(カレントブランチ名からissue番号を取得)
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 ありがとうございました。振り返りも問題ないので下記の内容でコミットしてください。
 - 対象
-  - docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.md
+  - docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-jj.md(jjは任意の定数、複数あり)
     - 存在しなければスキップ
   - docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
   - docs/issue-nnn/PLAN.md
