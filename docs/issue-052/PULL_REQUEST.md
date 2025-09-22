@@ -9,12 +9,32 @@ E2Eテスト `replace-inside-dom-with-regex.spec.ts` を通過するための正
 また、プロジェクト全体の保守性向上のため、散在していた正規表現パターンとマジックナンバーを統一的に管理するRegex定数クラスを新規作成し、既存コードのリファクタリングを実施しました。
 
 ## 主な変更点
+### 正規表現機能実装
 - **HtmlContent.ts**: 正規表現パターンの場合、改行コード無視変換をスキップするよう修正
 - **RegexConstants.ts**: 正規表現パターンと特殊文字エスケープ用定数クラスを新規作成
 - **StringPatternProcessingStrategy.ts**: 特殊文字エスケープ処理をRegexConstants使用に変更
 - **RewriteRule.ts**: HTML要素間改行コード無視処理をRegexConstants使用に変更
 - **RegexConstants.test.ts**: 包括的な単体テスト追加（各定数の値と動作確認）
 - **複数テストファイル**: 新機能に対応する単体テスト追加
+- **e2eテストの改善**: 
+  - 拡張機能が出しているコンソールエラーを検知
+  - タイムアウト時間を変更
+
+### ファイル構造のリファクタリング（daily-scrum-05実施）
+- **RewriteRule関連ファイルの再構成**: 
+  - `RewriteRule.ts` → `RewriteRule/RewriteRule.ts`に移動
+  - 関連するStrategy関連ファイルをRewriteRule/配下に移動
+  - import文の調整（全21ファイル）
+
+### テストファイルの標準準拠（daily-scrum-05実施）
+- **.clinerules/03-testing-standards準拠**: 
+  - テストの配列化とJSDocコメントの追加
+  - `createRedundantPattern.test.ts`の正規表現パターンと文字列パターンでのファイル分割
+  - `HtmlContent.test.ts`の配列ベースのテストへの分割
+  - テストデータ構造の統一（RewriteRuleコンストラクタパラメータに準拠）
+  - assertionTypeの統一（expect(result).toBe(expected)）
+  - パラメータ名の統一（searchPattern → oldString, replacePattern → newString）
+  - 繰り返し使用されるHTML文字列の定数化
 
 ## テスト方法
 [動作確認の手順]
