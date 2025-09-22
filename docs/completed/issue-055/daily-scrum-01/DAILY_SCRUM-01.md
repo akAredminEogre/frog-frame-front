@@ -1,4 +1,4 @@
-# DAILY SCRUM-kk回目
+# DAILY SCRUM-01回目
 # DAILY SCRUM-作業計画
 
 ## 本スクラムの作業予定
@@ -19,9 +19,14 @@
 ## 一言コメント
 <!-- 感情ベースで一言コメントをお願いします。 -->
 
-# DAILY SCRUM-kk作業実績
+# DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+- refactor: registerStorageOnChangedを廃止
+- refactor: HandleStorageChangedUseCaseを廃止
 
 ## 修正したファイル
+- host-frontend-root/frontend-src-root/entrypoints/background.ts
+- host-frontend-root/frontend-src-root/src/application/usecases/rule/HandleStorageChangedUseCase.ts
+- host-frontend-root/frontend-src-root/src/infrastructure/browser/listeners/storage.onChanged.ts
+- host-frontend-root/frontend-src-root/src/infrastructure/di/container.ts
+- host-frontend-root/frontend-src-root/tests/unit/infrastructure/di/container/concrete-class-registration-completeness.test.ts

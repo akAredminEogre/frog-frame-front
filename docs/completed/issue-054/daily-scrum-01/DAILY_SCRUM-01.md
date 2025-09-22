@@ -1,11 +1,13 @@
-# DAILY SCRUM-kk回目
+# DAILY SCRUM-01回目
 # DAILY SCRUM-作業計画
 
 ## 本スクラムの作業予定
-<!-- PLAN.mdの計画の中でどのユーザーストーリーに取り組むか記載してください。 -->
+E2Eテストのリファクタリング作業を実施
 
 ## 修正予定ファイル
-<!-- 修正予定のファイルを記載してください。 -->
+- `host-frontend-root/frontend-src-root/tests/e2e/replace-inside-dom-with-regex.spec.ts`
+- その他のE2Eテストファイル
+- `host-frontend-root/frontend-src-root/playwright.config.ts`
 
 ## 相談事項
 <!-- workflow:01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -19,9 +21,13 @@
 ## 一言コメント
 <!-- 感情ベースで一言コメントをお願いします。 -->
 
-# DAILY SCRUM-kk作業実績
+# DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+E2Eテストのリファクタリング作業を実施し、テストの構造とロジックの改善、可読性と保守性の向上を図った。
 
 ## 修正したファイル
+- `host-frontend-root/frontend-src-root/tests/e2e/save-and-replace.spec.ts`
+- `host-frontend-root/frontend-src-root/tests/e2e/get-origin.spec.ts`
+- `host-frontend-root/frontend-src-root/tests/e2e/ignore-crlf-replace-with-regex.spec.ts`
+- `host-frontend-root/frontend-src-root/tests/e2e/ignore-crlf-replace.spec.ts`
+- `host-frontend-root/frontend-src-root/playwright.config.ts`
