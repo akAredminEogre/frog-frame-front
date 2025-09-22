@@ -37,7 +37,7 @@
     "unused:fix": "npm run knip:fix; npm run tsr:write; npm run lint:fix",
     "unused:remove-broken-tests": "npm run compile 2>&1 | grep 'Cannot find module' | sed -n \"s/.*\\(tests\\/[^(]*\\).*/\\1/p\" | sort -u | xargs -I {} sh -c 'echo \"Removing broken test: {}\" && rm \"{}\"'",
     "unused:complete": "npm run unused:fix && npm run unused:remove-broken-tests && npm run compile",
-    "unused:safe": "npm run unused:complete && npm run test:all && npm run knip:all && echo 'recursive test passed and knip passed, so no unused code remains!' || (echo 'Either tests or knip found issues. Please address them.' && exit 1)"
+    "test-and-lint": "npm run unused:complete && npm run test:all && npm run knip:all && echo 'recursive test passed and knip passed, so no unused code remains!' || (echo 'Either tests or knip found issues. Please address them.' && exit 1)"
   },
   "dependencies": {
     "react": "^18.3.1",
