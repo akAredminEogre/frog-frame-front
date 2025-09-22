@@ -7,7 +7,6 @@ export { container };
 // Register services with tsyringe
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
-import { HandleStorageChangedUseCase } from 'src/application/usecases/rule/HandleStorageChangedUseCase';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { SelectedPageTextService } from 'src/infrastructure/persistance/storage/SelectedPageTextService';
 import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
@@ -23,4 +22,3 @@ container.register<IPopupService>('IPopupService', { useClass: ChromePopupServic
 // Register concrete classes (required for container.resolve() to work)
 container.register(HandleContextMenuReplaceDomElement, { useClass: HandleContextMenuReplaceDomElement });
 container.register(ContextMenuSetupUseCase, { useClass: ContextMenuSetupUseCase });
-container.register(HandleStorageChangedUseCase, { useClass: HandleStorageChangedUseCase });
