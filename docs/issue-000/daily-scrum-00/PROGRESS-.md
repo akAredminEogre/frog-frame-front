@@ -21,4 +21,6 @@ kk=
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
+<!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
+
 ---
