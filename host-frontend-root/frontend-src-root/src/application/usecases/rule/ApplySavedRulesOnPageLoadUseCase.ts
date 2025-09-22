@@ -1,5 +1,5 @@
 import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
-import { RewriteRule } from 'src/domain/entities/RewriteRule';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 export class ApplySavedRulesOnPageLoadUseCase {
   private replacer: HtmlReplacer;
