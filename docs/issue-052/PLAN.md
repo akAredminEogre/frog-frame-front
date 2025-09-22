@@ -94,3 +94,14 @@ private createRedundantPattern(pattern: string, isRegex: boolean): string {
   - `replace-inside-dom-with-regex.spec.ts`の全ての検証項目の通過 ✓
 - [x] redundantPatternのリファクタリング、適切なdomainクラスへの移動
 - [x] regex関係の定数クラス作成
+- [x] PRレビュー指摘事項
+  - [x] favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.tsは、favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule/RewriteRule.tsに移動
+  - [x] 下記のファイルも、favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule/に移動
+    - PatternProcessingStrategy.ts
+    - PatternProcessingStrategyFactory.ts
+    - RegexPatternProcessingStrategy.ts
+    - StringPatternProcessingStrategy.ts
+  - [x] 以下のファイルを.clinerules/03-testing-standardsに準拠させる
+    - [x] host-frontend-root/frontend-src-root/tests/unit/domain/entities/RewriteRule/createRedundantPattern.test.ts
+    - [x] host-frontend-root/frontend-src-root/tests/unit/HtmlContent.test.ts
+    - [x] host-frontend-root/frontend-src-root/tests/unit/domain/factories/PatternProcessingStrategyFactory.test.ts
