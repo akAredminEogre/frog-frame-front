@@ -45,7 +45,7 @@
 1. **未使用コードチェックの実行**
    ```bash
    (cd で絶対パスでfavorite-keyword-link-frogに移動) && \
-   docker compose exec frontend npm run test-and-lint
+   docker compose exec frontend npm run unused:safe
    ```
 
 2. **チェック結果の確認**

@@ -51,7 +51,7 @@
 
 ```bash
 (cd で絶対パスでfavorite-keyword-link-frogに移動) && \
-docker compose exec frontend npm run test-and-lint
+docker compose exec frontend npm run unused:safe
 ```
 
 - エラーまたは未使用コードが検出された場合は修正が必須
