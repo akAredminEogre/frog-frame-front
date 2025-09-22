@@ -1,6 +1,7 @@
 # ISSUE 単位
 ## ISSUE開始時
 favorite-keyword-link-frog/.clinerules/02-workflow-automation/01-issue-launches/01-create-branch.mdに移管
+workflow:create-branch
 
 - ISSUE.mdの `# 概要` 、 `# 受け入れ条件` 、 `# タスク`(任意) を記載する
 
@@ -9,7 +10,8 @@ favorite-keyword-link-frog/.clinerules/02-workflow-automation/01-issue-launches/
 nnn=(カレントブランチ名からissue番号を取得)
 issue-nnnを開始します。
 まず、下記の内容でコミットしてください。
-- 対象：変更中のファイルで、`WITH_CLINE.md`、`issues.md`を除くすべてのファイル
+- 対象
+  - docs/issue-nnn/ISSUE.md
 - コミットメッセージ
   - docs: issue-nnnの開始時のドキュメント
 次に、docs/issue-nnn/ISSUE.mdを参照して実装計画を立てPLAN.mdを作成してください。
@@ -26,38 +28,22 @@ PLAN.mdのレビューが完了しました。
 
 # DAILY SCRUM単位
 ## DAILY SCRUM 開始時の指示
-```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
-kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナンバーの最大数+1)
-スクラムkk回目の作業を計画を立ててもらいます。
-- 下記コマンドを実行
-```bash
-cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
-mkdir -p docs/issue-nnn/daily-scrum-kk/
-```
-
-- docs/issue-nnnのドキュメントを読み込み、スクラムkk回目の作業を計画を立てデイリースクラムを実施。
-- その内容に基づき、favorite-keyword-link-frog/docs/issue-000/daily-scrum-00/DAILY_SCRUM-.mdのフォーマットに従って、docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.mdを作成してください。
-- `## 相談事項` のセクションに記入があった場合は、その旨をチャットにも記入してください
-```
-```
+workflow:create-daily-scrumに移管
 
 ## DAILY_SCRUM-kk.md作成後の指示
 
 
 ```cline-instructions
+nnn=(カレントブランチ名からissue番号を取得)
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 デイリースクラムの計画をレビューしました。
 まず、下記の内容でコミットしてください。
-- 対象：変更中のファイルで、`WITH_CLINE.md`、`issues.md`を除くすべてのファイル
+- 対象
+  - docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
 - コミットメッセージ
   - docs: デイリースクラムkk回目開始時のドキュメント
-```
 
-```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
-kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
-DAILY_SCRUM-kk.mdの作業を開始してください。
+次に、DAILY_SCRUM-kk.mdの作業を開始してください。
 実装が完了したら `favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-00/PROGRESS-.md` のフォーマットに従って、favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.mdを追記してコードレビューを依頼してください
 ```
 
@@ -105,8 +91,8 @@ docs/issue-nnn/ 以下のドキュメント群から変更されたファイル�
 ## PR作成時の指示
 
 ### PRテンプレートの作成
-favorite-keyword-link-frog/.clinerules/02-workflow-automation/04-pull-request/01-pr-md.mdに移管
-workflow:pr-md
+favorite-keyword-link-frog/.clinerules/02-workflow-automation/04-pull-request/01-create-pr-md.mdに移管
+workflow:create-pr-md
 
 ### PR作成
 
