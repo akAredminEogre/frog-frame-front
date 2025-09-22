@@ -29,4 +29,5 @@
 - [ ] CurrentTabのテストコード
 - [ ] HandleContextMenuReplaceDomElemenのテストコード
 - [ ] registerTabsOnUpdatedの'complete'ハードコード解消
+- [ ] 不正な正規表現入力のエラーハンドリング
 
