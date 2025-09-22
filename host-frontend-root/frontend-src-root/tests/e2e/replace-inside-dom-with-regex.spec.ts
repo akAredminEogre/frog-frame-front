@@ -4,11 +4,6 @@ test('正規表現で取得した値をタグ内に埋め込み', async ({ page,
   // コンソールエラーメッセージを記録するための配列（早期設定）
   const extensionErrors: string[] = [];
 
-  // プロダクションコードのconsole.logをキャプチャして表示
-  // page.on('console', msg => {
-  //   console.log(`[PAGE] ${msg.type()}: ${msg.text()}`);
-  // });
-
   popupPage.on('console', msg => {
     console.log(`[POPUP] ${msg.type()}: ${msg.text()}`);
     if (msg.type() === 'error') {
