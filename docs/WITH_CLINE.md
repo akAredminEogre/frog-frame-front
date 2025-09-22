@@ -31,39 +31,8 @@ PLAN.mdのレビューが完了しました。
 workflow:create-daily-scrumに移管
 
 ## DAILY_SCRUM-kk.md作成後の指示
+workflow:see-and-commit-review-comment-then-code-againに移管
 
-
-```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
-kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
-デイリースクラムの計画をレビューしました。
-まず、下記の内容でコミットしてください。
-- 対象
-  - docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
-- コミットメッセージ
-  - docs: デイリースクラムkk回目開始時のドキュメント
-
-次に、DAILY_SCRUM-kk.mdの作業を開始してください。
-実装が完了したら `favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-00/PROGRESS-.md` のフォーマットに従って、favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.mdを追記してコードレビューを依頼してください
-```
-
-- コードレビューする
-- ドキュメントをコミット
-  - コミットメッセージ
-    - docs: スクラムkk ii回目のコードレビュー
-
-```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
-kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
-ii=01
-favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.md
-に、
-### スクラムkk-(ii回目) のレビューコメント
-としてレビューコメントを記載しました。
-
-その内容に沿って、修正を行ってください。
-実装が完了したら `favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-00/PROGRESS-.md` のフォーマットに従って、favorite-keyword-link-frog/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.mdに、ii=ii+1として、進捗を追記してコードレビューを依頼してください
-```
 
 ## DAILY_SCRUM.md実装終了後
 
