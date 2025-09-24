@@ -13,12 +13,16 @@ import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopup
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 import { IPopupService } from 'src/application/ports/IPopupService';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository';
 
 // Register implementations for interfaces (抽象化のため)
 container.register<IChromeTabsService>('IChromeTabsService', { useClass: ChromeTabsService });
 container.register<ISelectedPageTextService>('ISelectedPageTextService', { useClass: SelectedPageTextService });
 container.register<IPopupService>('IPopupService', { useClass: ChromePopupService });
+container.register<IRewriteRuleRepository>('IRewriteRuleRepository', { useClass: ChromeStorageRewriteRuleRepository });
 
 // Register concrete classes (required for container.resolve() to work)
 container.register(HandleContextMenuReplaceDomElement, { useClass: HandleContextMenuReplaceDomElement });
 container.register(ContextMenuSetupUseCase, { useClass: ContextMenuSetupUseCase });
+container.register(ChromeStorageRewriteRuleRepository, { useClass: ChromeStorageRewriteRuleRepository });
