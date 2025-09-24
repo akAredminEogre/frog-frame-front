@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import { getActiveTabOrigin } from '../../src/domain/entities/tabUtils';
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
-import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository';
+import { container } from 'src/infrastructure/di/container';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 
@@ -34,8 +35,8 @@ function App() {
 
   /** 保存ボタンを押したとき、UseCaseを通して保存・適用処理を実行 */
   const handleSave = async () => {
-    // 依存性を組み立て
-    const repository = new ChromeStorageRewriteRuleRepository();
+    // 依存性を組み立て（DIコンテナから取得）
+    const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
     const currentTabService = new ChromeCurrentTabService();
     const chromeRuntimeService = new ChromeRuntimeService();
     const saveUseCase = new SaveRewriteRuleAndApplyToCurrentTabUseCase(
