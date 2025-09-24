@@ -38,6 +38,10 @@ describe('DI Container - 完全自動化インターフェース登録確認テ�
     {
       interface: 'IPopupService',
       implementationName: 'ChromePopupService'
+    },
+    {
+      interface: 'IRewriteRuleRepository',
+      implementationName: 'ChromeStorageRewriteRuleRepository'
     }
   ];
 

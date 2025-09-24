@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 import 'src/infrastructure/di/container';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
+import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository';
 
 /**
  * DIコンテナの完全自動化具体クラス登録確認テスト
@@ -36,6 +37,10 @@ describe('DI Container - 完全自動化具体クラス登録確認テスト', (
     {
       class: ContextMenuSetupUseCase,
       className: 'ContextMenuSetupUseCase'  
+    },
+    {
+      class: ChromeStorageRewriteRuleRepository,
+      className: 'ChromeStorageRewriteRuleRepository'
     }
   ];
 
