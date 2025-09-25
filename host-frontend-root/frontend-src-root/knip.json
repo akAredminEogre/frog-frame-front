@@ -21,11 +21,13 @@
   "includeEntryExports": true,
   "entry": [
     "entrypoints/**/*.{ts,tsx}!",
+    "src/entrypoints/**/*.{ts,tsx}!",
     "wxt.config.ts"
   ],
   "project": [
     "src/**/*.{ts,tsx}!",
     "entrypoints/**/*.{ts,tsx}!",
+    "src/entrypoints/**/*.{ts,tsx}!",
     "wxt.config.ts"
   ]
 }

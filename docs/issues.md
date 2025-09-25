@@ -18,11 +18,10 @@
 - [ ] '@'記法をsrcに変更、設定廃止
 - [ ] RewriteRuleのTodo解消
 - [ ] createRedundantPatternはRewriteRuleに取り込む
-- [ ] HtmlReplacerのメンバ変数化
-- [ ] application層からinfrastructureの実装をしているのを解消
-- [ ] importをアルファベット順にソートするnpm
-- [ ] createMessageRouterの堅牢化
 - [ ] entrypointsをsrc/entrypointsに移動
+
+
+## phase02
 - [ ] `container.ts`への`SaveRewriteRuleAndApplyToCurrentTabUseCase`登録
 - [ ] UseCaseレベルでのテスト作成
 - [ ] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
@@ -31,4 +30,7 @@
 - [ ] registerTabsOnUpdatedの'complete'ハードコード解消
 - [ ] 不正な正規表現入力のエラーハンドリング
 - [ ] rewriteRules.toArray().forEachの書き方をファーストクラスコレクションに移管
-
+- [ ] HtmlReplacerのメンバ変数化
+- [ ] application層からinfrastructureの実装をしているのを解消
+- [ ] importをアルファベット順にソートするnpm
+- [ ] createMessageRouterの堅牢化
