@@ -23,6 +23,37 @@ export class RewriteRule {
   }
 
   /**
+   * プレーンオブジェクトからRewriteRuleインスタンスを生成するファクトリーメソッド
+   * @param ruleData プレーンオブジェクトのRewriteRuleデータ
+   * @returns RewriteRuleインスタンス
+   * @throws {Error} ruleDataがnull、undefined、非オブジェクト、または空オブジェクトの場合
+   */
+  static fromPlainObject(ruleData: any): RewriteRule {
+    // null/undefinedチェック
+    if (ruleData == null) {
+      throw new Error('ruleData cannot be null or undefined');
+    }
+
+    // オブジェクトかどうかのチェック（配列は除く）
+    if (typeof ruleData !== 'object' || Array.isArray(ruleData)) {
+      throw new Error('ruleData must be an object');
+    }
+
+    // 空オブジェクトチェック
+    if (Object.keys(ruleData).length === 0) {
+      throw new Error('ruleData cannot be an empty object');
+    }
+
+    return new RewriteRule(
+      ruleData.id,
+      ruleData.oldString,
+      ruleData.newString,
+      ruleData.urlPattern,
+      ruleData.isRegex
+    );
+  }
+
+  /**
    * パターンを改行コードを無視するように変換する統合メソッド
    * Strategyパターンを使用してif句を除去し、将来のフラグ拡張に対応
    * @returns 改行コードを無視する正規表現パターン文字列
