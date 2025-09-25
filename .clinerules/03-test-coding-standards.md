@@ -134,28 +134,7 @@ tests/unit/infrastructure/[category]/[service-name]/
 ### 2. 外部依存システムのテスト
 
 #### 2.1 Chrome拡張機能API
-Chrome拡張機能では以下の未定義ケースを必須でテスト：
-- `chrome` 自体が未定義
-- `chrome.storage` が未定義  
-- `chrome.storage.local` が未定義
-
-```typescript
-// Chrome Storage APIのモック設定
-const mockChromeStorageLocal = {
-  get: vi.fn(),
-  set: vi.fn()
-};
-
-// グローバルなchromeオブジェクトをモック
-Object.defineProperty(globalThis, 'chrome', {
-  value: {
-    storage: {
-      local: mockChromeStorageLocal
-    }
-  },
-  writable: true
-});
-```
+一旦この考慮は対象外とする
 
 #### 2.2 その他の外部API
 - ブラウザAPI（DOM、fetch、localStorage等）
