@@ -30,4 +30,5 @@
 - [ ] HandleContextMenuReplaceDomElemenのテストコード
 - [ ] registerTabsOnUpdatedの'complete'ハードコード解消
 - [ ] 不正な正規表現入力のエラーハンドリング
+- [ ] rewriteRules.toArray().forEachの書き方をファーストクラスコレクションに移管
 
