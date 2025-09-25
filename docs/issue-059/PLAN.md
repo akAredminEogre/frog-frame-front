@@ -174,7 +174,7 @@ export class ChromeStorageRewriteRuleRepository implements IRewriteRuleRepositor
 - 複数タブでの同時アクセス時の競合状態
 
 ## 残タスク
-- [ ] ChromeStorageRewriteRuleRepositoryのユニットテスト追加 (完了)
+- [x] ChromeStorageRewriteRuleRepositoryのユニットテスト追加 (完了 - スクラム02)
 - [x] RewriteRule.fromPlainObjectメソッドのテスト実装 (完了 - 14テスト成功)
 - [x] バリデーション機能の追加とテスト修正 (完了 - .toThrow()対応)
 - [x] テストリファクタリング (完了 - 配列形式への変更)
