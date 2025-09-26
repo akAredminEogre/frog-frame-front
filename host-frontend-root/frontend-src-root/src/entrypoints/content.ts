@@ -1,4 +1,4 @@
-import { matchUrl } from '../src/utils/matchUrl';
+import { matchUrl } from 'src/utils/matchUrl';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';

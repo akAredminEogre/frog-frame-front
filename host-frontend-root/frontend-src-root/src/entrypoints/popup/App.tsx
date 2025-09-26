@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
-import { getActiveTabOrigin } from '../../src/domain/entities/tabUtils';
+import { getActiveTabOrigin } from 'src/domain/entities/tabUtils';
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { container } from 'src/infrastructure/di/container';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
