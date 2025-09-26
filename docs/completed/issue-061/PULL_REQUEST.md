@@ -64,4 +64,8 @@ host-frontend-root/frontend-src-root/wxt.config.ts
 ## 本スコープの対象外となったタスク
 特になし。計画されたリファクタリング作業は全て完了。
 
+## プルリクエスト情報
+- **プルリクエスト番号**: #106
+- **URL**: https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/106
+
 <!-- ユーザーが使うコマンド workflow:submit-pull-request -->
