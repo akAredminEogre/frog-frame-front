@@ -10,8 +10,8 @@
     "vitest.config.ts",
     "eslint.config.js",
     "playwright.config.ts",
-    "entrypoints/background.ts",
-    "entrypoints/content.ts",
+    "src/entrypoints/background.ts",
+    "src/entrypoints/content.ts",
     "wxt.config.ts"
   ],
   "ignoreDependencies": [
@@ -20,14 +20,11 @@
   "ignoreExportsUsedInFile": false,
   "includeEntryExports": true,
   "entry": [
-    "entrypoints/**/*.{ts,tsx}!",
     "src/entrypoints/**/*.{ts,tsx}!",
     "wxt.config.ts"
   ],
   "project": [
     "src/**/*.{ts,tsx}!",
-    "entrypoints/**/*.{ts,tsx}!",
-    "src/entrypoints/**/*.{ts,tsx}!",
     "wxt.config.ts"
   ]
 }
