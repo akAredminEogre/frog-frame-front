@@ -10,7 +10,7 @@
         "./src/*"
       ],
       "entrypoints/*": [
-        "./entrypoints/*"
+        "./src/entrypoints/*"
       ]
     },
     "allowImportingTsExtensions": true,
