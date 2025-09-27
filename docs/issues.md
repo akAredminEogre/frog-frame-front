@@ -1,24 +1,5 @@
-- [ ] バリデーション
-- [ ] クエリが含まれていると、最初だけうまくいかない
-- [ ] applyRulesのリファクタリング
-- [ ] 選択されたテキストが複数のHTML要素にまたがる場合の処理方針について
-- [ ] 右クリック入力のロジック分離
-- [ ] issue-012: 右クリック入力のe2eテスト
-- [ ] ElementSelectorの返り値をValueObjectに変更
-- [ ] no-consoleも無視しない
-- [ ] SelectionServiceのテストケース追加
-  - [ ] hasValidSelectionのテストと、ElementSelector.test.tsの重複削除
-- [ ] mockSelectionServiceが変更可能なのは大丈夫か確認
-- [ ] ElementSelectorの詳細テスト追加
-- [ ] --project tsconfig.tsr.json の統一
-- [ ] ElementSelector.test.tsのテストケース分割
-- [ ] isInvalidAncestor、getStartElementの切り出し
-- [ ] isMultiElementSelection、findOptimalElementのif文整理
-- [ ] clineがデフォルトで確認する指示書
-- [ ] '@'記法をsrcに変更、設定廃止
-- [ ] RewriteRuleのTodo解消
-- [ ] createRedundantPatternはRewriteRuleに取り込む
-- [ ] entrypointsをsrc/entrypointsに移動
+- [ ] 書き換えルールの詳細編集機能
+- [ ] 書き換えルールの削除機能
 
 
 ## phase02
@@ -34,3 +15,19 @@
 - [ ] application層からinfrastructureの実装をしているのを解消
 - [ ] importをアルファベット順にソートするnpm
 - [ ] createMessageRouterの堅牢化
+- [ ] '@'記法をsrcに変更、設定廃止
+- [ ] issue-012: 右クリック入力のe2eテスト
+- [ ] ElementSelectorの返り値をValueObjectに変更
+- [ ] no-consoleも無視しない
+- [ ] SelectionServiceのテストケース追加
+  - [ ] hasValidSelectionのテストと、ElementSelector.test.tsの重複削除
+- [ ] mockSelectionServiceが変更可能なのは大丈夫か確認
+- [ ] バリデーション
+- [ ] 選択されたテキストが複数のHTML要素にまたがる場合の処理方針について
+- [ ] 右クリック入力のロジック分離
+
+- [ ] ElementSelectorの詳細テスト追加
+- [ ] --project tsconfig.tsr.json の統一
+- [ ] ElementSelector.test.tsのテストケース分割
+- [ ] isInvalidAncestor、getStartElementの切り出し
+- [ ] isMultiElementSelection、findOptimalElementのif文整理
