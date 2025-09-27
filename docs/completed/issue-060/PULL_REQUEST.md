@@ -41,4 +41,7 @@ Chrome拡張機能のオプションページにルール一覧表示機能を�
 ## 本スコープの対象外となったタスク
 
 
+## プルリクエストURL
+https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/108
+
 <!-- ユーザーが使うコマンド workflow:submit-pull-request -->
