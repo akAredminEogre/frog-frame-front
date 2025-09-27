@@ -7,6 +7,7 @@ export const test = base.extend<{
   extensionId: string;
   popupPage: Page;
   page: Page;
+  rulesPage: Page;
 }>({
   context: async ({}, use) => {
     const pathToExtension = path.join(process.cwd(), '.output/chrome-mv3-dev');
@@ -36,6 +37,11 @@ export const test = base.extend<{
   page: async ({ context }, use) => {
     const page = await context.newPage();
     await use(page);
+  },
+  rulesPage: async ({ context, extensionId }, use) => {
+    const rulesPage = await context.newPage();
+    await rulesPage.goto(`chrome-extension://${extensionId}/rules.html`);
+    await use(rulesPage);
   },
 });
 
