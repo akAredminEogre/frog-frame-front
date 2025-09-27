@@ -1,21 +1,26 @@
 workflow:start-coding-according-to-daily-scrum
 
 ```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
-kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
-デイリースクラムの計画をレビューしました。
-まず、下記の内容でコミットしてください。
-- 対象
-  - docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
-- コミットメッセージ
-  - docs: デイリースクラムkk回目開始時のドキュメント
+- 下記の内容で採番を行う
+  - nnn=(カレントブランチ名からissue番号を取得)
+  - kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 
-次に、DAILY_SCRUM-kk.mdの作業を開始してください。
-コーディングの際には
-workflow:code-according-to-the-rules
-を参照しながら進めてください。
+- デイリースクラム開始時ドキュメントのコミット
+  - 対象：docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
+  - コミットメッセージ
+    - docs: デイリースクラムkk回目開始時のドキュメント
+    - 他のファイルの無許可コミットを禁止する
 
-実装が完了したら、コミットはしないで、下記の方法で進捗をまとめてください
-workflow:record-progress
+- DAILY_SCRUM-kk.mdに応じたコーディング修正
+  - 参照すべきドキュメント
+    - docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
+  - コーディングにおけるルール、規約
+    - workflow:code-according-to-the-rules
+    - に必ず準拠すること
+
+- 実装完了後の処理
+  - 修正したファイルでも、許可なくコミットしないこと
+  - 下記のワークフローに従って進捗をまとめてください
+    - workflow:record-progress
 
 ```

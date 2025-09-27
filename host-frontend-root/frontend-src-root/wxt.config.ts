@@ -11,7 +11,8 @@ export default defineConfig({
   srcDir: 'src',
   manifest: {
     permissions: ['contextMenus', 'storage', 'tabs', 'scripting'],
-    host_permissions: ['<all_urls>']
+    host_permissions: ['<all_urls>'],
+    options_page: 'rules.html'
   },
   dev: {
     server: {
