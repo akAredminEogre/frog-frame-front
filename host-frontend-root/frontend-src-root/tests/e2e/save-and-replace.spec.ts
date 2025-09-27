@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures';
 
-test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, popupPage }) => {
+test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, popupPage, rulesPage }) => {
   // 1. Arrange: テスト対象ページに移動
   await page.goto('https://agilemanifesto.org/iso/ja/manifesto.html');
   await page.bringToFront();
@@ -53,6 +53,41 @@ test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, po
     }
   });
   
-  // 9. Assert: コンソールエラーが発生していないことを確認
+  // 9. 追加テスト: fixtureのrulesPageで保存されたルールを確認
+  await rulesPage.reload();
+  
+  // 10. Assert: ルールページが正しく表示される
+  await expect(rulesPage.locator('body')).toBeVisible();
+  
+  // 11. Assert: 保存されたルールが表示されている（空の状態ではない）
+  const emptyState = rulesPage.locator('.empty-state');
+  await expect(emptyState).not.toBeVisible();
+  
+  // 12. Assert: ルール一覧の内容確認
+  const rulesTableContainer = rulesPage.locator('.rules-table-container');
+  await expect(rulesTableContainer).toBeVisible();
+  
+  // 13. Assert: ルールテーブルが表示されている
+  const rulesTable = rulesPage.locator('.rules-table');
+  await expect(rulesTable).toBeVisible();
+  
+  // 14. Assert: 保存したURLパターンが表示されている
+  await expect(rulesPage.locator('.rule-url-pattern:has-text("https://agilemanifesto.org")')).toBeVisible();
+  
+  // 15. Assert: 保存した置換前文字列が表示されている
+  await expect(rulesPage.locator('.rule-old-string:has-text("<h1>(.+?)</h1>")')).toBeVisible();
+  
+  // 16. Assert: 保存した置換後文字列が表示されている
+  await expect(rulesPage.locator('.rule-new-string:has-text("<h2>$1</h2>")')).toBeVisible();
+  
+  // 17. Assert: 正規表現使用の表示確認（✓マークで表示される）
+  await expect(rulesPage.locator('.regex-badge:has-text("✓")')).toBeVisible();
+  
+  // 18. Assert: フッターのルール数表示が更新されている  
+  await expect(rulesPage.locator('text=合計 1 件のルールが保存されています')).toBeVisible();
+  
+  // 19. Assert: コンソールエラーが発生していないことを確認
   expect(consoleMessages).toHaveLength(0);
+  
+  console.log('保存後のrules一覧表示確認も完了: 保存されたルールが正しく反映されています');
 });
