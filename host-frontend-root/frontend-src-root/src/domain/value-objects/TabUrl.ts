@@ -6,24 +6,18 @@ export class TabUrl {
       throw new Error('Tab URL cannot be empty');
     }
     
-    try {
-      const url = new URL(value);
-      // HTTPとHTTPSのみ許可
-      const allowedProtocols = ['http:', 'https:'];
-      if (!allowedProtocols.includes(url.protocol)) {
-        throw new Error('Tab URL must use http:// or https:// protocol');
-      }
-    } catch (error) {
-      if (error instanceof TypeError) {
-        throw new Error('Invalid URL format');
-      }
-      throw error;
+    const url = new URL(value);
+    
+    // HTTPとHTTPSのみ許可
+    const allowedProtocols = ['http:', 'https:'];
+    if (!allowedProtocols.includes(url.protocol)) {
+      throw new Error('Tab URL must use http:// or https:// protocol');
     }
     
     this._value = value;
   }
 
-  getValue(): string {
+  get value(): string {
     return this._value;
   }
 }

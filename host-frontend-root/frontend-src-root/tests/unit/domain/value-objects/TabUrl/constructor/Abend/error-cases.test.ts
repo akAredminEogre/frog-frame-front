@@ -22,6 +22,6 @@ describe('TabUrl constructor - 異常系', () => {
   test('プロトコルなしのURLの場合はエラーを投げる', () => {
     expect(() => {
       new TabUrl('example.com');
-    }).toThrow('Invalid URL format');
+    }).toThrow('Invalid URL');
   });
 });
