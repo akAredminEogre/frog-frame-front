@@ -7,12 +7,12 @@ import { describe, it, expect } from 'vitest';
  */
 describe('CurrentTab.tabId - 正常系', () => {
   it('tabIdプロパティで正しい値を取得できる', () => {
-    const currentTab = new CurrentTab(100);
+    const currentTab = new CurrentTab(100, 'https://example.com');
     expect(currentTab.getTabId().value).toBe(100);
   });
 
   it('インスタンス作成後に値が変わらない', () => {
-    const currentTab = new CurrentTab(42);
+    const currentTab = new CurrentTab(42, 'https://test.com');
     const firstAccess = currentTab.getTabId().value;
     const secondAccess = currentTab.getTabId().value;
     
@@ -22,8 +22,8 @@ describe('CurrentTab.tabId - 正常系', () => {
   });
 
   it('異なるインスタンスは独立した値を持つ', () => {
-    const currentTab1 = new CurrentTab(1);
-    const currentTab2 = new CurrentTab(2);
+    const currentTab1 = new CurrentTab(1, 'https://example1.com');
+    const currentTab2 = new CurrentTab(2, 'https://example2.com');
     
     expect(currentTab1.getTabId().value).toBe(1);
     expect(currentTab2.getTabId().value).toBe(2);

@@ -19,7 +19,7 @@ const tabIdValidationFailureCases = [
 describe('CurrentTab.constructor - TabIdバリデーション失敗', () => {
   tabIdValidationFailureCases.forEach(({ description, input }) => {
     it(`${description} (入力: ${input})`, () => {
-      expect(() => new CurrentTab(input as any)).toThrow('Failed to create TabId:');
+      expect(() => new CurrentTab(input as any, 'https://example.com')).toThrow('Failed to create CurrentTab:');
     });
   });
 });
