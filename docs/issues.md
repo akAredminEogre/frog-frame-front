@@ -5,6 +5,7 @@
 ## phase02
 - [ ] `container.ts`への`SaveRewriteRuleAndApplyToCurrentTabUseCase`登録
 - [ ] UseCaseレベルでのテスト作成
+- [ ] makeコマンド
 - [ ] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 - [ ] CurrentTabのテストコード
 - [ ] HandleContextMenuReplaceDomElemenのテストコード
