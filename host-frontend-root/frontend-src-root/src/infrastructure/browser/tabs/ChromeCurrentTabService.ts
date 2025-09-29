@@ -1,5 +1,6 @@
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
+import { TabId } from 'src/domain/value-objects/TabId';
 
 export class ChromeCurrentTabService implements ICurrentTabService {
   async getCurrentTab(): Promise<CurrentTab> {
@@ -15,19 +16,35 @@ export class ChromeCurrentTabService implements ICurrentTabService {
   }
 
   private handleTabQueryResult(tabs: chrome.tabs.Tab[]): CurrentTab {
-    if (chrome.runtime.lastError) {
-      console.error('Failed to get current tab:', chrome.runtime.lastError);
-      throw new Error(`Chrome runtime error: ${chrome.runtime.lastError.message}`);
-    }
-
     const tab = tabs[0];
     if (!tab) {
       throw new Error('No active tab found');
     }
 
-    const tabId = tab.id;
+    return this.createCurrentTabFromTab(tab);
+  }
 
-    console.log(`[ChromeCurrentTabService] Creating CurrentTab with tabId: ${tabId}`);
-    return new CurrentTab(tabId!);
+  async getTabById(tabId: TabId): Promise<CurrentTab> {
+    return new Promise((resolve, reject) => {
+      chrome.tabs.get(tabId.value, (tab: chrome.tabs.Tab) => {
+        try {
+          resolve(this.createCurrentTabFromTab(tab));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+
+  private createCurrentTabFromTab(tab: chrome.tabs.Tab): CurrentTab {
+    const tabId = tab.id;
+    const tabUrl = tab.url;
+
+    if (!tabUrl) {
+      throw new Error('No active tab found');
+    }
+
+    console.log(`[ChromeCurrentTabService] Creating CurrentTab with tabId: ${tabId}, url: ${tabUrl}`);
+    return new CurrentTab(tabId!, tabUrl);
   }
 }
