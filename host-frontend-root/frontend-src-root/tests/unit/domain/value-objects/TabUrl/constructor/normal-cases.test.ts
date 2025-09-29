@@ -9,12 +9,12 @@ describe('TabUrl constructor - 正常系', () => {
   test('正常なHTTPSのURLで作成できる', () => {
     const url = 'https://example.com';
     const tabUrl = new TabUrl(url);
-    expect(tabUrl.getValue()).toBe(url);
+    expect(tabUrl.value).toBe(url);
   });
 
   test('正常なHTTPのURLで作成できる', () => {
     const url = 'http://example.com';
     const tabUrl = new TabUrl(url);
-    expect(tabUrl.getValue()).toBe(url);
+    expect(tabUrl.value).toBe(url);
   });
 });
