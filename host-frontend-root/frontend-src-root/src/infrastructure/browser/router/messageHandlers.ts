@@ -2,7 +2,7 @@ import { container } from 'src/infrastructure/di/container';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 
 type Message =
-  | { type: 'applyAllRules'; tabId: number }
+  | { type: 'applyAllRules'; tabId: number; tabUrl: string }
   | { type: 'ping' };
 
 /**
@@ -12,11 +12,14 @@ type Message =
 export const handlers = {
   applyAllRules: async (msg: Extract<Message, { type: 'applyAllRules' }>) => {
     try {
-      const { tabId } = msg;
+      const { tabId, tabUrl } = msg;
 
       // Infrastructure層のサービスを使用してcontent scriptにメッセージを転送
       const chromeTabsService = container.resolve(ChromeTabsService);
-      const response = await chromeTabsService.sendMessage(tabId, { type: 'applyAllRules' });
+      const response = await chromeTabsService.sendMessage(tabId, { 
+        type: 'applyAllRules',
+        tabUrl 
+      });
       
       return { success: true, response };
 

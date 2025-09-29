@@ -1,12 +1,23 @@
+import { container } from 'src/infrastructure/di/container';
+import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
+import { TabId } from 'src/domain/value-objects/TabId';
 
- 
 export function registerTabsOnUpdated() {
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
     if (changeInfo.status === 'complete') {
-      // content.tsにメッセージを送信して、全ルールの適用を依頼する
-      // 一旦Message Handlersで受信される
-      chrome.tabs.sendMessage(tabId, { type: 'applyAllRules' })
-        .catch(() => { /* コンテンツスクリプト未注入時のエラーは無視 */ });
+      try {
+        // currentTabServiceを使用して特定のタブ情報を取得
+        const currentTabService = container.resolve(ChromeCurrentTabService);
+        const currentTab = await currentTabService.getTabById(new TabId(tabId));
+        
+        chrome.tabs.sendMessage(tabId, { 
+          type: 'applyAllRules', 
+          tabUrl: currentTab.getTabUrl().value
+        }).catch(() => { /* コンテンツスクリプト未注入時のエラーは無視 */ });
+      } catch (error) {
+        // タブ情報取得に失敗した場合は無視（タブが存在しない、URLが無効など）
+        console.debug('[tabs.onUpdated] Failed to get tab info:', error);
+      }
     }
   });
 }
