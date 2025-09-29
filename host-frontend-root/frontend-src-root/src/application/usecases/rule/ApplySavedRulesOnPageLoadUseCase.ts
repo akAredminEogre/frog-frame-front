@@ -13,7 +13,7 @@ export class ApplySavedRulesOnPageLoadUseCase {
   /**
    * ストレージに保存されている全てのルールを取得して適用する
    */
-  async applyAllRules(targetElement: Element = document.body): Promise<void> {
+  async applyAllRules(targetElement: Element = document.body, currentUrl: string): Promise<void> {
     try {
       // リポジトリを使用してルール集合を取得
       const rewriteRules = await this.repository.getAll();
@@ -22,7 +22,6 @@ export class ApplySavedRulesOnPageLoadUseCase {
       rewriteRules.toArray().forEach((rule) => {
         // URLパターンをチェック
         if (rule.urlPattern) {
-          const currentUrl = window.location.href;
           if (!currentUrl.startsWith(rule.urlPattern)) {
             return;
           }
