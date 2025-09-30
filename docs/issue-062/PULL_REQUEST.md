@@ -15,7 +15,13 @@ TabUrlクラスとTabIdクラス間のAPI不整合を解消し、ChromeCurrentTa
 
 ### 2. ChromeCurrentTabServiceの重複コード削除
 - WET（重複コード）を共通メソッドに分離してDRY原則に準拠
-- コードの保守性と可読性を向上#
+- コードの保守性と可読性を向上
+
+### 3. sendApplyRewriteRuleMessageメソッドのシグネチャ統一
+- `sendApplyRewriteRuleMessage(tabId: TabId, tabUrl: TabUrl)`を`sendApplyRewriteRuleMessage(currentTab: CurrentTab)`に変更
+- CurrentTabオブジェクトを単一パラメータとして受け取る形に統一
+- インターフェース（IChromeRuntimeService）、実装（ChromeRuntimeService）、テスト、使用箇所すべてを一貫性を保って更新
+- メソッド内で`currentTab.getTabId()`と`currentTab.getTabUrl()`を使用して必要な値を取得
 
 ## テスト方法
 [動作確認の手順]
