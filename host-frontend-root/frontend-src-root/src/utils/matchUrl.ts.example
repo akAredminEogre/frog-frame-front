@@ -1,4 +1,5 @@
 export const matchUrl = [
   'https://qiita.com/akAredminEogre/items/73b97b12ee5db94552af',
   'https://agilemanifesto.org/*',
+  'https://www01.hanmoto.com/bd/isbn/9784065396209'
 ];
