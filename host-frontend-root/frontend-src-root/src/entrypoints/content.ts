@@ -26,7 +26,7 @@ export default defineContentScript({
       }
       // 2) backgroundからの全ルール適用メッセージ
       else if (request.type === 'applyAllRules') {
-        applySavedRulesOnPageLoadUseCase.applyAllRules().then(() => {
+        applySavedRulesOnPageLoadUseCase.applyAllRules(document.body, request.tabUrl).then(() => {
           sendResponse({ success: true });
         });
         return true;

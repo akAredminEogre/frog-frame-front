@@ -1,14 +1,18 @@
-import { TabId } from 'src/domain/value-objects/TabId';
+import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 
 export class ChromeRuntimeService implements IChromeRuntimeService {
-  async sendApplyRewriteRuleMessage(tabId: TabId): Promise<{ success: boolean; error?: string }> {
+  async sendApplyRewriteRuleMessage(currentTab: CurrentTab): Promise<{ success: boolean; error?: string }> {
     try {
+      const tabId = currentTab.getTabId();
+      const tabUrl = currentTab.getTabUrl();
+      
       await new Promise<void>((resolve) => {
         chrome.runtime.sendMessage(
           {
             type: 'applyAllRules',
-            tabId: tabId.value
+            tabId: tabId.value,
+            tabUrl: tabUrl.value
           },
           () => {
             // エラーは無視して処理を続行

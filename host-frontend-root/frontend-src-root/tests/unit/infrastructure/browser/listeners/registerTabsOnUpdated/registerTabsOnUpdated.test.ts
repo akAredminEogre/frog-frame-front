@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { registerTabsOnUpdated } from 'src/infrastructure/browser/listeners/tabs.onUpdated';
+import { container } from 'src/infrastructure/di/container';
 
 // Chrome APIのモック
 const mockChrome = {
@@ -14,9 +15,30 @@ const mockChrome = {
 // グローバルのchromeオブジェクトをモック
 global.chrome = mockChrome as any;
 
+// DIコンテナとサービスのモック
+const mockCurrentTab = {
+  getTabUrl: vi.fn().mockReturnValue({
+    value: 'https://example.com'
+  })
+};
+
+const mockCurrentTabService = {
+  getTabById: vi.fn().mockResolvedValue(mockCurrentTab)
+};
+
+vi.mock('src/infrastructure/di/container', () => ({
+  container: {
+    resolve: vi.fn()
+  }
+}));
+
 describe('registerTabsOnUpdated', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    
+    // DIコンテナのモックを設定
+    const mockContainer = container as any;
+    mockContainer.resolve.mockReturnValue(mockCurrentTabService);
   });
 
   it('chrome.tabs.onUpdated.addListenerにコールバックを登録する', () => {
@@ -34,7 +56,7 @@ describe('registerTabsOnUpdated', () => {
   });
 
   describe('onUpdated listener callback', () => {
-    let callback: (tabId: number, changeInfo: any) => void;
+    let callback: (tabId: number, changeInfo: any) => Promise<void>;
 
     beforeEach(() => {
       mockChrome.tabs.sendMessage.mockResolvedValue({});
@@ -47,32 +69,32 @@ describe('registerTabsOnUpdated', () => {
       const tabId = 1;
       const changeInfo = { status: 'complete' };
 
-      callback(tabId, changeInfo);
+      await callback(tabId, changeInfo);
 
       expect(mockChrome.tabs.sendMessage).toHaveBeenCalledWith(
         tabId,
-        { type: 'applyAllRules' }
+        { type: 'applyAllRules', tabUrl: 'https://example.com' }
       );
     });
 
-    it('statusがcomplete以外の場合、メッセージを送信しない', () => {
+    it('statusがcomplete以外の場合、メッセージを送信しない', async () => {
       const tabId = 1;
       const changeInfo = { status: 'loading' };
 
-      callback(tabId, changeInfo);
+      await callback(tabId, changeInfo);
 
       expect(mockChrome.tabs.sendMessage).not.toHaveBeenCalled();
     });
 
-    it('tabIdが0でもメッセージを送信する', () => {
-      const tabId = 0;
+    it('小さな正の整数のtabIdでもメッセージを送信する', async () => {
+      const tabId = 1;
       const changeInfo = { status: 'complete' };
 
-      callback(tabId, changeInfo);
+      await callback(tabId, changeInfo);
 
       expect(mockChrome.tabs.sendMessage).toHaveBeenCalledWith(
         tabId,
-        { type: 'applyAllRules' }
+        { type: 'applyAllRules', tabUrl: 'https://example.com' }
       );
     });
 
@@ -84,40 +106,38 @@ describe('registerTabsOnUpdated', () => {
       mockChrome.tabs.sendMessage.mockRejectedValue(new Error('Content script not injected'));
 
       // エラーをスローしないことを確認
-      expect(() => {
-        callback(tabId, changeInfo);
-      }).not.toThrow();
+      await expect(callback(tabId, changeInfo)).resolves.not.toThrow();
 
       expect(mockChrome.tabs.sendMessage).toHaveBeenCalledWith(
         tabId,
-        { type: 'applyAllRules' }
+        { type: 'applyAllRules', tabUrl: 'https://example.com' }
       );
     });
 
-    it('異なるtabIdでも正常に動作する', () => {
+    it('異なるtabIdでも正常に動作する', async () => {
       const testCases = [
         { tabId: 999 },
         { tabId: 123 }
       ];
 
-      testCases.forEach(({ tabId }) => {
-        callback(tabId, { status: 'complete' });
-      });
+      for (const { tabId } of testCases) {
+        await callback(tabId, { status: 'complete' });
+      }
 
       expect(mockChrome.tabs.sendMessage).toHaveBeenCalledTimes(2);
       expect(mockChrome.tabs.sendMessage).toHaveBeenNthCalledWith(
         1,
         999,
-        { type: 'applyAllRules' }
+        { type: 'applyAllRules', tabUrl: 'https://example.com' }
       );
       expect(mockChrome.tabs.sendMessage).toHaveBeenNthCalledWith(
         2,
         123,
-        { type: 'applyAllRules' }
+        { type: 'applyAllRules', tabUrl: 'https://example.com' }
       );
     });
 
-    it('changeInfoに他のプロパティがあっても、statusのみをチェックする', () => {
+    it('changeInfoに他のプロパティがあっても、statusのみをチェックする', async () => {
       const tabId = 1;
       const changeInfo = { 
         status: 'complete',
@@ -126,11 +146,11 @@ describe('registerTabsOnUpdated', () => {
         url: 'https://example.com/new-page'
       };
 
-      callback(tabId, changeInfo);
+      await callback(tabId, changeInfo);
 
       expect(mockChrome.tabs.sendMessage).toHaveBeenCalledWith(
         tabId,
-        { type: 'applyAllRules' }
+        { type: 'applyAllRules', tabUrl: 'https://example.com' }
       );
     });
   });

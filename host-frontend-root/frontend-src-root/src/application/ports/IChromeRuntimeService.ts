@@ -1,5 +1,5 @@
-import { TabId } from 'src/domain/value-objects/TabId';
+import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 export interface IChromeRuntimeService {
-  sendApplyRewriteRuleMessage(tabId: TabId): Promise<{ success: boolean; error?: string }>;
+  sendApplyRewriteRuleMessage(currentTab: CurrentTab): Promise<{ success: boolean; error?: string }>;
 }

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
-import { TabId } from 'src/domain/value-objects/TabId';
+import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
 
 // Chrome APIのモック
 const mockChrome = {
@@ -14,11 +14,11 @@ global.chrome = mockChrome as any;
 
 describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
   let chromeRuntimeService: ChromeRuntimeService;
-  let tabId: TabId;
+  let currentTab: CurrentTab;
 
   beforeEach(() => {
     chromeRuntimeService = new ChromeRuntimeService();
-    tabId = new TabId(1);
+    currentTab = new CurrentTab(1, 'https://example.com');
     vi.clearAllMocks();
   });
 
@@ -29,12 +29,13 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
       setTimeout(() => callback(), 0);
     });
 
-    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(tabId);
+    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
 
     expect(mockChrome.runtime.sendMessage).toHaveBeenCalledWith(
       {
         type: 'applyAllRules',
-        tabId: tabId.value
+        tabId: currentTab.getTabId().value,
+        tabUrl: currentTab.getTabUrl().value
       },
       expect.any(Function)
     );
@@ -49,7 +50,7 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
       throw error;
     });
 
-    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(tabId);
+    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
 
     expect(result).toEqual({ 
       success: false, 
@@ -65,7 +66,7 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
       throw errorMessage;
     });
 
-    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(tabId);
+    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
 
     expect(result).toEqual({ 
       success: false, 
@@ -86,7 +87,7 @@ describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
       }, 0);
     });
 
-    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(tabId);
+    const result = await chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
 
     expect(result).toEqual({ success: true });
   });
