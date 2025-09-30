@@ -1,4 +1,5 @@
 import { test, expect } from './fixtures';
+import { matchUrl } from 'src/utils/matchUrl';
 
 test('正規表現で取得した値をタグ内に埋め込み', async ({ page, popupPage }) => {
   // コンソールエラーメッセージを記録するための配列（早期設定）
@@ -12,6 +13,9 @@ test('正規表現で取得した値をタグ内に埋め込み', async ({ page,
   });
 
   // 1. Arrange: 指定されたhanmoto.comページに移動
+  // https://www01.hanmoto.com/bd/isbn/9784065396209が、matchUrl配列のいずれかに一致することを確認
+  expect(matchUrl).toContain('https://www01.hanmoto.com/bd/isbn/9784065396209');
+
   await page.goto('https://www01.hanmoto.com/bd/isbn/9784065396209');
   await page.bringToFront();
   
