@@ -29,14 +29,15 @@ describe('handlers.applyAllRules', () => {
 
     const message = {
       type: 'applyAllRules' as const,
-      tabId: tabId
+      tabId: tabId,
+      tabUrl: 'https://example.com'
     };
 
     const result = await handlers.applyAllRules(message);
 
     expect(mockChromeTabsService.sendMessage).toHaveBeenCalledWith(
       tabId,
-      { type: 'applyAllRules' }
+      { type: 'applyAllRules', tabUrl: 'https://example.com' }
     );
     expect(result).toEqual({
       success: true,
@@ -53,7 +54,8 @@ describe('handlers.applyAllRules', () => {
 
     const message = {
       type: 'applyAllRules' as const,
-      tabId: tabId
+      tabId: tabId,
+      tabUrl: 'https://example.com'
     };
 
     const result = await handlers.applyAllRules(message);
@@ -79,7 +81,8 @@ describe('handlers.applyAllRules', () => {
 
     const message = {
       type: 'applyAllRules' as const,
-      tabId: tabId
+      tabId: tabId,
+      tabUrl: 'https://example.com'
     };
 
     const result = await handlers.applyAllRules(message);
