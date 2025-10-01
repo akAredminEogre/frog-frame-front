@@ -1,0 +1,37 @@
+@import '../tokens.module.css';
+
+.checkboxContainer {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  gap: var(--spacing-md);
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.label {
+  user-select: none;
+  line-height: 1.4;
+}
+
+.checkboxContainer:has(.checkbox:disabled) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.checkboxContainer:has(.checkbox:disabled) .label {
+  color: var(--color-text-light);
+}
