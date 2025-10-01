@@ -12,7 +12,11 @@
     "playwright.config.ts",
     "src/entrypoints/background.ts",
     "src/entrypoints/content.ts",
-    "wxt.config.ts"
+    "wxt.config.ts",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    ".storybook/**",
+    "src/components/**"
   ],
   "ignoreDependencies": [
     "@wxt-dev/module-react"
