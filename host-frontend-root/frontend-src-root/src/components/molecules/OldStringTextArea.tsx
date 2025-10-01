@@ -1,0 +1,44 @@
+import React from 'react';
+import TextArea from '../atoms/TextArea';
+import Checkbox from '../atoms/Checkbox';
+import styles from '../organisms/RewriteRuleForm.module.css';
+
+interface OldStringTextAreaProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  isRegex: boolean;
+  onRegexChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export const OldStringTextArea: React.FC<OldStringTextAreaProps> = ({
+  value,
+  onChange,
+  isRegex,
+  onRegexChange
+}) => {
+  return (
+    <>
+      <div className={styles.labelWithCheckbox}>
+        <label htmlFor="oldString" className={styles.label}>置換前:</label>
+        <label className={styles.checkboxLabel}>
+          <Checkbox
+            checked={isRegex}
+            onChange={onRegexChange}
+            name="isRegex"
+          />
+          正規表現を使う
+        </label>
+      </div>
+      <TextArea
+        id="oldString"
+        name="oldString"
+        value={value}
+        onChange={onChange}
+        placeholder="置換したいテキストを入力"
+        rows={3}
+      />
+    </>
+  );
+};
+
+export default OldStringTextArea;
