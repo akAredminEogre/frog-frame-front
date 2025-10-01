@@ -2,8 +2,9 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] 既存のpopup/App.tsxの調査・分析（コンポーネント構造、UI要素、データフロー）
+- [x] 既存のpopup/App.tsxの調査・分析（コンポーネント構造、UI要素、データフロー）
 - [ ] Storybookを利用したatomic designでのUI再現（基本コンポーネント作成）
+  - 事前調査資料：favorite-keyword-link-frog/docs/issue-065/daily-scrum-01/PROGRESS-01-01.md
 - [ ] 共通UI部品の作成（新規登録と編集で見た目を共通化）
 - [ ] 新規登録画面の状態管理実装（現在の popup/App.tsx ベース）
 - [ ] 編集画面の状態管理実装（読み込み・保存時の挙動を分離）
@@ -26,3 +27,7 @@
 
 # 残タスク
 <!-- issueの進捗に応じて記入 -->
+- [ ] Storybookでのatomic design実装
+- [ ] 既存App.tsxのリファクタリング
+- [ ] スタイリング手法の決定と実装
+- [ ] テストケースの作成
