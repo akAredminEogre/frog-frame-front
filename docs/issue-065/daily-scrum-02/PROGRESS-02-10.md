@@ -67,3 +67,13 @@ RewriteRuleForm.tsxのコード改善が完了しました：
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
+```Typescript
+  const handleTextChange = (field: keyof Pick<RewriteRule, 'oldString' | 'newString' | 'urlPattern'>) => 
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      onRuleChange({
+        ...rule,
+        [field]: e.target.value
+      });
+    };
+```
+も、HTMLInputElementとHTMLTextAreaElementを区別して型安全にしてください。
