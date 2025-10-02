@@ -18,13 +18,17 @@ interface RewriteRuleFormProps {
   onRuleChange: (rule: RewriteRule) => void;
   onSave: () => void;
   isLoading?: boolean;
+  title?: string; // カスタマイズ可能なタイトル
+  ruleId?: string; // 編集対象のルールID（将来の拡張用）
 }
 
 export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
   rule,
   onRuleChange,
   onSave,
-  isLoading = false
+  isLoading = false,
+  title = "fklf: Rewrite Rule",
+  ruleId
 }) => {
   
   const handleTextAreaChange = (field: keyof Pick<RewriteRule, 'oldString' | 'newString'>) => 
@@ -53,7 +57,7 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
 
   return (
     <div className={styles.form}>
-      <Title level={2}>fklf: Rewrite Rule</Title>
+      <Title level={2}>{title}</Title>
       
       <div className={styles.section}>
         <OldStringTextArea
