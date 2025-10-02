@@ -1,5 +1,5 @@
 import React from 'react';
-import LabeledTextArea from './LabeledTextArea';
+import LabeledTextArea from 'src/components/molecules/LabeledTextArea';
 
 export interface NewStringTextAreaProps {
   value: string;
