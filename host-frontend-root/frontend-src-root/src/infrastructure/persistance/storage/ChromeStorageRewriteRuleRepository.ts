@@ -29,6 +29,18 @@ export class ChromeStorageRewriteRuleRepository implements IRewriteRuleRepositor
     return new RewriteRules();
   }
 
+  async getById(id: string): Promise<RewriteRule | null> {
+    const allRules = await this.getAll();
+    const foundRule = allRules.findById(id);
+    return foundRule || null;
+  }
+
+  async update(rule: RewriteRule): Promise<void> {
+    const existingRules = await this.getAll();
+    const updatedRules = existingRules.update(rule);
+    await this.saveRewriteRulesToStorage(updatedRules);
+  }
+
   private async saveRewriteRulesToStorage(rewriteRules: RewriteRules): Promise<void> {
     await chrome.storage.local.set({
       [ChromeStorageRewriteRuleRepository.STORAGE_KEY]: rewriteRules.toObject()
