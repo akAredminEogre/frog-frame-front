@@ -45,6 +45,13 @@ function RulesApp() {
     );
   }
 
+  const handleEdit = (ruleId: string) => {
+    // Chrome Extension APIを使用して編集画面を新しいタブで開く
+    chrome.tabs.create({
+      url: chrome.runtime.getURL(`edit.html?ruleId=${ruleId}`)
+    });
+  };
+
   return (
     <div className="container">
       <h1>保存されたルール一覧</h1>
@@ -63,6 +70,7 @@ function RulesApp() {
                 <th>置換前</th>
                 <th>置換後</th>
                 <th>正規表現</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
@@ -87,6 +95,15 @@ function RulesApp() {
                     ) : (
                       <span className="no-regex">-</span>
                     )}
+                  </td>
+                  <td className="rule-actions">
+                    <button
+                      className="edit-button"
+                      onClick={() => handleEdit(rule.id)}
+                      type="button"
+                    >
+                      編集
+                    </button>
                   </td>
                 </tr>
               ))}
