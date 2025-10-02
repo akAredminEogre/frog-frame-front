@@ -52,4 +52,24 @@ export class RewriteRules {
     return Object.fromEntries(this.rules);
   }
 
+  /**
+   * IDで指定されたルールを取得
+   * @param id 検索するルールのID
+   * @returns 見つかったRewriteRule、存在しない場合はundefined
+   */
+  findById(id: string): RewriteRule | undefined {
+    return this.rules.get(id);
+  }
+
+  /**
+   * 既存のルールを更新した新しいRewriteRulesオブジェクトを返す（Immutable）
+   * @param rule 更新するRewriteRule
+   * @returns ルールが更新されたRewriteRulesオブジェクト
+   */
+  update(rule: RewriteRule): RewriteRules {
+    const newRules = new Map(this.rules);
+    newRules.set(rule.id, rule);
+    return new RewriteRules(Object.fromEntries(newRules));
+  }
+
 }
