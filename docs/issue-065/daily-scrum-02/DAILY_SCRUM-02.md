@@ -55,4 +55,60 @@ Storybookでのatomic design実装において、以下の点について方針�
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+### 1. Storybookを利用したatomic designでのUI再現（基本コンポーネント作成）
+- デザイントークンの定義（色、サイズ、フォント、間隔の標準化）
+- Atomsコンポーネントの実装（Input, TextArea, Checkbox, Title, Description）
+- Moleculesコンポーネントの実装（InputSection）
+- Storybookストーリーの作成（Inputコンポーネント）
+- 既存App.tsxとの見た目比較・調整
+
+### 2. 共通UI部品の作成と状態管理実装
+- 新規登録と編集で見た目を共通化したコンポーネント設計
+- 新規登録画面の状態管理実装（popup/App.tsx ベース）
+- RewriteRuleFormコンポーネントの実装と改善
+
+### 3. コード品質向上とレビュー対応
+- RewriteRuleForm.tsxのコード改善（三項演算子排除、責務分離）
+- 型安全性の向上（HTMLInputElementとHTMLTextAreaElementの分離対応）
+- Checkboxコンポーネントの表示順序変更（「正規表現を使う □」順序に修正）
+- テストとリントの品質確保、未使用コードの除去
+
+### 4. Atomic Design アーキテクチャの構築
+- CSS modulesを使用したスタイリング手法の統一
+- 再利用可能なコンポーネント設計
+- 型安全性を重視したイベントハンドラーの実装
+
 ## 修正したファイル
+
+### 新規作成ファイル
+- `src/components/tokens.module.css` - デザイントークン定義
+- `src/components/atoms/Input.tsx` - Input Atomコンポーネント
+- `src/components/atoms/Input.module.css` - Input スタイル
+- `src/components/atoms/TextArea.tsx` - TextArea Atomコンポーネント
+- `src/components/atoms/TextArea.module.css` - TextArea スタイル
+- `src/components/atoms/Checkbox.tsx` - Checkbox Atomコンポーネント
+- `src/components/atoms/Checkbox.module.css` - Checkbox スタイル
+- `src/components/atoms/Title.tsx` - Title Atomコンポーネント
+- `src/components/atoms/Title.module.css` - Title スタイル
+- `src/components/atoms/Description.tsx` - Description Atomコンポーネント
+- `src/components/atoms/Description.module.css` - Description スタイル
+- `src/components/molecules/InputSection.tsx` - InputSection Moleculeコンポーネント
+- `src/components/molecules/InputSection.module.css` - InputSection スタイル
+- `src/components/atoms/Input.stories.tsx` - Input Storybookストーリー
+- `src/components/molecules/LabeledInput.tsx` - LabeledInput Moleculeコンポーネント
+- `src/components/molecules/NewStringTextArea.tsx` - NewString入力用Moleculeコンポーネント
+- `src/components/molecules/OldStringTextArea.tsx` - OldString入力用Moleculeコンポーネント
+- `src/components/molecules/URLPatternInput.tsx` - URLPattern入力用Moleculeコンポーネント
+- `src/components/organisms/RewriteRuleForm.tsx` - RewriteRule編集用Organismコンポーネント
+- `src/components/organisms/RewriteRuleForm.module.css` - RewriteRuleForm スタイル
+- `src/components/organisms/NewStringTextArea.tsx` - NewString入力用Organismコンポーネント
+- `src/components/organisms/OldStringTextArea.tsx` - OldString入力用Organismコンポーネント
+- `src/components/organisms/URLPatternInput.tsx` - URLPattern入力用Organismコンポーネント
+
+### 修正ファイル
+- `src/components/atoms/Checkbox.tsx` - 表示順序変更（「正規表現を使う □」順序に修正）
+- `src/entrypoints/popup/App.tsx` - 新しいコンポーネントとの統合
+
+### テストファイル
+- `tests/e2e/get-origin.spec.ts` - E2Eテスト対応
+- `tests/e2e/popup.spec.ts` - ポップアップE2Eテスト対応

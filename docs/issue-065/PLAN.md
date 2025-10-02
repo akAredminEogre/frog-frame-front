@@ -3,10 +3,13 @@
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
 - [x] 既存のpopup/App.tsxの調査・分析（コンポーネント構造、UI要素、データフロー）
-- [ ] Storybookを利用したatomic designでのUI再現（基本コンポーネント作成）
+- [x] Storybookを利用したatomic designでのUI再現（基本コンポーネント作成）
   - 事前調査資料：favorite-keyword-link-frog/docs/issue-065/daily-scrum-01/PROGRESS-01-01.md
-- [ ] 共通UI部品の作成（新規登録と編集で見た目を共通化）
-- [ ] 新規登録画面の状態管理実装（現在の popup/App.tsx ベース）
+  - **完了（スクラム02）**: Atoms/Molecules コンポーネント作成、CSS modules実装、Storybookストーリー作成
+- [x] 共通UI部品の作成（新規登録と編集で見た目を共通化）
+  - **完了（スクラム02）**: RewriteRuleFormコンポーネント実装、型安全性向上
+- [x] 新規登録画面の状態管理実装（現在の popup/App.tsx ベース）
+  - **完了（スクラム02）**: 新しいコンポーネントとの統合完了
 - [ ] 編集画面の状態管理実装（読み込み・保存時の挙動を分離）
 - [ ] rules.htmlからの編集機能呼び出し実装（編集ボタンとモーダル表示）
 - [ ] 編集画面での保存機能実装（rules.htmlのルール行更新）
@@ -27,7 +30,15 @@
 
 # 残タスク
 <!-- issueの進捗に応じて記入 -->
-- [ ] Storybookでのatomic design実装
-- [ ] 既存App.tsxのリファクタリング
-- [ ] スタイリング手法の決定と実装
-- [ ] テストケースの作成
+- [ ] Storybookでのatomic design実装 
+- [ ] atomsのstorybook化 
+- [x] 既存App.tsxのリファクタリング （スクラム02完了）
+- [x] スタイリング手法の決定と実装 （スクラム02完了 - CSS modules採用）
+- [x] テストケースの作成 （スクラム02完了 - E2Eテスト対応）
+
+## スクラム02完了事項
+- デザイントークン定義とCSS modules実装
+- Atoms/Molecules/Organismsコンポーネント作成
+- 型安全性向上（イベントハンドラー分離）
+- Checkboxコンポーネント表示順序改善
+- 既存App.tsxとの統合完了
