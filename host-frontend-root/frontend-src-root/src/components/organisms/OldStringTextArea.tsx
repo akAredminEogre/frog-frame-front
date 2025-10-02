@@ -20,14 +20,13 @@ export const OldStringTextArea: React.FC<OldStringTextAreaProps> = ({
     <>
       <div className={styles.labelWithCheckbox}>
         <label htmlFor="oldString" className={styles.label}>置換前:</label>
-        <label className={styles.checkboxLabel}>
-          <Checkbox
-            checked={isRegex}
-            onChange={onRegexChange}
-            name="isRegex"
-          />
+        <Checkbox
+          checked={isRegex}
+          onChange={onRegexChange}
+          name="isRegex"
+        >
           正規表現を使う
-        </label>
+        </Checkbox>
       </div>
       <TextArea
         id="oldString"

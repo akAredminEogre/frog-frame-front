@@ -19,6 +19,7 @@ const Checkbox = ({
 }: CheckboxProps) => {
   return (
     <label className={styles.checkboxContainer}>
+      {children && <span className={styles.label}>{children}</span>}
       <input
         type="checkbox"
         checked={checked}
@@ -28,7 +29,6 @@ const Checkbox = ({
         className={styles.checkbox}
         {...props}
       />
-      {children && <span className={styles.label}>{children}</span>}
     </label>
   );
 };
