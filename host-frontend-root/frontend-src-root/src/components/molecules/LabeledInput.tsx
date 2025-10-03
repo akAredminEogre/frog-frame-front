@@ -3,7 +3,7 @@ import Input from 'src/components/atoms/Input';
 import Description from 'src/components/atoms/Description';
 import styles from './InputSection.module.css';
 
-export interface LabeledInputProps {
+interface LabeledInputProps {
   label: string;
   value: string;
   name: string;
