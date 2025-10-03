@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './TextArea.module.css';
 
-export interface TextAreaProps {
+interface TextAreaProps {
   value: string;
   placeholder?: string;
   name?: string;

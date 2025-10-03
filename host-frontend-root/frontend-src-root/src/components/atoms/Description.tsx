@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Description.module.css';
 
-export interface DescriptionProps {
+interface DescriptionProps {
   children: React.ReactNode;
   size?: 'small' | 'medium';
   variant?: 'default' | 'muted';
