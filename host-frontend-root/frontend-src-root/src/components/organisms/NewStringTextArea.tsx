@@ -1,7 +1,7 @@
 import React from 'react';
 import LabeledTextArea from 'src/components/molecules/LabeledTextArea';
 
-export interface NewStringTextAreaProps {
+interface NewStringTextAreaProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }

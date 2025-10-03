@@ -6,7 +6,7 @@ interface URLPatternInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const URLPatternInput: React.FC<URLPatternInputProps> = ({
+const URLPatternInput: React.FC<URLPatternInputProps> = ({
   value,
   onChange
 }) => {
