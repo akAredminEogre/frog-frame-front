@@ -10,7 +10,7 @@ interface OldStringTextAreaProps {
   onRegexChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const OldStringTextArea: React.FC<OldStringTextAreaProps> = ({
+const OldStringTextArea: React.FC<OldStringTextAreaProps> = ({
   value,
   onChange,
   isRegex,
