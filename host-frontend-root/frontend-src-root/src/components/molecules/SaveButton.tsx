@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button } from '../atoms/Button';
+import { Button } from 'src/components/atoms/Button';
 
 interface SaveButtonProps {
   onClick: () => void;
   isLoading?: boolean;
 }
 
-export const SaveButton: React.FC<SaveButtonProps> = ({
+const SaveButton: React.FC<SaveButtonProps> = ({
   onClick,
   isLoading = false
 }) => {

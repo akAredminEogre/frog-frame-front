@@ -3,7 +3,7 @@ import TextArea from 'src/components/atoms/TextArea';
 import Description from 'src/components/atoms/Description';
 import styles from './InputSection.module.css';
 
-export interface LabeledTextAreaProps {
+interface LabeledTextAreaProps {
   label: string;
   value: string;
   name: string;
