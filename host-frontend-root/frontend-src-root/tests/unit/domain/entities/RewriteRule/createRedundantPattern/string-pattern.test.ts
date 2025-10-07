@@ -8,10 +8,7 @@ import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 interface CreateRedundantPatternStringTestCase {
   description: string;
   input: {
-    id: string;
     oldString: string;
-    newString: string;
-    urlPattern?: string;
     isRegex?: boolean;
   };
   expected: string;
@@ -21,10 +18,7 @@ const stringPatternTestCases: CreateRedundantPatternStringTestCase[] = [
   {
     description: '通常文字列パターンの場合は特殊文字をエスケープして改行コード無視処理を追加する',
     input: {
-      id: 'test-id',
       oldString: '<div>Hello World</div>',
-      newString: 'replacement',
-      urlPattern: undefined,
       isRegex: false
     },
     expected: '(?:\\s*)<div>(?:\\s*)Hello World(?:\\s*)</div>(?:\\s*)'
@@ -32,10 +26,7 @@ const stringPatternTestCases: CreateRedundantPatternStringTestCase[] = [
   {
     description: '特殊文字を含む通常文字列の場合は正しくエスケープする',
     input: {
-      id: 'test-id',
       oldString: '<div class="test">.*?</div>',
-      newString: 'replacement',
-      urlPattern: undefined,
       isRegex: false
     },
     expected: '(?:\\s*)<div class="test">(?:\\s*)\\.\\*\\?(?:\\s*)</div>(?:\\s*)'
@@ -43,10 +34,7 @@ const stringPatternTestCases: CreateRedundantPatternStringTestCase[] = [
   {
     description: 'HTMLタグを含まない通常文字列の場合は特殊文字のエスケープのみ行う',
     input: {
-      id: 'test-id',
       oldString: 'Hello.*World',
-      newString: 'replacement',
-      urlPattern: undefined,
       isRegex: false
     },
     expected: 'Hello\\.\\*World'
@@ -54,10 +42,7 @@ const stringPatternTestCases: CreateRedundantPatternStringTestCase[] = [
   {
     description: '空文字列の場合は空文字列を返す',
     input: {
-      id: 'test-id',
       oldString: '',
-      newString: 'replacement',
-      urlPattern: undefined,
       isRegex: false
     },
     expected: ''
@@ -65,10 +50,7 @@ const stringPatternTestCases: CreateRedundantPatternStringTestCase[] = [
   {
     description: 'isRegexが未定義の場合はfalseとして扱う',
     input: {
-      id: 'test-id',
       oldString: '<div>test</div>',
-      newString: 'replacement',
-      urlPattern: undefined,
       isRegex: undefined
     },
     expected: '(?:\\s*)<div>(?:\\s*)test(?:\\s*)</div>(?:\\s*)'
@@ -88,10 +70,10 @@ describe('RewriteRule.createRedundantPattern - 文字列パターン', () => {
     it(testCase.description, () => {
       // Arrange
       const rule = new RewriteRule(
-        testCase.input.id,
+        'test-id',
         testCase.input.oldString,
-        testCase.input.newString,
-        testCase.input.urlPattern,
+        'replacement',
+        '',
         testCase.input.isRegex
       );
 

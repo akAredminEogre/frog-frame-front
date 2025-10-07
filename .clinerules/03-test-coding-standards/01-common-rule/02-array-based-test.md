@@ -11,23 +11,21 @@ workflow:array-based-test
 6. テストをまとめた配列は、1ファイルに1つとする。
 
 ```typescript
-// 新しいファイル: chrome-undefined-cases.test.ts
-const chromeUndefinedCases = [
+const testCases = [
   {
-    description: 'should handle chrome.storage.local being undefined',
-    setup: () => ({ storage: { local: undefined } })
+    description: 'Chromeでundefinedが返るケース1',
+    input: { /* 入力値 */ },
+    expected: { /* 期待値 */ },
   },
   {
-    description: 'should handle chrome.storage being undefined',
-    setup: () => ({ storage: undefined })
+    description: 'Chromeでundefinedが返るケース2',
+    input: { /* 入力値 */ },
+    expected: { /* 期待値 */ },
   },
-  {
-    description: 'should handle chrome being completely undefined',
-    setup: () => undefined
-  }
+  // 他のケースも同様に追加
 ];
 
-chromeUndefinedCases.forEach((testCase) => {
+testCases.forEach((testCase) => {
   it(testCase.description, async () => {
     // 統一されたテストロジック
   });
