@@ -12,7 +12,7 @@ export class RewriteRule {
     public readonly id: string,
     public readonly oldString: string,
     public readonly newString: string,
-    public readonly urlPattern?: string,
+    public readonly urlPattern: string,
     public readonly isRegex: boolean = false
   ) {
     // 正規表現関連の定数をメンバ変数として初期化
