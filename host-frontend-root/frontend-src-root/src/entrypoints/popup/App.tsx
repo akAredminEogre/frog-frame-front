@@ -7,31 +7,21 @@ import { container } from 'src/infrastructure/di/container';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
+import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
 
 function App() {
   // フォーム入力を管理するState
   const [rewriteRule, setRewriteRule] = useState<{
     oldString: string;
     newString: string;
-    urlPattern?: string;
-    isRegex?: boolean;
+    urlPattern: string;
+    isRegex: boolean;
   }>({
     oldString: '',
     newString: '',
     urlPattern: '',
     isRegex: false,
   });
-
-  /** フォームの入力値を変更するハンドラ */
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const isCheckbox = type === 'checkbox';
-    
-    setRewriteRule((prev) => ({
-      ...prev,
-      [name]: isCheckbox ? (e.target as HTMLInputElement).checked : value,
-    }));
-  };
 
   /** 保存ボタンを押したとき、UseCaseを通して保存・適用処理を実行 */
   const handleSave = async () => {
@@ -87,61 +77,11 @@ function App() {
   }, []);
 
   return (
-    <div style={{ width: 300, padding: 10 }}>
-      <h2>fklf: Rewrite Rule</h2>
-
-      <div style={{ marginBottom: 8 }}>
-        <label>
-          置換前:
-          <label style={{ marginLeft: 8, cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              name="isRegex"
-              checked={rewriteRule.isRegex}
-              onChange={handleChange}
-            />
-            正規表現を使う
-          </label>
-          <textarea
-            name="oldString"
-            value={rewriteRule.oldString}
-            onChange={handleChange}
-            style={{ marginLeft: 4, width: '95%', minHeight: '60px', verticalAlign: 'top' }}
-          />
-        </label>
-      </div>
-
-      <div style={{ marginBottom: 8 }}>
-        <label>
-          置換後:
-          <textarea
-            name="newString"
-            value={rewriteRule.newString}
-            onChange={handleChange}
-            style={{ marginLeft: 4, width: '95%', minHeight: '60px', verticalAlign: 'top' }}
-          />
-        </label>
-      </div>
-
-      <div style={{ marginBottom: 8 }}>
-        <label>
-          URLパターン (前方一致):
-          <input
-            type="text"
-            name="urlPattern"
-            value={rewriteRule.urlPattern}
-            onChange={handleChange}
-            style={{ marginLeft: 4 }}
-            placeholder="例: https://qiita.com/"
-          />
-        </label>
-        <div style={{ fontSize: '0.8em', color: '#666', marginTop: 2 }}>
-          ※ URLを指定することで任意のサイトで適用できます
-        </div>
-      </div>
-
-      <button onClick={handleSave}>保存</button>
-    </div>
+    <RewriteRuleForm
+      rule={rewriteRule}
+      onRuleChange={setRewriteRule}
+      onSave={handleSave}
+    />
   );
 }
 
