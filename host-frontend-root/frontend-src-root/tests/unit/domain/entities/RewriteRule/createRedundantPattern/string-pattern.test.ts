@@ -26,7 +26,7 @@ const stringPatternTestCases: CreateRedundantPatternStringTestCase[] = [
   {
     description: '特殊文字を含む通常文字列の場合は正しくエスケープする',
     input: {
-      oldString: '<div class=\"test\">.*?</div>',
+      oldString: '<div class="test">.*?</div>',
       isRegex: false
     },
     expected: '(?:\\s*)<div class="test">(?:\\s*)\\.\\*\\?(?:\\s*)</div>(?:\\s*)'
