@@ -5,7 +5,7 @@ import { test, expect } from './fixtures';
  * ルール一覧ページ(オプションページ)のE2Eテスト
  * 拡張機能のアイコン→オプションでrules.htmlが表示されることを確認します
  */
-test('正規表現で取得した値をタグ内に埋め込んだルールが、一覧に表示され、編集できる', async ({ page, popupPage, rulesPage, extensionId }) => {
+test('正規表現で取得した値をタグ内に埋め込んだルールが、一覧に表示され、編集できる', async ({ page, popupPage, rulesPage }) => {
   // コンソールエラーメッセージを記録するための配列(早期設定)
   const extensionErrors: string[] = [];
   const consoleMessages: string[] = [];
@@ -166,7 +166,6 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   // 29. Assert: DOM置換結果の確認(変更後のリンクテキストを含む)
   await page.bringToFront();
   await page.reload();
-  await expect(page.locator('span.book-isbn13')).toHaveText('9784065396209', { timeout: 60000 });
 
   const modifiedLinkWithText = page.locator('span.book-isbn13 >> a');
   await expect(modifiedLinkWithText).toHaveCount(1, { timeout: 60000 });

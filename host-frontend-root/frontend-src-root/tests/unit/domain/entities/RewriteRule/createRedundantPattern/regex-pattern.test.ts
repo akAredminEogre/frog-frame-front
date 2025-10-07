@@ -55,7 +55,7 @@ describe('RewriteRule.createRedundantPattern - 正規表現パターン', () => 
         testCase.input.id,
         testCase.input.oldString,
         testCase.input.newString,
-        testCase.input.urlPattern,
+        testCase.input.urlPattern || "",
         testCase.input.isRegex
       );
 

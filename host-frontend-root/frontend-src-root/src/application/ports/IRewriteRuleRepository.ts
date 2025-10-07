@@ -4,6 +4,6 @@ import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 export interface IRewriteRuleRepository {
   save(rule: RewriteRule): Promise<void>;
   getAll(): Promise<RewriteRules>;
-  getById(id: string): Promise<RewriteRule | null>;
+  getById(id: string): Promise<RewriteRule>;
   update(rule: RewriteRule): Promise<void>;
 }
