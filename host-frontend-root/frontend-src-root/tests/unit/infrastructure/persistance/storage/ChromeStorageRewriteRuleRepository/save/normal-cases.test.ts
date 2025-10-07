@@ -30,7 +30,8 @@ describe('ChromeStorageRewriteRuleRepository.save - 正常系', () => {
     testRule = new RewriteRule(
       'test-rule-1',
       'test-pattern',
-      'test-replacement'
+      'test-replacement',
+      ''
     );
     vi.clearAllMocks();
   });
@@ -115,7 +116,8 @@ describe('ChromeStorageRewriteRuleRepository.save - 正常系', () => {
     const updatedRule = new RewriteRule(
       'test-rule-1',
       'updated-pattern',
-      'updated-replacement'
+      'updated-replacement',
+      ''
     );
 
     // Act
