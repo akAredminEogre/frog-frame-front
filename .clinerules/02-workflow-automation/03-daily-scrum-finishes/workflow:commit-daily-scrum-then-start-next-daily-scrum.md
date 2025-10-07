@@ -1,4 +1,7 @@
 workflow:commit-daily-scrum-then-start-next-daily-scrum
+下記の手順をチャットスレッドに表示してから実行してください。
+workflowの手順に従うと、書かれている場合は、その手順もチャットスレッドに表示し、
+その表示した手順に従って実行してください
 
 ```cline-instructions
 - デイリースクラムドキュメントのコミット
