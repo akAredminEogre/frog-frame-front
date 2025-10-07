@@ -1,0 +1,33 @@
+@import '../tokens.module.css';
+
+.textarea {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-md);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  width: 100%;
+  min-height: var(--min-height-input);
+  box-sizing: border-box;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+  vertical-align: top;
+}
+
+.textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.textarea:disabled {
+  background-color: #f5f5f5;
+  color: var(--color-text-light);
+  cursor: not-allowed;
+  resize: none;
+}
+
+.textarea::placeholder {
+  color: var(--color-text-light);
+}
