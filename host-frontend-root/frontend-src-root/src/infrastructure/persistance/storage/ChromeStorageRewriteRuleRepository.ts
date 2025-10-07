@@ -1,6 +1,7 @@
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 
 export class ChromeStorageRewriteRuleRepository implements IRewriteRuleRepository {
   private static readonly STORAGE_KEY = 'RewriteRules';
@@ -29,10 +30,13 @@ export class ChromeStorageRewriteRuleRepository implements IRewriteRuleRepositor
     return new RewriteRules();
   }
 
-  async getById(id: string): Promise<RewriteRule | null> {
+  async getById(id: string): Promise<RewriteRule> {
     const allRules = await this.getAll();
     const foundRule = allRules.findById(id);
-    return foundRule || null;
+    if (!foundRule) {
+      throw new RewriteRuleNotFoundError(id);
+    }
+    return foundRule;
   }
 
   async update(rule: RewriteRule): Promise<void> {

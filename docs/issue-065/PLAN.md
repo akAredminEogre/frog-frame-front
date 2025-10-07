@@ -43,6 +43,9 @@
 - [ ] ストレージからのIDによるルール取得処理、編集処理の単体テスト
 - [ ] ファーストクラスコレクションの機能追加の単体テスト
 - [ ] 編集画面のE2Eテストのコメントアウトしたテストの復活
+- [ ]     chrome.tabs.create({
+      url: chrome.runtime.getURL(`edit.html?ruleId=${ruleId}`)
+    }); のinfrastructure層への移管
 
 
 ## スクラム02完了事項

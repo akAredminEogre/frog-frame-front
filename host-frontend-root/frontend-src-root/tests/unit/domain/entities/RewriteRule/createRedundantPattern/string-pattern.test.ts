@@ -91,7 +91,7 @@ describe('RewriteRule.createRedundantPattern - 文字列パターン', () => {
         testCase.input.id,
         testCase.input.oldString,
         testCase.input.newString,
-        testCase.input.urlPattern,
+        testCase.input.urlPattern || "",
         testCase.input.isRegex
       );
 

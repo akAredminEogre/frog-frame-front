@@ -16,7 +16,7 @@ describe('RewriteRules.add - 正常系', () => {
   beforeEach(() => {
     rule1 = new RewriteRule('rule1', 'old1', 'new1', 'https://example.com/*', false);
     rule2 = new RewriteRule('rule2', 'old2', 'new2', 'https://test.com/*', true);
-    rule3 = new RewriteRule('rule3', 'old3', 'new3', undefined, false);
+    rule3 = new RewriteRule('rule3', 'old3', 'new3', "", false);
     rulesObject = {
       rule1,
       rule2,

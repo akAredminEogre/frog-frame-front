@@ -20,7 +20,7 @@ kk=
 ### スクラム-kk(ii回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
+<!-- ユーザーが使うコマンド .clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 
 ---

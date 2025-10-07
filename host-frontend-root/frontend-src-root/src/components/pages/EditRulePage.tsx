@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { RewriteRuleForm } from '../organisms/RewriteRuleForm';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { container } from 'src/infrastructure/di/container';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
+import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
+import { RefreshAllTabsAfterRuleUpdateUseCase } from 'src/application/usecases/rule/RefreshAllTabsAfterRuleUpdateUseCase';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 
 interface RewriteRuleFormData {
   oldString: string;
@@ -35,7 +39,8 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
       setError(null);
       try {
         const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
-        const loadedRule = await repository.getById(ruleId);
+        const loadUseCase = new LoadRewriteRuleForEditUseCase(repository);
+        const loadedRule = await loadUseCase.execute(ruleId);
         
         if (loadedRule) {
           setRule({
@@ -68,6 +73,7 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
     setIsSaving(true);
     try {
       const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+      const updateUseCase = new UpdateRewriteRuleUseCase(repository);
       
       // 更新されたルールエンティティを作成
       const updatedRule = new RewriteRule(
@@ -78,7 +84,17 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
         rule.isRegex
       );
       
-      await repository.update(updatedRule);
+      await updateUseCase.execute(updatedRule);
+      
+      // ルール更新後、該当タブの内容を更新（失敗してもルール保存は成功）
+      try {
+        const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
+        const refreshTabsUseCase = new RefreshAllTabsAfterRuleUpdateUseCase(chromeTabsService);
+        await refreshTabsUseCase.execute(updatedRule);
+      } catch (refreshError) {
+        console.warn('Failed to refresh tabs, but rule was saved successfully:', refreshError);
+      }
+      
       alert('Rule updated successfully!');
     } catch (error) {
       console.error('Failed to save rule:', error);
@@ -104,7 +120,6 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
         onSave={handleSave}
         isLoading={isSaving}
         title="fklf: Edit Rewrite Rule"
-        ruleId={ruleId}
       />
     </div>
   );
