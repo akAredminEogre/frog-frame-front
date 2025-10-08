@@ -17,8 +17,7 @@ describe('LoadRewriteRuleForEditUseCase.execute - 正常系', () => {
     mockRepository = {
       getById: vi.fn(),
       getAll: vi.fn(),
-      save: vi.fn(),
-      update: vi.fn(),
+      set: vi.fn(),
     };
 
     // テスト対象の初期化

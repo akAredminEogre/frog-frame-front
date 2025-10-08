@@ -46,7 +46,7 @@ export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
       rewriteRuleData.isRegex || false
     );
     
-    await this.repository.save(rule);
+    await this.repository.set(rule);
     return rule;
   }
 

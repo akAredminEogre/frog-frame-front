@@ -7,6 +7,6 @@ export class UpdateRewriteRuleUseCase {
   ) {}
 
   async execute(rule: RewriteRule): Promise<void> {
-    await this.rewriteRuleRepository.update(rule);
+    await this.rewriteRuleRepository.set(rule);
   }
 }
