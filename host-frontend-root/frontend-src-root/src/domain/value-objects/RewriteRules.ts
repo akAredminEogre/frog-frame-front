@@ -1,4 +1,5 @@
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 
 /**
  * RewriteRuleのファーストコレクションオブジェクト
@@ -55,10 +56,15 @@ export class RewriteRules {
   /**
    * IDで指定されたルールを取得
    * @param id 検索するルールのID
-   * @returns 見つかったRewriteRule、存在しない場合はundefined
+   * @returns 見つかったRewriteRule
+   * @throws {RewriteRuleNotFoundError} ルールが見つからない場合
    */
-  findById(id: string): RewriteRule | undefined {
-    return this.rules.get(id);
+  getById(id: string): RewriteRule {
+    const rule = this.rules.get(id);
+    if (!rule) {
+      throw new RewriteRuleNotFoundError(id);
+    }
+    return rule;
   }
 
   /**
