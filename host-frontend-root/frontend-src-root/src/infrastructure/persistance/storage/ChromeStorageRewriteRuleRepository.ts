@@ -5,12 +5,16 @@ import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 export class ChromeStorageRewriteRuleRepository implements IRewriteRuleRepository {
   private static readonly STORAGE_KEY = 'RewriteRules';
 
-  async save(rule: RewriteRule): Promise<void> {
+  /**
+   * ルールを設定する（新規追加または上書き）
+   * @param rule 設定するRewriteRule
+   */
+  async set(rule: RewriteRule): Promise<void> {
     // 既存のルール集合を取得
     const existingRules = await this.getAll();
     
-    // 新しいルールを追加
-    const updatedRules = existingRules.add(rule);
+    // ルールを設定（新規追加または上書き）
+    const updatedRules = existingRules.set(rule);
     
     // 全体を保存
     await this.saveRewriteRulesToStorage(updatedRules);
@@ -34,11 +38,6 @@ export class ChromeStorageRewriteRuleRepository implements IRewriteRuleRepositor
     return allRules.getById(id);
   }
 
-  async update(rule: RewriteRule): Promise<void> {
-    const existingRules = await this.getAll();
-    const updatedRules = existingRules.update(rule);
-    await this.saveRewriteRulesToStorage(updatedRules);
-  }
 
   private async saveRewriteRulesToStorage(rewriteRules: RewriteRules): Promise<void> {
     await chrome.storage.local.set({
