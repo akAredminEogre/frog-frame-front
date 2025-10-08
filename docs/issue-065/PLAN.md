@@ -16,11 +16,23 @@
   - **完了（スクラム03）**: RulesAppに編集ボタンと遷移機能を統合
 - [x] 編集画面での保存機能実装（rules.htmlのルール行更新）
   - **完了（スクラム03）**: リポジトリupdate機能実装、ストレージ更新
-- [ ] メッセージング方式でのタブ内容更新機能実装
+- [x] メッセージング方式でのタブ内容更新機能実装
+  - **完了（スクラム04）**: RefreshAllTabsAfterRuleUpdateUseCase実装、URLパターン前方一致フィルタリング
 - [ ] 編集画面でのキャンセル機能実装（ポップアップクローズ）
 - [x] e2eテストの実装と動作確認（UI操作フロー全体）
   - **完了（スクラム03）**: 編集フロー全体のE2Eテスト実装
 - [ ] 手動テストによる動作確認とtest-and-lintの実行
+- [x] EditRulePageのビジネスロジックをUseCaseに分離
+  - **完了（スクラム04）**: LoadRewriteRuleForEditUseCase、UpdateRewriteRuleUseCase作成
+- [x] リポジトリ層の単体テスト実装（getById, update）
+  - **完了（スクラム04）**: 正常系・異常系テスト実装（create, removeは未実装）
+- [ ] ファーストクラスコレクション（RewriteRules）の単体テスト実装
+- [x] 編集画面のE2Eテストのコメントアウトしたテストの復活
+  - **完了（スクラム04）**: コンソールエラーテスト復活
+- [ ] 編集画面でのキャンセル機能実装（ポップアップクローズ）
+- [ ] 手動テストによる動作確認
+- [ ] test-and-lint実行と修正
+
 
 # ISSUEを通した相談事
 - storybookを利用してatomic designでUI再現する際の、既存のpopup/App.tsxとの整合性はどの程度まで求めるか？
@@ -39,10 +51,11 @@
 - [x] 既存App.tsxのリファクタリング （スクラム02完了）
 - [x] スタイリング手法の決定と実装 （スクラム02完了 - CSS modules採用）
 - [x] テストケースの作成 （スクラム02完了 - E2Eテスト対応）
-- [ ] favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.tsx のロジックをUseCaseに分離
-- [ ] ストレージからのIDによるルール取得処理、編集処理の単体テスト
+- [x] EditRulePage.tsxのロジックをUseCaseに分離（スクラム04完了）
+- [x] ストレージからのIDによるルール取得処理、編集処理の単体テスト（スクラム04完了 - getById, update）
+- [ ] ストレージのcreate, remove処理の単体テスト
 - [ ] ファーストクラスコレクションの機能追加の単体テスト
-- [ ] 編集画面のE2Eテストのコメントアウトしたテストの復活
+- [x] 編集画面のE2Eテストのコメントアウトしたテストの復活（スクラム04完了）
 - [ ]     chrome.tabs.create({
       url: chrome.runtime.getURL(`edit.html?ruleId=${ruleId}`)
     }); のinfrastructure層への移管
