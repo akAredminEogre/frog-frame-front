@@ -32,11 +32,7 @@ export class ChromeStorageRewriteRuleRepository implements IRewriteRuleRepositor
 
   async getById(id: string): Promise<RewriteRule> {
     const allRules = await this.getAll();
-    const foundRule = allRules.findById(id);
-    if (!foundRule) {
-      throw new RewriteRuleNotFoundError(id);
-    }
-    return foundRule;
+    return allRules.getById(id);
   }
 
   async update(rule: RewriteRule): Promise<void> {
