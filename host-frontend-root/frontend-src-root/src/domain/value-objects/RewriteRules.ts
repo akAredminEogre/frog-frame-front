@@ -27,11 +27,12 @@ export class RewriteRules {
   }
 
   /**
-   * 新しいルールを追加した新しいRewriteRulesオブジェクトを返す（Immutable）
-   * @param rule 追加するRewriteRule
-   * @returns 新しいルールが追加されたRewriteRulesオブジェクト
+   * ルールを設定した新しいRewriteRulesオブジェクトを返す（Immutable）
+   * 既存のIDがある場合は上書き、ない場合は新規追加
+   * @param rule 設定するRewriteRule
+   * @returns ルールが設定されたRewriteRulesオブジェクト
    */
-  add(rule: RewriteRule): RewriteRules {
+  set(rule: RewriteRule): RewriteRules {
     const newRules = new Map(this.rules);
     newRules.set(rule.id, rule);
     return new RewriteRules(Object.fromEntries(newRules));
@@ -67,15 +68,5 @@ export class RewriteRules {
     return rule;
   }
 
-  /**
-   * 既存のルールを更新した新しいRewriteRulesオブジェクトを返す（Immutable）
-   * @param rule 更新するRewriteRule
-   * @returns ルールが更新されたRewriteRulesオブジェクト
-   */
-  update(rule: RewriteRule): RewriteRules {
-    const newRules = new Map(this.rules);
-    newRules.set(rule.id, rule);
-    return new RewriteRules(Object.fromEntries(newRules));
-  }
 
 }
