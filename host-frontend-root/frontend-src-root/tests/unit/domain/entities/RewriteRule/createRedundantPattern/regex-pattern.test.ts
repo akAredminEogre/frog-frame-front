@@ -8,11 +8,7 @@ import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 interface CreateRedundantPatternRegexTestCase {
   description: string;
   input: {
-    id: string;
     oldString: string;
-    newString: string;
-    urlPattern?: string;
-    isRegex: boolean;
   };
   expected: string;
 }
@@ -21,22 +17,14 @@ const regexPatternTestCases: CreateRedundantPatternRegexTestCase[] = [
   {
     description: '正規表現パターンの場合は元のパターンに改行コード無視処理を追加する',
     input: {
-      id: 'test-id',
       oldString: '<div>.*?</div>',
-      newString: 'replacement',
-      urlPattern: undefined,
-      isRegex: true
     },
     expected: '(?:\\s*)<div>(?:\\s*).*?(?:\\s*)</div>(?:\\s*)'
   },
   {
     description: 'HTMLタグを含まない正規表現の場合はそのまま返す',
     input: {
-      id: 'test-id',
       oldString: 'Hello.*World',
-      newString: 'replacement',
-      urlPattern: undefined,
-      isRegex: true
     },
     expected: 'Hello.*World'
   }
@@ -52,11 +40,11 @@ describe('RewriteRule.createRedundantPattern - 正規表現パターン', () => 
     it(testCase.description, () => {
       // Arrange
       const rule = new RewriteRule(
-        testCase.input.id,
+        'test-id',
         testCase.input.oldString,
-        testCase.input.newString,
-        testCase.input.urlPattern || "",
-        testCase.input.isRegex
+        'replacement',
+        '',
+        true
       );
 
       // Act
