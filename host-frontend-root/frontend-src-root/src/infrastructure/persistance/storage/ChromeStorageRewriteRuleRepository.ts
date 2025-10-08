@@ -1,7 +1,6 @@
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
-import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 
 export class ChromeStorageRewriteRuleRepository implements IRewriteRuleRepository {
   private static readonly STORAGE_KEY = 'RewriteRules';
