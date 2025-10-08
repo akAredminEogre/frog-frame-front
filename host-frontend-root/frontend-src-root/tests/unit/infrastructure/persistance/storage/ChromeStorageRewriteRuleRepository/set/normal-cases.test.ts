@@ -19,7 +19,12 @@ Object.defineProperty(globalThis, 'chrome', {
 });
 
 /**
- * Chrome Storage APIの正しい呼び出し、既存ルールへの新規ルール設定保存、Promise型確認を統合的にテスト
+ * 1. 既存ルールに新規ルールを追加し、Promise型で返却
+ * 2. 空のストレージに最初のルールを保存
+ * 3. 同じIDの既存ルールを新しい値で上書き
+ * 4. 既存ルールのプロパティを更新
+ * 5. 指定されたプロパティのみ更新し、他のプロパティは保持
+ * 6. 1つのルールを更新する際に全てのルールを保持
  */
 describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
   let repository: ChromeStorageRewriteRuleRepository;

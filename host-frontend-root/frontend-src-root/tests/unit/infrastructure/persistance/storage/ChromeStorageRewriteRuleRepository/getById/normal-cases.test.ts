@@ -17,6 +17,10 @@ Object.defineProperty(globalThis, 'chrome', {
   writable: true
 });
 
+/**
+ * 1. 指定されたIDのルールが存在する場合、そのRewriteRuleインスタンスを返却
+ * 2. 全てのプロパティを持つルールを正しく取得
+ */
 describe('ChromeStorageRewriteRuleRepository.getById - 正常系', () => {
   let repository: ChromeStorageRewriteRuleRepository;
 
