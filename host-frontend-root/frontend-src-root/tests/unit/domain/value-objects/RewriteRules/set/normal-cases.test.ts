@@ -3,11 +3,11 @@ import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 /**
- * 1. 空のRewriteRulesに新しいルールを追加できることを確認
- * 2. 既存のRewriteRulesに新しいルールを追加できることを確認（Immutableであることも確認）
- * 3. 同じIDのルールを追加すると上書きされることを確認
+ * 1. 空のRewriteRulesに新しいルールを設定できることを確認
+ * 2. 既存のRewriteRulesに新しいルールを設定できることを確認（Immutableであることも確認）
+ * 3. 同じIDのルールを設定すると上書きされることを確認
  */
-describe('RewriteRules.add - 正常系', () => {
+describe('RewriteRules.set - 正常系', () => {
   let rule1: RewriteRule;
   let rule2: RewriteRule;
   let rule3: RewriteRule;
@@ -23,18 +23,18 @@ describe('RewriteRules.add - 正常系', () => {
     };
   });
 
-  it('空のRewriteRulesに新しいルールを追加できる', () => {
+  it('空のRewriteRulesに新しいルールを設定できる', () => {
     const emptyRules = new RewriteRules();
-    const updatedRules = emptyRules.add(rule1);
+    const updatedRules = emptyRules.set(rule1);
     
     expect(Object.keys(emptyRules.toObject())).toHaveLength(0); // 元のオブジェクトは変更されない（Immutable）
     expect(Object.keys(updatedRules.toObject())).toHaveLength(1);
     expect(updatedRules.toObject()['rule1']).toBe(rule1);
   });
 
-  it('既存のRewriteRulesに新しいルールを追加できる', () => {
+  it('既存のRewriteRulesに新しいルールを設定できる', () => {
     const originalRules = new RewriteRules(rulesObject);
-    const updatedRules = originalRules.add(rule3);
+    const updatedRules = originalRules.set(rule3);
     
     const originalRulesObject = originalRules.toObject();
     const updatedRulesObject = updatedRules.toObject();
@@ -46,10 +46,10 @@ describe('RewriteRules.add - 正常系', () => {
     expect(updatedRulesObject['rule3']).toBe(rule3);
   });
 
-  it('同じIDのルールを追加すると上書きされる', () => {
+  it('同じIDのルールを設定すると上書きされる', () => {
     const originalRules = new RewriteRules(rulesObject);
     const newRule1 = new RewriteRule('rule1', 'updated_old', 'updated_new', 'https://updated.com/*', true);
-    const updatedRules = originalRules.add(newRule1);
+    const updatedRules = originalRules.set(newRule1);
     
     const updatedRulesObject = updatedRules.toObject();
     

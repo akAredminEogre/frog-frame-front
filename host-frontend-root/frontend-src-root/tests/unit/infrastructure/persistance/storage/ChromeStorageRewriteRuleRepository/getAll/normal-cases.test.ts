@@ -19,7 +19,9 @@ Object.defineProperty(globalThis, 'chrome', {
 });
 
 /**
- * Chrome Storage APIの正しい呼び出し、RewriteRulesオブジェクトの取得、Promise型確認を統合的にテスト
+ * 1. 複数のルールが保存されている場合、すべてのルールをRewriteRulesインスタンスとして取得し、Promise型で返却
+ * 2. ストレージが空の場合、空のRewriteRulesインスタンスを返却
+ * 3. RewriteRulesの値がnullの場合、空のRewriteRulesインスタンスを返却
  */
 describe('ChromeStorageRewriteRuleRepository.getAll - 正常系', () => {
   let repository: ChromeStorageRewriteRuleRepository;
