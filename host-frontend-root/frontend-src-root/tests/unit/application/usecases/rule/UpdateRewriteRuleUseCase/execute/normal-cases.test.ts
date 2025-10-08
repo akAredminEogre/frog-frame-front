@@ -18,8 +18,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
     mockRepository = {
       getById: vi.fn(),
       getAll: vi.fn(),
-      save: vi.fn(),
-      update: vi.fn(),
+      set: vi.fn(),
     };
 
     // テスト対象の初期化
@@ -59,13 +58,13 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
     },
   ])('$description', async ({ rule }) => {
     // Arrange
-    vi.mocked(mockRepository.update).mockResolvedValue();
+    vi.mocked(mockRepository.set).mockResolvedValue();
 
     // Act
     await useCase.execute(rule);
 
     // Assert
-    expect(mockRepository.update).toHaveBeenCalledTimes(1);
-    expect(mockRepository.update).toHaveBeenCalledWith(rule);
+    expect(mockRepository.set).toHaveBeenCalledTimes(1);
+    expect(mockRepository.set).toHaveBeenCalledWith(rule);
   });
 });
