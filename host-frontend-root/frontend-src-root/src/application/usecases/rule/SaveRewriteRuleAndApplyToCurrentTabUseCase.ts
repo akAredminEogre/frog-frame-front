@@ -2,7 +2,7 @@ import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
+import { Tab } from 'src/domain/value-objects/Tab';
 
 interface RewriteRuleData {
   oldString: string;
@@ -60,7 +60,7 @@ export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
     }
   }
 
-  private async processRuleApplication(currentTab: CurrentTab): Promise<SaveRewriteRuleAndApplyResult> {
+  private async processRuleApplication(currentTab: Tab): Promise<SaveRewriteRuleAndApplyResult> {
 
     const applyResult = await this.chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
     if (!applyResult.success) {
