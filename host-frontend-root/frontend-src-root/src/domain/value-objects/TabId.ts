@@ -2,7 +2,6 @@ export class TabId {
   private readonly _value: number;
 
   constructor(value: number) {
-    // より詳細なバリデーション（CurrentTabから移行）
     if (value === undefined || value === null) {
       throw new Error(`TabId constructor received invalid value: ${value}`);
     }
