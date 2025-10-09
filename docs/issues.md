@@ -8,6 +8,8 @@
 
 ## phase02
 - [ ] フロントエンドコンポーネントのフロントエンドテスト
+- [ ] urlPatternの空文字、null、undefinedのバリデーション
+- [ ] urlPatternの値オブジェクト化
 - [ ] 編集ページはポップアップとしても使えるようにする
 - [ ] ルールの有効/無効切り替え機能
 - [ ] `container.ts`への`SaveRewriteRuleAndApplyToCurrentTabUseCase`登録
