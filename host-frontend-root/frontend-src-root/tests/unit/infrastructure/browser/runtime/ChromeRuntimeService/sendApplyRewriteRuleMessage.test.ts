@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
+import { Tab } from 'src/domain/value-objects/Tab';
 
 // Chrome APIのモック
 const mockChrome = {
@@ -14,11 +14,11 @@ global.chrome = mockChrome as any;
 
 describe('ChromeRuntimeService.sendApplyRewriteRuleMessage', () => {
   let chromeRuntimeService: ChromeRuntimeService;
-  let currentTab: CurrentTab;
+  let currentTab: Tab;
 
   beforeEach(() => {
     chromeRuntimeService = new ChromeRuntimeService();
-    currentTab = new CurrentTab(1, 'https://example.com');
+    currentTab = new Tab(1, 'https://example.com');
     vi.clearAllMocks();
   });
 

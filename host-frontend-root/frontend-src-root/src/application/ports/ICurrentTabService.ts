@@ -1,7 +1,7 @@
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
+import { Tab } from 'src/domain/value-objects/Tab';
 import { TabId } from 'src/domain/value-objects/TabId';
 
 export interface ICurrentTabService {
-  getCurrentTab(): Promise<CurrentTab>;
-  getTabById(tabId: TabId): Promise<CurrentTab>;
+  getCurrentTab(): Promise<Tab>;
+  getTabById(tabId: TabId): Promise<Tab>;
 }
