@@ -1,5 +1,6 @@
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { Tab } from 'src/domain/value-objects/Tab';
 
 /**
  * ルール更新後に該当タブの内容を更新するユースケース
@@ -26,31 +27,32 @@ export class RefreshAllTabsAfterRuleUpdateUseCase {
     await this.sendMessageToTabs(targetTabs);
   }
 
-  private filterTargetTabs(tabs: any[], rule: RewriteRule): any[] {
+  private filterTargetTabs(tabs: Tab[], rule: RewriteRule): Tab[] {
     return tabs.filter(tab => {
-      if (!tab.url) {
+      const url = tab.getTabUrl().value;
+      if (!url) {
         return false;
       }
-      return rule.matchesUrl(tab.url);
+      return rule.matchesUrl(url);
     });
   }
 
-  private async sendMessageToTabs(tabs: any[]): Promise<void> {
+  private async sendMessageToTabs(tabs: Tab[]): Promise<void> {
     for (const tab of tabs) {
-      if (tab.id && tab.url) {
-        await this.sendMessageToTab(tab);
-      }
+      await this.sendMessageToTab(tab);
     }
   }
 
-  private async sendMessageToTab(tab: any): Promise<void> {
+  private async sendMessageToTab(tab: Tab): Promise<void> {
     try {
-      await this.chromeTabsService.sendMessage(tab.id, {
+      const tabId = tab.getTabId().value;
+      const tabUrl = tab.getTabUrl().value;
+      await this.chromeTabsService.sendMessage(tabId, {
         type: 'applyAllRules',
-        tabUrl: tab.url
+        tabUrl: tabUrl
       });
     } catch (error) {
-      console.debug('[RefreshAllTabsAfterRuleUpdateUseCase] Failed to send message to tab:', tab.id, error);
+      console.debug('[RefreshAllTabsAfterRuleUpdateUseCase] Failed to send message to tab:', tab.getTabId().value, error);
     }
   }
 }

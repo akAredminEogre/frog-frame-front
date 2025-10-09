@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { RefreshAllTabsAfterRuleUpdateUseCase } from 'src/application/usecases/rule/RefreshAllTabsAfterRuleUpdateUseCase';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { Tab } from 'src/domain/value-objects/Tab';
 
 /**
  * RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系テスト
@@ -35,9 +36,9 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     );
 
     const tabs = [
-      { id: 1, url: 'https://example.com/page1' },
-      { id: 2, url: 'https://example.com/page2' },
-      { id: 3, url: 'https://other.com/page' },
+      new Tab(1, 'https://example.com/page1'),
+      new Tab(2, 'https://example.com/page2'),
+      new Tab(3, 'https://other.com/page'),
     ];
 
     vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
@@ -93,10 +94,10 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     );
 
     const tabs = [
-      { id: 1, url: 'https://example.com/' },
-      { id: 2, url: 'https://example.com/page1' },
-      { id: 3, url: 'https://example.com/page2' },
-      { id: 4, url: 'https://example.com/page3' },
+      new Tab(1, 'https://example.com/'),
+      new Tab(2, 'https://example.com/page1'),
+      new Tab(3, 'https://example.com/page2'),
+      new Tab(4, 'https://example.com/page3'),
     ];
 
     vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
@@ -111,60 +112,6 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     expect(mockChromeTabsService.sendMessage).toHaveBeenCalledTimes(4);
   });
 
-  it('タブのURLが存在しない場合は無視する', async () => {
-    // Arrange
-    const rule = new RewriteRule(
-      'rule-004',
-      'oldText',
-      'newText',
-      'https://example.com',
-      false
-    );
-
-    const tabs = [
-      { id: 1, url: 'https://example.com/page1' },
-      { id: 2, url: undefined },
-      { id: 3, url: 'https://example.com/page2' },
-    ];
-
-    vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
-    vi.mocked(mockChromeTabsService.sendMessage).mockResolvedValue(undefined);
-
-    // Act
-    await useCase.execute(rule);
-
-    // Assert
-    expect(mockChromeTabsService.queryTabs).toHaveBeenCalledWith({});
-    expect(mockChromeTabsService.sendMessage).toHaveBeenCalledTimes(2);
-  });
-
-  it('タブのIDが存在しない場合は無視する', async () => {
-    // Arrange
-    const rule = new RewriteRule(
-      'rule-005',
-      'oldText',
-      'newText',
-      'https://example.com',
-      false
-    );
-
-    const tabs = [
-      { id: 1, url: 'https://example.com/page1' },
-      { id: undefined, url: 'https://example.com/page2' },
-      { id: 3, url: 'https://example.com/page3' },
-    ];
-
-    vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
-    vi.mocked(mockChromeTabsService.sendMessage).mockResolvedValue(undefined);
-
-    // Act
-    await useCase.execute(rule);
-
-    // Assert
-    expect(mockChromeTabsService.queryTabs).toHaveBeenCalledWith({});
-    expect(mockChromeTabsService.sendMessage).toHaveBeenCalledTimes(2);
-  });
-
   it('メッセージ送信に失敗してもエラーをスローしない', async () => {
     // Arrange
     const rule = new RewriteRule(
@@ -176,8 +123,8 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     );
 
     const tabs = [
-      { id: 1, url: 'https://example.com/page1' },
-      { id: 2, url: 'https://example.com/page2' },
+      new Tab(1, 'https://example.com/page1'),
+      new Tab(2, 'https://example.com/page2'),
     ];
 
     vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
