@@ -18,10 +18,8 @@ refactor: CurrentTabクラスをTabクラスにリネーム
 - クラス名: `CurrentTab` → `Tab`
 
 ### 2. 関連するインターフェースとサービスの更新
-- `IChromeTabsService`: 新しい`Tab`型を使用するメソッドを追加
 - `ICurrentTabService`: `Tab`型を返すように更新
 - `IChromeRuntimeService`: `Tab`型を使用するように更新
-- `ChromeTabsService`: `Tab`型のインスタンスを返す実装を追加
 - `ChromeCurrentTabService`: `Tab`型を生成するように変更
 - `ChromeRuntimeService`: `Tab`型を受け取るように変更
 
