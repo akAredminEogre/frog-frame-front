@@ -75,4 +75,16 @@ export class RewriteRule {
       .replace(this.htmlOpenTagPattern, this.htmlWhitespaceBeforeOpenTag)
       .replace(this.htmlCloseTagPattern, this.htmlWhitespaceAfterCloseTag);
   }
+
+  /**
+   * 指定されたURLがこのルールのURLパターンに前方一致するかどうかを判定する
+   * @param url 判定対象のURL文字列
+   * @returns URLパターンが空文字列の場合はfalse、前方一致する場合はtrue
+   */
+  public matchesUrl(url: string): boolean {
+    if (this.urlPattern === '') {
+      return false;
+    }
+    return url.startsWith(this.urlPattern);
+  }
 }
