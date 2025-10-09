@@ -1,9 +1,9 @@
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
+import { Tab } from 'src/domain/value-objects/Tab';
 import { describe, it, expect } from 'vitest';
 
 /**
- * TabIdのバリデーション失敗時にCurrentTabが適切にエラーをラップすることを確認
- * バリデーション規約：サブクラス（TabId）の詳細ではなく、成功/失敗パターンのみテスト
+ * TabIdのバリデーション失敗時にTabが適切にエラーをラップすることを確認
+ * バリデーション規約:サブクラス（TabId）の詳細ではなく、成功/失敗パターンのみテスト
  */
 
 const tabIdValidationFailureCases = [
@@ -16,10 +16,10 @@ const tabIdValidationFailureCases = [
   { description: 'TabIdバリデーション失敗時にエラーがラップされる', input: NaN }
 ];
 
-describe('CurrentTab.constructor - TabIdバリデーション失敗', () => {
+describe('Tab.constructor - TabIdバリデーション失敗', () => {
   tabIdValidationFailureCases.forEach(({ description, input }) => {
     it(`${description} (入力: ${input})`, () => {
-      expect(() => new CurrentTab(input as any, 'https://example.com')).toThrow('Failed to create CurrentTab:');
+      expect(() => new Tab(input as any, 'https://example.com')).toThrow('Failed to create Tab:');
     });
   });
 });
