@@ -1,8 +1,8 @@
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
+import { Tab } from 'src/domain/value-objects/Tab';
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 
 export class ChromeRuntimeService implements IChromeRuntimeService {
-  async sendApplyRewriteRuleMessage(currentTab: CurrentTab): Promise<{ success: boolean; error?: string }> {
+  async sendApplyRewriteRuleMessage(currentTab: Tab): Promise<{ success: boolean; error?: string }> {
     try {
       const tabId = currentTab.getTabId();
       const tabUrl = currentTab.getTabUrl();
