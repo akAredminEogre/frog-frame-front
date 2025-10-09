@@ -1,5 +1,6 @@
 import { injectable } from 'tsyringe';
-import { IChromeTabsService, Tab } from 'src/application/ports/IChromeTabsService';
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
+import { Tab } from 'src/domain/value-objects/Tab';
 
 /**
  * Chrome Tabs APIを使用して現在のタブにメッセージを送信するサービスの実装
@@ -19,7 +20,7 @@ export class ChromeTabsService implements IChromeTabsService {
   async queryTabs(queryInfo: any): Promise<Tab[]> {
     try {
       const tabs = await chrome.tabs.query(queryInfo);
-      return tabs;
+      return tabs.map(tab => new Tab(tab.id!, tab.url!));
     } catch (error) {
       console.error('[ChromeTabsService] queryTabs error:', error);
       throw error;
