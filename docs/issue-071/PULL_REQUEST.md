@@ -27,7 +27,6 @@ refactor: CurrentTabクラスをTabクラスにリネーム
 
 ### 3. ユースケースの更新
 - `SaveRewriteRuleAndApplyToCurrentTabUseCase`: `Tab`型を使用
-- `RefreshAllTabsAfterRuleUpdateUseCase`: 新規追加（複数タブを`Tab`型で扱う）
 
 ### 4. テストの更新とリネーム
 - `tests/unit/domain/value-objects/CurrentTab/*` → `tests/unit/domain/value-objects/Tab/*`
