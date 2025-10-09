@@ -1,9 +1,9 @@
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
-import { CurrentTab } from 'src/domain/value-objects/CurrentTab';
+import { Tab } from 'src/domain/value-objects/Tab';
 import { TabId } from 'src/domain/value-objects/TabId';
 
 export class ChromeCurrentTabService implements ICurrentTabService {
-  async getCurrentTab(): Promise<CurrentTab> {
+  async getCurrentTab(): Promise<Tab> {
     return new Promise((resolve, reject) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
         try {
@@ -15,7 +15,7 @@ export class ChromeCurrentTabService implements ICurrentTabService {
     });
   }
 
-  private handleTabQueryResult(tabs: chrome.tabs.Tab[]): CurrentTab {
+  private handleTabQueryResult(tabs: chrome.tabs.Tab[]): Tab {
     const tab = tabs[0];
     if (!tab) {
       throw new Error('No active tab found');
@@ -24,7 +24,7 @@ export class ChromeCurrentTabService implements ICurrentTabService {
     return this.createCurrentTabFromTab(tab);
   }
 
-  async getTabById(tabId: TabId): Promise<CurrentTab> {
+  async getTabById(tabId: TabId): Promise<Tab> {
     return new Promise((resolve, reject) => {
       chrome.tabs.get(tabId.value, (tab: chrome.tabs.Tab) => {
         try {
@@ -36,7 +36,7 @@ export class ChromeCurrentTabService implements ICurrentTabService {
     });
   }
 
-  private createCurrentTabFromTab(tab: chrome.tabs.Tab): CurrentTab {
+  private createCurrentTabFromTab(tab: chrome.tabs.Tab): Tab {
     const tabId = tab.id;
     const tabUrl = tab.url;
 
@@ -45,6 +45,6 @@ export class ChromeCurrentTabService implements ICurrentTabService {
     }
 
     console.log(`[ChromeCurrentTabService] Creating CurrentTab with tabId: ${tabId}, url: ${tabUrl}`);
-    return new CurrentTab(tabId!, tabUrl);
+    return new Tab(tabId!, tabUrl);
   }
 }
