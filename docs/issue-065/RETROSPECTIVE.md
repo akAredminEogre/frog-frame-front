@@ -240,3 +240,31 @@
 
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+
+## スクラム09の振り返り
+<!-- KPT法で振り返りを行なってください -->
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+- 'applyAllRules'メッセージ送信ロジックをinfrastructure層のChromeTabsServiceに集約し、コードの重複を排除できた
+- IChromeTabsService.sendApplyAllRulesMessage(tab: Tab)の導入により、3箇所の重複コードを統一できた
+- 既存の使用箇所(RefreshAllTabsAfterRuleUpdateUseCase、tabs.onUpdated、messageHandlers)を新しいメソッドに置き換え、保守性を向上させた
+- 全テスト(73ファイル、268テスト)が成功し、リファクタリングの安全性を確保できた
+- TypeScriptコンパイルエラーなし、品質を維持できた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+- テストファイルの分割作業で、一時的にregistration.test.tsとonUpdatedListenerCallback.test.tsを作成したが、最終的にユーザーによってすべて削除されることになった
+- テストファイルの分割の必要性や方針について、事前に十分な確認ができていなかった
+- 作業記録(PROGRESS-09-01.md)で、削除されたテストファイルについての記述修正が必要になった
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+- テストファイルの分割や構造変更を行う前に、その必要性と影響範囲をユーザーに確認する
+- リファクタリング作業では、コード変更とテスト変更を分けて計画し、段階的に進める
+- 作業記録は現状を正確に反映するよう、最終状態を確認してから記述する
+- Infrastructure層へのロジック集約パターンを他の箇所にも適用できないか確認する
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
