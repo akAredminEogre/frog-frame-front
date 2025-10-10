@@ -1,5 +1,6 @@
 import { TabId } from 'src/domain/value-objects/TabId';
 import { TabUrl } from 'src/domain/value-objects/TabUrl';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 export class Tab {
   private readonly _tabId: TabId;
@@ -20,5 +21,13 @@ export class Tab {
 
   getTabUrl(): TabUrl {
     return this._tabUrl;
+  }
+
+  /**
+   * ルールにマッチするかどうかを判定
+   */
+  matchesRule(rule: RewriteRule): boolean {
+    const url = this._tabUrl.value!;
+    return rule.matchesUrl(url);
   }
 }
