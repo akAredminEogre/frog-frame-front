@@ -2,8 +2,10 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
+import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
 import { container } from 'src/infrastructure/di/container';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import './style.css';
 
 function RulesApp() {
@@ -45,11 +47,10 @@ function RulesApp() {
     );
   }
 
-  const handleEdit = (ruleId: string) => {
-    // Chrome Extension APIを使用して編集画面を新しいタブで開く
-    chrome.tabs.create({
-      url: chrome.runtime.getURL(`edit.html?ruleId=${ruleId}`)
-    });
+  const handleEdit = async (ruleId: string) => {
+    const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
+    const openRuleEditPageUseCase = new OpenRuleEditPageUseCase(chromeTabsService);
+    await openRuleEditPageUseCase.execute(ruleId);
   };
 
   return (
