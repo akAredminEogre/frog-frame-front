@@ -21,6 +21,7 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
       sendMessage: vi.fn(),
       queryTabs: vi.fn(),
       sendApplyAllRulesMessage: vi.fn(),
+      openEditPage: vi.fn(),
     };
 
     // テスト対象の初期化
