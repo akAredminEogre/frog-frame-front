@@ -19,6 +19,8 @@ describe('HandleContextMenuReplaceDomElement.execute - エッジケース', () =
     mockTabsService = {
       sendMessage: vi.fn(),
       queryTabs: vi.fn(),
+      sendApplyAllRulesMessage: vi.fn(),
+      openEditPage: vi.fn(),
     };
 
     mockSelectedPageTextService = {
