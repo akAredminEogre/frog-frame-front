@@ -57,9 +57,7 @@
 - [ ] ファーストクラスコレクションの機能追加の単体テスト
 - [x] 編集画面のE2Eテストのコメントアウトしたテストの復活（スクラム04完了）
 - [x] 'applyAllRules'メッセージ送信ロジックのinfrastructure層への集約（スクラム09完了）
-- [ ]     chrome.tabs.create({
-      url: chrome.runtime.getURL(`edit.html?ruleId=${ruleId}`)
-    }); のinfrastructure層への移管
+- [x] chrome.tabs.create({ url: chrome.runtime.getURL(`edit.html?ruleId=${ruleId}`) }); のinfrastructure層への移管（スクラム10完了）
 
 
 ## スクラム02完了事項
