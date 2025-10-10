@@ -3,6 +3,7 @@ import { RefreshAllTabsAfterRuleUpdateUseCase } from 'src/application/usecases/r
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { Tab } from 'src/domain/value-objects/Tab';
+import { Tabs } from 'src/domain/value-objects/Tabs';
 
 /**
  * RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系テスト
@@ -35,11 +36,11 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
       false
     );
 
-    const tabs = [
+    const tabs = new Tabs([
       new Tab(1, 'https://example.com/page1'),
       new Tab(2, 'https://example.com/page2'),
       new Tab(3, 'https://other.com/page'),
-    ];
+    ]);
 
     vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
     vi.mocked(mockChromeTabsService.sendMessage).mockResolvedValue(undefined);
@@ -71,7 +72,7 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
       false
     );
 
-    vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue([]);
+    vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(new Tabs([]));
     vi.mocked(mockChromeTabsService.sendMessage).mockResolvedValue(undefined);
 
     // Act
@@ -93,12 +94,12 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
       false
     );
 
-    const tabs = [
+    const tabs = new Tabs([
       new Tab(1, 'https://example.com/'),
       new Tab(2, 'https://example.com/page1'),
       new Tab(3, 'https://example.com/page2'),
       new Tab(4, 'https://example.com/page3'),
-    ];
+    ]);
 
     vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
     vi.mocked(mockChromeTabsService.sendMessage).mockResolvedValue(undefined);
@@ -122,10 +123,10 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
       false
     );
 
-    const tabs = [
+    const tabs = new Tabs([
       new Tab(1, 'https://example.com/page1'),
       new Tab(2, 'https://example.com/page2'),
-    ];
+    ]);
 
     vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
     vi.mocked(mockChromeTabsService.sendMessage)
