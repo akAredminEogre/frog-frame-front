@@ -7,6 +7,7 @@
 
 
 ## phase02
+- [ ] モックの切り出し
 - [ ] フロントエンドコンポーネントのフロントエンドテスト
 - [ ] urlPatternの空文字、null、undefinedのバリデーション
 - [ ] urlPatternの値オブジェクト化
