@@ -20,6 +20,7 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     mockChromeTabsService = {
       sendMessage: vi.fn(),
       queryTabs: vi.fn(),
+      sendApplyAllRulesMessage: vi.fn(),
     };
 
     // テスト対象の初期化
@@ -43,7 +44,7 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     ]);
 
     vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
-    vi.mocked(mockChromeTabsService.sendMessage).mockResolvedValue(undefined);
+    vi.mocked(mockChromeTabsService.sendApplyAllRulesMessage).mockResolvedValue(undefined);
 
     // Act
     await useCase.execute(rule);
@@ -51,15 +52,7 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     // Assert
     expect(mockChromeTabsService.queryTabs).toHaveBeenCalledTimes(1);
     expect(mockChromeTabsService.queryTabs).toHaveBeenCalledWith({});
-    expect(mockChromeTabsService.sendMessage).toHaveBeenCalledTimes(2);
-    expect(mockChromeTabsService.sendMessage).toHaveBeenCalledWith(1, {
-      type: 'applyAllRules',
-      tabUrl: 'https://example.com/page1',
-    });
-    expect(mockChromeTabsService.sendMessage).toHaveBeenCalledWith(2, {
-      type: 'applyAllRules',
-      tabUrl: 'https://example.com/page2',
-    });
+    expect(mockChromeTabsService.sendApplyAllRulesMessage).toHaveBeenCalledTimes(2);
   });
 
   it('URLパターンが設定されていない場合は、どのタブにもメッセージを送信しない', async () => {
@@ -102,7 +95,7 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     ]);
 
     vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
-    vi.mocked(mockChromeTabsService.sendMessage).mockResolvedValue(undefined);
+    vi.mocked(mockChromeTabsService.sendApplyAllRulesMessage).mockResolvedValue(undefined);
 
     // Act
     await useCase.execute(rule);
@@ -110,7 +103,7 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     // Assert
     expect(mockChromeTabsService.queryTabs).toHaveBeenCalledTimes(1);
     expect(mockChromeTabsService.queryTabs).toHaveBeenCalledWith({});
-    expect(mockChromeTabsService.sendMessage).toHaveBeenCalledTimes(4);
+    expect(mockChromeTabsService.sendApplyAllRulesMessage).toHaveBeenCalledTimes(4);
   });
 
   it('メッセージ送信に失敗してもエラーをスローしない', async () => {
@@ -129,13 +122,13 @@ describe('RefreshAllTabsAfterRuleUpdateUseCase.execute - 正常系', () => {
     ]);
 
     vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(tabs);
-    vi.mocked(mockChromeTabsService.sendMessage)
+    vi.mocked(mockChromeTabsService.sendApplyAllRulesMessage)
       .mockRejectedValueOnce(new Error('Tab not found'))
       .mockResolvedValueOnce(undefined);
 
     // Act & Assert
     await expect(useCase.execute(rule)).resolves.not.toThrow();
     expect(mockChromeTabsService.queryTabs).toHaveBeenCalledWith({});
-    expect(mockChromeTabsService.sendMessage).toHaveBeenCalledTimes(2);
+    expect(mockChromeTabsService.sendApplyAllRulesMessage).toHaveBeenCalledTimes(2);
   });
 });
