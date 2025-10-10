@@ -1,6 +1,7 @@
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { Tab } from 'src/domain/value-objects/Tab';
+import { Tabs } from 'src/domain/value-objects/Tabs';
 
 /**
  * ルール更新後に該当タブの内容を更新するユースケース
@@ -23,22 +24,12 @@ export class RefreshAllTabsAfterRuleUpdateUseCase {
     // Chrome Tabs APIの url パラメータはマッチパターンを使用するため、
     // 単純な前方一致を実現するには全タブを取得してフィルタリングする方が確実
     const tabs = await this.chromeTabsService.queryTabs({});
-    const targetTabs = this.filterTargetTabs(tabs, rule);
+    const targetTabs = tabs.filterByRule(rule);
     await this.sendMessageToTabs(targetTabs);
   }
 
-  private filterTargetTabs(tabs: Tab[], rule: RewriteRule): Tab[] {
-    return tabs.filter(tab => {
-      const url = tab.getTabUrl().value;
-      if (!url) {
-        return false;
-      }
-      return rule.matchesUrl(url);
-    });
-  }
-
-  private async sendMessageToTabs(tabs: Tab[]): Promise<void> {
-    for (const tab of tabs) {
+  private async sendMessageToTabs(tabs: Tabs): Promise<void> {
+    for (const tab of tabs.toArray()) {
       await this.sendMessageToTab(tab);
     }
   }
