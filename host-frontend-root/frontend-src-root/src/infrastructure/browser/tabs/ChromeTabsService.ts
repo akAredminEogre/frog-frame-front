@@ -28,4 +28,20 @@ export class ChromeTabsService implements IChromeTabsService {
       throw error;
     }
   }
+
+  async sendApplyAllRulesMessage(tab: Tab): Promise<any> {
+    try {
+      const response = await chrome.tabs.sendMessage(
+        tab.getTabId().value,
+        {
+          type: 'applyAllRules',
+          tabUrl: tab.getTabUrl().value
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error('[ChromeTabsService] sendApplyAllRulesMessage error:', error);
+      throw error;
+    }
+  }
 }
