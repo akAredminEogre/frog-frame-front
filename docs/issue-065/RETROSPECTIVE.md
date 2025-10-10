@@ -211,3 +211,32 @@
 
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+
+## スクラム08の振り返り
+<!-- KPT法で振り替りを行なってください -->
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+- Tabsファーストクラスコレクションの導入により、ドメインロジックの適切な集約ができた
+- Tab.matchesRuleメソッドの追加により、URL判定ロジックをTabクラスに移管し、単一責任の原則を実現できた
+- IChromeTabsService.queryTabsの返り値をTabsコレクションに変更し、型安全性を向上させた
+- filterTargetTabsメソッドをTabsコレクションに移管し、ビジネスロジックのカプセル化を実現できた
+- 全テスト（RefreshAllTabsAfterRuleUpdateUseCase 4/4、Tab.matchesRule 3/3）が成功し、リファクタリングの安全性を保証できた
+- レビューコメント（設計相談）に対して、DDDとClean Architectureの原則に基づいた明確な回答を提供できた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+- sendMessageToTabsメソッドをTabsコレクションに組み込むべきか、という設計上の疑問が生じた
+- Value ObjectからInfrastructure層の処理を呼び出すことの可否について、判断に迷いがあった
+- レイヤードアーキテクチャにおける各層の責務について、常に明確に理解できているわけではない
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+- Value Objectの責務（不変なドメイン概念の表現、純粋な値の比較・計算・変換）を常に意識する
+- メソッド配置を検討する際は、副作用の有無と依存関係の方向を最初に確認する
+- Infrastructure層への依存が必要な処理は、Application層のUseCaseに配置するという原則を徹底する
+- 設計上の疑問が生じた際は、DDDとClean Architectureの基本原則に立ち返って判断する
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
