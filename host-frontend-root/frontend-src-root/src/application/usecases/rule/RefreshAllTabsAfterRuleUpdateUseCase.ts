@@ -36,12 +36,7 @@ export class RefreshAllTabsAfterRuleUpdateUseCase {
 
   private async sendMessageToTab(tab: Tab): Promise<void> {
     try {
-      const tabId = tab.getTabId().value;
-      const tabUrl = tab.getTabUrl().value;
-      await this.chromeTabsService.sendMessage(tabId, {
-        type: 'applyAllRules',
-        tabUrl: tabUrl
-      });
+      await this.chromeTabsService.sendApplyAllRulesMessage(tab);
     } catch (error) {
       console.debug('[RefreshAllTabsAfterRuleUpdateUseCase] Failed to send message to tab:', tab.getTabId().value, error);
     }
