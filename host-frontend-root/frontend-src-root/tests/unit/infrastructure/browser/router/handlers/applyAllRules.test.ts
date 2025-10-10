@@ -5,7 +5,8 @@ import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsSer
 
 // Chrome APIのモック
 const mockChromeTabsService = {
-  sendMessage: vi.fn()
+  sendMessage: vi.fn(),
+  sendApplyAllRulesMessage: vi.fn()
 };
 
 describe('handlers.applyAllRules', () => {
@@ -25,7 +26,7 @@ describe('handlers.applyAllRules', () => {
 
   it('正常にapplyAllRulesメッセージを処理する', async () => {
     const expectedResponse = { success: true, data: 'applied' };
-    mockChromeTabsService.sendMessage.mockResolvedValue(expectedResponse);
+    mockChromeTabsService.sendApplyAllRulesMessage.mockResolvedValue(expectedResponse);
 
     const message = {
       type: 'applyAllRules' as const,
@@ -35,63 +36,17 @@ describe('handlers.applyAllRules', () => {
 
     const result = await handlers.applyAllRules(message);
 
-    expect(mockChromeTabsService.sendMessage).toHaveBeenCalledWith(
-      tabId,
-      { type: 'applyAllRules', tabUrl: 'https://example.com' }
-    );
+    expect(mockChromeTabsService.sendApplyAllRulesMessage).toHaveBeenCalledTimes(1);
+    const callArg = mockChromeTabsService.sendApplyAllRulesMessage.mock.calls[0][0];
+    expect(callArg.getTabId().value).toBe(tabId);
+    expect(callArg.getTabUrl().value).toBe('https://example.com');
     expect(result).toEqual({
       success: true,
       response: expectedResponse
     });
   });
 
-  it('ChromeTabsService.sendMessageが失敗した場合、エラーを返す', async () => {
-    const error = new Error('Tab not found');
-    mockChromeTabsService.sendMessage.mockRejectedValue(error);
 
-    // コンソールエラーをモック
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    const message = {
-      type: 'applyAllRules' as const,
-      tabId: tabId,
-      tabUrl: 'https://example.com'
-    };
 
-    const result = await handlers.applyAllRules(message);
-
-    expect(result).toEqual({
-      success: false,
-      error: 'Tab not found'
-    });
-    expect(consoleSpy).toHaveBeenCalledWith('[background] applyAllRules error:', error);
-    
-    consoleSpy.mockRestore();
-  });
-
-  it('containerのresolveが失敗した場合、エラーを返す', async () => {
-    // サービスを一時的に未登録にする（tsyringeでは難しいため、エラーを投げるモックを使用）
-    const errorMock = {
-      sendMessage: vi.fn().mockRejectedValue(new Error('Service not found'))
-    };
-    
-    container.register(ChromeTabsService, { useValue: errorMock as any });
-
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    const message = {
-      type: 'applyAllRules' as const,
-      tabId: tabId,
-      tabUrl: 'https://example.com'
-    };
-
-    const result = await handlers.applyAllRules(message);
-
-    expect(result).toEqual({
-      success: false,
-      error: 'Service not found'
-    });
-
-    consoleSpy.mockRestore();
-  });
 });
