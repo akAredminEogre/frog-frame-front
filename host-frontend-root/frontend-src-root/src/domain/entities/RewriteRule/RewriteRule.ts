@@ -1,5 +1,6 @@
 import { PatternProcessingStrategyFactory } from "./PatternProcessingStrategyFactory";
 import { RegexConstants } from "src/domain/constants/RegexConstants";
+import { RewriteRuleParams } from "src/application/types/RewriteRuleParams";
 
 export class RewriteRule {
   // HTML要素間改行コード無視処理用の正規表現定数をメンバ変数として保持
@@ -20,6 +21,22 @@ export class RewriteRule {
     this.htmlCloseTagPattern = RegexConstants.HTML_CLOSE_TAG_PATTERN;
     this.htmlWhitespaceBeforeOpenTag = RegexConstants.HTML_WHITESPACE_BEFORE_OPEN_TAG;
     this.htmlWhitespaceAfterCloseTag = RegexConstants.HTML_WHITESPACE_AFTER_CLOSE_TAG;
+  }
+
+  /**
+   * RewriteRuleParamsからRewriteRuleインスタンスを生成するファクトリーメソッド
+   * @param id ルールのID
+   * @param params RewriteRuleParamsオブジェクト
+   * @returns RewriteRuleインスタンス
+   */
+  static fromParams(id: string, params: RewriteRuleParams): RewriteRule {
+    return new RewriteRule(
+      id,
+      params.oldString,
+      params.newString,
+      params.urlPattern,
+      params.isRegex
+    );
   }
 
   /**

@@ -5,17 +5,11 @@ import OldStringTextArea from 'src/components/organisms/OldStringTextArea';
 import URLPatternInput from 'src/components/organisms/URLPatternInput';
 import SaveButton from '../molecules/SaveButton';
 import styles from './RewriteRuleForm.module.css';
-
-interface RewriteRule {
-  oldString: string;
-  newString: string;
-  urlPattern: string;
-  isRegex: boolean;
-}
+import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 
 interface RewriteRuleFormProps {
-  rule: RewriteRule;
-  onRuleChange: (rule: RewriteRule) => void;
+  rule: RewriteRuleParams;
+  onRuleChange: (rule: RewriteRuleParams) => void;
   onSave: () => void;
   isLoading?: boolean;
   title?: string; // カスタマイズ可能なタイトル
@@ -29,7 +23,7 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
   title = "fklf: Rewrite Rule",
 }) => {
   
-  const handleTextAreaChange = (field: keyof Pick<RewriteRule, 'oldString' | 'newString'>) => 
+  const handleTextAreaChange = (field: keyof Pick<RewriteRuleParams, 'oldString' | 'newString'>) => 
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       onRuleChange({
         ...rule,
@@ -38,7 +32,7 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
     };
 
   
-  const handleInputChange = (field: keyof Pick<RewriteRule, 'urlPattern'>) => 
+  const handleInputChange = (field: keyof Pick<RewriteRuleParams, 'urlPattern'>) => 
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onRuleChange({
         ...rule,

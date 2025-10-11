@@ -8,15 +8,11 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
+import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 
 function App() {
   // フォーム入力を管理するState
-  const [rewriteRule, setRewriteRule] = useState<{
-    oldString: string;
-    newString: string;
-    urlPattern: string;
-    isRegex: boolean;
-  }>({
+  const [rewriteRule, setRewriteRule] = useState<RewriteRuleParams>({
     oldString: '',
     newString: '',
     urlPattern: '',
