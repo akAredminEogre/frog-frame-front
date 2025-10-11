@@ -15,6 +15,8 @@ import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTex
 import { IPopupService } from 'src/application/ports/IPopupService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository';
+import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
+import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 
 // Register implementations for interfaces (抽象化のため)
 container.register<IChromeTabsService>('IChromeTabsService', { useClass: ChromeTabsService });
@@ -26,3 +28,5 @@ container.register<IRewriteRuleRepository>('IRewriteRuleRepository', { useClass:
 container.register(HandleContextMenuReplaceDomElement, { useClass: HandleContextMenuReplaceDomElement });
 container.register(ContextMenuSetupUseCase, { useClass: ContextMenuSetupUseCase });
 container.register(ChromeStorageRewriteRuleRepository, { useClass: ChromeStorageRewriteRuleRepository });
+container.register(LoadRewriteRuleForEditUseCase, { useClass: LoadRewriteRuleForEditUseCase });
+container.register(UpdateRewriteRuleUseCase, { useClass: UpdateRewriteRuleUseCase });
