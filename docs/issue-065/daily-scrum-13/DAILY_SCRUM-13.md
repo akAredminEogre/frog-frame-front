@@ -26,7 +26,28 @@
 
 # DAILY SCRUM-13作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+
+### 実施内容
+- デイリースクラム13の作業予定内容の確認と調査を実施
+- RewriteRulesクラスの実装状況とテスト網羅状況を調査
+- 調査結果、全ての既存メソッドに対してテストが実装済みであることを確認
+- 開発者の判断により、今回のスクラムではコード実装・修正は不要と決定
+
+### 調査結果
+- 既存メソッド全てにテストが実装済み：
+  - constructor (normal-cases.test.ts)
+  - set (normal-cases.test.ts)
+  - getById (normal-cases.test.ts, Abend/error-cases.test.ts)
+  - toArray (normal-cases.test.ts)
+  - toObject (normal-cases.test.ts)
+- デイリースクラムで予定されていたメソッドは既に実装済み
+  - getById()がfindById()に相当
+  - set()がupdate()/add()に相当
+  - remove()は未実装
+
+### テスト実行結果
+- 単体テスト: 72ファイル、262テスト全てパス
+- lint/knip: 問題なし
 
 ## 修正したファイル
+なし（実装・修正不要と判断）
