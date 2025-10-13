@@ -4,6 +4,7 @@ import NewStringTextArea from 'src/components/organisms/NewStringTextArea';
 import OldStringTextArea from 'src/components/organisms/OldStringTextArea';
 import URLPatternInput from 'src/components/organisms/URLPatternInput';
 import SaveButton from '../molecules/SaveButton';
+import CancelButton from '../molecules/CancelButton';
 import styles from './RewriteRuleForm.module.css';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 
@@ -11,6 +12,7 @@ interface RewriteRuleFormProps {
   rule: RewriteRuleParams;
   onRuleChange: (rule: RewriteRuleParams) => void;
   onSave: () => void;
+  onCancel?: () => void;
   isLoading?: boolean;
   isLoadingData?: boolean;
   error?: string | null;
@@ -21,6 +23,7 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
   rule,
   onRuleChange,
   onSave,
+  onCancel,
   isLoading = false,
   isLoadingData = false,
   error = null,
@@ -91,6 +94,12 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
           onClick={onSave}
           isLoading={isLoading}
         />
+        {onCancel && (
+          <CancelButton
+            onClick={onCancel}
+            disabled={isLoading}
+          />
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { RewriteRuleForm } from '../organisms/RewriteRuleForm';
 import { container } from 'src/infrastructure/di/container';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
+import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 
 interface EditRulePageProps {
@@ -68,12 +69,18 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
     }
   };
 
+  const handleCancel = async () => {
+    const closeWindowUseCase = container.resolve(CloseCurrentWindowUseCase);
+    await closeWindowUseCase.execute();
+  };
+
   return (
     <div>
       <RewriteRuleForm
         rule={rule}
         onRuleChange={handleRuleChange}
         onSave={handleSave}
+        onCancel={handleCancel}
         isLoading={isSaving}
         isLoadingData={isLoading}
         error={error}
