@@ -46,8 +46,8 @@
 
 # 残タスク
 <!-- issueの進捗に応じて記入 -->
-- [ ] Storybookでのatomic design実装 
-- [ ] atomsのstorybook化 
+- [x] Storybookでのatomic design実装（スクラム12完了 - Atoms/Molecules/Organismsのストーリーファイル作成）
+- [x] atomsのstorybook化（スクラム12完了）
 - [x] 既存App.tsxのリファクタリング （スクラム02完了）
 - [x] スタイリング手法の決定と実装 （スクラム02完了 - CSS modules採用）
 - [x] テストケースの作成 （スクラム02完了 - E2Eテスト対応）
