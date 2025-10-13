@@ -1,4 +1,4 @@
-workflow:create-daily-scrum
+favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:create-daily-scrum.md
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
