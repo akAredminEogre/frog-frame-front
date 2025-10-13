@@ -30,7 +30,8 @@
   - **完了（スクラム13）**: 調査の結果、全メソッド（constructor, set, getById, toArray, toObject）について既にテスト実装済み
 - [x] 編集画面のE2Eテストのコメントアウトしたテストの復活
   - **完了（スクラム04）**: コンソールエラーテスト復活
-- [ ] 編集画面でのキャンセル機能実装（ポップアップクローズ）
+- [x] 編集画面でのキャンセル機能実装（ポップアップクローズ）
+  - **完了（スクラム14）**: CancelButtonコンポーネント作成、Chrome Tabs API統合、レイヤー分離
 - [ ] 手動テストによる動作確認
 - [ ] test-and-lint実行と修正
 
@@ -58,7 +59,6 @@
 - [x] 編集画面のE2Eテストのコメントアウトしたテストの復活（スクラム04完了）
 - [x] 'applyAllRules'メッセージ送信ロジックのinfrastructure層への集約（スクラム09完了）
 - [x] chrome.tabs.create({ url: chrome.runtime.getURL(`edit.html?ruleId=${ruleId}`) }); のinfrastructure層への移管（スクラム10完了）
-- [ ] storageの入出力をRewriteRuleParams経由に変更するか検討
 
 
 ## スクラム02完了事項
