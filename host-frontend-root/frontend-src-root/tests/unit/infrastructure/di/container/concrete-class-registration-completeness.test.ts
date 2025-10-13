@@ -6,6 +6,7 @@ import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/Co
 import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
+import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 
 /**
  * DIコンテナの完全自動化具体クラス登録確認テスト
@@ -51,6 +52,10 @@ describe('DI Container - 完全自動化具体クラス登録確認テスト', (
     {
       class: UpdateRewriteRuleUseCase,
       className: 'UpdateRewriteRuleUseCase'
+    },
+    {
+      class: CloseCurrentWindowUseCase,
+      className: 'CloseCurrentWindowUseCase'
     },
   ];
 
