@@ -68,14 +68,6 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
     }
   };
 
-  if (isLoading) {
-    return <div>Loading rule data...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   return (
     <div>
       <RewriteRuleForm
@@ -83,6 +75,8 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
         onRuleChange={handleRuleChange}
         onSave={handleSave}
         isLoading={isSaving}
+        isLoadingData={isLoading}
+        error={error}
         title="fklf: Edit Rewrite Rule"
       />
     </div>
