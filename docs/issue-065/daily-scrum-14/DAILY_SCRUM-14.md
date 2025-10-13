@@ -28,7 +28,49 @@
 
 # DAILY SCRUM-14作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+
+### 実装内容
+1. CancelButtonコンポーネントの新規作成
+   - Buttonコンポーネントを使用したキャンセルボタン
+   - secondaryバリアントを使用
+
+2. RewriteRuleFormにキャンセル機能を追加
+   - onCancelプロップの追加（オプショナル）
+   - キャンセルボタンの表示（onCancelが渡された場合のみ）
+
+3. EditRulePageにキャンセル処理を実装
+   - handleCancel関数の追加
+   - CloseCurrentWindowUseCaseを使用してタブを閉じる
+
+4. E2Eテストの追加
+   - キャンセルボタンの表示確認
+   - キャンセルボタンクリック後のウィンドウクローズ確認
+
+5. CancelButton.stories.tsxの追加
+   - Defaultストーリー（disabled: false）
+   - Disabledストーリー（disabled: true）
+
+6. アーキテクチャ改善（レイヤー分離）
+   - IWindowServiceインターフェースの作成（application層）
+   - ChromeWindowServiceの実装（infrastructure層）
+     - Chrome Tabs APIを使用してタブ単位で閉じる実装
+   - CloseCurrentWindowUseCaseの実装（application層）
+   - DIコンテナへの登録
+
+### テスト結果
+- 単体テスト: 72ファイル、262テスト全てパス
+- E2Eテスト: 9件全て成功
+- lint/knip: 問題なし
 
 ## 修正したファイル
+- `src/components/molecules/CancelButton.tsx` (新規作成)
+- `src/components/molecules/CancelButton.stories.tsx` (新規作成)
+- `src/components/organisms/RewriteRuleForm.tsx`
+- `src/components/pages/EditRulePage.tsx`
+- `src/application/ports/IWindowService.ts` (新規作成)
+- `src/application/usecases/window/CloseCurrentWindowUseCase.ts` (新規作成)
+- `src/infrastructure/browser/window/ChromeWindowService.ts` (新規作成)
+- `src/infrastructure/di/container.ts`
+- `tests/e2e/edit-page.spec.ts`
+- `tests/unit/infrastructure/di/container/concrete-class-registration-completeness.test.ts`
+- `tests/unit/infrastructure/di/container/interface-registration-completeness.test.ts`
