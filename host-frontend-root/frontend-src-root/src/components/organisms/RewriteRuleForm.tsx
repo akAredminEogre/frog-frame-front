@@ -12,6 +12,8 @@ interface RewriteRuleFormProps {
   onRuleChange: (rule: RewriteRuleParams) => void;
   onSave: () => void;
   isLoading?: boolean;
+  isLoadingData?: boolean;
+  error?: string | null;
   title?: string; // カスタマイズ可能なタイトル
 }
 
@@ -20,6 +22,8 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
   onRuleChange,
   onSave,
   isLoading = false,
+  isLoadingData = false,
+  error = null,
   title = "fklf: Rewrite Rule",
 }) => {
   
@@ -46,6 +50,14 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
       isRegex: e.target.checked
     });
   };
+
+  if (isLoadingData) {
+    return <div>Loading rule data...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className={styles.form}>
