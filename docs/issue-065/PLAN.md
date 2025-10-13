@@ -26,7 +26,8 @@
   - **完了（スクラム04）**: LoadRewriteRuleForEditUseCase、UpdateRewriteRuleUseCase作成
 - [x] リポジトリ層の単体テスト実装（getById, update）
   - **完了（スクラム04）**: 正常系・異常系テスト実装（create, removeは未実装）
-- [ ] ファーストクラスコレクション（RewriteRules）の単体テスト実装
+- [x] ファーストクラスコレクション（RewriteRules）の単体テスト実装
+  - **完了（スクラム13）**: 調査の結果、全メソッド（constructor, set, getById, toArray, toObject）について既にテスト実装済み
 - [x] 編集画面のE2Eテストのコメントアウトしたテストの復活
   - **完了（スクラム04）**: コンソールエラーテスト復活
 - [ ] 編集画面でのキャンセル機能実装（ポップアップクローズ）
@@ -53,8 +54,7 @@
 - [x] テストケースの作成 （スクラム02完了 - E2Eテスト対応）
 - [x] EditRulePage.tsxのロジックをUseCaseに分離（スクラム04完了）
 - [x] ストレージからのIDによるルール取得処理、編集処理の単体テスト（スクラム04完了 - getById, update）
-- [ ] ストレージのcreate, remove処理の単体テスト
-- [ ] ファーストクラスコレクションの機能追加の単体テスト
+- [x] ファーストクラスコレクションの機能追加の単体テスト（スクラム13完了 - 既存テスト網羅済み確認）
 - [x] 編集画面のE2Eテストのコメントアウトしたテストの復活（スクラム04完了）
 - [x] 'applyAllRules'メッセージ送信ロジックのinfrastructure層への集約（スクラム09完了）
 - [x] chrome.tabs.create({ url: chrome.runtime.getURL(`edit.html?ruleId=${ruleId}`) }); のinfrastructure層への移管（スクラム10完了）
