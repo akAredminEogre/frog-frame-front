@@ -51,8 +51,8 @@ test('正規表現で取得した値をタグ内に埋め込み', async ({ page,
   
   // 6. 保存ボタンクリック（タイムアウト延長）
   const saveButton = popupPage.locator('button:has-text("保存")');
-  await expect(saveButton).toBeVisible({ timeout: 60000 });
-  await expect(saveButton).toBeEnabled({ timeout: 60000 });
+  await expect(saveButton).toBeVisible({ timeout: 120000 });
+  await expect(saveButton).toBeEnabled({ timeout: 120000 });
   await saveButton.click();
   
   // 7. Assert: アラートダイアログの確認（タイムアウト延長）

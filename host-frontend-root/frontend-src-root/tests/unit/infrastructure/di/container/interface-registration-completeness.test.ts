@@ -42,6 +42,10 @@ describe('DI Container - 完全自動化インターフェース登録確認テ�
     {
       interface: 'IRewriteRuleRepository',
       implementationName: 'ChromeStorageRewriteRuleRepository'
+    },
+    {
+      interface: 'IWindowService',
+      implementationName: 'ChromeWindowService'
     }
   ];
 
