@@ -1,7 +1,8 @@
-workflow:see-discussion-then-start-coding
-下記の手順をチャットスレッドに表示してから実行してください。
-別のworkflowに従うと、指示されてる場合は、その手順も再帰的にチャットスレッドに表示してください
-手順を全体を表示したら、その表示した手順に従って実行してください
+favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md
+
+cline-instructionsの手順をチャットスレッドに表示してから実行してください。
+その中で別のworkflowに従うと指示されてる場合は、その手順も検索・確認して再帰的にチャットスレッドに表示してください
+手順を全体を表示してから、その表示した手順に従って実行してください
 
 ```cline-instructions
 - 下記の内容で採番を行う
