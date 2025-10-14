@@ -2,8 +2,10 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
+import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
 import { container } from 'src/infrastructure/di/container';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import './style.css';
 
 function RulesApp() {
@@ -45,6 +47,12 @@ function RulesApp() {
     );
   }
 
+  const handleEdit = async (ruleId: string) => {
+    const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
+    const openRuleEditPageUseCase = new OpenRuleEditPageUseCase(chromeTabsService);
+    await openRuleEditPageUseCase.execute(ruleId);
+  };
+
   return (
     <div className="container">
       <h1>保存されたルール一覧</h1>
@@ -63,6 +71,7 @@ function RulesApp() {
                 <th>置換前</th>
                 <th>置換後</th>
                 <th>正規表現</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
@@ -87,6 +96,15 @@ function RulesApp() {
                     ) : (
                       <span className="no-regex">-</span>
                     )}
+                  </td>
+                  <td className="rule-actions">
+                    <button
+                      className="edit-button"
+                      onClick={() => handleEdit(rule.id)}
+                      type="button"
+                    >
+                      編集
+                    </button>
                   </td>
                 </tr>
               ))}
