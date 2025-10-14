@@ -3,9 +3,9 @@ import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/con
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 import { IPopupService } from 'src/application/ports/IPopupService';
-import { createMockTabsService } from 'tests/application/ports/IChromeTabsService/createMockTabsService';
-import { createMockSelectedPageTextService } from 'tests/application/ports/ISelectedPageTextService/createMockSelectedPageTextService';
-import { createMockPopupService } from 'tests/application/ports/IPopupService/createMockPopupService';
+import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
+import { createMockSelectedPageTextService } from 'tests/unit/application/ports/ISelectedPageTextService/createMockSelectedPageTextService';
+import { createMockPopupService } from 'tests/unit/application/ports/IPopupService/createMockPopupService';
 
 /**
  * 1. tabId=1(最小有効値)での正常処理とCurrentTab.tabId検証
