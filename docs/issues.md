@@ -10,6 +10,9 @@
 
 ## phase02
 - [ ] e2eテストのローカル化
+- [ ] edit/app.tsxのloadingをatomsに移動
+- [ ] edit/app.tsxのuseEffectの整理
+- [ ] e2eテストのエラー修正を部品化
 - [ ] RewriteRuleのfromParamsファクトリメソッドの導入
 - [ ] モックの切り出し
 - [ ] フロントエンドコンポーネントのフロントエンドテスト
