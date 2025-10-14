@@ -1,8 +1,22 @@
 - [ ] 書き換えルールの詳細編集機能
 - [ ] 書き換えルールの削除機能
+- [ ] tsr,knipの設定で、使われていない変数、メソッドは表示だけで削除にしない
+- [ ] アプリ名、リポジトリ名変更
+- [ ] RewriteRuleオブジェクトを全部setしない
+- [ ] RefreshAllTabsAfterRuleUpdateUseCaseのドメイン層とinfrastructure層の分離
+- [ ] storageの入出力をRewriteRuleParams経由に変更するか検討
+- [ ] 編集後のタブリロード
 
 
 ## phase02
+- [ ] e2eテストのローカル化
+- [ ] RewriteRuleのfromParamsファクトリメソッドの導入
+- [ ] モックの切り出し
+- [ ] フロントエンドコンポーネントのフロントエンドテスト
+- [ ] urlPatternの空文字、null、undefinedのバリデーション
+- [ ] urlPatternの値オブジェクト化
+- [ ] 編集ページはポップアップとしても使えるようにする
+- [ ] ルールの有効/無効切り替え機能
 - [ ] `container.ts`への`SaveRewriteRuleAndApplyToCurrentTabUseCase`登録
 - [ ] UseCaseレベルでのテスト作成
 - [ ] makeコマンド
