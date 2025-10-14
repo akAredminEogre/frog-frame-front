@@ -11,6 +11,9 @@
       ],
       "entrypoints/*": [
         "./src/entrypoints/*"
+      ],
+      "tests/*": [
+        "./tests/*"
       ]
     },
     "allowImportingTsExtensions": true,

@@ -3,6 +3,9 @@ import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/con
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 import { IPopupService } from 'src/application/ports/IPopupService';
+import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
+import { createMockSelectedPageTextService } from 'tests/unit/application/ports/ISelectedPageTextService/createMockSelectedPageTextService';
+import { createMockPopupService } from 'tests/unit/application/ports/IPopupService/createMockPopupService';
 
 /**
  * 1. tabId=1(最小有効値)での正常処理とCurrentTab.tabId検証
@@ -16,21 +19,9 @@ describe('HandleContextMenuReplaceDomElement.execute - エッジケース', () =
 
   beforeEach(() => {
     // モックサービスの初期化
-    mockTabsService = {
-      sendMessage: vi.fn(),
-      queryTabs: vi.fn(),
-      sendApplyAllRulesMessage: vi.fn(),
-      openEditPage: vi.fn(),
-    };
-
-    mockSelectedPageTextService = {
-      setSelectedPageText: vi.fn(),
-      getSelectedPageText: vi.fn(),
-    };
-
-    mockPopupService = {
-      openPopup: vi.fn(),
-    };
+    mockTabsService = createMockTabsService();
+    mockSelectedPageTextService = createMockSelectedPageTextService();
+    mockPopupService = createMockPopupService();
 
     // テスト対象の初期化
     useCase = new HandleContextMenuReplaceDomElement(
