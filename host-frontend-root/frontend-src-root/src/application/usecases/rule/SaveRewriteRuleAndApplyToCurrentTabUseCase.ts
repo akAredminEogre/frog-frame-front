@@ -3,13 +3,7 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { Tab } from 'src/domain/value-objects/Tab';
-
-interface RewriteRuleData {
-  oldString: string;
-  newString: string;
-  urlPattern?: string;
-  isRegex?: boolean;
-}
+import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 
 interface SaveRewriteRuleAndApplyResult {
   success: boolean;
@@ -27,9 +21,9 @@ export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
     private chromeRuntimeService: IChromeRuntimeService
   ) {}
 
-  async execute(rewriteRuleData: RewriteRuleData): Promise<SaveRewriteRuleAndApplyResult> {
+  async execute(params: RewriteRuleParams): Promise<SaveRewriteRuleAndApplyResult> {
     try {
-      await this.saveRule(rewriteRuleData);
+      await this.saveRule(params);
       return await this.applyRuleToCurrentTab();
     } catch (error) {
       console.error('SaveRewriteRuleAndApplyToCurrentTabUseCase error:', error);
@@ -37,15 +31,8 @@ export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
     }
   }
 
-  private async saveRule(rewriteRuleData: RewriteRuleData): Promise<RewriteRule> {
-    const rule = new RewriteRule(
-      crypto.randomUUID(),
-      rewriteRuleData.oldString,
-      rewriteRuleData.newString,
-      rewriteRuleData.urlPattern || '',
-      rewriteRuleData.isRegex || false
-    );
-    
+  private async saveRule(params: RewriteRuleParams): Promise<RewriteRule> {
+    const rule = RewriteRule.fromParams(crypto.randomUUID(), params);
     await this.repository.set(rule);
     return rule;
   }
