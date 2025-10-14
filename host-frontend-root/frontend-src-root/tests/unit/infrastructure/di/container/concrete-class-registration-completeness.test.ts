@@ -4,6 +4,9 @@ import 'src/infrastructure/di/container';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository';
+import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
+import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
+import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 
 /**
  * DIコンテナの完全自動化具体クラス登録確認テスト
@@ -41,7 +44,19 @@ describe('DI Container - 完全自動化具体クラス登録確認テスト', (
     {
       class: ChromeStorageRewriteRuleRepository,
       className: 'ChromeStorageRewriteRuleRepository'
-    }
+    },
+    {
+      class: LoadRewriteRuleForEditUseCase,
+      className: 'LoadRewriteRuleForEditUseCase'
+    },
+    {
+      class: UpdateRewriteRuleUseCase,
+      className: 'UpdateRewriteRuleUseCase'
+    },
+    {
+      class: CloseCurrentWindowUseCase,
+      className: 'CloseCurrentWindowUseCase'
+    },
   ];
 
   it('should verify expected concrete classes are registered and can be resolved', () => {
