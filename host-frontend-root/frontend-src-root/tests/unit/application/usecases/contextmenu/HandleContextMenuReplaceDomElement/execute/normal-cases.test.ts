@@ -20,6 +20,9 @@ describe('HandleContextMenuReplaceDomElement.execute - 正常系', () => {
     // モックサービスの初期化
     mockTabsService = {
       sendMessage: vi.fn(),
+      queryTabs: vi.fn(),
+      sendApplyAllRulesMessage: vi.fn(),
+      openEditPage: vi.fn(),
     };
 
     mockSelectedPageTextService = {
