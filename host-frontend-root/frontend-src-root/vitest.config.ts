@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [WxtVitest()],
   resolve: {
     alias: {
-      'src': path.resolve(__dirname, './src')
+      'src': path.resolve(__dirname, './src'),
+      'tests': path.resolve(__dirname, './tests')
     }
   },
   test: {
