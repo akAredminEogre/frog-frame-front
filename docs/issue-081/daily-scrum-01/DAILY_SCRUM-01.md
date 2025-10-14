@@ -45,4 +45,57 @@
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+### 01回目の作業内容
+1. lintエラーの確認
+   - 実行コマンド: `npm run lint`
+   - 結果: エラーなし
+
+2. 未使用の依存関係の検出
+   - 実行コマンド: `npx depcheck`
+   - 結果: `@storybook/addon-docs` が未使用として検出
+
+3. 型チェックの実行
+   - 実行コマンド: `npm run compile`
+   - 結果: エラーなし
+
+4. manifestファイルの確認
+   - ビルド実行: `npm run build`
+   - 生成されたmanifest.json (.output/chrome-mv3/manifest.json) の確認
+   - 確認項目:
+     - バージョン: `0.0.0` (リリース前に変更が必要)
+     - description: `"manifest.json description"` (仮の説明文、変更が必要)
+     - name: `"favorite-keyword-link-frog"` (確認済み)
+     - アイコン: 全サイズ（16, 32, 48, 96, 128）が存在
+     - 権限: contextMenus, storage, tabs, scripting, <all_urls> (適切)
+
+### 02回目の作業内容（レビューコメントへの対応）
+1. @storybook/addon-docsの削除
+   - `package.json` の `devDependencies` から `@storybook/addon-docs` を削除
+   - `npm install` を実行して依存関係を更新（4つのパッケージが削除された）
+
+2. Storybook設定ファイルの修正
+   - `.storybook/main.ts` の `addons` 配列から `@storybook/addon-docs` を削除
+   - `addons: []` に変更
+
+3. 動作確認
+   - `npm run storybook` を実行
+   - 警告なしで正常に起動することを確認
+   - ポート6006で正常に起動
+
+4. テスト・リント実行
+   - `npm run test-and-lint` を実行
+   - ユニットテスト: 全て成功（72ファイル、262テスト）
+   - knip: 問題なし
+   - e2eテスト: 7つのテストが失敗（外部サイトへのネットワーク接続エラー `net::ERR_ABORTED`、今回の変更とは無関係）
+
 ## 修正したファイル
+
+### 01回目
+なし（確認作業のみ実施）
+
+### 02回目
+1. `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/package.json`
+   - `devDependencies` から `@storybook/addon-docs` を削除
+
+2. `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/.storybook/main.ts`
+   - `addons` 配列から `@storybook/addon-docs` を削除
