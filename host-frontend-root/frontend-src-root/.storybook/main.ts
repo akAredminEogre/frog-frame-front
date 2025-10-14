@@ -3,7 +3,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
   stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: ['@storybook/addon-docs'],
+  addons: [],
 
   framework: {
     name: '@storybook/react-vite',
