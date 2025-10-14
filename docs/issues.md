@@ -4,9 +4,12 @@
 - [ ] アプリ名、リポジトリ名変更
 - [ ] RewriteRuleオブジェクトを全部setしない
 - [ ] RefreshAllTabsAfterRuleUpdateUseCaseのドメイン層とinfrastructure層の分離
+- [ ] storageの入出力をRewriteRuleParams経由に変更するか検討
+- [ ] 編集後のタブリロード
 
 
 ## phase02
+- [ ] e2eテストのローカル化
 - [ ] RewriteRuleのfromParamsファクトリメソッドの導入
 - [ ] モックの切り出し
 - [ ] フロントエンドコンポーネントのフロントエンドテスト
