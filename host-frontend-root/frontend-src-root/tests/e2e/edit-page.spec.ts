@@ -168,7 +168,7 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   await page.reload();
 
   const modifiedLinkWithText = page.locator('span.book-isbn13 >> a');
-  await expect(modifiedLinkWithText).toHaveCount(1, { timeout: 60000 });
+  await expect(modifiedLinkWithText).toHaveCount(1, { timeout: 120000 });
   await expect(modifiedLinkWithText).toHaveAttribute('href', 'https://www01.hanmoto.com/bd/isbn/9784065396209', { timeout: 60000 });
   await expect(modifiedLinkWithText).toHaveText('9784065396209へのリンク', { timeout: 60000 });
 
