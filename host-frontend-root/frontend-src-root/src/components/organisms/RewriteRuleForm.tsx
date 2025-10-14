@@ -4,20 +4,18 @@ import NewStringTextArea from 'src/components/organisms/NewStringTextArea';
 import OldStringTextArea from 'src/components/organisms/OldStringTextArea';
 import URLPatternInput from 'src/components/organisms/URLPatternInput';
 import SaveButton from '../molecules/SaveButton';
+import CancelButton from '../molecules/CancelButton';
 import styles from './RewriteRuleForm.module.css';
-
-interface RewriteRule {
-  oldString: string;
-  newString: string;
-  urlPattern: string;
-  isRegex: boolean;
-}
+import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 
 interface RewriteRuleFormProps {
-  rule: RewriteRule;
-  onRuleChange: (rule: RewriteRule) => void;
+  rule: RewriteRuleParams;
+  onRuleChange: (rule: RewriteRuleParams) => void;
   onSave: () => void;
+  onCancel?: () => void;
   isLoading?: boolean;
+  isLoadingData?: boolean;
+  error?: string | null;
   title?: string; // カスタマイズ可能なタイトル
 }
 
@@ -25,11 +23,14 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
   rule,
   onRuleChange,
   onSave,
+  onCancel,
   isLoading = false,
+  isLoadingData = false,
+  error = null,
   title = "fklf: Rewrite Rule",
 }) => {
   
-  const handleTextAreaChange = (field: keyof Pick<RewriteRule, 'oldString' | 'newString'>) => 
+  const handleTextAreaChange = (field: keyof Pick<RewriteRuleParams, 'oldString' | 'newString'>) => 
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       onRuleChange({
         ...rule,
@@ -38,7 +39,7 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
     };
 
   
-  const handleInputChange = (field: keyof Pick<RewriteRule, 'urlPattern'>) => 
+  const handleInputChange = (field: keyof Pick<RewriteRuleParams, 'urlPattern'>) => 
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onRuleChange({
         ...rule,
@@ -52,6 +53,14 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
       isRegex: e.target.checked
     });
   };
+
+  if (isLoadingData) {
+    return <div>Loading rule data...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className={styles.form}>
@@ -85,6 +94,12 @@ export const RewriteRuleForm: React.FC<RewriteRuleFormProps> = ({
           onClick={onSave}
           isLoading={isLoading}
         />
+        {onCancel && (
+          <CancelButton
+            onClick={onCancel}
+            disabled={isLoading}
+          />
+        )}
       </div>
     </div>
   );
