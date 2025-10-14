@@ -1,6 +1,7 @@
 # 振り返り
 
 このファイルでデイリースクラムの振り返りを行います。追記専用です。過去の内容を修正しないでください。
+追記のときは最後尾に追加してください。
 
 ## スクラムkk の振り返り
 <!-- KPT法で振り返りを行なってください -->
@@ -17,3 +18,4 @@
 
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->

@@ -36,6 +36,20 @@
 - **使われないメソッドを作らないこと**
   - いつか使うだろうで、isValideやequalsを乱造しない
 
+## Clean Architectureルール
+- **ドメイン層は他の層に依存してはいけない**
+- application, componentに、直接記述しては行けないコード
+  - chrome APIやwindowオブジェクトを直接使うコード
+  - domain層に依存するコード
+  - infrastructure層に依存するコード
+- componentのメソッド1つからは、極力1つのusecaseメソッドしか呼び出さないこと
+- **infrastructure層にのみ、chrome APIやwindowオブジェクトを直接使うコードを書いてよい**
+- **Infrastructure層への依存が必要な処理は、Application層のUseCaseに配置するという原則を徹底する**
+- application層の依存は、container.tsで解決すること
+- application層には、domain層とinfrastructure層の依存を持ち込まないこと
+
+
+
 ## テストルール
 
 ### テストファイル構造
