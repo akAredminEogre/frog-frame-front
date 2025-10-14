@@ -152,6 +152,11 @@ h1 {
   text-align: center;
 }
 
+.rule-actions {
+  width: 80px;
+  text-align: center;
+}
+
 .regex-badge {
   background-color: #9b59b6;
   color: white;
@@ -164,6 +169,27 @@ h1 {
 .no-regex {
   color: #bdc3c7;
   font-size: 14px;
+}
+
+.edit-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.edit-button:hover {
+  background-color: #2980b9;
+}
+
+.edit-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
 }
 
 /* フッター */
