@@ -32,6 +32,33 @@
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
 <!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
 
+## スクラム06 の振り返り
+<!-- KPT法で振り返りを行なってください -->
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+- Chrome Web Storeへの登録準備として必要な確認項目を体系的に実施できた（ストア説明文、manifest、アイコン、プライバシーポリシー）
+- 各確認項目について、Chrome Web Storeの要件を満たしているかを適切に検証できた
+- package.jsonのdescriptionフィールドの誤字（manupilates → manipulates）を発見し修正できた
+- テスト・リントを実行し、ユニットテストが全て成功（72ファイル262テスト）することを確認できた
+- E2Eテストの失敗について、今回の変更との関連性を分析し、環境依存の問題であることを適切に判断できた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+- E2Eテストで1件のタイムアウトエラーが発生した（編集ページのロード待機中、60秒でタイムアウト）
+- package.jsonのdescriptionに誤字が残っていた（開発過程で気づけなかった）
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+- ドキュメント・コード作成時にスペルチェックツールを活用し、誤字を早期に発見する
+- E2Eテストのタイムアウト設定や実行環境を定期的に見直し、安定性を向上させる
+- リリース前の最終チェックリストを作成し、細かい誤字・脱字も含めて漏れなく確認する
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+
 ## スクラム05 の振り返り
 <!-- KPT法で振り返りを行なってください -->
 
