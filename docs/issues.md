@@ -1,14 +1,35 @@
-- [ ] 書き換えルールの詳細編集機能
-- [ ] 書き換えルールの削除機能
-- [ ] tsr,knipの設定で、使われていない変数、メソッドは表示だけで削除にしない
+
+# 0.1.1
 - [ ] アプリ名、リポジトリ名変更
-- [ ] RewriteRuleオブジェクトを全部setしない
-- [ ] RefreshAllTabsAfterRuleUpdateUseCaseのドメイン層とinfrastructure層の分離
+- [ ] デモ画像の追加
+- [ ] 開発者アカウントの登録
+- [ ] ソース内機密情報の取捨選択
+- [ ] Chrome Web Storeへの実際の登録作業
+- [ ] リポジトリ名、アプリ名の変更
+- [ ] アイコン画像の準備（各サイズ: 16x16, 48x48, 128x128）
+- [ ] Chrome Web Store用のスクリーンショット・プロモーション画像の準備
+- [ ] ビルド・パッケージング手順の確認
+
+# 0.1.2
+- [ ] tsr,knipの設定で、使われていない変数、メソッドは表示だけで削除にしない
+- [ ] 開発環境のセットアップ方法
 - [ ] storageの入出力をRewriteRuleParams経由に変更するか検討
 - [ ] 編集後のタブリロード
+- [ ] RewriteRuleオブジェクトを全部setしない
 
+# 0.1.3
+- [ ] makeコマンド
+- [ ] コーディング規約ドキュメントまとめ
+
+# 0.2.0
+- [ ] 書き換えルールの削除機能
+
+# 1.0.0
+- [ ] ルールの有効/無効切り替え機能
+- [ ] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 
 ## phase02
+
 - [ ] e2eテストのローカル化
 - [ ] edit/app.tsxのloadingをatomsに移動
 - [ ] edit/app.tsxのuseEffectの整理
@@ -19,12 +40,8 @@
 - [ ] urlPatternの空文字、null、undefinedのバリデーション
 - [ ] urlPatternの値オブジェクト化
 - [ ] 編集ページはポップアップとしても使えるようにする
-- [ ] ルールの有効/無効切り替え機能
 - [ ] `container.ts`への`SaveRewriteRuleAndApplyToCurrentTabUseCase`登録
 - [ ] UseCaseレベルでのテスト作成
-- [ ] makeコマンド
-- [ ] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
-- [ ] CurrentTabのテストコード
 - [ ] HandleContextMenuReplaceDomElemenのテストコード
 - [ ] registerTabsOnUpdatedの'complete'ハードコード解消
 - [ ] 不正な正規表現入力のエラーハンドリング
@@ -43,7 +60,6 @@
 - [ ] バリデーション
 - [ ] 選択されたテキストが複数のHTML要素にまたがる場合の処理方針について
 - [ ] 右クリック入力のロジック分離
-
 - [ ] ElementSelectorの詳細テスト追加
 - [ ] --project tsconfig.tsr.json の統一
 - [ ] ElementSelector.test.tsのテストケース分割
