@@ -84,7 +84,7 @@ test('DOM置換機能のe2eテスト', async ({ page, popupPage }) => {
 
 #### 4.1 事前確認
 ```bash
-cd ~/akAredminEogre-project/favorite-keyword-link-frog && docker compose exec frontend npm run test:e2e
+cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm run test:e2e
 ```
 
 #### 4.2 実装後のテスト実行
