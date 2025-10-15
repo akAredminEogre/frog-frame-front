@@ -51,7 +51,7 @@ favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tsconfig.tsr.jso
 で、むしろsrc/componentsを除外しました。
 この状態で
 ```
-akaredmineogre@MSI:~/akAredminEogre-project/favorite-keyword-link-frog$ cd /home/akaredmineogre/akAredminEogre-project/favorite-keyword-link-frog && docker compose exec frontend npm run tsr:check
+cd ~/absolute-path/to/favorite-keyword-link-frog/ && docker compose exec frontend npm run tsr:check
 
 > favorite-keyword-link-frog@0.0.0 tsr:check
 > tsr --project tsconfig.tsr.json 'src/entrypoints/.*\.(ts|tsx)$'
