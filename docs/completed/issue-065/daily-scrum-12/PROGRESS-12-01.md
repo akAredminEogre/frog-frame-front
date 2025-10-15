@@ -44,7 +44,7 @@ kk=12
 
 下記のエラーに対応してください
 ```
-cd /home/akaredmineogre/akAredminEogre-project/favorite-keyword-link-frog && docker compose exec frontend npm run storybook
+cd ~/absolute-path/to/favorite-keyword-link-frog/ && docker compose exec frontend npm run storybook
 
 > favorite-keyword-link-frog@0.0.0 storybook
 > storybook dev -p 6006 --host 0.0.0.0
