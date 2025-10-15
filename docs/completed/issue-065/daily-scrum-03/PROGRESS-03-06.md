@@ -96,7 +96,7 @@ e2eテストが通るようにしてください
     [chromium] › tests/e2e/edit-page.spec.ts:67:1 › 編集画面で値を変更して保存できる 
     [chromium] › tests/e2e/edit-page.spec.ts:103:1 › 編集画面でコンソールエラーが発生していない 
   7 passed (31.7s)
-akaredmineogre@MSI:~/akAredminEogre-project/favorite-keyword-link-frog$ 
+
 
 
 ---
