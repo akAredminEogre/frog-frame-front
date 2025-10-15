@@ -1,6 +1,6 @@
 {
   "name": "favorite-keyword-link-frog",
-  "description": "A Chrome extension that manupilates DOM as you like.",
+  "description": "A Chrome extension that manipulates DOM as you like.",
   "private": true,
   "version": "0.1.0",
   "type": "module",
