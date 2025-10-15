@@ -31,3 +31,27 @@
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
 <!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+
+## スクラム02 の振り返り
+<!-- KPT法で振り返りを行なってください -->
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+- package.jsonのバージョンとdescriptionを適切な値に更新できた（0.0.0 → 0.1.0、説明文の明確化）
+- wxt.config.tsでmanifest設定を確認し、権限設定が適切であることを検証できた
+- テスト・Lintチェックを実行し、すべて正常に完了することを確認できた（ユニットテスト72ファイル262テスト、E2Eテスト9テストすべてパス、Knip未使用コードなし）
+- 前回のレビューで指摘された問題点（仮のバージョン番号と説明文）を解決できた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+- 特になし
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+- リリース前の確認項目を事前に洗い出し、計画的に進める
+- manifestファイルの設定を定期的に見直し、最新の要件に適合しているか確認する
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->

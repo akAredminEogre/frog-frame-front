@@ -38,4 +38,17 @@
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+package.jsonのバージョンとdescriptionを更新しました。
+- バージョン: 0.0.0 → 0.1.0 (初回リリース版)
+- description: "manifest.json description" → "A Chrome extension that adds links to specific keywords on web pages"
+
+wxt.config.tsでmanifest設定を確認し、権限設定が適切であることを確認しました。
+
+テスト・Lintチェックを実行し、すべて正常に完了しました:
+- ユニットテスト: 72ファイル、262テスト - すべてパス
+- E2Eテスト: 9テスト - すべてパス
+- Knip: 未使用コードなし
+
 ## 修正したファイル
+
+- host-frontend-root/frontend-src-root/package.json
