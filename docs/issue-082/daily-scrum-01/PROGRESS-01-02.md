@@ -11,11 +11,8 @@ kk=01
 レビューコメントに従い、ドキュメント内の絶対パス情報を汎用的な表記に置換しました。
 
 #### 作業内容
-1. `~/akAredminEogre-project/favorite-keyword-link-frog` を検索
-2. 6つのドキュメントファイルから該当パスを置換:
-   - `~/akAredminEogre-project/favorite-keyword-link-frog` → `~/absolute-path/to/favorite-keyword-link-frog`
-   - `/home/akAredminEogre-project/favorite-keyword-link-frog` → `/home/absolute-path/to/favorite-keyword-link-frog`
-3. 開発者固有の環境情報を削除し、汎用的なドキュメントに修正
+- 6つのドキュメントファイルから該当パスを置換:
+- 開発者固有の環境情報を削除し、汎用的なドキュメントに修正
 
 ### 修正したファイル
 - `docs/completed/issue-009/PULL_REQUEST.md`
@@ -36,5 +33,5 @@ kk=01
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
-
+他にも秘匿情報が残っていないか、ソース、ドキュメント全体で確認をお願いします
 ---
