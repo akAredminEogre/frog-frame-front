@@ -13,11 +13,6 @@
 - **base branch**: `develop`
 - **PR作成**: `gh` コマンド使用
 
-### 作業ディレクトリ
-- **ホームディレクトリ**: `~/akAredminEogre-project`
-- **プロジェクトルート**: `~/akAredminEogre-project/favorite-keyword-link-frog`
-- **フロントエンド**: `host-frontend-root/frontend-src-root`
-
 ### docsディレクトリ管理
 - **進行中**: `docs/issue-XXX/`
 - **完了済み**: `docs/completed/issue-XXX/`
