@@ -1,8 +1,8 @@
 {
   "name": "favorite-keyword-link-frog",
-  "description": "manifest.json description",
+  "description": "A Chrome extension that manipulates DOM as you like.",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -70,7 +70,6 @@
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.1.2",
     "wxt": "^0.20.7",
-    "eslint-plugin-storybook": "9.1.8",
-    "@storybook/addon-docs": "^9.1.8"
+    "eslint-plugin-storybook": "9.1.8"
   }
 }
