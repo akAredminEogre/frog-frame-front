@@ -82,3 +82,29 @@
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
 <!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+
+## スクラム04 の振り返り
+<!-- KPT法で振り返りを行なってください -->
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+- Chrome Web Storeの要件に基づき、プライバシーポリシーを適切に作成できた
+- 日本語・英語の両方に対応したプライバシーポリシーを作成し、グローバルな利用に備えることができた
+- 拡張機能の実際の動作（データ収集なし、ローカルストレージのみ使用、外部送信なし）に基づいた正確な内容を記載できた
+- プライバシーポリシーに必要な要素（情報収集、データ使用目的、共有、セキュリティ、ユーザー権利、変更方針、連絡先）を網羅的に記載できた
+- GitHubリポジトリへの掲載という現実的な選択肢を採用し、迅速に対応できた
+- 作業後のテスト・リント実行により、品質を確保できた（単体テスト262件、E2E9件すべて成功）
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+- 特になし
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+- ストア公開時の要件を事前に調査し、必要なドキュメントを計画段階で洗い出す
+- プライバシーポリシーの内容が実装と一致しているか、定期的に確認する
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
