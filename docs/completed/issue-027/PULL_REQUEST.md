@@ -43,14 +43,14 @@
 ## テスト方法
 1. **単体テストの実行**
    ```bash
-   cd ~/akAredminEogre-project/favorite-keyword-link-frog && docker compose exec frontend npm test
+   cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm test
    ```
    - 全26テストケースがパスすることを確認
 
 2. **Lint・未使用コードチェック**
    ```bash
-   cd ~/akAredminEogre-project/favorite-keyword-link-frog && docker compose exec frontend npm run lint
-   cd ~/akAredminEogre-project/favorite-keyword-link-frog && docker compose exec frontend npm run unused:check
+   cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm run lint
+   cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm run unused:check
    ```
 
 3. **動作確認**

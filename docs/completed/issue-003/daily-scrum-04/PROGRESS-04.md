@@ -39,7 +39,7 @@ kk=04
 - TableDomConverter.test.ts のテストケースを、`HtmlReplacer.test.ts` を参考に共通化してください。
 - テストを実行するときは、
 ```
-cd ~/home/akaredmineogre/akAredminEogre-project/favorite-keyword-link-frog/host-frontend-root/frontend-src-root && docker compose exec frontend npm run test
+cd ~/absolute-path/to/favorite-keyword-link-frog/host-frontend-root/frontend-src-root && docker compose exec frontend npm run test
 ```
 によってDockerコンテナ内で実行してください。
 kk=04

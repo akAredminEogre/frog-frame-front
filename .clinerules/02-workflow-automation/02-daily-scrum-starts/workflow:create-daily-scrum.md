@@ -6,7 +6,7 @@ kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナ�
 スクラムkk回目の作業を計画を立ててもらいます。
 - 下記コマンドを実行
 ```bash
-cd ~/akAredminEogre-project/favorite-keyword-link-frog/ && \
+cd ~/absolute-path/to/favorite-keyword-link-frog/ && \
 mkdir -p docs/issue-nnn/daily-scrum-kk/
 ```
 
