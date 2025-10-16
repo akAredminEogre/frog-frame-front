@@ -95,8 +95,8 @@ private createRedundantPattern(pattern: string, isRegex: boolean): string {
 - [x] redundantPatternのリファクタリング、適切なdomainクラスへの移動
 - [x] regex関係の定数クラス作成
 - [x] PRレビュー指摘事項
-  - [x] favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.tsは、favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule/RewriteRule.tsに移動
-  - [x] 下記のファイルも、favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule/に移動
+  - [x] frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.tsは、frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule/RewriteRule.tsに移動
+  - [x] 下記のファイルも、frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule/に移動
     - PatternProcessingStrategy.ts
     - PatternProcessingStrategyFactory.ts
     - RegexPatternProcessingStrategy.ts

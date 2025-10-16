@@ -45,7 +45,7 @@ kk=05
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/unit/HtmlContent.test.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/HtmlContent.test.ts
   - workflow:array-based-test
     - に準拠させてください
 - 

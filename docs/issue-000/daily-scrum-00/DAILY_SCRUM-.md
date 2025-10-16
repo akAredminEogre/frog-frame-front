@@ -18,7 +18,7 @@
 <!-- 質問は不明点を明確に記載してください。 -->
 <!-- レビューしてほしいことは、レビュー対象を具体的に記載してください。 -->
 <!-- また上記相談・質問・レビューのトピックが重複する場合は、まとめて記載してください。 -->
-<!-- ユーザーが使うコマンド: favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
+<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
 
 ## 一言コメント
 <!-- 感情ベースで一言コメントをお願いします。 -->

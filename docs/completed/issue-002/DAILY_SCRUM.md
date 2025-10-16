@@ -39,8 +39,8 @@ Story-1: 開発者として、NodeTextReplacerの責務を分割し、コード�
 
 ## 修正予定のファイル
 
--   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/ReplacementValue.ts` (新規作成)
--   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/ReplacementValue.test.ts` (新規作成)
+-   `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/ReplacementValue.ts` (新規作成)
+-   `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/ReplacementValue.test.ts` (新規作成)
 
 ## 相談事項
 
@@ -69,8 +69,8 @@ Story-1: 開発者として、NodeTextReplacerの責務を分割し、コード�
 
 ## 修正予定のファイル
 
--   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/TextReplacer.ts` (新規作成)
--   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/TextReplacer.test.ts` (新規作成)
+-   `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/TextReplacer.ts` (新規作成)
+-   `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/TextReplacer.test.ts` (新規作成)
 
 ## 相談事項
 
@@ -106,8 +106,8 @@ Story-1: 開発者として、NodeTextReplacerの責務を分割し、コード�
 
 ## 修正予定のファイル
 
--   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts` (新規作成)
--   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlReplacer.test.ts` (新規作成)
+-   `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts` (新規作成)
+-   `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlReplacer.test.ts` (新規作成)
 
 ## 相談事項
 
@@ -178,8 +178,8 @@ Story-1: 開発者として、NodeTextReplacerの責務を分割し、コード�
 
 ## 修正予定のファイル
 
--   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/NodeTextReplacer.ts`
--   `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/NodeTextReplacer.test.ts`
+-   `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/NodeTextReplacer.ts`
+-   `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/NodeTextReplacer.test.ts`
 
 ## 相談事項
 

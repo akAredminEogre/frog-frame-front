@@ -8,9 +8,9 @@
 特に、`HtmlContent.ts` の正規表現置換ロジックが、要件を満たし、かつ堅牢であるかをご確認いただきたいです。
 
 ### 変更ファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlContent.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlContent.test.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlContent.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlContent.test.ts`
 
 ### スクラム01-(1回目) のレビューコメント
 

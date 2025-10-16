@@ -19,7 +19,7 @@
 
 ## テスト方法
 ```bash
-cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm run test:e2e
+cd ~/absolute-path/to/frog-frame-front && docker compose exec frontend npm run test:e2e
 ```
 
 実行結果：

@@ -24,11 +24,11 @@ kk=12
 - knipによる未使用コードチェックも問題なし
 
 ### 修正したファイル
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/Button.stories.tsx (新規作成)
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/Checkbox.stories.tsx (新規作成)
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/Description.stories.tsx (新規作成)
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/TextArea.stories.tsx (新規作成)
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/Title.stories.tsx (新規作成)
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/Button.stories.tsx (新規作成)
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/Checkbox.stories.tsx (新規作成)
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/Description.stories.tsx (新規作成)
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/TextArea.stories.tsx (新規作成)
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/Title.stories.tsx (新規作成)
 
 ### 次回以降のスクラムに先送りする課題
 特になし
@@ -44,9 +44,9 @@ kk=12
 
 下記のエラーに対応してください
 ```
-cd ~/absolute-path/to/favorite-keyword-link-frog/ && docker compose exec frontend npm run storybook
+cd ~/absolute-path/to/frog-frame-front/ && docker compose exec frontend npm run storybook
 
-> favorite-keyword-link-frog@0.0.0 storybook
+> frog-frame-front@0.0.0 storybook
 > storybook dev -p 6006 --host 0.0.0.0
 
 storybook v9.1.8

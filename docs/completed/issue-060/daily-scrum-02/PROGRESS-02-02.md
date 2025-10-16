@@ -41,6 +41,6 @@ PROGRESS-02-01.mdで受けたレビューコメントに対応して、以下の
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 今回作成したe2eテストは、要件としては現時点ではOKです。あとは、
-favorite-keyword-link-frog/.clinerules/03-test-coding-standards/03-e2e-test-rule/console-error-handling.md
+frog-frame-front/.clinerules/03-test-coding-standards/03-e2e-test-rule/console-error-handling.md
 に従うようにしてください
 ---

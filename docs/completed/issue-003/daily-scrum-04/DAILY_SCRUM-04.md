@@ -13,18 +13,18 @@
 - `PLAN.md` および `RETROSPECTIVE.md` の更新。
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts` (必要に応じて)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/DomConverterStrategy.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/DefaultDomConverter.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/TableDomConverter.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/DomConverterFactory.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/DomConverterStrategy.test.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/DefaultDomConverter.test.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/TableDomConverter.test.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/DomConverterFactory.test.ts` (新規作成)
-- `favorite-keyword-link-frog/docs/CODING_STYLE.md` (必要に応じて)
-- `favorite-keyword-link-frog/docs/issue-003/PLAN.md`
-- `favorite-keyword-link-frog/docs/issue-003/RETROSPECTIVE.md`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts` (必要に応じて)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/DomConverterStrategy.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/DefaultDomConverter.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/TableDomConverter.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/DomConverterFactory.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/DomConverterStrategy.test.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/DefaultDomConverter.test.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/TableDomConverter.test.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/DomConverterFactory.test.ts` (新規作成)
+- `frog-frame-front/docs/CODING_STYLE.md` (必要に応じて)
+- `frog-frame-front/docs/issue-003/PLAN.md`
+- `frog-frame-front/docs/issue-003/RETROSPECTIVE.md`
 
 ## 相談事項
 - 特になし

@@ -55,11 +55,11 @@ kk=05
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/unit/HtmlContent.test.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/HtmlContent.test.ts
   - のテストは.clinerules/03-test-standards.mdに準拠してテストの配列化、コメント記入をJSDoc形式で行ってください
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/unit/domain/entities/RewriteRule/createRedundantPattern.test.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/entities/RewriteRule/createRedundantPattern.test.ts
   - のテストは正規表現パターンと文字列パターンでテストファイルを分けてください
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/unit/domain/factories/PatternProcessingStrategyFactory.test.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/factories/PatternProcessingStrategyFactory.test.ts
   - のテストは.clinerules/03-test-standards.mdに準拠してテストの配列化、コメント記入をJSDoc形式で行ってください
 
 ---

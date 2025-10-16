@@ -23,8 +23,8 @@
 **コードレビュー依頼:**
 `HtmlReplacer`のリファクタリングとオブジェクト指向ルールへの準拠確認が完了しました。
 以下のファイルについてコードレビューをお願いいたします。
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts`
-- `favorite-keyword-link-frog/docs/CODING_STYLE.md` (変更がないことを確認)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts`
+- `frog-frame-front/docs/CODING_STYLE.md` (変更がないことを確認)
 
 ### スクラム03-(1回目) のレビューコメント
 kk=03

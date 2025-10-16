@@ -102,5 +102,5 @@ Test Files  5 passed (5)
 <!-- ユーザーが使うコマンド .clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 修正については問題ありません。ただ
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository.ts
 についてもsave,updateメソッドが同一のロジックです。setに統合を検討してください

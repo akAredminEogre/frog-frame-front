@@ -46,6 +46,6 @@ kk=03
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 手動テストは通過している状況です。ありがとうございます。
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/e2e/edit-page.spec.ts
+frog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/edit-page.spec.ts
 を変更してください。
 テストしてほしい内容をコメント記入したので、内容に沿って修正してください。

@@ -20,9 +20,9 @@
 ### スクラム04-1回目のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/DefaultDomConverter.test.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/DefaultDomConverter.test.ts
 のテストケースを、
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlReplacer.test.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlReplacer.test.ts
 を参考に共通化してください。
 kk=04
 実装が完了したらPROGRESS-04.mdを追記してコードレビューを依頼してください
@@ -39,7 +39,7 @@ kk=04
 - TableDomConverter.test.ts のテストケースを、`HtmlReplacer.test.ts` を参考に共通化してください。
 - テストを実行するときは、
 ```
-cd ~/absolute-path/to/favorite-keyword-link-frog/host-frontend-root/frontend-src-root && docker compose exec frontend npm run test
+cd ~/absolute-path/to/frog-frame-front/host-frontend-root/frontend-src-root && docker compose exec frontend npm run test
 ```
 によってDockerコンテナ内で実行してください。
 kk=04

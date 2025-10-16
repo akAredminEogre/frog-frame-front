@@ -30,7 +30,7 @@
 
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
 
 ## スクラム06 の振り返り
 <!-- KPT法で振り返りを行なってください -->
@@ -57,7 +57,7 @@
 
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
 
 ## スクラム05 の振り返り
 <!-- KPT法で振り返りを行なってください -->
@@ -84,7 +84,7 @@
 
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
 
 ## スクラム02 の振り返り
 <!-- KPT法で振り返りを行なってください -->
@@ -108,7 +108,7 @@
 
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
 
 ## スクラム03 の振り返り
 <!-- KPT法で振り返りを行なってください -->
@@ -135,7 +135,7 @@
 
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
 
 ## スクラム04 の振り返り
 <!-- KPT法で振り返りを行なってください -->
@@ -161,4 +161,4 @@
 
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->

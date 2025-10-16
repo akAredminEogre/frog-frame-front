@@ -19,8 +19,8 @@ HTMLのソースコードでは、タグ内に改行コードや空白文字が�
 ## テスト方法
 ### 自動テスト
 ```bash
-cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm test
-cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm run test:e2e
+cd ~/absolute-path/to/frog-frame-front && docker compose exec frontend npm test
+cd ~/absolute-path/to/frog-frame-front && docker compose exec frontend npm run test:e2e
 ```
 
 ### 手動テスト

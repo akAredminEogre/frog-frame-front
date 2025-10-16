@@ -20,6 +20,6 @@ ISSUE-033 リファクタリング: 不要なマッチカウントの削除
 - 全てのテストが通過することを確認済みです。
 
 ## 補足
-- 計画については `favorite-keyword-link-frog/docs/issue-033/PLAN.md` を参照してください。
-- 振り返りについては `favorite-keyword-link-frog/docs/issue-033/RETROSPECTIVE.md` を参照してください。
-- 日々のスクラム記録は `favorite-keyword-link-frog/docs/issue-033/daily-scrum-00/` および `favorite-keyword-link-frog/docs/issue-033/daily-scrum-01/` にあります。
+- 計画については `frog-frame-front/docs/issue-033/PLAN.md` を参照してください。
+- 振り返りについては `frog-frame-front/docs/issue-033/RETROSPECTIVE.md` を参照してください。
+- 日々のスクラム記録は `frog-frame-front/docs/issue-033/daily-scrum-00/` および `frog-frame-front/docs/issue-033/daily-scrum-01/` にあります。

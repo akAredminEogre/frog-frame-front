@@ -17,7 +17,7 @@
 ## 修正予定のファイル
 <!-- 修正予定のファイルを記載してください。 -->
 
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/content.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/content.ts`
   - `getElementSelectionInfo()`関数の実装
 
 ## 相談事項

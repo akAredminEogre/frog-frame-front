@@ -45,7 +45,7 @@ kk=01
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository/ 以下のテストファイルについて、
-favorite-keyword-link-frog/.clinerules/03-test-coding-standards/01-common-rule/02-JSDoc-rule.md
+frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository/ 以下のテストファイルについて、
+frog-frame-front/.clinerules/03-test-coding-standards/01-common-rule/02-JSDoc-rule.md
 のJSDocルールに従ってください
 ---

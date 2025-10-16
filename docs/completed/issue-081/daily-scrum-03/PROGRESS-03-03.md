@@ -13,13 +13,13 @@ kk=03
 
 #### 1. README.mdへのライセンス情報の追加
 
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/README.md` のライセンスセクションを更新
+- `frog-frame-front/host-frontend-root/frontend-src-root/README.md` のライセンスセクションを更新
 - MITライセンスであることを明記
 - プロジェクトルートのLICENSEファイルへのリンクを追加
 
 #### 2. LICENSEファイルの作成
 
-- `favorite-keyword-link-frog/LICENSE` を新規作成
+- `frog-frame-front/LICENSE` を新規作成
 - MITライセンスの全文を記載
 - Copyright年を2025年に設定
 - 著作権者名は `[Your Name]` としてプレースホルダーを配置（ユーザー側で適宜変更可能）
@@ -36,10 +36,10 @@ kk=03
 ### 修正したファイル
 
 #### 更新
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/README.md`
+- `frog-frame-front/host-frontend-root/frontend-src-root/README.md`
 
 #### 新規作成
-- `favorite-keyword-link-frog/LICENSE`
+- `frog-frame-front/LICENSE`
 
 ### 次回以降のスクラムに先送りする課題
 <!-- 本issueで解決するが、本スクラムでは取り扱わない課題 -->
@@ -53,7 +53,7 @@ kk=03
 ### スクラム-03(03回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
 
 ---

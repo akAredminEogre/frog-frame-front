@@ -5,7 +5,7 @@
 具体的には、無限ループ防止ロジックが不要であることを確認し、重複していた2つのメソッドを統合してDRY原則に従ったコードに改善しました。
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlContent.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlContent.ts`
   - `createRedundantRegexPattern`と`createRedundantPattern`を統合
   - 統合された`createRedundantPattern(pattern: string, isRegex: boolean)`メソッドを作成
   - TypeScriptの型安全性を向上（`this.rule.isRegex ?? false`でundefined対応）

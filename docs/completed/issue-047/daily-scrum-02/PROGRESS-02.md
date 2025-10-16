@@ -61,7 +61,7 @@
 ### スクラム02-(01回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-すべての修正内容について、favorite-keyword-link-frog/docs/CODING_STYLE.md
+すべての修正内容について、frog-frame-front/docs/CODING_STYLE.md
 の
 `### テストファイル(追加、変更があったもの)`
 に準拠するとともに、下記の修正をお願いします

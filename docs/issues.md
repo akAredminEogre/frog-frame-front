@@ -29,7 +29,7 @@
 - [ ] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 
 ## phase02
-
+- [ ] ドキュメント中のアプリルートに、アプリ名を含まない
 - [ ] e2eテストのローカル化
 - [ ] edit/app.tsxのloadingをatomsに移動
 - [ ] edit/app.tsxのuseEffectの整理

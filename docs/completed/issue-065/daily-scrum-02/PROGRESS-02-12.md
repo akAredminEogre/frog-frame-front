@@ -80,9 +80,9 @@ body {
 
 ### 修正したファイル
 
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/entrypoints/popup/style.css`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/entrypoints/popup/style.css`
   - ポップアップのCSS問題を修正（min-height: 100vhを削除）
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/InputSection.module.css`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/InputSection.module.css`
   - 不足していたCSSファイルを新規作成
 
 ### 次回以降のスクラムに先送りする課題
@@ -99,8 +99,8 @@ body {
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/OldStringTextArea.tsx
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/NewStringTextArea.tsx
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/URLPatternInput.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/OldStringTextArea.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/NewStringTextArea.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/URLPatternInput.tsx
 ですが、ドメイン用語が入り込んでいるため、oraganismsに移してください
 ---

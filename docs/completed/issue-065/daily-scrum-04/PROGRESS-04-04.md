@@ -51,7 +51,7 @@ kk=04
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/application/usecases/rule/LoadRewriteRuleForEditUseCase.ts
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/application/usecases/rule/UpdateRewriteRuleUseCase.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/application/usecases/rule/LoadRewriteRuleForEditUseCase.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/application/usecases/rule/UpdateRewriteRuleUseCase.ts
 正常系だけでよいので、上記の2つのユースケースの単体テストを追加してください。
 ---

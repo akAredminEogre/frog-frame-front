@@ -20,7 +20,7 @@ PLAN.mdの相談事項への回答により、GitHubリポジトリに掲載す�
 
 ## 修正予定ファイル
 <!-- 修正予定のファイルを記載してください。 -->
-- favorite-keyword-link-frog/PRIVACY_POLICY.md（新規作成）
+- frog-frame-front/PRIVACY_POLICY.md（新規作成）
 
 ## スクラム内残タスク
 
@@ -32,7 +32,7 @@ PLAN.mdの相談事項への回答により、GitHubリポジトリに掲載す�
 <!-- 質問は不明点を明確に記載してください。 -->
 <!-- レビューしてほしいことは、レビュー対象を具体的に記載してください。 -->
 <!-- また上記相談・質問・レビューのトピックが重複する場合は、まとめて記載してください。 -->
-<!-- ユーザーが使うコマンド: favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
+<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
 
 - プライバシーポリシーの内容について確認したい
   - この拡張機能は、ユーザーデータを収集・保存・送信していますか？
@@ -53,7 +53,7 @@ PLAN.mdの相談事項への回答により、GitHubリポジトリに掲載す�
 Chrome Web Storeへの登録に必要なプライバシーポリシーを作成しました。
 
 ### 作成内容
-- **ファイル**: favorite-keyword-link-frog/PRIVACY_POLICY.md
+- **ファイル**: frog-frame-front/PRIVACY_POLICY.md
 - **言語**: 日本語・英語の両方に対応
 - **内容**:
   - 情報の収集について（個人情報は収集しない）
@@ -79,4 +79,4 @@ npm run test-and-lint
 すべてのテストが通過し、未使用コードも検出されませんでした。
 
 ## 修正したファイル
-- favorite-keyword-link-frog/PRIVACY_POLICY.md（新規作成）
+- frog-frame-front/PRIVACY_POLICY.md（新規作成）

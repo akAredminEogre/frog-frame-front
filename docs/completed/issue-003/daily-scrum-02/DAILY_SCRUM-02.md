@@ -5,11 +5,11 @@ PLAN.mdのStep 2「値オブジェクトの導入」に取り組みます。
 `CODING_STYLE.md`のオブジェクト指向ルール「すべてのプリミティブ型と文字列型をラップすること」に従い、`HtmlString`と`TagName`という2つの値オブジェクトを作成し、`HtmlReplacer`に適用します。
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/HtmlString.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/TagName.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/HtmlString.test.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/TagName.test.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/HtmlString.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/TagName.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/HtmlString.test.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/TagName.test.ts` (新規作成)
 
 ## 相談事項
 - 値オブジェクトの責務分離（特にDOM変換ロジックをどこまで担当させるか）について、実装を進める中でレビューをお願いしたいです。

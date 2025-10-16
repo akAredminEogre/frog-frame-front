@@ -72,7 +72,7 @@ if (typeof (globalThis as any).chrome === 'undefined') {
 - エラーなし ✓
 
 ### 修正したファイル
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/.storybook/preview.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/.storybook/preview.ts
 
 ### 次回以降のスクラムに先送りする課題
 特になし

@@ -29,7 +29,7 @@ PROGRESS-12-01.mdのレビューコメントで指摘されたStorybookの起動
 - 未使用コードなし ✓
 
 ### 修正したファイル
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/package.json
+- frog-frame-front/host-frontend-root/frontend-src-root/package.json
   - storybookスクリプトに`--no-open`フラグを追加
 
 ### 次回以降のスクラムに先送りする課題
@@ -43,5 +43,5 @@ PROGRESS-12-01.mdのレビューコメントで指摘されたStorybookの起動
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド .clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-ありがとうございます、うまくいったので、favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/componentsの他のコンポーネントのStorybookストーリーファイルも作成してください
+ありがとうございます、うまくいったので、frog-frame-front/host-frontend-root/frontend-src-root/src/componentsの他のコンポーネントのStorybookストーリーファイルも作成してください
 ---

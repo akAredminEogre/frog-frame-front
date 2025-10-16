@@ -5,12 +5,12 @@ workflow:submit-pull-request
   - nnn=(カレントブランチ名からissue番号を取得)
 - PRドキュメントのコミット
 - 対象
-  - favorite-keyword-link-frog/docs/issue-nnn/PULL_REQUEST.md
+  - frog-frame-front/docs/issue-nnn/PULL_REQUEST.md
   - コミットメッセージ
     - docs: PULL_REQUEST.mdの作成、レビュー完了
 - 現時点のブランチをpush
   - コミットされていない変更はそのまま
-  - push先リポジトリ akAredminEogre/favorite-keyword-link-frog
+  - push先リポジトリ akAredminEogre/frog-frame-front
 - ghコマンドによるPR作成
   - base branch: develop
   - title: `PULL REQUEST.md`の`## タイトル`を利用
