@@ -19,12 +19,18 @@ git config core.bare false
 git config core.logallrefupdates true
 ```
 
-### コンテナ起動
+### 初回コンテナ起動
 cd コマンドで `frog-frame-front` ディレクトリに移動し、以下のコマンドを実行してください。
 ```
 cp .env.example .env && cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example host-frontend-root/frontend-src-root/src/utils/matchUrl.ts && \
 docker compose up -d --build && docker compose ps && \
 docker compose exec frontend npm install && \
+docker compose up -d && docker compose ps && \
+docker compose exec frontend npm run dev 
+```
+
+一旦ctrl + c で開発サーバーを停止し、再度以下のコマンドを実行してください。
+```
 docker compose up -d && docker compose ps && \
 docker compose exec frontend npm run dev 
 ```
