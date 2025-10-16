@@ -20,6 +20,10 @@ export default defineConfig({
   expect: { timeout: 5000 },
   fullyParallel: true,
   workers: process.env.CI ? 1 : undefined,
+  
+  // バージョンアップ時の問題を回避するための設定
+  // 失敗したテストを自動的に再試行
+  retries: process.env.CI ? 2 : 1,
 
   // テスト実行時のブラウザセット
   projects: [

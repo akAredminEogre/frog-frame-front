@@ -12,7 +12,7 @@
     "storybook": "storybook dev -p 6006 --host 0.0.0.0 --no-open",
     "build-storybook": "storybook build",
     "test": "vitest --run",
-    "test:e2e": "playwright test",
+    "test:e2e": "npx playwright install chromium && playwright test",
     "test:all": "npm run test  && npm run test:e2e",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
-    "@playwright/test": "^1.55.1",
+    "@playwright/test": "^1.56.0",
     "@storybook/react-vite": "^9.1.8",
     "@types/chrome": "^0.0.326",
     "@types/react": "^18.3.11",
@@ -61,6 +61,7 @@
     "eslint": "^9.33.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-storybook": "9.1.8",
     "eslint-plugin-unused-imports": "^4.1.4",
     "happy-dom": "^18.0.1",
     "knip": "^5.62.0",
@@ -69,7 +70,6 @@
     "typescript": "^5.6.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.1.2",
-    "wxt": "^0.20.7",
-    "eslint-plugin-storybook": "9.1.8"
+    "wxt": "^0.20.11"
   }
 }
