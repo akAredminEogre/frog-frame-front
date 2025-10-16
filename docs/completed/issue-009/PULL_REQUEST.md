@@ -20,7 +20,7 @@ PlaywrightおよびWXTの公式ドキュメントで推奨されている`fixtur
 ## テスト方法
 1. 以下のコマンドを実行してE2Eテストを実施します。
    ```bash
-   cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm run test:e2e
+   cd ~/absolute-path/to/frog-frame-front && docker compose exec frontend npm run test:e2e
    ```
 2. すべてのテストケースが正常にパスすることを確認します。
 

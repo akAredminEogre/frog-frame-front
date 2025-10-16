@@ -17,8 +17,8 @@
 ## テスト方法
 1. 以下のコマンドでユニットテストとE2Eテストを実行します。
    ```bash
-   cd favorite-keyword-link-frog && docker compose exec frontend npm test
-   cd favorite-keyword-link-frog && docker compose exec frontend npm run test:e2e
+   cd frog-frame-front && docker compose exec frontend npm test
+   cd frog-frame-front && docker compose exec frontend npm run test:e2e
    ```
 2. ユニットテストが108件すべて成功することを確認します。
 3. E2Eテストが5件すべて成功することを確認します。特に`ignore-crlf-replace-with-regex.spec.ts`がパスすることを確認してください。

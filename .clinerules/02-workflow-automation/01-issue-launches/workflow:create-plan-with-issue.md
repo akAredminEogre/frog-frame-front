@@ -1,4 +1,4 @@
-favorite-keyword-link-frog/.clinerules/02-workflow-automation/01-issue-launches/workflow:create-plan-with-issue.md
+frog-frame-front/.clinerules/02-workflow-automation/01-issue-launches/workflow:create-plan-with-issue.md
 
 cline-instructionsの手順をチャットスレッドに表示してから実行してください。
 その中で別のworkflowに従うと指示されてる場合は、その手順も検索・確認して再帰的にチャットスレッドに表示してください
@@ -17,7 +17,7 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 
 - PLAN.mdの作成
   - 保存先
-    - favorite-keyword-link-frog/docs/issue-nnn/PLAN.md
+    - frog-frame-front/docs/issue-nnn/PLAN.md
   - 従うべきフォーマット
-    - favorite-keyword-link-frog/docs/issue-000/PLAN.md
+    - frog-frame-front/docs/issue-000/PLAN.md
 ```

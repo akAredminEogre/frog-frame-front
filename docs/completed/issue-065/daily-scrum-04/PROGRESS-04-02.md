@@ -47,13 +47,13 @@ kk=04
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tsconfig.tsr.json
+frog-frame-front/host-frontend-root/frontend-src-root/tsconfig.tsr.json
 で、むしろsrc/componentsを除外しました。
 この状態で
 ```
-cd ~/absolute-path/to/favorite-keyword-link-frog/ && docker compose exec frontend npm run tsr:check
+cd ~/absolute-path/to/frog-frame-front/ && docker compose exec frontend npm run tsr:check
 
-> favorite-keyword-link-frog@0.0.0 tsr:check
+> frog-frame-front@0.0.0 tsr:check
 > tsr --project tsconfig.tsr.json 'src/entrypoints/.*\.(ts|tsx)$'
 
 tsconfig tsconfig.tsr.json
@@ -74,5 +74,5 @@ file   src/components/Button.tsx
 ```
 の結果を得ています。ただ、
 src/components/atoms/Title.tsxは、
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsxからimportされています。なぜtsr:checkで引っかかってしまうのか、原因を調査してください
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsxからimportされています。なぜtsr:checkで引っかかってしまうのか、原因を調査してください
 ---

@@ -3,7 +3,7 @@ workflow:test-and-lint-before-complete
 **CRITICAL: attempt_completionツールを使用する前に、以下を必ず実行する：**
 
 ```bash
-(cd 絶対パスでfavorite-keyword-link-frogに移動) && \
+(cd 絶対パスでfrog-frame-frontに移動) && \
 docker compose exec frontend npm run test-and-lint
 ```
 

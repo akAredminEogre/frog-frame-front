@@ -57,7 +57,7 @@ const handleInputChange = (field: keyof Pick<RewriteRule, 'urlPattern'>) =>
 
 ### 修正したファイル
 
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx`
   - HTMLInputElementとHTMLTextAreaElementを区別した型安全なハンドラーに分離
 
 ### 次回以降のスクラムに先送りする課題
@@ -76,7 +76,7 @@ const handleInputChange = (field: keyof Pick<RewriteRule, 'urlPattern'>) =>
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 
 下記のエラーがでています。対応をお願いします
-> favorite-keyword-link-frog@0.0.0 test:e2e
+> frog-frame-front@0.0.0 test:e2e
 > playwright test
 
 

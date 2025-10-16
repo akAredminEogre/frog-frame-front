@@ -5,8 +5,8 @@
 - `CODING_STYLE.md`の`# オブジェクト指向ルール`に準拠しているか確認し、必要に応じて修正
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts`
-- `favorite-keyword-link-frog/docs/CODING_STYLE.md` (必要に応じて)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts`
+- `frog-frame-front/docs/CODING_STYLE.md` (必要に応じて)
 
 ## 相談事項
 - 特になし

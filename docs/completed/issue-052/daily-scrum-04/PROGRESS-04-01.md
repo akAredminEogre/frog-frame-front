@@ -49,7 +49,7 @@ regex関係の定数クラス作成を完了しました。正規表現パター
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts
 で、呼び出している正規表現関連の定数は、一旦RewriteRuleのメンバ変数として呼び出し、それからメンバ変数を使う形にしてください
 
 ---

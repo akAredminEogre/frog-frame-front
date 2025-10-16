@@ -15,7 +15,7 @@ export function replaceInNodeがファットになってきたので、CODING_ST
 # 心配事
 <!-- チケットを進めるうえでハードルとなりそうな懸念点を列挙します -->
 - 現時点で、すべてのコードをCODING_STYLE.mdのディレクトリ構造に従わせる必要はない。今回の開発に絞った範囲でディレクトリ・アーキテクチャを移行するのみでよい
-- wxt.config.tsの`srcDir: 'src'`を設定することになるが、今回このディレクトリに移動するのは最小限にとどめたい。言い換えれば、現時点ではfavorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypointsとその中身はそのままにしておきたいが、そんなことが可能なのか。
+- wxt.config.tsの`srcDir: 'src'`を設定することになるが、今回このディレクトリに移動するのは最小限にとどめたい。言い換えれば、現時点ではfrog-frame-front/host-frontend-root/frontend-src-root/entrypointsとその中身はそのままにしておきたいが、そんなことが可能なのか。
 
 # タスク
 <!-- チケットの見積もりを行うために、必要なタスクを列挙します -->

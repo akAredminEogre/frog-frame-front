@@ -4,11 +4,11 @@
 ChromeTabsService sendMessageエラーとbackground applyAllRulesエラーを検知するE2Eテストアサートの追加
 
 ## 修正予定のファイル
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/e2e/save-and-replace.spec.ts
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/e2e/get-origin.spec.ts
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/e2e/ignore-crlf-replace-with-regex.spec.ts
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/e2e/ignore-crlf-replace.spec.ts
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/e2e/popup.spec.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/save-and-replace.spec.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/get-origin.spec.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/ignore-crlf-replace-with-regex.spec.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/ignore-crlf-replace.spec.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/popup.spec.ts
 
 ## 相談事項
 事後作成のためなし

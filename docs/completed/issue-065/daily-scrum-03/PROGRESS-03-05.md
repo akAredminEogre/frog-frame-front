@@ -60,6 +60,6 @@ kk=03
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/entrypoints/popup/App.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/entrypoints/popup/App.tsx
 にルール一覧を表示する必要はありません。該当コードを削除してください
 ---

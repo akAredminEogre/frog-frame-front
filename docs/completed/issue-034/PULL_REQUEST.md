@@ -14,6 +14,6 @@ ISSUE-034 リファクタリング: content.tsから不要なコードブロッ�
 - 回帰テストを実行し、既存機能への影響がないことを確認済みです。
 
 ## 補足
-- 計画については `favorite-keyword-link-frog/docs/issue-034/PLAN.md` を参照してください。
-- 振り返りについては `favorite-keyword-link-frog/docs/issue-034/RETROSPECTIVE.md` を参照してください。
-- 日々のスクラム記録は `favorite-keyword-link-frog/docs/issue-034/daily-scrum-00/` および `favorite-keyword-link-frog/docs/issue-034/daily-scrum-01/` にあります。
+- 計画については `frog-frame-front/docs/issue-034/PLAN.md` を参照してください。
+- 振り返りについては `frog-frame-front/docs/issue-034/RETROSPECTIVE.md` を参照してください。
+- 日々のスクラム記録は `frog-frame-front/docs/issue-034/daily-scrum-00/` および `frog-frame-front/docs/issue-034/daily-scrum-01/` にあります。

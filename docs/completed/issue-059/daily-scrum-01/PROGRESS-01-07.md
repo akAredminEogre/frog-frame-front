@@ -45,7 +45,7 @@
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-> favorite-keyword-link-frog@0.0.0 knip:all
+> frog-frame-front@0.0.0 knip:all
 > npx knip --production --include files,dependencies,unlisted,unresolved,exports,nsExports,classMembers,types,nsTypes,enumMembers,duplicates
 
 Unused exported class members (4)

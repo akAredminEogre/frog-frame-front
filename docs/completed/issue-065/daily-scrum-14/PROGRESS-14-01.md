@@ -51,7 +51,7 @@ kk=14
 <!-- ユーザーが使うコマンド .clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 e2eテストは再実行で成功することを確認しました。
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/CancelButton.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/CancelButton.tsx
   - storybookの追加もお願いします。
 - 
 

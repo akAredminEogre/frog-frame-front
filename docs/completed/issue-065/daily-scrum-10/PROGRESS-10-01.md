@@ -70,7 +70,7 @@ kk=10
 <!-- ユーザーが使うコマンド .clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/entrypoints/rules/RulesApp.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/entrypoints/rules/RulesApp.tsx
   -     try {
       const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
       await chromeTabsService.openEditPage(ruleId);
@@ -84,7 +84,7 @@ kk=10
     } catch (err) {
       console.error('編集ページを開く際にエラーが発生しました:', err);
     }
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/infrastructure/browser/tabs/ChromeTabsService.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/src/infrastructure/browser/tabs/ChromeTabsService.ts
 ```
   async openEditPage(ruleId: string): Promise<void> {
     try {

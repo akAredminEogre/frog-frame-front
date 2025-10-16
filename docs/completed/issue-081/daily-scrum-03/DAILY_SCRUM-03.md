@@ -19,7 +19,7 @@ README.mdに以下の情報を含めます：
 
 ## 修正予定ファイル
 <!-- 修正予定のファイルを記載してください。 -->
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/README.md
+- frog-frame-front/host-frontend-root/frontend-src-root/README.md
 
 ## スクラム内残タスク
 
@@ -31,7 +31,7 @@ README.mdに以下の情報を含めます：
 <!-- 質問は不明点を明確に記載してください。 -->
 <!-- レビューしてほしいことは、レビュー対象を具体的に記載してください。 -->
 <!-- また上記相談・質問・レビューのトピックが重複する場合は、まとめて記載してください。 -->
-<!-- ユーザーが使うコマンド: favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
+<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
 
 - README.mdに記載するスクリーンショットを用意するタイミングについて確認したい
   - スクリーンショットは別途作成するのか、それともこのスクラムで仮の画像を用意するのか
@@ -76,7 +76,7 @@ README.mdに以下の情報を含めます：
 ## 修正したファイル
 
 ### 更新
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/README.md（1回目、3回目）
+- frog-frame-front/host-frontend-root/frontend-src-root/README.md（1回目、3回目）
 
 ### 新規作成
-- favorite-keyword-link-frog/LICENSE（3回目）
+- frog-frame-front/LICENSE（3回目）

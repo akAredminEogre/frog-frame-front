@@ -42,7 +42,7 @@
 ### スクラム05-(1回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__全体のテストコードに重複がないか確認してください。重複があれば解消し、責務や範囲として適切なテストケースに統合してください。
+- frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__全体のテストコードに重複がないか確認してください。重複があれば解消し、責務や範囲として適切なテストケースに統合してください。
 - HtmlReplacer.tsの`replace`メソッドのロジックが適切に分離され、可読性が向上しているか確認してください。特に配列を扱っているため、ファーストクラスコレクションを使用することで、より明確な意図を持たせることができるかもしれません。(CODING_STYLE.mdのオブジェクト指向ルールに従って、配列をラップするクラスを作成し、メソッドを追加することを検討してください。)
 kk=05
 実装が完了したらPROGRESS-05.mdを追記してコードレビューを依頼してください

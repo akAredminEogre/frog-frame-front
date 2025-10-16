@@ -23,10 +23,10 @@
    - background.tsで「この要素を置換」メニューが新しいメッセージタイプを使用するよう更新
 
 ### 実装したファイル：
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/content.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/content.ts`
   - `getElementSelectionInfo()`関数の実装
   - メッセージハンドラに`getElementSelection`タイプを追加
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/background.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/background.ts`
   - コンテキストメニューのメッセージタイプを`getElementSelection`に変更
 
 ### 技術的な詳細：
@@ -63,7 +63,7 @@ kk=02
    - ファイルを削除することなく、適切なテスト修正で問題解決
 
 ### 実装したファイル：
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/__tests__/background.test.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/__tests__/background.test.ts`
   - テストコードと実装の整合性を確保
   - テスト通過率：16ファイル全通/91テスト全通
 

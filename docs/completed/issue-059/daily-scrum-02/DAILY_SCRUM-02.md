@@ -16,11 +16,11 @@ PLAN.mdに記載された残タスク「ChromeStorageRewriteRuleRepositoryのユ
 ## 相談事項
 ChromeStorageRewriteRuleRepositoryのユニットテスト実装について：
 - chrome.storage.localのモックパターンはプロジェクト内で統一された方法がありますか？
-  - →favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/unit/infrastructure/persistance/storage/SelectedPageTextServiceを参考にしてください
+  - →frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/infrastructure/persistance/storage/SelectedPageTextServiceを参考にしてください
 - テストファイルの分割方法（メソッド別など）について、このクラス特有の考慮事項はありますか？
   - →クラス特有はありませんが、下記に準拠してください
-    - favorite-keyword-link-frog/.clinerules/03-test-coding-standards.md
-    - favorite-keyword-link-frog/.clinerules/03-test-coding-standards/01-common-rule/02-array-based-test.md
+    - frog-frame-front/.clinerules/03-test-coding-standards.md
+    - frog-frame-front/.clinerules/03-test-coding-standards/01-common-rule/02-array-based-test.md
 - ストレージキー「RewriteRules」の一元管理やテスト用のファクトリーメソッドが必要でしょうか？
   - →現時点では不要です。必要に応じて後で追加してください
 

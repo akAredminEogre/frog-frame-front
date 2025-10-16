@@ -305,6 +305,6 @@ const expectedConcreteClassRegistrations = [
 ありがとうございます。前回のレビューコメントの対応としては完璧です。
 
 下記でも、RewriteRuleParamsを利用してください
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/entrypoints/popup/App.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/src/entrypoints/popup/App.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts

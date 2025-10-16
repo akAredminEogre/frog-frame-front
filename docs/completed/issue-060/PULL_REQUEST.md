@@ -42,6 +42,6 @@ Chrome拡張機能のオプションページにルール一覧表示機能を�
 
 
 ## プルリクエストURL
-https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/108
+https://github.com/akAredminEogre/frog-frame-front/pull/108
 
 <!-- ユーザーが使うコマンド workflow:submit-pull-request -->

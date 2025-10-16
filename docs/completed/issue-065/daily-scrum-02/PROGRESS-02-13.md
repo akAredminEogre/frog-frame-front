@@ -43,13 +43,13 @@ AtomicDesignの原則に従って、ドメイン固有の概念を含むコン�
 
 ### 修正したファイル
 
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/OldStringTextArea.tsx`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/OldStringTextArea.tsx`
   - moleculesから移動、import文を絶対パスに修正
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/NewStringTextArea.tsx`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/NewStringTextArea.tsx`
   - moleculesから移動、import文を絶対パスに修正  
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/URLPatternInput.tsx`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/URLPatternInput.tsx`
   - moleculesから移動、import文を絶対パスに修正
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx`
   - 移動したコンポーネントのimport先を修正
 
 ### 次回以降のスクラムに先送りする課題

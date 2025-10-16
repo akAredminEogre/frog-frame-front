@@ -39,7 +39,7 @@
 - EditRulePageのビジネスロジックをUseCaseに分離する際、UseCase層の責務範囲はどこまでにすべきでしょうか？（リポジトリ呼び出し、バリデーション、エラーハンドリングなど）
   - EditRulePageがinfrastructure層、domain層に依存しないように、リポジトリ呼び出しやビジネスロジックはUseCaseに集約してください。バリデーションも可能な限りUseCaseで行い、UIコンポーネントは表示とユーザー入力の受け取りに専念させる設計が望ましいです。
 - リポジトリ層の単体テストでは、Chrome Storage APIのモックをどのように実装するのが適切でしょうか？
-  - →favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepositoryを参考にしてください
+  - →frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepositoryを参考にしてください
 - 編集画面のE2Eテストで優先的に復活させるべきテストケースは何でしょうか？
   - // 19. Assert: コンソールエラーが発生していないことを確認
   // expect(consoleMessages).toHaveLength(0); です。ただし難しそうであれば、本スクラムの対象外としても構いません。

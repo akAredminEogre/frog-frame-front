@@ -66,6 +66,6 @@ host-frontend-root/frontend-src-root/wxt.config.ts
 
 ## プルリクエスト情報
 - **プルリクエスト番号**: #106
-- **URL**: https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/106
+- **URL**: https://github.com/akAredminEogre/frog-frame-front/pull/106
 
 <!-- ユーザーが使うコマンド workflow:submit-pull-request -->

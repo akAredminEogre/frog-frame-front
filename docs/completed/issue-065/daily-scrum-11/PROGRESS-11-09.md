@@ -227,6 +227,6 @@ useCase = new UpdateRewriteRuleUseCase(mockRepository, mockChromeTabsService);
 <!-- ユーザーが使うコマンド .clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 test-and-lintも通ったので、
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/application/usecases/rule/RefreshAllTabsAfterRuleUpdateUseCase.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/application/usecases/rule/RefreshAllTabsAfterRuleUpdateUseCase.ts
 を削除しても良いと思います。問題ないことを確認してから削除してください。終わったらtest:allを実行してください。
 ---

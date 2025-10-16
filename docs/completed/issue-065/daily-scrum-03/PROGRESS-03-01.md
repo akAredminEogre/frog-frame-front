@@ -63,7 +63,7 @@ kk=03
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/EditRewriteRuleForm.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/EditRewriteRuleForm.tsx
 について、
 ```
       {ruleId && (
@@ -72,5 +72,5 @@ favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/o
         </div>
       )}
 ```
-は現状不要なので、favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsxとの統合を検討してください。その障害・課題、要考慮事項があれば、指摘をお願いします
+は現状不要なので、frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsxとの統合を検討してください。その障害・課題、要考慮事項があれば、指摘をお願いします
 ---

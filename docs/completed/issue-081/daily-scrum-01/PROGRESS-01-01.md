@@ -26,7 +26,7 @@ kk=01
 - 確認項目:
   - バージョン: `0.0.0` (リリース前に変更が必要)
   - description: `"manifest.json description"` (仮の説明文、変更が必要)
-  - name: `"favorite-keyword-link-frog"` (確認済み)
+  - name: `"frog-frame-front"` (確認済み)
   - アイコン: 全サイズ（16, 32, 48, 96, 128）が存在
   - 権限: contextMenus, storage, tabs, scripting, <all_urls> (適切)
 
@@ -47,7 +47,7 @@ kk=01
 ### スクラム-01(01回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 試しに@storybook/addon-docsを削除して、npm run storybookが動くか確認してみてください。もし難しいようであれば下に戻して、今後depcheckで検出されないように設定を変更してください
 ---

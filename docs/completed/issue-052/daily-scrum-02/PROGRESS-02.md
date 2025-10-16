@@ -114,7 +114,7 @@ E2Eテストでの複数aタグ問題の根本原因分析と最適解の発見�
    - デバウンス機能関連のコードをコメントアウト
    - タブごとの実行時間記録機能を無効化
 
-3. **`favorite-keyword-link-frog/docs/issue-052/PLAN.md`**
+3. **`frog-frame-front/docs/issue-052/PLAN.md`**
    - 「不正な正規表現入力のエラーハンドリング」を対象外課題として削除
 
 #### 動作確認
