@@ -2,8 +2,8 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [x] プロダクションコード、テストコード、ドキュメント中のfrog-frame-frontをfrog-frame-frontに変更
-- [ ] リポジトリ名をfrog-frame-frontからfrog-frame-frontに変更
+- [x] プロダクションコード、テストコード、ドキュメント中のfrog-frame-frontをfavorite-keyword-link-frogに変更
+- [x] リポジトリ名変更の方針決定（開発者が手動でGitHubリポジトリ名を変更、再クローンで対応）
 
 # ISSUEを通した相談事
 
