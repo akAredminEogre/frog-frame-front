@@ -51,6 +51,3 @@ RUN npm install -D @playwright/test
 
 # Playwright が動作するためのブラウザと依存ライブラリを一括インストール
 RUN npx playwright install --with-deps chromium
-
-# WXTでビルド（.output/chrome-mv3-dev生成）
-RUN npm run build
