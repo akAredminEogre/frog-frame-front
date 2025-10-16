@@ -27,3 +27,28 @@
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+
+## スクラム02 の振り返り
+<!-- KPT法で振り返りを行なってください -->
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+- `.clinerules`と`docs`ディレクトリ内のMarkdownファイル（計145ファイル）で文言の一括置換を完了できた
+- 変更後にテスト&リントを実行し、ドキュメント変更のみであることを確認できた（単体テスト262個成功、Knip正常）
+- 作業後にPROGRESSファイルに詳細な作業内容と修正ファイル一覧を記録できた
+- E2Eテスト失敗が既存問題であることを明確に記録し、今回の変更と無関係であることを示せた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+- E2Eテスト2件が失敗している（既存問題だが、いずれ対処が必要）
+- ドキュメントファイルが多数あるため、一括置換の影響範囲が広かった
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+- E2Eテストの既存問題は別issueとして管理し、計画的に対処する
+- 大量のファイルを変更する際は、変更前にバックアップの確認や戻し方を明確にしておく
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
