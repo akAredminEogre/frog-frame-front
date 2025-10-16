@@ -91,7 +91,7 @@ export default preview;
 - エラーなし ✓
 
 ### 修正したファイル
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/.storybook/preview.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/.storybook/preview.ts
 
 ### 次回以降のスクラムに先送りする課題
 特になし
@@ -102,8 +102,8 @@ export default preview;
 ### スクラム-12(08回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/.storybook/main.ts
+frog-frame-front/host-frontend-root/frontend-src-root/.storybook/main.ts
 の変更は、依然として必要でしょうか？EditRulePage.stories.tsxを削除したのであれば、不要かと思いますが、ご確認ください。もし必要であればその旨次のPROGRESSに記載してください。
 ---

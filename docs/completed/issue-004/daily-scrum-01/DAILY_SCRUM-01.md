@@ -4,9 +4,9 @@
 - `PLAN.md` の「4.1. ドメイン層の修正」に取り組みます。
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlContent.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlContent.test.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlContent.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/HtmlContent.test.ts`
 
 ## 相談事項
 - ドメイン層の実装が完了しましたので、レビューをお願いいたします。

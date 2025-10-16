@@ -32,7 +32,7 @@ kk=01
 ### スクラム-01(01回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
-おそらくいろいろな箇所に、絶対パスが文字列が含まれていると思うので、~/absolute-path/to/favorite-keyword-link-frogや/home/absolute-path/to/favorite-keyword-link-frogに置換しておいてください。
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
+おそらくいろいろな箇所に、絶対パスが文字列が含まれていると思うので、~/absolute-path/to/frog-frame-frontや/home/absolute-path/to/frog-frame-frontに置換しておいてください。
 ---

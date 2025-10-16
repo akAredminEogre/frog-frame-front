@@ -8,13 +8,13 @@ RewriteRuleクラスのfromPlainObjectメソッドの廃止とRewriteRulePlainOb
 これにより、factory methodパターンからより直接的なコンストラクタパターンへのリファクタリングが完了し、コードがより明確になりました。
 
 ## 主な変更点
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts`
   - fromPlainObjectメソッドの削除
   - RewriteRulePlainObject型定義の削除
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/content.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/content.ts`
   - fromPlainObjectメソッド使用箇所を個別const設定に変更
   - RewriteRulePlainObjectの import を削除
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/popup/App.tsx`
+- `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/popup/App.tsx`
   - RewriteRulePlainObjectの import を削除
   - useState型定義を直接的なオブジェクト型定義に変更
 

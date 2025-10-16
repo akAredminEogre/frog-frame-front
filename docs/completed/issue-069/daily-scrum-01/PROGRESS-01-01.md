@@ -53,7 +53,7 @@ RewriteRules.tsのset(rule: RewriteRule): RewriteRulesとgetById(id: string):メ
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 現在コミットされていないテストコードについて、
-favorite-keyword-link-frog/.clinerules/03-test-coding-standards
-favorite-keyword-link-frog/.clinerules/03-test-coding-standards.md
+frog-frame-front/.clinerules/03-test-coding-standards
+frog-frame-front/.clinerules/03-test-coding-standards.md
 の規約に合わせてください
 ---

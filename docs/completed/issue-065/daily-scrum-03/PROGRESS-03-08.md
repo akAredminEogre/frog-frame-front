@@ -9,7 +9,7 @@ kk=03
 <!-- ここに進捗を記載 -->
 
 ### 実装内容
-レビューコメント「favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/e2e/edit-page.spec.tsを変更してください。テストしてほしい内容をコメント記入したので、内容に沿って修正してください。」に対応しました。
+レビューコメント「frog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/edit-page.spec.tsを変更してください。テストしてほしい内容をコメント記入したので、内容に沿って修正してください。」に対応しました。
 
 #### 1. テストコードの修正内容
 - edit-page.spec.tsにコメントで記入された内容に沿ってテストを実装

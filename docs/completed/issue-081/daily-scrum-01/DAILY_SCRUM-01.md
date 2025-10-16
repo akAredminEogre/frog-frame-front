@@ -64,7 +64,7 @@
    - 確認項目:
      - バージョン: `0.0.0` (リリース前に変更が必要)
      - description: `"manifest.json description"` (仮の説明文、変更が必要)
-     - name: `"favorite-keyword-link-frog"` (確認済み)
+     - name: `"frog-frame-front"` (確認済み)
      - アイコン: 全サイズ（16, 32, 48, 96, 128）が存在
      - 権限: contextMenus, storage, tabs, scripting, <all_urls> (適切)
 
@@ -94,8 +94,8 @@
 なし（確認作業のみ実施）
 
 ### 02回目
-1. `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/package.json`
+1. `frog-frame-front/host-frontend-root/frontend-src-root/package.json`
    - `devDependencies` から `@storybook/addon-docs` を削除
 
-2. `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/.storybook/main.ts`
+2. `frog-frame-front/host-frontend-root/frontend-src-root/.storybook/main.ts`
    - `addons` 配列から `@storybook/addon-docs` を削除

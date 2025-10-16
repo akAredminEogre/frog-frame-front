@@ -39,8 +39,8 @@ brew install git-filter-repo
 ```bash
 # リポジトリ全体をバックアップ
 cd ..
-cp -r favorite-keyword-link-frog favorite-keyword-link-frog-backup
-cd favorite-keyword-link-frog
+cp -r frog-frame-front frog-frame-front-backup
+cd frog-frame-front
 ```
 
 2. **対象ファイルから特定の文字列を削除**
@@ -185,10 +185,10 @@ git push origin --force --all
 ```bash
 # Step 1: 現状の確認とバックアップ
 cd /path/to/parent-directory
-cp -r favorite-keyword-link-frog favorite-keyword-link-frog-backup-$(date +%Y%m%d)
+cp -r frog-frame-front frog-frame-front-backup-$(date +%Y%m%d)
 
 # Step 2: 秘匿情報を特定
-cd favorite-keyword-link-frog
+cd frog-frame-front
 # 対象ファイルと秘匿情報を確認
 
 # Step 3: git filter-repoで履歴を書き換え
@@ -204,7 +204,7 @@ git push origin --force --tags
 
 # Step 6: 他のマシンでの対応
 # 他のマシンでクローンしている場合は、再クローン
-rm -rf favorite-keyword-link-frog
+rm -rf frog-frame-front
 git clone <repository-url>
 ```
 
@@ -254,7 +254,7 @@ git clone <repository-url>
 ### スクラム-01(05回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
 調査ありがとうございます。結論としては実施しません。今回の情報はパス名であり、漏洩したとしても許容できるものと判断しました。
 ---

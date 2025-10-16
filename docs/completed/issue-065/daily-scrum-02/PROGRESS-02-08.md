@@ -65,7 +65,7 @@ kk=02
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again ---->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum ---->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/OldStringTextArea.tsx
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/NewStringTextArea.tsx
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/URLPatternInput.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/OldStringTextArea.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/NewStringTextArea.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/URLPatternInput.tsx
 は、moleculesよりも、organismのほうがよいのでは、と思ったのですが、atomic designの考え方としてはどちらのほうが適切でしょうか？

@@ -69,6 +69,6 @@ PROGRESS-04-09.md のレビューコメント：
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド .clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule/RewriteRule.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule/RewriteRule.ts
 でurlPatternは必須としてください。
 ---

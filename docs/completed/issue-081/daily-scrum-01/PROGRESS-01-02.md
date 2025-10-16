@@ -33,10 +33,10 @@ kk=01
 
 ### 修正したファイル
 
-1. `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/package.json`
+1. `frog-frame-front/host-frontend-root/frontend-src-root/package.json`
    - `devDependencies` から `@storybook/addon-docs` を削除
 
-2. `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/.storybook/main.ts`
+2. `frog-frame-front/host-frontend-root/frontend-src-root/.storybook/main.ts`
    - `addons` 配列から `@storybook/addon-docs` を削除
 
 ### 次回以降のスクラムに先送りする課題
@@ -53,7 +53,7 @@ kk=01
 ### スクラム-01(02回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 
 ---

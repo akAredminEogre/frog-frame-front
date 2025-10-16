@@ -36,7 +36,7 @@ redundantPatternのリファクタリングについて、以下の設計方針�
    - `src/domain/services/PatternService.ts`
    - `src/domain/valueObjects/Pattern.ts`
 
-上記2点とも、favorite-keyword-link-frog/.clinerules/01-coding-standards.mdに従うと自然と決まるのではないかと考えています。
+上記2点とも、frog-frame-front/.clinerules/01-coding-standards.mdに従うと自然と決まるのではないかと考えています。
 私が考えていることとしては、RewriteRuleがPatternの値オブジェクトを持ち、PatternProcessorがその値オブジェクトを受け取って処理を行う形が良いのではないかと思っています。
 HtmlContentはRewriteRuleの値を参照するだけで、あくまでHTMLコンテンツの表現に専念し、パターン処理の責任を持たせない方が良いと考えています。
 

@@ -56,7 +56,7 @@ OldStringTextAreaコンポーネントで「正規表現を使う」チェック
 
 ### 修正したファイル
 
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/OldStringTextArea.tsx`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/OldStringTextArea.tsx`
   - 重複していたlabel要素を削除し、Checkboxコンポーネントのchildren機能を使用
 
 ### 次回以降のスクラムに先送りする課題

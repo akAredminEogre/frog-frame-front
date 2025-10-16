@@ -62,7 +62,7 @@ EditRulePage.tsxがRewriteRuleエンティティを知らなくても良いよ�
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 RewriteRuleを知らなくて良いようにするリファクタリングが適切に行われていることを確認しました。
 もう1点、
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.tsx
         rule.oldString,
         rule.newString,
         rule.urlPattern,

@@ -10,8 +10,8 @@
 
 ## 修正予定のファイル
 - 必要に応じて不要ファイルの削除
-- `favorite-keyword-link-frog/docs/issue-003/PLAN.md` (最終ステータス更新)
-- `favorite-keyword-link-frog/docs/issue-003/ISSUE.md` (受け入れ条件の最終チェック)
+- `frog-frame-front/docs/issue-003/PLAN.md` (最終ステータス更新)
+- `frog-frame-front/docs/issue-003/ISSUE.md` (受け入れ条件の最終チェック)
 
 ## 相談事項
 特になし。最終確認段階のため、問題があれば対処方針を相談する。

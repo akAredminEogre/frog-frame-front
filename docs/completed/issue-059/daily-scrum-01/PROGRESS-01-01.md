@@ -48,9 +48,9 @@ Phase 2以降の実装：
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/unit/domain/value-objects/RewriteRules.test.ts
+frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/value-objects/RewriteRules.test.ts
 は、
-favorite-keyword-link-frog/.clinerules/03-test-coding-standards.md
+frog-frame-front/.clinerules/03-test-coding-standards.md
 の規約に従ってください
 
 ### レビューコメント対応完了

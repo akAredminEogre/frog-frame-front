@@ -32,7 +32,7 @@ wxt.config.tsでmanifest設定を確認し、権限設定が適切であるこ�
 ### スクラム-02(01回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 
 ---

@@ -10,8 +10,8 @@
 - 実装したテストと既存テストの実行・確認
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/e2e/get-origin.spec.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/e2e/fixtures.ts` (修正が必要な場合)
+- `frog-frame-front/host-frontend-root/frontend-src-root/e2e/get-origin.spec.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/e2e/fixtures.ts` (修正が必要な場合)
 
 ## 相談事項
 - 特になし。

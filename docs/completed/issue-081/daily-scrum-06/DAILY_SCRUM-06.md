@@ -33,7 +33,7 @@
 <!-- 質問は不明点を明確に記載してください。 -->
 <!-- レビューしてほしいことは、レビュー対象を具体的に記載してください。 -->
 <!-- また上記相談・質問・レビューのトピックが重複する場合は、まとめて記載してください。 -->
-<!-- ユーザーが使うコマンド: favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
+<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
 
 - テスト環境での動作確認の具体的な確認項目について、現在想定している以下の内容で十分か、他に確認すべき項目があればレビューしてほしい
   - 基本機能（キーワードリンク付与）の動作確認

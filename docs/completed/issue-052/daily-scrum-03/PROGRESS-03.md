@@ -69,7 +69,7 @@ kk=03
 レビューコメントにより、より保守性の高い適切な設計に改善されました。
 
 ### スクラム-03(2回目) のレビューコメント
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts
 にelse句が使われています。これは.clinerules/01-coding-standards.mdの「条件分岐はifをネストさせず、早期リターンで対応する」に違反しています。else句を使わずに早期リターンで書き直してください。
 
 ## スクラム-03(3回目) の進捗
@@ -252,7 +252,7 @@ HtmlWhitespacePatternProcessor
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/RewriteRule.ts
   - strategyのprocessPatternメソッドに、this.oldStringを引数として渡すのはやめてください。strategyの具体クラスのコンストラクタにoldStringを渡すようにして、processPatternはそのメンバ変数を参照するようにしてください。
 
 ## スクラム-03(8回目) の進捗

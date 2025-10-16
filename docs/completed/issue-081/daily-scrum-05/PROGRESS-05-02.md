@@ -19,7 +19,7 @@ README.mdの記述「Favorite Keyword Link Frogは、ブラウザに表示した
 
 ### 修正したファイル
 
-- favorite-keyword-link-frog/docs/issue-081/STORE_DESCRIPTION.md
+- frog-frame-front/docs/issue-081/STORE_DESCRIPTION.md
 
 ### 次回以降のスクラムに先送りする課題
 
@@ -33,7 +33,7 @@ README.mdの記述「Favorite Keyword Link Frogは、ブラウザに表示した
 ### スクラム-05(02回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
 
 ---
