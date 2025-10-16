@@ -38,4 +38,54 @@
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+### 調査結果
+
+#### 1. .clinerulesディレクトリ内のtest-and-lint実行箇所
+
+以下の3箇所でtest-and-lintが参照されています：
+
+1. `.clinerules/02-workflow-automation/02-daily-scrum-starts/test-and-lint-before-complete.md`
+   - workflow:test-and-lint-before-complete
+   - attempt_completion前に必ず実行する必要がある
+   - コマンド: `docker compose exec frontend npm run test-and-lint`
+
+2. `.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:code-according-to-the-rules.md`
+   - 実装完了後にworkflow:test-and-lint-before-completeを必ず実行する指示
+
+3. `.clinerules/05-project-specific-rules.md`
+   - test-and-lintコマンドの参照
+
+#### 2. package.jsonのtest-and-lint設定
+
+実行内容：
+- `npm run unused:complete`: 未使用コードの完全クリーンアップ
+  - `npm run unused:fix`: knip:fix + tsr:write + lint:fix
+  - `npm run unused:remove-broken-tests`: コンパイルエラーのあるテストファイル削除
+  - `npm run compile`: TypeScriptコンパイルチェック
+- `npm run test:all`: vitest + playwright実行
+- `npm run knip:all`: 未使用コード検出（production設定）
+
+#### 3. knip.json設定
+
+- ignoreディレクトリ: `.output`, `.wxt`, `test-results`, `node_modules`, `dist`, `build`, `.storybook`, `src/components`
+- ignoreファイル: `vitest.config.ts`, `eslint.config.js`, `playwright.config.ts`, エントリポイント、Storybookファイル
+- ignoreDependencies: `@wxt-dev/module-react`
+- entry: `src/entrypoints/**/*.{ts,tsx}!`, `wxt.config.ts`
+- project: `src/**/*.{ts,tsx}!`, `wxt.config.ts`
+
+#### 4. tsconfig.tsr.json設定
+
+- extends: `./tsconfig.json`
+- include: `src/**/*`
+- exclude: テストファイル、Storybookファイル
+
+#### 5. .depcheckrc設定
+
+- ignoreDirs: `tests`, `test`, `spec`, `__tests__`, `e2e`
+- ignores: `@wxt-dev/module-react`
+- skipMissing: true
+- ignorePatterns: `*.test.ts`, `*.spec.ts`, `*.test.tsx`, `*.spec.tsx`
+
 ## 修正したファイル
+
+なし（調査タスクのため）
