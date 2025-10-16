@@ -6,7 +6,7 @@
 <!-- PLAN.mdの計画の中でどのユーザーストーリーに取り組むか記載してください。 -->
 
 PLAN.mdの以下のタスクに取り組みます：
-- リポジトリ名をfrog-frame-frontからfavorite-keyword-link-frogに変更
+- リポジトリ名をfavorite-keyword-link-frogからfrog-frame-frontに変更
 
 ### 作業内容
 1. GitHubリポジトリ名を変更（GitHub Web UIで実施）
@@ -20,8 +20,6 @@ PLAN.mdの以下のタスクに取り組みます：
 - リポジトリ名の変更に伴う設定ファイル（必要に応じて）
 
 ## スクラム内残タスク
-
-- [ ] GitHubリポジトリ名をfrog-frame-frontからfavorite-keyword-link-frogに変更
 - [ ] ローカルリポジトリのリモートURLを更新
 - [ ] git操作の動作確認（push、pull、fetchなど）
 - [ ] 変更後の動作を文書化
@@ -42,7 +40,7 @@ GitHubリポジトリ名の変更は、私（AI）が直接実施することが
 
 1. GitHubのリポジトリページを開く
 2. Settings タブをクリック
-3. Repository name の欄で「frog-frame-front」を「favorite-keyword-link-frog」に変更
+3. Repository name の欄で「favorite-keyword-link-frog」を「frog-frame-front」に変更
 4. Rename ボタンをクリック
 
 この作業をユーザー様に実施していただいた後、私がローカルリポジトリのリモートURL更新を実施します。
