@@ -8,15 +8,15 @@ export class ContextMenuSetupUseCase {
     chrome.contextMenus.removeAll(() => {
       // 親メニューを作成
       chrome.contextMenus.create({
-        id: 'favorite-keyword-link-frog-parent',
-        title: 'favorite-keyword-link-frog',
+        id: 'frog-frame-front-parent',
+        title: 'frog-frame-front',
         contexts: ['selection'],
       });
       
       // サブメニューを作成
       chrome.contextMenus.create({
         id: 'context-menu-replace-dom-element',
-        parentId: 'favorite-keyword-link-frog-parent',
+        parentId: 'frog-frame-front-parent',
         title: 'この要素を置換',
         contexts: ['selection'],
       });
