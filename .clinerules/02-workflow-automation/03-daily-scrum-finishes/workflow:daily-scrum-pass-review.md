@@ -1,4 +1,4 @@
-favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md
+frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
@@ -16,7 +16,7 @@ docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-jj.md(jjは任意の定数、複数あ
 をインプットとして、
 docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md を更新してください
 - 従うべきフォーマット
-  - favorite-keyword-link-frog/docs/issue-000/daily-scrum-00/DAILY_SCRUM-.md
+  - frog-frame-front/docs/issue-000/daily-scrum-00/DAILY_SCRUM-.md
   - ただし、kkはスクラム回数に置き換えてください
 
 続いて、下記の振り返りも行ってください

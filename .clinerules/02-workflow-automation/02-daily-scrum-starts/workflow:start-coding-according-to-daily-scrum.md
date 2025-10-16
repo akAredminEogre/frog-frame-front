@@ -1,4 +1,4 @@
-favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:start-coding-according-to-daily-scrum.md
+frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:start-coding-according-to-daily-scrum.md
 
 cline-instructionsの手順をチャットスレッドに表示してから実行してください。
 その中で別のworkflowに従うと指示されてる場合は、その手順も検索・確認して再帰的にチャットスレッドに表示してください
