@@ -35,7 +35,7 @@ README.mdの作成・更新を行いました。
 
 ### 修正したファイル
 
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/README.md
+- frog-frame-front/host-frontend-root/frontend-src-root/README.md
 
 ### 次回以降のスクラムに先送りする課題
 <!-- 本issueで解決するが、本スクラムでは取り扱わない課題 -->
@@ -50,7 +50,7 @@ README.mdの作成・更新を行いました。
 ### スクラム-03(01回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 - README.mdについて、記述いただいた内容に問題ありません。むしろまだこちらで対応しきれていない箇所があり、削除することになってしまい申し訳ありません。
 - ライセンスについて教えていただけないでしょうか。私にとってchrome拡張機能を開発してリリースするのは初めてとなります。初歩的なことで申し訳ないでしょうが、ライセンスを記述する意図と、MITライセンスやその他のライセンスの違いを教えていただけると助かります。

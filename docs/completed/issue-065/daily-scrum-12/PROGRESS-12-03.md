@@ -41,14 +41,14 @@ PROGRESS-12-02.mdのレビューコメントで指摘された、他のコンポ
   - `tests/e2e/edit-page.spec.ts` - net::ERR_ABORTED; maybe frame was detached?
 
 ### 修正したファイル
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/LabeledInput.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/LabeledTextArea.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/SaveButton.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/NewStringTextArea.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/OldStringTextArea.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/URLPatternInput.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/LabeledInput.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/LabeledTextArea.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/SaveButton.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/NewStringTextArea.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/OldStringTextArea.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/URLPatternInput.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.stories.tsx
 
 ### 次回以降のスクラムに先送りする課題
 - E2Eテストの1つの失敗は既存の問題（ネットワーク接続やフレームのデタッチ関連）で、今回の修正とは無関係のため、別途対応が必要

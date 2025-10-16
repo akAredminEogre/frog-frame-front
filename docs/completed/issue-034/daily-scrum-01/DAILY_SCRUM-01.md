@@ -4,7 +4,7 @@
 `content.ts`内に現在使用されていない`else if (request.type === 'getPageInfo')`のコードブロックが存在するため、これを削除してコードをクリーンにします。削除後は、回帰テストを実行して既存機能への影響がないことを確認します。
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/content.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/content.ts`
 
 ## 相談事項
 特にありません。

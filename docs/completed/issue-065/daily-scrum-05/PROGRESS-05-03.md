@@ -11,7 +11,7 @@ kk=05
 #### 1. レビューコメントへの対応: ChromeStorageRewriteRuleRepositoryのsave()とupdate()メソッドの統合
 
 **レビューコメント内容:**
-> favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository.ts
+> frog-frame-front/host-frontend-root/frontend-src-root/src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository.ts
 > についてもsave,updateメソッドが同一のロジックです。setに統合を検討してください
 
 **分析結果:**

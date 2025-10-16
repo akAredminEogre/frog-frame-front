@@ -71,9 +71,9 @@ PROGRESS-12-06.mdのレビューコメントで指摘された以下の対応を
 - エラーなし ✓
 
 ### 修正したファイル
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.stories.tsx（削除）
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.stories.tsx（削除）
 
 ### 次回以降のスクラムに先送りする課題
 特になし
@@ -84,7 +84,7 @@ PROGRESS-12-06.mdのレビューコメントで指摘された以下の対応を
 ### スクラム-12(07回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 ありがとうございます。Storybookのほうも落ち着きました。
 最後の作業として、このスクラムではいくつかの、試行錯誤をしたので、EditRulePageをstory化するためにした変更で、不要になったものがあれば削除してください。

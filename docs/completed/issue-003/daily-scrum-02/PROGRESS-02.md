@@ -30,11 +30,11 @@
 **コードレビュー依頼:**
 `HtmlReplacer`のリファクタリング（値オブジェクト導入）が完了しました。
 以下のファイルについてコードレビューをお願いいたします。
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/HtmlString.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/TagName.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/HtmlString.test.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/TagName.test.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/HtmlString.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/TagName.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlReplacer.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/HtmlString.test.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/__tests__/TagName.test.ts`
 
 ### スクラム02-(1回目) のレビューコメント
 
@@ -64,8 +64,8 @@ if (['tbody', 'thead', 'tfoot', 'tr', 'td', 'th', 'caption'].includes(lowerTagNa
 **コードレビュー依頼:**
 レビューコメントへの対応が完了しました。
 以下のファイルについて再度コードレビューをお願いいたします。
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/HtmlString.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/TextReplacer.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/HtmlString.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/TextReplacer.ts`
 
 ### スクラム02-(2回目) のレビューコメント
 
@@ -90,7 +90,7 @@ kk=02
 **コードレビュー依頼:**
 レビューコメントへの対応が完了しました。
 以下のファイルについて再度コードレビューをお願いいたします。
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/HtmlString.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/HtmlString.ts`
 
 ### スクラム02-(3回目) のレビューコメント
 kk=02

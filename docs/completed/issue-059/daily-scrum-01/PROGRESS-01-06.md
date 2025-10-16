@@ -40,7 +40,7 @@
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/unit/domain/value-objects/RewriteRules/のテストコードは、
-- favorite-keyword-link-frog/.clinerules/03-test-coding-standards.md
-- favorite-keyword-link-frog/.clinerules/03-test-coding-standards/01-common-rule/02-array-based-test.md
+frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/value-objects/RewriteRules/のテストコードは、
+- frog-frame-front/.clinerules/03-test-coding-standards.md
+- frog-frame-front/.clinerules/03-test-coding-standards/01-common-rule/02-array-based-test.md
 のルールに従って修正してください

@@ -91,10 +91,10 @@ kk=10
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド .clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/infrastructure/browser/tabs/ChromeTabsService.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/src/infrastructure/browser/tabs/ChromeTabsService.ts
   - openEditPageメソッドは、直接はinfrastructureの実装を知らないため、UseCaseに移管してください。
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/application/usecases/rule/OpenRuleEditPageUseCase.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/src/application/usecases/rule/OpenRuleEditPageUseCase.ts
   - executeメソッドの中で、上記のopenEditPageメソッドを呼び出してください
 - テストコードについて
-  - favorite-keyword-link-frog/.clinerules/03-test-coding-standards.md のように変更したので、infrastructure層についてはそれに該当するか、指示がない限り作成しなくて構いません。削除してください
+  - frog-frame-front/.clinerules/03-test-coding-standards.md のように変更したので、infrastructure層についてはそれに該当するか、指示がない限り作成しなくて構いません。削除してください
 ---

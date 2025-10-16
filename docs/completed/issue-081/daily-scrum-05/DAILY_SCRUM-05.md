@@ -26,7 +26,7 @@
 
 ## 修正予定ファイル
 <!-- 修正予定のファイルを記載してください。 -->
-- favorite-keyword-link-frog/docs/issue-081/STORE_DESCRIPTION.md（新規作成）
+- frog-frame-front/docs/issue-081/STORE_DESCRIPTION.md（新規作成）
 
 ## スクラム内残タスク
 
@@ -38,7 +38,7 @@
 <!-- 質問は不明点を明確に記載してください。 -->
 <!-- レビューしてほしいことは、レビュー対象を具体的に記載してください。 -->
 <!-- また上記相談・質問・レビューのトピックが重複する場合は、まとめて記載してください。 -->
-<!-- ユーザーが使うコマンド: favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
+<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
 
 - アイコン画像のデザインについて確認したい
   - 「Favorite Keyword Link Frog」という拡張機能名から、カエル（frog）をモチーフにしたアイコンが適切だと考えていますが、デザインの方向性について希望はありますか？
@@ -82,4 +82,4 @@ README.mdの記述「Favorite Keyword Link Frogは、ブラウザに表示した
 
 ## 修正したファイル
 
-- favorite-keyword-link-frog/docs/issue-081/STORE_DESCRIPTION.md（新規作成・修正）
+- frog-frame-front/docs/issue-081/STORE_DESCRIPTION.md（新規作成・修正）

@@ -69,25 +69,25 @@ atomsのstorybook化により、コンポーネントの再利用性とドキュ
 ## 修正したファイル
 
 ### 新規作成
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/Button.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/Checkbox.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/Description.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/TextArea.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/Title.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/LabeledInput.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/LabeledTextArea.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/SaveButton.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/NewStringTextArea.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/OldStringTextArea.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.stories.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/URLPatternInput.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/Button.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/Checkbox.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/Description.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/TextArea.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/Title.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/LabeledInput.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/LabeledTextArea.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/SaveButton.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/NewStringTextArea.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/OldStringTextArea.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/URLPatternInput.stories.tsx
 
 ### 変更
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/package.json
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/.storybook/main.ts
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/.storybook/preview.ts
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/package.json
+- frog-frame-front/host-frontend-root/frontend-src-root/.storybook/main.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/.storybook/preview.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleForm.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.tsx
 
 ### 削除
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.stories.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.stories.tsx

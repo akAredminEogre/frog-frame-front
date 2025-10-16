@@ -49,7 +49,7 @@ const config = {
 - エラーなし ✓
 
 ### 修正したファイル
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/.storybook/main.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/.storybook/main.ts
 
 ### 次回以降のスクラムに先送りする課題
 特になし

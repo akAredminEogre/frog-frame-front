@@ -50,7 +50,7 @@
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/value-objects/RewriteRules.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/domain/value-objects/RewriteRules.ts
 のconstructorの
 ```
         return [id, new RewriteRule(

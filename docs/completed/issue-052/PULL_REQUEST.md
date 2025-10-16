@@ -10,11 +10,11 @@ E2Eテスト `replace-inside-dom-with-regex.spec.ts` を通過するための正
 
 ### 補足
 上記実装を行ったが、PRとしては巨大なものになったため、以下のPRに分割してマージ済み
-https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/99
-https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/100
-https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/101
-https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/102
-https://github.com/akAredminEogre/favorite-keyword-link-frog/pull/103
+https://github.com/akAredminEogre/frog-frame-front/pull/99
+https://github.com/akAredminEogre/frog-frame-front/pull/100
+https://github.com/akAredminEogre/frog-frame-front/pull/101
+https://github.com/akAredminEogre/frog-frame-front/pull/102
+https://github.com/akAredminEogre/frog-frame-front/pull/103
 
 本PRはドキュメントの更新と最終的な修正を含むもの
 

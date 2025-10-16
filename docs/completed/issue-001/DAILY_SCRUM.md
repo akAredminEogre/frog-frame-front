@@ -12,7 +12,7 @@ Story-1: 開発者として、保守性の高いコードベースを維持す�
 - `src`配下に`domain/entities`と`domain/entities/__tests__`ディレクトリを作成する
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/wxt.config.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/wxt.config.ts`
 
 ## 相談事項
 - 特にありません。計画通りに進めます。
@@ -30,7 +30,7 @@ Story-1: 開発者として、保守性の高いコードベースを維持す�
 Story-1: 開発者として、保守性の高いコードベースを維持するために、`replaceInNode`のロジックをドメイン層に分離する（過渡期対応）
 
 - **レビュー指摘事項の修正:**
-    - `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/.gitkeep` を作成済み。
+    - `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/.gitkeep` を作成済み。
 - **`replaceInNode`のリファクタリング:**
     - `utils/domUtils.ts` にある `replaceInNode` を `src/domain/entities/NodeTextReplacer.ts` にドメインサービスとしてリファクタリングする。
     - `replaceInNode` が依存している `Keyword` 型を `src/domain/entities/Keyword.ts` に定義する。
@@ -40,11 +40,11 @@ Story-1: 開発者として、保守性の高いコードベースを維持す�
     - `content.ts` で `replaceInNode` を呼び出している箇所を、新しいドメインサービス `NodeTextReplacer` を使用するように修正する。
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/Keyword.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/NodeTextReplacer.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/NodeTextReplacer.test.ts` (新規作成)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/utils/domUtils.ts` (削除)
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/content.ts` (修正)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/Keyword.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/NodeTextReplacer.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/__tests__/NodeTextReplacer.test.ts` (新規作成)
+- `frog-frame-front/host-frontend-root/frontend-src-root/utils/domUtils.ts` (削除)
+- `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/content.ts` (修正)
 
 ## 相談事項
 - 特にありません。計画通りに進めます。
@@ -79,8 +79,8 @@ Story-1: 開発者として、保守性の高いコードベースを維持す�
 - 全ての単体テストが通るまで修正を続ける
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/__tests__/background.test.ts`
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/utils/__tests__/tabUtils.test.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/__tests__/background.test.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/utils/__tests__/tabUtils.test.ts`
 
 ## 相談事項
 - 特にありません。前回のレビューコメントに従って問題を解決します。
@@ -116,8 +116,8 @@ issue-001のStory-1の現状整理と残り作業の確認
 - 完了していれば振り返りを実施し、次のStoryまたは新しいissueに進む準備をする
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/docs/issue-001/PLAN.md`
-- `favorite-keyword-link-frog/docs/issue-001/RETROSPECTIVE.md` (必要に応じて)
+- `frog-frame-front/docs/issue-001/PLAN.md`
+- `frog-frame-front/docs/issue-001/RETROSPECTIVE.md` (必要に応じて)
 
 ## 相談事項
 - Story-1が完了している場合、次に進むべき作業についてユーザーと相談したい

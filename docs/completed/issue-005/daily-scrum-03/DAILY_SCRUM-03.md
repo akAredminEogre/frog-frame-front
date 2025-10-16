@@ -18,9 +18,9 @@
 <!-- 修正予定のファイルを記載してください。 -->
 
 - 新規作成: テスト用HTMLファイル（手動テスト環境用）
-- 必要に応じて: `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/content.ts`
+- 必要に応じて: `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/content.ts`
   - 手動テスト過程で発見された問題の修正
-- 必要に応じて: `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/entrypoints/background.ts`
+- 必要に応じて: `frog-frame-front/host-frontend-root/frontend-src-root/entrypoints/background.ts`
   - 手動テスト過程で発見された問題の修正
 
 ## 相談事項

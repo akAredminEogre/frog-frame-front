@@ -12,7 +12,7 @@ Chrome Web Storeへの登録に必要なプライバシーポリシーを作成�
 
 ### 作成内容
 
-- **ファイル**: favorite-keyword-link-frog/PRIVACY_POLICY.md
+- **ファイル**: frog-frame-front/PRIVACY_POLICY.md
 - **言語**: 日本語・英語の両方に対応
 - **内容**:
   - 情報の収集について（個人情報は収集しない）
@@ -43,7 +43,7 @@ npm run test-and-lint
 
 ### 修正したファイル
 
-- favorite-keyword-link-frog/PRIVACY_POLICY.md（新規作成）
+- frog-frame-front/PRIVACY_POLICY.md（新規作成）
 
 ### 次回以降のスクラムに先送りする課題
 <!-- 本issueで解決するが、本スクラムでは取り扱わない課題 -->
@@ -57,7 +57,7 @@ npm run test-and-lint
 ### スクラム-04(01回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
-<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
 
 ---

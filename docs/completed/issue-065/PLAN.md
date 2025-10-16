@@ -4,7 +4,7 @@
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
 - [x] 既存のpopup/App.tsxの調査・分析（コンポーネント構造、UI要素、データフロー）
 - [x] Storybookを利用したatomic designでのUI再現（基本コンポーネント作成）
-  - 事前調査資料：favorite-keyword-link-frog/docs/issue-065/daily-scrum-01/PROGRESS-01-01.md
+  - 事前調査資料：frog-frame-front/docs/issue-065/daily-scrum-01/PROGRESS-01-01.md
   - **完了（スクラム02）**: Atoms/Molecules コンポーネント作成、CSS modules実装、Storybookストーリー作成
 - [x] 共通UI部品の作成（新規登録と編集で見た目を共通化）
   - **完了（スクラム02）**: RewriteRuleFormコンポーネント実装、型安全性向上

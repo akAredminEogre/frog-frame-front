@@ -67,7 +67,7 @@ kk=04
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
 
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/application/usecases/rule/RefreshAllTabsAfterRuleUpdateUseCase.ts
+frog-frame-front/host-frontend-root/frontend-src-root/src/application/usecases/rule/RefreshAllTabsAfterRuleUpdateUseCase.ts
 には、infrastructure層のロジックを直接実装しないようにしてください。
 また、適用するタブは、RewriteRule編集したもので、URLパターンが前方一致するものだけにしてください。
 

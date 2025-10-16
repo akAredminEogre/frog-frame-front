@@ -166,7 +166,7 @@ const expectedConcreteClassRegistrations = [
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド .clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.tsx
+- frog-frame-front/host-frontend-root/frontend-src-root/src/components/pages/EditRulePage.tsx
   - の下記のコードについても、DIを使って同様の対応をしてください
 ```typescript
       const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
@@ -179,7 +179,7 @@ const expectedConcreteClassRegistrations = [
         const refreshTabsUseCase = new RefreshAllTabsAfterRuleUpdateUseCase(chromeTabsService);
         await refreshTabsUseCase.execute(ruleId, rule);
 ```
-- favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/application/usecases/rule/UpdateRewriteRuleUseCase.ts
+- frog-frame-front/host-frontend-root/frontend-src-root/src/application/usecases/rule/UpdateRewriteRuleUseCase.ts
 ```
     const rule = new RewriteRule(
       id,

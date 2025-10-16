@@ -12,9 +12,9 @@ kk=02
 ### レビューコメントへの回答
 
 **レビューコメント：**
-> favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/OldStringTextArea.tsx
-> favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/NewStringTextArea.tsx
-> favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/molecules/URLPatternInput.tsx
+> frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/OldStringTextArea.tsx
+> frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/NewStringTextArea.tsx
+> frog-frame-front/host-frontend-root/frontend-src-root/src/components/molecules/URLPatternInput.tsx
 > は、moleculesよりも、organismのほうがよいのでは、と思ったのですが、atomic designの考え方としてはどちらのほうが適切でしょうか？
 
 **回答：**

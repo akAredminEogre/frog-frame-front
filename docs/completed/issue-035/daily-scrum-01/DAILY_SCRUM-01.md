@@ -5,10 +5,10 @@
 具体的には、ignore-crlf-replace-with-regex.spec.tsのE2Eテストをパスするように、HtmlContent.tsクラスの正規表現処理部分を修正しました。
 
 ## 修正予定のファイル
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/domain/entities/HtmlContent.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/domain/entities/HtmlContent.ts`
   - 正規表現ルールでも改行コードを無視する処理を追加
   - `createRedundantRegexPattern`メソッドを新規作成
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/tests/e2e/ignore-crlf-replace-with-regex.spec.ts`
+- `frog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/ignore-crlf-replace-with-regex.spec.ts`
   - 正規表現チェックボックスを正しくチェックするように修正
   - 構文エラーを修正
 

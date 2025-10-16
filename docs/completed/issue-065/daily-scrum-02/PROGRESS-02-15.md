@@ -65,7 +65,7 @@ Checkboxコンポーネント内でlabel要素の子要素の配置順序を変�
 
 ### 修正したファイル
 
-- `favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/atoms/Checkbox.tsx`
+- `frog-frame-front/host-frontend-root/frontend-src-root/src/components/atoms/Checkbox.tsx`
   - ラベルテキストとチェックボックスの表示順序を変更
 
 ### 次回以降のスクラムに先送りする課題

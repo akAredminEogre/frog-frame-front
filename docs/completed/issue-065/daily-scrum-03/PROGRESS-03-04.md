@@ -55,8 +55,8 @@ kk=03
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド workflow:see-and-commit-review-comment-then-code-again -->
 <!-- ユーザーが使うコマンド workflow:daily-scrum-pass-review-scrum -->
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleList.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/components/organisms/RewriteRuleList.tsx
 は廃止し、既存の
-favorite-keyword-link-frog/host-frontend-root/frontend-src-root/src/entrypoints/rules/RulesApp.tsx
+frog-frame-front/host-frontend-root/frontend-src-root/src/entrypoints/rules/RulesApp.tsx
 に統合してください。その障害・課題、要考慮事項があれば、指摘をお願いします
 ---

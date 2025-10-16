@@ -14,7 +14,7 @@
 ### Phase 1: バージョン調査と更新準備
 1. **最新バージョンの確認**
    ```bash
-   cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm show @playwright/test version
+   cd ~/absolute-path/to/frog-frame-front && docker compose exec frontend npm show @playwright/test version
    ```
    - npmで`@playwright/test`の最新バージョンを調査
    - 破壊的変更やリリースノートを確認
@@ -34,12 +34,12 @@
 ### Phase 3: ローカルでのテスト実行と修正
 1. **Dockerコンテナの再ビルド**
    ```bash
-   cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose build --no-cache
+   cd ~/absolute-path/to/frog-frame-front && docker compose build --no-cache
    ```
 
 2. **e2eテストの実行**
    ```bash
-   cd ~/absolute-path/to/favorite-keyword-link-frog && docker compose exec frontend npm run test:e2e
+   cd ~/absolute-path/to/frog-frame-front && docker compose exec frontend npm run test:e2e
    ```
    - 既存のe2eテスト（popup.spec.ts）を実行
    - エラーや警告の確認
