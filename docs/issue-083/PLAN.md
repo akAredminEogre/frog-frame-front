@@ -2,7 +2,7 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] プロダクションコード、テストコード、ドキュメント中のfavorite-keyword-link-frogをfrog-frame-frontに変更
+- [x] プロダクションコード、テストコード、ドキュメント中のfavorite-keyword-link-frogをfrog-frame-frontに変更
 - [ ] リポジトリ名をfavorite-keyword-link-frogからfrog-frame-frontに変更
 
 # ISSUEを通した相談事
