@@ -4,17 +4,17 @@
 
 ## スクラム-01(01回目) の進捗
 
-プロダクションコード、テストコード、ドキュメント中の`favorite-keyword-link-frog`を`frog-frame-front`に変更する作業を実施しました。
+プロダクションコード、テストコード、ドキュメント中の`frog-frame-front`を`frog-frame-front`に変更する作業を実施しました。
 
 ### 修正したファイル
 
 1. **host-frontend-root/frontend-src-root/src/application/usecases/contextmenu/ContextMenuSetupUseCase.ts**
-   - コンテキストメニューのID: `favorite-keyword-link-frog-parent` → `frog-frame-front-parent`
-   - コンテキストメニューのタイトル: `favorite-keyword-link-frog` → `frog-frame-front`
-   - サブメニューのparentId: `favorite-keyword-link-frog-parent` → `frog-frame-front-parent`
+   - コンテキストメニューのID: `frog-frame-front-parent` → `frog-frame-front-parent`
+   - コンテキストメニューのタイトル: `frog-frame-front` → `frog-frame-front`
+   - サブメニューのparentId: `frog-frame-front-parent` → `frog-frame-front-parent`
 
 2. **host-frontend-root/frontend-src-root/package.json**
-   - パッケージ名: `favorite-keyword-link-frog` → `frog-frame-front`
+   - パッケージ名: `frog-frame-front` → `frog-frame-front`
 
 3. **host-frontend-root/frontend-src-root/package-lock.json**
    - `npm install`により自動更新
@@ -38,7 +38,7 @@
 ### スクラム-01(01回目) のレビューコメント
 
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
-<!-- ユーザーが使うコマンド: favorite-keyword-link-frog/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
-<!-- ユーザーが使うコマンド: favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
+<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
+<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
 
 ---

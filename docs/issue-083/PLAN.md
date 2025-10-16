@@ -2,8 +2,8 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [x] プロダクションコード、テストコード、ドキュメント中のfavorite-keyword-link-frogをfrog-frame-frontに変更
-- [ ] リポジトリ名をfavorite-keyword-link-frogからfrog-frame-frontに変更
+- [x] プロダクションコード、テストコード、ドキュメント中のfrog-frame-frontをfrog-frame-frontに変更
+- [ ] リポジトリ名をfrog-frame-frontからfrog-frame-frontに変更
 
 # ISSUEを通した相談事
 
@@ -33,7 +33,7 @@ git remote set-url origin NEW_URL
 ```
 
 ### 3. 注意事項
-- 将来、元のリポジトリ名（favorite-keyword-link-frog）を再利用すると、リダイレクトが機能しなくなる
+- 将来、元のリポジトリ名（frog-frame-front）を再利用すると、リダイレクトが機能しなくなる
 - GitHub Actionsを使用している場合、リポジトリ名を参照している箇所の更新が必要になる可能性がある
 
 参考: [GitHub Docs - Renaming a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/renaming-a-repository)

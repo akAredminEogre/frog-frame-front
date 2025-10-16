@@ -2,7 +2,7 @@
 <!-- このチケットで解決したい課題 -->
 アプリ名とリポジトリ名を変更したいです。
 
-変更前：favorite-keyword-link-frog
+変更前：frog-frame-front
 変更後：frog-frame-front
 
 に変えたいです
@@ -24,7 +24,7 @@
 
 # タスク
 <!-- チケットの見積もりを行うために、必要なタスクを列挙します -->
-- [ ] プロダクションコード中のfavorite-keyword-link-frogをfrog-frame-frontに変更
-- [ ] テストコード中のfavorite-keyword-link-frogをfrog-frame-frontに変更
-- [ ] ドキュメント中のfavorite-keyword-link-frogをfrog-frame-frontに変更
+- [ ] プロダクションコード中のfrog-frame-frontをfrog-frame-frontに変更
+- [ ] テストコード中のfrog-frame-frontをfrog-frame-frontに変更
+- [ ] ドキュメント中のfrog-frame-frontをfrog-frame-frontに変更
 - [ ] リポジトリ名を変更する
