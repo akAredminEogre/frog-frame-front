@@ -52,3 +52,30 @@
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+
+## スクラム03 の振り返り
+<!-- KPT法で振り返りを行なってください -->
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+- リポジトリ名変更の方針について、開発者と適切にコミュニケーションを取って確認できた
+- GitHubリポジトリ名変更に関する技術情報を調査し、明確に文書化できた
+- issue-083の完了方針（PR作成→developマージ→issue完了）を明確にできた
+- ソースコード編集作業の完了を確認し、次のステップを整理できた
+- リポジトリ名変更後の確認事項（GitHub Actions、Webhook設定など）を具体的にリストアップできた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+- 当初はGitHubリポジトリ名の変更をAIが実施する想定だったが、実際には手動作業が必要だった
+- スクラムの計画段階で、実施可能な作業範囲を明確にできていなかった
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+- 外部サービス（GitHubなど）の設定変更が必要な作業は、事前に実施可能性を確認する
+- 手動作業が必要な場合は、早めにユーザーに確認し、作業範囲を調整する
+- 作業開始前に「AIで自動化できること」と「手動で行うこと」を明確に区別する
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+<!-- ユーザーが使うコマンド favorite-keyword-link-frog/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
