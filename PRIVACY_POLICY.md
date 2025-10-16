@@ -49,7 +49,7 @@ Favorite Keyword Link Frog（以下「本拡張機能」）は、ユーザーの
 ### お問い合わせ
 
 本プライバシーポリシーに関するご質問は、GitHubリポジトリのIssueセクションにてお問い合わせください：
-https://github.com/akAredminEogre/favorite-keyword-link-frog
+https://github.com/akAredminEogre/frog-frame-front
 
 ---
 
@@ -101,7 +101,7 @@ This Privacy Policy may be updated as necessary. If there are significant change
 ### Contact
 
 For questions regarding this Privacy Policy, please contact us through the Issues section of the GitHub repository:
-https://github.com/akAredminEogre/favorite-keyword-link-frog
+https://github.com/akAredminEogre/frog-frame-front
 
 ---
 
