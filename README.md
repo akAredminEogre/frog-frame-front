@@ -4,6 +4,11 @@
 
 ## セットアップ
 
+### clone
+```bash
+git clone git@github.com:akAredminEogre/frog-frame-front.git
+```
+
 ### git config
 リポジトリをクローンした後、以下のコマンドを実行して Git 設定を適用してください。
 
@@ -24,6 +29,7 @@ docker compose exec frontend npm run dev
 ```
 
 ### test-and-lint
+`npm run dev ` で開発サーバーを起動した後、別のターミナルで以下のコマンドを実行してください。
 ```
 docker compose exec frontend npm run test-and-lint
 ```
