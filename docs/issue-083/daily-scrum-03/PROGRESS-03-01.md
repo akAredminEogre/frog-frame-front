@@ -24,7 +24,7 @@ DAILY_SCRUM-03.mdの相談事項で以下の方針を確認・決定しました
    - PR作成 → developへのマージ → issue-083完了という流れで進める
 
 3. **GitHubリポジトリ名の変更**
-   - GitHubリポジトリ名の変更（frog-frame-front → favorite-keyword-link-frog）は、開発者が手動で実施
+   - GitHubリポジトリ名の変更（favorite-keyword-link-frog → frog-frame-front）は、開発者が手動で実施
    - 変更後はローカルに再クローンすることで、リモートURL更新が不要になる
 
 4. **リポジトリ名変更後の確認事項**
