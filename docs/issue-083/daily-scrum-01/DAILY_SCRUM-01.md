@@ -64,4 +64,28 @@ PLAN.mdの最初のタスク「プロダクションコード、テストコー�
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+プロダクションコード、テストコード、ドキュメント中の`favorite-keyword-link-frog`を`frog-frame-front`に変更する作業を実施しました。
+
+### 実施内容
+1. コンテキストメニューのID、タイトル、parentIdを`favorite-keyword-link-frog`から`frog-frame-front`に変更
+2. package.jsonのパッケージ名を`favorite-keyword-link-frog`から`frog-frame-front`に変更
+3. package-lock.jsonを`npm install`により自動更新
+4. 全テスト実行による動作確認（単体テスト、E2Eテスト、knip、TypeScriptコンパイル、ESLint）
+
+### テスト結果
+- ✅ 単体テスト: 72ファイル、262テスト すべて成功
+- ✅ E2Eテスト: 9テスト すべて成功
+- ✅ knip: 未使用コードなし
+- ✅ TypeScript コンパイル: 成功
+- ✅ ESLint: 成功
+
+### 次回以降のスクラムに先送りする課題
+なし
+
+### 本issueの対象外とする課題
+なし
+
 ## 修正したファイル
+1. host-frontend-root/frontend-src-root/src/application/usecases/contextmenu/ContextMenuSetupUseCase.ts
+2. host-frontend-root/frontend-src-root/package.json
+3. host-frontend-root/frontend-src-root/package-lock.json (npm installにより自動更新)
