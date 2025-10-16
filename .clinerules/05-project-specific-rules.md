@@ -1,7 +1,7 @@
 # プロジェクト固有ルール
 
 ## プロジェクト概要
-- **プロジェクト名**: favorite-keyword-link-frog
+- **プロジェクト名**: frog-frame-front
 - **目的**: ブラウザ拡張機能（WXT フレームワーク使用）
 - **アーキテクチャ**: クリーンアーキテクチャ + DDD
 - **主要技術**: TypeScript, React, WXT
@@ -9,7 +9,7 @@
 ## リポジトリ固有情報
 
 ### リモートリポジトリ
-- **GitHub**: `akAredminEogre/favorite-keyword-link-frog`
+- **GitHub**: `akAredminEogre/frog-frame-front`
 - **base branch**: `develop`
 - **PR作成**: `gh` コマンド使用
 
@@ -39,7 +39,7 @@
 
 1. **未使用コードチェックの実行**
    ```bash
-   (cd で絶対パスでfavorite-keyword-link-frogに移動) && \
+   (cd で絶対パスでfrog-frame-frontに移動) && \
    docker compose exec frontend npm run test-and-lint
    ```
 
