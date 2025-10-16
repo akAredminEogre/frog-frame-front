@@ -2,8 +2,8 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] 現状の.clinerulesのworkflowとdocumentを調査し、test-and-lintの実行箇所を特定する
-- [ ] 現状のpackage.jsonのknipやtsr、test-and-lintの設定を確認する
+- [x] 現状の.clinerulesのworkflowとdocumentを調査し、test-and-lintの実行箇所を特定する
+- [x] 現状のpackage.jsonのknipやtsr、test-and-lintの設定を確認する
 - [ ] 未使用コードの扱いに関する改善案を検討し、最適なアプローチを決定する
 - [ ] .clinerulesのworkflowやdocumentを改善案に基づいて修正する
 - [ ] package.jsonのknipやtsr、test-and-lintの設定を改善案に基づいて変更する
