@@ -4,7 +4,7 @@ workflow:test-and-check-before-complete
 
 ```bash
 (cd 絶対パスでfrog-frame-frontに移動) && \
-docker compose exec frontend npm run test-and-check
+make test-and-check
 ```
 
 - エラーまたは未使用コードが検出された場合は修正が必須

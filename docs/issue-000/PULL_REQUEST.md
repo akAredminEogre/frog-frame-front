@@ -9,7 +9,7 @@
 
 ## テスト方法
 [動作確認の手順]
-- `docker compose exec frontend npm run test-and-lint` で回帰テスト通過・未使用コードがないことを確認
+- `make test-and-check` で回帰テスト通過を確認
   - 既存自動テストとlinterを同時に確認
 
 ## 補足
