@@ -62,3 +62,32 @@
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+
+## スクラム03 の振り返り
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+
+- スクラム02で実装したtest-and-checkスクリプトの動作確認を体系的に実施できた
+- test-and-checkとtest-and-lintの両方を実行し、相互に影響がないことを検証できた
+- 開発者からのレビューコメントを正確に理解し、追加実装が不要であることを確認できた
+- 最終的な実装（test-and-checkとtest-and-lintの共存）により、開発者の用途に応じた使い分けが可能になった
+- 動作確認結果を詳細に記録し、実装の正しさを証明できた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+
+- レビューコメントの内容が「不要です」という簡潔なものだったため、追加実装の必要性について慎重な判断が必要だった
+- 動作確認のみのスクラムとなり、新規コード実装がなかった（これ自体は問題ではないが）
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+
+- 実装完了後の動作確認フェーズでは、正常系だけでなく異常系（エラー時の挙動）も体系的に検証する
+- レビューコメントが簡潔な場合は、その意図を確認するための質問を検討する
+- 最終的な実装の完成度を示すため、ユースケースごとの動作確認結果を整理する習慣を持つ
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
