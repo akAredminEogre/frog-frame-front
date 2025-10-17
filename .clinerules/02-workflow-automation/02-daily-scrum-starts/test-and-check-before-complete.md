@@ -1,10 +1,10 @@
-workflow:test-and-lint-before-complete
+workflow:test-and-check-before-complete
 
 **CRITICAL: attempt_completionツールを使用する前に、以下を必ず実行する：**
 
 ```bash
 (cd 絶対パスでfrog-frame-frontに移動) && \
-docker compose exec frontend npm run test-and-lint
+docker compose exec frontend npm run test-and-check
 ```
 
 - エラーまたは未使用コードが検出された場合は修正が必須
