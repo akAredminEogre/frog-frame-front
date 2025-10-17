@@ -1,11 +1,15 @@
-.PHONY: init-config help init-dev dev
+.PHONY: init-config help init-dev dev down ps test-and-check test-and-lint
 
 help:
 	@echo "Available commands:"
-	@echo "  make init-config - Apply git configuration from template"
-	@echo "  make init-dev    - Initial setup for development (first time only)"
-	@echo "  make dev         - Start development server"
-	@echo "  make help        - Show this help message"
+	@echo "  make init-config    - Apply git configuration from template"
+	@echo "  make init-dev       - Initial setup for development (first time only)"
+	@echo "  make dev            - Start development server"
+	@echo "  make down           - Stop Docker containers"
+	@echo "  make ps             - List running containers"
+	@echo "  make test-and-check - Run tests with warnings"
+	@echo "  make test-and-lint  - Run comprehensive tests and linting (required before PR)"
+	@echo "  make help           - Show this help message"
 
 init-config:
 	@echo "Applying git configuration from .gitconfig.template..."
@@ -52,4 +56,12 @@ down:
 ps:
 	@echo "Listing all running Docker containers..."
 	@docker compose ps
+
+test-and-check:
+	@echo "Running tests with warnings..."
+	@docker compose exec frontend npm run test-and-check
+
+test-and-lint:
+	@echo "Running comprehensive tests and linting..."
+	@docker compose exec frontend npm run test-and-lint
 
