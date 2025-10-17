@@ -54,16 +54,20 @@ make dev
 ### test-and-lint
 `make dev` で開発サーバーを起動した後、別のターミナルで以下のコマンドを実行してください。
 ```bash
-docker compose exec frontend npm run test-and-lint
+make test-and-lint
 ```
 
 ## 利用可能なコマンド
 
 ```bash
-make help        # 利用可能なコマンドを表示
-make init-config # Git設定を適用
-make init-dev    # 初回開発環境セットアップ
-make dev         # 開発サーバーを起動
+make help           # 利用可能なコマンドを表示
+make init-config    # Git設定を適用
+make init-dev       # 初回開発環境セットアップ
+make dev            # 開発サーバーを起動
+make down           # Dockerコンテナを停止
+make ps             # 実行中のコンテナを一覧表示
+make test-and-check # テストを実行（警告あり）
+make test-and-lint  # 包括的なテストとリント
 ```
 
 ## プロジェクト構造
