@@ -72,7 +72,10 @@ After `make dev` is running, open a new terminal for these commands:
 
 ```bash
 # Testing and linting (REQUIRED before completing any task)
-docker compose exec frontend npm run test-and-lint
+make test-and-lint
+
+# Quick check (tests with warnings, softer than test-and-lint)
+make test-and-check
 
 # Individual test commands
 docker compose exec frontend npm run test           # Unit tests only
@@ -87,13 +90,12 @@ docker compose exec frontend npm run lint:fix       # Auto-fix ESLint issues
 # Unused code detection and cleanup
 docker compose exec frontend npm run unused:complete    # Remove unused code
 docker compose exec frontend npm run knip:all           # Check for unused exports/dependencies
-docker compose exec frontend npm run test-and-check     # Run tests with warnings (softer than test-and-lint)
 ```
 
 ### Critical Pre-Completion Check
 **IMPORTANT**: Before marking any task as complete, you MUST run:
 ```bash
-docker compose exec frontend npm run test-and-lint
+make test-and-lint
 ```
 This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
 
