@@ -39,6 +39,17 @@ init-dev:
 
 dev:
 	@echo "Starting development server..."
+	@docker compose down
 	@docker compose up -d
 	@docker compose ps
 	@docker compose exec frontend npm run dev
+
+down:
+	@echo "Stopping all Docker containers..."
+	@docker compose down
+	@docker compose ps
+
+ps:
+	@echo "Listing all running Docker containers..."
+	@docker compose ps
+
