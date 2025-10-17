@@ -2,8 +2,8 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] .clinerulesの重要なルールを特定（相談結果：02-workflow-automation, 03-test-coding-standards/, 03-test-coding-standards.md, 01-coding-standards.md）
-- [ ] CLAUDE.mdファイルを作成し、プロジェクト固有のルールとガイドラインを記載する
+- [x] .clinerulesの重要なルールを特定（相談結果：02-workflow-automation, 03-test-coding-standards/, 03-test-coding-standards.md, 01-coding-standards.md）
+- [x] CLAUDE.mdファイルを作成し、プロジェクト固有のルールとガイドラインを記載する
   - プロジェクト概要（日本語対応を含む）
   - 開発コマンド（CRITICAL: test-and-lintの必須実行を強調）
   - アーキテクチャ概要
