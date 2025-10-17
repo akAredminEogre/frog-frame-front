@@ -38,4 +38,52 @@
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+スクラム02では、未使用コード検出の扱いに関する改善案を検討し、最終的に`test-and-check`スクリプトを新設しました。これにより、粒度の細かいPRを実現しつつ、コード品質を維持する運用が可能になりました。
+
+### 実施内容の詳細
+
+1. **改善案の検討と決定（01回目）**
+   - 5つの改善案を比較検討
+   - 案4（段階的なワークフロー）を推奨案として決定
+   - 実装計画（3フェーズ）を策定
+
+2. **運用方針の再検討（02回目）**
+   - レビューコメントに基づき、issue運用の見直しを検討
+   - 案6（issue運用変更）と案7（現状運用維持）を提案
+   - 開発者との対話により方針を決定
+
+3. **test-and-checkスクリプトの実装（03-04回目）**
+   - 当初test-and-lintを修正したが、最終的に新スクリプトとして分離
+   - `test-and-check`: 警告レベルで実行（lint/knip/tsrが失敗しても継続）
+   - `test-and-lint`: 厳格モードを維持（既存運用）
+
+4. **.clinerulesワークフローの更新（05-06回目）**
+   - `.clinerules`内のtest-and-lint参照をtest-and-checkに変更
+   - ファイル名を`test-and-check-before-complete.md`に変更
+   - 関連する参照箇所をすべて更新
+
+### 最終的な実装内容
+
+**package.jsonのスクリプト:**
+- `test-and-check`: 単体テスト必須、lint系は警告レベル（新設）
+- `test-and-lint`: 全チェック厳格実行（既存維持）
+
+**.clinerulesの更新:**
+- デイリースクラム完了時: `test-and-check`を使用
+- issue完了時: `test-and-lint`を使用（従来通り）
+
 ## 修正したファイル
+
+- `frog-frame-front/docs/issue-089/PLAN.md`
+  - 改善案の詳細分析を追加（01回目）
+  - 案6と案7の検討内容を追加（02回目）
+- `frog-frame-front/host-frontend-root/frontend-src-root/package.json`
+  - test-and-checkスクリプトを新設（04回目）
+  - test-and-lintを元の厳格形式に戻した（04回目）
+- `frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/test-and-lint-before-complete.md`
+  - test-and-lintをtest-and-checkに変更（05回目）
+  - ファイル名をtest-and-check-before-complete.mdに変更（06回目）
+- `frog-frame-front/.clinerules/05-project-specific-rules.md`
+  - test-and-lintをtest-and-checkに変更（05回目）
+- `frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:code-according-to-the-rules.md`
+  - 参照をtest-and-check-before-completeに更新（06回目）
