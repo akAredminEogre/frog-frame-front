@@ -29,7 +29,28 @@ e2eテストを安定させて実行速度を向上させるリファクタリ�
 
 # DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+
+デイリースクラム-01の計画に従い、e2eテストのローカル化に向けた現状調査とテストデータ準備を完了しました。
+
+1. **現在のe2eテストファイルの確認**
+   - `tests/e2e/replace-inside-dom-with-regex.spec.ts` の内容を確認
+   - 外部URL `https://www01.hanmoto.com/bd/isbn/9784065396209` を使用していることを確認
+
+2. **必要なHTMLタグ構造の特定**
+   - テストで使用しているHTMLタグ構造を特定:
+     ```html
+     <span class="book-isbn13" itemprop="isbn13" data-selectable="">9784065396209</span>
+     ```
+
+3. **ローカルHTMLファイルの作成**
+   - `tests/e2e/fixtures/book-page.html` を作成
+   - 必要なHTMLタグ構造を含む最小限のHTMLページを用意
+
+4. **テストとチェックの実行**
+   - `docker compose exec frontend npm run test-and-check` を実行
+   - 全てのテストが正常に完了 (262 unit tests passed, 9 e2e tests passed)
+   - knip, tsr, lint も全て問題なし
 
 ## 修正したファイル
+
+- 新規作成: `host-frontend-root/frontend-src-root/tests/e2e/fixtures/book-page.html`

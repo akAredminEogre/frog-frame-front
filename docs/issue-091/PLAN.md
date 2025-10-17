@@ -6,10 +6,10 @@ e2eテスト `replace-inside-dom-with-regex.spec.ts` を外部ページではな
 # DAILY-SCRUM単位のタスク
 
 ## デイリースクラム-01: 現状調査とテストデータ準備
-- [ ] 現在のe2eテスト `replace-inside-dom-with-regex.spec.ts` の内容を確認
-- [ ] テストで使用している外部ページのURLと必要なHTMLタグ構造を特定
-- [ ] 必要なHTMLタグを含むローカルHTMLファイルを作成
-- [ ] HTMLファイルの配置場所を決定（tests/e2e/fixtures/ など）
+- [x] 現在のe2eテスト `replace-inside-dom-with-regex.spec.ts` の内容を確認
+- [x] テストで使用している外部ページのURLと必要なHTMLタグ構造を特定
+- [x] 必要なHTMLタグを含むローカルHTMLファイルを作成
+- [x] HTMLファイルの配置場所を決定（tests/e2e/fixtures/ など）
 
 ## デイリースクラム-02: テストの修正と動作確認
 - [ ] e2eテストを修正し、ローカルHTMLファイルを参照するように変更
