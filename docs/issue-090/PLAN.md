@@ -14,7 +14,7 @@
   - Gitワークフロー
   - トラブルシューティング
   - **CLAUDE.mdから.clinerulesへの参照方法を明記**
-- [ ] CLAUDE.mdの内容をレビューし、必要に応じて調整する
+- [x] CLAUDE.mdの内容をレビューし、必要に応じて調整する
 - [ ] 動作確認：claude codeがCLAUDE.mdを参照してタスクを実行できることを確認
 
 # ISSUEを通した相談事
