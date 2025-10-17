@@ -26,3 +26,27 @@
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+
+## スクラム02 の振り返り
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+- Fr³（Frの右上に上付き文字で3）というシンプルで明確なデザイン仕様を策定できた
+- ChatGPT 5用のアイコン生成プロンプト文を具体的かつ詳細に作成できた
+- 4種類のサイズ（16x16, 32x32, 48x48, 128x128）すべてに対応した生成仕様を明確化できた
+- ユーザーとの相談を通じてデザイン方針を明確に決定できた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+- AIに直接画像を生成させる機能がないため、プロンプト文の作成までに留まった
+- 実際の画像生成は別のツール（ChatGPT 5）が必要となり、作業が分断された
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+- 作成したプロンプト文を使って実際に画像を生成し、実装まで完了させる
+- 生成した画像の品質を確認し、必要に応じてプロンプトを調整する方針を持つ
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
