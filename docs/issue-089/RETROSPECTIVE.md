@@ -30,3 +30,35 @@
 ---
 <!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
+
+## スクラム02 の振り返り
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+
+- 開発者との対話を重ねながら、段階的に改善案を調整し、最適な設計に到達できた
+- test-and-checkスクリプトの新設により、現状運用を維持しつつ粒度の細かいPRを実現する方針を確立できた
+- レビューコメントに基づき、柔軟に方針転換し、複数の改善案を提示できた
+- package.jsonのスクリプト分離と.clinerulesの更新を一貫性を持って実装できた
+- 各変更後に動作確認を行い、意図通りの動作を検証する習慣を維持できた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+
+- 当初の案4がissue運用の制約（1issue=1PR）により機能しないことが判明し、方針転換が必要になった
+- test-and-lintの修正からtest-and-checkの新設へと、複数回の方向性変更が発生した
+- 運用の制約を事前に十分に確認できておらず、試行錯誤が多くなった
+- 6回のPROGRESSファイル作成が必要になり、スクラムが長期化した
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+
+- 改善案の検討時には、現状の運用制約（issue/ブランチ/PR戦略）を最初に確認し、実装可能性を事前検証する
+- より早い段階で開発者に方向性を確認し、大きな手戻りを防ぐ
+- スクリプト名やファイル名の変更が必要な場合は、影響範囲を事前に洗い出し、一括で実施する
+- 複数の選択肢がある場合は、それぞれの運用への影響を明示的に整理してから提案する
+
+---
+<!-- ユーザーが使うコマンド workflow:commit-daily-scrum -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:commit-daily-scrum-then-start-next-daily-scrum.md -->
