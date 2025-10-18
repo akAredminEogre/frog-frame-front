@@ -103,4 +103,4 @@ Dockerイメージのビルド時は、効率化のため `package.json` と `pa
 2. `make init-config` を実行してGit設定を適用
 3. `make init-dev` を実行して初回セットアップ（初回のみ）
 4. `make dev` を実行して開発サーバーを起動（2回目以降）
-5. 新しいissueブランチを作成する場合は、`.clinerules/02-workflow-automation/01-issue-launches/workflow:create-branch.md` を参照
+5. 新しいissueブランチを作成する場合は、`.clinerules/02-workflow-automation/01-issue-launches/workflow-create-branch.md` を参照

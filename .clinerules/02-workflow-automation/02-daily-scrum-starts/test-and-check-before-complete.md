@@ -1,4 +1,4 @@
-workflow:test-and-check-before-complete
+workflow-test-and-check-before-complete
 
 **CRITICAL: attempt_completionツールを使用する前に、以下を必ず実行する：**
 
