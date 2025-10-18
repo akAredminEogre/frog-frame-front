@@ -7,19 +7,16 @@
       "Read(./.claude/**)",
       "Write(./.claude/**)",
       "Edit(./.claude/**)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git push:*)",
       "Bash(gh pr list:*)",
       "Bash(gh pr merge:*)",
       "Bash(git checkout:*)",
       "Bash(git pull:*)",
       "Bash(git fetch:*)",
       "Bash(git --no-pager branch:*)",
-      "Bash(docker compose exec -T frontend env)",
-      "Bash(docker compose exec -T frontend npm run test:e2e)",
-      "Bash(make test-and-lint)",
-      "Bash(gh pr create:*)"
+      "Bash(docker compose exec -T frontend:*)",
+      "Bash(make:*)",
+      "Bash(gh pr create:*)",
+      "Bash(git:*)"
     ],
     "defaultMode": "acceptEdits"
   }
