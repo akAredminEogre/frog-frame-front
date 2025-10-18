@@ -1,4 +1,4 @@
-workflow:re-submit-pull-request
+workflow-re-submit-pull-request
 
 ```cline-instructions
 - issue番号の取得

@@ -11,14 +11,14 @@
 ## スクラム内残タスク
 
 ## 相談事項
-<!-- workflow:01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
+<!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
 <!-- について、体言止めでの相談ではなににどう答えればよいのか明確にならないので使わないでください-->
 <!-- 相談は具体的な内容を記載してください。 -->
 <!-- 質問は不明点を明確に記載してください。 -->
 <!-- レビューしてほしいことは、レビュー対象を具体的に記載してください。 -->
 <!-- また上記相談・質問・レビューのトピックが重複する場合は、まとめて記載してください。 -->
-<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md-->
+<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-discussion-then-start-coding.md-->
 
 ## 一言コメント
 <!-- 感情ベースで一言コメントをお願いします。 -->

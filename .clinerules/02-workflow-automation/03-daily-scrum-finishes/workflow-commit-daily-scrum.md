@@ -1,4 +1,4 @@
-workflow:commit-daily-scrum
+workflow-commit-daily-scrum
 
 ```cline-instructions
 - 下記の内容で採番を行う
