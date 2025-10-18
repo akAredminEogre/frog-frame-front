@@ -1,4 +1,4 @@
-workflow:record-progress-after-coding
+workflow-record-progress-after-coding
 
 cline-instructionsの手順をチャットスレッドに表示してから実行してください。
 その中で別のworkflowに従うと指示されてる場合は、その手順も検索・確認して再帰的にチャットスレッドに表示してください
@@ -21,6 +21,6 @@ cp docs/issue-000/daily-scrum-00/DAILY_SCRUM-.md docs/issue-nnn/daily-scrum-kk/D
 - 今回の作業内容、チャットスレッドの内容、
 `git --no-pager diff --name-only develop`
 の出力結果に基づき、
-workflow:record-progress に従って、docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-ii.mdを作成してください。
+workflow-record-progress に従って、docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-ii.mdを作成してください。
 
 ```

@@ -1,4 +1,4 @@
-workflow:array-based-test
+workflow-array-based-test
 ### 1.2 配列ベースのテスト
 類似のテストケースは配列で管理し、専用ファイルに切り出す：
 
