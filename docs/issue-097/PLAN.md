@@ -4,16 +4,16 @@
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
 
 ## DAILY-SCRUM-01: Dexie.jsセットアップとスキーマ設計
-- [ ] Dexie.jsライブラリのインストール（`npm install dexie`）
-- [ ] Dexie.js型定義の確認（TypeScript対応）
-- [ ] IndexedDBデータベーススキーマの設計
-  - [ ] RewriteRulesテーブルのスキーマ定義
-  - [ ] SelectedPageTextテーブルのスキーマ定義
-- [ ] データベースセットアップクラスの作成（`src/infrastructure/persistance/indexeddb/DexieDatabase.ts`）
-- [ ] スキーマのバージョン管理戦略の決定
-- [ ] 作業内容のコミット
+- [x] Dexie.jsライブラリのインストール（`npm install dexie`）
+- [x] Dexie.js型定義の確認（TypeScript対応）
+- [x] IndexedDBデータベーススキーマの設計
+  - [x] RewriteRulesテーブルのスキーマ定義
+  - ~~[ ] SelectedPageTextテーブルのスキーマ定義~~ (chrome.storageに保存するため削除)
+- [x] データベースセットアップクラスの作成（`src/infrastructure/persistance/indexeddb/DexieDatabase.ts`）
+- [x] スキーマのバージョン管理戦略の決定
+- [x] 作業内容のコミット
 
-**目標**: Dexie.jsが正しくインストールされ、データベーススキーマが定義されている状態
+**目標**: Dexie.jsが正しくインストールされ、データベーススキーマが定義されている状態 ✅ 完了
 
 ## DAILY-SCRUM-02: DexieRewriteRuleRepository実装
 - [ ] `DexieRewriteRuleRepository`クラスの作成（`src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository.ts`）
@@ -31,37 +31,30 @@
 
 **目標**: DexieRewriteRuleRepositoryが完全に実装され、テストがパスする状態
 
-## DAILY-SCRUM-03: DexieSelectedPageTextService実装
-- [ ] `DexieSelectedPageTextService`クラスの作成（`src/infrastructure/persistance/indexeddb/DexieSelectedPageTextService.ts`）
-- [ ] `ISelectedPageTextService`インターフェースの実装
-  - [ ] `setSelectedPageText(text: string): Promise<void>`メソッド
-  - [ ] `getSelectedPageText(): Promise<string>`メソッド
-- [ ] ユニットテストの作成
-  - [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/setSelectedPageText/normal-cases.test.ts`
-  - [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/setSelectedPageText/edge-cases.test.ts`
-  - [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/setSelectedPageText/Abend/null-undefined-validation.test.ts`
-  - [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/getSelectedPageText/normal-cases.test.ts`
-  - [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/getSelectedPageText/Abend/no-data-cases.test.ts`
-- [ ] テストが全てパスすることを確認（`npm run test`）
-- [ ] 作業内容のコミット
+## ~~DAILY-SCRUM-03: DexieSelectedPageTextService実装~~ (不要)
+~~- [ ] `DexieSelectedPageTextService`クラスの作成（`src/infrastructure/persistance/indexeddb/DexieSelectedPageTextService.ts`）~~
+~~- [ ] `ISelectedPageTextService`インターフェースの実装~~
+  ~~- [ ] `setSelectedPageText(text: string): Promise<void>`メソッド~~
+  ~~- [ ] `getSelectedPageText(): Promise<string>`メソッド~~
+~~- [ ] ユニットテストの作成~~
+  ~~- [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/setSelectedPageText/normal-cases.test.ts`~~
+  ~~- [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/setSelectedPageText/edge-cases.test.ts`~~
+  ~~- [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/setSelectedPageText/Abend/null-undefined-validation.test.ts`~~
+  ~~- [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/getSelectedPageText/normal-cases.test.ts`~~
+  ~~- [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieSelectedPageTextService/getSelectedPageText/Abend/no-data-cases.test.ts`~~
+~~- [ ] テストが全てパスすることを確認（`npm run test`）~~
+~~- [ ] 作業内容のコミット~~
 
-**目標**: DexieSelectedPageTextServiceが完全に実装され、テストがパスする状態
+**理由**: SelectedPageTextはchrome.storageに保存する方針に変更したため、IndexedDB実装は不要
 
-## DAILY-SCRUM-04: データマイグレーションとDI更新
-- [ ] マイグレーション機能の実装（`src/infrastructure/persistance/indexeddb/DataMigration.ts`）
-  - [ ] chrome.storage.localからRewriteRulesデータを読み取る
-  - [ ] IndexedDBにデータを移行する
-  - [ ] chrome.storage.localからSelectedPageTextデータを読み取る
-  - [ ] IndexedDBにデータを移行する
-  - [ ] 移行完了フラグの管理
+## DAILY-SCRUM-04: DI更新とRewriteRuleRepositoryの切り替え
 - [ ] DIコンテナの更新（`src/infrastructure/di/container.ts`）
   - [ ] `IRewriteRuleRepository`の登録を`DexieRewriteRuleRepository`に変更
-  - [ ] `ISelectedPageTextService`の登録を`DexieSelectedPageTextService`に変更
-- [ ] マイグレーション機能のテスト作成
-- [ ] background.tsでのマイグレーション実行タイミングの決定と実装
 - [ ] 作業内容のコミット
 
-**目標**: 既存データが安全にIndexedDBに移行され、DIコンテナが更新されている状態
+**目標**: DIコンテナが更新され、RewriteRuleRepositoryがDexie実装に切り替わっている状態
+
+**変更点**: アプリ未リリースのためマイグレーション不要、SelectedPageTextはchrome.storageに保存するためDI更新も不要
 
 ## DAILY-SCRUM-05: 統合テストと最終検証
 - [ ] 既存のユニットテストの実行と確認（`npm run test`）

@@ -46,7 +46,62 @@ IndexedDB移行の第一歩、スキーマ設計から始まります。しっ�
 
 # DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+
+DAILY-SCRUM-01の目標である「Dexie.jsセットアップとスキーマ設計」を完了しました。
+
+### 01回目の作業内容
+1. **Dexie.jsライブラリのインストール**
+   - `npm install dexie`を実行し、Dexie.js v4.2.1をインストール
+   - TypeScript型定義ファイルが含まれていることを確認
+
+2. **IndexedDBデータベーススキーマの設計**
+   - RewriteRulesテーブル: `id`（プライマリキー）、`urlPattern`（インデックス）
+   - SelectedPageTextテーブル: `key`（プライマリキー）
+
+3. **DexieDatabaseクラスの作成**
+   - `src/infrastructure/persistance/indexeddb/DexieDatabase.ts`を新規作成
+   - `RewriteRuleSchema`型定義を作成（id, oldString, newString, urlPattern, isRegex）
+   - `SelectedPageTextSchema`型定義を作成（key, text）
+   - `DexieDatabase`クラスを`Dexie`を継承して実装
+   - シングルトンインスタンス`dexieDatabase`をエクスポート
+
+4. **スキーマバージョン管理戦略の決定**
+   - Dexie.jsの`version()`メソッドを使用したバージョン管理を採用
+   - 初期バージョン（version 1）でスキーマを定義
+   - 将来のスキーマ変更は新しいバージョン番号で管理可能
+
+### 02回目の作業内容（レビュー対応）
+**レビューコメント**: selectedPageTextはchrome.storageに保存する予定なので、DexieDatabaseからは削除してください
+
+1. **DexieDatabaseからSelectedPageText関連コードの削除**
+   - `SelectedPageTextSchema`インターフェースを削除
+   - `selectedPageText`テーブルをデータベーススキーマから削除
+   - DexieDatabaseクラスのドキュメントを更新（RewriteRulesのみの永続化を提供することを明記）
+
+2. **設計変更の確認**
+   - SelectedPageTextはchrome.storageに保存する方針に変更
+   - IndexedDBにはRewriteRulesのみを保存する
+   - PLAN.mdのDAILY-SCRUM-03（DexieSelectedPageTextService実装）は不要となる
+
+### 03回目の作業内容（レビュー対応）
+**レビューコメント**: super('FrogFrameDatabase');をsuper('FrogFrameFrontDatabase');に変えてください
+
+1. **DexieDatabaseクラスのデータベース名変更**
+   - `DexieDatabase`のコンストラクタで使用するデータベース名を`FrogFrameDatabase`から`FrogFrameFrontDatabase`に変更
+   - 変更箇所: `src/infrastructure/persistance/indexeddb/DexieDatabase.ts:24`
+
+### テスト結果
+- 全ユニットテスト: 263件 PASS
+- 全E2Eテスト: 9件 PASS
+- TypeScriptコンパイル: エラーなし
+- Lint: エラーなし
+- Knip: `DexieDatabase.ts`と`dexie`が未使用として検出（想定通り、次のスクラムで使用予定）
+
+### 本issueの対象外とする課題
+- DAILY-SCRUM-03: DexieSelectedPageTextService実装（SelectedPageTextはchrome.storageに保存するため不要）
 
 ## 修正したファイル
+
+- `host-frontend-root/frontend-src-root/package.json` - dexie依存関係の追加
+- `host-frontend-root/frontend-src-root/package-lock.json` - ロックファイル更新
+- `host-frontend-root/frontend-src-root/src/infrastructure/persistance/indexeddb/DexieDatabase.ts` - 新規作成、SelectedPageText削除、データベース名変更
