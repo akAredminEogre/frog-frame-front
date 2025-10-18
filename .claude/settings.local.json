@@ -10,7 +10,10 @@
       "Bash(git checkout:*)",
       "Bash(git pull:*)",
       "Bash(git fetch:*)",
-      "Bash(git --no-pager branch:*)"
+      "Bash(git --no-pager branch:*)",
+      "Bash(docker compose exec -T frontend npm run test:e2e -- replace-inside-dom-with-regex.spec.ts)",
+      "Bash(docker compose exec -T frontend env)",
+      "Bash(docker compose exec -T frontend npm run test:e2e)"
     ],
     "defaultMode": "acceptEdits"
   }
