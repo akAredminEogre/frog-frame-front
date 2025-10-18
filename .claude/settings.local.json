@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(./.clinerules/**)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
+      "Bash(git --no-pager branch:*)"
+    ],
+    "defaultMode": "acceptEdits"
+  }
+}
