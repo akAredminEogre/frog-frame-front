@@ -1,4 +1,4 @@
-frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-discussion-then-start-coding.md
+frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-discussion-then-start-coding.md
 
 cline-instructionsの手順をチャットスレッドに表示してから実行してください。
 その中で別のworkflowに従うと指示されてる場合は、その手順も検索・確認して再帰的にチャットスレッドに表示してください
@@ -21,6 +21,6 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 
 - デイリースクラム作業の開始
   - 上記作業終了後、
-  - workflow:start-coding-according-to-daily-scrum
+  - workflow-start-coding-according-to-daily-scrum
   - の手順を実行してください
 ```
