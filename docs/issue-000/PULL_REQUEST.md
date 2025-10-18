@@ -18,4 +18,4 @@
 ## 本スコープの対象外となったタスク
 
 
-<!-- ユーザーが使うコマンド workflow:submit-pull-request -->
+<!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/02-submit-pull-request.md -->
