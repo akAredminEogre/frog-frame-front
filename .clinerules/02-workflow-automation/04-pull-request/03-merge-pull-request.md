@@ -1,4 +1,4 @@
-workflow:merge-pull-request
+workflow-merge-pull-request
 
 cline-instructionsの手順をチャットスレッドに表示してから実行してください。
 その中で別のworkflowに従うと指示されてる場合は、その手順も検索・確認して再帰的にチャットスレッドに表示してください
