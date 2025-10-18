@@ -18,9 +18,6 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
     - issues.md
       - コミットメッセージ
         - docs: 新規・追加・残タスク
-    - WITH_CLINE.md
-      - コミットメッセージ
-        - docs: CLINEへの指示改善
   - issue-nnnのディレクトリを、completed/issue-nnnに移動する
   - 現在のブランチで残っている変更があればすべてコミットしてプッシュ
     - コミットメッセージは「issue-nnn: プルリクエストの内容を反映」
