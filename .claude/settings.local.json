@@ -11,10 +11,8 @@
       "Bash(git pull:*)",
       "Bash(git fetch:*)",
       "Bash(git --no-pager branch:*)",
-      "Bash(docker compose exec -T frontend npm run test:e2e -- replace-inside-dom-with-regex.spec.ts)",
       "Bash(docker compose exec -T frontend env)",
       "Bash(docker compose exec -T frontend npm run test:e2e)",
-      "Bash(git mv docs/issue-092 docs/completed/issue-092)",
       "Bash(make test-and-lint)"
     ],
     "defaultMode": "acceptEdits"
