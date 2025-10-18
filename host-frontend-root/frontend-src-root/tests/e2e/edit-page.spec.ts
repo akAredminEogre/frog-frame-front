@@ -1,6 +1,9 @@
 
 import { test, expect } from './fixtures';
 
+// このテストはローカルHTMLファイルを使用してE2Eテストの安定性と実行速度を向上させています
+// 外部Webサイトへの依存を排除し、テスト環境の制御性を高めています
+
 /**
  * ルール一覧ページ(オプションページ)のE2Eテスト
  * 拡張機能のアイコン→オプションでrules.htmlが表示されることを確認します
@@ -24,8 +27,12 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
     }
   });
 
-  // 1. Arrange: 指定されたhanmoto.comページに移動
-  await page.goto('https://www01.hanmoto.com/bd/isbn/9784065396209');
+  // 1. Arrange: ローカルHTTPサーバー経由でHTMLファイルに移動
+  // test-pages/book-page.htmlを使用してテストの安定性を確保
+  const fixtureUrl = 'http://localhost:8080/book-page.html';
+  const expectedUrlPattern = 'http://localhost:8080';
+
+  await page.goto(fixtureUrl);
   await page.bringToFront();
 
   // 初期DOM要素の存在確認（タイムアウト延長）
@@ -34,18 +41,18 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   // 2. ポップアップをリロードして最新のアクティブタブ情報を取得
   await popupPage.reload();
 
-  // 3. URLパターンの自動入力確認（既存機能のテスト）（タイムアウト延長）
+  // 3. URLパターンの自動入力確認（ドメインのみが自動入力される）（タイムアウト延長）
   const urlPatternInput = popupPage.locator('input[name="urlPattern"]');
-  await expect(urlPatternInput).toHaveValue('https://www01.hanmoto.com', { timeout: 60000 });
+  await expect(urlPatternInput).toHaveValue(expectedUrlPattern, { timeout: 60000 });
 
   // 4. Act: 置換設定の入力
   const beforeInput = popupPage.locator('textarea[name="oldString"]');
   const afterInput = popupPage.locator('textarea[name="newString"]');
   const regexCheckbox = popupPage.getByLabel('正規表現を使う');
 
-  // hanmoto.comの実際の要素構造に合わせて正規表現パターンを設定
+  // HTMLファイルの要素構造に合わせて正規表現パターンを設定
   await beforeInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable="">(.+?)</span>');
-  await afterInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://www01.hanmoto.com/bd/isbn/$1">$1</a></span>');
+  await afterInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>');
 
   // チェックボックスの状態を確認してからクリック（タイムアウト延長）
   await expect(regexCheckbox).toBeVisible({ timeout: 60000 });
@@ -71,7 +78,7 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   // デバウンス機能により単一のaタグのみが生成されることを確認
   const modifiedLink = page.locator('span.book-isbn13 >> a');
   await expect(modifiedLink).toHaveCount(1, { timeout: 60000 }); // 単一要素であることを確認
-  await expect(modifiedLink).toHaveAttribute('href', 'https://www01.hanmoto.com/bd/isbn/9784065396209', { timeout: 60000 });
+  await expect(modifiedLink).toHaveAttribute('href', 'https://example.com/isbn/9784065396209', { timeout: 60000 });
   await expect(modifiedLink).toHaveText('9784065396209', { timeout: 60000 });
 
   // 9. Assert: エラーを出所別にチェック
@@ -95,14 +102,14 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   await expect(rulesTable).toBeVisible({ timeout: 60000 });
 
   // 14. Assert: 保存したURLパターンが表示されている
-  await expect(rulesPage.locator('.rule-url-pattern:has-text("https://www01.hanmoto.com")')).toBeVisible({ timeout: 60000 });
-  
+  await expect(rulesPage.locator('.rule-url-pattern:has-text("http://localhost:8080")')).toBeVisible({ timeout: 60000 });
+
   // 15. Assert: 保存した置換前文字列が表示されている
   const oldStringText = '<span class="book-isbn13" itemprop="isbn13" data-selectable="">(.+?)</span>';
   await expect(rulesPage.locator('.rule-old-string').filter({ hasText: oldStringText })).toBeVisible({ timeout: 60000 });
 
   // 16. Assert: 保存した置換後文字列が表示されている
-  const newStringText = '<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://www01.hanmoto.com/bd/isbn/$1">$1</a></span>';
+  const newStringText = '<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>';
   await expect(rulesPage.locator('.rule-new-string').filter({ hasText: newStringText })).toBeVisible({ timeout: 60000 });
   
   // 17. Assert: 正規表現使用の表示確認(✓マークで表示される)
@@ -132,7 +139,7 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   // 22. 編集ページで置換後の文字列を変更
   const editAfterInput = editPage.locator('textarea[name="newString"]');
   await expect(editAfterInput).toBeVisible({ timeout: 60000 });
-  const newTextWithLink = '<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://www01.hanmoto.com/bd/isbn/$1">$1へのリンク</a></span>';
+  const newTextWithLink = '<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1へのリンク</a></span>';
   await editAfterInput.fill(newTextWithLink);
   
   // 23. 保存ボタンクリック
@@ -169,7 +176,7 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
 
   const modifiedLinkWithText = page.locator('span.book-isbn13 >> a');
   await expect(modifiedLinkWithText).toHaveCount(1, { timeout: 120000 });
-  await expect(modifiedLinkWithText).toHaveAttribute('href', 'https://www01.hanmoto.com/bd/isbn/9784065396209', { timeout: 60000 });
+  await expect(modifiedLinkWithText).toHaveAttribute('href', 'https://example.com/isbn/9784065396209', { timeout: 60000 });
   await expect(modifiedLinkWithText).toHaveText('9784065396209へのリンク', { timeout: 60000 });
 
 
@@ -202,8 +209,12 @@ test('編集画面でキャンセルボタンをクリックすると、ポッ�
     }
   });
 
-  // 1. Arrange: 指定されたhanmoto.comページに移動
-  await page.goto('https://www01.hanmoto.com/bd/isbn/9784065396209');
+  // 1. Arrange: ローカルHTTPサーバー経由でHTMLファイルに移動
+  // test-pages/book-page.htmlを使用してテストの安定性を確保
+  const fixtureUrl = 'http://localhost:8080/book-page.html';
+  const expectedUrlPattern = 'http://localhost:8080';
+
+  await page.goto(fixtureUrl);
   await page.bringToFront();
 
   // 初期DOM要素の存在確認
@@ -212,9 +223,9 @@ test('編集画面でキャンセルボタンをクリックすると、ポッ�
   // 2. ポップアップをリロードして最新のアクティブタブ情報を取得
   await popupPage.reload();
 
-  // 3. URLパターンの自動入力確認
+  // 3. URLパターンの自動入力確認（ドメインのみが自動入力される）
   const urlPatternInput = popupPage.locator('input[name="urlPattern"]');
-  await expect(urlPatternInput).toHaveValue('https://www01.hanmoto.com', { timeout: 60000 });
+  await expect(urlPatternInput).toHaveValue(expectedUrlPattern, { timeout: 60000 });
 
   // 4. Act: 置換設定の入力
   const beforeInput = popupPage.locator('textarea[name="oldString"]');
@@ -222,7 +233,7 @@ test('編集画面でキャンセルボタンをクリックすると、ポッ�
   const regexCheckbox = popupPage.getByLabel('正規表現を使う');
 
   await beforeInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable="">(.+?)</span>');
-  await afterInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://www01.hanmoto.com/bd/isbn/$1">$1</a></span>');
+  await afterInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>');
 
   await expect(regexCheckbox).toBeVisible({ timeout: 60000 });
   await regexCheckbox.check();
