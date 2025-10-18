@@ -39,7 +39,7 @@
 1. **未使用コードチェックの実行**
    ```bash
    (cd で絶対パスでfrog-frame-frontに移動) && \
-   docker compose exec frontend npm run test-and-check
+   make test-and-check
    ```
 
 2. **チェック結果の確認**

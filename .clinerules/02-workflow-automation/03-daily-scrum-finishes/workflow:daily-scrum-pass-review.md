@@ -31,4 +31,5 @@ docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md を更新してください
   - スクラムkkの振り返りを記載
   - 従うべきフォーマット
     - docs/issue-000/RETROSPECTIVE.mdを参照
+- 修正したファイルでも、許可なくコミットしないこと
 ```
