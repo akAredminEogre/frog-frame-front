@@ -14,7 +14,7 @@ test('正規表現で取得した値をタグ内に埋め込み', async ({ page,
   });
 
   // 1. Arrange: ローカルHTTPサーバー経由でHTMLファイルに移動
-  // fixtures/book-page.htmlを使用してテストの安定性を確保
+  // test-pages/book-page.htmlを使用してテストの安定性を確保
   const fixtureUrl = 'http://localhost:8080/book-page.html';
   const expectedUrlPattern = 'http://localhost:8080';
   
