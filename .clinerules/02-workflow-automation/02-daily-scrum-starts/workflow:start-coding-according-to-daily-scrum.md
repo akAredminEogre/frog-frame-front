@@ -16,6 +16,7 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
     - 他のファイルの無許可コミットを禁止する
 
 - DAILY_SCRUM-kk.mdに応じたコーディング修正
+  - 修正したファイルでも、許可なくコミットしないこと
   - 参照すべきドキュメント
     - docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
   - コーディングにおけるルール、規約
