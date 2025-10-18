@@ -11,4 +11,5 @@ mkdir docs/issue-nnn/daily-scrum-00
 を実行し、その後
 issue-nnn-<branch-suffix>
 ブランチを作成してください
+最後にそのブランチをgit push origin してください
 ```
