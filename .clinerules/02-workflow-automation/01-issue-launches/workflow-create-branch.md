@@ -1,4 +1,4 @@
-workflow:create-branch branch-suffix=
+workflow-create-branch branch-suffix=
 ```cline-instructions
 issue番号の採番：
 ```

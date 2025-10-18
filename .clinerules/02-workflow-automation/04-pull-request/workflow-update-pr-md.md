@@ -1,4 +1,4 @@
-workflow:update-pr-md
+workflow-update-pr-md
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
