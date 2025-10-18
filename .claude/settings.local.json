@@ -13,7 +13,9 @@
       "Bash(git --no-pager branch:*)",
       "Bash(docker compose exec -T frontend npm run test:e2e -- replace-inside-dom-with-regex.spec.ts)",
       "Bash(docker compose exec -T frontend env)",
-      "Bash(docker compose exec -T frontend npm run test:e2e)"
+      "Bash(docker compose exec -T frontend npm run test:e2e)",
+      "Bash(gh pr create --base develop --title \"E2Eテストのローカルサーバー設定を修正してコンテナ環境で正しく動作するように改善\" --body \"$(cat <<''EOF''\n# ISSUE-092 PULL REQUEST\n\n## タイトル\nE2Eテストのローカルサーバー設定を修正してコンテナ環境で正しく動作するように改善\n\n## 概要と理由\nDockerコンテナ環境でE2Eテストを実行する際、テスト用のHTTPサーバーがすべてのネットワークインターフェース（0.0.0.0）でリッスンしていたため、ローカライズされた環境やコンテナ環境での接続に問題が発生する可能性がありました。\n\nこの問題を解決するため、PlaywrightのwebServer設定を修正し、明示的に127.0.0.1（localhost）でリッスンするように変更しました。\n\n## 主な変更点\n\n### 1. playwright.config.ts の修正\n- **ファイル**: \\`host-frontend-root/frontend-src-root/playwright.config.ts:57\\`\n- **変更内容**: http-serverコマンドに \\`-a 127.0.0.1\\` オプションを追加\n- **変更前**: \\`command: ''npx http-server tests/e2e/test-pages -p 8080''\\`\n- **変更後**: \\`command: ''npx http-server tests/e2e/test-pages -p 8080 -a 127.0.0.1''\\`\n- **理由**: コンテナ環境でのE2Eテスト実行時に、テストサーバーが確実にlocalhostでアクセス可能になるよう明示的にアドレスを指定\n\n### 2. Claude Code設定の改善\n- **ファイル**: \\`.claude/settings.local.json\\`\n- **変更内容**: E2Eテスト関連のBashコマンドを自動承認リストに追加\n  - \\`docker compose exec -T frontend npm run test:e2e\\`\n  - \\`docker compose exec -T frontend npm run test:e2e -- replace-inside-dom-with-regex.spec.ts\\`\n  - \\`docker compose exec -T frontend env\\`\n- **理由**: 開発効率向上のため、頻繁に使用するE2Eテストコマンドを事前承認\n\n### 3. ワークフロードキュメントの改善\n- **ファイル**: \\`.clinerules/02-workflow-automation/01-issue-launches/workflow:create-branch.md\\`\n- **変更内容**: ブランチ作成後に \\`git push origin\\` する指示を追加\n- **理由**: ワークフローの完全性向上\n\n## テスト方法\n[動作確認の手順]\n- \\`make test-and-check\\` で回帰テスト通過を確認\n  - 既存自動テストとlinterを同時に確認\n- E2Eテストが正常に実行できることを確認:\n  \\`\\`\\`bash\n  docker compose exec frontend npm run test:e2e\n  \\`\\`\\`\n\n## 補足\nこの変更により、Docker環境でのE2Eテストの安定性が向上します。特に、異なるネットワーク設定やセキュリティ制約がある環境での実行において、より予測可能な動作が期待できます。\n\n## 本スコープの対象外となったタスク\nなし\nEOF\n)\")",
+      "Bash(git mv docs/issue-092 docs/completed/issue-092)"
     ],
     "defaultMode": "acceptEdits"
   }
