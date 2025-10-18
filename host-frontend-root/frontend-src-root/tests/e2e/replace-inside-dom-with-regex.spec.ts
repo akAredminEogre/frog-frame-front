@@ -1,5 +1,7 @@
 import { test, expect } from './fixtures';
 
+// このテストはローカルHTMLファイルを使用してE2Eテストの安定性と実行速度を向上させています
+// 外部Webサイトへの依存を排除し、テスト環境の制御性を高めています
 test('正規表現で取得した値をタグ内に埋め込み', async ({ page, popupPage }) => {
   // コンソールエラーメッセージを記録するための配列（早期設定）
   const extensionErrors: string[] = [];
@@ -12,6 +14,7 @@ test('正規表現で取得した値をタグ内に埋め込み', async ({ page,
   });
 
   // 1. Arrange: ローカルHTTPサーバー経由でHTMLファイルに移動
+  // fixtures/book-page.htmlを使用してテストの安定性を確保
   const fixtureUrl = 'http://localhost:8080/book-page.html';
   const expectedUrlPattern = 'http://localhost:8080';
   
