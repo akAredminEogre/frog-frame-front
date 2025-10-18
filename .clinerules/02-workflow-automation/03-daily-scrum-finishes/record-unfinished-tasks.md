@@ -1,4 +1,4 @@
-workflow:record-unfinished-tasks
+workflow-record-unfinished-tasks
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
