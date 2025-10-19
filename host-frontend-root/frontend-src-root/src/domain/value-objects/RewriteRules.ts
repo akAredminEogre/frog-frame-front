@@ -34,7 +34,7 @@ export class RewriteRules {
    */
   set(rule: RewriteRule): RewriteRules {
     const newRules = new Map(this.rules);
-    newRules.set(rule.id, rule);
+    newRules.set(String(rule.id), rule);
     return new RewriteRules(Object.fromEntries(newRules));
   }
 

@@ -47,7 +47,7 @@ function RulesApp() {
     );
   }
 
-  const handleEdit = async (ruleId: string) => {
+  const handleEdit = async (ruleId: string | number) => {
     const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
     const openRuleEditPageUseCase = new OpenRuleEditPageUseCase(chromeTabsService);
     await openRuleEditPageUseCase.execute(ruleId);
