@@ -3,7 +3,7 @@
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
 - [x] RewriteRuleのidのtypeをstring | numberに変更し、テストを修正して全テストが通ることを確認する
-- [ ] compileエラー対処
+- [x] compileエラー対処
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
