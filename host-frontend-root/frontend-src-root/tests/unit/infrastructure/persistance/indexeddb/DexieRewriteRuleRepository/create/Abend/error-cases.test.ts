@@ -28,7 +28,7 @@ describe('DexieRewriteRuleRepository.create - 異常系', () => {
   it('should throw error when trying to add record with existing ID', async () => {
     // Arrange
     const firstRule = new RewriteRule(
-      'first-rule',
+      1,
       'pattern1',
       'replacement1',
       ''

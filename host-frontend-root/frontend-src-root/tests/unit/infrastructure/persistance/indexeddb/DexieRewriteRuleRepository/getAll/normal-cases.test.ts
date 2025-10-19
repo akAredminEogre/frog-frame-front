@@ -29,14 +29,14 @@ describe('DexieRewriteRuleRepository.getAll - 正常系', () => {
   it('should return RewriteRules instance with stored data and return Promise', async () => {
     // Arrange
     const rule1 = new RewriteRule(
-      'rule-1',
+      1,
       'pattern1',
       'replacement1',
       '',
       false
     );
     const rule2 = new RewriteRule(
-      'rule-2',
+      2,
       'pattern2',
       'replacement2',
       '',
