@@ -38,13 +38,13 @@ describe('ChromeStorageRewriteRuleRepository.getAll - 正常系', () => {
   it('should correctly call chrome.storage API, return RewriteRules instance with stored data, and return Promise', async () => {
     // Arrange
     const storedRulesObject = {
-      'rule-1': {
-        id: 'rule-1',
+      '1': {
+        id: 1,
         oldString: 'pattern1',
         newString: 'replacement1'
       },
-      'rule-2': {
-        id: 'rule-2',
+      '2': {
+        id: 2,
         oldString: 'pattern2',
         newString: 'replacement2'
       }
@@ -66,14 +66,14 @@ describe('ChromeStorageRewriteRuleRepository.getAll - 正常系', () => {
     
     // Assert - 取得されたデータが正しくRewriteRuleインスタンスに変換されることを確認
     const resultAsObject = actualResult.toObject();
-    expect(resultAsObject['rule-1']).toBeInstanceOf(RewriteRule);
-    expect(resultAsObject['rule-2']).toBeInstanceOf(RewriteRule);
-    expect(resultAsObject['rule-1'].id).toBe('rule-1');
-    expect(resultAsObject['rule-1'].oldString).toBe('pattern1');
-    expect(resultAsObject['rule-1'].newString).toBe('replacement1');
-    expect(resultAsObject['rule-2'].id).toBe('rule-2');
-    expect(resultAsObject['rule-2'].oldString).toBe('pattern2');
-    expect(resultAsObject['rule-2'].newString).toBe('replacement2');
+    expect(resultAsObject[1]).toBeInstanceOf(RewriteRule);
+    expect(resultAsObject[2]).toBeInstanceOf(RewriteRule);
+    expect(resultAsObject[1].id).toBe(1);
+    expect(resultAsObject[1].oldString).toBe('pattern1');
+    expect(resultAsObject[1].newString).toBe('replacement1');
+    expect(resultAsObject[2].id).toBe(2);
+    expect(resultAsObject[2].oldString).toBe('pattern2');
+    expect(resultAsObject[2].newString).toBe('replacement2');
     
     // Assert - chrome.storage.local.getが正しく呼ばれることを確認
     expect(mockChromeStorageLocal.get).toHaveBeenCalledTimes(1);
