@@ -33,7 +33,7 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
   beforeEach(() => {
     repository = new ChromeStorageRewriteRuleRepository();
     testRule = new RewriteRule(
-      'test-rule-1',
+      1,
       'test-pattern',
       'test-replacement',
       ''
@@ -48,8 +48,8 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
   it('should correctly call chrome.storage API, add new rule to existing rules, and return Promise', async () => {
     // Arrange
     const existingRulesObject = {
-      'existing-rule-1': {
-        id: 'existing-rule-1',
+      '1': {
+        id: 1,
         oldString: 'existing-pattern',
         newString: 'existing-replacement'
       }
@@ -77,10 +77,10 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
     
     // Assert - 保存された内容を検証（RewriteRuleインスタンスが保存されることを確認）
     const [savedData] = mockChromeStorageLocal.set.mock.calls[0];
-    expect(savedData.RewriteRules['existing-rule-1']).toBeInstanceOf(RewriteRule);
-    expect(savedData.RewriteRules['test-rule-1']).toBeInstanceOf(RewriteRule);
-    expect(savedData.RewriteRules['existing-rule-1'].id).toBe('existing-rule-1');
-    expect(savedData.RewriteRules['test-rule-1'].id).toBe('test-rule-1');
+    expect(savedData.RewriteRules[1]).toBeInstanceOf(RewriteRule);
+    expect(savedData.RewriteRules[1]).toBeInstanceOf(RewriteRule);
+    expect(savedData.RewriteRules[1].id).toBe(1);
+    expect(savedData.RewriteRules[1].id).toBe(1);
   });
 
   it('should correctly handle empty storage and save first rule', async () => {
@@ -94,20 +94,20 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
     
     // Assert - 空のストレージでも正しく保存されることを確認
     const [savedData] = mockChromeStorageLocal.set.mock.calls[0];
-    expect(savedData.RewriteRules['test-rule-1']).toBeInstanceOf(RewriteRule);
-    expect(savedData.RewriteRules['test-rule-1'].id).toBe('test-rule-1');
+    expect(savedData.RewriteRules[1]).toBeInstanceOf(RewriteRule);
+    expect(savedData.RewriteRules[1].id).toBe(1);
   });
 
   it('should correctly overwrite existing rule with same ID', async () => {
     // Arrange
     const existingRulesObject = {
-      'test-rule-1': {
-        id: 'test-rule-1',
+      '1': {
+        id: 1,
         oldString: 'old-pattern',
         newString: 'old-replacement'
       },
-      'other-rule': {
-        id: 'other-rule',
+      '2': {
+        id: 2,
         oldString: 'other-pattern',
         newString: 'other-replacement'
       }
@@ -119,7 +119,7 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
 
     // 同じIDの新しいルール（異なるパターンと置換文字）
     const updatedRule = new RewriteRule(
-      'test-rule-1',
+      1,
       'updated-pattern',
       'updated-replacement',
       ''
@@ -134,32 +134,32 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
     
     // Assert - 保存された内容を検証（既存ルールが上書きされることを確認）
     const [savedData] = mockChromeStorageLocal.set.mock.calls[0];
-    expect(savedData.RewriteRules['test-rule-1']).toBeInstanceOf(RewriteRule);
-    expect(savedData.RewriteRules['other-rule']).toBeInstanceOf(RewriteRule);
+    expect(savedData.RewriteRules[1]).toBeInstanceOf(RewriteRule);
+    expect(savedData.RewriteRules[2]).toBeInstanceOf(RewriteRule);
     
     // Assert - 上書きされたルールの内容が新しい値になっていることを確認
-    expect(savedData.RewriteRules['test-rule-1'].id).toBe('test-rule-1');
-    expect(savedData.RewriteRules['test-rule-1'].oldString).toBe('updated-pattern');
-    expect(savedData.RewriteRules['test-rule-1'].newString).toBe('updated-replacement');
+    expect(savedData.RewriteRules[1].id).toBe(1);
+    expect(savedData.RewriteRules[1].oldString).toBe('updated-pattern');
+    expect(savedData.RewriteRules[1].newString).toBe('updated-replacement');
     
     // Assert - 他のルールは影響を受けていないことを確認
-    expect(savedData.RewriteRules['other-rule'].id).toBe('other-rule');
-    expect(savedData.RewriteRules['other-rule'].oldString).toBe('other-pattern');
-    expect(savedData.RewriteRules['other-rule'].newString).toBe('other-replacement');
+    expect(savedData.RewriteRules[2].id).toBe(2);
+    expect(savedData.RewriteRules[2].oldString).toBe('other-pattern');
+    expect(savedData.RewriteRules[2].newString).toBe('other-replacement');
   });
 
   it('should update existing rule with new values', async () => {
     // Arrange
     const existingRulesObject = {
-      'rule-1': {
-        id: 'rule-1',
+      1: {
+        id: 1,
         oldString: 'old-pattern',
         newString: 'old-replacement',
         urlPattern: '',
         isRegex: false
       },
-      'rule-2': {
-        id: 'rule-2',
+      2: {
+        id: 2,
         oldString: 'pattern2',
         newString: 'replacement2',
         urlPattern: '',
@@ -171,7 +171,7 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
     mockChromeStorageLocal.set.mockResolvedValue(undefined);
 
     const updatedRule = new RewriteRule(
-      'rule-1',
+      1,
       'new-pattern',
       'new-replacement',
       'https://example.com',
@@ -186,22 +186,22 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
     
     // Assert - 更新されたルールが正しく保存されることを確認
     const savedData = mockChromeStorageLocal.set.mock.calls[0][0];
-    expect(savedData.RewriteRules['rule-1'].id).toBe('rule-1');
-    expect(savedData.RewriteRules['rule-1'].oldString).toBe('new-pattern');
-    expect(savedData.RewriteRules['rule-1'].newString).toBe('new-replacement');
-    expect(savedData.RewriteRules['rule-1'].urlPattern).toBe('https://example.com');
-    expect(savedData.RewriteRules['rule-1'].isRegex).toBe(true);
+    expect(savedData.RewriteRules[1].id).toBe(1);
+    expect(savedData.RewriteRules[1].oldString).toBe('new-pattern');
+    expect(savedData.RewriteRules[1].newString).toBe('new-replacement');
+    expect(savedData.RewriteRules[1].urlPattern).toBe('https://example.com');
+    expect(savedData.RewriteRules[1].isRegex).toBe(true);
     
     // Assert - 他のルールが変更されていないことを確認
-    expect(savedData.RewriteRules['rule-2'].oldString).toBe('pattern2');
-    expect(savedData.RewriteRules['rule-2'].newString).toBe('replacement2');
+    expect(savedData.RewriteRules[2].oldString).toBe('pattern2');
+    expect(savedData.RewriteRules[2].newString).toBe('replacement2');
   });
 
   it('should update only specified properties while preserving others', async () => {
     // Arrange
     const existingRulesObject = {
-      'rule-1': {
-        id: 'rule-1',
+      1: {
+        id: 1,
         oldString: 'pattern',
         newString: 'replacement',
         urlPattern: 'https://old.com',
@@ -213,7 +213,7 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
     mockChromeStorageLocal.set.mockResolvedValue(undefined);
 
     const updatedRule = new RewriteRule(
-      'rule-1',
+      1,
       'new-pattern',
       'replacement',
       'https://old.com',
@@ -225,27 +225,27 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
 
     // Assert
     const savedData = mockChromeStorageLocal.set.mock.calls[0][0];
-    expect(savedData.RewriteRules['rule-1'].oldString).toBe('new-pattern');
-    expect(savedData.RewriteRules['rule-1'].newString).toBe('replacement');
-    expect(savedData.RewriteRules['rule-1'].urlPattern).toBe('https://old.com');
-    expect(savedData.RewriteRules['rule-1'].isRegex).toBe(false);
+    expect(savedData.RewriteRules[1].oldString).toBe('new-pattern');
+    expect(savedData.RewriteRules[1].newString).toBe('replacement');
+    expect(savedData.RewriteRules[1].urlPattern).toBe('https://old.com');
+    expect(savedData.RewriteRules[1].isRegex).toBe(false);
   });
 
   it('should preserve all rules when updating one rule', async () => {
     // Arrange
     const existingRulesObject = {
-      'rule-1': {
-        id: 'rule-1',
+      1: {
+        id: 1,
         oldString: 'pattern1',
         newString: 'replacement1'
       },
-      'rule-2': {
-        id: 'rule-2',
+      2: {
+        id: 2,
         oldString: 'pattern2',
         newString: 'replacement2'
       },
-      'rule-3': {
-        id: 'rule-3',
+      3: {
+        id: 3,
         oldString: 'pattern3',
         newString: 'replacement3'
       }
@@ -255,7 +255,7 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
     mockChromeStorageLocal.set.mockResolvedValue(undefined);
 
     const updatedRule = new RewriteRule(
-      'rule-2',
+      2,
       'updated-pattern2',
       'updated-replacement2',
       '',
@@ -268,16 +268,16 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
     // Assert - すべてのルールが保存されることを確認
     const savedData = mockChromeStorageLocal.set.mock.calls[0][0];
     expect(Object.keys(savedData.RewriteRules)).toHaveLength(3);
-    expect(savedData.RewriteRules['rule-1']).toBeDefined();
-    expect(savedData.RewriteRules['rule-2']).toBeDefined();
-    expect(savedData.RewriteRules['rule-3']).toBeDefined();
+    expect(savedData.RewriteRules[1]).toBeDefined();
+    expect(savedData.RewriteRules[2]).toBeDefined();
+    expect(savedData.RewriteRules[3]).toBeDefined();
     
     // Assert - rule-2のみが更新されることを確認
-    expect(savedData.RewriteRules['rule-2'].oldString).toBe('updated-pattern2');
-    expect(savedData.RewriteRules['rule-2'].newString).toBe('updated-replacement2');
+    expect(savedData.RewriteRules[2].oldString).toBe('updated-pattern2');
+    expect(savedData.RewriteRules[2].newString).toBe('updated-replacement2');
     
     // Assert - 他のルールは変更されていないことを確認
-    expect(savedData.RewriteRules['rule-1'].oldString).toBe('pattern1');
-    expect(savedData.RewriteRules['rule-3'].oldString).toBe('pattern3');
+    expect(savedData.RewriteRules[1].oldString).toBe('pattern1');
+    expect(savedData.RewriteRules[3].oldString).toBe('pattern3');
   });
 });

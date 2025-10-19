@@ -17,7 +17,7 @@ describe('HtmlContent - 通常文字列での置換の回帰テスト', () => {
       input: {
         html: '<div class="test">元のテキスト</div>',
         rewriteRule: {
-          id: 'test-rule-4',
+          id: 4,
           oldString: '<div class="test">元のテキスト</div>',
           newString: '<div class="test">置換されたテキスト</div>',
           url: 'https://example.com',
@@ -35,7 +35,7 @@ describe('HtmlContent - 通常文字列での置換の回帰テスト', () => {
         元のテキスト
       </div>`,
         rewriteRule: {
-          id: 'test-rule-5',
+          id: 5,
           oldString: '<div class="test">元のテキスト</div>',
           newString: '<div class="test">置換されたテキスト</div>',
           url: 'https://example.com',
