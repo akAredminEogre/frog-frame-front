@@ -154,7 +154,7 @@ describe('HtmlReplacer', () => {
   testCases.forEach(({ description, input, expected }) => {
     it(description, () => {
       container.innerHTML = input.initialHtml;
-      const rule = new RewriteRule('1', input.oldString, input.newString, '');
+      const rule = new RewriteRule(1, input.oldString, input.newString, '');
       replacer.replace(container, rule);
       expect(container.innerHTML).toBe(expected.html);
     });
