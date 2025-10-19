@@ -14,28 +14,28 @@ describe('RewriteRules.getById - 正常系', () => {
   let rewriteRules: RewriteRules;
 
   beforeEach(() => {
-    rule1 = new RewriteRule('rule1', 'old1', 'new1', 'https://example.com/*', false);
-    rule2 = new RewriteRule('rule2', 'old2', 'new2', 'https://test.com/*', true);
-    rule3 = new RewriteRule('rule3', 'old3', 'new3', '', false);
+    rule1 = new RewriteRule(1, 'old1', 'new1', 'https://example.com/*', false);
+    rule2 = new RewriteRule(2, 'old2', 'new2', 'https://test.com/*', true);
+    rule3 = new RewriteRule(3, 'old3', 'new3', '', false);
     rulesObject = {
-      rule1,
-      rule2,
-      rule3,
+      1: rule1,
+      2: rule2,
+      3: rule3,
     };
     rewriteRules = new RewriteRules(rulesObject);
   });
 
   it('存在するIDでルールを取得できる', () => {
-    const foundRule = rewriteRules.getById('rule1');
-    
+    const foundRule = rewriteRules.getById(1);
+
     expect(foundRule).toBe(rule1);
   });
 
   it('複数のルールがある場合でも正しいルールを取得できる', () => {
-    const foundRule1 = rewriteRules.getById('rule1');
-    const foundRule2 = rewriteRules.getById('rule2');
-    const foundRule3 = rewriteRules.getById('rule3');
-    
+    const foundRule1 = rewriteRules.getById(1);
+    const foundRule2 = rewriteRules.getById(2);
+    const foundRule3 = rewriteRules.getById(3);
+
     expect(foundRule1).toBe(rule1);
     expect(foundRule2).toBe(rule2);
     expect(foundRule3).toBe(rule3);

@@ -10,10 +10,10 @@
 - [ ] ビルド・パッケージング手順の確認
 
 # 0.1.2
-- [ ] tsr,knipの設定で、使われていない変数、メソッドは表示だけで削除にしない
+- [x] tsr,knipの設定で、使われていない変数、メソッドは表示だけで削除にしない
 - [x] 開発環境のセットアップ方法
-- [ ] storageの入出力をRewriteRuleParams経由に変更するか検討
-- [ ] 編集後のタブリロード
+- [x] storageの入出力をRewriteRuleParams経由に変更するか検討
+- [x] 編集後のタブリロード
 - [ ] RewriteRuleオブジェクトを全部setしない
 - [ ] indexedDBへの完全移行
   - [ ] RewriteRuleのidをstring→numberに変更
@@ -31,9 +31,10 @@
 
 # 1.0.0
 - [ ] ルールの有効/無効切り替え機能
-- [ ] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
+- [x] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 
 ## phase02
+- [ ] entrypointのUseCaseをDI解決
 - [ ] ドキュメント中のアプリルートに、アプリ名を含まない
 - [ ] e2eテストのローカル化
 - [ ] edit/app.tsxのloadingをatomsに移動

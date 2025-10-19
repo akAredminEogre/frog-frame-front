@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
+import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
 
 /**
  * OpenRuleEditPageUseCase.execute - 正常系テスト
@@ -11,12 +12,7 @@ describe('OpenRuleEditPageUseCase.execute - 正常系', () => {
   let mockChromeTabsService: IChromeTabsService;
 
   beforeEach(() => {
-    mockChromeTabsService = {
-      sendMessage: vi.fn(),
-      queryTabs: vi.fn(),
-      sendApplyAllRulesMessage: vi.fn(),
-      openEditPage: vi.fn(),
-    };
+    mockChromeTabsService = createMockTabsService();
 
     useCase = new OpenRuleEditPageUseCase(mockChromeTabsService);
   });
