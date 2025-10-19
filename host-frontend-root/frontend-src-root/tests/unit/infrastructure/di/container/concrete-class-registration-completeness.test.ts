@@ -7,6 +7,7 @@ import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistan
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
+import { GetSelectedPageTextUseCase } from 'src/application/usecases/selectedPageText/GetSelectedPageTextUseCase';
 
 /**
  * DIコンテナの完全自動化具体クラス登録確認テスト
@@ -56,6 +57,10 @@ describe('DI Container - 完全自動化具体クラス登録確認テスト', (
     {
       class: CloseCurrentWindowUseCase,
       className: 'CloseCurrentWindowUseCase'
+    },
+    {
+      class: GetSelectedPageTextUseCase,
+      className: 'GetSelectedPageTextUseCase'
     },
   ];
 
