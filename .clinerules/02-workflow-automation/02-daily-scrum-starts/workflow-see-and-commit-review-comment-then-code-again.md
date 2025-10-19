@@ -1,4 +1,4 @@
-frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md
+frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md
 
 
 cline-instructionsの手順をチャットスレッドに表示してから実行してください。
@@ -22,10 +22,10 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
     - frog-frame-front/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-ii.md
       - の、 `### スクラム-kk(ii回目) のレビューコメント`
   - コーディングにおけるルール、規約
-    - workflow:code-according-to-the-rules
+    - workflow-code-according-to-the-rules
     - に必ず準拠すること
 - 実装完了後の処理
   - 修正したファイルでも、許可なくコミットしないこと
   - 下記のワークフローに従って進捗をまとめてください
-    - workflow:record-progress
+    - workflow-record-progress
 ```

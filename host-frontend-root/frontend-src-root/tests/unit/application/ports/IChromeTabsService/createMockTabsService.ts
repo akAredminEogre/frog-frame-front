@@ -10,5 +10,6 @@ export function createMockTabsService(): IChromeTabsService {
     queryTabs: vi.fn(),
     sendApplyAllRulesMessage: vi.fn(),
     openEditPage: vi.fn(),
+    reloadTab: vi.fn(),
   };
 }

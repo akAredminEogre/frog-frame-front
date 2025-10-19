@@ -1,4 +1,4 @@
-workflow:code-according-to-the-rules
+workflow-code-according-to-the-rules
 
 ```cline-instructions
 コーディングの際には
@@ -9,6 +9,6 @@ workflow:code-according-to-the-rules
 を参照しながら進めてください。
 
 実装が完了したら
-workflow:test-and-check-before-complete
+workflow-test-and-check-before-complete
 のワークフローを必ず行ってください。
 ```

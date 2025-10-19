@@ -1,4 +1,4 @@
-# workflow:submit-pull-request
+# workflow-submit-pull-request
 
 Submit a pull request to the repository.
 

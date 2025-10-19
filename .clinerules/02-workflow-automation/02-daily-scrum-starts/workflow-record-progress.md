@@ -1,4 +1,4 @@
-workflow:record-progress
+workflow-record-progress
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)

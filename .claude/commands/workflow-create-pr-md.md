@@ -1,4 +1,4 @@
-# workflow:create-pr-md
+# workflow-create-pr-md
 
 Create a pull request documentation file.
 

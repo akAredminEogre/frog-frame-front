@@ -1,4 +1,4 @@
-frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:start-coding-according-to-daily-scrum.md
+frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-start-coding-according-to-daily-scrum.md
 
 cline-instructionsの手順をチャットスレッドに表示してから実行してください。
 その中で別のworkflowに従うと指示されてる場合は、その手順も検索・確認して再帰的にチャットスレッドに表示してください
@@ -20,12 +20,12 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
   - 参照すべきドキュメント
     - docs/issue-nnn/daily-scrum-kk/DAILY_SCRUM-kk.md
   - コーディングにおけるルール、規約
-    - workflow:code-according-to-the-rules
+    - workflow-code-according-to-the-rules
     - に必ず準拠すること
 
 - 実装完了後の処理
   - 修正したファイルでも、許可なくコミットしないこと
   - 下記のワークフローに従って進捗をまとめてください
-    - workflow:record-progress
+    - workflow-record-progress
 
 ```

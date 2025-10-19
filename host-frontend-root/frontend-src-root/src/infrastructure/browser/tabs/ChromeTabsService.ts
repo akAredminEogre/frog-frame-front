@@ -62,4 +62,16 @@ export class ChromeTabsService implements IChromeTabsService {
   private async createTab(url: string): Promise<void> {
     await chrome.tabs.create({ url });
   }
+
+  async reloadTab(tab: Tab): Promise<void> {
+    const tabId = tab.getTabId().value;
+    console.log('[ChromeTabsService] reloadTab called', { tabId, tabUrl: tab.getTabUrl().value });
+    try {
+      await chrome.tabs.reload(tabId);
+      console.log('[ChromeTabsService] chrome.tabs.reload succeeded', { tabId });
+    } catch (error) {
+      console.error('[ChromeTabsService] reloadTab error:', { tabId, error });
+      throw error;
+    }
+  }
 }

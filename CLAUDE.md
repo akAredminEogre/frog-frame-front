@@ -265,7 +265,7 @@ All entry points in `src/entrypoints/`:
 ### Branch Strategy
 - **Base branch**: `develop`
 - **Branch naming**: Issue-based branches (e.g., `issue-086-docs-how-to-set-up`)
-- See `.clinerules/02-workflow-automation/01-issue-launches/workflow:create-branch.md` for branch creation workflow
+- See `.clinerules/02-workflow-automation/01-issue-launches/workflow-create-branch.md` for branch creation workflow
 
 ### Documentation Structure
 ```
