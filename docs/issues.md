@@ -15,6 +15,12 @@
 - [ ] storageの入出力をRewriteRuleParams経由に変更するか検討
 - [ ] 編集後のタブリロード
 - [ ] RewriteRuleオブジェクトを全部setしない
+- [ ] indexedDBへの完全移行
+  - [ ] RewriteRuleのidをstring→numberに変更
+  - [ ] テストコードの修正
+  - [ ] 移行期間のid文字列変換ロジックを削除
+  - [ ] repositoryの切り替え
+- [ ] RewriteRulesのtoObject()の廃止
 
 # 0.1.3
 - [ ] makeコマンド
