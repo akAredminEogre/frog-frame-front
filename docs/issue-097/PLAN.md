@@ -52,28 +52,10 @@
 **理由**: SelectedPageTextはchrome.storageに保存する方針に変更したため、IndexedDB実装は不要
 
 ## DAILY-SCRUM-04: DI更新とRewriteRuleRepositoryの切り替え
-- [ ] DIコンテナの更新（`src/infrastructure/di/container.ts`）
-  - [ ] `IRewriteRuleRepository`の登録を`DexieRewriteRuleRepository`に変更
-- [ ] 作業内容のコミット
-
-**目標**: DIコンテナが更新され、RewriteRuleRepositoryがDexie実装に切り替わっている状態
-
-**変更点**: アプリ未リリースのためマイグレーション不要、SelectedPageTextはchrome.storageに保存するためDI更新も不要
+- 別issueに切り出し済み
 
 ## DAILY-SCRUM-05: 統合テストと最終検証
-- [ ] 既存のユニットテストの実行と確認（`npm run test`）
-- [ ] E2Eテストの実行と確認（`npm run test:e2e`）
-- [ ] 開発環境での動作確認
-  - [ ] Rules画面でルールの作成・編集・削除が正常に動作する
-  - [ ] コンテキストメニューからのDOM置換が正常に動作する
-  - [ ] データがIndexedDBに正しく保存されることをDevToolsで確認
-- [ ] `make test-and-lint`の実行
-  - [ ] 全テストがパス
-  - [ ] 未使用コードがない
-  - [ ] Lintエラーがない
-- [ ] 不具合があれば修正
-- [ ] 最終コミット
-- [ ] ドキュメントの更新（必要に応じて）
+- 別issueに切り出し済み
 
 **目標**: 全てのテストがパスし、機能が正常に動作する状態
 
