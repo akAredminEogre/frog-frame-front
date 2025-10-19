@@ -60,10 +60,11 @@ export class RewriteRules {
    * @returns 見つかったRewriteRule
    * @throws {RewriteRuleNotFoundError} ルールが見つからない場合
    */
-  getById(id: string): RewriteRule {
-    const rule = this.rules.get(id);
+  getById(id: string | number): RewriteRule {
+    const idString = String(id);
+    const rule = this.rules.get(idString);
     if (!rule) {
-      throw new RewriteRuleNotFoundError(id);
+      throw new RewriteRuleNotFoundError(idString);
     }
     return rule;
   }

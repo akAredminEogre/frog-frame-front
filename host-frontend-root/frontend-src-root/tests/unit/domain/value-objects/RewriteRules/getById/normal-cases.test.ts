@@ -26,16 +26,16 @@ describe('RewriteRules.getById - 正常系', () => {
   });
 
   it('存在するIDでルールを取得できる', () => {
-    const foundRule = rewriteRules.getById('1');
+    const foundRule = rewriteRules.getById(1);
 
     expect(foundRule).toBe(rule1);
   });
 
   it('複数のルールがある場合でも正しいルールを取得できる', () => {
-    const foundRule1 = rewriteRules.getById('1');
-    const foundRule2 = rewriteRules.getById('2');
-    const foundRule3 = rewriteRules.getById('3');
-    
+    const foundRule1 = rewriteRules.getById(1);
+    const foundRule2 = rewriteRules.getById(2);
+    const foundRule3 = rewriteRules.getById(3);
+
     expect(foundRule1).toBe(rule1);
     expect(foundRule2).toBe(rule2);
     expect(foundRule3).toBe(rule3);
