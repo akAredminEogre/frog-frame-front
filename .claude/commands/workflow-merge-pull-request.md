@@ -1,4 +1,4 @@
-# workflow:merge-pull-request
+# workflow-merge-pull-request
 
 Merge an approved pull request.
 

@@ -8,10 +8,10 @@ export class TabUrl {
     
     const url = new URL(value);
     
-    // HTTPとHTTPSのみ許可
-    const allowedProtocols = ['http:', 'https:'];
+    // HTTP、HTTPS、Chrome関連プロトコルを許可
+    const allowedProtocols = ['http:', 'https:', 'chrome:', 'chrome-extension:'];
     if (!allowedProtocols.includes(url.protocol)) {
-      throw new Error('Tab URL must use http:// or https:// protocol');
+      throw new Error('Tab URL must use http://, https://, chrome://, or chrome-extension:// protocol');
     }
     
     this._value = value;

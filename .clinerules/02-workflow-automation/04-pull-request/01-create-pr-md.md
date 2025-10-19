@@ -1,4 +1,4 @@
-workflow:create-pr-md
+workflow-create-pr-md
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
 issue-nnnのプルリクエストの本文を作成してください。

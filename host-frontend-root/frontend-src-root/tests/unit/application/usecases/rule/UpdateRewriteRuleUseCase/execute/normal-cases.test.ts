@@ -4,6 +4,7 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { Tabs } from 'src/domain/value-objects/Tabs';
+import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
 
 /**
  * UpdateRewriteRuleUseCase.execute - 正常系テスト
@@ -25,12 +26,8 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
     };
 
     // モックChromeTabsServiceの初期化
-    mockChromeTabsService = {
-      queryTabs: vi.fn().mockResolvedValue(new Tabs([])),
-      sendApplyAllRulesMessage: vi.fn(),
-      sendMessage: vi.fn(),
-      openEditPage: vi.fn(),
-    };
+    mockChromeTabsService = createMockTabsService();
+    vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(new Tabs([]));
 
     // テスト対象の初期化
     useCase = new UpdateRewriteRuleUseCase(mockRepository, mockChromeTabsService);

@@ -1,4 +1,4 @@
-frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:create-daily-scrum.md
+frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-create-daily-scrum.md
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)
