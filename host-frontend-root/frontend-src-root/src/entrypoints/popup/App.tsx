@@ -9,6 +9,7 @@ import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeC
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
+import { GetSelectedPageTextUseCase } from 'src/application/usecases/selectedPageText/GetSelectedPageTextUseCase';
 
 function App() {
   // フォーム入力を管理するState
@@ -50,15 +51,9 @@ function App() {
   /** コンポーネントがマウントされたときにルールを適用 */
   useEffect(() => {
     const initForm = async () => {
-      // ストレージから一時的な選択テキストを取得
-      const { selectedPageText } = await chrome.storage.local.get('selectedPageText');
-      
-      let selectedText = '';
-      if (selectedPageText) {
-        selectedText = selectedPageText;
-        // 取得後は不要なので削除
-        await chrome.storage.local.remove('selectedPageText');
-      }
+      // UseCaseを通してストレージから右クリック選択テキストを取得
+      const getSelectedPageTextUseCase = container.resolve(GetSelectedPageTextUseCase);
+      const selectedText = await getSelectedPageTextUseCase.execute();
 
       const origin = await getActiveTabOrigin();
 

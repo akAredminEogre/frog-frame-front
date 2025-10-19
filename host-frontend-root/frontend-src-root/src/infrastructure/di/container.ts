@@ -20,6 +20,9 @@ import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRe
 import { IWindowService } from 'src/application/ports/IWindowService';
 import { ChromeWindowService } from 'src/infrastructure/browser/window/ChromeWindowService';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
+import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
+import { SelectedPageTextRepository } from 'src/infrastructure/storage/SelectedPageTextRepository';
+import { GetSelectedPageTextUseCase } from 'src/application/usecases/selectedPageText/GetSelectedPageTextUseCase';
 
 // Register implementations for interfaces (抽象化のため)
 container.register<IChromeTabsService>('IChromeTabsService', { useClass: ChromeTabsService });
@@ -27,6 +30,7 @@ container.register<ISelectedPageTextService>('ISelectedPageTextService', { useCl
 container.register<IPopupService>('IPopupService', { useClass: ChromePopupService });
 container.register<IRewriteRuleRepository>('IRewriteRuleRepository', { useClass: ChromeStorageRewriteRuleRepository });
 container.register<IWindowService>('IWindowService', { useClass: ChromeWindowService });
+container.register<ISelectedPageTextRepository>('ISelectedPageTextRepository', { useClass: SelectedPageTextRepository });
 
 // Register concrete classes (required for container.resolve() to work)
 container.register(HandleContextMenuReplaceDomElement, { useClass: HandleContextMenuReplaceDomElement });
@@ -35,3 +39,4 @@ container.register(ChromeStorageRewriteRuleRepository, { useClass: ChromeStorage
 container.register(LoadRewriteRuleForEditUseCase, { useClass: LoadRewriteRuleForEditUseCase });
 container.register(UpdateRewriteRuleUseCase, { useClass: UpdateRewriteRuleUseCase });
 container.register(CloseCurrentWindowUseCase, { useClass: CloseCurrentWindowUseCase });
+container.register(GetSelectedPageTextUseCase, { useClass: GetSelectedPageTextUseCase });
