@@ -22,7 +22,7 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
 
     repository = new DexieRewriteRuleRepository();
     testRule = new RewriteRule(
-      'test-rule-1',
+      1,
       'test-pattern',
       'test-replacement',
       ''
@@ -36,7 +36,7 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
   it('should correctly add new rule to existing rules and return Promise', async () => {
     // Arrange
     const existingRule = new RewriteRule(
-      'existing-rule-1',
+      2,
       'existing-pattern',
       'existing-replacement',
       '',
@@ -89,7 +89,7 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
   it('should correctly create rule with all properties', async () => {
     // Arrange
     const ruleWithAllProps = new RewriteRule(
-      'rule-with-all-props',
+      3,
       'old',
       'new',
       'https://test.com/*',
