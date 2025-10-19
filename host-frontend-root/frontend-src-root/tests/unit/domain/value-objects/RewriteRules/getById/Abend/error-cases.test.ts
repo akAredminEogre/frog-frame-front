@@ -14,11 +14,11 @@ describe('RewriteRules.getById - 異常系', () => {
   let rewriteRules: RewriteRules;
 
   beforeEach(() => {
-    rule1 = new RewriteRule('rule1', 'old1', 'new1', 'https://example.com/*', false);
-    rule2 = new RewriteRule('rule2', 'old2', 'new2', 'https://test.com/*', true);
+    rule1 = new RewriteRule(1, 'old1', 'new1', 'https://example.com/*', false);
+    rule2 = new RewriteRule(2, 'old2', 'new2', 'https://test.com/*', true);
     rulesObject = {
-      rule1,
-      rule2,
+      1: rule1,
+      2: rule2,
     };
     rewriteRules = new RewriteRules(rulesObject);
   });
@@ -30,8 +30,8 @@ describe('RewriteRules.getById - 異常系', () => {
 
   it('空のRewriteRulesから取得しようとした場合にRewriteRuleNotFoundErrorがthrowされる', () => {
     const emptyRules = new RewriteRules();
-    
-    expect(() => emptyRules.getById('rule1')).toThrow(RewriteRuleNotFoundError);
-    expect(() => emptyRules.getById('rule1')).toThrow('Rewrite rule with id "rule1" not found');
+
+    expect(() => emptyRules.getById(1)).toThrow(RewriteRuleNotFoundError);
+    expect(() => emptyRules.getById(1)).toThrow('Rewrite rule with id "1" not found');
   });
 });
