@@ -62,18 +62,18 @@ export class DexieRewriteRuleRepository {
 
   /**
    * IDで指定されたルールを取得する（IndexedDBから直接取得）
-   * @param id 検索するルールのID（string型）
+   * @param id 検索するルールのID（string型またはnumber型）
    * @returns RewriteRuleオブジェクト
    * @throws {RewriteRuleNotFoundError} ルールが見つからない場合
    *
-   * 注意: string型のIDをnumber型に変換してDB検索を行う
+   * 注意: string型またはnumber型のIDをnumber型に変換してDB検索を行う
    */
-  async getById(id: string): Promise<RewriteRule> {
+  async getById(id: string | number): Promise<RewriteRule> {
     const numericId = this.convertStringIdToNumber(id);
     const schema = await this.database.rewriteRules.get(numericId);
 
     if (!schema) {
-      throw new RewriteRuleNotFoundError(id);
+      throw new RewriteRuleNotFoundError(String(id));
     }
 
     return this.convertSchemaToRule(schema);
@@ -124,15 +124,15 @@ export class DexieRewriteRuleRepository {
   }
 
   /**
-   * string型のIDをnumber型に変換する
-   * @param id string型のID
+   * string型またはnumber型のIDをnumber型に変換する
+   * @param id string型またはnumber型のID
    * @returns number型のID
    * @throws {Error} IDが数値に変換できない場合
    */
-  private convertStringIdToNumber(id: string): number {
+  private convertStringIdToNumber(id: string | number): number {
     const numericId = Number(id);
     if (Number.isNaN(numericId)) {
-      throw new Error(`Invalid ID format: ${id}. Expected a numeric string.`);
+      throw new Error(`Invalid ID format: ${id}. Expected a numeric string or number.`);
     }
     return numericId;
   }

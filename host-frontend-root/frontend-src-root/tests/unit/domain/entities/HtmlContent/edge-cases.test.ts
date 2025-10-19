@@ -10,7 +10,7 @@ describe('HtmlContent', () => {
   describe('replaceWith - edge cases', () => {
     it('should accept invalid html as oldString in rule', () => {
       const html = '<div>hello</div>';
-      const rule = new RewriteRule('1', '<div', 'hi', '');
+      const rule = new RewriteRule(1, '<div', 'hi', '');
       const content = new HtmlContent(html, rule);
       expect(() => content.replace()).not.toThrow();
     });

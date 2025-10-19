@@ -12,11 +12,11 @@ describe('RewriteRules.toArray - 正常系', () => {
   let rulesObject: Record<string, RewriteRule>;
 
   beforeEach(() => {
-    rule1 = new RewriteRule('rule1', 'old1', 'new1', 'https://example.com/*', false);
-    rule2 = new RewriteRule('rule2', 'old2', 'new2', 'https://test.com/*', true);
+    rule1 = new RewriteRule(1, 'old1', 'new1', 'https://example.com/*', false);
+    rule2 = new RewriteRule(2, 'old2', 'new2', 'https://test.com/*', true);
     rulesObject = {
-      rule1,
-      rule2,
+      1: rule1,
+      2: rule2,
     };
   });
 

@@ -40,7 +40,7 @@
     "unused:remove-broken-tests": "npm run compile 2>&1 | grep 'Cannot find module' | sed -n \"s/.*\\(tests\\/[^(]*\\).*/\\1/p\" | sort -u | xargs -I {} sh -c 'echo \"Removing broken test: {}\" && rm \"{}\"'",
     "unused:complete": "npm run unused:fix && npm run unused:remove-broken-tests && npm run compile",
     "test-and-lint": "npm run unused:complete && npm run test:all && npm run knip:all && echo 'recursive test passed and knip passed, so no unused code remains!' || (echo 'Either tests or knip found issues. Please address them.' && exit 1)",
-    "test-and-check": "npm run test && npm run test:e2e && (npm run knip:all || true) && (npm run tsr:check || true) && (npm run lint || true) && echo 'Test-and-check completed. Check lint/knip/tsr warnings above if any.'"
+    "test-and-check": "npm run compile && npm run test && npm run test:e2e && (npm run knip:all || true) && (npm run tsr:check || true) && (npm run lint || true) && echo 'Test-and-check completed. Check lint/knip/tsr warnings above if any.'"
   },
   "dependencies": {
     "dexie": "^4.2.1",

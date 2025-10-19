@@ -48,6 +48,6 @@ describe('DexieRewriteRuleRepository.getById - 異常系', () => {
 
   it('should throw Error when ID format is invalid (non-numeric string)', async () => {
     // Act & Assert - 数値に変換できないIDの場合はエラー
-    await expect(repository.getById('invalid-id')).rejects.toThrow('Invalid ID format: invalid-id. Expected a numeric string.');
+    await expect(repository.getById('invalid-id')).rejects.toThrow('Invalid ID format: invalid-id. Expected a numeric string or number.');
   });
 });
