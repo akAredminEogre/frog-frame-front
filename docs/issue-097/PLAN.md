@@ -16,20 +16,24 @@
 **目標**: Dexie.jsが正しくインストールされ、データベーススキーマが定義されている状態 ✅ 完了
 
 ## DAILY-SCRUM-02: DexieRewriteRuleRepository実装
-- [ ] `DexieRewriteRuleRepository`クラスの作成（`src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository.ts`）
-- [ ] `IRewriteRuleRepository`インターフェースの実装
-  - [ ] `set(rule: RewriteRule): Promise<void>`メソッド
-  - [ ] `getAll(): Promise<RewriteRules>`メソッド
-  - [ ] `getById(id: string): Promise<RewriteRule>`メソッド
-- [ ] ユニットテストの作成
-  - [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/set/normal-cases.test.ts`
-  - [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/getAll/normal-cases.test.ts`
-  - [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/getById/normal-cases.test.ts`
-  - [ ] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/getById/error-cases.test.ts`
-- [ ] テストが全てパスすることを確認（`npm run test`）
-- [ ] 作業内容のコミット
+- [x] `DexieRewriteRuleRepository`クラスの作成（`src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository.ts`）
+- [x] 独立したクラスとして実装（`IRewriteRuleRepository`は将来実装予定）
+  - [x] `create(rule: RewriteRule): Promise<void>`メソッド（DB側で自動採番）
+  - [x] `update(rule: RewriteRule): Promise<void>`メソッド
+  - [x] `getAll(): Promise<RewriteRules>`メソッド（`each()`を使用し最適化）
+  - [x] `getById(id: string): Promise<RewriteRule>`メソッド
+- [x] Primary Keyの自動採番対応（スキーマ`'++id'`）
+- [x] ユニットテストの作成
+  - [x] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/create/normal-cases.test.ts`
+  - [x] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/create/Abend/error-cases.test.ts`
+  - [x] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/update/normal-cases.test.ts`
+  - [x] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/getAll/normal-cases.test.ts`
+  - [x] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/getById/normal-cases.test.ts`
+  - [x] `tests/unit/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository/getById/error-cases.test.ts`
+- [x] テストが全てパスすることを確認（277個のユニットテスト、9個のE2Eテスト）
+- [x] 作業内容のコミット
 
-**目標**: DexieRewriteRuleRepositoryが完全に実装され、テストがパスする状態
+**目標**: DexieRewriteRuleRepositoryが完全に実装され、テストがパスする状態 ✅ 完了
 
 ## ~~DAILY-SCRUM-03: DexieSelectedPageTextService実装~~ (不要)
 ~~- [ ] `DexieSelectedPageTextService`クラスの作成（`src/infrastructure/persistance/indexeddb/DexieSelectedPageTextService.ts`）~~
