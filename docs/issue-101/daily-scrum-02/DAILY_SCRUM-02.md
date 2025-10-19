@@ -39,4 +39,33 @@
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+Clean Architectureに従ってApp.tsxのchrome.storage.local直接呼び出しをUseCaseパターンで抽象化を実施。
+
+**第1回進捗**: 基本的なClean Architecture実装
+- SelectedPageText値オブジェクト、ISelectedPageTextRepositoryインターフェース、GetSelectedPageTextUseCaseを作成
+- DIコンテナ登録とApp.tsx修正、必要なユニットテスト作成
+
+**第2回進捗**: レビュー指摘事項の修正
+- nullの代わりに空のSelectedPageTextを返すように修正し、三項演算子を排除
+- より簡潔で一貫性のあるコード実現
+
+**第3回進捗**: Clean Architecture設計観点の改善
+- UseCaseの戻り値をSelectedPageTextからstring（プリミティブ型）に変更
+- 単純なデータ転送にはプリミティブ型が適切という設計判断を実装
+- 不要な型変換処理を排除し、より適切な層間データ転送を実現
+
 ## 修正したファイル
+
+**新規作成**:
+- `src/domain/value-objects/SelectedPageText.ts`
+- `src/application/ports/ISelectedPageTextRepository.ts`
+- `src/application/usecases/selectedPageText/GetSelectedPageTextUseCase.ts`
+- `src/infrastructure/storage/SelectedPageTextRepository.ts`
+- `tests/unit/application/usecases/selectedPageText/GetSelectedPageTextUseCase/execute/normal-cases.test.ts`
+- `tests/unit/domain/value-objects/SelectedPageText/constructor/normal-cases.test.ts`
+
+**修正**:
+- `src/infrastructure/di/container.ts`
+- `src/entrypoints/popup/App.tsx`
+- `tests/unit/infrastructure/di/container/interface-registration-completeness.test.ts`
+- `tests/unit/infrastructure/di/container/concrete-class-registration-completeness.test.ts`

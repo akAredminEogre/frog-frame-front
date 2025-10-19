@@ -2,14 +2,14 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] 現在のApp.tsxの実装を確認し、Clean Architectureに従った改修方針を決定する
-- [ ] selectedPageTextを取得するUseCaseを作成する
-- [ ] UseCaseに必要なRepositoryインターフェースを定義する
-- [ ] InfrastructureにRepositoryの実装を作成する
-- [ ] DIコンテナに依存関係を登録する
-- [ ] App.tsxをUseCaseを使用するように修正する
-- [ ] 単体テストを作成する
-- [ ] 全体のテストとlintチェックを実行する
+- [x] 現在のApp.tsxの実装を確認し、Clean Architectureに従った改修方針を決定する
+- [x] selectedPageTextを取得するUseCaseを作成する
+- [x] UseCaseに必要なRepositoryインターフェースを定義する
+- [x] InfrastructureにRepositoryの実装を作成する
+- [x] DIコンテナに依存関係を登録する
+- [x] App.tsxをUseCaseを使用するように修正する
+- [x] 単体テストを作成する
+- [x] 全体のテストとlintチェックを実行する
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
