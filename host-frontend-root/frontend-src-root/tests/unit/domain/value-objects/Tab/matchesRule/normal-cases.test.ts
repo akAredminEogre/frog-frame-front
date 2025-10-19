@@ -40,7 +40,7 @@ describe('Tab.matchesRule - 正常系', () => {
     it(testCase.description, () => {
       const tab = new Tab(1, testCase.input.tabUrl);
       const rule = new RewriteRule(
-        'test-rule',
+        1,
         'oldText',
         'newText',
         testCase.input.urlPattern,

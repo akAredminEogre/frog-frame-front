@@ -27,14 +27,14 @@ describe('DexieRewriteRuleRepository.getById - 正常系', () => {
   it('should return RewriteRule instance when rule with specified ID exists', async () => {
     // Arrange
     const rule1 = new RewriteRule(
-      'rule-1',
+      1,
       'pattern1',
       'replacement1',
       '',
       false
     );
     const rule2 = new RewriteRule(
-      'rule-2',
+      2,
       'pattern2',
       'replacement2',
       'https://example.com',
@@ -64,7 +64,7 @@ describe('DexieRewriteRuleRepository.getById - 正常系', () => {
   it('should correctly retrieve rule with all properties', async () => {
     // Arrange
     const ruleWithAllProps = new RewriteRule(
-      'rule-with-all-props',
+      3,
       'old',
       'new',
       'https://test.com/*',

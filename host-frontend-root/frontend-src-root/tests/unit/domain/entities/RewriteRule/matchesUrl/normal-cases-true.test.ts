@@ -54,7 +54,7 @@ describe('RewriteRule.matchesUrl - 正常系 (trueを返すケース)', () => {
   testCases.forEach((testCase) => {
     it(testCase.description, () => {
       // テストケースに本質的には無関係なパラメータ
-      const ruleId = '1';
+      const ruleId = 1;
       const oldKeyword = 'old';
       const newKeyword = 'new';
 
