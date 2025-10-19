@@ -24,8 +24,8 @@ describe('RewriteRules.getById - 異常系', () => {
   });
 
   it('存在しないIDを指定した場合にRewriteRuleNotFoundErrorがthrowされる', () => {
-    expect(() => rewriteRules.getById('nonexistent')).toThrow(RewriteRuleNotFoundError);
-    expect(() => rewriteRules.getById('nonexistent')).toThrow('Rewrite rule with id "nonexistent" not found');
+    expect(() => rewriteRules.getById(999)).toThrow(RewriteRuleNotFoundError);
+    expect(() => rewriteRules.getById(999)).toThrow('Rewrite rule with id "999" not found');
   });
 
   it('空のRewriteRulesから取得しようとした場合にRewriteRuleNotFoundErrorがthrowされる', () => {

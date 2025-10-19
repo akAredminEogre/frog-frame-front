@@ -28,14 +28,14 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
   it('should update existing rule with new values', async () => {
     // Arrange
     const rule1 = new RewriteRule(
-      'rule-1',
+      1,
       'old-pattern',
       'old-replacement',
       '',
       false
     );
     const rule2 = new RewriteRule(
-      'rule-2',
+      2,
       'pattern2',
       'replacement2',
       '',
@@ -81,7 +81,7 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
   it('should update only specified properties while preserving others', async () => {
     // Arrange
     const existingRule = new RewriteRule(
-      'rule-1',
+      3,
       'pattern',
       'replacement',
       'https://old.com',
@@ -119,21 +119,21 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
   it('should preserve all rules when updating one rule', async () => {
     // Arrange
     const rule1 = new RewriteRule(
-      'rule-1',
+      4,
       'pattern1',
       'replacement1',
       '',
       false
     );
     const rule2 = new RewriteRule(
-      'rule-2',
+      5,
       'pattern2',
       'replacement2',
       '',
       false
     );
     const rule3 = new RewriteRule(
-      'rule-3',
+      6,
       'pattern3',
       'replacement3',
       '',

@@ -103,7 +103,7 @@ describe('Tabs.filterByRule - 正常系', () => {
       );
       const tabs = new Tabs(tabInstances);
       const rule = new RewriteRule(
-        'test-rule',
+        1,
         'oldText',
         'newText',
         testCase.input.urlPattern,

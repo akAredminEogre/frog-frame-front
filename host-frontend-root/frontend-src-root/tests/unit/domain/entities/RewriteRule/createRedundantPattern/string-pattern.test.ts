@@ -70,7 +70,7 @@ describe('RewriteRule.createRedundantPattern - 文字列パターン', () => {
     it(testCase.description, () => {
       // Arrange
       const rule = new RewriteRule(
-        'test-id',
+        1,
         testCase.input.oldString,
         'replacement',
         '',

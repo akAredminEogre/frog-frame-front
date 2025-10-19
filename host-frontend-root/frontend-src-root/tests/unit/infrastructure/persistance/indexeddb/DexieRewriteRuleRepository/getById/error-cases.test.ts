@@ -26,7 +26,7 @@ describe('DexieRewriteRuleRepository.getById - 異常系', () => {
   it('should throw RewriteRuleNotFoundError when rule with specified ID does not exist', async () => {
     // Arrange
     const rule1 = new RewriteRule(
-      'rule-1',
+      1,
       'pattern1',
       'replacement1',
       '',
@@ -36,18 +36,20 @@ describe('DexieRewriteRuleRepository.getById - 異常系', () => {
     await repository.create(rule1);
 
     // Act & Assert - 存在しないIDとして大きな数値を使用
-    await expect(repository.getById('999')).rejects.toThrow(RewriteRuleNotFoundError);
-    await expect(repository.getById('999')).rejects.toThrow('Rewrite rule with id "999" not found');
+    await expect(repository.getById(999)).rejects.toThrow(RewriteRuleNotFoundError);
+    await expect(repository.getById(999)).rejects.toThrow('Rewrite rule with id "999" not found');
   });
 
   it('should throw RewriteRuleNotFoundError when database is empty', async () => {
     // Act & Assert
-    await expect(repository.getById('1')).rejects.toThrow(RewriteRuleNotFoundError);
-    await expect(repository.getById('1')).rejects.toThrow('Rewrite rule with id "1" not found');
+    await expect(repository.getById(1)).rejects.toThrow(RewriteRuleNotFoundError);
+    await expect(repository.getById(1)).rejects.toThrow('Rewrite rule with id "1" not found');
   });
 
-  it('should throw Error when ID format is invalid (non-numeric string)', async () => {
-    // Act & Assert - 数値に変換できないIDの場合はエラー
-    await expect(repository.getById('invalid-id')).rejects.toThrow('Invalid ID format: invalid-id. Expected a numeric string or number.');
-  });
+  // NOTE: Test removed because getById now only accepts number type
+  // TypeScript prevents invalid string IDs at compile time
+  // it('should throw Error when ID format is invalid (non-numeric string)', async () => {
+  //   // Act & Assert - 数値に変換できないIDの場合はエラー
+  //   await expect(repository.getById('invalid-id')).rejects.toThrow('Invalid ID format: invalid-id. Expected a numeric string or number.');
+  // });
 });

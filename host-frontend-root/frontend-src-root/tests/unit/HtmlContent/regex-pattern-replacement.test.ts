@@ -21,7 +21,7 @@ describe('HtmlContent - 正規表現パターンでのキャプチャグルー�
       input: {
         html: `<li class="productInfo">${ISBN_CATEGORY_HTML}${CATEGORY_VALUE_SPAN}9784065396209</span></li>`,
         rewriteRule: {
-          id: 'test-rule-1',
+          id: 1,
           oldString: `<li class="productInfo">${ISBN_CATEGORY_HTML}${CATEGORY_VALUE_SPAN}(.+?)</span></li>`,
           newString: `<li class="productInfo">${ISBN_CATEGORY_HTML}${CATEGORY_VALUE_SPAN}<a href="https://www01.hanmoto.com/bd/isbn/$1">$1</a></span></li>`,
           url: 'https://books.rakuten.co.jp',
@@ -40,7 +40,7 @@ describe('HtmlContent - 正規表現パターンでのキャプチャグルー�
         ${CATEGORY_VALUE_SPAN}9784065396209</span>
       </li>`,
         rewriteRule: {
-          id: 'test-rule-2',
+          id: 2,
           oldString: `<li class="productInfo">${ISBN_CATEGORY_HTML}${CATEGORY_VALUE_SPAN}(.+?)</span></li>`,
           newString: `<li class="productInfo">${ISBN_CATEGORY_HTML}${CATEGORY_VALUE_SPAN}<a href="https://www01.hanmoto.com/bd/isbn/$1">$1</a></span></li>`,
           url: 'https://books.rakuten.co.jp',
@@ -56,7 +56,7 @@ describe('HtmlContent - 正規表現パターンでのキャプチャグルー�
       input: {
         html: '<div><span class="title">書籍名</span><span class="isbn">9784065396209</span></div>',
         rewriteRule: {
-          id: 'test-rule-3',
+          id: 3,
           oldString: '<div><span class="title">(.+?)</span><span class="isbn">(.+?)</span></div>',
           newString: '<div><span class="title">$1</span><span class="isbn"><a href="https://www01.hanmoto.com/bd/isbn/$2">$2</a></span></div>',
           url: 'https://books.rakuten.co.jp',
