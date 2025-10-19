@@ -9,14 +9,13 @@
       "Edit(./.claude/**)",
       "Bash(gh pr list:*)",
       "Bash(gh pr merge:*)",
-      "Bash(git checkout:*)",
-      "Bash(git pull:*)",
-      "Bash(git fetch:*)",
-      "Bash(git --no-pager branch:*)",
-      "Bash(docker compose exec -T frontend:*)",
-      "Bash(make:*)",
       "Bash(gh pr create:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Bash(make:*)",
+      "Bash(bash:*)",
+      "Bash(docker compose exec:*)",
+      "WebSearch",
+      "WebFetch(domain:dexie.org)"
     ],
     "defaultMode": "acceptEdits"
   }
