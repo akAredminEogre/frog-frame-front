@@ -15,7 +15,8 @@
       "Bash(bash:*)",
       "Bash(docker compose exec:*)",
       "WebSearch",
-      "WebFetch(domain:dexie.org)"
+      "WebFetch(domain:dexie.org)",
+      "Bash(npm run:*)"
     ],
     "defaultMode": "acceptEdits"
   }

@@ -20,4 +20,11 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
     - frog-frame-front/docs/issue-nnn/PLAN.md
   - 従うべきフォーマット
     - frog-frame-front/docs/issue-000/PLAN.md
+
+- PLAN.md作成後の手順
+  - ## 相談事項セクションに記入がない場合
+    - workflow-commit-plan-then-start-daily-issue
+    - を始める
+  - ## 相談事項セクションに記入がある場合
+  　- チャットスレッドに記入がある旨表示し、本ワークフローを終了する
 ```
