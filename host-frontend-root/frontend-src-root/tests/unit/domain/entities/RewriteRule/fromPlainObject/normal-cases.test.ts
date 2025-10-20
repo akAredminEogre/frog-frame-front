@@ -11,7 +11,7 @@ import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 describe('RewriteRule.fromPlainObject - 正常系', () => {
   it('should create RewriteRule instance from plain object with all parameters', () => {
     const ruleData = {
-      id: '1',
+      id: 1,
       oldString: 'old text',
       newString: 'new text',
       urlPattern: 'https://example.com/*',
@@ -20,7 +20,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
 
     const rule = RewriteRule.fromPlainObject(ruleData);
     
-    expect(rule.id).toBe('1');
+    expect(rule.id).toBe(1);
     expect(rule.oldString).toBe('old text');
     expect(rule.newString).toBe('new text');
     expect(rule.urlPattern).toBe('https://example.com/*');
@@ -29,14 +29,14 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
 
   it('should create RewriteRule instance from plain object with required parameters only', () => {
     const ruleData = {
-      id: '2',
+      id: 2,
       oldString: 'search text',
       newString: 'replace text'
     };
 
     const rule = RewriteRule.fromPlainObject(ruleData);
     
-    expect(rule.id).toBe('2');
+    expect(rule.id).toBe(2);
     expect(rule.oldString).toBe('search text');
     expect(rule.newString).toBe('replace text');
     expect(rule.urlPattern).toBeUndefined();
@@ -45,7 +45,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
 
   it('should create RewriteRule instance with isRegex false when explicitly set', () => {
     const ruleData = {
-      id: '3',
+      id: 3,
       oldString: 'pattern',
       newString: 'replacement',
       urlPattern: 'https://test.com/*',
@@ -54,7 +54,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
 
     const rule = RewriteRule.fromPlainObject(ruleData);
     
-    expect(rule.id).toBe('3');
+    expect(rule.id).toBe(3);
     expect(rule.oldString).toBe('pattern');
     expect(rule.newString).toBe('replacement');
     expect(rule.urlPattern).toBe('https://test.com/*');
@@ -63,7 +63,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
 
   it('should create RewriteRule instance with urlPattern undefined when not provided', () => {
     const ruleData = {
-      id: '4',
+      id: 4,
       oldString: 'test',
       newString: 'result',
       isRegex: true
@@ -71,7 +71,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
 
     const rule = RewriteRule.fromPlainObject(ruleData);
     
-    expect(rule.id).toBe('4');
+    expect(rule.id).toBe(4);
     expect(rule.oldString).toBe('test');
     expect(rule.newString).toBe('result');
     expect(rule.urlPattern).toBeUndefined();
@@ -80,7 +80,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
 
   it('should preserve null values for optional parameters', () => {
     const ruleData = {
-      id: '5',
+      id: 5,
       oldString: 'source',
       newString: 'target',
       urlPattern: null,
@@ -89,7 +89,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
 
     const rule = RewriteRule.fromPlainObject(ruleData);
     
-    expect(rule.id).toBe('5');
+    expect(rule.id).toBe(5);
     expect(rule.oldString).toBe('source');
     expect(rule.newString).toBe('target');
     expect(rule.urlPattern).toBe(null);
