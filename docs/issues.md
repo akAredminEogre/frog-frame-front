@@ -16,9 +16,9 @@
 - [x] 編集後のタブリロード
 - [ ] RewriteRuleオブジェクトを全部setしない
 - [ ] indexedDBへの完全移行
-  - [ ] RewriteRuleのidをstring→numberに変更
-  - [ ] テストコードの修正
-  - [ ] 移行期間のid文字列変換ロジックを削除
+  - [x] RewriteRuleのidをstring→numberに変更
+  - [x] テストコードの修正
+  - [x] 移行期間のid文字列変換ロジックを削除
   - [ ] repositoryの切り替え
 - [ ] RewriteRulesのtoObject()の廃止
 
