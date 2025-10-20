@@ -5,6 +5,7 @@ import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { Tabs } from 'src/domain/value-objects/Tabs';
 import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
+import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
 
 /**
  * UpdateRewriteRuleUseCase.execute - 正常系テスト
@@ -19,11 +20,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
 
   beforeEach(() => {
     // モックリポジトリの初期化
-    mockRepository = {
-      getById: vi.fn(),
-      getAll: vi.fn(),
-      set: vi.fn(),
-    };
+    mockRepository = createMockRewriteRuleRepository();
 
     // モックChromeTabsServiceの初期化
     mockChromeTabsService = createMockTabsService();
