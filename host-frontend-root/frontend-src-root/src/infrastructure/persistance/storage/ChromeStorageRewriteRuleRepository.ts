@@ -33,7 +33,7 @@ export class ChromeStorageRewriteRuleRepository implements IRewriteRuleRepositor
     return new RewriteRules();
   }
 
-  async getById(id: string | number): Promise<RewriteRule> {
+  async getById(id: number): Promise<RewriteRule> {
     const allRules = await this.getAll();
     return allRules.getById(id);
   }
