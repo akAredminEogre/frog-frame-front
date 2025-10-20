@@ -36,5 +36,25 @@
 ## 本スクラムでの作業実績内容
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+- RewriteRule.idの型定義をstringからnumberに変更
+- 関連する全ての実装ファイルとテストファイルを更新
+- 型変更に伴うバリデーションとエラーハンドリングを調整
 
 ## 修正したファイル
+- src/domain/entities/RewriteRule/RewriteRule.ts
+- src/application/ports/IRewriteRuleRepository.ts
+- src/domain/errors/RewriteRuleNotFoundError.ts
+- src/application/usecases/rule/UpdateRewriteRuleUseCase.ts
+- src/domain/value-objects/RewriteRules.ts
+- src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository.ts
+- src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository.ts
+- src/application/usecases/rule/LoadRewriteRuleForEditUseCase.ts
+- src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts
+- src/components/pages/EditRulePage.tsx
+- tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts
+- tests/unit/domain/entities/RewriteRule/fromPlainObject/normal-cases.test.ts
+- tests/unit/domain/entities/RewriteRule/fromPlainObject/error-cases.test.ts
+- tests/unit/application/usecases/rule/LoadRewriteRuleForEditUseCase/execute/normal-cases.test.ts
+- tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository/getById/error-cases.test.ts
+- tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository/getById/Abend/error-cases.test.ts
+- tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository/getById/normal-cases.test.ts
