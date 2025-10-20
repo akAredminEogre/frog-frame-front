@@ -38,12 +38,12 @@ describe('ChromeStorageRewriteRuleRepository.getAll - 正常系', () => {
   it('should correctly call chrome.storage API, return RewriteRules instance with stored data, and return Promise', async () => {
     // Arrange
     const storedRulesObject = {
-      '1': {
+      1: {
         id: 1,
         oldString: 'pattern1',
         newString: 'replacement1'
       },
-      '2': {
+      2: {
         id: 2,
         oldString: 'pattern2',
         newString: 'replacement2'
