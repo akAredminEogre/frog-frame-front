@@ -36,7 +36,7 @@ describe('ChromeStorageRewriteRuleRepository.getById - 異常系', () => {
   it('should throw RewriteRuleNotFoundError when rule with specified ID does not exist', async () => {
     // Arrange
     const storedRulesObject = {
-      '1': {
+      1: {
         id: 1,
         oldString: 'pattern1',
         newString: 'replacement1'
