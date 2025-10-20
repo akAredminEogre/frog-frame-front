@@ -75,7 +75,8 @@ kk=01
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
-IRewriteRuleRepositoryをimplementsしているクラスが2つありますが、どちらか1つに統一できませんか？
-具体的には、ChromeRuntimeRewriteRuleRepositoryに統一し、そのなかで、DexieRewriteRuleRepositoryを利用するという実装です。
+    const rewriteRuleRepository: IRewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository();
+    const applySavedRulesOnPageLoadUseCase = new ApplySavedRulesOnPageLoadUseCase(rewriteRuleRepository);
+    をDIコンテナで解決するように修正してください。
 
 ---
