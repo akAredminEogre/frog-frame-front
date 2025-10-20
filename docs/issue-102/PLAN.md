@@ -2,10 +2,10 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] RewriteRule.idの型定義をstringからnumberに変更
-- [ ] RewriteRule.idに関連するコード（生成、比較、使用箇所）を調査・修正
-- [ ] 影響範囲の特定とテストケースの更新
-- [ ] test-and-checkを実行して全ての不具合を修正
+- [x] RewriteRule.idの型定義をstringからnumberに変更
+- [x] RewriteRule.idに関連するコード（生成、比較、使用箇所）を調査・修正
+- [x] 影響範囲の特定とテストケースの更新
+- [x] test-and-checkを実行して全ての不具合を修正
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
