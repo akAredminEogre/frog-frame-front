@@ -31,15 +31,13 @@ export class ChromeTabsService implements IChromeTabsService {
 
   async sendApplyAllRulesMessage(tab: Tab): Promise<any> {
     try {
-      const tabId = tab.getTabId().value;
-      const tabUrl = tab.getTabUrl().value;
-      const message = {
-        type: 'applyAllRules',
-        tabUrl: tabUrl
-      };
-      
-      const response = await chrome.tabs.sendMessage(tabId, message);
-      
+      const response = await chrome.tabs.sendMessage(
+        tab.getTabId().value,
+        {
+          type: 'applyAllRules',
+          tabUrl: tab.getTabUrl().value
+        }
+      );
       return response;
     } catch (error) {
       console.error('[ChromeTabsService] sendApplyAllRulesMessage error:', error);
