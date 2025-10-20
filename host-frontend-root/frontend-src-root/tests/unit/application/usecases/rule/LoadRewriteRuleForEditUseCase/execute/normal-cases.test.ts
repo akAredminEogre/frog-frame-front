@@ -27,9 +27,9 @@ describe('LoadRewriteRuleForEditUseCase.execute - 正常系', () => {
   it.each([
     {
       description: '存在するルールIDでルールが正常に取得できる',
-      ruleId: 'rule-001',
+      ruleId: 1,
       mockRule: new RewriteRule(
-        'rule-001',
+        1,
         'oldText',
         'newText',
         'https://example.com',
@@ -38,9 +38,9 @@ describe('LoadRewriteRuleForEditUseCase.execute - 正常系', () => {
     },
     {
       description: '正規表現を含むルールが正常に取得できる',
-      ruleId: 'rule-002',
+      ruleId: 2,
       mockRule: new RewriteRule(
-        'rule-002',
+        2,
         '\\d{4}-\\d{13}',
         '<a href="https://example.com/$1">$1</a>',
         'https://example.com',
