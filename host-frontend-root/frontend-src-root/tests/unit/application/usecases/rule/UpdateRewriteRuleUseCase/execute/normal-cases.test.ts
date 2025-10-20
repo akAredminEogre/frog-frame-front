@@ -36,7 +36,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
   it.each([
     {
       description: '通常のルールが正常に更新できる',
-      id: 'rule-001',
+      id: 1,
       params: {
         oldString: 'oldText',
         newString: 'newText',
@@ -44,7 +44,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         isRegex: false
       },
       expectedRule: new RewriteRule(
-        'rule-001',
+        1,
         'oldText',
         'newText',
         'https://example.com',
@@ -53,7 +53,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
     },
     {
       description: '正規表現を含むルールが正常に更新できる',
-      id: 'rule-002',
+      id: 2,
       params: {
         oldString: '\\d{4}-\\d{13}',
         newString: '<a href="https://example.com/$1">$1</a>',
@@ -61,7 +61,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         isRegex: true
       },
       expectedRule: new RewriteRule(
-        'rule-002',
+        2,
         '\\d{4}-\\d{13}',
         '<a href="https://example.com/$1">$1</a>',
         'https://example.com',
@@ -70,7 +70,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
     },
     {
       description: 'URLパターンを持つルールが正常に更新できる',
-      id: 'rule-003',
+      id: 3,
       params: {
         oldString: 'search',
         newString: 'replace',
@@ -78,7 +78,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         isRegex: false
       },
       expectedRule: new RewriteRule(
-        'rule-003',
+        3,
         'search',
         'replace',
         'https://.*\\.example\\.com/.*',

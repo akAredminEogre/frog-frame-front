@@ -16,7 +16,7 @@ export class UpdateRewriteRuleUseCase {
   ) {}
 
   async execute(
-    id: string,
+    id: number,
     params: RewriteRuleParams
   ): Promise<void> {
     const rule = RewriteRule.fromParams(id, params);
@@ -34,7 +34,7 @@ export class UpdateRewriteRuleUseCase {
    * ルール更新後に該当タブをリロードする
    */
   private async reloadAllTabsAfterRuleUpdate(
-    id: string,
+    id: number,
     params: RewriteRuleParams
   ): Promise<void> {
     // 早期リターン: urlPatternが空文字列やundefinedの場合
