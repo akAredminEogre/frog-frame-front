@@ -53,24 +53,24 @@ chromeTabsService.sendApplyAllRulesMessage(currentTab).catch(() => {
 ## DAILY-SCRUM単位のタスク
 
 ### DAILY-SCRUM 01: 調査と設計
-- [ ] コンテンツスクリプト注入可能なURLパターンの調査
+- [x] コンテンツスクリプト注入可能なURLパターンの調査
   - WXTフレームワークのmatchesパターンの仕様確認
   - chrome://、about://、file://などの特殊URLの動作確認
-- [ ] 既存の関連コードの調査
+- [x] 既存の関連コードの調査
   - `matchUrl.ts`の実装確認
   - 他のメッセージ送信箇所での同様の問題の有無確認
-- [ ] 解決アプローチの決定と設計
+- [x] 解決アプローチの決定と設計
   - アプローチ1とアプローチ2の詳細比較
   - URLフィルタリングロジックの設計（アプローチ1の場合）
 
 ### DAILY-SCRUM 02: 実装
-- [ ] URLフィルタリング機能の実装
+- [x] URLフィルタリング機能の実装
   - `domain/value-objects/`または`domain/entities/`にURL判定ロジック追加
   - 注入可能URLパターンのホワイトリスト/ブラックリスト定義
-- [ ] `tabs.onUpdated.ts`の修正
+- [x] `tabs.onUpdated.ts`の修正
   - URLフィルタリングを適用
   - 適切なエラーハンドリング追加
-- [ ] `ChromeTabsService`の改善（必要に応じて）
+- [x] `ChromeTabsService`の改善（必要に応じて）
   - エラーログの最適化
   - エラー種別の分類
 
