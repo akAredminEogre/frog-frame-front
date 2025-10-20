@@ -26,15 +26,7 @@ export default defineContentScript({
       }
       // 2) backgroundからの全ルール適用メッセージ
       else if (request.type === 'applyAllRules') {
-        console.log('[content] Received applyAllRules message', { 
-          tabUrl: request.tabUrl,
-          documentBody: !!document.body,
-          currentUrl: window.location.href
-        });
-        
-        console.log('[content] Calling applySavedRulesOnPageLoadUseCase.applyAllRules');
         applySavedRulesOnPageLoadUseCase.applyAllRules(document.body, request.tabUrl).then(() => {
-          console.log('[content] applySavedRulesOnPageLoadUseCase.applyAllRules completed successfully');
           sendResponse({ success: true });
         }).catch((error) => {
           console.error('[content] applySavedRulesOnPageLoadUseCase.applyAllRules failed:', error);

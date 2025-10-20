@@ -38,19 +38,7 @@ export class ChromeTabsService implements IChromeTabsService {
         tabUrl: tabUrl
       };
       
-      console.log('[ChromeTabsService] sendApplyAllRulesMessage called', { 
-        tabId, 
-        tabUrl, 
-        message 
-      });
-      
-      console.log('[ChromeTabsService] Calling chrome.tabs.sendMessage');
       const response = await chrome.tabs.sendMessage(tabId, message);
-      
-      console.log('[ChromeTabsService] chrome.tabs.sendMessage completed', { 
-        tabId, 
-        response 
-      });
       
       return response;
     } catch (error) {
@@ -79,10 +67,8 @@ export class ChromeTabsService implements IChromeTabsService {
 
   async reloadTab(tab: Tab): Promise<void> {
     const tabId = tab.getTabId().value;
-    console.log('[ChromeTabsService] reloadTab called', { tabId, tabUrl: tab.getTabUrl().value });
     try {
       await chrome.tabs.reload(tabId);
-      console.log('[ChromeTabsService] chrome.tabs.reload succeeded', { tabId });
     } catch (error) {
       console.error('[ChromeTabsService] reloadTab error:', { tabId, error });
       throw error;

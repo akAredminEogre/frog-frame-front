@@ -44,7 +44,6 @@ export class ChromeCurrentTabService implements ICurrentTabService {
       throw new Error('No active tab found');
     }
 
-    console.log(`[ChromeCurrentTabService] Creating CurrentTab with tabId: ${tabId}, url: ${tabUrl}`);
     return new Tab(tabId!, tabUrl);
   }
 }
