@@ -75,17 +75,18 @@ chromeTabsService.sendApplyAllRulesMessage(currentTab).catch(() => {
   - エラー種別の分類
 
 ### DAILY-SCRUM 03: テストとドキュメント
-- [ ] ユニットテストの追加/更新
+- [x] ユニットテストの追加/更新
   - URLフィルタリングロジックのテスト
   - `tabs.onUpdated`のテスト
   - エラーハンドリングのテスト
-- [ ] E2Eテストの確認
-  - chrome://ページでのエラー発生確認
+- [x] E2Eテストの確認
+  - chrome://ページでのエラー発生確認（about:blankで代替）
   - 通常ページでのルール適用確認
-- [ ] 既存テストの実行と修正
-  - `make test-and-lint`の実行
+  - Chrome Web Storeページでのエラー発生確認
+- [x] 既存テストの実行と修正
+  - `make test-and-check`の実行
   - 失敗するテストの修正
-- [ ] ドキュメント更新（必要に応じて）
+- [x] ドキュメント更新（必要に応じて）
 
 ## ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
