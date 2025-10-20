@@ -7,7 +7,7 @@ import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/Close
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 
 interface EditRulePageProps {
-  ruleId?: string; // 編集対象のルールID（URLパラメータから取得想定）
+  ruleId?: string; // 編集対象のルールID（URLパラメータから取得想定、numberに変換して使用）
 }
 
 export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
@@ -30,7 +30,7 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
       setError(null);
       try {
         const loadUseCase = container.resolve(LoadRewriteRuleForEditUseCase);
-        const loadedRule = await loadUseCase.execute(ruleId);
+        const loadedRule = await loadUseCase.execute(Number(ruleId));
         
         if (loadedRule) {
           setRule(loadedRule);
@@ -58,7 +58,7 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
     setIsSaving(true);
     try {
       const updateUseCase = container.resolve(UpdateRewriteRuleUseCase);
-      await updateUseCase.execute(ruleId, rule);
+      await updateUseCase.execute(Number(ruleId), rule);
       
       alert('Rule updated successfully!');
     } catch (error) {

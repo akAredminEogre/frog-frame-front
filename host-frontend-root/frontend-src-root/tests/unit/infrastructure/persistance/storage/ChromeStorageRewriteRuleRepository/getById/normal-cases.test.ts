@@ -36,15 +36,15 @@ describe('ChromeStorageRewriteRuleRepository.getById - 正常系', () => {
   it('should return RewriteRule instance when rule with specified ID exists', async () => {
     // Arrange
     const storedRulesObject = {
-      'rule-1': {
-        id: 'rule-1',
+      '1': {
+        id: 1,
         oldString: 'pattern1',
         newString: 'replacement1',
         urlPattern: '',
         isRegex: false
       },
-      'rule-2': {
-        id: 'rule-2',
+      '2': {
+        id: 2,
         oldString: 'pattern2',
         newString: 'replacement2',
         urlPattern: 'https://example.com',
@@ -55,11 +55,11 @@ describe('ChromeStorageRewriteRuleRepository.getById - 正常系', () => {
     mockChromeStorageLocal.get.mockResolvedValue({ RewriteRules: storedRulesObject });
 
     // Act
-    const result = await repository.getById('rule-1');
+    const result = await repository.getById(1);
 
     // Assert
     expect(result).toBeInstanceOf(RewriteRule);
-    expect(result.id).toBe('rule-1');
+    expect(result.id).toBe(1);
     expect(result.oldString).toBe('pattern1');
     expect(result.newString).toBe('replacement1');
     expect(result.urlPattern).toBe('');
@@ -69,8 +69,8 @@ describe('ChromeStorageRewriteRuleRepository.getById - 正常系', () => {
   it('should correctly retrieve rule with all properties', async () => {
     // Arrange
     const storedRulesObject = {
-      'rule-with-all-props': {
-        id: 'rule-with-all-props',
+      '3': {
+        id: 3,
         oldString: 'old',
         newString: 'new',
         urlPattern: 'https://test.com/*',
@@ -81,11 +81,11 @@ describe('ChromeStorageRewriteRuleRepository.getById - 正常系', () => {
     mockChromeStorageLocal.get.mockResolvedValue({ RewriteRules: storedRulesObject });
 
     // Act
-    const result = await repository.getById('rule-with-all-props');
+    const result = await repository.getById(3);
 
     // Assert
     expect(result).toBeInstanceOf(RewriteRule);
-    expect(result.id).toBe('rule-with-all-props');
+    expect(result.id).toBe(3);
     expect(result.oldString).toBe('old');
     expect(result.newString).toBe('new');
     expect(result.urlPattern).toBe('https://test.com/*');
