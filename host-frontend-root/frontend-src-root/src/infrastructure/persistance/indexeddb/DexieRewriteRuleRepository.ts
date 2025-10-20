@@ -1,3 +1,4 @@
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
@@ -7,19 +8,14 @@ import { dexieDatabase, RewriteRuleSchema } from './DexieDatabase';
  * Dexie.js (IndexedDB) を使用したRewriteRuleリポジトリの実装
  * Clean Architectureのインフラストラクチャ層に配置
  * RewriteRuleの永続化をIndexedDBで提供
- * Dexie.js APIを直接活用した実装
- *
- * 注意: 現時点では IRewriteRuleRepository を実装していません。
- * これは既存の ChromeStorageRewriteRuleRepository への影響を最小化し、
- * DexieRewriteRuleRepository 特有の実装に集中するためです。
- * 将来的には IRewriteRuleRepository を実装する予定です。
+ * IRewriteRuleRepositoryインターフェースを実装
  *
  * ID型について:
  * - DB層: number型の自動採番ID
- * - Domain層: number型のID（string型から変更）
+ * - Domain層: number型のID
  * - Repository層では型変換不要
  */
-export class DexieRewriteRuleRepository {
+export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
   private readonly database = dexieDatabase;
 
   /**
