@@ -20,7 +20,7 @@ export class UpdateRewriteRuleUseCase {
     params: RewriteRuleParams
   ): Promise<void> {
     const rule = RewriteRule.fromParams(id, params);
-    await this.rewriteRuleRepository.set(rule);
+    await this.rewriteRuleRepository.update(rule);
 
     // ルール更新後、該当タブをリロード(失敗してもルール保存は成功)
     try {
