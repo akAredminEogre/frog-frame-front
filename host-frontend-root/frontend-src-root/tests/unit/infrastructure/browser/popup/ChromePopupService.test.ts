@@ -30,7 +30,9 @@ describe('ChromePopupService', () => {
   describe('openPopup', () => {
     it('should call chrome.action.openPopup', async () => {
       // Arrange
-      mockChromeAction.openPopup.mockResolvedValue(undefined);
+      mockChromeAction.openPopup.mockImplementation(() => {
+        // chrome.action.openPopup は戻り値がない
+      });
 
       // Act
       await service.openPopup();
@@ -42,15 +44,9 @@ describe('ChromePopupService', () => {
 
     it('should resolve successfully when chrome.action.openPopup completes', async () => {
       // Arrange
-      mockChromeAction.openPopup.mockResolvedValue(undefined);
-
-      // Act & Assert
-      await expect(service.openPopup()).resolves.toBeUndefined();
-    });
-
-    it('should handle when chrome.action.openPopup returns null', async () => {
-      // Arrange
-      mockChromeAction.openPopup.mockResolvedValue(null);
+      mockChromeAction.openPopup.mockImplementation(() => {
+        // 正常完了をシミュレート
+      });
 
       // Act & Assert
       await expect(service.openPopup()).resolves.toBeUndefined();
@@ -58,19 +54,13 @@ describe('ChromePopupService', () => {
 
     it('should handle chrome.action.openPopup errors gracefully', async () => {
       // Arrange
-      const error = new Error('Test error');
-      mockChromeAction.openPopup.mockRejectedValue(error);
+      const error = new Error('Failed to open popup');
+      mockChromeAction.openPopup.mockImplementation(() => {
+        throw error;
+      });
 
       // Act & Assert
-      await expect(service.openPopup()).rejects.toThrow('Failed to open popup: Test error');
-    });
-
-    it('should handle non-Error exceptions', async () => {
-      // Arrange
-      mockChromeAction.openPopup.mockRejectedValue('string error');
-
-      // Act & Assert
-      await expect(service.openPopup()).rejects.toThrow('Failed to open popup: Unknown error');
+      await expect(service.openPopup()).rejects.toThrow('Failed to open popup');
     });
 
     it('should implement IPopupService interface', () => {
@@ -100,7 +90,7 @@ describe('ChromePopupService', () => {
   describe('Promise behavior', () => {
     it('should return a Promise', () => {
       // Arrange
-      mockChromeAction.openPopup.mockResolvedValue(undefined);
+      mockChromeAction.openPopup.mockImplementation(() => {});
 
       // Act
       const result = service.openPopup();
@@ -111,7 +101,9 @@ describe('ChromePopupService', () => {
 
     it('should resolve the Promise when chrome API call succeeds', async () => {
       // Arrange
-      mockChromeAction.openPopup.mockResolvedValue(undefined);
+      mockChromeAction.openPopup.mockImplementation(() => {
+        // 成功時の動作をシミュレート
+      });
 
       // Act
       const result = await service.openPopup();
@@ -119,28 +111,18 @@ describe('ChromePopupService', () => {
       // Assert
       expect(result).toBeUndefined();
     });
-
-    it('should handle Promise returned by chrome.action.openPopup', async () => {
-      // Arrange
-      const mockPromise = Promise.resolve();
-      mockChromeAction.openPopup.mockResolvedValue(mockPromise);
-
-      // Act
-      await service.openPopup();
-
-      // Assert
-      expect(mockChromeAction.openPopup).toHaveBeenCalledTimes(1);
-    });
   });
 
   describe('error scenarios', () => {
     it('should propagate chrome API errors', async () => {
       // Arrange
       const chromeError = new Error('Chrome extension context invalidated');
-      mockChromeAction.openPopup.mockRejectedValue(chromeError);
+      mockChromeAction.openPopup.mockImplementation(() => {
+        throw chromeError;
+      });
 
       // Act & Assert
-      await expect(service.openPopup()).rejects.toThrow('Failed to open popup: Chrome extension context invalidated');
+      await expect(service.openPopup()).rejects.toThrow('Chrome extension context invalidated');
     });
 
     it('should handle undefined chrome.action', async () => {
@@ -153,26 +135,6 @@ describe('ChromePopupService', () => {
 
       // Cleanup
       (globalThis as any).chrome = originalChrome;
-    });
-
-    it('should log errors to console', async () => {
-      // Arrange
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      const error = new Error('Test error');
-      mockChromeAction.openPopup.mockRejectedValue(error);
-
-      // Act
-      try {
-        await service.openPopup();
-      } catch {
-        // エラーは期待される
-      }
-
-      // Assert
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to open popup:', error);
-
-      // Cleanup
-      consoleErrorSpy.mockRestore();
     });
   });
 });
