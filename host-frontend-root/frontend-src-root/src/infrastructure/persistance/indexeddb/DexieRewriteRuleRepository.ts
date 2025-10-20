@@ -46,50 +46,15 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
    * @returns RewriteRulesオブジェクト
    */
   async getAll(): Promise<RewriteRules> {
-    console.log('[DexieRewriteRuleRepository] getAll() started');
-    
     try {
-      console.log('[DexieRewriteRuleRepository] Accessing database.rewriteRules table');
       const rulesObject: Record<string, RewriteRule> = {};
-      let processedCount = 0;
 
       await this.database.rewriteRules.each(schema => {
-        processedCount++;
-        console.log(`[DexieRewriteRuleRepository] Processing rule ${processedCount}`, {
-          schema: {
-            id: schema.id,
-            oldString: schema.oldString,
-            newString: schema.newString,
-            urlPattern: schema.urlPattern,
-            isRegex: schema.isRegex
-          }
-        });
-        
         const rule = this.convertSchemaToRule(schema);
-        console.log(`[DexieRewriteRuleRepository] Converted schema to rule ${processedCount}`, {
-          rule: {
-            id: rule.id,
-            oldString: rule.oldString,
-            newString: rule.newString,
-            urlPattern: rule.urlPattern,
-            isRegex: rule.isRegex
-          }
-        });
-        
         rulesObject[rule.id] = rule;
       });
 
-      console.log('[DexieRewriteRuleRepository] Finished processing all rules', {
-        totalRulesProcessed: processedCount,
-        rulesObjectKeys: Object.keys(rulesObject)
-      });
-
-      const rewriteRules = new RewriteRules(rulesObject);
-      console.log('[DexieRewriteRuleRepository] Created RewriteRules object', {
-        rewriteRulesArrayLength: rewriteRules.toArray().length
-      });
-      
-      return rewriteRules;
+      return new RewriteRules(rulesObject);
     } catch (error) {
       console.error('[DexieRewriteRuleRepository] Error in getAll():', error);
       throw error;

@@ -17,11 +17,7 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
    * @returns RewriteRulesオブジェクト
    */
   async getAll(): Promise<RewriteRules> {
-    console.log('[ChromeRuntimeRewriteRuleRepository] getAll() started');
-    
     try {
-      console.log('[ChromeRuntimeRewriteRuleRepository] Sending getAllRules message to background');
-      
       const response = await chrome.runtime.sendMessage({ type: 'getAllRules' });
       
       if (!response.success) {
@@ -29,25 +25,9 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
         throw new Error(`Failed to get rules from background: ${response.error}`);
       }
       
-      console.log('[ChromeRuntimeRewriteRuleRepository] Received rules from background', {
-        rulesCount: response.rules.length
-      });
-      
       const rulesObject: Record<string, RewriteRule> = {};
-      let processedCount = 0;
 
       response.rules.forEach((ruleData: any) => {
-        processedCount++;
-        console.log(`[ChromeRuntimeRewriteRuleRepository] Processing rule ${processedCount}`, {
-          ruleData: {
-            id: ruleData.id,
-            oldString: ruleData.oldString,
-            newString: ruleData.newString,
-            urlPattern: ruleData.urlPattern,
-            isRegex: ruleData.isRegex
-          }
-        });
-        
         const rule = new RewriteRule(
           ruleData.id,
           ruleData.oldString,
@@ -56,30 +36,10 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
           ruleData.isRegex
         );
         
-        console.log(`[ChromeRuntimeRewriteRuleRepository] Created RewriteRule ${processedCount}`, {
-          rule: {
-            id: rule.id,
-            oldString: rule.oldString,
-            newString: rule.newString,
-            urlPattern: rule.urlPattern,
-            isRegex: rule.isRegex
-          }
-        });
-        
         rulesObject[rule.id] = rule;
       });
 
-      console.log('[ChromeRuntimeRewriteRuleRepository] Finished processing all rules', {
-        totalRulesProcessed: processedCount,
-        rulesObjectKeys: Object.keys(rulesObject)
-      });
-
-      const rewriteRules = new RewriteRules(rulesObject);
-      console.log('[ChromeRuntimeRewriteRuleRepository] Created RewriteRules object', {
-        rewriteRulesArrayLength: rewriteRules.toArray().length
-      });
-      
-      return rewriteRules;
+      return new RewriteRules(rulesObject);
     } catch (error) {
       console.error('[ChromeRuntimeRewriteRuleRepository] Error in getAll():', error);
       throw error;
