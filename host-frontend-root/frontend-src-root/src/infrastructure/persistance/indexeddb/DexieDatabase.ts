@@ -21,7 +21,7 @@ export interface RewriteRuleSchema {
  * Clean Architectureのインフラストラクチャ層に配置
  * RewriteRulesの永続化を提供
  */
-export class DexieDatabase extends Dexie {
+class DexieDatabase extends Dexie {
   rewriteRules!: Table<RewriteRuleSchema, number>;
 
   constructor() {
