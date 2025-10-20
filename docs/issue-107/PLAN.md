@@ -2,10 +2,10 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] テストコード内の `let mockRepository: IRewriteRuleRepository;` を直接作成している箇所を特定する
-- [ ] モッククラスを作成する（例：MockRewriteRuleRepository）
-- [ ] 特定した箇所をモッククラスのimportに置き換える
-- [ ] テストが正常に動作することを確認する
+- [x] テストコード内の `let mockRepository: IRewriteRuleRepository;` を直接作成している箇所を特定する
+- [x] モッククラスを作成する（例：MockRewriteRuleRepository）
+- [x] 特定した箇所をモッククラスのimportに置き換える
+- [x] テストが正常に動作することを確認する
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->

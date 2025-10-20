@@ -13,8 +13,8 @@
 - 新規作成：MockRewriteRuleRepositoryクラス
 
 ## スクラム内残タスク
-- [ ] テストコード内の `let mockRepository: IRewriteRuleRepository;` を直接作成している箇所を特定する
-- [ ] モッククラスを作成する（例：MockRewriteRuleRepository）
+- [x] テストコード内の `let mockRepository: IRewriteRuleRepository;` を直接作成している箇所を特定する
+- [x] モッククラスを作成する（例：MockRewriteRuleRepository）
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -35,4 +35,16 @@
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+テストコード内で直接作成していた `mockRepository: IRewriteRuleRepository` のリファクタリングを完了しました。
+
+### 実装内容
+1. モック作成用関数 `createMockRewriteRuleRepository` を作成
+2. 直接モック作成していた2つのテストファイルをリファクタリング：
+   - UpdateRewriteRuleUseCase/execute/normal-cases.test.ts
+   - LoadRewriteRuleForEditUseCase/execute/normal-cases.test.ts
+3. 既存のテストパターンに合わせた実装（createMockTabsServiceと同様の構造）
+
 ## 修正したファイル
+- `tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository.ts` (新規作成)
+- `tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts`
+- `tests/unit/application/usecases/rule/LoadRewriteRuleForEditUseCase/execute/normal-cases.test.ts`
