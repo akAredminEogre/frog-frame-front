@@ -51,4 +51,39 @@ DAILY-SCRUM 02でコア実装とユニットテストを完了しました。今
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+DAILY-SCRUM 03では、Issue-108のテストとレビューフィードバック対応を3回の進捗で完了しました:
+
+### 01回目の進捗
+1. **E2Eテストの追加**
+   - `tests/e2e/restricted-url-handling.spec.ts` を新規作成
+   - 制限されたURL(about:blank)でエラーが発生しないことを確認するテスト
+   - 通常のページでルールが正常に適用されることを確認するテスト
+   - Issue-108の受け入れ条件をカバー
+
+2. **テスト実行結果**
+   - `make test-and-check` を実行し、すべてのテストが合格
+   - ユニットテスト: 293テスト合格
+   - E2Eテスト: 11テスト合格（新規2テスト追加）
+
+### 02回目の進捗
+レビューコメントに基づき、Chrome Web StoreのURLでのエラーハンドリングテストを追加:
+- 外部URL(Chrome Web Store: https://chrome.google.com/webstore/)でエラーが発生しないことを確認
+- URLがリダイレクトされる場合(chromewebstore.google.com)も考慮した実装
+- E2Eテスト: 12テスト合格（新規1テスト追加、合計3テストに）
+
+### 03回目の進捗
+レビューコメントに基づき、コンソールエラー検証のアサーションを明示的に追加:
+- Chrome Web Storeテストケースに`consoleMessages`配列を追加
+- `page.on('console', ...)` でエラーログを監視するリスナーを設定
+- `expect(consoleMessages).toHaveLength(0)` で明示的にエラーがないことを確認
+- 他の2つのテストと同じパターンでエラー監視を実装
+
+### Issue-108の受け入れ条件検証
+- ✓ chrome://extensions/などのURLでエラーログが出力されないこと（about:blankで代替テスト）
+- ✓ Chrome Web Storeなどの外部URLでエラーログが出力されないこと
+- ✓ 通常のウェブページでは引き続き正常にルールが適用されること
+- ✓ 既存のテストが全て合格すること
+
 ## 修正したファイル
+
+- `host-frontend-root/frontend-src-root/tests/e2e/restricted-url-handling.spec.ts` (新規作成・修正)
