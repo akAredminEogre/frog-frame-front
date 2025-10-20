@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
 
 /**
  * LoadRewriteRuleForEditUseCase.execute - 正常系テスト
@@ -14,11 +15,7 @@ describe('LoadRewriteRuleForEditUseCase.execute - 正常系', () => {
 
   beforeEach(() => {
     // モックリポジトリの初期化
-    mockRepository = {
-      getById: vi.fn(),
-      getAll: vi.fn(),
-      set: vi.fn(),
-    };
+    mockRepository = createMockRewriteRuleRepository();
 
     // テスト対象の初期化
     useCase = new LoadRewriteRuleForEditUseCase(mockRepository);
