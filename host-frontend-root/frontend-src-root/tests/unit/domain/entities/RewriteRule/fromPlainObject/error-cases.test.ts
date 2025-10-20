@@ -9,14 +9,14 @@ import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 describe('RewriteRule.fromPlainObject - 異常系', () => {
   it('should handle partially missing required parameters', () => {
     const ruleDataMissingNewString = {
-      id: '1',
+      id: 1,
       oldString: 'test'
       // newString is missing
     };
 
     const rule = RewriteRule.fromPlainObject(ruleDataMissingNewString);
     
-    expect(rule.id).toBe('1');
+    expect(rule.id).toBe(1);
     expect(rule.oldString).toBe('test');
     expect(rule.newString).toBeUndefined();
   });

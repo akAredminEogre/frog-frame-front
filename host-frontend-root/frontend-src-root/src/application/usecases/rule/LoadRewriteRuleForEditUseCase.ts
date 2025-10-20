@@ -9,7 +9,7 @@ export class LoadRewriteRuleForEditUseCase {
     private readonly rewriteRuleRepository: IRewriteRuleRepository
   ) {}
 
-  async execute(ruleId: string): Promise<RewriteRule> {
+  async execute(ruleId: number): Promise<RewriteRule> {
     return await this.rewriteRuleRepository.getById(ruleId);
   }
 }

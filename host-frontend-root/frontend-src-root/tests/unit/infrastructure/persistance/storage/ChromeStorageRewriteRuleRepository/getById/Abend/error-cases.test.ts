@@ -36,8 +36,8 @@ describe('ChromeStorageRewriteRuleRepository.getById - 異常系', () => {
   it('should throw RewriteRuleNotFoundError when rule with specified ID does not exist', async () => {
     // Arrange
     const storedRulesObject = {
-      'rule-1': {
-        id: 'rule-1',
+      '1': {
+        id: 1,
         oldString: 'pattern1',
         newString: 'replacement1'
       }
@@ -46,8 +46,8 @@ describe('ChromeStorageRewriteRuleRepository.getById - 異常系', () => {
     mockChromeStorageLocal.get.mockResolvedValue({ RewriteRules: storedRulesObject });
 
     // Act & Assert
-    await expect(repository.getById('non-existent-id')).rejects.toThrow(RewriteRuleNotFoundError);
-    await expect(repository.getById('non-existent-id')).rejects.toThrow('Rewrite rule with id "non-existent-id" not found');
+    await expect(repository.getById(999)).rejects.toThrow(RewriteRuleNotFoundError);
+    await expect(repository.getById(999)).rejects.toThrow('Rewrite rule with id "999" not found');
   });
 
   it('should throw RewriteRuleNotFoundError when storage is empty', async () => {
@@ -55,7 +55,7 @@ describe('ChromeStorageRewriteRuleRepository.getById - 異常系', () => {
     mockChromeStorageLocal.get.mockResolvedValue({});
 
     // Act & Assert
-    await expect(repository.getById('any-id')).rejects.toThrow(RewriteRuleNotFoundError);
-    await expect(repository.getById('any-id')).rejects.toThrow('Rewrite rule with id "any-id" not found');
+    await expect(repository.getById(888)).rejects.toThrow(RewriteRuleNotFoundError);
+    await expect(repository.getById(888)).rejects.toThrow('Rewrite rule with id "888" not found');
   });
 });
