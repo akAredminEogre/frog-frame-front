@@ -48,7 +48,7 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
   it('should correctly call chrome.storage API, add new rule to existing rules, and return Promise', async () => {
     // Arrange
     const existingRulesObject = {
-      '1': {
+      1: {
         id: 1,
         oldString: 'existing-pattern',
         newString: 'existing-replacement'
@@ -101,12 +101,12 @@ describe('ChromeStorageRewriteRuleRepository.set - 正常系', () => {
   it('should correctly overwrite existing rule with same ID', async () => {
     // Arrange
     const existingRulesObject = {
-      '1': {
+      1: {
         id: 1,
         oldString: 'old-pattern',
         newString: 'old-replacement'
       },
-      '2': {
+      2: {
         id: 2,
         oldString: 'other-pattern',
         newString: 'other-replacement'

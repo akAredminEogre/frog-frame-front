@@ -36,14 +36,14 @@ describe('ChromeStorageRewriteRuleRepository.getById - 正常系', () => {
   it('should return RewriteRule instance when rule with specified ID exists', async () => {
     // Arrange
     const storedRulesObject = {
-      '1': {
+      1: {
         id: 1,
         oldString: 'pattern1',
         newString: 'replacement1',
         urlPattern: '',
         isRegex: false
       },
-      '2': {
+      2: {
         id: 2,
         oldString: 'pattern2',
         newString: 'replacement2',
@@ -69,7 +69,7 @@ describe('ChromeStorageRewriteRuleRepository.getById - 正常系', () => {
   it('should correctly retrieve rule with all properties', async () => {
     // Arrange
     const storedRulesObject = {
-      '3': {
+      3: {
         id: 3,
         oldString: 'old',
         newString: 'new',
