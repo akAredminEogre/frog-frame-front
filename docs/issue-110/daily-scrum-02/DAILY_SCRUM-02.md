@@ -34,7 +34,16 @@ issue-110のすべてのタスクが正常に完了し、プルリクエスト�
 ## 本スクラムでの作業実績内容
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
-issue-110の完了状況を確認し、すべてのタスクが完了していることを確認しました。
+1. ブランチ操作のワークフロー化を実施
+   - issue-110で行ったブランチマージ → mixed reset → 選択的変更保持の手順を文書化
+   - workflow-merge-branch-then-mixed-reset.mdを作成
+   - ブランチ名をパラメータとして受け取れるよう設計
+
+2. レビューコメントに基づく修正を実施
+   - ワークフローファイルの形式をcline-instructions準拠に修正
+   - .clinerules/02-workflow-automation/配下に配置
+   - .claude/commandsから参照できるバージョンを作成
 
 ## 修正したファイル
-なし
+- .clinerules/02-workflow-automation/workflow-merge-branch-then-mixed-reset.md (新規作成・修正)
+- .claude/commands/workflow-merge-branch-then-mixed-reset.md (新規作成)
