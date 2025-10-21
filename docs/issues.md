@@ -34,6 +34,8 @@
 - [x] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 
 ## phase02
+- [ ] タブリロードのテストはapplication層で行う
+- [ ] EditPageのE2Eテスト修正
 - [ ] entrypointのUseCaseをDI解決
 - [ ] ドキュメント中のアプリルートに、アプリ名を含まない
 - [ ] e2eテストのローカル化
