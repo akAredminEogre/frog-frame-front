@@ -37,5 +37,13 @@ messageHandlers.tsのリファクタリング作業を進めていきます。
 ## 本スクラムでの作業実績内容
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+issue-106-feat-switch-to-indexeddbブランチからmessageHandlers.tsの変更を取り込み、ハンドラを個別ファイルに分離するリファクタリングを実施しました。
+- issue-106ブランチをマージし、mixed resetで未コミット状態に変更
+- messageHandlers.ts関連の変更のみを残して他の変更を破棄
+- getAllRulesHandlerは不要との指示により削除
+- test-and-checkを実行し、すべてのテストがパスすることを確認
 
 ## 修正したファイル
+- host-frontend-root/frontend-src-root/src/infrastructure/browser/router/messageHandlers.ts
+- host-frontend-root/frontend-src-root/src/infrastructure/browser/router/handlers/applyAllRulesHandler.ts (新規追加)
+- host-frontend-root/frontend-src-root/src/infrastructure/browser/router/handlers/pingHandler.ts (新規追加)
