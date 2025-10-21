@@ -69,8 +69,7 @@ content.tsでの手動での依存関係の作成を、DIコンテナを使用�
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
-- せっかくなので、contentContainerのユニットテストも、host-frontend-root/frontend-src-root/tests/unit/infrastructure/di/container/を参考に作成してください。
-- a61bd48591a2b6076b0c4cfade7e33fe8cea525c のplantumlのファイルをチェリーピックしてください
+- f510cff678812526c6e6fc27504e1ae3da359483 のplantumlのファイルをチェリーピックしてください
 - frog-frame-front\host-frontend-root\frontend-src-root\src\infrastructure\browser\router\messageHandlers.ts
   - 低凝集のロジックが集まってきました。applyAllRules、getAllRewriteRulesなどのハンドラごとに別ファイルに分割してください。messageHandlers.tsは各ハンドラをまとめてエクスポートするだけの役割にしてください。
   - 下記のロジックは細かい実装が見えすぎてしまっているので、getAllRulesUseCase.execute()の中で処理をするようにしてください。
