@@ -33,7 +33,7 @@ This project includes additional guidelines and automated workflows defined in t
 - **`.clinerules/05-project-specific-rules.md`** - Project-specific constraints:
   - WXT framework requirements
   - Repository information (branch strategy, PR process)
-  - Pre-completion checks (`test-and-check` workflow)
+  - Pre-completion checks (`test:check` workflow)
 
 ### Workflow Automation
 The **`.clinerules/02-workflow-automation/`** directory contains automated workflow definitions:
@@ -74,11 +74,11 @@ After `make dev` is running, open a new terminal for these commands:
 # Testing and linting (REQUIRED before completing any task)
 make test-and-lint
 
-# Quick check (tests with warnings, softer than test-and-lint)
+# Quick check (tests with warnings, softer than test:lint)
 make test-and-check
 
 # Individual test commands
-docker compose exec frontend npm run test           # Unit tests only
+docker compose exec frontend npm run test:unit      # Unit tests only
 docker compose exec frontend npm run test:e2e       # E2E tests only
 docker compose exec frontend npm run test:all       # Both unit and E2E tests
 
@@ -239,7 +239,7 @@ tests/unit/infrastructure/[category]/[ServiceName]/
 ### Test Frameworks
 - **Unit tests**: Vitest with happy-dom (files: `*.test.ts` in `tests/`)
 - **E2E tests**: Playwright (files: `*.spec.ts` in `tests/e2e/`)
-- Run both: `npm run test:all` or comprehensive `npm run test-and-lint`
+- Run both: `npm run test:all` or comprehensive `npm run test:lint`
 
 ## WXT Framework Specifics
 
