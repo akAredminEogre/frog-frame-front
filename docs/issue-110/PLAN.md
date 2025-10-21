@@ -2,13 +2,13 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] daily-scrum-01: messageHandlers.tsの変更を取り込む
-  - [ ] issue-106-feat-switch-to-indexeddbブランチを本ブランチにマージ
-  - [ ] マージしたコミットをmixed resetで未コミット状態にする
-  - [ ] messageHandlers.tsの変更と関連変更のみを残す（他の変更は破棄）
-  - [ ] test-and-checkを実行して動作確認
-  - [ ] PROGRESSドキュメントを作成
-  - [ ] コードレビュー依頼
+- [x] daily-scrum-01: messageHandlers.tsの変更を取り込む
+  - [x] issue-106-feat-switch-to-indexeddbブランチを本ブランチにマージ
+  - [x] マージしたコミットをmixed resetで未コミット状態にする
+  - [x] messageHandlers.tsの変更と関連変更のみを残す（他の変更は破棄）
+  - [x] test-and-checkを実行して動作確認
+  - [x] PROGRESSドキュメントを作成
+  - [x] コードレビュー依頼
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
