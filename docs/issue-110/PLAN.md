@@ -9,6 +9,11 @@
   - [x] test-and-checkを実行して動作確認
   - [x] PROGRESSドキュメントを作成
   - [x] コードレビュー依頼
+- [x] daily-scrum-02: ワークフローの作成と整備
+  - [x] ブランチ操作のワークフロー化（workflow-merge-branch-then-mixed-reset.md作成）
+  - [x] レビューコメントに基づくワークフローの形式修正
+  - [x] .claude/commandsから参照できるバージョンの作成
+  - [x] test-and-checkを実行して動作確認
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
