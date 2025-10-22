@@ -1,4 +1,4 @@
-# test-and-check-before-complete
+# test-check-before-complete
 
 Run tests and checks before marking tasks as complete.
 
