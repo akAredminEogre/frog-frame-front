@@ -33,7 +33,7 @@ export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
 
   private async saveRule(params: RewriteRuleParams): Promise<RewriteRule> {
     const rule = RewriteRule.fromParams(Date.now(), params);
-    await this.repository.set(rule);
+    await this.repository.create(rule);
     return rule;
   }
 

@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 import 'src/infrastructure/di/container';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
-import { ChromeStorageRewriteRuleRepository } from 'src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository';
+import { DexieRewriteRuleRepository } from 'src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
@@ -43,8 +43,8 @@ describe('DI Container - 完全自動化具体クラス登録確認テスト', (
       className: 'ContextMenuSetupUseCase'  
     },
     {
-      class: ChromeStorageRewriteRuleRepository,
-      className: 'ChromeStorageRewriteRuleRepository'
+      class: DexieRewriteRuleRepository,
+      className: 'DexieRewriteRuleRepository'
     },
     {
       class: LoadRewriteRuleForEditUseCase,
