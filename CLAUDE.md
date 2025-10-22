@@ -33,7 +33,7 @@ This project includes additional guidelines and automated workflows defined in t
 - **`.clinerules/05-project-specific-rules.md`** - Project-specific constraints:
   - WXT framework requirements
   - Repository information (branch strategy, PR process)
-  - Pre-completion checks (`test:check` workflow)
+  - Pre-completion checks (`testcheck` workflow)
 
 ### Workflow Automation
 The **`.clinerules/02-workflow-automation/`** directory contains automated workflow definitions:
@@ -72,15 +72,15 @@ After `make dev` is running, open a new terminal for these commands:
 
 ```bash
 # Testing and linting (REQUIRED before completing any task)
-make test-and-lint
+make testlint
 
-# Quick check (tests with warnings, softer than test:lint)
-make test-and-check
+# Quick check (tests with warnings, softer than make testlint)
+make testcheck
 
 # Individual test commands
-docker compose exec frontend npm run test:unit      # Unit tests only
-docker compose exec frontend npm run test:e2e       # E2E tests only
-docker compose exec frontend npm run test:all       # Both unit and E2E tests
+make unit         # Unit tests only
+make e2e          # E2E tests only
+make testall      # Both unit and E2E tests
 
 # Code quality checks
 docker compose exec frontend npm run compile        # TypeScript compilation check
@@ -95,7 +95,7 @@ docker compose exec frontend npm run knip:all           # Check for unused expor
 ### Critical Pre-Completion Check
 **IMPORTANT**: Before marking any task as complete, you MUST run:
 ```bash
-make test-and-lint
+make testlint
 ```
 This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
 
@@ -239,7 +239,7 @@ tests/unit/infrastructure/[category]/[ServiceName]/
 ### Test Frameworks
 - **Unit tests**: Vitest with happy-dom (files: `*.test.ts` in `tests/`)
 - **E2E tests**: Playwright (files: `*.spec.ts` in `tests/e2e/`)
-- Run both: `npm run test:all` or comprehensive `npm run test:lint`
+- Run both: `make testall` or comprehensive `make testlint`
 
 ## WXT Framework Specifics
 
