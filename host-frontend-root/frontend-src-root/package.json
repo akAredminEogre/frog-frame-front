@@ -11,9 +11,9 @@
     "build:firefox": "wxt build -b firefox",
     "storybook": "storybook dev -p 6006 --host 0.0.0.0 --no-open",
     "build-storybook": "storybook build",
-    "test": "vitest --run",
+    "test:unit": "vitest --run",
     "test:e2e": "npx playwright install chromium && playwright test",
-    "test:all": "npm run test  && npm run test:e2e",
+    "test:all": "npm run test:unit && npm run test:e2e",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
@@ -39,11 +39,10 @@
     "unused:fix": "npm run knip:fix; npm run tsr:write; npm run lint:fix",
     "unused:remove-broken-tests": "npm run compile 2>&1 | grep 'Cannot find module' | sed -n \"s/.*\\(tests\\/[^(]*\\).*/\\1/p\" | sort -u | xargs -I {} sh -c 'echo \"Removing broken test: {}\" && rm \"{}\"'",
     "unused:complete": "npm run unused:fix && npm run unused:remove-broken-tests && npm run compile",
-    "test-and-lint": "npm run unused:complete && npm run test:all && npm run knip:all && echo 'recursive test passed and knip passed, so no unused code remains!' || (echo 'Either tests or knip found issues. Please address them.' && exit 1)",
-    "test-and-check": "npm run compile && npm run test && npm run test:e2e && (npm run knip:all || true) && (npm run tsr:check || true) && (npm run lint || true) && echo 'Test-and-check completed. Check lint/knip/tsr warnings above if any.'"
+    "test:lint": "npm run unused:complete && npm run test:all && npm run knip:all && echo 'recursive test passed and knip passed, so no unused code remains!' || (echo 'Either tests or knip found issues. Please address them.' && exit 1)",
+    "test:check": "npm run compile && npm run test:unit && npm run test:e2e && (npm run knip:all || true) && (npm run tsr:check || true) && (npm run lint || true) && echo 'Test-and-check completed. Check lint/knip/tsr warnings above if any.'"
   },
   "dependencies": {
-    "dexie": "^4.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "reflect-metadata": "^0.2.2",
