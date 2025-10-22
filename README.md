@@ -51,23 +51,26 @@ make dev
 
 開発サーバーを停止するには、`Ctrl + C` を押してください。
 
-### test-and-lint
+### testlint
 `make dev` で開発サーバーを起動した後、別のターミナルで以下のコマンドを実行してください。
 ```bash
-make test-and-lint
+make testlint
 ```
 
 ## 利用可能なコマンド
 
 ```bash
-make help           # 利用可能なコマンドを表示
-make init-config    # Git設定を適用
-make init-dev       # 初回開発環境セットアップ
-make dev            # 開発サーバーを起動
-make down           # Dockerコンテナを停止
-make ps             # 実行中のコンテナを一覧表示
-make test-and-check # テストを実行（警告あり）
-make test-and-lint  # 包括的なテストとリント
+make help         # 利用可能なコマンドを表示
+make init-config  # Git設定を適用
+make init-dev     # 初回開発環境セットアップ
+make dev          # 開発サーバーを起動
+make down         # Dockerコンテナを停止
+make ps           # 実行中のコンテナを一覧表示
+make unit         # ユニットテストを実行
+make e2e          # E2Eテストを実行
+make testall      # 全テストを実行（ユニット + E2E）
+make testcheck    # テストを実行（警告あり）
+make testlint     # 包括的なテストとリント
 ```
 
 ## プロジェクト構造
