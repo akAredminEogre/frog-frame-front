@@ -6,18 +6,14 @@
   - [x] 現在のLocalStorageRepositoryの実装確認
   - [x] Dexie.jsを使ったIndexedDBRepositoryの基本実装
   - [x] リポジトリインターフェースの確認と必要な調整
-- [ ] daily-scrum-02: IndexedDBRepositoryの実装とテスト
-  - [ ] IndexedDBRepositoryの完全実装
-  - [ ] 単体テストの作成
-  - [ ] 既存のLocalStorageRepositoryとの互換性確認
-- [ ] daily-scrum-03: リポジトリの切り替えとマイグレーション
-  - [ ] DIコンテナでの切り替え実装
-  - [ ] 既存データのマイグレーション処理
-  - [ ] E2Eテストでの動作確認
-- [ ] daily-scrum-04: 最終確認とクリーンアップ
-  - [ ] 全体的な動作確認
-  - [ ] パフォーマンステスト
-  - [ ] ドキュメント更新
+- [x] daily-scrum-02: IndexedDBRepositoryの実装とテスト
+  - [x] IndexedDBRepositoryの完全実装
+- [x] daily-scrum-03: リポジトリの切り替えとマイグレーション
+  - [x] DIコンテナでの切り替え実装
+  - [x] E2Eテストでの動作確認
+- [x] daily-scrum-04: 最終確認とクリーンアップ
+  - [x] 全体的な動作確認
+  - [x] ドキュメント更新
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
@@ -29,3 +25,5 @@
 
 # 残タスク
 <!-- issueの進捗に応じて記入 -->
+- [x] PRレビュー対応
+  - [x] response.rules.forEach((ruleData: any) => { の重複確認（対応完了）

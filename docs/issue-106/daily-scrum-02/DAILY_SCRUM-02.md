@@ -71,4 +71,18 @@ getAllRewriteRulesHandler.ts では、データを取得して返すだけにし
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+PRレビューで指摘された二重データ変換の問題を解決しました。
+
+### 実施した修正内容
+- getAllRewriteRulesHandler.tsにおけるデータ変換処理（`rules.map(rule => ({...}))`）を削除
+- `GetAllRewriteRulesUseCase.execute()`から得られたrulesをそのまま返すように変更
+- ハンドラーの責務をシンプルなデータ返却のみに限定
+- データ変換の重複を排除し、ChromeRuntimeRewriteRuleRepositoryで一元的に処理
+
+### アーキテクチャの改善効果
+- データ変換の重複を排除し、処理効率が向上
+- ハンドラーの責務が明確化され、保守性が向上
+- 各層の責務が適切に分離された
+
 ## 修正したファイル
+- src/infrastructure/browser/router/handlers/getAllRewriteRulesHandler.ts （データ変換処理削除、シンプル化）
