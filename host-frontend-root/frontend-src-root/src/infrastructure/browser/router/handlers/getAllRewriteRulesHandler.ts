@@ -14,13 +14,7 @@ export const getAllRewriteRulesHandler = async () => {
     
     return { 
       success: true, 
-      rules: rules.map(rule => ({
-        id: rule.id,
-        oldString: rule.oldString,
-        newString: rule.newString,
-        urlPattern: rule.urlPattern,
-        isRegex: rule.isRegex
-      }))
+      rules: rules
     };
   } catch (error: any) {
     console.error('[background] getAllRules error:', error);
