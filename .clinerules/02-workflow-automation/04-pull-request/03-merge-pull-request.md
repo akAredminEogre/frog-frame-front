@@ -1,4 +1,4 @@
-workflow:merge-pull-request
+workflow-merge-pull-request
 
 cline-instructionsの手順をチャットスレッドに表示してから実行してください。
 その中で別のworkflowに従うと指示されてる場合は、その手順も検索・確認して再帰的にチャットスレッドに表示してください
@@ -18,9 +18,6 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
     - issues.md
       - コミットメッセージ
         - docs: 新規・追加・残タスク
-    - WITH_CLINE.md
-      - コミットメッセージ
-        - docs: CLINEへの指示改善
   - issue-nnnのディレクトリを、completed/issue-nnnに移動する
   - 現在のブランチで残っている変更があればすべてコミットしてプッシュ
     - コミットメッセージは「issue-nnn: プルリクエストの内容を反映」

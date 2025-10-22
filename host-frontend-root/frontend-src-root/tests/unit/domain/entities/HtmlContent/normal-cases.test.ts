@@ -48,7 +48,7 @@ describe('HtmlContent', () => {
 
     testCases.forEach((testCase) => {
       it(testCase.description, () => {
-        const rule = new RewriteRule('1', testCase.input.oldString, testCase.input.newString, '');
+        const rule = new RewriteRule(1, testCase.input.oldString, testCase.input.newString, '');
         const content = new HtmlContent(testCase.input.html, rule);
         const result = content.replace();
         expect(result.replacedHtml).toBe(testCase.expected.replacedHtml);

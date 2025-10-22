@@ -2,15 +2,21 @@
   "permissions": {
     "allow": [
       "Read(./.clinerules/**)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git push:*)",
+      "Write(./.clinerules/**)",
+      "Edit(./.clinerules/**)",
+      "Read(./.claude/**)",
+      "Write(./.claude/**)",
+      "Edit(./.claude/**)",
       "Bash(gh pr list:*)",
       "Bash(gh pr merge:*)",
-      "Bash(git checkout:*)",
-      "Bash(git pull:*)",
-      "Bash(git fetch:*)",
-      "Bash(git --no-pager branch:*)"
+      "Bash(gh pr create:*)",
+      "Bash(git:*)",
+      "Bash(make:*)",
+      "Bash(bash:*)",
+      "Bash(docker compose exec:*)",
+      "WebSearch",
+      "WebFetch(domain:dexie.org)",
+      "Bash(npm run:*)"
     ],
     "defaultMode": "acceptEdits"
   }

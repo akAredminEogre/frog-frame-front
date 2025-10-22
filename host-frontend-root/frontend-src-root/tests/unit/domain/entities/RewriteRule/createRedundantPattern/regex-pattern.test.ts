@@ -40,7 +40,7 @@ describe('RewriteRule.createRedundantPattern - 正規表現パターン', () => 
     it(testCase.description, () => {
       // Arrange
       const rule = new RewriteRule(
-        'test-id',
+        1,
         testCase.input.oldString,
         'replacement',
         '',

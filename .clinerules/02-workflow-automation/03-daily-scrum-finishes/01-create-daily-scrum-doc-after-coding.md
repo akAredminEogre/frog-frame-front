@@ -1,4 +1,4 @@
-workflow:create-daily-scrum-doc-after-coding
+workflow-create-daily-scrum-doc-after-coding
 
 ```cline-instructions
 nnn=(カレントブランチ名からissue番号を取得)

@@ -1,0 +1,92 @@
+@startuml handleSave-sequence
+title handleSave メソッドのシーケンス図 (Clean Architecture層付き)
+
+!define INTERFACE_COLOR #E8F4FD
+!define APPLICATION_COLOR #FFF2CC
+!define DOMAIN_COLOR #D5E8D4
+!define INFRASTRUCTURE_COLOR #F8CECC
+
+actor User
+
+box "Interface Layer (外側)" INTERFACE_COLOR
+participant "App.tsx\n(Component)" as App
+participant "background.ts\n(WXT Entrypoint)" as Background
+participant "content.ts\n(WXT Entrypoint)" as Content
+end box
+
+box "Application Layer" APPLICATION_COLOR
+participant "DIコンテナ\n(container)" as Container
+participant "SaveRewriteRuleAnd\nApplyToCurrentTabUseCase" as SaveUseCase
+participant "ApplySavedRulesOn\nPageLoadUseCase" as ApplyUseCase
+end box
+
+box "Domain Layer (内側)" DOMAIN_COLOR
+participant "RewriteRule\n(Entity)" as RewriteRule
+end box
+
+box "Infrastructure Layer" INFRASTRUCTURE_COLOR
+participant "IRewriteRuleRepository\n(DexieRewriteRuleRepository)" as Repository
+participant "ChromeCurrentTabService" as TabService
+participant "ChromeRuntimeService" as RuntimeService
+participant "messageRouter" as MessageRouter
+participant "applyAllRulesHandler" as Handler
+end box
+
+User -> App: handleSaveボタンクリック
+
+App -> Container: resolve('IRewriteRuleRepository')
+Container --> App: repository instance
+
+App -> App: new ChromeCurrentTabService()
+App -> App: new ChromeRuntimeService()
+App -> SaveUseCase: new SaveRewriteRuleAndApplyToCurrentTabUseCase(\nrepository, currentTabService, chromeRuntimeService)
+
+App -> SaveUseCase: execute(rewriteRule)
+SaveUseCase -> SaveUseCase: saveRule(params)
+SaveUseCase -> RewriteRule: fromParams(timestamp, params)
+RewriteRule --> SaveUseCase: rule instance
+SaveUseCase -> Repository: create(rule)
+note right: IndexedDBに保存
+Repository --> SaveUseCase: void
+
+SaveUseCase -> SaveUseCase: applyRuleToCurrentTab()
+SaveUseCase -> TabService: getCurrentTab()
+TabService --> SaveUseCase: Tab instance
+
+SaveUseCase -> SaveUseCase: processRuleApplication(tab)
+SaveUseCase -> RuntimeService: sendApplyRewriteRuleMessage(tab)
+RuntimeService -> Background: chrome.runtime.sendMessage(\n{type: 'applyAllRules', tabId, tabUrl})
+
+Background -> Background: registerRuntimeOnMessage listener
+Background -> MessageRouter: route(message)
+MessageRouter -> Handler: applyAllRules(message)
+Handler -> TabService: sendApplyAllRulesMessage(tab)
+TabService -> Content: chrome.tabs.sendMessage(\n{type: 'applyAllRules', tabUrl})
+
+Content -> Container: resolve('ApplySavedRulesOnPageLoadUseCase')
+Container --> Content: useCase instance
+Content -> ApplyUseCase: applyAllRules(document.body, tabUrl)
+ApplyUseCase --> Content: void
+Content --> TabService: {success: true}
+TabService --> Handler: response
+Handler --> MessageRouter: response
+MessageRouter --> Background: response
+Background --> RuntimeService: response
+RuntimeService --> SaveUseCase: {success: true}
+
+SaveUseCase -> SaveUseCase: createSuccessResult(\n"保存して適用しました！", true)
+SaveUseCase --> App: {success: true, message: "...", \nshouldResetForm: true}
+
+App -> App: alert(result.message)
+App -> User: アラート表示
+App -> App: setRewriteRule(reset)
+App -> App: フォームリセット
+
+note over User, Repository
+Clean Architecture層の依存関係:
+外側 → 内側への依存のみ許可
+Interface → Application → Domain
+Infrastructure → Application, Domain
+end note
+
+@enduml

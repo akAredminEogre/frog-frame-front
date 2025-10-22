@@ -1,0 +1,60 @@
+# DAILY SCRUM-01回目
+# DAILY SCRUM-作業計画
+<!-- 作業計画は作業前のみ記入 -->
+
+## 本スクラムの作業予定
+<!-- PLAN.mdの計画の中でどのユーザーストーリーに取り組むか記載してください。 -->
+- RewriteRule.idの型定義をstringからnumberに変更
+- RewriteRule.idに関連するコード（生成、比較、使用箇所）を調査
+
+## 修正予定ファイル
+<!-- 修正予定のファイルを記載してください。 -->
+- src/domain/entities/RewriteRule/ (型定義ファイル)
+- RewriteRule.idを使用している関連ファイル（調査後特定）
+
+## スクラム内残タスク
+- [ ] RewriteRuleエンティティの定義ファイルを特定
+- [ ] RewriteRule.idの型をstringからnumberに変更
+- [ ] RewriteRule.idを使用している箇所を検索・特定
+- [ ] 影響を受けるコードの修正方針を決定
+
+## 相談事項
+<!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
+<!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
+<!-- について、体言止めでの相談ではなににどう答えればよいのか明確にならないので使わないでください-->
+<!-- 相談は具体的な内容を記載してください。 -->
+<!-- 質問は不明点を明確に記載してください。 -->
+<!-- レビューしてほしいことは、レビュー対象を具体的に記載してください。 -->
+<!-- また上記相談・質問・レビューのトピックが重複する場合は、まとめて記載してください。 -->
+<!-- ユーザーが使うコマンド: frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-discussion-then-start-coding.md-->
+
+## 一言コメント
+<!-- 感情ベースで一言コメントをお願いします。 -->
+型変更の影響範囲を慎重に調査して、確実に実装していきたいと思います。
+
+# DAILY SCRUM-01作業実績
+## 本スクラムでの作業実績内容
+<!-- 本スクラムでの作業内容を記載してください。 -->
+<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+- RewriteRule.idの型定義をstringからnumberに変更
+- 関連する全ての実装ファイルとテストファイルを更新
+- 型変更に伴うバリデーションとエラーハンドリングを調整
+
+## 修正したファイル
+- src/domain/entities/RewriteRule/RewriteRule.ts
+- src/application/ports/IRewriteRuleRepository.ts
+- src/domain/errors/RewriteRuleNotFoundError.ts
+- src/application/usecases/rule/UpdateRewriteRuleUseCase.ts
+- src/domain/value-objects/RewriteRules.ts
+- src/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository.ts
+- src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository.ts
+- src/application/usecases/rule/LoadRewriteRuleForEditUseCase.ts
+- src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts
+- src/components/pages/EditRulePage.tsx
+- tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts
+- tests/unit/domain/entities/RewriteRule/fromPlainObject/normal-cases.test.ts
+- tests/unit/domain/entities/RewriteRule/fromPlainObject/error-cases.test.ts
+- tests/unit/application/usecases/rule/LoadRewriteRuleForEditUseCase/execute/normal-cases.test.ts
+- tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository/getById/error-cases.test.ts
+- tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository/getById/Abend/error-cases.test.ts
+- tests/unit/infrastructure/persistance/storage/ChromeStorageRewriteRuleRepository/getById/normal-cases.test.ts

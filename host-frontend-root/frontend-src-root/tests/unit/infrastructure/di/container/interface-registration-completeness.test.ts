@@ -41,11 +41,15 @@ describe('DI Container - 完全自動化インターフェース登録確認テ�
     },
     {
       interface: 'IRewriteRuleRepository',
-      implementationName: 'ChromeStorageRewriteRuleRepository'
+      implementationName: 'DexieRewriteRuleRepository'
     },
     {
       interface: 'IWindowService',
       implementationName: 'ChromeWindowService'
+    },
+    {
+      interface: 'ISelectedPageTextRepository',
+      implementationName: 'SelectedPageTextRepository'
     }
   ];
 

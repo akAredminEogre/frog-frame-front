@@ -42,12 +42,19 @@ describe('RewriteRule.matchesUrl - 正常系 (trueを返すケース)', () => {
         targetUrl: 'https://example.com/api',
       },
     },
+    {
+      description: 'localhost + ポート番号のURLパターンでパス付きURLに一致',
+      input: {
+        urlPattern: 'http://localhost:8080',
+        targetUrl: 'http://localhost:8080/book-page.html',
+      },
+    },
   ];
 
   testCases.forEach((testCase) => {
     it(testCase.description, () => {
       // テストケースに本質的には無関係なパラメータ
-      const ruleId = '1';
+      const ruleId = 1;
       const oldKeyword = 'old';
       const newKeyword = 'new';
 

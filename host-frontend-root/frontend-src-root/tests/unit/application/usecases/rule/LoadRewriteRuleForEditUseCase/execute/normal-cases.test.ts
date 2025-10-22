@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
 
 /**
  * LoadRewriteRuleForEditUseCase.execute - 正常系テスト
@@ -14,11 +15,7 @@ describe('LoadRewriteRuleForEditUseCase.execute - 正常系', () => {
 
   beforeEach(() => {
     // モックリポジトリの初期化
-    mockRepository = {
-      getById: vi.fn(),
-      getAll: vi.fn(),
-      set: vi.fn(),
-    };
+    mockRepository = createMockRewriteRuleRepository();
 
     // テスト対象の初期化
     useCase = new LoadRewriteRuleForEditUseCase(mockRepository);
@@ -27,9 +24,9 @@ describe('LoadRewriteRuleForEditUseCase.execute - 正常系', () => {
   it.each([
     {
       description: '存在するルールIDでルールが正常に取得できる',
-      ruleId: 'rule-001',
+      ruleId: 1,
       mockRule: new RewriteRule(
-        'rule-001',
+        1,
         'oldText',
         'newText',
         'https://example.com',
@@ -38,9 +35,9 @@ describe('LoadRewriteRuleForEditUseCase.execute - 正常系', () => {
     },
     {
       description: '正規表現を含むルールが正常に取得できる',
-      ruleId: 'rule-002',
+      ruleId: 2,
       mockRule: new RewriteRule(
-        'rule-002',
+        2,
         '\\d{4}-\\d{13}',
         '<a href="https://example.com/$1">$1</a>',
         'https://example.com',

@@ -1,31 +1,13 @@
-import { container } from 'src/infrastructure/di/container';
-import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
-import { Tab } from 'src/domain/value-objects/Tab';
-
-type Message =
-  | { type: 'applyAllRules'; tabId: number; tabUrl: string }
-  | { type: 'ping' };
+import { applyAllRulesHandler } from 'src/infrastructure/browser/router/handlers/applyAllRulesHandler';
+import { pingHandler } from 'src/infrastructure/browser/router/handlers/pingHandler';
+import { getAllRewriteRulesHandler } from 'src/infrastructure/browser/router/handlers/getAllRewriteRulesHandler';
 
 /**
- * Message handlers using tsyringe DI container
- * sendMessageの受信側であるcontent scriptにメッセージを転送する
+ * Message handlers aggregator
+ * 各ハンドラを個別ファイルから集約してエクスポートする
  */
 export const handlers = {
-  applyAllRules: async (msg: Extract<Message, { type: 'applyAllRules' }>) => {
-    try {
-      const { tabId, tabUrl } = msg;
-
-      // Infrastructure層のサービスを使用してcontent scriptにメッセージを転送
-      const chromeTabsService = container.resolve(ChromeTabsService);
-      const tab = new Tab(tabId, tabUrl);
-      const response = await chromeTabsService.sendApplyAllRulesMessage(tab);
-      
-      return { success: true, response };
-
-    } catch (error: any) {
-      console.error('[background] applyAllRules error:', error);
-      return { success: false, error: error.message };
-    }
-  },
-  ping: async () => ({ pong: true }),
+  applyAllRules: applyAllRulesHandler,
+  ping: pingHandler,
+  getAllRules: getAllRewriteRulesHandler,
 };
