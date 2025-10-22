@@ -52,7 +52,7 @@ const addHtmlWhitespaceIgnoringPatternCases = [
 describe('RewriteRule.addHtmlWhitespaceIgnoringPattern - リフレクションテスト', () => {
   addHtmlWhitespaceIgnoringPatternCases.forEach((testCase) => {
     it(testCase.description, () => {
-      const rule = new RewriteRule('1', 'test', 'replacement', '');
+      const rule = new RewriteRule(1, 'test', 'replacement', '');
       
       // リフレクションを使ってプライベートメソッドにアクセス
       const result = (rule as any).addHtmlWhitespaceIgnoringPattern(testCase.input);

@@ -12,11 +12,11 @@ describe('RewriteRules.constructor - 正常系', () => {
   let rulesObject: Record<string, RewriteRule>;
 
   beforeEach(() => {
-    rule1 = new RewriteRule('rule1', 'old1', 'new1', 'https://example.com/*', false);
-    rule2 = new RewriteRule('rule2', 'old2', 'new2', 'https://test.com/*', true);
+    rule1 = new RewriteRule(1, 'old1', 'new1', 'https://example.com/*', false);
+    rule2 = new RewriteRule(2, 'old2', 'new2', 'https://test.com/*', true);
     rulesObject = {
-      rule1,
-      rule2,
+      1: rule1,
+      2: rule2,
     };
   });
 
@@ -36,7 +36,7 @@ describe('RewriteRules.constructor - 正常系', () => {
     
     expect(Object.keys(rulesObjectResult)).toHaveLength(2);
     expect(rewriteRules.toArray()).toHaveLength(2);
-    expect(rulesObjectResult['rule1']).toBe(rule1);
-    expect(rulesObjectResult['rule2']).toBe(rule2);
+    expect(rulesObjectResult[1]).toBe(rule1);
+    expect(rulesObjectResult[2]).toBe(rule2);
   });
 });

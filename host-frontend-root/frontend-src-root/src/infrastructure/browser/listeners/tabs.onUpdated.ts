@@ -11,7 +11,13 @@ export function registerTabsOnUpdated() {
         const currentTabService = container.resolve(ChromeCurrentTabService);
         const chromeTabsService = container.resolve(ChromeTabsService);
         const currentTab = await currentTabService.getTabById(new TabId(tabId));
-        
+
+        // コンテンツスクリプトを注入できるURLかチェック
+        if (!currentTab.getTabUrl().canInjectContentScript()) {
+          // chrome://などの制限されたURLには送信しない
+          return;
+        }
+
         chromeTabsService.sendApplyAllRulesMessage(currentTab).catch(() => { /* コンテンツスクリプト未注入時のエラーは無視 */ });
       } catch (error) {
         // タブ情報取得に失敗した場合は無視（タブが存在しない、URLが無効など）

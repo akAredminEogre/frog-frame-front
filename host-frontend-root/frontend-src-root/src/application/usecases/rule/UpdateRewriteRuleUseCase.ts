@@ -16,25 +16,25 @@ export class UpdateRewriteRuleUseCase {
   ) {}
 
   async execute(
-    id: string,
+    id: number,
     params: RewriteRuleParams
   ): Promise<void> {
     const rule = RewriteRule.fromParams(id, params);
-    await this.rewriteRuleRepository.set(rule);
+    await this.rewriteRuleRepository.update(rule);
 
-    // ルール更新後、該当タブの内容を更新(失敗してもルール保存は成功)
+    // ルール更新後、該当タブをリロード(失敗してもルール保存は成功)
     try {
-      await this.refreshAllTabsAfterRuleUpdate(id, params);
-    } catch (refreshError) {
-      console.warn('Failed to refresh tabs, but rule was saved successfully:', refreshError);
+      await this.reloadAllTabsAfterRuleUpdate(id, params);
+    } catch (reloadError) {
+      console.warn('[UpdateRewriteRuleUseCase] Failed to reload tabs, but rule was saved successfully:', reloadError);
     }
   }
 
   /**
-   * ルール更新後に該当タブの内容を更新する
+   * ルール更新後に該当タブをリロードする
    */
-  private async refreshAllTabsAfterRuleUpdate(
-    id: string,
+  private async reloadAllTabsAfterRuleUpdate(
+    id: number,
     params: RewriteRuleParams
   ): Promise<void> {
     // 早期リターン: urlPatternが空文字列やundefinedの場合
@@ -47,20 +47,20 @@ export class UpdateRewriteRuleUseCase {
     // 全タブを取得してアプリケーション層でフィルタリング
     const tabs = await this.chromeTabsService.queryTabs({});
     const targetTabs = tabs.filterByRule(rule);
-    await this.sendMessageToTabs(targetTabs);
+    await this.reloadTabs(targetTabs);
   }
 
-  private async sendMessageToTabs(tabs: Tabs): Promise<void> {
+  private async reloadTabs(tabs: Tabs): Promise<void> {
     for (const tab of tabs.toArray()) {
-      await this.sendMessageToTab(tab);
+      await this.reloadTab(tab);
     }
   }
 
-  private async sendMessageToTab(tab: Tab): Promise<void> {
+  private async reloadTab(tab: Tab): Promise<void> {
     try {
-      await this.chromeTabsService.sendApplyAllRulesMessage(tab);
+      await this.chromeTabsService.reloadTab(tab);
     } catch (error) {
-      console.debug('[UpdateRewriteRuleUseCase] Failed to send message to tab:', tab.getTabId().value, error);
+      console.debug('[UpdateRewriteRuleUseCase] Failed to reload tab:', tab.getTabId().value, error);
     }
   }
 }

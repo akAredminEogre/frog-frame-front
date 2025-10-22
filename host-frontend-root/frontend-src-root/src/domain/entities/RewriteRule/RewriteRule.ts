@@ -10,7 +10,7 @@ export class RewriteRule {
   private readonly htmlWhitespaceAfterCloseTag: string;
 
   constructor(
-    public readonly id: string,
+    public readonly id: number,
     public readonly oldString: string,
     public readonly newString: string,
     public readonly urlPattern: string,
@@ -29,7 +29,7 @@ export class RewriteRule {
    * @param params RewriteRuleParamsオブジェクト
    * @returns RewriteRuleインスタンス
    */
-  static fromParams(id: string, params: RewriteRuleParams): RewriteRule {
+  static fromParams(id: number, params: RewriteRuleParams): RewriteRule {
     return new RewriteRule(
       id,
       params.oldString,

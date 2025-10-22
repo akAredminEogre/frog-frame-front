@@ -4,6 +4,8 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { Tabs } from 'src/domain/value-objects/Tabs';
+import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
+import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
 
 /**
  * UpdateRewriteRuleUseCase.execute - 正常系テスト
@@ -18,19 +20,11 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
 
   beforeEach(() => {
     // モックリポジトリの初期化
-    mockRepository = {
-      getById: vi.fn(),
-      getAll: vi.fn(),
-      set: vi.fn(),
-    };
+    mockRepository = createMockRewriteRuleRepository();
 
     // モックChromeTabsServiceの初期化
-    mockChromeTabsService = {
-      queryTabs: vi.fn().mockResolvedValue(new Tabs([])),
-      sendApplyAllRulesMessage: vi.fn(),
-      sendMessage: vi.fn(),
-      openEditPage: vi.fn(),
-    };
+    mockChromeTabsService = createMockTabsService();
+    vi.mocked(mockChromeTabsService.queryTabs).mockResolvedValue(new Tabs([]));
 
     // テスト対象の初期化
     useCase = new UpdateRewriteRuleUseCase(mockRepository, mockChromeTabsService);
@@ -39,7 +33,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
   it.each([
     {
       description: '通常のルールが正常に更新できる',
-      id: 'rule-001',
+      id: 1,
       params: {
         oldString: 'oldText',
         newString: 'newText',
@@ -47,7 +41,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         isRegex: false
       },
       expectedRule: new RewriteRule(
-        'rule-001',
+        1,
         'oldText',
         'newText',
         'https://example.com',
@@ -56,7 +50,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
     },
     {
       description: '正規表現を含むルールが正常に更新できる',
-      id: 'rule-002',
+      id: 2,
       params: {
         oldString: '\\d{4}-\\d{13}',
         newString: '<a href="https://example.com/$1">$1</a>',
@@ -64,7 +58,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         isRegex: true
       },
       expectedRule: new RewriteRule(
-        'rule-002',
+        2,
         '\\d{4}-\\d{13}',
         '<a href="https://example.com/$1">$1</a>',
         'https://example.com',
@@ -73,7 +67,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
     },
     {
       description: 'URLパターンを持つルールが正常に更新できる',
-      id: 'rule-003',
+      id: 3,
       params: {
         oldString: 'search',
         newString: 'replace',
@@ -81,7 +75,7 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         isRegex: false
       },
       expectedRule: new RewriteRule(
-        'rule-003',
+        3,
         'search',
         'replace',
         'https://.*\\.example\\.com/.*',
@@ -90,13 +84,13 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
     },
   ])('$description', async ({ id, params, expectedRule }) => {
     // Arrange
-    vi.mocked(mockRepository.set).mockResolvedValue();
+    vi.mocked(mockRepository.update).mockResolvedValue();
 
     // Act
     await useCase.execute(id, params);
 
     // Assert
-    expect(mockRepository.set).toHaveBeenCalledTimes(1);
-    expect(mockRepository.set).toHaveBeenCalledWith(expectedRule);
+    expect(mockRepository.update).toHaveBeenCalledTimes(1);
+    expect(mockRepository.update).toHaveBeenCalledWith(expectedRule);
   });
 });

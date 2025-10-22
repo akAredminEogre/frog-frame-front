@@ -6,4 +6,5 @@ export interface IChromeTabsService {
   queryTabs(queryInfo: any): Promise<Tabs>;
   sendApplyAllRulesMessage(tab: Tab): Promise<any>;
   openEditPage(ruleId: string): Promise<void>;
+  reloadTab(tab: Tab): Promise<void>;
 }
