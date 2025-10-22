@@ -6,7 +6,8 @@ import type { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleR
  */
 export function createMockRewriteRuleRepository(): IRewriteRuleRepository {
   return {
-    set: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
     getAll: vi.fn(),
     getById: vi.fn(),
   };

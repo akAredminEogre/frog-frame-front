@@ -84,13 +84,13 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
     },
   ])('$description', async ({ id, params, expectedRule }) => {
     // Arrange
-    vi.mocked(mockRepository.set).mockResolvedValue();
+    vi.mocked(mockRepository.update).mockResolvedValue();
 
     // Act
     await useCase.execute(id, params);
 
     // Assert
-    expect(mockRepository.set).toHaveBeenCalledTimes(1);
-    expect(mockRepository.set).toHaveBeenCalledWith(expectedRule);
+    expect(mockRepository.update).toHaveBeenCalledTimes(1);
+    expect(mockRepository.update).toHaveBeenCalledWith(expectedRule);
   });
 });

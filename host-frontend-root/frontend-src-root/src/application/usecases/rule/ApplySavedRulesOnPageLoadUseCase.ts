@@ -31,7 +31,7 @@ export class ApplySavedRulesOnPageLoadUseCase {
       });
     } catch (error) {
       // エラーが発生しても処理を続行（ログ出力などは必要に応じて追加）
-      console.error('Error applying saved rules:', error);
+      console.error('[ApplySavedRulesOnPageLoadUseCase] Error applying saved rules:', error);
     }
   }
 }

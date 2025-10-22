@@ -1,5 +1,6 @@
 import { applyAllRulesHandler } from 'src/infrastructure/browser/router/handlers/applyAllRulesHandler';
 import { pingHandler } from 'src/infrastructure/browser/router/handlers/pingHandler';
+import { getAllRewriteRulesHandler } from 'src/infrastructure/browser/router/handlers/getAllRewriteRulesHandler';
 
 /**
  * Message handlers aggregator
@@ -8,4 +9,5 @@ import { pingHandler } from 'src/infrastructure/browser/router/handlers/pingHand
 export const handlers = {
   applyAllRules: applyAllRulesHandler,
   ping: pingHandler,
+  getAllRules: getAllRewriteRulesHandler,
 };
