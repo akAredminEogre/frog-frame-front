@@ -46,19 +46,14 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
    * @returns RewriteRulesオブジェクト
    */
   async getAll(): Promise<RewriteRules> {
-    try {
-      const rulesObject: Record<string, RewriteRule> = {};
+    const rulesObject: Record<string, RewriteRule> = {};
 
-      await this.database.rewriteRules.each(schema => {
-        const rule = this.convertSchemaToRule(schema);
-        rulesObject[rule.id] = rule;
-      });
+    await this.database.rewriteRules.each(schema => {
+      const rule = this.convertSchemaToRule(schema);
+      rulesObject[rule.id] = rule;
+    });
 
-      return new RewriteRules(rulesObject);
-    } catch (error) {
-      console.error('[DexieRewriteRuleRepository] Error in getAll():', error);
-      throw error;
-    }
+    return new RewriteRules(rulesObject);
   }
 
   /**
