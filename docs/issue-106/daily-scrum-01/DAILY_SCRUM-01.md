@@ -41,4 +41,59 @@ IndexedDBへの移行でより大容量のデータ保存が可能になるこ�
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+### IndexedDB実装の完了
+- DexieRewriteRuleRepositoryの実装完了
+- DIコンテナの設定でLocalStorageRepositoryからDexieRewriteRuleRepositoryへの切り替え
+- Chrome Runtime Messaging経由でのRepository実装（content script用）
+
+### メッセージハンドラーの整理
+- saveRuleハンドラーとgetAllRulesハンドラーを独立したファイルに分離
+- messageHandlers.tsを純粋な集約ファイルとして再構成
+- content scriptのDIコンテナ（contentContainer.ts）を新規作成
+
+### デバッグとテスト
+- Chrome API呼び出しのPromise処理とエラーハンドリング改善
+- DIコンテナテストの更新（新しいRepository実装に対応）
+- 全テスト（単体テスト278件、E2Eテスト12件）の通過確認
+
+### ドキュメント
+- PlantUMLでのシーケンス図作成（handleSave-sequence.puml）
+- IndexedDB使用時のデータフローを明確化
+
 ## 修正したファイル
+
+### Infrastructure層
+- src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository.ts (新規作成・修正)
+- src/infrastructure/di/container.ts (DexieRewriteRuleRepositoryへの切り替え)
+- src/infrastructure/di/contentContainer.ts (新規作成)
+- src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository.ts (新規作成)
+- src/infrastructure/browser/router/messageHandlers.ts (ハンドラー集約のみに変更)
+- src/infrastructure/browser/router/handlers/getAllRewriteRulesHandler.ts (新規作成)
+- src/infrastructure/browser/router/handlers/saveRule.ts (作成→削除)
+- src/infrastructure/browser/popup/ChromePopupService.ts (Promise処理修正)
+- src/infrastructure/browser/tabs/ChromeTabsService.ts (デバッグログ削除)
+- src/infrastructure/browser/tabs/ChromeCurrentTabService.ts (デバッグログ削除)
+
+### Application層
+- src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts
+- src/application/usecases/rule/UpdateRewriteRuleUseCase.ts
+- src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase.ts (DI対応、デバッグログ削除)
+
+### Components層
+- src/components/atoms/Button.tsx (デバッグログ削除)
+- src/components/molecules/SaveButton.tsx (デバッグログ削除)
+- src/components/pages/EditRulePage.tsx (デバッグログ削除)
+
+### Entrypoints
+- src/entrypoints/popup/App.tsx (元の実装に復元、デバッグログ削除)
+- src/entrypoints/content.ts (DIコンテナ使用、デバッグログ削除)
+
+### テスト
+- tests/unit/application/usecases/rule/LoadRewriteRuleForEditUseCase/execute/normal-cases.test.ts
+- tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts
+- tests/unit/infrastructure/di/container/interface-registration-completeness.test.ts
+- tests/unit/infrastructure/di/container/concrete-class-registration-completeness.test.ts
+- tests/unit/infrastructure/browser/popup/ChromePopupService.test.ts (新実装対応)
+
+### ドキュメント
+- docs/diagrams/handleSave-sequence.puml (新規追加)
