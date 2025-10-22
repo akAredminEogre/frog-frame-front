@@ -28,9 +28,6 @@ export default defineContentScript({
       else if (request.type === 'applyAllRules') {
         applySavedRulesOnPageLoadUseCase.applyAllRules(document.body, request.tabUrl).then(() => {
           sendResponse({ success: true });
-        }).catch((error) => {
-          console.error('[content] applySavedRulesOnPageLoadUseCase.applyAllRules failed:', error);
-          sendResponse({ success: false, error: error.message });
         });
         return true;
       }
