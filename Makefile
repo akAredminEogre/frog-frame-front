@@ -1,15 +1,18 @@
-.PHONY: init-config help init-dev dev down ps test-and-check test-and-lint
+.PHONY: init-config help init-dev dev down ps unit e2e testall testcheck testlint
 
 help:
 	@echo "Available commands:"
-	@echo "  make init-config    - Apply git configuration from template"
-	@echo "  make init-dev       - Initial setup for development (first time only)"
-	@echo "  make dev            - Start development server"
-	@echo "  make down           - Stop Docker containers"
-	@echo "  make ps             - List running containers"
-	@echo "  make test-and-check - Run tests with warnings"
-	@echo "  make test-and-lint  - Run comprehensive tests and linting (required before PR)"
-	@echo "  make help           - Show this help message"
+	@echo "  make init-config  - Apply git configuration from template"
+	@echo "  make init-dev     - Initial setup for development (first time only)"
+	@echo "  make dev          - Start development server"
+	@echo "  make down         - Stop Docker containers"
+	@echo "  make ps           - List running containers"
+	@echo "  make unit         - Run unit tests only"
+	@echo "  make e2e          - Run E2E tests only"
+	@echo "  make testall      - Run all tests (unit + E2E)"
+	@echo "  make testcheck    - Run tests with warnings"
+	@echo "  make testlint     - Run comprehensive tests and linting (required before PR)"
+	@echo "  make help         - Show this help message"
 
 init-config:
 	@echo "Applying git configuration from .gitconfig.template..."
@@ -57,11 +60,23 @@ ps:
 	@echo "Listing all running Docker containers..."
 	@docker compose ps
 
-test-and-check:
-	@echo "Running tests with warnings..."
-	@docker compose exec frontend npm run test-and-check
+unit:
+	@echo "Running unit tests..."
+	@docker compose exec frontend npm run test:unit
 
-test-and-lint:
+e2e:
+	@echo "Running E2E tests..."
+	@docker compose exec frontend npm run test:e2e
+
+testall:
+	@echo "Running all tests..."
+	@docker compose exec frontend npm run test:all
+
+testcheck:
+	@echo "Running tests with warnings..."
+	@docker compose exec frontend npm run test:check
+
+testlint:
 	@echo "Running comprehensive tests and linting..."
-	@docker compose exec frontend npm run test-and-lint
+	@docker compose exec frontend npm run test:lint
 
