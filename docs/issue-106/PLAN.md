@@ -2,10 +2,10 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] daily-scrum-01: IndexedDBライブラリ（Dexie.js）の現状調査とリポジトリ実装の準備
-  - [ ] 現在のLocalStorageRepositoryの実装確認
-  - [ ] Dexie.jsを使ったIndexedDBRepositoryの基本実装
-  - [ ] リポジトリインターフェースの確認と必要な調整
+- [x] daily-scrum-01: IndexedDBライブラリ（Dexie.js）の現状調査とリポジトリ実装の準備
+  - [x] 現在のLocalStorageRepositoryの実装確認
+  - [x] Dexie.jsを使ったIndexedDBRepositoryの基本実装
+  - [x] リポジトリインターフェースの確認と必要な調整
 - [ ] daily-scrum-02: IndexedDBRepositoryの実装とテスト
   - [ ] IndexedDBRepositoryの完全実装
   - [ ] 単体テストの作成
