@@ -16,7 +16,13 @@
       "Bash(docker compose exec:*)",
       "WebSearch",
       "WebFetch(domain:dexie.org)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "SlashCommand(/workflow-commit-plan-then-start-daily-issue)",
+      "SlashCommand(/workflow-create-daily-scrum)",
+      "SlashCommand(/workflow-start-coding-according-to-daily-scrum)",
+      "SlashCommand(/workflow-record-progress)",
+      "Bash(grep:*)",
+      "Bash(find:*)"
     ],
     "defaultMode": "acceptEdits"
   }
