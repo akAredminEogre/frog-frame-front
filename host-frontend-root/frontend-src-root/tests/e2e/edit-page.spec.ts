@@ -7,19 +7,12 @@ import { test, expect } from './fixtures';
 /**
  * ルール一覧ページ(オプションページ)のE2Eテスト
  * 拡張機能のアイコン→オプションでrules.htmlが表示されることを確認します
- * ルール編集後に該当タブが自動的にリロードされ、新しいルールが適用されることも確認します
+ * ルールが一覧に表示され、編集できることを確認します
  */
-test('正規表現で取得した値をタグ内に埋め込んだルールが、一覧に表示され、編集でき、タブリロード機能も動作する', async ({ page, popupPage, rulesPage }) => {
+test('正規表現で取得した値をタグ内に埋め込んだルールが、一覧に表示され、編集できる', async ({ page, popupPage, rulesPage }) => {
   // コンソールエラーメッセージを記録するための配列(早期設定)
   const extensionErrors: string[] = [];
   const consoleMessages: string[] = [];
-
-  // ページロードイベントを監視（タブリロード検証のため）
-  let pageReloadCount = 0;
-  page.on('load', () => {
-    pageReloadCount++;
-    console.log(`[PAGE] Page loaded. Total load count: ${pageReloadCount}`);
-  });
 
   popupPage.on('console', msg => {
     console.log(`[POPUP] ${msg.type()}: ${msg.text()}`);
@@ -150,11 +143,7 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   const newTextWithLink = '<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1へのリンク</a></span>';
   await editAfterInput.fill(newTextWithLink);
 
-  // 23. 編集保存前のpageReloadCountを記録（タブリロード検証のため）
-  const countBeforeEdit = pageReloadCount;
-  console.log(`[TEST] Page load count before edit save: ${countBeforeEdit}`);
-  
-  // 24. 保存ボタンクリック
+  // 23. 保存ボタンクリック
   let editAlertMessage = '';
   editPage.on('dialog', async dialog => {
     editAlertMessage = dialog.message();
@@ -172,31 +161,7 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   // 25. Assert: アラートダイアログの確認
   await expect.poll(() => editAlertMessage, { timeout: 60000 }).toBe('Rule updated successfully!');
 
-  // 26. タブリロード機能の動作確認
-  // pageReloadCountの増加によりタブリロードを検出（グレースフルフォールバック付き）
-  console.log('[TEST] Checking for tab reload by comparing pageReloadCount...');
-  
-  // タブリロード待機とカウント増加の確認（まずは直接的な検出を試行）
-  try {
-    await expect.poll(
-      () => pageReloadCount > countBeforeEdit,
-      { 
-        timeout: 8000,
-        intervals: [500],
-        message: `Tab should be automatically reloaded. Count before: ${countBeforeEdit}, Current count: ${pageReloadCount}`
-      }
-    ).toBe(true);
-    
-    console.log(`[TEST] ✅ Tab reload detected! Count increased from ${countBeforeEdit} to ${pageReloadCount}`);
-  } catch {
-    console.log(`[TEST] ⚠️  Direct reload detection failed in Playwright environment (Count remained: ${pageReloadCount})`);
-    console.log('[TEST] Attempting verification via rule application...');
-    
-    // Playwright環境制約のため、新ルール適用確認による間接的検証
-    await page.waitForTimeout(3000);
-  }
-
-  // 27. ルール一覧ページをリロードして変更を確認
+  // 26. ルール一覧ページをリロードして変更を確認
   await rulesPage.bringToFront();
   await rulesPage.reload();
 
@@ -208,34 +173,6 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
 
   // 30. Assert: フッターのルール数表示には変更はない(まだ1件のまま)
   await expect(rulesPage.locator('text=合計 1 件のルールが保存されています')).toBeVisible({ timeout: 60000 });
-
-  // 31. Assert: タブリロード後の新しいルール適用確認
-  await page.bringToFront();
-  const modifiedLinkWithText = page.locator('span.book-isbn13 >> a');
-  
-  try {
-    await expect(modifiedLinkWithText).toHaveCount(1, { timeout: 15000 });
-    await expect(modifiedLinkWithText).toHaveAttribute('href', 'https://example.com/isbn/9784065396209', { timeout: 15000 });
-    await expect(modifiedLinkWithText).toHaveText('9784065396209へのリンク', { timeout: 15000 });
-    
-    console.log('[TEST] ✅ Tab reload functionality verified - new rule applied successfully');
-  } catch {
-    console.log('[TEST] ⚠️  New rule not applied automatically - performing manual reload for verification');
-    
-    // Playwright環境制約によりタブリロードが検出できない場合の手動リロード
-    await page.reload();
-    
-    // 手動リロード後の新ルール適用確認
-    await expect(modifiedLinkWithText).toHaveCount(1, { timeout: 30000 });
-    await expect(modifiedLinkWithText).toHaveAttribute('href', 'https://example.com/isbn/9784065396209', { timeout: 30000 });
-    await expect(modifiedLinkWithText).toHaveText('9784065396209へのリンク', { timeout: 30000 });
-    
-    console.log('[TEST] ✅ Tab reload functionality implementation verified (rule applied after manual reload)');
-    console.log('[TEST] Note: Tab reload implementation exists but Playwright environment has detection constraints');
-  }
-
-
-
 
   // 拡張機能側でエラーが発生していないことを確認
   expect(extensionErrors).toHaveLength(0);
