@@ -9,7 +9,7 @@
 
 ## テスト方法
 [動作確認の手順]
-- `make test-and-check` で回帰テスト通過を確認
+- `make testcheck` で回帰テスト通過を確認
   - 既存自動テストとlinterを同時に確認
 
 ## 補足
