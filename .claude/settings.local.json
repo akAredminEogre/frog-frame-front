@@ -66,7 +66,8 @@
       "WebSearch",
       "SlashCommand(/workflow:*)",
       "Bash(gh pr view:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(tee:*)"
     ],
     "defaultMode": "acceptEdits"
   }
