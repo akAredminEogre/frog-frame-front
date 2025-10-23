@@ -62,8 +62,7 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
     await repository.update(updatedRule);
 
     // Assert - 更新されたルールが正しく保存されることを確認
-    const allRules = await repository.getAll();
-    const updatedRuleInDb = allRules.getById(rule1InDb.id);
+    const updatedRuleInDb = await repository.getById(rule1InDb.id);
 
     expect(updatedRuleInDb.id).toBe(rule1InDb.id);
     expect(updatedRuleInDb.oldString).toBe('new-pattern');
@@ -72,6 +71,7 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
     expect(updatedRuleInDb.isRegex).toBe(true);
 
     // Assert - 他のルールが変更されていないことを確認
+    const allRules = await repository.getAll();
     const rulesArray = allRules.toArray();
     const rule2InDb = rulesArray.find(r => r.oldString === 'pattern2')!;
     expect(rule2InDb.oldString).toBe('pattern2');
@@ -107,8 +107,7 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
     await repository.update(updatedRule);
 
     // Assert
-    const allRules = await repository.getAll();
-    const updatedRuleInDb = allRules.getById(ruleInDb.id);
+    const updatedRuleInDb = await repository.getById(ruleInDb.id);
 
     expect(updatedRuleInDb.oldString).toBe('new-pattern');
     expect(updatedRuleInDb.newString).toBe('replacement');
@@ -167,7 +166,7 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
     expect(rulesArray).toHaveLength(3);
 
     // Assert - rule-2のみが更新されることを確認
-    const updatedRule2InDb = allRules.getById(rule2InDb.id);
+    const updatedRule2InDb = await repository.getById(rule2InDb.id);
     expect(updatedRule2InDb.oldString).toBe('updated-pattern2');
     expect(updatedRule2InDb.newString).toBe('updated-replacement2');
 
