@@ -36,7 +36,24 @@ dotenvの警告を調査して、開発環境をクリーンに保ちましょ�
 
 # DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+dotenvの警告メッセージの調査と解決を完了しました。
+
+### 調査結果
+- 警告メッセージ: `[dotenv@17.2.3] injecting env (0) from .env.development.chrome.local,...,.env`
+- 原因: WXT@0.20.11が内部で使用するdotenv@17.2.3において、v17からデフォルトでランタイムログが出力される仕様に変更されたため
+- dotenvの`quiet`オプションがデフォルトで`false`になっており、環境変数の読み込み時にログが表示される
+
+### 実装した解決策
+- docker-compose.ymlのenvironmentセクションに`DOTENV_CONFIG_QUIET=true`を追加
+- この環境変数はdotenvがロードされる前に設定する必要があるため、Dockerコンテナの環境変数として設定
+- これにより、WXTが内部で使用するdotenvのログ出力が抑制される
+
+### 検証結果
+- Docker再起動後、`npx wxt prepare`コマンドでdotenv警告が表示されないことを確認
+- コンパイルチェック: 成功
+- ユニットテスト: 全283テスト成功
+- 既存機能への影響なし
 
 ## 修正したファイル
+- docker-compose.yml
+  - environmentセクションに`DOTENV_CONFIG_QUIET=true`を追加 (docker-compose.yml:21)
