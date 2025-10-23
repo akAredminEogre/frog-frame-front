@@ -64,7 +64,9 @@
       "WebFetch(domain:wxt.dev)",
       "WebFetch(domain:www.npmjs.com)",
       "WebSearch",
-      "SlashCommand(/workflow:*)"
+      "SlashCommand(/workflow:*)",
+      "Bash(gh pr view:*)",
+      "Bash(test:*)"
     ],
     "defaultMode": "acceptEdits"
   }
