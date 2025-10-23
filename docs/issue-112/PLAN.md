@@ -2,9 +2,24 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] App.tsxのhandleSaveメソッドでDIコンテナから直接SaveRewriteRuleAndApplyToCurrentTabUseCaseを解決するように修正
-- [ ] 手動でのサービスインスタンス化を削除し、DIコンテナでの依存性解決に統一
-- [ ] リファクタリング後のテスト実行と動作確認
+- [x] App.tsxのhandleSaveメソッドでDIコンテナから直接SaveRewriteRuleAndApplyToCurrentTabUseCaseを解決するように修正
+- [x] 手動でのサービスインスタンス化を削除し、DIコンテナでの依存性解決に統一
+- [x] リファクタリング後のテスト実行と動作確認
+## スクラム02以降の課題
+
+### DIアーキテクチャの統一化
+- **問題**: PopupInitFormUseCaseとSaveRewriteRuleAndApplyToCurrentTabUseCaseにおいて、@injectableデコレータを使用するとReactアプリが無音で起動しなくなる問題が発生
+- **現在の対応**: E2Eテストの動作を優先し、手動依存性構築パターンに戻して対応済み
+- **今後の課題**: 
+  - DIコンテナのtsynringe設定とReactアプリの初期化プロセスの競合原因調査
+  - ポップアップコンポーネント特有のDI制約の明確化
+  - EditRulePage.tsxで動作しているDIパターンとの相違点分析
+  - 統一されたDIアーキテクチャの設計と実装
+
+### 技術的負債
+- PopupのUseCaseクラスのみ手動依存性構築を使用（他のコンポーネントはDIコンテナ使用）
+- 混合DIパターンによるコードの一貫性の欠如
+- container.tsのコメントでの説明に依存した設計
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
