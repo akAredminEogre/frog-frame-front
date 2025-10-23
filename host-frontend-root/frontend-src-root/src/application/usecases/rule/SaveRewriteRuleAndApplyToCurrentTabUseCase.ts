@@ -1,3 +1,4 @@
+import { injectable, inject } from 'tsyringe';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
@@ -14,11 +15,12 @@ interface SaveRewriteRuleAndApplyResult {
 /**
  * リライトルールを保存し、現在のタブに適用するUseCase
  */
+@injectable()
 export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
   constructor(
-    private repository: IRewriteRuleRepository,
-    private currentTabService: ICurrentTabService,
-    private chromeRuntimeService: IChromeRuntimeService
+    @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
+    @inject('ICurrentTabService') private currentTabService: ICurrentTabService,
+    @inject('IChromeRuntimeService') private chromeRuntimeService: IChromeRuntimeService
   ) {}
 
   async execute(params: RewriteRuleParams): Promise<SaveRewriteRuleAndApplyResult> {
