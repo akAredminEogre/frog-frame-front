@@ -14,17 +14,18 @@
 - [x] 開発環境のセットアップ方法
 - [x] storageの入出力をRewriteRuleParams経由に変更するか検討
 - [x] 編集後のタブリロード
-- [ ] RewriteRuleオブジェクトを全部setしない
-- [ ] indexedDBへの完全移行
+- [x] RewriteRuleオブジェクトを全部setしない
+- [x] indexedDBへの完全移行
   - [x] RewriteRuleのidをstring→numberに変更
   - [x] テストコードの修正
   - [x] 移行期間のid文字列変換ロジックを削除
-  - [ ] repositoryの切り替え
-- [ ] RewriteRulesのtoObject()の廃止
+  - [x] repositoryの切り替え
+- [x] RewriteRulesのtoObject()の廃止
 
 # 0.1.3
-- [ ] makeコマンド
+- [x] makeコマンド
 - [ ] コーディング規約ドキュメントまとめ
+- [ ] (node:12933) [DEP0066] DeprecationWarning: OutgoingMessage.
 
 # 0.2.0
 - [ ] 書き換えルールの削除機能

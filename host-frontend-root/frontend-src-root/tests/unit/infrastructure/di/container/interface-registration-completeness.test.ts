@@ -50,6 +50,14 @@ describe('DI Container - 完全自動化インターフェース登録確認テ�
     {
       interface: 'ISelectedPageTextRepository',
       implementationName: 'SelectedPageTextRepository'
+    },
+    {
+      interface: 'ICurrentTabService',
+      implementationName: 'ChromeCurrentTabService'
+    },
+    {
+      interface: 'IChromeRuntimeService',
+      implementationName: 'ChromeRuntimeService'
     }
   ];
 
