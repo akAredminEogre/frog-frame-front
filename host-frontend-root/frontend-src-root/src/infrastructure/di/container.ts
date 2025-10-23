@@ -22,7 +22,12 @@ import { ChromeWindowService } from 'src/infrastructure/browser/window/ChromeWin
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
 import { SelectedPageTextRepository } from 'src/infrastructure/storage/SelectedPageTextRepository';
-import { GetSelectedPageTextUseCase } from 'src/application/usecases/selectedPageText/GetSelectedPageTextUseCase';
+import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
+import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
+import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
+import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
+import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
+import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
 
 // Register implementations for interfaces (抽象化のため)
 container.register<IChromeTabsService>('IChromeTabsService', { useClass: ChromeTabsService });
@@ -31,6 +36,8 @@ container.register<IPopupService>('IPopupService', { useClass: ChromePopupServic
 container.register<IRewriteRuleRepository>('IRewriteRuleRepository', { useClass: DexieRewriteRuleRepository });
 container.register<IWindowService>('IWindowService', { useClass: ChromeWindowService });
 container.register<ISelectedPageTextRepository>('ISelectedPageTextRepository', { useClass: SelectedPageTextRepository });
+container.register<ICurrentTabService>('ICurrentTabService', { useClass: ChromeCurrentTabService });
+container.register<IChromeRuntimeService>('IChromeRuntimeService', { useClass: ChromeRuntimeService });
 
 // Register concrete classes (required for container.resolve() to work)
 container.register(HandleContextMenuReplaceDomElement, { useClass: HandleContextMenuReplaceDomElement });
@@ -39,4 +46,5 @@ container.register(DexieRewriteRuleRepository, { useClass: DexieRewriteRuleRepos
 container.register(LoadRewriteRuleForEditUseCase, { useClass: LoadRewriteRuleForEditUseCase });
 container.register(UpdateRewriteRuleUseCase, { useClass: UpdateRewriteRuleUseCase });
 container.register(CloseCurrentWindowUseCase, { useClass: CloseCurrentWindowUseCase });
-container.register(GetSelectedPageTextUseCase, { useClass: GetSelectedPageTextUseCase });
+container.register(SaveRewriteRuleAndApplyToCurrentTabUseCase, { useClass: SaveRewriteRuleAndApplyToCurrentTabUseCase });
+container.register(PopupInitFormUseCase, { useClass: PopupInitFormUseCase });

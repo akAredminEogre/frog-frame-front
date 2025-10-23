@@ -7,7 +7,8 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistance/index
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
-import { GetSelectedPageTextUseCase } from 'src/application/usecases/selectedPageText/GetSelectedPageTextUseCase';
+import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
+import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
 
 /**
  * DIコンテナの完全自動化具体クラス登録確認テスト
@@ -59,9 +60,13 @@ describe('DI Container - 完全自動化具体クラス登録確認テスト', (
       className: 'CloseCurrentWindowUseCase'
     },
     {
-      class: GetSelectedPageTextUseCase,
-      className: 'GetSelectedPageTextUseCase'
+      class: SaveRewriteRuleAndApplyToCurrentTabUseCase,
+      className: 'SaveRewriteRuleAndApplyToCurrentTabUseCase'
     },
+    {
+      class: PopupInitFormUseCase,
+      className: 'PopupInitFormUseCase'
+    }
   ];
 
   it('should verify expected concrete classes are registered and can be resolved', () => {

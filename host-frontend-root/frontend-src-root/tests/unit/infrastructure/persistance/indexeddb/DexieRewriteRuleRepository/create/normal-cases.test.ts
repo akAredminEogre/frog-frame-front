@@ -17,6 +17,15 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
   let testRule: RewriteRule;
 
   beforeEach(async () => {
+    // IndexedDB環境の検証
+    if (!globalThis.indexedDB) {
+      throw new Error(
+        'IndexedDB is not available in test environment. ' +
+        'Please check if fake-indexeddb setup is correct in tests/unit/infrastructure/persistance/indexeddb/setup.ts. ' +
+        'This may happen after git pull - try running: docker compose exec frontend npm run install'
+      );
+    }
+
     // データベーステーブルをクリア
     await dexieDatabase.rewriteRules.clear();
 

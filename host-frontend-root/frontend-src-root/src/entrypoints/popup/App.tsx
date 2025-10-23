@@ -1,15 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
-import { getActiveTabOrigin } from 'src/domain/entities/tabUtils';
-import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { container } from 'src/infrastructure/di/container';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
-import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
+import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
+import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
 import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
-import { GetSelectedPageTextUseCase } from 'src/application/usecases/selectedPageText/GetSelectedPageTextUseCase';
 
 function App() {
   // フォーム入力を管理するState
@@ -22,16 +18,7 @@ function App() {
 
   /** 保存ボタンを押したとき、UseCaseを通して保存・適用処理を実行 */
   const handleSave = async () => {
-    // 依存性を組み立て（DIコンテナから取得）
-    const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
-    const currentTabService = new ChromeCurrentTabService();
-    const chromeRuntimeService = new ChromeRuntimeService();
-    const saveUseCase = new SaveRewriteRuleAndApplyToCurrentTabUseCase(
-      repository,
-      currentTabService,
-      chromeRuntimeService
-    );
-
+    const saveUseCase = container.resolve(SaveRewriteRuleAndApplyToCurrentTabUseCase);
     const result = await saveUseCase.execute(rewriteRule);
 
     // 結果をユーザーに通知
@@ -48,20 +35,22 @@ function App() {
     }
   };
 
-  /** コンポーネントがマウントされたときにルールを適用 */
+  /** コンポーネントがマウントされたときにフォームを初期化 */
   useEffect(() => {
     const initForm = async () => {
-      // UseCaseを通してストレージから右クリック選択テキストを取得
-      const getSelectedPageTextUseCase = container.resolve(GetSelectedPageTextUseCase);
-      const selectedText = await getSelectedPageTextUseCase.execute();
-
-      const origin = await getActiveTabOrigin();
+      console.log('App: Starting form initialization...');
+      
+      const popupInitFormUseCase = container.resolve(PopupInitFormUseCase);
+      const result = await popupInitFormUseCase.execute();
+      
+      console.log('App: PopupInitFormUseCase executed successfully:', result);
 
       setRewriteRule((prev) => ({
         ...prev,
-        oldString: selectedText || prev.oldString,
-        urlPattern: origin || prev.urlPattern,
+        oldString: result.selectedText || prev.oldString,
+        urlPattern: result.urlPattern || prev.urlPattern,
       }));
+      console.log('App: Form initialized successfully');
     };
 
     initForm();
