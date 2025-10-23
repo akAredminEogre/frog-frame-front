@@ -2,7 +2,7 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] Node.js DEP0066 deprecation warning (OutgoingMessage.prototype._headers) の解決
+- [x] Node.js DEP0066 deprecation warning (OutgoingMessage.prototype._headers) の解決
   - 警告が発生している箇所を特定（node --trace-deprecation を使用）
   - 非推奨のAPIを使用しているコードまたは依存パッケージを特定
   - 非推奨APIを推奨される代替手段に置き換え
