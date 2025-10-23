@@ -1,3 +1,4 @@
+import { injectable, inject } from 'tsyringe';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
 
@@ -10,10 +11,11 @@ interface PopupInitFormResult {
  * ポップアップのフォーム初期化を行うUseCase
  * 右クリック選択テキストと現在のタブのoriginを取得してフォームを初期化する
  */
+@injectable()
 export class PopupInitFormUseCase {
   constructor(
-    private currentTabService: ICurrentTabService,
-    private selectedPageTextRepository: ISelectedPageTextRepository
+    @inject('ICurrentTabService') private currentTabService: ICurrentTabService,
+    @inject('ISelectedPageTextRepository') private selectedPageTextRepository: ISelectedPageTextRepository
   ) {}
 
   async execute(): Promise<PopupInitFormResult> {
