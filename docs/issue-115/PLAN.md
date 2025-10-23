@@ -2,7 +2,7 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] RewriteRulesクラスの使用箇所調査と、未使用メソッド(set, toObject, getById)の削除対応
+- [x] RewriteRulesクラスの使用箇所調査と、未使用メソッド(set, toObject, getById)の削除対応
   - プロダクションコード内でRewriteRulesクラスがimportされている箇所を調査
   - set, toObject, getByIdで代用できるコードがあれば、それらを使うように修正
   - プロダクションコード内で使われていないメソッドを削除対象として特定
