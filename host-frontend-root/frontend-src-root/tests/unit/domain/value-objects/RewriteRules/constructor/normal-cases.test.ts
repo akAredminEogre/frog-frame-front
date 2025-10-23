@@ -22,21 +22,18 @@ describe('RewriteRules.constructor - 正常系', () => {
 
   it('空のオブジェクトでRewriteRulesインスタンスを作成できる', () => {
     const rewriteRules = new RewriteRules();
-    
-    expect(Object.keys(rewriteRules.toObject())).toHaveLength(0);
+
     expect(rewriteRules.toArray()).toHaveLength(0);
     expect(rewriteRules.toArray()).toEqual([]);
-    expect(rewriteRules.toObject()).toEqual({});
   });
 
   it('既存のルールオブジェクトでRewriteRulesインスタンスを作成できる', () => {
     const rewriteRules = new RewriteRules(rulesObject);
-    
-    const rulesObjectResult = rewriteRules.toObject();
-    
-    expect(Object.keys(rulesObjectResult)).toHaveLength(2);
-    expect(rewriteRules.toArray()).toHaveLength(2);
-    expect(rulesObjectResult[1]).toBe(rule1);
-    expect(rulesObjectResult[2]).toBe(rule2);
+
+    const rulesArray = rewriteRules.toArray();
+
+    expect(rulesArray).toHaveLength(2);
+    expect(rulesArray).toContain(rule1);
+    expect(rulesArray).toContain(rule2);
   });
 });
