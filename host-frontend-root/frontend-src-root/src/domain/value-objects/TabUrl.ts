@@ -1,5 +1,6 @@
 export class TabUrl {
   private readonly _value: string;
+  private readonly _tabOrigin: string;
 
   /**
    * URL schemes that cannot have content scripts injected
@@ -35,10 +36,20 @@ export class TabUrl {
     }
 
     this._value = value;
+
+    if (url.protocol === 'http:' || url.protocol === 'https:') {
+      this._tabOrigin = url.origin;
+    } else {
+      this._tabOrigin = '';
+    }
   }
 
   get value(): string {
     return this._value;
+  }
+
+  get tabOrigin(): string {
+    return this._tabOrigin;
   }
 
   /**
