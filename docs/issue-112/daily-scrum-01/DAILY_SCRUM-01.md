@@ -32,4 +32,15 @@ DIコンテナを活用してコードを簡潔にできる良いリファクタ
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+1. **DIコンテナリファクタリング完了**: App.tsxのhandleSaveメソッドでDIコンテナから直接SaveRewriteRuleAndApplyToCurrentTabUseCaseを解決するように修正し、手動でのサービスインスタンス化を削除
+2. **E2Eテスト修正**: 初期実装でE2Eテストが失敗していた問題を分析・修正し、全テストを通過させる
+3. **レビューコメント対応**: 指示のないtry-catch文を削除し、Clean Architectureの原則に従った適切なエラーハンドリング構造に改善
+4. **テスト品質向上**: ユニットテスト269個とE2Eテスト12個の全てが通過する状態で実装完了
+
 ## 修正したファイル
+- host-frontend-root/frontend-src-root/src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts
+- host-frontend-root/frontend-src-root/src/infrastructure/di/container.ts  
+- host-frontend-root/frontend-src-root/src/entrypoints/popup/App.tsx
+- host-frontend-root/frontend-src-root/src/application/usecases/popup/PopupInitFormUseCase.ts
+- host-frontend-root/frontend-src-root/tests/unit/infrastructure/di/container/interface-registration-completeness.test.ts
+- host-frontend-root/frontend-src-root/tests/unit/infrastructure/di/container/concrete-class-registration-completeness.test.ts
