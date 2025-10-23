@@ -47,4 +47,25 @@ Issue-112の主要目標は達成済みですが、以下の点について確�
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+DIアーキテクチャの統一化とポップアップ環境でのDIコンテナ初期化問題の根本的解決を完了しました。
+
+### 主要成果
+1. **根本原因の特定**: ポップアップ環境でDIコンテナモジュールがインポートされておらず、`reflect-metadata`が初期化されていなかった
+2. **根本的解決**: DIコンテナのインポート追加と適切な@injectableデコレータの実装により、冗長なコード追加なしで問題解決
+3. **統一されたDIアーキテクチャ**: 全UseCaseでDIコンテナを使用する一貫したアーキテクチャを実現
+4. **完全なテスト通過**: ユニットテスト269/269、E2Eテスト12/12すべて通過
+
+### 技術的詳細
+- PopupのApp.tsxにDIコンテナインポートを追加
+- PopupInitFormUseCaseとSaveRewriteRuleAndApplyToCurrentTabUseCaseに@injectableデコレータ追加
+- DIコンテナへの適切な登録
+- 手動依存性構築コードの削除
+- テストの更新（期待クラス数を6から8に変更）
+
 ## 修正したファイル
+### 更新ファイル
+- host-frontend-root/frontend-src-root/src/entrypoints/popup/App.tsx
+- host-frontend-root/frontend-src-root/src/application/usecases/popup/PopupInitFormUseCase.ts
+- host-frontend-root/frontend-src-root/src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts
+- host-frontend-root/frontend-src-root/src/infrastructure/di/container.ts
+- host-frontend-root/frontend-src-root/tests/unit/infrastructure/di/container/concrete-class-registration-completeness.test.ts
