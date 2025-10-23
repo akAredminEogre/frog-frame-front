@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
-import { getActiveTabOrigin } from 'src/domain/entities/tabUtils';
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
-import { container } from 'src/infrastructure/di/container';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
+import { DexieRewriteRuleRepository } from 'src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
+import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
+import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
+import { SelectedPageTextRepository } from 'src/infrastructure/storage/SelectedPageTextRepository';
 import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
-import { GetSelectedPageTextUseCase } from 'src/application/usecases/selectedPageText/GetSelectedPageTextUseCase';
 
 function App() {
   // フォーム入力を管理するState
@@ -22,8 +21,8 @@ function App() {
 
   /** 保存ボタンを押したとき、UseCaseを通して保存・適用処理を実行 */
   const handleSave = async () => {
-    // 依存性を組み立て（DIコンテナから取得）
-    const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+    // Manual dependency construction to avoid DI conflicts
+    const repository = new DexieRewriteRuleRepository();
     const currentTabService = new ChromeCurrentTabService();
     const chromeRuntimeService = new ChromeRuntimeService();
     const saveUseCase = new SaveRewriteRuleAndApplyToCurrentTabUseCase(
@@ -48,20 +47,27 @@ function App() {
     }
   };
 
-  /** コンポーネントがマウントされたときにルールを適用 */
+  /** コンポーネントがマウントされたときにフォームを初期化 */
   useEffect(() => {
     const initForm = async () => {
-      // UseCaseを通してストレージから右クリック選択テキストを取得
-      const getSelectedPageTextUseCase = container.resolve(GetSelectedPageTextUseCase);
-      const selectedText = await getSelectedPageTextUseCase.execute();
-
-      const origin = await getActiveTabOrigin();
+      console.log('App: Starting form initialization...');
+      
+      // Manual dependency construction for PopupInitFormUseCase
+      const currentTabService = new ChromeCurrentTabService();
+      const selectedPageTextRepository = new SelectedPageTextRepository();
+      const popupInitFormUseCase = new PopupInitFormUseCase(currentTabService, selectedPageTextRepository);
+      
+      // Execute the use case
+      const result = await popupInitFormUseCase.execute();
+      
+      console.log('App: PopupInitFormUseCase executed successfully:', result);
 
       setRewriteRule((prev) => ({
         ...prev,
-        oldString: selectedText || prev.oldString,
-        urlPattern: origin || prev.urlPattern,
+        oldString: result.selectedText || prev.oldString,
+        urlPattern: result.urlPattern || prev.urlPattern,
       }));
+      console.log('App: Form initialized successfully');
     };
 
     initForm();
