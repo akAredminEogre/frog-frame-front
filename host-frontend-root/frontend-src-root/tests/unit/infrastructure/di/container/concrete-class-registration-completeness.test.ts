@@ -7,9 +7,8 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistance/index
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
-// import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
-// import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
-// import { GetCurrentTabOriginUseCase } from 'src/application/usecases/tab/GetCurrentTabOriginUseCase';
+import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
+import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
 
 /**
  * DIコンテナの完全自動化具体クラス登録確認テスト
@@ -60,7 +59,14 @@ describe('DI Container - 完全自動化具体クラス登録確認テスト', (
       class: CloseCurrentWindowUseCase,
       className: 'CloseCurrentWindowUseCase'
     },
-    // Note: SaveRewriteRuleAndApplyToCurrentTabUseCase, PopupInitFormUseCase and GetCurrentTabOriginUseCase use manual dependency construction pattern
+    {
+      class: SaveRewriteRuleAndApplyToCurrentTabUseCase,
+      className: 'SaveRewriteRuleAndApplyToCurrentTabUseCase'
+    },
+    {
+      class: PopupInitFormUseCase,
+      className: 'PopupInitFormUseCase'
+    }
   ];
 
   it('should verify expected concrete classes are registered and can be resolved', () => {
