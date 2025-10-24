@@ -6,6 +6,7 @@ import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import unusedImports from 'eslint-plugin-unused-imports';
 
 export default [js.configs.recommended, {
@@ -30,9 +31,36 @@ export default [js.configs.recommended, {
     '@typescript-eslint': tseslint,
     react: react,
     'react-hooks': reactHooks,
+    'simple-import-sort': simpleImportSort,
     'unused-imports': unusedImports,
   },
   rules: {
+    // Import sorting with custom groups
+    // DI container must be imported first to ensure reflect-metadata is loaded
+    // before any classes with @injectable() decorator
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          // Side effect imports (like 'reflect-metadata')
+          ['^\\u0000'],
+          // DI container import - MUST BE FIRST to initialize reflect-metadata
+          ['^src/infrastructure/di/container$'],
+          // Node.js builtins
+          ['^node:'],
+          // External packages
+          ['^@?\\w'],
+          // Internal packages starting with src/
+          ['^src/'],
+          // Parent imports (../)
+          ['^\\.\\./'],
+          // Current directory imports (./)
+          ['^\\.'],
+        ],
+      },
+    ],
+    'simple-import-sort/exports': 'error',
+
     // TypeScript ESLintルール - 不使用変数を厳しくチェック
     '@typescript-eslint/no-unused-vars': [
       'error',
@@ -43,7 +71,7 @@ export default [js.configs.recommended, {
         caughtErrors: 'all',
       },
     ],
-    
+
     // 未使用のimportを検知・削除
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': [
