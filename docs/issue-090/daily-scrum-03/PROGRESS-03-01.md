@@ -54,9 +54,7 @@ workflow:start-coding-according-to-daily-scrumに従って作業を開始しま�
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow:see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow:daily-scrum-pass-review.md -->
-
-
-
-
+自動生成ができなかったので、手動で最低限の画像を作成して対応しました。
+所定のフォルダに画像を配置したので、次のステップに進んでください。
 
 ---
