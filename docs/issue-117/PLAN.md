@@ -2,13 +2,14 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] importをアルファベット順にソートするnpmパッケージの調査・選定・インストール
-  - 候補パッケージの調査（eslint-plugin-import, eslint-plugin-simple-import-sort等）
-  - プロジェクトの要件に最適なパッケージを選定
-  - package.jsonへの追加
-  - ESLint設定ファイル（.eslintrc.cjs）への設定追加
-  - 既存コードへのソート適用（npm run lint:fix）
-  - make testlint で既存テストの全通過を確認
+- [x] importをアルファベット順にソートするnpmパッケージの調査・選定・インストール
+  - [x] 候補パッケージの調査（eslint-plugin-import, eslint-plugin-simple-import-sort等）
+  - [x] プロジェクトの要件に最適なパッケージを選定
+  - [x] package.jsonへの追加
+  - [x] ESLint設定ファイル（eslint.config.js）への設定追加
+  - [x] 既存コードへのソート適用（npm run lint:fix）
+  - [x] E2Eテスト失敗の原因究明とDI初期化順序の修正
+  - [x] make testcheck で既存テストの全通過を確認
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
@@ -20,3 +21,5 @@
 
 # 残タスク
 <!-- issueの進捗に応じて記入 -->
+- [ ] DIがコケたのにユニットテストで検知できなかったのはなぜか
+- [ ] 全体ではなく、変更のあったファイルだけに対してimportソートを適用するにはどうすればよいか
