@@ -54,7 +54,7 @@ export default defineConfig({
   
   // E2Eテスト用のローカルHTTPサーバー
   webServer: {
-    command: 'npx http-server tests/e2e/test-pages -p 8080 -a 127.0.0.1',
+    command: 'npx serve tests/e2e/test-pages -l 8080',
     port: 8080,
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,
