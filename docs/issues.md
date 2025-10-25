@@ -24,22 +24,21 @@
 
 # 0.1.3
 - [x] makeコマンド
+- [ ] SaveRewriteRuleAndApplyToCurrentTabUseCaseのDI解決のテストコード
 - [ ] コーディング規約ドキュメントまとめ
 - [ ] (node:12933) [DEP0066] DeprecationWarning: OutgoingMessage.
+- [ ] `手順の全体表示は`を修正
 
 # 0.2.0
-- [ ] 書き換えルールの削除機能
+- [ ] ルールの有効/無効切り替え機能
 
 # 1.0.0
-- [ ] ルールの有効/無効切り替え機能
+- [ ] 書き換えルールの削除機能
 - [x] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 
 ## phase02
 - [ ] タブリロードのテストはapplication層で行う
-- [ ] EditPageのE2Eテスト修正
-- [ ] entrypointのUseCaseをDI解決
 - [ ] ドキュメント中のアプリルートに、アプリ名を含まない
-- [ ] e2eテストのローカル化
 - [ ] edit/app.tsxのloadingをatomsに移動
 - [ ] edit/app.tsxのuseEffectの整理
 - [ ] e2eテストのエラー修正を部品化
@@ -49,7 +48,6 @@
 - [ ] urlPatternの空文字、null、undefinedのバリデーション
 - [ ] urlPatternの値オブジェクト化
 - [ ] 編集ページはポップアップとしても使えるようにする
-- [ ] `container.ts`への`SaveRewriteRuleAndApplyToCurrentTabUseCase`登録
 - [ ] UseCaseレベルでのテスト作成
 - [ ] HandleContextMenuReplaceDomElemenのテストコード
 - [ ] registerTabsOnUpdatedの'complete'ハードコード解消
@@ -57,8 +55,6 @@
 - [ ] rewriteRules.toArray().forEachの書き方をファーストクラスコレクションに移管
 - [ ] HtmlReplacerのメンバ変数化
 - [ ] application層からinfrastructureの実装をしているのを解消
-- [ ] importをアルファベット順にソートするnpm
-- [ ] createMessageRouterの堅牢化
 - [ ] '@'記法をsrcに変更、設定廃止
 - [ ] issue-012: 右クリック入力のe2eテスト
 - [ ] ElementSelectorの返り値をValueObjectに変更
@@ -66,11 +62,9 @@
 - [ ] SelectionServiceのテストケース追加
   - [ ] hasValidSelectionのテストと、ElementSelector.test.tsの重複削除
 - [ ] mockSelectionServiceが変更可能なのは大丈夫か確認
-- [ ] バリデーション
 - [ ] 選択されたテキストが複数のHTML要素にまたがる場合の処理方針について
 - [ ] 右クリック入力のロジック分離
 - [ ] ElementSelectorの詳細テスト追加
-- [ ] --project tsconfig.tsr.json の統一
 - [ ] ElementSelector.test.tsのテストケース分割
 - [ ] isInvalidAncestor、getStartElementの切り出し
 - [ ] isMultiElementSelection、findOptimalElementのif文整理
