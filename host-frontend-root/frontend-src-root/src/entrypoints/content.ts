@@ -1,8 +1,8 @@
-import { matchUrl } from 'src/utils/matchUrl';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
+import { matchUrl } from 'src/utils/matchUrl';
 
 
 export default defineContentScript({

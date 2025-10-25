@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+
 import type { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 
 /**

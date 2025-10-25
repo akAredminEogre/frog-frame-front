@@ -1,12 +1,15 @@
+import './style.css';
+
+import { container } from 'src/infrastructure/di/container';
+
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { useEffect,useState } from 'react';
+
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
 import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
-import { container } from 'src/infrastructure/di/container';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import './style.css';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);

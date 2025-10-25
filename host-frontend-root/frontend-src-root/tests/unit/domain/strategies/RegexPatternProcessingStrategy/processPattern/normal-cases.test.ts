@@ -5,7 +5,8 @@
  * 2. 複雑な正規表現パターンの保持
  * 3. 正規表現特殊文字の保持確認
  */
-import { describe, it, expect } from 'vitest';
+import { describe, expect,it } from 'vitest';
+
 import { RegexPatternProcessingStrategy } from 'src/domain/entities/RewriteRule/RegexPatternProcessingStrategy';
 
 const regexPatternProcessingCases = [

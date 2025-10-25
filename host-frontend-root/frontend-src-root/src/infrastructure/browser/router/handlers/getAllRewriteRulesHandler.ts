@@ -1,4 +1,5 @@
 import { container } from 'src/infrastructure/di/container';
+
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
 

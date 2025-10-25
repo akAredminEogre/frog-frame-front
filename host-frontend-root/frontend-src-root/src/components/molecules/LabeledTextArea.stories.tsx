@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import LabeledTextArea from './LabeledTextArea';
 
 const meta: Meta<typeof LabeledTextArea> = {

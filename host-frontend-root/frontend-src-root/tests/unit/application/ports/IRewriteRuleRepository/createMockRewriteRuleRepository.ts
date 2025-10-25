@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+
 import type { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 
 /**

@@ -1,6 +1,7 @@
-import { Tab } from 'src/domain/value-objects/Tab';
+import { describe, expect,it } from 'vitest';
+
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { describe, it, expect } from 'vitest';
+import { Tab } from 'src/domain/value-objects/Tab';
 
 /**
  * Tab.matchesRule メソッドの正常系テスト

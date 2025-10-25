@@ -1,6 +1,7 @@
 import { container } from 'src/infrastructure/di/container';
-import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
+
 import { Tab } from 'src/domain/value-objects/Tab';
+import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 
 type ApplyAllRulesMessage = { type: 'applyAllRules'; tabId: number; tabUrl: string };
 

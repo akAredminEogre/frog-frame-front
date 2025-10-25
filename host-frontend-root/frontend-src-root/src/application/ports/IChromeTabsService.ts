@@ -1,5 +1,5 @@
-import { Tabs } from 'src/domain/value-objects/Tabs';
 import { Tab } from 'src/domain/value-objects/Tab';
+import { Tabs } from 'src/domain/value-objects/Tabs';
 
 export interface IChromeTabsService {
   sendMessage(tabId: number, message: any): Promise<any>;

@@ -1,6 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { handlers } from 'src/infrastructure/browser/router/messageHandlers';
 import { container } from 'src/infrastructure/di/container';
+
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { handlers } from 'src/infrastructure/browser/router/messageHandlers';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 
 // Chrome APIのモック

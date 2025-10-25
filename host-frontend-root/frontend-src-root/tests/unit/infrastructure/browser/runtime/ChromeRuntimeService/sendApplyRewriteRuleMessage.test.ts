@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { Tab } from 'src/domain/value-objects/Tab';
+import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 
 // Chrome APIのモック
 const mockChrome = {
