@@ -11,9 +11,9 @@ e2eテスト実行時に発生する`npm warn exec The following package was not
 - `host-frontend-root/frontend-src-root/package.json` - `serve`をdevDependenciesに追加
 
 ## スクラム内残タスク
-- [ ] `serve`パッケージをdevDependenciesに追加
-- [ ] `make testlint`で回帰テストを実施
-- [ ] 警告が解消されたことを確認
+- [x] `serve`パッケージをdevDependenciesに追加
+- [x] `make testlint`で回帰テストを実施
+- [x] 警告が解消されたことを確認
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -30,7 +30,15 @@ e2eテスト実行時に発生する`npm warn exec The following package was not
 
 # DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+e2eテスト実行時に発生していた`npm warn exec The following package was not found and will be installed: serve@14.2.5`警告を解決しました。
+
+`serve`パッケージ(v14.2.5)をpackage.jsonのdevDependenciesに追加し、npm installを実行して依存関係を更新しました。
+
+`make testlint`で回帰テスト実施し、全テスト通過を確認しました:
+- 267 unit tests passed
+- 12 E2E tests passed
+- knip: no unused code detected
+- linting: passed
 
 ## 修正したファイル
+- `host-frontend-root/frontend-src-root/package.json` - `serve@^14.2.5`をdevDependenciesに追加
