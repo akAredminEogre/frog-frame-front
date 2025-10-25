@@ -2,9 +2,9 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] package.jsonからno-sortコマンドを削除
-- [ ] no-sortコマンドの削除による影響範囲を調査・対応
-- [ ] テストとリント実行（make testlint）
+- [x] package.jsonからno-sortコマンドを削除
+- [x] no-sortコマンドの削除による影響範囲を調査・対応
+- [x] テストとリント実行（make testlint）
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
