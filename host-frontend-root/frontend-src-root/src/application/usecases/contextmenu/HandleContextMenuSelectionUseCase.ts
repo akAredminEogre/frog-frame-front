@@ -1,7 +1,8 @@
 import { inject, injectable } from 'tsyringe';
+
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 import { IPopupService } from 'src/application/ports/IPopupService';
+import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 
 /**
  * コンテキストメニューからのDOM要素置換処理を扱うユースケース

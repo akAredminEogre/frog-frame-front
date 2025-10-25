@@ -4,7 +4,8 @@
  * 2. 全パラメータでのインスタンス生成  
  * 3. isRegexデフォルト値の確認
  */
-import { describe, it, expect } from 'vitest';
+import { describe, expect,it } from 'vitest';
+
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 describe('RewriteRule.constructor - 正常系', () => {

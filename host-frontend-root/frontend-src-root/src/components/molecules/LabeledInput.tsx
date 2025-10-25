@@ -1,6 +1,8 @@
 import React from 'react';
-import Input from 'src/components/atoms/Input';
+
 import Description from 'src/components/atoms/Description';
+import Input from 'src/components/atoms/Input';
+
 import styles from './InputSection.module.css';
 
 interface LabeledInputProps {

@@ -1,5 +1,6 @@
-import { PatternProcessingStrategy } from "./PatternProcessingStrategy";
 import { RegexConstants } from "src/domain/constants/RegexConstants";
+
+import { PatternProcessingStrategy } from "./PatternProcessingStrategy";
 
 /**
  * 文字列パターン処理戦略

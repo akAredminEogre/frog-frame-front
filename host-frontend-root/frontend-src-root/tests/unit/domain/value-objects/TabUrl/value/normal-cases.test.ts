@@ -1,5 +1,6 @@
+import { describe, expect,it } from 'vitest';
+
 import { TabUrl } from 'src/domain/value-objects/TabUrl';
-import { describe, it, expect } from 'vitest';
 
 /**
  * 1. valueプロパティで正しい値を取得できることの確認

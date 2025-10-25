@@ -1,5 +1,5 @@
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RegexConstants } from 'src/domain/constants/RegexConstants';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 class ReplaceResult {
   constructor(

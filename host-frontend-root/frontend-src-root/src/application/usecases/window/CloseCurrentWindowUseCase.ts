@@ -1,4 +1,5 @@
-import { injectable, inject } from 'tsyringe';
+import { inject,injectable } from 'tsyringe';
+
 import { IWindowService } from 'src/application/ports/IWindowService';
 
 @injectable()

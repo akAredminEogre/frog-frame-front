@@ -1,4 +1,5 @@
-import { injectable, inject } from 'tsyringe';
+import { inject,injectable } from 'tsyringe';
+
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 

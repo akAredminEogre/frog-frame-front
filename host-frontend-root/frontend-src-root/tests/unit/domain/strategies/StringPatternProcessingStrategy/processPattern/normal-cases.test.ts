@@ -6,7 +6,8 @@
  * 4. 特殊文字を含まない通常文字列の無変更処理
  * 5. HTML要素を含むパターンでの角括弧の適切な処理
  */
-import { describe, it, expect } from 'vitest';
+import { describe, expect,it } from 'vitest';
+
 import { StringPatternProcessingStrategy } from 'src/domain/entities/RewriteRule/StringPatternProcessingStrategy';
 
 const stringPatternProcessingCases = [

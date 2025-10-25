@@ -1,5 +1,6 @@
+import { describe, expect,it } from 'vitest';
+
 import { Tab } from 'src/domain/value-objects/Tab';
-import { describe, it, expect } from 'vitest';
 
 /**
  * TabIdのバリデーション失敗時にTabが適切にエラーをラップすることを確認

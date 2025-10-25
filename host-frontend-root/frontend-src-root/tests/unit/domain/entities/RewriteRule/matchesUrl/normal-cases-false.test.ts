@@ -5,7 +5,8 @@
  * 3. URLが前方一致しない場合はfalseを返す - 異なるドメイン
  * 4. URLが前方一致しない場合はfalseを返す - 異なるプロトコル
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 describe('RewriteRule.matchesUrl - 正常系 (falseを返すケース)', () => {

@@ -1,5 +1,6 @@
+import { describe, expect,it } from 'vitest';
+
 import { TabUrl } from 'src/domain/value-objects/TabUrl';
-import { describe, it, expect } from 'vitest';
 
 /**
  * Tests for TabUrl.canInjectContentScript() - Normal cases

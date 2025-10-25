@@ -1,5 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+
 import RulesApp from './RulesApp';
 
 const container = document.getElementById('root');

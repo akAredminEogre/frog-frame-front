@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { container } from 'tsyringe';
 import 'src/infrastructure/di/container';
+
+import { container } from 'tsyringe';
+import { afterEach,beforeEach, describe, expect, it } from 'vitest';
 
 /**
  * DIコンテナの完全自動化インターフェース登録確認テスト

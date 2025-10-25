@@ -1,7 +1,8 @@
 import { container } from 'src/infrastructure/di/container';
+
+import { TabId } from 'src/domain/value-objects/TabId';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
-import { TabId } from 'src/domain/value-objects/TabId';
 
 export function registerTabsOnUpdated() {
   chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {

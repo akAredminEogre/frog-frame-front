@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
-import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
+import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
 
 /**
  * OpenRuleEditPageUseCase.execute - 正常系テスト

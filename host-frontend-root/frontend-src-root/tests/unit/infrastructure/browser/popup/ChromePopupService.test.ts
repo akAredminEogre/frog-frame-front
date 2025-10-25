@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
+import { afterEach,beforeEach, describe, expect, it, vi } from 'vitest';
+
 import type { IPopupService } from 'src/application/ports/IPopupService';
+import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
 
 // Chrome APIのモック設定
 const mockChromeAction = {

@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { expect,test } from './fixtures';
 
 /**
  * Chrome拡張機能ポップアップのE2Eテスト
