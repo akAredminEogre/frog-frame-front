@@ -51,7 +51,65 @@
 
 # DAILY SCRUM-02作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+
+スクラム02では、PLAN.mdの残タスク「DIがコケたのにユニットテストで検知できなかったのはなぜか」の調査と対応を完了しました。また、レビューコメントに応じて、import順序管理機能の段階的な改善を実施しました。
+
+### 1. DI初期化問題の原因調査とドキュメント化（PROGRESS-02-01）
+- ユニットテストとE2Eテストの違いを分析し、DI初期化問題がユニットテストで検知できなかった原因を特定
+- ユニットテストでは各テストファイルが最初に`container`をimportするため問題が発生しなかったが、E2Eテストでは実際のアプリケーション起動フローで問題が顕在化
+- CLAUDE.mdに「CRITICAL - Import Order Constraint」セクションを追加し、DI初期化の制約を文書化
+- 改善案として統合テストの追加を検討
+
+### 2. 統合テストの実装（PROGRESS-02-02）
+- `tests/integration/entrypoints/background-initialization.test.ts` を作成
+- エントリーポイントからリスナーまでの実際のimport順序を再現し、DI初期化を検証
+- E2Eテストより軽量で高速（数百ミリ秒で完了）
+- import順序の問題を早期に検知可能
+
+### 3. ESLint設定の調整（PROGRESS-02-03～06）
+- import sortingを一時的に無効化（`'off'`）して、警告なしで動作確認
+- レビューコメントに応じて、VSCodeで情報レベルでヒントを表示する設定に変更
+  - `eslint.config.js`: `simple-import-sort/imports` を `'warn'` に設定
+  - `.vscode/settings.json`: VSCodeでの表示を情報レベル（青いインジケーター）に設定
+- importソート機能の追加
+  - `package.json`: `sort:imports` スクリプトを追加
+  - `Makefile`: `make sortimports` コマンドを追加
+  - 全ファイル（約150ファイル）のimportをソート実行
+- 手動実行のみに制限（自動実行を防止）
+
+### 4. テストコマンドでのimport sort制御（PROGRESS-02-07～09）
+- `make testlint` でimport sortが自動修正されないように改善
+  - `package.json`: `lint:fix:no-sort` スクリプトを追加
+  - `unused:fix` スクリプトを `lint:fix:no-sort` を使用するように変更
+- `make testcheck` でimport sortの警告が表示されないように改善
+  - `package.json`: `lint:no-sort` スクリプトを追加
+  - `test:check` スクリプトを `lint:no-sort` を使用するように変更
+
+### 実装結果
+- すべてのユニットテスト（269件）、E2Eテスト（12件）が成功
+- DI初期化問題を早期に検知できる統合テストを追加
+- import順序管理機能の段階的な改善により、開発者が柔軟に制御可能な仕組みを構築
+  - VSCode上では情報レベルでヒント表示
+  - `make sortimports` で明示的にimportをソート
+  - `make testlint` / `make testcheck` ではimport sortを強制しない
 
 ## 修正したファイル
+
+**ドキュメント:**
+- CLAUDE.md - DI初期化の制約を文書化
+- docs/issue-117/PLAN.md - 残タスクを完了に更新
+- .vscode/settings.json（新規作成） - VSCodeでのESLint表示設定
+
+**テスト:**
+- tests/integration/entrypoints/background-initialization.test.ts（新規作成） - DI初期化の統合テスト
+
+**設定ファイル:**
+- host-frontend-root/frontend-src-root/eslint.config.js - simple-import-sortルールの調整
+- host-frontend-root/frontend-src-root/package.json - lint/testスクリプトの追加・変更
+  - `lint:no-sort` - import sort以外のルールでチェック
+  - `lint:fix:no-sort` - import sort以外のルールで修正
+  - `sort:imports` - 全ファイルのimportをソート
+- Makefile - `make sortimports` コマンドの追加
+
+**ソースコード（importソート実施）:**
+- 全ソースファイル（約150ファイル） - importをDIコンテナ優先順序でソート
