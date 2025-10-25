@@ -5,7 +5,8 @@
  * 3. 前方一致の境界値テスト - パス付きURLで一致
  * 4. 前方一致の境界値テスト - パス完全一致
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 describe('RewriteRule.matchesUrl - 正常系 (trueを返すケース)', () => {

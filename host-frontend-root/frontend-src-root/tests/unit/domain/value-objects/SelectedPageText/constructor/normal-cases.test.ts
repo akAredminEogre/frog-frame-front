@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect,it } from 'vitest';
+
 import { SelectedPageText } from 'src/domain/value-objects/SelectedPageText';
 
 describe('SelectedPageText.constructor() - normal cases', () => {

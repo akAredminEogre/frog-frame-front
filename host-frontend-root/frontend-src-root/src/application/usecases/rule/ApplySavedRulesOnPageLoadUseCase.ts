@@ -1,5 +1,5 @@
-import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
 
 export class ApplySavedRulesOnPageLoadUseCase {
   private replacer: HtmlReplacer;

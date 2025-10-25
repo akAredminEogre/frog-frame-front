@@ -1,10 +1,11 @@
-import { injectable, inject } from 'tsyringe';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
+import { inject,injectable } from 'tsyringe';
+
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
-import { Tab } from 'src/domain/value-objects/Tab';
+import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { Tab } from 'src/domain/value-objects/Tab';
 
 interface SaveRewriteRuleAndApplyResult {
   success: boolean;

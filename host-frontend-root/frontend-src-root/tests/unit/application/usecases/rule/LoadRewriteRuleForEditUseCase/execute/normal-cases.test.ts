@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 /**
  * LoadRewriteRuleForEditUseCase.execute - 正常系テスト

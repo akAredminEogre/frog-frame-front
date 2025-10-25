@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { handlers } from 'src/infrastructure/browser/router/messageHandlers';
 
 describe('handlers.ping', () => {

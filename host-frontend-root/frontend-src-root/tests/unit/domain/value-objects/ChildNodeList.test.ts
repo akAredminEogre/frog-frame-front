@@ -1,5 +1,6 @@
+import { beforeEach,describe, expect, it } from 'vitest';
+
 import { ChildNodeList } from 'src/domain/value-objects/ChildNodeList';
-import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('ChildNodeList', () => {
   let parentDiv: HTMLDivElement;

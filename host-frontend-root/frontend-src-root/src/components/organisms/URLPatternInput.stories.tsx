@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import URLPatternInput from './URLPatternInput';
 
 const meta: Meta<typeof URLPatternInput> = {

@@ -1,5 +1,6 @@
+import { describe, expect,it } from 'vitest';
+
 import { TabId } from 'src/domain/value-objects/TabId';
-import { describe, it, expect } from 'vitest';
 
 /**
  * 1. undefinedの場合はエラーをthrowする

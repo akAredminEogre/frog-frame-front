@@ -1,6 +1,8 @@
 import React from 'react';
-import TextArea from 'src/components/atoms/TextArea';
+
 import Description from 'src/components/atoms/Description';
+import TextArea from 'src/components/atoms/TextArea';
+
 import styles from './InputSection.module.css';
 
 interface LabeledTextAreaProps {

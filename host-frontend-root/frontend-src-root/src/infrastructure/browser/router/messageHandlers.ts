@@ -1,6 +1,6 @@
 import { applyAllRulesHandler } from 'src/infrastructure/browser/router/handlers/applyAllRulesHandler';
-import { pingHandler } from 'src/infrastructure/browser/router/handlers/pingHandler';
 import { getAllRewriteRulesHandler } from 'src/infrastructure/browser/router/handlers/getAllRewriteRulesHandler';
+import { pingHandler } from 'src/infrastructure/browser/router/handlers/pingHandler';
 
 /**
  * Message handlers aggregator

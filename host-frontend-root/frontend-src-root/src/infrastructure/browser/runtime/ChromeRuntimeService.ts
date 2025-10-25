@@ -1,5 +1,5 @@
-import { Tab } from 'src/domain/value-objects/Tab';
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
+import { Tab } from 'src/domain/value-objects/Tab';
 
 export class ChromeRuntimeService implements IChromeRuntimeService {
   async sendApplyRewriteRuleMessage(currentTab: Tab): Promise<{ success: boolean; error?: string }> {

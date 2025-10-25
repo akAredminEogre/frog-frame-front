@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { afterEach,beforeEach, describe, expect, it } from 'vitest';
+
 import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 

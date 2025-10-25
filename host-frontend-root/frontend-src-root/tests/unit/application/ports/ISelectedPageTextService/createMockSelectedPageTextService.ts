@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+
 import type { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 
 /**

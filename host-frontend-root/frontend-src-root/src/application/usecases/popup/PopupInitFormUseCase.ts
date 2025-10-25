@@ -1,4 +1,5 @@
-import { injectable, inject } from 'tsyringe';
+import { inject,injectable } from 'tsyringe';
+
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
 
