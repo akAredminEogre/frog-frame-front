@@ -38,10 +38,10 @@ export default [js.configs.recommended, {
     // Import sorting with custom groups
     // DI container must be imported first to ensure reflect-metadata is loaded
     // before any classes with @injectable() decorator
-    // NOTE: Disabled to avoid warnings when imports are not sorted
-    // The configuration is kept for future reference if auto-sorting is needed
+    // NOTE: Set to 'warn' to show information-level hints in VSCode when imports are not sorted
+    // This provides gentle guidance without blocking the build
     'simple-import-sort/imports': [
-      'off',
+      'warn',
       {
         groups: [
           // Side effect imports (like 'reflect-metadata')
