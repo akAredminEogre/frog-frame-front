@@ -40,7 +40,7 @@ feat: importをアルファベット順にソートするnpmパッケージの�
 ### 3. ESLint設定の段階的改善（スクラム02）
 - **警告表示の最適化**
   - `eslint.config.js`: `simple-import-sort/imports`を`'warn'`に設定
-  - `.vscode/settings.json`: VSCodeでの表示を情報レベル（青いインジケーター）に設定
+
 - **importソート機能の追加**
   - `package.json`: `sort:imports`スクリプトを追加
   - `Makefile`: `make sortimports`コマンドを追加
@@ -60,10 +60,6 @@ feat: importをアルファベット順にソートするnpmパッケージの�
 - `CLAUDE.md` - DI初期化の制約を文書化
 - `docs/issue-117/PLAN.md` - タスク管理と進捗記録
 - `docs/issue-117/RETROSPECTIVE.md` - スクラムの振り返り
-- `.vscode/settings.json`（新規作成） - VSCodeでのESLint表示設定
-
-**テスト:**
-- `tests/integration/entrypoints/background-initialization.test.ts`（新規作成） - DI初期化の統合テスト
 
 **設定ファイル:**
 - `host-frontend-root/frontend-src-root/eslint.config.js` - simple-import-sortルールの設定
@@ -89,29 +85,11 @@ feat: importをアルファベット順にソートするnpmパッケージの�
    - 既存の全E2Eテスト（12件）が成功することを確認
    - lint、knip、tsrがエラーなしで完了することを確認
 
-2. **統合テストの確認**
-   - `tests/integration/entrypoints/background-initialization.test.ts`が成功することを確認
-   - DI初期化が正しく行われていることを検証
-
-3. **import sortの動作確認**
-   ```bash
-   # 手動でimportをソート
-   make sortimports
-
-   # 変更がないことを確認（既にソート済み）
-   git status
-   ```
-
-4. **VSCodeでの表示確認**
-   - import順序が乱れているファイルを開く
-   - 情報レベル（青いインジケーター）でヒントが表示されることを確認
-
 ### 期待される結果
 - すべてのテストが成功（ユニット: 269件、E2E: 12件）
 - import順序がDIコンテナ優先順序で統一されている
 - `make testcheck`でimport sortの警告が表示されない
 - `make testlint`でimport sortの自動修正が行われない
-- VSCodeで情報レベルのヒントが表示される
 
 ## 補足
 
@@ -144,13 +122,6 @@ feat: importをアルファベット順にソートするnpmパッケージの�
 - `make sortimports`で明示的にimportをソート（手動実行のみ）
 - `make testlint` / `make testcheck`ではimport sortを強制しない
 - 開発者が柔軟に制御できる仕組みを構築
-
-## 本スコープの対象外となったタスク
-
-- **変更のあったファイルだけに対してimportソートを適用する機能**
-  - `make sortimports-changed`として一度実装したが、複雑性を考慮してスコープ外とした
-  - 本issueの主目的（importソート機能の導入）は達成済み
-  - 将来の改善課題として残す
 
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/02-submit-pull-request.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/03-merge-pull-request.md -->
