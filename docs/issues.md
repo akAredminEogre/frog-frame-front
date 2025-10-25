@@ -24,7 +24,6 @@
 
 # 0.1.3
 - [x] makeコマンド
-- [ ] SaveRewriteRuleAndApplyToCurrentTabUseCaseのDI解決のテストコード
 - [ ] コーディング規約ドキュメントまとめ
 - [ ] (node:12933) [DEP0066] DeprecationWarning: OutgoingMessage.
 - [ ] `手順の全体表示は`を修正
@@ -37,8 +36,6 @@
 - [x] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 
 ## phase02
-- [ ] タブリロードのテストはapplication層で行う
-- [ ] ドキュメント中のアプリルートに、アプリ名を含まない
 - [ ] edit/app.tsxのloadingをatomsに移動
 - [ ] edit/app.tsxのuseEffectの整理
 - [ ] e2eテストのエラー修正を部品化
