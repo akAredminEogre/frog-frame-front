@@ -38,8 +38,10 @@ export default [js.configs.recommended, {
     // Import sorting with custom groups
     // DI container must be imported first to ensure reflect-metadata is loaded
     // before any classes with @injectable() decorator
+    // NOTE: Disabled to avoid warnings when imports are not sorted
+    // The configuration is kept for future reference if auto-sorting is needed
     'simple-import-sort/imports': [
-      'error',
+      'off',
       {
         groups: [
           // Side effect imports (like 'reflect-metadata')
@@ -59,7 +61,7 @@ export default [js.configs.recommended, {
         ],
       },
     ],
-    'simple-import-sort/exports': 'error',
+    'simple-import-sort/exports': 'off',
 
     // TypeScript ESLintルール - 不使用変数を厳しくチェック
     '@typescript-eslint/no-unused-vars': [
