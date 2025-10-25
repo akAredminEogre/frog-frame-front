@@ -1,4 +1,4 @@
-.PHONY: init-config help init-dev dev down ps unit e2e testall testcheck testlint
+.PHONY: init-config help init-dev dev down ps unit e2e testall testcheck testlint sortimports
 
 help:
 	@echo "Available commands:"
@@ -12,6 +12,7 @@ help:
 	@echo "  make testall      - Run all tests (unit + E2E)"
 	@echo "  make testcheck    - Run tests with warnings"
 	@echo "  make testlint     - Run comprehensive tests and linting (required before PR)"
+	@echo "  make sortimports  - Sort imports in all files"
 	@echo "  make help         - Show this help message"
 
 init-config:
@@ -80,3 +81,6 @@ testlint:
 	@echo "Running comprehensive tests and linting..."
 	@docker compose exec frontend npm run test:lint
 
+sortimports:
+	@echo "Sorting imports in all files..."
+	@docker compose exec frontend npm run sort:imports
