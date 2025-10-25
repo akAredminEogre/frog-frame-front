@@ -1,5 +1,9 @@
 # 概要
 <!-- このチケットで解決したい課題 -->
+e2eテスト開始時に下記のwarningが発生する問題の調査と解決
+```
+[WebServer] npm warn exec The following package was not found and will be installed: serve@14.2.5
+```
 
 ## 関連リンク
 
