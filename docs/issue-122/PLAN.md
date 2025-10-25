@@ -2,7 +2,7 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] e2eテスト時のserve警告の原因調査と解決策の実装
+- [x] e2eテスト時のserve警告の原因調査と解決策の実装
   - playwright.config.ts:57で`npx serve`が使用されている
   - package.jsonに`serve`パッケージが含まれていないため、実行のたびにnpm warnが発生
   - 解決策: `serve`をdevDependenciesに追加する
