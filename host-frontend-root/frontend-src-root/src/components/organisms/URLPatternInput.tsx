@@ -1,4 +1,5 @@
 import React from 'react';
+
 import LabeledInput from 'src/components/molecules/LabeledInput';
 
 interface URLPatternInputProps {

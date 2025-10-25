@@ -5,7 +5,8 @@
  * 3. isRegexデフォルト値の確認
  * 4. urlPatternが未定義の場合の処理
  */
-import { describe, it, expect } from 'vitest';
+import { describe, expect,it } from 'vitest';
+
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 describe('RewriteRule.fromPlainObject - 正常系', () => {

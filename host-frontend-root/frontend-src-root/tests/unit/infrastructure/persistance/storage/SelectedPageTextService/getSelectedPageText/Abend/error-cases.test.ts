@@ -1,4 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach,beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { SelectedPageTextService } from 'src/infrastructure/persistance/storage/SelectedPageTextService';
 
 // Chrome Storage APIのモック設定

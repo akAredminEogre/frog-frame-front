@@ -1,11 +1,14 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
 import './App.css';
+
 import { container } from 'src/infrastructure/di/container';
-import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
-import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
-import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
+
+import * as React from 'react';
+import { useEffect,useState } from 'react';
+
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
+import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
+import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
+import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
 
 function App() {
   // フォーム入力を管理するState

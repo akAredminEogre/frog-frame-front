@@ -1,4 +1,5 @@
 import { injectable } from 'tsyringe';
+
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { Tab } from 'src/domain/value-objects/Tab';
 import { Tabs } from 'src/domain/value-objects/Tabs';

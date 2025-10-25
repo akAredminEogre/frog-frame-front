@@ -1,11 +1,12 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
-import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
-import { IPopupService } from 'src/application/ports/IPopupService';
 import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
-import { createMockSelectedPageTextService } from 'tests/unit/application/ports/ISelectedPageTextService/createMockSelectedPageTextService';
 import { createMockPopupService } from 'tests/unit/application/ports/IPopupService/createMockPopupService';
+import { createMockSelectedPageTextService } from 'tests/unit/application/ports/ISelectedPageTextService/createMockSelectedPageTextService';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
+import { IPopupService } from 'src/application/ports/IPopupService';
+import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
+import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 
 /**
  * 1. tabId=123, selection=\"selected text\"での正常処理とサービス実行順序検証

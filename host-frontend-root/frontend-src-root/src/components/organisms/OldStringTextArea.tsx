@@ -1,6 +1,7 @@
 import React from 'react';
-import TextArea from 'src/components/atoms/TextArea';
+
 import Checkbox from 'src/components/atoms/Checkbox';
+import TextArea from 'src/components/atoms/TextArea';
 import styles from 'src/components/organisms/RewriteRuleForm.module.css';
 
 interface OldStringTextAreaProps {

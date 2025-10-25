@@ -1,5 +1,6 @@
+import { describe, expect,it } from 'vitest';
+
 import { Tab } from 'src/domain/value-objects/Tab';
-import { describe, it, expect } from 'vitest';
 
 /**
  * 1. tabIdプロパティで正しい値を取得できることの確認

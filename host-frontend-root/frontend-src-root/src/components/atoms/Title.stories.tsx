@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import Title from './Title';
 
 const meta: Meta<typeof Title> = {

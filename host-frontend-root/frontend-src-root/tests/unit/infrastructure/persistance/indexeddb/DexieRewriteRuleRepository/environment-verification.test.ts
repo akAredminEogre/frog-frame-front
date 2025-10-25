@@ -1,6 +1,8 @@
 import '../setup';
-import { describe, it, expect } from 'vitest';
+
 import { IDBFactory } from 'fake-indexeddb';
+import { describe, expect,it } from 'vitest';
+
 import { dexieDatabase } from 'src/infrastructure/persistance/indexeddb/DexieDatabase';
 
 /**

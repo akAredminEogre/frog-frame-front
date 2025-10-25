@@ -1,6 +1,6 @@
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { TabId } from 'src/domain/value-objects/TabId';
 import { TabUrl } from 'src/domain/value-objects/TabUrl';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 export class Tab {
   private readonly _tabId: TabId;

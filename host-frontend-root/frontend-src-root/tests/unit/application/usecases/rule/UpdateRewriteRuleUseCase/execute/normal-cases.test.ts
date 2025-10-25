@@ -1,11 +1,12 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { Tabs } from 'src/domain/value-objects/Tabs';
 import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
 import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { Tabs } from 'src/domain/value-objects/Tabs';
 
 /**
  * UpdateRewriteRuleUseCase.execute - 正常系テスト

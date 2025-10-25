@@ -1,8 +1,9 @@
-import { injectable, inject } from 'tsyringe';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { inject,injectable } from 'tsyringe';
+
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { Tab } from 'src/domain/value-objects/Tab';
 import { Tabs } from 'src/domain/value-objects/Tabs';
 

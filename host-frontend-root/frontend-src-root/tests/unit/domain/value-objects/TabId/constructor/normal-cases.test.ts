@@ -1,5 +1,6 @@
+import { describe, expect,it } from 'vitest';
+
 import { TabId } from 'src/domain/value-objects/TabId';
-import { describe, it, expect } from 'vitest';
 
 /**
  * 1. 正の整数での正常なインスタンス作成

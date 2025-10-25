@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { expect,test } from './fixtures';
 
 /**
  * ルール一覧ページ（オプションページ）のE2Eテスト
