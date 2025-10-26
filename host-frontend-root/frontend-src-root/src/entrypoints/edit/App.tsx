@@ -1,8 +1,8 @@
-import './App.css';
+import 'src/entrypoints/edit/App.css';
 
 import React, { useEffect, useState } from 'react';
 
-import { EditRulePage } from '../../components/pages/EditRulePage';
+import { EditRulePage } from 'src/components/pages/EditRulePage';
 
 const App: React.FC = () => {
   const [ruleId, setRuleId] = useState<string | undefined>(undefined);

@@ -1,6 +1,6 @@
-import { PatternProcessingStrategy } from "./PatternProcessingStrategy";
-import { RegexPatternProcessingStrategy } from "./RegexPatternProcessingStrategy";
-import { StringPatternProcessingStrategy } from "./StringPatternProcessingStrategy";
+import { PatternProcessingStrategy } from "src/domain/entities/RewriteRule/PatternProcessingStrategy";
+import { RegexPatternProcessingStrategy } from "src/domain/entities/RewriteRule/RegexPatternProcessingStrategy";
+import { StringPatternProcessingStrategy } from "src/domain/entities/RewriteRule/StringPatternProcessingStrategy";
 
 /**
  * パターン処理戦略のファクトリクラス

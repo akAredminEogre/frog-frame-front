@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './TextArea.module.css';
+import styles from 'src/components/atoms/TextArea.module.css';
 
 interface TextAreaProps {
   value: string;

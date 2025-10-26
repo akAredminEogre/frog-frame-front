@@ -1,4 +1,4 @@
-import { PatternProcessingStrategy } from "./PatternProcessingStrategy";
+import { PatternProcessingStrategy } from "src/domain/entities/RewriteRule/PatternProcessingStrategy";
 
 /**
  * 正規表現パターン処理戦略

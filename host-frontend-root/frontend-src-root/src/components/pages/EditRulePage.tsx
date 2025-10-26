@@ -6,8 +6,7 @@ import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
-
-import { RewriteRuleForm } from '../organisms/RewriteRuleForm';
+import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
 
 interface EditRulePageProps {
   ruleId?: string; // 編集対象のルールID（URLパラメータから取得想定、numberに変換して使用）

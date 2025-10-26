@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import LabeledTextArea from './LabeledTextArea';
+import LabeledTextArea from 'src/components/molecules/LabeledTextArea';
 
 const meta: Meta<typeof LabeledTextArea> = {
   title: 'Molecules/LabeledTextArea',

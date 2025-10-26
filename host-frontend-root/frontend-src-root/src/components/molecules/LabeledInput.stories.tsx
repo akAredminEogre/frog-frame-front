@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import LabeledInput from './LabeledInput';
+import LabeledInput from 'src/components/molecules/LabeledInput';
 
 const meta: Meta<typeof LabeledInput> = {
   title: 'Molecules/LabeledInput',

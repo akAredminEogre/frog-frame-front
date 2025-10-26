@@ -2,8 +2,7 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
-
-import { dexieDatabase, RewriteRuleSchema } from './DexieDatabase';
+import { dexieDatabase, RewriteRuleSchema } from 'src/infrastructure/persistance/indexeddb/DexieDatabase';
 
 /**
  * Dexie.js (IndexedDB) を使用したRewriteRuleリポジトリの実装

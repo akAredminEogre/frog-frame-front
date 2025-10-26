@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import Title from './Title';
+import Title from 'src/components/atoms/Title';
 
 const meta: Meta<typeof Title> = {
   title: 'Atoms/Title',
