@@ -1,4 +1,4 @@
-import './style.css';
+import 'src/entrypoints/edit/style.css';
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';

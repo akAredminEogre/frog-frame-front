@@ -1,4 +1,4 @@
-import './style.css';
+import 'src/entrypoints/popup/style.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';

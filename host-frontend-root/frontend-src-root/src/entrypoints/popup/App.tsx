@@ -1,4 +1,4 @@
-import './App.css';
+import 'src/entrypoints/popup/App.css';
 
 import { container } from 'src/infrastructure/di/container';
 
