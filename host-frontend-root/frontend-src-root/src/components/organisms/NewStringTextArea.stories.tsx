@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import NewStringTextArea from './NewStringTextArea';
+import NewStringTextArea from 'src/components/organisms/NewStringTextArea';
 
 const meta: Meta<typeof NewStringTextArea> = {
   title: 'Organisms/NewStringTextArea',

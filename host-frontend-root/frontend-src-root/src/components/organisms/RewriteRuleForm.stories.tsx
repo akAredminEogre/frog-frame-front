@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { RewriteRuleForm } from './RewriteRuleForm';
+import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
 
 const meta: Meta<typeof RewriteRuleForm> = {
   title: 'Organisms/RewriteRuleForm',

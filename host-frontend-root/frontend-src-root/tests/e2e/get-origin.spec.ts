@@ -1,4 +1,4 @@
-import { expect,test } from './fixtures';
+import { expect,test } from 'tests/e2e/fixtures';
 
 test('ポップアップを開くと、URLパターンのフォームにブラウザに表示されているページのURLのドメインが自動入力されている', async ({ page, popupPage }) => {
   // メインページに移動し、フォーカスを当てる

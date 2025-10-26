@@ -1,5 +1,5 @@
 
-import { expect,test } from './fixtures';
+import { expect,test } from 'tests/e2e/fixtures';
 
 // このテストはローカルHTMLファイルを使用してE2Eテストの安定性と実行速度を向上させています
 // 外部Webサイトへの依存を排除し、テスト環境の制御性を高めています
