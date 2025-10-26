@@ -16,13 +16,13 @@ content.tsのリファクタリング実装を行う。
 - src/infrastructure/browser/listeners/runtime.onMessage.content.ts (新規作成)
 
 ## スクラム内残タスク
-- [ ] chrome.runtime.onMessage.addListenerの分岐ロジックを分析
-- [ ] src/infrastructure/browser/listeners/runtime.onMessage.content.ts を作成
-- [ ] getElementSelection用のメッセージハンドラー関数を作成
-- [ ] applyAllRules用のメッセージハンドラー関数を作成
-- [ ] content.tsを修正してリスナー登録関数を呼び出すように変更
-- [ ] 単体テストの追加
-- [ ] make testcheckでの動作確認
+- [x] chrome.runtime.onMessage.addListenerの分岐ロジックを分析
+- [x] src/infrastructure/browser/listeners/runtime.onMessage.content.ts を作成
+- [x] getElementSelection用のメッセージハンドラー関数を作成
+- [x] applyAllRules用のメッセージハンドラー関数を作成
+- [x] content.tsを修正してリスナー登録関数を呼び出すように変更
+- [x] 単体テストの追加 (infrastructure/listeners/ は Optional なのでスキップ)
+- [x] make testcheckでの動作確認
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -39,7 +39,58 @@ content.tsのリファクタリングに取り組みます。background.tsと同
 
 # DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+content.tsのリファクタリングを4回のレビューイテレーションを経て完了しました。
+
+### 第1回目の実装 (PROGRESS-01-01.md)
+1. 新規ファイルの作成
+   - src/infrastructure/browser/listeners/runtime.onMessage.content.ts
+   - registerRuntimeOnMessageForContent() 関数を作成
+   - メッセージタイプごとのハンドラー関数を分離
+
+2. content.tsのリファクタリング
+   - inline のメッセージリスナーロジックを削除
+   - registerRuntimeOnMessageForContent() を呼び出すように変更
+
+### 第2回目の実装 (PROGRESS-01-02.md) - メッセージルーターパターン導入
+レビューフィードバック: 「registerRuntimeOnMessageForContent 関数がまだ少し長いので、もう少し分割できる」
+
+対応内容:
+- 新規ファイルの作成:
+  - src/infrastructure/browser/router/handlers/content/getElementSelectionHandler.ts
+  - src/infrastructure/browser/router/handlers/content/applyAllRulesHandler.ts
+  - src/infrastructure/browser/router/messageHandlers.content.ts
+  - src/infrastructure/browser/router/messageRouter.content.ts
+- background.tsと同じメッセージルーターパターンを採用
+- registerRuntimeOnMessageForContent を約50行から約20行に削減
+
+### 第3回目の実装 (PROGRESS-01-03.md) - ドキュメント充実化
+レビューフィードバック: 「getElementSelectionHandlerは、msgパラメータがありませんが、実際にはどのような経路で呼び出されるのか」
+
+対応内容:
+- getElementSelectionHandler に _msg パラメータを復元（統一的なハンドラーシグネチャのため）
+- 両ハンドラーに詳細な呼び出し経路のドキュメントを追加
+- JSDocコメントを充実化
+
+### 第4回目の実装 (PROGRESS-01-04.md) - 依存性注入の最適化
+レビューフィードバック: 「rewriteRuleRepositoryは、createApplyAllRulesHandler内でconst newするようにしてください」
+
+対応内容:
+- applyAllRulesHandler がリポジトリを内部でインスタンス化するように変更
+- content.ts から IRewriteRuleRepository と ChromeRuntimeRewriteRuleRepository の依存を完全削除
+- content.ts が極めてシンプルになり、リスナー登録のみに責任が集中
+
+### 最終結果
+- 単体テスト: 267 passed
+- E2Eテスト: 12 passed
+- ESLint, TypeScript, Knip: すべてクリーン
 
 ## 修正したファイル
+**新規作成:**
+- src/infrastructure/browser/listeners/runtime.onMessage.content.ts
+- src/infrastructure/browser/router/handlers/content/getElementSelectionHandler.ts
+- src/infrastructure/browser/router/handlers/content/applyAllRulesHandler.ts
+- src/infrastructure/browser/router/messageHandlers.content.ts
+- src/infrastructure/browser/router/messageRouter.content.ts
+
+**修正:**
+- src/entrypoints/content.ts (大幅に簡素化)
