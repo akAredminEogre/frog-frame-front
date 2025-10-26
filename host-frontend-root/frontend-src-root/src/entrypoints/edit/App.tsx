@@ -1,4 +1,4 @@
-import './App.css';
+import 'src/entrypoints/edit/App.css';
 
 import React, { useEffect, useState } from 'react';
 

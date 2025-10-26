@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Input.module.css';
+import styles from 'src/components/atoms/Input.module.css';
 
 interface InputProps {
   value: string;
