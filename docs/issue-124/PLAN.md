@@ -2,16 +2,20 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] content.tsのリファクタリング実装
+- [x] content.tsのリファクタリング実装
   - chrome.runtime.onMessage.addListenerのロジックを関数に分割
   - background.tsと同様のパターンでリスナー登録関数を作成
   - src/infrastructure/browser/listeners/配下に新規ファイル作成
   - 既存の動作を保持したままリファクタリング
-- [ ] テストの実装・更新
-  - リファクタリング後の各関数に対する単体テストを追加
-  - 既存テストの更新（必要に応じて）
-- [ ] make testlintでの検証
+  - メッセージルーターパターンを導入し、さらに分割
+  - 依存性注入の最適化を実施
+- [x] テストの実装・更新
+  - infrastructure/listeners/ は Optional なのでスキップ
+  - 既存テストはすべて成功 (267 unit tests + 12 E2E tests)
+- [x] make testlintでの検証
   - すべてのテスト・リント・未使用コード検出をパス
+- [ ] content.ts関係のファイルの配置を検討
+  - content.ts関係のファイルを、entrypoints/content配下にパッケージとしてまとめることが、Clean Architecture、DDDの観点から適切か検討する
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
