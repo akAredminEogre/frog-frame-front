@@ -1,15 +1,13 @@
 import React from 'react';
 
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
+import Title from 'src/components/atoms/Title';
+import CancelButton from 'src/components/molecules/CancelButton';
+import SaveButton from 'src/components/molecules/SaveButton';
 import NewStringTextArea from 'src/components/organisms/NewStringTextArea';
 import OldStringTextArea from 'src/components/organisms/OldStringTextArea';
+import styles from 'src/components/organisms/RewriteRuleForm.module.css';
 import URLPatternInput from 'src/components/organisms/URLPatternInput';
-
-import Title from '../atoms/Title';
-import CancelButton from '../molecules/CancelButton';
-import SaveButton from '../molecules/SaveButton';
-
-import styles from './RewriteRuleForm.module.css';
 
 interface RewriteRuleFormProps {
   rule: RewriteRuleParams;

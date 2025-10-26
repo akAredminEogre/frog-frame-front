@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import SaveButton from './SaveButton';
+import SaveButton from 'src/components/molecules/SaveButton';
 
 const meta: Meta<typeof SaveButton> = {
   title: 'Molecules/SaveButton',

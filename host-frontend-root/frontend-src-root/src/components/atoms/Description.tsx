@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Description.module.css';
+import styles from 'src/components/atoms/Description.module.css';
 
 interface DescriptionProps {
   children: React.ReactNode;

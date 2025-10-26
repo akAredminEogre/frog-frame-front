@@ -8,6 +8,7 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import unusedImports from 'eslint-plugin-unused-imports';
+import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 
 export default [js.configs.recommended, {
   files: ['**/*.{ts,tsx,js,jsx}'],
@@ -33,6 +34,7 @@ export default [js.configs.recommended, {
     'react-hooks': reactHooks,
     'simple-import-sort': simpleImportSort,
     'unused-imports': unusedImports,
+    'no-relative-import-paths': noRelativeImportPaths,
   },
   rules: {
     // Import sorting with custom groups
@@ -106,6 +108,20 @@ export default [js.configs.recommended, {
     react: {
       version: 'detect',
     },
+  },
+}, {
+  // Disable relative import path checking for CSS/style imports
+  // CSS modules and style files should use relative paths as they are asset imports
+  files: ['**/*.{ts,tsx,js,jsx}'],
+  rules: {
+    'no-relative-import-paths/no-relative-import-paths': [
+      'warn',
+      {
+        allowSameFolder: false,
+        rootDir: 'src',
+        prefix: 'src',
+      },
+    ],
   },
 }, {
   ignores: [

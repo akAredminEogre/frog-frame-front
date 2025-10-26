@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import CancelButton from './CancelButton';
+import CancelButton from 'src/components/molecules/CancelButton';
 
 const meta: Meta<typeof CancelButton> = {
   title: 'Molecules/CancelButton',

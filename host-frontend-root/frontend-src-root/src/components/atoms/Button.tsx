@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Button.module.css';
+import styles from 'src/components/atoms/Button.module.css';
 
 interface ButtonProps {
   children: React.ReactNode;

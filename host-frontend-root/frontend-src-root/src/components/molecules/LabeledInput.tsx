@@ -2,8 +2,7 @@ import React from 'react';
 
 import Description from 'src/components/atoms/Description';
 import Input from 'src/components/atoms/Input';
-
-import styles from './InputSection.module.css';
+import styles from 'src/components/molecules/InputSection.module.css';
 
 interface LabeledInputProps {
   label: string;

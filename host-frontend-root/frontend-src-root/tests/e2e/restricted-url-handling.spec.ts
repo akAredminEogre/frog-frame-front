@@ -1,4 +1,4 @@
-import { expect,test } from './fixtures';
+import { expect,test } from 'tests/e2e/fixtures';
 
 /**
  * chrome://など制限されたURLでのエラーハンドリングE2Eテスト

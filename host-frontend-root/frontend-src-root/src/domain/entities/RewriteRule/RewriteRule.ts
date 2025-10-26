@@ -1,7 +1,6 @@
 import { RewriteRuleParams } from "src/application/types/RewriteRuleParams";
 import { RegexConstants } from "src/domain/constants/RegexConstants";
-
-import { PatternProcessingStrategyFactory } from "./PatternProcessingStrategyFactory";
+import { PatternProcessingStrategyFactory } from "src/domain/entities/RewriteRule/PatternProcessingStrategyFactory";
 
 export class RewriteRule {
   // HTML要素間改行コード無視処理用の正規表現定数をメンバ変数として保持

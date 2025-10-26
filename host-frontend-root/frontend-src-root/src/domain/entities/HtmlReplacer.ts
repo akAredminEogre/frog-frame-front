@@ -1,7 +1,6 @@
-import { ChildNodeList } from '../value-objects/ChildNodeList';
-
-import { HtmlContent } from './HtmlContent';
-import { RewriteRule } from './RewriteRule/RewriteRule';
+import { HtmlContent } from 'src/domain/entities/HtmlContent';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { ChildNodeList } from 'src/domain/value-objects/ChildNodeList';
 
 export class HtmlReplacer {
   replace(root: Node, rule: RewriteRule): void {
