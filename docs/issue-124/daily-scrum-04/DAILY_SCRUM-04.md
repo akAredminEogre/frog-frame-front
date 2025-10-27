@@ -19,14 +19,14 @@ PR指摘事項の対応を実施する。具体的には：
 - 関連するimport文を含む他ファイル（リネームに伴う修正）
 
 ## スクラム内残タスク
-- [ ] handlers/content配下のJSDocコメント最新化
-  - [ ] applyAllRulesHandler.ts のJSDoc更新
-  - [ ] getElementSelectionHandler.ts のJSDoc更新
-- [ ] listeners/content.runtime.onMessage.ts のファイル命名改善
-  - [ ] Clean Architecture・Chrome Extension開発の観点から最適な命名規則を検討
-  - [ ] ファイルリネーム実施
-  - [ ] 関連import pathの更新
-- [ ] make testlintでの検証
+- [x] handlers/content配下のJSDocコメント最新化
+  - [x] applyAllRulesHandler.ts のJSDoc更新
+  - [x] getElementSelectionHandler.ts のJSDoc更新
+- [x] listeners/content.runtime.onMessage.ts のファイル命名改善
+  - [x] Clean Architecture・Chrome Extension開発の観点から最適な命名規則を検討
+  - [x] ファイルリネーム実施
+  - [x] 関連import pathの更新
+- [x] make testlintでの検証
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -43,7 +43,23 @@ PR指摘事項の対応を実施する。具体的には：
 
 # DAILY SCRUM-04作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+PR指摘事項の対応を完了しました。JSDocコメントの最新化とファイル命名規則の改善を実施しています。
+
+**JSDocコメントの最新化:**
+- `src/infrastructure/browser/handlers/content/applyAllRulesHandler.ts`と`getElementSelectionHandler.ts`において、呼び出し経路のコメントを現在のファイル構造に合わせて更新
+
+**ファイル命名規則の改善:**
+- `src/infrastructure/browser/listeners/content.runtime.onMessage.ts`を`src/infrastructure/browser/listeners/runtime/content.onMessage.ts`にリネーム
+- Clean ArchitectureとChrome Extension開発のベストプラクティスを考慮し、runtime関連のリスナーを専用ディレクトリに整理
+- `src/entrypoints/content.ts`のimport pathを新しいファイルパスに更新
+
+**検証結果:**
+- TypeScript compilation: エラーなし ✅
+- Unit tests: 267 tests passed ✅  
+- ESLint: エラーなし ✅
 
 ## 修正したファイル
+- `src/infrastructure/browser/handlers/content/applyAllRulesHandler.ts` - JSDoc呼び出し経路コメント更新
+- `src/infrastructure/browser/handlers/content/getElementSelectionHandler.ts` - JSDoc呼び出し経路コメント更新
+- `src/infrastructure/browser/listeners/content.runtime.onMessage.ts` → `src/infrastructure/browser/listeners/runtime/content.onMessage.ts` - ファイルリネーム
+- `src/entrypoints/content.ts` - import path更新
