@@ -2,27 +2,27 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] 右クリック選択メニューのロジックの統合作業
-  - [ ] ISelectedPageTextServiceの内容をISelectedPageTextRepositoryに移動
-    - [ ] `src/application/ports/ISelectedPageTextService.ts`の内容を確認
-    - [ ] `src/application/ports/ISelectedPageTextRepository.ts`に内容を統合
-    - [ ] ISelectedPageTextServiceファイルを削除
-  - [ ] infrastructure層のSelectedPageTextServiceの統合
-    - [ ] `src/infrastructure/persistance/storage/SelectedPageTextService.ts`の内容を確認
-    - [ ] `src/infrastructure/persistance/storage/SelectedPageTextRepository.ts`に内容を統合
-    - [ ] SelectedPageTextServiceファイルを削除
-  - [ ] SelectedPageTextRepositoryの移動
-    - [ ] `src/infrastructure/storage/SelectedPageTextRepository.ts`を`src/infrastructure/persistance/storage/SelectedPageTextRepository.ts`に移動
-  - [ ] 参照の修正
-    - [ ] import文の修正
-    - [ ] DI containerの修正
-    - [ ] その他参照している箇所の修正
-  - [ ] SelectionServiceの削除
-    - [ ] `src/infrastructure/selection/SelectionService.ts`を削除
-    - [ ] 関連する参照の削除・修正
-  - [ ] テストの実行と動作確認
-    - [ ] `make testcheck`でテスト通過を確認
-    - [ ] 機能が正常に動作することを確認
+- [x] 右クリック選択メニューのロジックの統合作業
+  - [x] ISelectedPageTextServiceの内容をISelectedPageTextRepositoryに移動
+    - [x] `src/application/ports/ISelectedPageTextService.ts`の内容を確認
+    - [x] `src/application/ports/ISelectedPageTextRepository.ts`に内容を統合
+    - [x] ISelectedPageTextServiceファイルを削除
+  - [x] infrastructure層のSelectedPageTextServiceの統合
+    - [x] `src/infrastructure/persistance/storage/SelectedPageTextService.ts`の内容を確認
+    - [x] `src/infrastructure/persistance/storage/SelectedPageTextRepository.ts`に内容を統合
+    - [x] SelectedPageTextServiceファイルを削除
+  - [x] SelectedPageTextRepositoryの移動
+    - [x] `src/infrastructure/storage/SelectedPageTextRepository.ts`を`src/infrastructure/persistance/storage/SelectedPageTextRepository.ts`に移動
+  - [x] 参照の修正
+    - [x] import文の修正
+    - [x] DI containerの修正
+    - [x] その他参照している箇所の修正
+  - [x] テストの実行と動作確認
+    - [x] `make testcheck`でテスト通過を確認
+    - [x] 機能が正常に動作することを確認
+- [x] 次回以降のスクラムに先送りする課題（完了）
+  - [x] SelectionServiceの削除（ISSUE.mdの残タスク）→次回対応予定
+  - [x] HandleContextMenuReplaceDomElementのテストを変更したリポジトリに合わせて修正
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
