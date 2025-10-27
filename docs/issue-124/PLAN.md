@@ -32,6 +32,12 @@
   - content関連ファイルのディレクトリ分離と接頭辞からディレクトリへの移行実施
   - router/content/, handlers/content/ による一貫性のある構造を実現
   - 段階的改善アプローチによる部分的アーキテクチャ改善
+- [x] PR指摘事項
+  - [x] host-frontend-root/frontend-src-root/src/infrastructure/browser/handlers/content
+    - 以下のファイルについて、JSDocコメントを最新化する
+  - [x] frog-frame-front/host-frontend-root/frontend-src-root/src/infrastructure/browser/listeners/content.runtime.onMessage.ts
+    - [x] は、frog-frame-front/host-frontend-root/frontend-src-root/src/infrastructure/browser/listeners/runtime/content.onMessage.ts
+      - に変更してほしい。ただしClean Architectureやchrome extension開発においてよりよい命名規則があればそちらを採用してください。
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
