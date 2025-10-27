@@ -20,13 +20,15 @@ content.messageRouter.tsと既存のmessageRouter(background.ts関連)のコー�
 - 関連するimport pathの更新
 
 ## スクラム内残タスク
-- [ ] 既存のmessageRouter(background用)の実装を確認
-- [ ] content.messageRouter.tsとの類似点・相違点を分析
-- [ ] Clean Architecture・DDDの観点から統合可能性を評価
-- [ ] Chrome Extension開発のベストプラクティスを調査
-- [ ] 統合案・分離案それぞれのメリット・デメリットを比較
-- [ ] 最適な解決策を決定・実装
-- [ ] make testlintでの検証
+- [x] 既存のmessageRouter(background用)の実装を確認
+- [x] content.messageRouter.tsとの類似点・相違点を分析
+- [x] Clean Architecture・DDDの観点から統合可能性を評価
+- [x] Chrome Extension開発のベストプラクティスを調査
+- [x] 統合案・分離案それぞれのメリット・デメリットを比較
+- [x] 最適な解決策を決定・実装（分離アーキテクチャを維持）
+- [x] make testlintでの検証
+- [x] ディレクトリ構造の改善実装
+- [x] レビューフィードバックに基づく部分的変更実施
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -46,4 +48,19 @@ content.messageRouter.tsと既存のmessageRouter(background.ts関連)のコー�
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+当初予定のmessageRouter統合検討から方向転換し、ディレクトリ構造の改善とレビューフィードバック対応を実施。
+
+### 主要な成果
+1. **messageRouter分離アーキテクチャの決定**: Clean Architecture・DDD原則に基づき、現在の分離アーキテクチャを維持することを決定
+2. **ディレクトリ構造の改善**: content関連ファイルの整理により、より一貫性のある構造を実現
+3. **段階的改善の実現**: レビューフィードバックに基づき、background関連は別issue対応として部分的改善を実施
+
+### 実施した変更
+- content関連ファイルのディレクトリ分離と接頭辞からディレクトリへの移行
+- レビューに基づくbackground関連変更の部分的復元
+- import path調整とコンパイル・テスト検証
+
 ## 修正したファイル
+- ディレクトリ構造: router/content/, handlers/content/ の整理
+- import path更新: messageHandlers関連ファイル
+- 検証完了: TypeScript compilation, 267 unit tests
