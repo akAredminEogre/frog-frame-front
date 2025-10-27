@@ -1,10 +1,10 @@
 # ISSUE-124 PULL REQUEST
 
 ## タイトル
-content.tsのリファクタリング: 関数分割・メッセージルーター導入・ディレクトリ構造改善
+content.tsのリファクタリング: 関数分割・メッセージルーター導入・ディレクトリ構造改善・PR指摘事項対応
 
 ## 概要と理由
-content.tsはaddListener内でif文が多く、可読性が低く、単一責任の原則に反していたため、background.tsと同様のパターンで関数分割とメッセージルーター導入を実施しました。さらに、PR指摘事項を踏まえてアーキテクチャ検討とディレクトリ構造改善も実施しています。
+content.tsはaddListener内でif文が多く、可読性が低く、単一責任の原則に反していたため、background.tsと同様のパターンで関数分割とメッセージルーター導入を実施しました。さらに、PR指摘事項を踏まえてアーキテクチャ検討・ディレクトリ構造改善・JSDoc最新化・ファイル命名規則改善を4スクラムにわたって段階的に実施し、完全に完了しています。
 
 ## 主な変更点
 
@@ -32,9 +32,21 @@ content.tsはaddListener内でif文が多く、可読性が低く、単一責任
   - content関連: 接頭辞 → ディレクトリ分離を実施
   - background関連: 別issue対応として現状維持（ハイブリッドアプローチ）
 
+### スクラム04: PR指摘事項対応・最終調整
+- PR指摘事項の対応完了
+  - JSDocコメントの最新化
+    - `src/infrastructure/browser/handlers/content/applyAllRulesHandler.ts`
+    - `src/infrastructure/browser/handlers/content/getElementSelectionHandler.ts`
+  - 呼び出し経路コメントを現在のファイル構造に合わせて更新
+- ファイル命名規則の改善
+  - `src/infrastructure/browser/listeners/content.runtime.onMessage.ts` 
+    → `src/infrastructure/browser/listeners/runtime/content.onMessage.ts`
+  - Clean ArchitectureとChrome Extension開発のベストプラクティスを考慮した命名
+  - runtime関連リスナーの専用ディレクトリ整理により一貫性のある階層構造を実現
+
 ### 最終的なファイル構成
 - 新規ファイル作成:
-  - `src/infrastructure/browser/listeners/content.runtime.onMessage.ts`
+  - `src/infrastructure/browser/listeners/runtime/content.onMessage.ts` (リネーム後)
   - `src/infrastructure/browser/router/content/messageRouter.ts`
   - `src/infrastructure/browser/router/content/messageHandlers.ts`
   - `src/infrastructure/browser/handlers/content/applyAllRulesHandler.ts`
@@ -62,6 +74,12 @@ content.tsはaddListener内でif文が多く、可読性が低く、単一責任
 - content関連ファイルの一貫性向上（接頭辞 → ディレクトリ分離）
 - ハイブリッドアプローチによる部分的改善実現
 - 長期目標と現実的制約のバランスを考慮した実装
+
+### PR指摘事項対応（スクラム04）
+- JSDocコメントの完全最新化により呼び出し経路の正確性を確保
+- Clean ArchitectureとChrome Extension開発ベストプラクティスに基づくファイル命名規則の改善
+- runtime関連リスナーの専用ディレクトリ整理による階層構造の一貫性向上
+- TypeScript compilation（エラーなし）、267 unit tests（全パス）、ESLint（エラーなし）による品質保証
 
 ## 本スコープの対象外となったタスク
 background関連ファイルのディレクトリ整理（別issueで実施予定）
