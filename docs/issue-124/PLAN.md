@@ -22,6 +22,16 @@
     - runtime.onMessage.content.ts → content.runtime.onMessage.ts
     - messageRouter.content.ts → content.messageRouter.ts
     - messageHandlers.content.ts → content.messageHandlers.ts
+- [x] PR指摘事項
+  - [x] content.messageRouter.tsと、messageRouter(既存のbackground.ts関連のもの)はほぼ同じコードであるが、このWETは許容できるものなのか検討する
+    - Clean Architecture、DDDの観点から同一したほうが良いのか。それとも実装部分は共通しながら、それぞれのクラスから呼び出す形が良いのか、
+    - Chrome Extension開発の観点からmessageRounterは、content用、background用両方が使うものでも一つに集約したほうが良いのか
+    - 結論: 現在の分離アーキテクチャを維持
+    - 理由: DDD境界コンテキスト原則、Clean Architecture文脈分離、Chrome Extension セキュリティベストプラクティスに準拠
+- [x] ディレクトリ構造の改善
+  - content関連ファイルのディレクトリ分離と接頭辞からディレクトリへの移行実施
+  - router/content/, handlers/content/ による一貫性のある構造を実現
+  - 段階的改善アプローチによる部分的アーキテクチャ改善
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
@@ -36,3 +46,4 @@
 
 # 本issueの対象外とする課題
 <!-- issueの進捗に応じて記入 -->
+background関連ファイルのディレクトリ整理（別issueで実施予定）
