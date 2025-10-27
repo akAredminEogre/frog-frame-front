@@ -1,5 +1,5 @@
-import { applyAllRulesHandler } from 'src/infrastructure/browser/router/handlers/content/applyAllRulesHandler';
-import { getElementSelectionHandler } from 'src/infrastructure/browser/router/handlers/content/getElementSelectionHandler';
+import { applyAllRulesHandler } from 'src/infrastructure/browser/handlers/content/applyAllRulesHandler';
+import { getElementSelectionHandler } from 'src/infrastructure/browser/handlers/content/getElementSelectionHandler';
 
 /**
  * Content script message handlers aggregator
