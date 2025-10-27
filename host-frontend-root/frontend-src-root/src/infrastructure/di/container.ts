@@ -12,7 +12,6 @@ import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IPopupService } from 'src/application/ports/IPopupService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
-import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
 import { IWindowService } from 'src/application/ports/IWindowService';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
@@ -27,12 +26,10 @@ import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeC
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { ChromeWindowService } from 'src/infrastructure/browser/window/ChromeWindowService';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository';
-import { SelectedPageTextService } from 'src/infrastructure/persistance/storage/SelectedPageTextService';
-import { SelectedPageTextRepository } from 'src/infrastructure/storage/SelectedPageTextRepository';
+import { SelectedPageTextRepository } from 'src/infrastructure/persistance/storage/SelectedPageTextRepository';
 
 // Register implementations for interfaces (抽象化のため)
 container.register<IChromeTabsService>('IChromeTabsService', { useClass: ChromeTabsService });
-container.register<ISelectedPageTextService>('ISelectedPageTextService', { useClass: SelectedPageTextService });
 container.register<IPopupService>('IPopupService', { useClass: ChromePopupService });
 container.register<IRewriteRuleRepository>('IRewriteRuleRepository', { useClass: DexieRewriteRuleRepository });
 container.register<IWindowService>('IWindowService', { useClass: ChromeWindowService });
