@@ -1,7 +1,7 @@
-import { registerContextMenusOnClicked } from 'src/infrastructure/browser/listeners/contextMenus.onClicked';
-import { registerRuntimeOnInstalled } from 'src/infrastructure/browser/listeners/runtime.onInstalled';
-import { registerRuntimeOnMessage } from 'src/infrastructure/browser/listeners/runtime.onMessage';
-import { registerTabsOnUpdated } from 'src/infrastructure/browser/listeners/tabs.onUpdated';
+import { registerContextMenusOnClicked } from 'src/infrastructure/browser/listeners/contextMenus/background/onClicked';
+import { registerRuntimeOnInstalled } from 'src/infrastructure/browser/listeners/runtime/background/onInstalled';
+import { registerRuntimeOnMessage } from 'src/infrastructure/browser/listeners/runtime/background/onMessage';
+import { registerTabsOnUpdated } from 'src/infrastructure/browser/listeners/tabs/background/onUpdated';
 
 export default defineBackground({
   // Set manifest options
