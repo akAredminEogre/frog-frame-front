@@ -25,8 +25,7 @@
 # 0.1.3
 - [x] makeコマンド
 - [ ] コーディング規約ドキュメントまとめ
-- [ ] (node:12933) [DEP0066] DeprecationWarning: OutgoingMessage.
-- [ ] `手順の全体表示は`を修正
+- [x] (node:12933) [DEP0066] DeprecationWarning: OutgoingMessage.
 
 # 0.2.0
 - [ ] ルールの有効/無効切り替え機能
@@ -36,6 +35,7 @@
 - [x] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 
 ## phase02
+- [ ] { type: 'getElementSelection' }をクラス化
 - [ ] edit/app.tsxのloadingをatomsに移動
 - [ ] edit/app.tsxのuseEffectの整理
 - [ ] e2eテストのエラー修正を部品化
@@ -52,7 +52,6 @@
 - [ ] rewriteRules.toArray().forEachの書き方をファーストクラスコレクションに移管
 - [ ] HtmlReplacerのメンバ変数化
 - [ ] application層からinfrastructureの実装をしているのを解消
-- [ ] '@'記法をsrcに変更、設定廃止
 - [ ] issue-012: 右クリック入力のe2eテスト
 - [ ] ElementSelectorの返り値をValueObjectに変更
 - [ ] no-consoleも無視しない
