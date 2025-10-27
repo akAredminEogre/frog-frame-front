@@ -26,6 +26,8 @@
 - [x] makeコマンド
 - [ ] コーディング規約ドキュメントまとめ
 - [x] (node:12933) [DEP0066] DeprecationWarning: OutgoingMessage.
+- [ ] background.ts関係のinfrastructure層の整理
+- [ ] 採番バッチ化
 
 # 0.2.0
 - [ ] ルールの有効/無効切り替え機能
