@@ -37,6 +37,7 @@
 - [x] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
 
 ## phase02
+- [ ] chrome apiのディレクトリ整理
 - [ ] { type: 'getElementSelection' }をクラス化
 - [ ] edit/app.tsxのloadingをatomsに移動
 - [ ] edit/app.tsxのuseEffectの整理

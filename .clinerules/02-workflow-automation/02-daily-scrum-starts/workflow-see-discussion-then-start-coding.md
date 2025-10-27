@@ -22,5 +22,5 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 - デイリースクラム作業の開始
   - 上記作業終了後、
   - workflow-start-coding-according-to-daily-scrum
-  - の手順を実行してください
+  - を続けて自動的に始める
 ```

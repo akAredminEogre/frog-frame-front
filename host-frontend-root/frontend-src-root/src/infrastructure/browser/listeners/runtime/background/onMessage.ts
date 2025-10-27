@@ -1,4 +1,4 @@
-import { createMessageRouter } from 'src/infrastructure/browser/router/messageRouter';
+import { createMessageRouter } from 'src/infrastructure/browser/router/background/messageRouter';
 
 /**
  * 呼び出し元: entrypoints/background.ts
