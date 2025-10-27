@@ -1,4 +1,4 @@
-import { registerRuntimeOnMessageForContent } from 'src/infrastructure/browser/listeners/content.runtime.onMessage';
+import { registerRuntimeOnMessageForContent } from 'src/infrastructure/browser/listeners/runtime/content.onMessage';
 import { matchUrl } from 'src/utils/matchUrl';
 
 
