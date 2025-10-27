@@ -11,9 +11,9 @@ type GetElementSelectionMessage = { type: 'getElementSelection' };
  *
  * 呼び出し経路:
  * 1. chrome.runtime.onMessage.addListener が chrome から message を受信
- * 2. runtime.onMessage.content.ts の registerRuntimeOnMessageForContent が message を route 関数に渡す
- * 3. messageRouter.content.ts の createContentMessageRouter が message を適切な handler に振り分ける
- * 4. このハンドラーが呼び出される（messageRouter.content.ts の 23行目: handler(message)）
+ * 2. content.runtime.onMessage.ts の registerRuntimeOnMessageForContent が message を route 関数に渡す
+ * 3. content.messageRouter.ts の createContentMessageRouter が message を適切な handler に振り分ける
+ * 4. このハンドラーが呼び出される（content.messageRouter.ts の 23行目: handler(message)）
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
 export const getElementSelectionHandler = async (_msg: GetElementSelectionMessage) => {
