@@ -14,8 +14,14 @@
   - 既存テストはすべて成功 (267 unit tests + 12 E2E tests)
 - [x] make testlintでの検証
   - すべてのテスト・リント・未使用コード検出をパス
-- [ ] content.ts関係のファイルの配置を検討
+- [x] content.ts関係のファイルの配置を検討
   - content.ts関係のファイルを、entrypoints/content配下にパッケージとしてまとめることが、Clean Architecture、DDDの観点から適切か検討する
+  - 結論: 現在の配置 (src/infrastructure/browser/) を維持し、命名規則を強化
+  - 理由: Clean Architectureの依存性ルール、WXT規約、background.tsとの一貫性
+  - 実施: content関連ファイルに content. 接頭辞を適用してグルーピングを明確化
+    - runtime.onMessage.content.ts → content.runtime.onMessage.ts
+    - messageRouter.content.ts → content.messageRouter.ts
+    - messageHandlers.content.ts → content.messageHandlers.ts
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
