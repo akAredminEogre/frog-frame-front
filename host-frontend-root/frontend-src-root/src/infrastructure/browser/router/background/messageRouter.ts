@@ -1,4 +1,4 @@
-import { handlers } from 'src/infrastructure/browser/router/messageHandlers';
+import { handlers } from 'src/infrastructure/browser/router/background/messageHandlers';
 
 export function createMessageRouter() {
   return async (message: any) => {
