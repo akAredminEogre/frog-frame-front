@@ -1,11 +1,11 @@
 import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
 import { createMockPopupService } from 'tests/unit/application/ports/IPopupService/createMockPopupService';
-import { createMockSelectedPageTextService } from 'tests/unit/application/ports/ISelectedPageTextService/createMockSelectedPageTextService';
+import { createMockSelectedPageTextRepository } from 'tests/unit/application/ports/ISelectedPageTextRepository/createMockSelectedPageTextRepository';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { IPopupService } from 'src/application/ports/IPopupService';
-import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
+import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 
 /**
@@ -15,19 +15,19 @@ import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/con
 describe('HandleContextMenuReplaceDomElement.execute - エッジケース', () => {
   let useCase: HandleContextMenuReplaceDomElement;
   let mockTabsService: IChromeTabsService;
-  let mockSelectedPageTextService: ISelectedPageTextService;
+  let mockSelectedPageTextRepository: ISelectedPageTextRepository;
   let mockPopupService: IPopupService;
 
   beforeEach(() => {
     // モックサービスの初期化
     mockTabsService = createMockTabsService();
-    mockSelectedPageTextService = createMockSelectedPageTextService();
+    mockSelectedPageTextRepository = createMockSelectedPageTextRepository();
     mockPopupService = createMockPopupService();
 
     // テスト対象の初期化
     useCase = new HandleContextMenuReplaceDomElement(
       mockTabsService,
-      mockSelectedPageTextService,
+      mockSelectedPageTextRepository,
       mockPopupService
     );
   });
@@ -46,7 +46,7 @@ describe('HandleContextMenuReplaceDomElement.execute - エッジケース', () =
     const mockResponse = { selection: 'test' };
     
     vi.mocked(mockTabsService.sendMessage).mockResolvedValue(mockResponse);
-    vi.mocked(mockSelectedPageTextService.setSelectedPageText).mockResolvedValue();
+    vi.mocked(mockSelectedPageTextRepository.setSelectedPageText).mockResolvedValue();
     vi.mocked(mockPopupService.openPopup).mockResolvedValue();
 
     // Act
@@ -57,7 +57,7 @@ describe('HandleContextMenuReplaceDomElement.execute - エッジケース', () =
       tabId,
       { type: 'getElementSelection' }
     );
-    expect(mockSelectedPageTextService.setSelectedPageText).toHaveBeenCalledWith('test');
+    expect(mockSelectedPageTextRepository.setSelectedPageText).toHaveBeenCalledWith('test');
     expect(mockPopupService.openPopup).toHaveBeenCalledTimes(1);
   });
 

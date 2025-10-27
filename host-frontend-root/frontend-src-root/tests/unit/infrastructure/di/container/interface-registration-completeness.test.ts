@@ -33,10 +33,6 @@ describe('DI Container - 完全自動化インターフェース登録確認テ�
       implementationName: 'ChromeTabsService'
     },
     {
-      interface: 'ISelectedPageTextService',
-      implementationName: 'SelectedPageTextService'
-    },
-    {
       interface: 'IPopupService',
       implementationName: 'ChromePopupService'
     },

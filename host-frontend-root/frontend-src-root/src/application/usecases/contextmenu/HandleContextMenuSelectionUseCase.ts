@@ -2,7 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { IPopupService } from 'src/application/ports/IPopupService';
-import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTextService';
+import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
 
 /**
  * コンテキストメニューからのDOM要素置換処理を扱うユースケース
@@ -11,7 +11,7 @@ import { ISelectedPageTextService } from 'src/application/ports/ISelectedPageTex
 export class HandleContextMenuReplaceDomElement {
   constructor(
     @inject('IChromeTabsService') private readonly tabsService: IChromeTabsService,
-    @inject('ISelectedPageTextService') private readonly selectedPageTextService: ISelectedPageTextService,
+    @inject('ISelectedPageTextRepository') private readonly selectedPageTextRepository: ISelectedPageTextRepository,
     @inject('IPopupService') private readonly popupService: IPopupService
   ) { }
   
@@ -31,7 +31,7 @@ export class HandleContextMenuReplaceDomElement {
    * 選択内容をストレージに保存してポップアップを開く
    */
   private async saveSelectionAndOpenPopup(selection: string): Promise<void> {
-    await this.selectedPageTextService.setSelectedPageText(selection);
+    await this.selectedPageTextRepository.setSelectedPageText(selection);
     await this.popupService.openPopup();
   }
 }
