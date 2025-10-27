@@ -1,4 +1,4 @@
-import { handlers } from 'src/infrastructure/browser/router/messageHandlers.content';
+import { handlers } from 'src/infrastructure/browser/router/content.messageHandlers';
 
 /**
  * Content script用のメッセージルーター

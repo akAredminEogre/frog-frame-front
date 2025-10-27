@@ -1,4 +1,4 @@
-import { createContentMessageRouter } from 'src/infrastructure/browser/router/messageRouter.content';
+import { createContentMessageRouter } from 'src/infrastructure/browser/router/content.messageRouter';
 
 /**
  * 呼び出し元: entrypoints/content.ts
