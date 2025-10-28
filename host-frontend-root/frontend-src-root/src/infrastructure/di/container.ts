@@ -26,8 +26,8 @@ import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeR
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { ChromeWindowService } from 'src/infrastructure/browser/window/ChromeWindowService';
-import { DexieRewriteRuleRepository } from 'src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository';
-import { SelectedPageTextRepository } from 'src/infrastructure/persistance/storage/SelectedPageTextRepository';
+import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
+import { SelectedPageTextRepository } from 'src/infrastructure/persistence/storage/SelectedPageTextRepository';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 // Register implementations for interfaces (抽象化のため)
