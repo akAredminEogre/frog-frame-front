@@ -18,6 +18,11 @@
 - その他persistanceを参照している全ファイル
 
 ## スクラム内残タスク
+- [x] src/infrastructure/persistance ディレクトリを src/infrastructure/persistence にリネーム
+- [x] tests配下のpersistanceディレクトリもpersistenceにリネーム
+- [x] インポート文の修正（persistance → persistence）
+- [x] DIコンテナの登録パス修正
+- [x] テストファイルのインポートパス修正
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -37,7 +42,14 @@
 ## 本スクラムでの作業実績内容
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+スペルミス修正作業を完了しました。`persistance`を正しい英語表記`persistence`に修正することで、プロジェクト全体の一貫性を向上させました。ディレクトリリネーム、インポートパス修正、テストファイル更新を行い、全てのテスト(52個のunit tests + 12個のE2E tests)が正常に通過することを確認しました。
 
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+- `host-frontend-root/frontend-src-root/src/infrastructure/persistance/` → `host-frontend-root/frontend-src-root/src/infrastructure/persistence/` (ディレクトリリネーム)
+- `host-frontend-root/frontend-src-root/tests/unit/infrastructure/persistance/` → `host-frontend-root/frontend-src-root/tests/unit/infrastructure/persistence/` (ディレクトリリネーム)
+- `host-frontend-root/frontend-src-root/src/infrastructure/di/container.ts` (インポートパス修正)
+- `host-frontend-root/frontend-src-root/src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository.ts` (インポートパス修正)
+- `host-frontend-root/frontend-src-root/tests/unit/infrastructure/di/container/concrete-class-registration-completeness.test.ts` (インポートパス修正)
+- 全ての`tests/unit/infrastructure/persistence/`配下のテストファイル (インポートパス修正)
