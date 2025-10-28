@@ -3,7 +3,7 @@ import '../setup';
 import { IDBFactory } from 'fake-indexeddb';
 import { describe, expect,it } from 'vitest';
 
-import { dexieDatabase } from 'src/infrastructure/persistance/indexeddb/DexieDatabase';
+import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 
 /**
  * IndexedDB環境検証テスト
