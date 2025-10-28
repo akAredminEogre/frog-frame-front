@@ -2,11 +2,11 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] src/infrastructure/persistance ディレクトリを src/infrastructure/persistence にリネーム
-- [ ] tests配下のpersistanceディレクトリもpersistenceにリネーム
-- [ ] インポート文の修正（persistance → persistence）
-- [ ] DIコンテナの登録パス修正
-- [ ] テストファイルのインポートパス修正
+- [x] src/infrastructure/persistance ディレクトリを src/infrastructure/persistence にリネーム
+- [x] tests配下のpersistanceディレクトリもpersistenceにリネーム
+- [x] インポート文の修正（persistance → persistence）
+- [x] DIコンテナの登録パス修正
+- [x] テストファイルのインポートパス修正
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
