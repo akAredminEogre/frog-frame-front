@@ -19,6 +19,16 @@ SelectionServiceのリファクタリング作業の第1段階として、以下
 - 関連するimport文があるファイル
 
 ## スクラム内残タスク
+- [x] SelectionServiceのリファクタリング作業
+  - [x] 現在のSelectionServiceの内容を確認
+  - [x] application層にインターフェースを追加（IGetSelectionService.ts作成）
+  - [x] infrastructure層に新しい実装を作成（getSelectionService.ts作成）
+  - [x] 依存関係の修正（DIコンテナ、UseCase修正）
+  - [x] 旧ファイルの削除と整理（SelectionService.ts削除）
+- [x] Clean Architectureシーケンス図の作成
+  - [x] GetElementSelectionUseCaseの完全なシーケンス図作成
+  - [x] Chrome拡張機能技術制約の説明追加
+  - [x] Clean Architecture命名規則ガイドライン追加
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -36,9 +46,28 @@ SelectionServiceの依存性逆転を実現して、より良いアーキテク�
 
 # DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+SelectionServiceのClean Architectureリファクタリングを完全実行：
+- 依存関係逆転の実現（Infrastructure → Application層のインターフェース依存）
+- IGetSelectionService抽象化とgetSelectionService.ts具象実装の分離
+- DIコンテナでの適切な依存注入設定
+- 旧SelectionService.tsの削除と構造整理
+
+Complete Clean Architectureシーケンス図の作成：
+- GetElementSelectionUseCaseの全体フロー可視化
+- Chrome拡張機能の技術制約説明（DOM API制約によるメッセージング必要性）
+- Infrastructure層命名規則ガイドライン策定（Service vs Repository接尾辞）
 
 ## 修正したファイル
-<!-- スクラム単位での変更を記入 -->
-<!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+**新規作成:**
+- `src/application/ports/IGetSelectionService.ts` (Application層インターフェース)
+- `src/infrastructure/windows/getSelectionService.ts` (Infrastructure層実装)
+- `docs/diagrams/GetElementSelectionUseCase-sequence.puml` (完全アーキテクチャシーケンス図)
+
+**修正:**
+- `src/application/usecases/selection/GetElementSelectionUseCase.ts` (DI利用への変更)
+- `src/infrastructure/di/container.ts` (新インターフェースのDI設定)
+- `tests/unit/infrastructure/di/container/interface-registration-completeness.test.ts` (テスト更新)
+
+**削除:**
+- `src/infrastructure/selection/SelectionService.ts` (旧実装削除)
+- `src/infrastructure/selection/` (空ディレクトリ削除)
