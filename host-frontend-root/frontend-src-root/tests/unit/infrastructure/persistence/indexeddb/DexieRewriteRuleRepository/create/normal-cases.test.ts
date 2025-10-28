@@ -3,8 +3,8 @@ import '../../setup';
 import { afterEach,beforeEach, describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { dexieDatabase } from 'src/infrastructure/persistance/indexeddb/DexieDatabase';
-import { DexieRewriteRuleRepository } from 'src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository';
+import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
+import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 
 /**
  * 1. 既存ルールがある状態で新規ルールを作成し、Promise型で返却
@@ -23,7 +23,7 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
     if (!globalThis.indexedDB) {
       throw new Error(
         'IndexedDB is not available in test environment. ' +
-        'Please check if fake-indexeddb setup is correct in tests/unit/infrastructure/persistance/indexeddb/setup.ts. ' +
+        'Please check if fake-indexeddb setup is correct in tests/unit/infrastructure/persistence/indexeddb/setup.ts. ' +
         'This may happen after git pull - try running: docker compose exec frontend npm run install'
       );
     }
