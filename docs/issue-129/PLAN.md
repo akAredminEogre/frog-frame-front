@@ -2,29 +2,29 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] SelectionServiceのリファクタリング作業
-  - [ ] 現在のSelectionServiceの内容を確認
-    - [ ] `src/infrastructure/selection/SelectionService.ts`の実装内容を確認
-    - [ ] 使用している箇所を特定
-  - [ ] application層にインターフェースを追加
-    - [ ] `src/application/ports/IGetSelectionService.ts`を作成
-    - [ ] 適切なメソッドシグネチャを定義
-  - [ ] infrastructure層に新しい実装を作成
-    - [ ] `src/infrastructure/windows/getSelectionService.ts`を作成
-    - [ ] SelectionServiceの機能を新しいファイルに移植
-    - [ ] IGetSelectionServiceインターフェースを実装
-  - [ ] 依存関係の修正
-    - [ ] 既存のSelectionServiceを使用している箇所を特定
-    - [ ] 新しいインターフェースを使用するように修正
-    - [ ] DIコンテナの設定を更新
-  - [ ] 旧ファイルの削除と整理
-    - [ ] `src/infrastructure/selection/SelectionService.ts`を削除
-    - [ ] 空になったselectionディレクトリを削除
-    - [ ] import文の修正
-  - [ ] テストの更新と動作確認
-    - [ ] 関連するテストファイルの修正
-    - [ ] `make testcheck`でテスト通過を確認
-    - [ ] 機能が正常に動作することを確認
+- [x] SelectionServiceのリファクタリング作業
+  - [x] 現在のSelectionServiceの内容を確認
+    - [x] `src/infrastructure/selection/SelectionService.ts`の実装内容を確認
+    - [x] 使用している箇所を特定
+  - [x] application層にインターフェースを追加
+    - [x] `src/application/ports/IGetSelectionService.ts`を作成
+    - [x] 適切なメソッドシグネチャを定義
+  - [x] infrastructure層に新しい実装を作成
+    - [x] `src/infrastructure/windows/getSelectionService.ts`を作成
+    - [x] SelectionServiceの機能を新しいファイルに移植
+    - [x] IGetSelectionServiceインターフェースを実装
+  - [x] 依存関係の修正
+    - [x] 既存のSelectionServiceを使用している箇所を特定
+    - [x] 新しいインターフェースを使用するように修正
+    - [x] DIコンテナの設定を更新
+  - [x] 旧ファイルの削除と整理
+    - [x] `src/infrastructure/selection/SelectionService.ts`を削除
+    - [x] 空になったselectionディレクトリを削除
+    - [x] import文の修正
+  - [x] テストの更新と動作確認
+    - [x] 関連するテストファイルの修正
+    - [x] `make testcheck`でテスト通過を確認
+    - [x] 機能が正常に動作することを確認
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
