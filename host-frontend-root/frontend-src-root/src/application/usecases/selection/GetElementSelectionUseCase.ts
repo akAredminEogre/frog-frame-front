@@ -1,16 +1,17 @@
+import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
-import { SelectionService } from 'src/infrastructure/selection/SelectionService';
+import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 /**
  * 要素選択情報を取得するユースケース
  */
 export class GetElementSelectionUseCase {
   private elementSelector: ElementSelector;
-  private selectionService: SelectionService;
+  private selectionService: IGetSelectionService;
 
-  constructor(selectionService?: SelectionService) {
+  constructor(selectionService?: IGetSelectionService) {
     this.elementSelector = new ElementSelector();
-    this.selectionService = selectionService || new SelectionService();
+    this.selectionService = selectionService || new GetSelectionService();
   }
 
   /**

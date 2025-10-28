@@ -9,6 +9,7 @@ export { container };
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
+import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
 import { IPopupService } from 'src/application/ports/IPopupService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
@@ -27,6 +28,7 @@ import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsSer
 import { ChromeWindowService } from 'src/infrastructure/browser/window/ChromeWindowService';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistance/indexeddb/DexieRewriteRuleRepository';
 import { SelectedPageTextRepository } from 'src/infrastructure/persistance/storage/SelectedPageTextRepository';
+import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 // Register implementations for interfaces (抽象化のため)
 container.register<IChromeTabsService>('IChromeTabsService', { useClass: ChromeTabsService });
@@ -36,6 +38,7 @@ container.register<IWindowService>('IWindowService', { useClass: ChromeWindowSer
 container.register<ISelectedPageTextRepository>('ISelectedPageTextRepository', { useClass: SelectedPageTextRepository });
 container.register<ICurrentTabService>('ICurrentTabService', { useClass: ChromeCurrentTabService });
 container.register<IChromeRuntimeService>('IChromeRuntimeService', { useClass: ChromeRuntimeService });
+container.register<IGetSelectionService>('IGetSelectionService', { useClass: GetSelectionService });
 
 // Register concrete classes (required for container.resolve() to work)
 container.register(HandleContextMenuReplaceDomElement, { useClass: HandleContextMenuReplaceDomElement });

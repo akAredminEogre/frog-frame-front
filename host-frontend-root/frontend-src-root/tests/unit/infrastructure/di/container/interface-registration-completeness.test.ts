@@ -55,6 +55,10 @@ describe('DI Container - 完全自動化インターフェース登録確認テ�
     {
       interface: 'IChromeRuntimeService',
       implementationName: 'ChromeRuntimeService'
+    },
+    {
+      interface: 'IGetSelectionService',
+      implementationName: 'GetSelectionService'
     }
   ];
 
