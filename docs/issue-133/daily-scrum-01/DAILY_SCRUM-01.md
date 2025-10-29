@@ -33,7 +33,18 @@ issue-132の成果を踏襲してcontent側のリスナー構造も整理でき�
 ## 本スクラムでの作業実績内容
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+- content.tsのリスナー構造分析を完了
+- Clean Architecture・DDDの観点から最適なディレクトリ構造を設計（issue-132のbackgroundリスナー移動の成果を踏襲）
+- runtime/content.onMessageリスナーの移動とリネーム実装を完了
+  - 旧: `src/infrastructure/browser/listeners/runtime/content.onMessage.ts`
+  - 新: `src/infrastructure/browser/content/runtime/onMessageReceived.ts`
+  - 関数名変更: `registerRuntimeOnMessageForContent` → `runtimeOnMessageReceived`
+- content.tsのimport文とregister関数名の更新を完了
+- TypeScriptコンパイル確認済み（エラーなし）
 
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+- `src/entrypoints/content.ts` - import文と関数呼び出しの更新
+- `src/infrastructure/browser/content/runtime/onMessageReceived.ts` - 新規作成（旧ファイルから移動・リネーム）
+- `src/infrastructure/browser/listeners/runtime/content.onMessage.ts` - 削除
