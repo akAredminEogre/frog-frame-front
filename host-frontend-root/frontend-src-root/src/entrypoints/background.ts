@@ -1,7 +1,7 @@
-import { registerContextMenusOnClicked } from 'src/infrastructure/browser/listeners/contextMenus/background/onClicked';
-import { registerRuntimeOnInstalled } from 'src/infrastructure/browser/listeners/runtime/background/onInstalled';
-import { registerRuntimeOnMessage } from 'src/infrastructure/browser/listeners/runtime/background/onMessage';
-import { registerTabsOnUpdated } from 'src/infrastructure/browser/listeners/tabs/background/onUpdated';
+import { contextMenusOnClicked } from 'src/infrastructure/browser/background/contextMenus/onClicked';
+import { runtimeOnExtensionInstalled } from 'src/infrastructure/browser/background/runtime/onExtensionInstalled';
+import { runtimeOnMessageReceived } from 'src/infrastructure/browser/background/runtime/onMessageReceived';
+import { tabsOnUpdated } from 'src/infrastructure/browser/background/tabs/onUpdated';
 
 export default defineBackground({
   // Set manifest options
@@ -10,9 +10,9 @@ export default defineBackground({
   main() {
     // DI準備は container側で完了済み
     // 各イベントリスナーを登録（Composition Root）
-    registerTabsOnUpdated();
-    registerRuntimeOnInstalled();
-    registerRuntimeOnMessage();
-    registerContextMenusOnClicked();
+    tabsOnUpdated();
+    runtimeOnExtensionInstalled();
+    runtimeOnMessageReceived();
+    contextMenusOnClicked();
   },
 });
