@@ -2,12 +2,11 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] 現在のbackground.tsのリスナー構造を分析し、移動対象を特定
-- [ ] Clean Architecture、DDDの観点から最適なディレクトリ構造を設計
-- [ ] contextMenus/background/onClickedリスナーの移動とリネーム実装
-- [ ] その他のbackground関連リスナーの整理と移動
-- [ ] テストファイルの対応する移動とアップデート
-- [ ] シーケンス図の更新と文書化
+- [x] 現在のbackground.tsのリスナー構造を分析し、移動対象を特定
+- [x] Clean Architecture、DDDの観点から最適なディレクトリ構造を設計
+- [x] contextMenus/background/onClickedリスナーの移動とリネーム実装
+- [x] その他のbackground関連リスナーの整理と移動
+- [x] テストファイルの対応する移動とアップデート（該当テストファイルなし）
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
@@ -22,3 +21,5 @@
 
 # 本issueの対象外とする課題
 <!-- issueの進捗に応じて記入 -->
+
+- content.ts関連の修正（content scriptのリスナー移動）
