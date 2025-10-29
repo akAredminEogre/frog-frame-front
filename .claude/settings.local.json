@@ -69,7 +69,11 @@
       "Bash(gh pr view:*)",
       "Bash(test:*)",
       "Bash(tree:*)",
-      "Bash(tee:*)"
+      "Bash(tee:*)",
+      "Bash(npm test:*)"
+    ],
+    "deny": [
+      "Bash(git config:*)"
     ],
     "defaultMode": "acceptEdits"
   }
