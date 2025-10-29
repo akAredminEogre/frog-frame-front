@@ -2,7 +2,7 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] ElementSelector.test.tsの現状分析とリファクタリング計画策定
+- [x] ElementSelector.test.tsの現状分析とリファクタリング計画策定
 - [ ] メソッド別テストファイル分割の実行（getElementFromSelection、isTableElement、isWithinTable）
 - [ ] 配列ベースのテストケース適用（類似テストケースの統合）
 - [ ] 新しいテストファイル構造でのテスト実行確認とリファクタリング完了
