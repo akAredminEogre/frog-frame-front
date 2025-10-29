@@ -4,7 +4,7 @@ import { TabId } from 'src/domain/value-objects/TabId';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 
-export function registerTabsOnUpdated() {
+export function tabsOnUpdated() {
   chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
     if (changeInfo.status === 'complete') {
       try {

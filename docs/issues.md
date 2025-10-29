@@ -27,7 +27,8 @@
 - [ ] コーディング規約ドキュメントまとめ
 - [x] (node:12933) [DEP0066] DeprecationWarning: OutgoingMessage.
 - [x] background.ts関係のinfrastructure層の整理
-- [ ] persistence層のディレクトリ整理
+- [ ] content.ts関係のinfrastructure層の整理
+- [x] persistence層のディレクトリ整理
 - [ ] 採番バッチ化
 
 # 0.2.0

@@ -68,6 +68,7 @@
       "SlashCommand(/workflow:*)",
       "Bash(gh pr view:*)",
       "Bash(test:*)",
+      "Bash(tree:*)",
       "Bash(tee:*)"
     ],
     "defaultMode": "acceptEdits"
