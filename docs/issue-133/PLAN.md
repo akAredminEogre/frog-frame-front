@@ -2,11 +2,11 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] 現在のcontent.tsのリスナー構造を分析し、移動対象を特定
-- [ ] Clean Architecture、DDDの観点から最適なディレクトリ構造を設計（backgroundリスナー移動の成果を踏襲）
-- [ ] runtime/content.onMessageリスナーの移動とリネーム実装
-- [ ] content.tsのimport文とregister関数名の更新
-- [ ] テストファイルの対応する移動とアップデート（該当ファイルがあれば）
+- [x] 現在のcontent.tsのリスナー構造を分析し、移動対象を特定
+- [x] Clean Architecture、DDDの観点から最適なディレクトリ構造を設計（backgroundリスナー移動の成果を踏襲）
+- [x] runtime/content.onMessageリスナーの移動とリネーム実装
+- [x] content.tsのimport文とregister関数名の更新
+- [x] テストファイルの対応する移動とアップデート（該当ファイルがあれば）
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
