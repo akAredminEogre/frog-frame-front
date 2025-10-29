@@ -1,4 +1,4 @@
-import { registerRuntimeOnMessageForContent } from 'src/infrastructure/browser/listeners/runtime/content.onMessage';
+import { runtimeOnMessageReceived } from 'src/infrastructure/browser/content/runtime/onMessageReceived';
 import { matchUrl } from 'src/utils/matchUrl';
 
 
@@ -10,6 +10,6 @@ export default defineContentScript({
 
   main() {
     // メッセージ受信リスナーを登録
-    registerRuntimeOnMessageForContent();
+    runtimeOnMessageReceived();
   },
 });

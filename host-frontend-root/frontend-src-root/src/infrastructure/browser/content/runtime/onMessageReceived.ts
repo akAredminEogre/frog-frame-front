@@ -5,7 +5,7 @@ import { createContentMessageRouter } from 'src/infrastructure/browser/router/co
  *
  * Content Script用のruntime.onMessageリスナーを登録し、メッセージをルーティングする
  */
-export function registerRuntimeOnMessageForContent() {
+export function runtimeOnMessageReceived() {
   const route = createContentMessageRouter();
 
   chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
