@@ -5,7 +5,7 @@ import { createMessageRouter } from 'src/infrastructure/browser/router/backgroun
  * 
  * runtime.onMessageリスナーを登録し、メッセージをルーティングする
  */
-export function registerRuntimeOnMessage() {
+export function runtimeOnMessageReceived() {
   const route = createMessageRouter();
 
   chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
