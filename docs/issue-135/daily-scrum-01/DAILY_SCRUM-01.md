@@ -16,6 +16,10 @@ ElementSelector.test.tsの現状分析とリファクタリング計画策定を
 - 分析結果に基づく新しいテストファイル構造の設計書面（次スクラムでの実装準備）
 
 ## スクラム内残タスク
+- [x] 現在のテストファイルの構造とテストケース内容の分析
+- [x] テストコーディング規約に基づく分割計画の策定
+- [x] メソッド別（getElementFromSelection、isTableElement、isWithinTable）のファイル分割設計
+- [x] 配列ベースのテストケース統合の候補特定
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -36,6 +40,21 @@ ElementSelector.test.tsの現状分析とリファクタリング計画策定を
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+ElementSelector.test.tsの現状分析とリファクタリング計画策定が完了しました。
+
+**分析結果:**
+- 現在506行の単一ファイルに3つのメソッド（getElementFromSelection、isTableElement、isWithinTable）のテストが混在
+- テストコーディング規約違反：メソッド別分割がされていない
+- 配列ベーステストの適用機会：isTableElementメソッドで7つの類似テストケース
+- 異常系テストの分離不足：Abend/ディレクトリ構造なし
+
+**リファクタリング計画:**
+1. メソッド別ディレクトリ分割（ElementSelector/getElementFromSelection/, isTableElement/, isWithinTable/）
+2. 正常系・異常系分離（各メソッドにAbend/サブディレクトリ）
+3. 配列ベーステスト統合（isTableElementの7ケース→2配列、getElementFromSelectionの類似ケース）
+4. テーブル関連テストの専用ファイル分離
+
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+なし（分析・計画フェーズのため実装ファイルの変更なし）
