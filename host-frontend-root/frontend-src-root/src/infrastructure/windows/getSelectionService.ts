@@ -8,10 +8,10 @@ import { IGetSelectionService } from 'src/application/ports/IGetSelectionService
 export class GetSelectionService implements IGetSelectionService {
   /**
    * 現在のユーザー選択範囲を取得します。
-   * @returns 現在のSelectionオブジェクト。選択が存在しない場合はnull。
+   * @returns 現在のSelectionオブジェクト。
    */
-  private getCurrentSelection(): Selection | null {
-    return window.getSelection();
+  private getCurrentSelection(): Selection {
+    return window.getSelection()!;
   }
 
   /**
@@ -20,7 +20,7 @@ export class GetSelectionService implements IGetSelectionService {
    */
   private hasValidSelection(): boolean {
     const selection = this.getCurrentSelection();
-    return !!(selection && selection.rangeCount > 0);
+    return selection.rangeCount > 0;
   }
 
   /**
@@ -32,15 +32,15 @@ export class GetSelectionService implements IGetSelectionService {
       return null;
     }
     const selection = this.getCurrentSelection();
-    return selection!.getRangeAt(0);
+    return selection.getRangeAt(0);
   }
 
   /**
    * 選択範囲のテキスト内容を取得します。
-   * @returns 選択されたテキスト。選択が存在しない場合は空文字列。
+   * @returns 選択されたテキスト。
    */
   public getSelectedText(): string {
     const selection = this.getCurrentSelection();
-    return selection ? selection.toString() : '';
+    return selection.toString();
   }
 }
