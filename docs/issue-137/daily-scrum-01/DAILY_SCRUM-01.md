@@ -12,9 +12,9 @@
 - 移動対象: `docs/completed/issue-081/STORE_DESCRIPTION.md`
 
 ## スクラム内残タスク
-- [ ] ストア公開用のディレクトリ構造を決定
-- [ ] ディレクトリを作成
-- [ ] `docs/completed/issue-081/STORE_DESCRIPTION.md`を新しい場所に移動
+- [x] ストア公開用のディレクトリ構造を決定
+- [x] ディレクトリを作成
+- [x] `docs/completed/issue-081/STORE_DESCRIPTION.md`を新しい場所に移動
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -35,6 +35,12 @@ Chromeストア公開に向けた準備作業を開始します。まずは既�
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+Chromeストア公開に向けた資料格納場所の整備を完了。
+`docs/chrome-store/`ディレクトリを新規作成し、既存のストア説明文を移動してストア公開用資料の一元管理体制を構築。
+
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+
+- 新規作成: `docs/chrome-store/` ディレクトリ
+- 移動: `docs/chrome-store/STORE_DESCRIPTION.md` (元: `docs/completed/issue-081/STORE_DESCRIPTION.md`)
