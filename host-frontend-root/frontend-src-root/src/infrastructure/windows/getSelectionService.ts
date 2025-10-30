@@ -15,22 +15,10 @@ export class GetSelectionService implements IGetSelectionService {
   }
 
   /**
-   * 選択範囲が存在し、有効な範囲を持っているかを確認します。
-   * @returns 有効な選択範囲が存在する場合はtrue。
-   */
-  private hasValidSelection(): boolean {
-    const selection = this.getCurrentSelection();
-    return selection.rangeCount > 0;
-  }
-
-  /**
    * 現在の選択範囲の最初のRangeオブジェクトを取得します。
-   * @returns 最初のRangeオブジェクト。選択が存在しない場合はnull。
+   * @returns 最初のRangeオブジェクト。
    */
-  public getFirstRange(): Range | null {
-    if (!this.hasValidSelection()) {
-      return null;
-    }
+  public getFirstRange(): Range {
     const selection = this.getCurrentSelection();
     return selection.getRangeAt(0);
   }
