@@ -1,13 +1,11 @@
 
 # 0.1.1
 - [x] アプリ名、リポジトリ名変更
-- [ ] デモ画像の追加
+- [x] デモ画像の追加
 - [x] 開発者アカウントの登録
 - [x] ソース内機密情報の取捨選択
-- [ ] Chrome Web Storeへの実際の登録作業
 - [x] アイコン画像の準備（各サイズ: 16x16, 48x48, 128x128）
-- [ ] Chrome Web Store用のスクリーンショット・プロモーション画像の準備
-- [ ] ビルド・パッケージング手順の確認
+- [x] Chrome Web Store用のスクリーンショット・プロモーション画像の準備
 
 # 0.1.2
 - [x] tsr,knipの設定で、使われていない変数、メソッドは表示だけで削除にしない
@@ -21,15 +19,18 @@
   - [x] 移行期間のid文字列変換ロジックを削除
   - [x] repositoryの切り替え
 - [x] RewriteRulesのtoObject()の廃止
+- [ ] Chrome Web Storeへの実際の登録作業
+- [ ] ビルド・パッケージング手順の確認
 
 # 0.1.3
 - [x] makeコマンド
 - [ ] コーディング規約ドキュメントまとめ
 - [x] (node:12933) [DEP0066] DeprecationWarning: OutgoingMessage.
 - [x] background.ts関係のinfrastructure層の整理
-- [ ] content.ts関係のinfrastructure層の整理
+- [x] content.ts関係のinfrastructure層の整理
 - [x] persistence層のディレクトリ整理
 - [ ] 採番バッチ化
+- [ ] e2eテストのflaky解消
 
 # 0.2.0
 - [ ] GetElementSelectionUseCaseのシーケンスのリファクタリング
