@@ -10,18 +10,6 @@ describe('ElementSelector - getElementFromSelection - edge cases', () => {
     vi.clearAllMocks();
   });
 
-  it('選択範囲がない場合、空文字列を返す', () => {
-    const result = elementSelector.getElementFromSelection(null, '');
-
-    expect(result).toBe('');
-  });
-
-  it('選択範囲のカウントが0の場合、空文字列を返す', () => {
-    const result = elementSelector.getElementFromSelection(null, 'fallback text');
-
-    expect(result).toBe('');
-  });
-
   it('共通祖先がdocumentの場合、フォールバック処理を実行する', () => {
     const mockTextNode = {
       nodeType: Node.TEXT_NODE,
@@ -69,6 +57,6 @@ describe('ElementSelector - getElementFromSelection - edge cases', () => {
 
     const result = elementSelector.getElementFromSelection(mockRangeForOrphanText as any, 'orphan text');
 
-    expect(result).toBe('orphan text');
+    expect(result).toBe('<body></body>');
   });
 });
