@@ -13,10 +13,10 @@
 - getCurrentSelectionメソッドを使用している関連ファイル
 
 ## スクラム内残タスク
-- getCurrentSelectionメソッドの場所を特定する
-- 戻り値の型定義からnullを除去する
-- 呼び出し元のnullチェックを除去する
-- 影響範囲を調査し、再帰的に型修正を適用する
+- [x] getCurrentSelectionメソッドの場所を特定する
+- [x] 戻り値の型定義からnullを除去する
+- [x] 呼び出し元のnullチェックを除去する
+- [x] 影響範囲を調査し、再帰的に型修正を適用する
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -37,6 +37,19 @@
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+getCurrentSelectionメソッドの戻り値からnull型を除去し、関連する箇所からnullチェックを除去しました。
+
+具体的な変更内容：
+1. `GetSelectionService.getCurrentSelection()`の戻り値を`Selection | null`から`Selection`に変更
+2. `hasValidSelection()`メソッドのnullチェックを除去
+3. `getFirstRange()`メソッドでの非null assertion (!マーク)を除去
+4. `getSelectedText()`メソッドの三項演算子によるnullチェックを除去
+5. JSDocコメントを更新して「nullを返さない」旨を記載
+
+これらの変更により、アプリケーションアーキテクチャでnull選択が発生しないという前提に基づいた型安全性の向上を実現しました。
+
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+
+- `src/infrastructure/windows/getSelectionService.ts`
