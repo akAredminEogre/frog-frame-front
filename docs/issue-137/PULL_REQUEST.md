@@ -15,16 +15,13 @@ Chromeストアに拡張機能を公開するため、説明文やデモgifな�
 [動作確認の手順]
 - `make testcheck` で回帰テスト通過を確認
   - 既存自動テストとlinterを同時に確認
-- ディレクトリ作成確認: `ls -la docs/chrome-store/`
-- ファイル移動確認: `cat docs/chrome-store/STORE_DESCRIPTION.md`
 
 ## 補足
 [追加の文脈や注意点]
-今回はディレクトリ構造の整備とファイル移動のみ実施。実際のストア公開用説明文作成およびデモgif作成は開発者による手動作業として残っており、今後のタスクとなります。
+なし
 
 ## 本スコープの対象外となったタスク
-- ストア公開用の説明文作成(開発者が手動で行う)
-- デモgifを作成する(開発者が手動で行う)
+なし
 
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/02-submit-pull-request.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/03-merge-pull-request.md -->
