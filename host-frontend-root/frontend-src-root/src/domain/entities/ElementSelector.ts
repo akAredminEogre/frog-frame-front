@@ -18,7 +18,7 @@ export class ElementSelector {
   /**
    * 指定されたRangeから最適な要素を見つけ出します。
    * @param range - ユーザーの選択範囲。
-   * @returns 最適なHTML要素、または適切な要素が見つからない場合はnull。
+   * @returns 最適なHTML要素。見つからない場合はnull。
    */
   private findOptimalElement(range: Range): Element | null {
     const { commonAncestorContainer } = range;
@@ -43,7 +43,7 @@ export class ElementSelector {
    * 選択範囲を完全に包含する、最も内側にある適切な要素を見つけます。
    * @param range - ユーザーの選択範囲。
    * @param container - 共通祖先コンテナ。
-   * @returns 発見されたHTML要素、または適切な要素が見つからない場合はnull。
+   * @returns 発見されたHTML要素。見つからない場合はnull。
    */
   private findContainingElement(range: Range, container: Node): Element | null {
     if (container.nodeType === Node.TEXT_NODE) {
@@ -78,7 +78,7 @@ export class ElementSelector {
   /**
    * 選択範囲の開始コンテナから要素を取得します。
    * @param range - ユーザーの選択範囲。
-   * @returns 開始要素、または適切な要素が見つからない場合はnull。
+   * @returns 開始要素。
    */
   private getStartElement(range: Range): Element | null {
     const { startContainer } = range;
