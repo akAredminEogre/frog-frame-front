@@ -44,7 +44,7 @@ describe('ElementSelector - getElementFromSelection - edge cases', () => {
     expect(result).toBe('<div>test content</div>');
   });
 
-  it('ターゲット要素がnullの場合、フォールバック処理を実行する', () => {
+  it('ターゲット要素がnullの場合、選択テキストをそのまま返す', () => {
     const mockTextNodeWithoutParent = {
       nodeType: Node.TEXT_NODE,
       parentElement: null
@@ -57,6 +57,6 @@ describe('ElementSelector - getElementFromSelection - edge cases', () => {
 
     const result = elementSelector.getElementFromSelection(mockRangeForOrphanText as any, 'orphan text');
 
-    expect(result).toBe('<body></body>');
+    expect(result).toBe('orphan text');
   });
 });
