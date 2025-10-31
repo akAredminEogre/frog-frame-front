@@ -8,39 +8,27 @@ import { IGetSelectionService } from 'src/application/ports/IGetSelectionService
 export class GetSelectionService implements IGetSelectionService {
   /**
    * 現在のユーザー選択範囲を取得します。
-   * @returns 現在のSelectionオブジェクト。選択が存在しない場合はnull。
+   * @returns 現在のSelectionオブジェクト。
    */
-  private getCurrentSelection(): Selection | null {
-    return window.getSelection();
-  }
-
-  /**
-   * 選択範囲が存在し、有効な範囲を持っているかを確認します。
-   * @returns 有効な選択範囲が存在する場合はtrue。
-   */
-  private hasValidSelection(): boolean {
-    const selection = this.getCurrentSelection();
-    return !!(selection && selection.rangeCount > 0);
+  private getCurrentSelection(): Selection {
+    return window.getSelection()!;
   }
 
   /**
    * 現在の選択範囲の最初のRangeオブジェクトを取得します。
-   * @returns 最初のRangeオブジェクト。選択が存在しない場合はnull。
+   * @returns 最初のRangeオブジェクト。
    */
-  public getFirstRange(): Range | null {
-    if (!this.hasValidSelection()) {
-      return null;
-    }
+  public getFirstRange(): Range {
     const selection = this.getCurrentSelection();
-    return selection!.getRangeAt(0);
+    return selection.getRangeAt(0);
   }
 
   /**
    * 選択範囲のテキスト内容を取得します。
-   * @returns 選択されたテキスト。選択が存在しない場合は空文字列。
+   * @returns 選択されたテキスト。
    */
   public getSelectedText(): string {
     const selection = this.getCurrentSelection();
-    return selection ? selection.toString() : '';
+    return selection.toString();
   }
 }

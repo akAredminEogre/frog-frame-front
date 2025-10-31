@@ -6,9 +6,9 @@
 export interface IGetSelectionService {
   /**
    * 現在の選択範囲の最初のRangeオブジェクトを取得します。
-   * @returns 最初のRangeオブジェクト。選択が存在しない場合はnull。
+   * @returns 最初のRangeオブジェクト。
    */
-  getFirstRange(): Range | null;
+  getFirstRange(): Range;
 
   /**
    * 選択範囲のテキスト内容を取得します。
