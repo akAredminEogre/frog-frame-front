@@ -37,8 +37,8 @@ test('正規表現で取得した値をタグ内に埋め込み', async ({ page,
   const regexCheckbox = popupPage.getByLabel('正規表現を使う');
   
   // HTMLファイルの要素構造に合わせて正規表現パターンを設定
-  await beforeInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable="">(.+?)</span>');
-  await afterInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>');
+  await beforeInput.fill('<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable="">(.+?)</span>');
+  await afterInput.fill('<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>');
   
   // チェックボックスの状態を確認してからクリック（タイムアウト延長）
   await expect(regexCheckbox).toBeVisible({ timeout: 60000 });
