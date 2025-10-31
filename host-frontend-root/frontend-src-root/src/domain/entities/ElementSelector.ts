@@ -9,11 +9,7 @@ export class ElementSelector {
    * @param selectedText - 選択されたテキスト（フォールバック用）
    * @returns 発見された要素のouterHTML。適切な要素が見つからない場合は選択範囲のテキストを返します。
    */
-  public getElementFromSelection(range: Range | null, selectedText: string): string {
-    if (!range) {
-      return '';
-    }
-
+  public getElementFromSelection(range: Range, selectedText: string): string {
     const element = this.findOptimalElement(range);
 
     return element ? element.outerHTML : selectedText;
@@ -28,7 +24,7 @@ export class ElementSelector {
     const { commonAncestorContainer } = range;
 
     if (this.isInvalidAncestor(commonAncestorContainer)) {
-      return this.getFallbackElement(range);
+      return this.getStartElement(range);
     }
 
     return this.findContainingElement(range, commonAncestorContainer);
@@ -162,16 +158,4 @@ export class ElementSelector {
     return element.hasAttributes() && element.attributes.length > 0;
   }
 
-  /**
-   * フォールバックとして、選択範囲の開始点にある要素を取得します。
-   * @param range - ユーザーの選択範囲。
-   * @returns フォールバック用のHTML要素。
-   */
-  private getFallbackElement(range: Range): Element | null {
-    const element = this.getStartElement(range);
-    if (element && element !== document.body) {
-      return element;
-    }
-    return null;
-  }
 }

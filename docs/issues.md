@@ -36,9 +36,12 @@
 - [ ] GetElementSelectionUseCaseのシーケンスのリファクタリング
 - [ ] ルールの有効/無効切り替え機能
 
-# 1.0.0
+# 0.3.0
 - [ ] 書き換えルールの削除機能
 - [x] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
+
+# 0.4.0
+- [ ] 正規表現の適用範囲拡大
 
 ## phase02
 - [ ] chrome apiのディレクトリ整理
