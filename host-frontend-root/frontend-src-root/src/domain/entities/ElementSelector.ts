@@ -6,8 +6,8 @@ export class ElementSelector {
   /**
    * 指定された選択範囲から最適なHTML要素を取得します。
    * @param range - ユーザーの選択範囲
-   * @param selectedText - 選択されたテキスト（適切な要素が見つからない場合にそのまま返却）
-   * @returns 発見された要素のouterHTML、または適切な要素が見つからない場合はselectedText。
+   * @param selectedText - 選択されたテキスト（フォールバック用）
+   * @returns 発見された要素のouterHTML。適切な要素が見つからない場合は選択範囲のテキストを返します。
    */
   public getElementFromSelection(range: Range, selectedText: string): string {
     const element = this.findOptimalElement(range);
