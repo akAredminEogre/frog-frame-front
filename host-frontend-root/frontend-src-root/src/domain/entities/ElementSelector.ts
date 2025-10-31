@@ -6,14 +6,10 @@ export class ElementSelector {
   /**
    * 指定された選択範囲から最適なHTML要素を取得します。
    * @param range - ユーザーの選択範囲
-   * @param selectedText - 選択されたテキスト（フォールバック用）
-   * @returns 発見された要素のouterHTML。適切な要素が見つからない場合は選択範囲のテキストを返します。
+   * @param selectedText - 選択されたテキスト（適切な要素が見つからない場合にそのまま返却）
+   * @returns 発見された要素のouterHTML、または適切な要素が見つからない場合はselectedText。
    */
-  public getElementFromSelection(range: Range | null, selectedText: string): string {
-    if (!range) {
-      return '';
-    }
-
+  public getElementFromSelection(range: Range, selectedText: string): string {
     const element = this.findOptimalElement(range);
 
     return element ? element.outerHTML : selectedText;
@@ -22,13 +18,13 @@ export class ElementSelector {
   /**
    * 指定されたRangeから最適な要素を見つけ出します。
    * @param range - ユーザーの選択範囲。
-   * @returns 最適なHTML要素。見つからない場合はnull。
+   * @returns 最適なHTML要素、または適切な要素が見つからない場合はnull。
    */
   private findOptimalElement(range: Range): Element | null {
     const { commonAncestorContainer } = range;
 
     if (this.isInvalidAncestor(commonAncestorContainer)) {
-      return this.getFallbackElement(range);
+      return this.getStartElement(range);
     }
 
     return this.findContainingElement(range, commonAncestorContainer);
@@ -47,7 +43,7 @@ export class ElementSelector {
    * 選択範囲を完全に包含する、最も内側にある適切な要素を見つけます。
    * @param range - ユーザーの選択範囲。
    * @param container - 共通祖先コンテナ。
-   * @returns 発見されたHTML要素。見つからない場合はnull。
+   * @returns 発見されたHTML要素、または適切な要素が見つからない場合はnull。
    */
   private findContainingElement(range: Range, container: Node): Element | null {
     if (container.nodeType === Node.TEXT_NODE) {
@@ -82,7 +78,7 @@ export class ElementSelector {
   /**
    * 選択範囲の開始コンテナから要素を取得します。
    * @param range - ユーザーの選択範囲。
-   * @returns 開始要素。
+   * @returns 開始要素、または適切な要素が見つからない場合はnull。
    */
   private getStartElement(range: Range): Element | null {
     const { startContainer } = range;
@@ -162,16 +158,4 @@ export class ElementSelector {
     return element.hasAttributes() && element.attributes.length > 0;
   }
 
-  /**
-   * フォールバックとして、選択範囲の開始点にある要素を取得します。
-   * @param range - ユーザーの選択範囲。
-   * @returns フォールバック用のHTML要素。
-   */
-  private getFallbackElement(range: Range): Element | null {
-    const element = this.getStartElement(range);
-    if (element && element !== document.body) {
-      return element;
-    }
-    return null;
-  }
 }
