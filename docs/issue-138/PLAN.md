@@ -4,8 +4,8 @@
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
 - [x] getCurrentSelectionメソッドの戻り値からnull型を除去する
 - [x] getCurrentSelectionの戻り値を受け取る箇所からnull型とnullチェックを除去する
-- [ ] getSelectionServiceを利用する全てのメソッドからnull型とnullチェックを再帰的に除去する
-- [ ] テストを実行して全てが通ることを確認する
+- [x] getSelectionServiceを利用する全てのメソッドからnull型とnullチェックを再帰的に除去する
+- [x] テストを実行して全てが通ることを確認する
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
