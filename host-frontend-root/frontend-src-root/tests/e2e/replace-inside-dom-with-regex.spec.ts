@@ -60,6 +60,15 @@ test('正規表現で取得した値をタグ内に埋め込み', async ({ page,
   // 7. Assert: アラートダイアログの確認（タイムアウト延長）
   await expect.poll(() => alertMessage, { timeout: 60000 }).toBe('保存して適用しました！');
   
+  // Try to trigger rule application by reloading the page
+  // This should trigger tabs.onUpdated which applies rules automatically
+  await page.reload();
+  await page.waitForLoadState('networkidle');
+  
+  // Wait a bit for DOM replacement to potentially happen
+  await page.waitForTimeout(2000);
+  
+  
   // 8. Assert: DOM置換結果の確認（タイムアウト延長）
   // デバウンス機能により単一のaタグのみが生成されることを確認
   const modifiedLink = page.locator('span.book-isbn13 >> a');
