@@ -52,8 +52,8 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   const regexCheckbox = popupPage.getByLabel('正規表現を使う');
 
   // HTMLファイルの要素構造に合わせて正規表現パターンを設定
-  await beforeInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable="">(.+?)</span>');
-  await afterInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>');
+  await beforeInput.fill('<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable="">(.+?)</span>');
+  await afterInput.fill('<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>');
 
   // チェックボックスの状態を確認してからクリック（タイムアウト延長）
   await expect(regexCheckbox).toBeVisible({ timeout: 60000 });
@@ -106,11 +106,11 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   await expect(rulesPage.locator('.rule-url-pattern:has-text("http://localhost:8080")')).toBeVisible({ timeout: 60000 });
 
   // 15. Assert: 保存した置換前文字列が表示されている
-  const oldStringText = '<span class="book-isbn13" itemprop="isbn13" data-selectable="">(.+?)</span>';
+  const oldStringText = '<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable="">(.+?)</span>';
   await expect(rulesPage.locator('.rule-old-string').filter({ hasText: oldStringText })).toBeVisible({ timeout: 60000 });
 
   // 16. Assert: 保存した置換後文字列が表示されている
-  const newStringText = '<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>';
+  const newStringText = '<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>';
   await expect(rulesPage.locator('.rule-new-string').filter({ hasText: newStringText })).toBeVisible({ timeout: 60000 });
   
   // 17. Assert: 正規表現使用の表示確認(✓マークで表示される)
@@ -140,7 +140,7 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   // 22. 編集ページで置換後の文字列を変更
   const editAfterInput = editPage.locator('textarea[name="newString"]');
   await expect(editAfterInput).toBeVisible({ timeout: 60000 });
-  const newTextWithLink = '<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1へのリンク</a></span>';
+  const newTextWithLink = '<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1へのリンク</a></span>';
   await editAfterInput.fill(newTextWithLink);
 
   // 23. 保存ボタンクリック
@@ -224,8 +224,8 @@ test('編集画面でキャンセルボタンをクリックすると、ポッ�
   const afterInput = popupPage.locator('textarea[name="newString"]');
   const regexCheckbox = popupPage.getByLabel('正規表現を使う');
 
-  await beforeInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable="">(.+?)</span>');
-  await afterInput.fill('<span class="book-isbn13" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>');
+  await beforeInput.fill('<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable="">(.+?)</span>');
+  await afterInput.fill('<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>');
 
   await expect(regexCheckbox).toBeVisible({ timeout: 60000 });
   await regexCheckbox.check();
