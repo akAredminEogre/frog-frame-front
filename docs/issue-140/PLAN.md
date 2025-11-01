@@ -10,9 +10,11 @@
 - [x] E2Eテスト環境での動作確認とデバッグ（単体テストでは成功、E2Eテストでタイムアウト）
 - [x] E2E環境でのバックグラウンドスクリプト問題の修正
 - [x] E2Eテストの安定化
-- [ ] E2E環境でのChrome拡張機能メッセージング問題の解決
-- [ ] WXT Framework + Playwright E2E環境の互換性改善
-- [ ] Chrome Extension Manifest v3 + E2E環境の設定調整
+- [x] E2E環境でのChrome拡張機能メッセージング問題の解決
+- [x] WXT Framework + Playwright E2E環境の互換性改善
+- [x] Chrome Extension Manifest v3 + E2E環境の設定調整
+- [x] Tailwind CSSの正式な導入とセットアップ（テスト環境のみ、本番コードは除外）
+- [x] WXT開発サーバーの内部最適化（E2Eテストは開発ビルド使用に復元）
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
@@ -27,3 +29,6 @@
 
 # 本issueの対象外とする課題
 <!-- issueの進捗に応じて記入 -->
+- 他のE2Eテストフレームワークとの互換性検証
+- E2Eテストの更なる高速化手法
+- Playwright設定の詳細最適化
