@@ -84,3 +84,7 @@ testlint:
 sortimports:
 	@echo "Sorting imports in all files..."
 	@docker compose exec frontend npm run sort:imports
+
+npminstall:
+	@echo "Installing npm dependencies..."
+	@docker compose exec frontend npm install
