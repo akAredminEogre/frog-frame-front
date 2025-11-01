@@ -13,6 +13,15 @@
 - E2Eテスト関連ファイル (必要に応じて)
 
 ## スクラム内残タスク
+- [x] E2Eテスト環境での問題調査（現在のテスト失敗状況の確認）
+- [x] CSSセレクターがTailwind CSS角括弧記法に対応できない問題の分析
+- [x] 修正方法の検討（角括弧エスケープ or 代替CSSクラス名使用）
+- [x] 修正実装とテスト確認
+- [x] make testlintの実行と問題修正
+- [x] E2Eテスト環境での動作確認とデバッグ（単体テストでは成功、E2Eテストでタイムアウト）
+- [x] インフラ問題の詳細分析とクラス・メソッド単位での説明
+- [x] デバッグコードの完全削除
+- [x] 次スクラム課題のPLAN.md追加
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -30,9 +39,22 @@ Tailwind CSSの角括弧記法がE2Eテストに影響する問題を調査・�
 
 # DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+- CSS括弧エスケープ機能実装（RegexPatternProcessingStrategy.ts）
+- 包括的テスト作成（19個のテストケース、100%成功）
+- E2E環境問題の詳細分析（クラス・メソッド単位で特定・説明）
+- デバッグコードの完全削除（10個のファイルからconsole.log削除）
+- 次スクラム課題のPLAN.md追加
 
 ## 修正したファイル
-<!-- スクラム単位での変更を記入 -->
-<!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+**実装ファイル**:
+- `src/domain/entities/RewriteRule/RegexPatternProcessingStrategy.ts` - escapeCssAttributeBracketsメソッド追加
+
+**テストファイル**:
+- `tests/unit/domain/strategies/RegexPatternProcessingStrategy/escapeCssAttributeBrackets/` - 3つのテストファイル作成
+
+**ドキュメント**:
+- `docs/issue-140/PLAN.md` - 次スクラム課題追加
+
+**クリーンアップ**:
+- `tests/e2e/replace-inside-dom-with-regex.spec.ts` - デバッグログ削除
+- その他9個のファイル - デバッグログ削除
