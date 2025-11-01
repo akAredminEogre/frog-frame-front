@@ -7,8 +7,8 @@ frog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/test-pages/book-
 
 # 受け入れ条件
 <!-- チケットをクローズできる条件を状態として表現する -->
-- [ ] classとしてw-[200px]を持っているfrog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/test-pages/book-page.html をテストデータとして使うe2eテストが成功すること
-- [ ] make testlintが成功すること
+- [x] classとしてw-[200px]を持っているfrog-frame-front/host-frontend-root/frontend-src-root/tests/e2e/test-pages/book-page.html をテストデータとして使うe2eテストが成功すること
+- [x] make testlintが成功すること
 
 # 心配事
 <!-- チケットを進めるうえでハードルとなりそうな懸念点を列挙します -->
