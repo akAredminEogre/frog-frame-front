@@ -36,6 +36,7 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
     - チェックリストの更新(なければスキップ)
   - RETROSPECTIVE.md
     - スクラムkkの振り返りを記載
+    - docs/issue-nnn/daily-scrum-kk/ 以下の PROGRESS-kk-*.md を参考に記載
     - 従うべきフォーマット
       - docs/issue-000/RETROSPECTIVE.mdを参照
 - 修正したファイルでも、許可なくコミットしないこと
