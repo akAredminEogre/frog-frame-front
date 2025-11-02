@@ -34,6 +34,44 @@
 - 調査専用のスクラムの場合、テスト実行の必要性について明確な指針があると良い（今回は調査のみだったが、テスト実行を試みた）
 
 
+## スクラム02 の振り返り
+<!-- KPT法で振り返りを行なってください -->
+
+### Keep
+<!-- うまく行ったこと、続けていきたいこと -->
+- DOM差分書き換えアプローチの設計から実装まで一気通貫で完成させることができた
+- DomDifferとEnhancedHtmlReplacerの責任分離が明確で、保守性の高い設計を実現できた
+- 包括的なテストカバレッジ（Event listener、form state preservation、error handling）を同時に実装できた
+- 複数回のコードレビューサイクルを通じて、テスト構造やコード品質を継続的に改善できた
+- Abendディレクトリの使用やdescribe分離など、プロジェクト固有のテスト規約を適切に適用できた
+- フォールバック削除という設計変更にも柔軟に対応し、より安全な実装に改善できた
+
+### Problem
+<!-- 問題点、苦労したこと、レビューで指摘を受けたこと -->
+<!-- PROGRESS-02-*.md をすべて読み、うまく行かなかった点、開発者とのコミュニケーションでの課題も記載 -->
+- テスト構造の改善で複数回のレビューサイクルが必要になった（配列ベーステスト→describe分離→Abend移動）
+- 初期設計でフォールバック機能を入れすぎており、シンプルな設計への変更が必要だった
+- 変数名の命名で意図が伝わりにくい表現を使用していた（updatedInput問題）
+- workflow-record-progress-after-codingを誤って実行し、不要なスクラム番号（03）を作成してしまった
+- 最初にworkflow-test-check-before-completeが存在しないファイルを参照しようとした
+
+### Try
+<!-- 次回やってみたいこと -->
+<!-- タスクベースではなく、行動ルールとして記載してください。 -->
+- テスト実装時は最初からプロジェクトのテスト規約（Abend使用、describe分離）を適用する
+- 設計時にはYAGNI原則を重視し、不要な機能（デバッグ用メソッド等）は最初から作らない
+- 変数名は処理の意図を明確に表現する命名規則を心がける
+- ワークフロー実行前に、実行すべきファイル名を正確に確認してから実行する
+- コードレビューフィードバックを設計フェーズで予測し、初期実装で対応する
+
+### 提案する開発者→AIの指示における改善点
+<!-- 開発者がAIに指示を出す際の改善点や工夫点を記載してください。 -->
+<!-- 特に既存の.clinerulesの改善点、誤読を招きかねない指示等の問題点があれば指摘してください。 -->
+- workflow-see-and-commit-review-comment-then-code-again.mdでworkflow-record-progressを参照しているが、workflow-record-progress-after-codingと混同しやすい。ファイル名を明確に区別できるよう改善が必要
+- テスト規約（Abendディレクトリ使用、describe分離）をより早期に適用できるよう、workflow-code-according-to-the-rulesでの記載を強化する必要がある
+- 不要メソッド作成を防ぐため、YAGNI原則の適用をworkflow-code-according-to-the-rulesに明記することを提案する
+
+
 ---
 <!-- ユーザーが使うコマンド workflow-commit-daily-scrum -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-commit-daily-scrum-then-start-next-daily-scrum.md -->
