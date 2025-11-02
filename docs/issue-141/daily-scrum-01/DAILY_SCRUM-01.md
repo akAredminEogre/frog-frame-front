@@ -17,12 +17,12 @@
 調査段階のため、ファイル修正は予定なし（HtmlReplacerの実装ファイルを読み込み・分析）
 
 ## スクラム内残タスク
-- [ ] HtmlReplacerクラスの場所特定と実装内容確認
-- [ ] DOM書き換え処理の詳細分析
-- [ ] innerHTML使用による副作用の調査
-- [ ] 動的レンダリングとの競合状態の調査
-- [ ] 問題が発生するサイトパターンの整理
-- [ ] 解決アプローチの方向性決定
+- [x] HtmlReplacerクラスの場所特定と実装内容確認
+- [x] DOM書き換え処理の詳細分析
+- [x] innerHTML使用による副作用の調査
+- [x] 動的レンダリングとの競合状態の調査
+- [x] 問題が発生するサイトパターンの整理
+- [x] 解決アプローチの方向性決定
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -43,6 +43,28 @@ DOM操作の深い部分に踏み込む調査になりそうで、技術的に�
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+### 完了した調査内容
+1. **HtmlReplacerクラスの実装確認**
+   - 場所: `src/domain/entities/HtmlReplacer.ts`
+   - DOM書き換えの仕組み: `rootElement.innerHTML`を取得→HtmlContentで置換→結果をchildNodesとして再構築
+
+2. **問題の根本原因特定**
+   - `HtmlReplacer.replace()`メソッド(6-26行目)で全体innerHTML書き換えを実行
+   - `ChildNodeList.clearAllFrom()`(22行目)で全子ノードを削除
+   - `childNodes.appendAllTo()`(25行目)で新しいノードを追加
+   - この過程でDOMに紐付いたイベントリスナーやスタイルが失われる
+
+3. **UseCase経由での呼び出し確認**
+   - `ApplySavedRulesOnPageLoadUseCase.applyAllRules()` → `HtmlReplacer.replace()`
+   - content scriptから`applyAllRulesHandler`経由で呼び出される
+
+4. **問題が発生するメカニズム**
+   - innerHTML書き換えによりDOMノードが完全に再作成される
+   - JavaScriptイベントリスナーが失われる
+   - 動的に適用されたCSSスタイルが失われる
+   - 外部ライブラリ(モーダル表示等)の状態が失われる
+
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+調査のみのため、ファイル修正なし
