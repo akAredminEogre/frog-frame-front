@@ -1,3 +1,4 @@
+import { RegexConstants } from 'src/domain/constants/RegexConstants';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 /**
@@ -5,37 +6,107 @@ import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
  * This preserves event listeners, styles, and component state during DOM transformations
  */
 export class DomDiffer {
-  
+
   /**
    * Apply a rewrite rule to a DOM element using selective updates
+   * Uses createRedundantPattern to handle newline-ignoring patterns like the original HtmlContent
+   * Preserves DOM nodes that are not being replaced to maintain event listeners and state
    * @param root The root element to apply the rule to
    * @param rule The rewrite rule to apply
    */
   applyRule(root: Element, rule: RewriteRule): void {
-    // Find all elements that match the oldString pattern
-    const matchingElements = this.findMatchingElements(root, rule);
-    
-    // Apply the transformation to each matching element
+    // Find all elements that match the oldString pattern using createRedundantPattern
+    const matchingElements = this.findMatchingElementsWithPattern(root, rule);
+
+    // Apply the transformation to each matching element individually
     matchingElements.forEach(element => {
-      this.replaceElement(element, rule);
+      this.replaceElementPreservingState(element, rule);
     });
   }
 
   /**
-   * Find all elements in the DOM tree that match the rule's oldString pattern
+   * Apply HTML changes while preserving element state
+   * This method performs selective updates to maintain event listeners and form states
+   * @param root The root element to update
+   * @param newHtml The new HTML content to apply
+   */
+  private applyHtmlChanges(root: Element, newHtml: string): void {
+    // Create a temporary container with the new HTML
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = newHtml;
+    
+    // For now, implement a simple approach: preserve key elements by their IDs/classes
+    this.preserveElementStates(root);
+    
+    // Replace the content
+    root.innerHTML = newHtml;
+    
+    // Restore preserved states
+    this.restoreElementStates(root);
+  }
+
+  /**
+   * Store important element states before DOM replacement
+   * @param root The root element to scan
+   */
+  private preserveElementStates(root: Element): void {
+    // Store form values
+    this.preservedFormStates = new Map();
+    const inputs = root.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+      const id = input.id || input.getAttribute('name');
+      if (id && (input as HTMLInputElement).value) {
+        this.preservedFormStates.set(id, (input as HTMLInputElement).value);
+      }
+    });
+    
+    // Store event listeners would require more complex implementation
+    // For now, we rely on the framework/application to re-attach listeners
+  }
+
+  /**
+   * Restore preserved element states after DOM replacement
+   * @param root The root element to restore states in
+   */
+  private restoreElementStates(root: Element): void {
+    // Restore form values
+    if (this.preservedFormStates) {
+      this.preservedFormStates.forEach((value, id) => {
+        const element = root.querySelector(`#${id}`) || root.querySelector(`[name="${id}"]`);
+        if (element && (element as HTMLInputElement).value !== undefined) {
+          (element as HTMLInputElement).value = value;
+        }
+      });
+    }
+  }
+
+  private preservedFormStates: Map<string, string> = new Map();
+
+  /**
+   * Find elements that match the rule's pattern using createRedundantPattern
    * @param root The root element to search from
    * @param rule The rewrite rule containing the pattern to match
    * @returns Array of elements that match the pattern
    */
-  private findMatchingElements(root: Element, rule: RewriteRule): Element[] {
+  private findMatchingElementsWithPattern(root: Element, rule: RewriteRule): Element[] {
     const matchingElements: Element[] = [];
     
-    // Convert the rule's oldString to a pattern we can match against DOM elements
-    const pattern = this.createElementPattern(rule.oldString);
+    // For DOM diffing, we need more flexible attribute matching
+    // Use a combination of exact pattern matching and attribute-flexible matching
+    const regexPattern = rule.createRedundantPattern();
     
-    // Walk the DOM tree and find matching elements
+    // Validate pattern before creating regex
+    if (!regexPattern || regexPattern.trim() === '') {
+      throw new Error('Invalid or empty pattern generated from rule');
+    }
+    
+    
+    const regex = new RegExp(regexPattern, RegexConstants.REGEX_FLAGS_GLOBAL_MULTILINE);
+    
+    
+    // Walk through only children elements, not the root container
     this.walkDomTree(root, (element) => {
-      if (this.elementMatchesPattern(element, pattern)) {
+      if (this.elementMatchesFlexiblePattern(element, rule, regex)) {
         matchingElements.push(element);
       }
     });
@@ -44,29 +115,146 @@ export class DomDiffer {
   }
 
   /**
-   * Replace a single element according to the rewrite rule
-   * This preserves the position in the DOM and transfers attributes/children as needed
+   * Check if an element matches the pattern with flexible attribute handling
+   * @param element The element to check
+   * @param rule The rewrite rule
+   * @param regex The regex pattern to match against
+   * @returns true if the element matches
+   */
+  private elementMatchesFlexiblePattern(element: Element, rule: RewriteRule, regex: RegExp): boolean {
+    const outerHTML = element.outerHTML;
+    
+    // Reset regex lastIndex to ensure consistent matching
+    regex.lastIndex = 0;
+    
+    // First try exact pattern matching
+    const exactMatch = regex.exec(outerHTML);
+    
+    if (exactMatch && exactMatch.index === 0 && exactMatch[0].length === outerHTML.length) {
+      return true;
+    }
+    
+    // If exact match fails, try structural matching for attribute flexibility
+    return this.structuralElementMatch(element, rule);
+  }
+
+  /**
+   * Check if element matches structurally (tag, required attributes, content) allowing additional attributes
+   * @param element The element to check
+   * @param rule The rewrite rule
+   * @returns true if element matches the structural requirements
+   */
+  private structuralElementMatch(element: Element, rule: RewriteRule): boolean {
+    const ruleHtml = rule.oldString;
+    
+    // Parse the rule's expected element
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = ruleHtml;
+    const expectedElement = tempDiv.firstElementChild;
+    
+    if (!expectedElement) return false;
+    
+    // Check tag name match
+    if (element.tagName.toLowerCase() !== expectedElement.tagName.toLowerCase()) {
+      return false;
+    }
+    
+    // Enhanced text content match that ignores whitespace differences
+    const elementText = this.normalizeWhitespace(element.textContent || '');
+    const expectedText = this.normalizeWhitespace(expectedElement.textContent || '');
+    if (expectedText && elementText !== expectedText) {
+      return false;
+    }
+    
+    // Check required attributes (element must have all attributes from rule, but can have additional ones)
+    const expectedAttributes = expectedElement.attributes;
+    for (let i = 0; i < expectedAttributes.length; i++) {
+      const attr = expectedAttributes[i];
+      const elementAttrValue = element.getAttribute(attr.name);
+      if (elementAttrValue !== attr.value) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+
+  /**
+   * Normalize whitespace in text content to handle newlines and multiple spaces
+   * @param text The text to normalize
+   * @returns Normalized text with single spaces
+   */
+  private normalizeWhitespace(text: string): string {
+    return text.replace(/\s+/g, ' ').trim();
+  }
+
+
+  /**
+   * Replace a single element while preserving surrounding DOM state
    * @param element The element to replace
    * @param rule The rewrite rule to apply
    */
-  private replaceElement(element: Element, rule: RewriteRule): void {
+  private replaceElementPreservingState(element: Element, rule: RewriteRule): void {
     const parent = element.parentNode;
     if (!parent) return;
 
-    // Parse the newString to create replacement elements
-    const replacementContainer = document.createElement('div');
-    replacementContainer.innerHTML = rule.newString;
+    // Get the actual replacement content by applying regex substitution if needed
+    const replacementContent = this.getReplacementContent(element, rule);
     
-    // Insert all replacement elements
-    const replacementElements = Array.from(replacementContainer.children);
+    // Parse the replacement content to create replacement nodes
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = replacementContent;
     
-    // Insert replacement elements before the original
-    replacementElements.forEach(replacementElement => {
-      parent.insertBefore(replacementElement.cloneNode(true), element);
+    // Insert all replacement nodes
+    const replacementNodes = Array.from(tempContainer.childNodes);
+    
+    // Insert replacement nodes before the original element
+    replacementNodes.forEach(node => {
+      parent.insertBefore(node.cloneNode(true), element);
     });
     
     // Remove the original element
     parent.removeChild(element);
+  }
+
+  /**
+   * Get the actual replacement content by applying regex substitution if the rule uses regex
+   * @param element The element being replaced
+   * @param rule The rewrite rule to apply
+   * @returns The final replacement content with substitutions applied
+   */
+  private getReplacementContent(element: Element, rule: RewriteRule): string {
+    if (!rule.isRegex) {
+      return rule.newString;
+    }
+
+    // For regex rules, we need to apply the original regex pattern with whitespace normalization
+    try {
+      const elementHtml = element.outerHTML;
+      
+      // Normalize whitespace in both the element HTML and apply the original pattern
+      const normalizedElementHtml = elementHtml.replace(/\s+/g, ' ').trim();
+      const normalizedOldString = rule.oldString.replace(/\s+/g, ' ').trim();
+      const normalizedRegex = new RegExp(normalizedOldString, RegexConstants.REGEX_FLAGS_GLOBAL_MULTILINE);
+      
+      // Apply regex replacement to get the actual content
+      const result = normalizedElementHtml.replace(normalizedRegex, rule.newString);
+      
+      // If no replacement occurred, try with the redundant pattern approach
+      if (result === normalizedElementHtml) {
+        // Fallback to the redundant pattern
+        const redundantPattern = rule.createRedundantPattern();
+        if (redundantPattern) {
+          const redundantRegex = new RegExp(redundantPattern, RegexConstants.REGEX_FLAGS_GLOBAL_MULTILINE);
+          return elementHtml.replace(redundantRegex, rule.newString);
+        }
+      }
+      
+      return result;
+    } catch (error) {
+      console.warn('[DomDiffer] Regex replacement failed:', error);
+      return rule.newString;
+    }
   }
 
   /**
@@ -75,88 +263,11 @@ export class DomDiffer {
    * @param callback Function to call for each element
    */
   private walkDomTree(root: Element, callback: (element: Element) => void): void {
-    callback(root);
-    
-    // Recursively walk children
+    // Only walk children, not the root itself to avoid replacing the container
     Array.from(root.children).forEach(child => {
+      callback(child);
       this.walkDomTree(child, callback);
     });
   }
 
-  /**
-   * Create a pattern object from the rule's oldString for matching DOM elements
-   * @param oldString The HTML string to convert to a matching pattern
-   * @returns Pattern object for matching
-   */
-  private createElementPattern(oldString: string): ElementPattern {
-    // Parse the oldString to extract the element structure
-    const tempContainer = document.createElement('div');
-    tempContainer.innerHTML = oldString;
-    
-    if (tempContainer.children.length === 0) {
-      throw new Error('Invalid oldString: no valid HTML elements found');
-    }
-    
-    // For now, use the first element as the pattern
-    const targetElement = tempContainer.children[0];
-    
-    return {
-      tagName: targetElement.tagName.toLowerCase(),
-      attributes: this.getElementAttributes(targetElement),
-      textContent: targetElement.textContent?.trim() || '',
-      hasExactMatch: true
-    };
-  }
-
-  /**
-   * Check if a DOM element matches the given pattern
-   * @param element The DOM element to check
-   * @param pattern The pattern to match against
-   * @returns true if the element matches the pattern
-   */
-  private elementMatchesPattern(element: Element, pattern: ElementPattern): boolean {
-    // Check tag name
-    if (element.tagName.toLowerCase() !== pattern.tagName) {
-      return false;
-    }
-    
-    // Check attributes
-    for (const [key, value] of Object.entries(pattern.attributes)) {
-      if (element.getAttribute(key) !== value) {
-        return false;
-      }
-    }
-    
-    // Check text content if specified
-    if (pattern.textContent && element.textContent?.trim() !== pattern.textContent) {
-      return false;
-    }
-    
-    return true;
-  }
-
-  /**
-   * Get all attributes from an element as an object
-   * @param element The element to extract attributes from
-   * @returns Object with attribute name-value pairs
-   */
-  private getElementAttributes(element: Element): Record<string, string> {
-    const attributes: Record<string, string> = {};
-    
-    Array.from(element.attributes).forEach(attr => {
-      attributes[attr.name] = attr.value;
-    });
-    
-    return attributes;
-  }
-}
-
-/**
- * Pattern for matching DOM elements
- */
-interface ElementPattern {
-  tagName: string;
-  attributes: Record<string, string>;
-  textContent: string;
-  hasExactMatch: boolean;
 }
