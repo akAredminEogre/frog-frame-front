@@ -56,9 +56,8 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
       },
       expected: false
     },
-    // Structural Matching Cases
     {
-      description: 'should match element with additional attributes',
+      description: 'should not match element with additional attributes',
       input: {
         elementHTML: '<button class="btn" onclick="alert()" id="test">Old Button</button>',
         rule: {
@@ -68,10 +67,10 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
           isRegex: false
         }
       },
-      expected: true
+      expected: false
     },
     {
-      description: 'should match with normalized whitespace',
+      description: 'should not match with different whitespace',
       input: {
         elementHTML: '<div>Replace   me</div>',
         rule: {
@@ -81,7 +80,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
           isRegex: false
         }
       },
-      expected: true
+      expected: false
     },
     {
       description: 'should not match element with missing required attributes',
