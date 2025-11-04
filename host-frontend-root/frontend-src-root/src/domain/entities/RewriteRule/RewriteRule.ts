@@ -88,13 +88,9 @@ export class RewriteRule {
    * @returns HTML要素間改行コード無視処理を適用したパターン文字列
    */
   private addHtmlWhitespaceIgnoringPattern(pattern: string): string {
-    let result = pattern;
-    
-    // Add whitespace ignoring patterns around HTML tags using the efficient regex approach
-    result = result.replace(this.htmlOpenTagPattern, this.htmlWhitespaceBeforeOpenTag);
-    result = result.replace(this.htmlCloseTagPattern, this.htmlWhitespaceAfterCloseTag);
-    
-    return result;
+    return pattern
+      .replace(this.htmlOpenTagPattern, this.htmlWhitespaceBeforeOpenTag)
+      .replace(this.htmlCloseTagPattern, this.htmlWhitespaceAfterCloseTag);
   }
 
   /**
