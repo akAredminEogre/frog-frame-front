@@ -4,11 +4,9 @@ import { EnhancedHtmlReplacer } from 'src/domain/entities/EnhancedHtmlReplacer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 describe('EnhancedHtmlReplacer - State Preservation', () => {
-  let enhancedReplacer: EnhancedHtmlReplacer;
   let container: HTMLElement;
 
   beforeEach(() => {
-    enhancedReplacer = new EnhancedHtmlReplacer();
     container = document.createElement('div');
     document.body.appendChild(container);
   });
@@ -30,7 +28,8 @@ describe('EnhancedHtmlReplacer - State Preservation', () => {
       
       // Apply replacement rule
       const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', '');
-      enhancedReplacer.replace(container, rule);
+      const enhancedReplacer = new EnhancedHtmlReplacer(container, rule);
+      enhancedReplacer.replace();
       
       // Verify the button still has the event listener
       const updatedButton = container.querySelector('#keep') as HTMLButtonElement;
@@ -55,7 +54,8 @@ describe('EnhancedHtmlReplacer - State Preservation', () => {
       
       // Apply replacement rule
       const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', '');
-      enhancedReplacer.replace(container, rule);
+      const enhancedReplacer = new EnhancedHtmlReplacer(container, rule);
+      enhancedReplacer.replace();
       
       // Verify input value is preserved
       const inputUntouched = container.querySelector('#keep') as HTMLInputElement;

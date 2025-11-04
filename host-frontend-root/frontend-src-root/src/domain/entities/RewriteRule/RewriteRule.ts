@@ -90,16 +90,9 @@ export class RewriteRule {
   private addHtmlWhitespaceIgnoringPattern(pattern: string): string {
     let result = pattern;
     
-    // Handle complete HTML tag elements with content
-    result = result.replace(/<([^/>]+)>([^<>]*)<\/([^>]+)>/g, (_match, openTag, content, closeTag) => {
-      return `(?:\\s*)<${openTag}>(?:\\s*)${content}(?:\\s*)</${closeTag}>(?:\\s*)`;
-    });
-    
-    // Only handle standalone tags if no complete elements were processed
-    if (!/<([^/>]+)>([^<>]*)<\/([^>]+)>/.test(pattern)) {
-      result = result.replace(this.htmlOpenTagPattern, this.htmlWhitespaceBeforeOpenTag);
-      result = result.replace(this.htmlCloseTagPattern, this.htmlWhitespaceAfterCloseTag);
-    }
+    // Add whitespace ignoring patterns around HTML tags using the efficient regex approach
+    result = result.replace(this.htmlOpenTagPattern, this.htmlWhitespaceBeforeOpenTag);
+    result = result.replace(this.htmlCloseTagPattern, this.htmlWhitespaceAfterCloseTag);
     
     return result;
   }

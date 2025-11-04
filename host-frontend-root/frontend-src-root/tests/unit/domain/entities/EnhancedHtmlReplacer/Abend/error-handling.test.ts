@@ -4,11 +4,9 @@ import { EnhancedHtmlReplacer } from 'src/domain/entities/EnhancedHtmlReplacer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 describe('EnhancedHtmlReplacer - Error Handling', () => {
-  let enhancedReplacer: EnhancedHtmlReplacer;
   let container: HTMLElement;
 
   beforeEach(() => {
-    enhancedReplacer = new EnhancedHtmlReplacer();
     container = document.createElement('div');
     document.body.appendChild(container);
   });
@@ -23,14 +21,15 @@ describe('EnhancedHtmlReplacer - Error Handling', () => {
       container.innerHTML = '<div><p>Replace me</p></div>';
       const originalHTML = container.innerHTML;
       
-      // Create a rule that will cause DOM diffing to fail (empty oldString)
-      const rule = new RewriteRule(1, '', '<span>Replaced</span>', '');
+      // Create a rule that will cause DOM diffing to fail with invalid regex pattern
+      const rule = new RewriteRule(1, '[', '<span>Replaced</span>', '', true); // Invalid regex: unclosed bracket
       
       // Mock console.warn to capture warning message
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       
       // Apply replacement - should leave DOM unchanged
-      enhancedReplacer.replace(container, rule);
+      const enhancedReplacer = new EnhancedHtmlReplacer(container, rule);
+      enhancedReplacer.replace();
       
       // Verify warning message was logged
       expect(consoleSpy).toHaveBeenCalledWith(

@@ -129,8 +129,8 @@ describe('ApplySavedRulesOnPageLoadUseCase - EnhancedHtmlReplacer Integration', 
     it('should handle DOM diffing failures gracefully', async () => {
       container.innerHTML = '<div><p>Test</p></div>';
 
-      // Create rule that will cause DOM diffing to fail (empty oldString)
-      const rule = new RewriteRule(1, '', '<span>Replaced</span>', '');
+      // Create rule that will cause DOM diffing to fail with invalid regex pattern
+      const rule = new RewriteRule(1, '[', '<span>Replaced</span>', '', true); // Invalid regex: unclosed bracket
       const rules = new RewriteRules([rule]);
       vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
 

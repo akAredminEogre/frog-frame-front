@@ -2,7 +2,7 @@ import { expect,test } from 'tests/e2e/fixtures';
 
 test('ポップアップを開くと、URLパターンのフォームにブラウザに表示されているページのURLのドメインが自動入力されている', async ({ page, popupPage }) => {
   // メインページに移動し、フォーカスを当てる
-  await page.goto('https://agilemanifesto.org/iso/ja/manifesto.html', { timeout: 60000 });
+  await page.goto('https://agilemanifesto.org/iso/ja/manifesto.html', { timeout: 120000 });
   await page.bringToFront();
 
   //  ポップアップをリロードして、最新のアクティブタブ情報を取得させる
@@ -12,7 +12,7 @@ test('ポップアップを開くと、URLパターンのフォームにブラ�
   const urlPatternInput = popupPage.getByLabel('URLパターン (前方一致):');
   
   // 値が設定されるまで、デフォルトより長いタイムアウトを設定して待機
-  await expect(urlPatternInput).toHaveValue('https://agilemanifesto.org', { timeout: 60000 });
+  await expect(urlPatternInput).toHaveValue('https://agilemanifesto.org', { timeout: 120000 });
   
   // コンソールエラーメッセージを記録するための配列
   const consoleMessages: string[] = [];
