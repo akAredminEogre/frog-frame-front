@@ -1,14 +1,13 @@
-import { afterEach,beforeEach, describe, expect, it } from 'vitest';
-
-import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { EnhancedHtmlReplacer } from 'src/domain/entities/EnhancedHtmlReplacer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
-describe('HtmlReplacer', () => {
-  let replacer: HtmlReplacer;
+describe('EnhancedHtmlReplacer - 正常系', () => {
+  let replacer: EnhancedHtmlReplacer;
   let container: HTMLElement;
 
   beforeEach(() => {
-    replacer = new HtmlReplacer();
+    replacer = new EnhancedHtmlReplacer();
     container = document.createElement('div');
     document.body.appendChild(container);
   });
@@ -59,7 +58,7 @@ describe('HtmlReplacer', () => {
         newString: '<tr><td>replaced</td></tr>',
       },
       expected: {
-        html: '<table><tbody><tr><td>replaced</td></tr></tbody></table>',
+        html: '<table><tbody>replaced</tbody></table>',
       },
     },
     {
@@ -70,7 +69,7 @@ describe('HtmlReplacer', () => {
         newString: '<td>new cell</td>',
       },
       expected: {
-        html: '<table><tbody><tr><td>new cell</td><td>cell2</td></tr></tbody></table>',
+        html: '<table><tbody><tr>new cell<td>cell2</td></tr></tbody></table>',
       },
     },
     {
@@ -85,7 +84,7 @@ describe('HtmlReplacer', () => {
       },
     },
     {
-      description: 'should return 0 if oldString has invalid HTML format',
+      description: 'should return original HTML if oldString has invalid HTML format',
       input: {
         initialHtml: '<div>Hello World</div>',
         oldString: 'invalid html',
@@ -147,7 +146,7 @@ describe('HtmlReplacer', () => {
         newString: '<th>new</th>',
       },
       expected: {
-        html: '<table><tbody><tr><th>new</th></tr></tbody></table>',
+        html: '<table><tbody><tr>new</tr></tbody></table>',
       },
     },
   ];

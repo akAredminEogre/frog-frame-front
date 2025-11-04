@@ -1,12 +1,12 @@
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
+import { EnhancedHtmlReplacer } from 'src/domain/entities/EnhancedHtmlReplacer';
 
 export class ApplySavedRulesOnPageLoadUseCase {
-  private replacer: HtmlReplacer;
+  private replacer: EnhancedHtmlReplacer;
   private repository: IRewriteRuleRepository;
 
   constructor(repository: IRewriteRuleRepository) {
-    this.replacer = new HtmlReplacer();
+    this.replacer = new EnhancedHtmlReplacer();
     this.repository = repository;
   }
 

@@ -1,14 +1,13 @@
-import { afterEach,beforeEach, describe, expect, it } from 'vitest';
-
-import { HtmlReplacer } from 'src/domain/entities/HtmlReplacer';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { EnhancedHtmlReplacer } from 'src/domain/entities/EnhancedHtmlReplacer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
-describe('HtmlReplacer', () => {
-  let replacer: HtmlReplacer;
+describe('EnhancedHtmlReplacer - 正規表現パターン', () => {
+  let replacer: EnhancedHtmlReplacer;
   let container: HTMLElement;
 
   beforeEach(() => {
-    replacer = new HtmlReplacer();
+    replacer = new EnhancedHtmlReplacer();
     container = document.createElement('div');
     document.body.appendChild(container);
   });
