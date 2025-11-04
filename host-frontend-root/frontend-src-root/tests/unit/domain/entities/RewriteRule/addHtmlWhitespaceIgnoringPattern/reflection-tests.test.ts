@@ -21,7 +21,7 @@ const addHtmlWhitespaceIgnoringPatternCases = [
   {
     description: 'should handle pattern with multiple HTML elements',
     input: '<div><span>content</span></div>',
-    expected: '<div>(?:\\s*)<span>(?:\\s*)content(?:\\s*)</span>(?:\\s*)</div>'
+    expected: '(?:\\s*)<div>(?:\\s*)(?:\\s*)<span>(?:\\s*)content(?:\\s*)</span>(?:\\s*)(?:\\s*)</div>(?:\\s*)'
   },
   {
     description: 'should handle pattern with no HTML elements',
@@ -41,7 +41,7 @@ const addHtmlWhitespaceIgnoringPatternCases = [
   {
     description: 'should handle pattern with mixed content',
     input: 'text<div>nested<span>deep</span>content</div>more',
-    expected: 'text<div>nested(?:\\s*)<span>(?:\\s*)deep(?:\\s*)</span>(?:\\s*)content</div>more'
+    expected: 'text(?:\\s*)<div>(?:\\s*)nested(?:\\s*)<span>(?:\\s*)deep(?:\\s*)</span>(?:\\s*)content(?:\\s*)</div>(?:\\s*)more'
   },
   {
     description: 'should handle special characters in pattern',

@@ -1,13 +1,12 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { afterEach,beforeEach, describe, expect, it } from 'vitest';
+
 import { EnhancedHtmlReplacer } from 'src/domain/entities/EnhancedHtmlReplacer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 describe('EnhancedHtmlReplacer - 正常系', () => {
-  let replacer: EnhancedHtmlReplacer;
   let container: HTMLElement;
 
   beforeEach(() => {
-    replacer = new EnhancedHtmlReplacer();
     container = document.createElement('div');
     document.body.appendChild(container);
   });
@@ -155,7 +154,8 @@ describe('EnhancedHtmlReplacer - 正常系', () => {
     it(description, () => {
       container.innerHTML = input.initialHtml;
       const rule = new RewriteRule(1, input.oldString, input.newString, '');
-      replacer.replace(container, rule);
+      const replacer = new EnhancedHtmlReplacer(container, rule);
+      replacer.replace();
       expect(container.innerHTML).toBe(expected.html);
     });
   });

@@ -2,11 +2,9 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { EnhancedHtmlReplacer } from 'src/domain/entities/EnhancedHtmlReplacer';
 
 export class ApplySavedRulesOnPageLoadUseCase {
-  private replacer: EnhancedHtmlReplacer;
   private repository: IRewriteRuleRepository;
 
   constructor(repository: IRewriteRuleRepository) {
-    this.replacer = new EnhancedHtmlReplacer();
     this.repository = repository;
   }
 
@@ -27,7 +25,8 @@ export class ApplySavedRulesOnPageLoadUseCase {
           }
         }
 
-        this.replacer.replace(targetElement, rule);
+        const replacer = new EnhancedHtmlReplacer(targetElement, rule);
+        replacer.replace();
       });
     } catch (error) {
       // エラーが発生しても処理を続行（ログ出力などは必要に応じて追加）
