@@ -1,7 +1,7 @@
-import { RegexConstants } from 'src/domain/constants/RegexConstants';
+import { ElementMatchesFlexiblePattern } from 'src/domain/entities/ElementMatchesFlexiblePattern';
+import { ReplaceElementPreservingState } from 'src/domain/entities/ReplaceElementPreservingState';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { MatchingElements } from 'src/domain/value-objects/MatchingElements';
-import { ElementMatchesFlexiblePattern } from 'src/domain/entities/ElementMatchesFlexiblePattern';
 
 /**
  * DOM difference engine that performs selective updates instead of full innerHTML replacement
@@ -27,7 +27,8 @@ export class DomDiffer {
 
     // Apply the transformation to each matching element individually
     matchingElements.applyReplacements(this.rule, (element, rule) => {
-      this.replaceElementPreservingState(element, rule);
+      const replaceElementPreservingState = new ReplaceElementPreservingState(element, rule);
+      replaceElementPreservingState.exec();
     });
   }
 
@@ -48,73 +49,6 @@ export class DomDiffer {
     return new MatchingElements(matchingElementsArray);
   }
 
-  /**
-   * Replace a single element while preserving surrounding DOM state
-   * @param element The element to replace
-   * @param rule The rewrite rule to apply
-   */
-  private replaceElementPreservingState(element: Element, rule: RewriteRule): void {
-    const parent = element.parentNode;
-    if (!parent) return;
-
-    // Get the actual replacement content by applying regex substitution if needed
-    const replacementContent = this.getReplacementContent(element, rule);
-    
-    // Parse the replacement content to create replacement nodes
-    const tempContainer = document.createElement('div');
-    tempContainer.innerHTML = replacementContent;
-    
-    // Insert all replacement nodes
-    const replacementNodes = Array.from(tempContainer.childNodes);
-    
-    // Insert replacement nodes before the original element
-    replacementNodes.forEach(node => {
-      parent.insertBefore(node.cloneNode(true), element);
-    });
-    
-    // Remove the original element
-    parent.removeChild(element);
-  }
-
-  /**
-   * Get the actual replacement content by applying regex substitution if the rule uses regex
-   * @param element The element being replaced
-   * @param rule The rewrite rule to apply
-   * @returns The final replacement content with substitutions applied
-   */
-  private getReplacementContent(element: Element, rule: RewriteRule): string {
-    if (!rule.isRegex) {
-      return rule.newString;
-    }
-
-    // For regex rules, we need to apply the original regex pattern with whitespace normalization
-    try {
-      const elementHtml = element.outerHTML;
-      
-      // Normalize whitespace in both the element HTML and apply the original pattern
-      const normalizedElementHtml = elementHtml.replace(/\s+/g, ' ').trim();
-      const normalizedOldString = rule.oldString.replace(/\s+/g, ' ').trim();
-      const normalizedRegex = new RegExp(normalizedOldString, RegexConstants.REGEX_FLAGS_GLOBAL_MULTILINE);
-      
-      // Apply regex replacement to get the actual content
-      const result = normalizedElementHtml.replace(normalizedRegex, rule.newString);
-      
-      // If no replacement occurred, try with the redundant pattern approach
-      if (result === normalizedElementHtml) {
-        // Fallback to the redundant pattern
-        const redundantPattern = rule.createRedundantPattern();
-        if (redundantPattern) {
-          const redundantRegex = new RegExp(redundantPattern, RegexConstants.REGEX_FLAGS_GLOBAL_MULTILINE);
-          return elementHtml.replace(redundantRegex, rule.newString);
-        }
-      }
-      
-      return result;
-    } catch (error) {
-      console.warn('[DomDiffer] Regex replacement failed:', error);
-      return rule.newString;
-    }
-  }
 
   /**
    * Walk through all elements in a DOM tree

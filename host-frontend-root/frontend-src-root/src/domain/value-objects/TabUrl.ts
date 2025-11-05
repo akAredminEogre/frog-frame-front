@@ -19,7 +19,7 @@ export class TabUrl {
    * Special URLs that cannot have content scripts injected
    */
   private static readonly RESTRICTED_URLS = [
-    'https://chrome.google.com/webstore/',
+    'https://chromewebstore.google.com/',
   ] as const;
 
   constructor(value: string) {

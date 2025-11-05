@@ -39,7 +39,7 @@ test('外部URL(Chrome Web Store)でエラーが発生しないことを確認',
 
   // Act: Chrome Web Storeページに移動（外部のHTTPSページ）
   // コンテンツスクリプト注入可能だが、クロスオリジンの制約があるURL
-  await page.goto('https://chrome.google.com/webstore/', { timeout: 120000 });
+  await page.goto('https://chromewebstore.google.com/', { timeout: 120000 });
 
   // ページが正常に読み込まれることを確認
   await expect(page.locator('body')).toBeVisible({ timeout: 120000 });
