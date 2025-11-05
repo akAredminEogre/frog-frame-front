@@ -15,13 +15,18 @@
 - [ ] タイミング遅延アプローチの調査と実装（代替案2）
 - [ ] 選定したアプローチでHtmlReplacerを改修
 - [ ] 問題のあったサイトでの動作確認とテスト
-- [ ] リグレッションテストの実行
-- [ ] パフォーマンス最適化（スコープ制限、キャッシング）
 - [ ] ドキュメント更新、AI指示改善
 - [ ] ネットワーク接続に依存するE2Eテストの安定化（外部サイトアクセス関連）
-- [ ] 正規表現置換のE2Eテスト失敗（4テスト）
 - [ ] 正規表現キャプチャグループの統合動作確認
 - [ ] E2Eテストで失敗している正規表現置換機能の詳細調査と修正（一部のテストでタイムアウトが発生）
+- [ ] frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/entities/DomDiffer/basic-replacement.test.ts
+  - [ ] 'Simple Element Replacement' 以外のテストケースはarrange / act / assert を共通化できそうなので、テスト配列化のコード規約に沿ってリファクタリングする(規約から外れる場合は断念する)
+  - [ ] 'Table Row Replacement' のテストケースが新たに追加されたので、それをpassするようにプロダクションコードを修正する
+- [ ] PRレビュー対応
+  - [ ] host-frontend-root/frontend-src-root/tests/unit/domain/entities/EnhancedHtmlReplacer/normal-cases.test.ts
+    - [ ] のテストケースの復元
+    - [ ] 
+- [ ] Table要素置換リファクタリングの実装（レビュアーの判断待ち） 
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
