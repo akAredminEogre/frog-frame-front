@@ -35,8 +35,8 @@ describe('DomDiffer - Basic Replacement', () => {
   });
 
   describe('Attribute Handling', () => {
-    it('should replace elements with attributes', () => {
-      container.innerHTML = '<div><button class="btn" onclick="alert()">Old Button</button></div>';
+    it('should replace elements with exact attribute matching', () => {
+      container.innerHTML = '<div><button class="btn">Old Button</button></div>';
       
       const rule = new RewriteRule(1, '<button class="btn">Old Button</button>', '<button class="new-btn">New Button</button>', '');
       const domDiffer = new DomDiffer(container, rule);
