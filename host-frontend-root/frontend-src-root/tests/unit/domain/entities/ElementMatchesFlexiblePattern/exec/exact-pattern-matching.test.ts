@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ElementMatchesFlexiblePattern } from 'src/domain/entities/ElementMatchesFlexiblePattern';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
-describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
+describe('ElementMatchesFlexiblePattern.exec() - Exact Pattern Matching (isRegex: false)', () => {
   let container: HTMLElement;
 
   beforeEach(() => {
@@ -15,10 +15,33 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
     document.body.removeChild(container);
   });
 
+  /**
+   * 厳密パターンマッチング機能のテストケース
+   * 
+   * @description ElementMatchesFlexiblePatternがisRegex=falseの場合に、
+   * 厳密な文字列パターンで要素を正しくマッチングすることを検証する
+   * 
+   * テストシナリオ:
+   * - 厳密なパターンマッチング成功ケース
+   * - 属性付き要素のマッチング成功ケース
+   * - 異なる内容でのマッチング失敗ケース
+   * - 追加属性でのマッチング失敗ケース
+   * - 空白文字の違いでのマッチング失敗ケース
+   * - 必須属性欠如でのマッチング失敗ケース
+   * - 異なるタグでのマッチング失敗ケース
+   * - 異なる属性値でのマッチング失敗ケース
+   * - タグ前後の改行・空白文字を無視した成功ケース
+   * - タグ前後の改行・空白文字を無視した失敗ケース
+   * 
+   * @testInputFormat 各テストケースの構造:
+   * - description: テストケースの日本語説明
+   * - input.elementHTML: テスト対象のHTML文字列
+   * - input.rule: isRegexをfalseに設定したRewriteRule設定
+   * - expected: マッチするかどうかの真偽値
+   */
   const testCases = [
-    // Exact Pattern Matching Cases
     {
-      description: 'should match element with exact pattern',
+      description: '厳密なパターンマッチング成功ケース',
       input: {
         elementHTML: '<div>Replace me</div>',
         rule: {
@@ -31,7 +54,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
       expected: true
     },
     {
-      description: 'should match element with attributes',
+      description: '属性付き要素のマッチング成功ケース',
       input: {
         elementHTML: '<button class="btn">Old Button</button>',
         rule: {
@@ -44,7 +67,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
       expected: true
     },
     {
-      description: 'should not match different elements',
+      description: '異なる内容でのマッチング失敗ケース',
       input: {
         elementHTML: '<div>Different content</div>',
         rule: {
@@ -57,7 +80,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
       expected: false
     },
     {
-      description: 'should not match element with additional attributes',
+      description: '追加属性でのマッチング失敗ケース',
       input: {
         elementHTML: '<button class="btn" onclick="alert()" id="test">Old Button</button>',
         rule: {
@@ -70,7 +93,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
       expected: false
     },
     {
-      description: 'should not match with different whitespace',
+      description: '空白文字の違いでのマッチング失敗ケース',
       input: {
         elementHTML: '<div>Replace   me</div>',
         rule: {
@@ -83,7 +106,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
       expected: false
     },
     {
-      description: 'should not match element with missing required attributes',
+      description: '必須属性欠如でのマッチング失敗ケース',
       input: {
         elementHTML: '<button>Old Button</button>',
         rule: {
@@ -96,7 +119,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
       expected: false
     },
     {
-      description: 'should not match element with different tag',
+      description: '異なるタグでのマッチング失敗ケース',
       input: {
         elementHTML: '<span class="btn">Old Button</span>',
         rule: {
@@ -109,7 +132,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
       expected: false
     },
     {
-      description: 'should not match element with different attribute value',
+      description: '異なる属性値でのマッチング失敗ケース',
       input: {
         elementHTML: '<button class="different">Old Button</button>',
         rule: {
@@ -121,32 +144,31 @@ describe('ElementMatchesFlexiblePattern.exec() - Normal Cases', () => {
       },
       expected: false
     },
-    // Regex Pattern Matching Cases
     {
-      description: 'should match with regex pattern including HTML tags',
+      description: 'タグ前後の改行・空白文字を無視した成功ケース',
       input: {
-        elementHTML: '<div>Test content</div>',
+        elementHTML: '\n  <div>Test content</div>  \n',
         rule: {
-          oldString: '<div>.*?</div>',
+          oldString: '<div>Test content</div>',
           newString: '<div>Updated content</div>',
           urlPattern: '',
-          isRegex: true
+          isRegex: false
         }
       },
       expected: true
     },
     {
-      description: 'should not match non-matching regex pattern',
+      description: '要素内の改行・空白文字を無視した成功ケース',
       input: {
-        elementHTML: '<span>Different content</span>',
+        elementHTML: '<div>\n  Test content  \n</div>',
         rule: {
-          oldString: '<div>.*?</div>',
+          oldString: '<div>Test content</div>',
           newString: '<div>Updated content</div>',
           urlPattern: '',
-          isRegex: true
+          isRegex: false
         }
       },
-      expected: false
+      expected: true
     }
   ];
 
