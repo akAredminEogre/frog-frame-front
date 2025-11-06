@@ -1,6 +1,6 @@
 import { RegexConstants } from 'src/domain/constants/RegexConstants';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { ParserContextStrategyFactory } from 'src/domain/entities/ParserContextStrategy';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 /**
  * 要素の状態を保持しながら置換を実行するクラス

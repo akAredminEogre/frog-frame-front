@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { ParserContextStrategyFactory } from 'src/domain/entities/ParserContextStrategy';
 
 describe('ParserContextStrategyFactory', () => {
