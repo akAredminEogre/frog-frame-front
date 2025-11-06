@@ -50,6 +50,50 @@ describe('EnhancedHtmlReplacer - 正規表現パターン', () => {
           html: '<div>No h1 tags here</div>',
         },
       },
+      {
+        description: 'should replace based on regex pattern (legacy HtmlContent behavior)',
+        input: {
+          initialHtml: '<h1>hello</h1><h2>world</h2>',
+          oldString: '<h1>(.*?)</h1>',
+          newString: '<h3>$1</h3>',
+        },
+        expected: {
+          html: '<h3>hello</h3><h2>world</h2>',
+        },
+      },
+      {
+        description: 'should handle multiple regex matches (legacy HtmlContent behavior)',
+        input: {
+          initialHtml: '<h1>hello</h1><h1>world</h1>',
+          oldString: '<h1>(.*?)</h1>',
+          newString: '<h3>$1</h3>',
+        },
+        expected: {
+          html: '<h3>hello</h3><h3>world</h3>',
+        },
+      },
+      {
+        description: 'should not replace if pattern does not match (legacy HtmlContent behavior)',
+        input: {
+          initialHtml: '<div>hello</div>',
+          oldString: '<h1>(.*?)</h1>',
+          newString: '<h3>$1</h3>',
+        },
+        expected: {
+          html: '<div>hello</div>',
+        },
+      },
+      {
+        description: 'should handle multiline HTML tags with s flag (legacy HtmlContent behavior)',
+        input: {
+          initialHtml: '<h1>アジャイルソフトウェア開発宣言\n</h1>',
+          oldString: '<h1>(.+?)</h1>',
+          newString: '<h2>$1</h2>',
+        },
+        expected: {
+          html: '<h2>アジャイルソフトウェア開発宣言</h2>',
+        },
+      },
     ];
 
     regexTestCases.forEach(({ description, input, expected }) => {

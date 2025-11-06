@@ -148,6 +148,28 @@ describe('EnhancedHtmlReplacer - 正常系', () => {
         html: '<table><tbody><tr><th>new</th></tr></tbody></table>',
       },
     },
+    {
+      description: 'should return original html if no element match found (legacy HtmlContent behavior)',
+      input: {
+        initialHtml: '<div>hello world</div>',
+        oldString: '<span>test</span>',
+        newString: '<p>hi</p>',
+      },
+      expected: {
+        html: '<div>hello world</div>',
+      },
+    },
+    {
+      description: 'should handle special characters in oldString',
+      input: {
+        initialHtml: '<div>a.b*c+d</div>',
+        oldString: '<div>a.b*c+d</div>',
+        newString: '<div>replaced</div>',
+      },
+      expected: {
+        html: '<div>replaced</div>',
+      },
+    }
   ];
 
   testCases.forEach(({ description, input, expected }) => {
