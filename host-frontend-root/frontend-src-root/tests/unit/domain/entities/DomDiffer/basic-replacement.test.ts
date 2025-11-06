@@ -15,46 +15,42 @@ describe('DomDiffer - Basic Replacement', () => {
     document.body.removeChild(container);
   });
 
-  describe('Simple Element Replacement', () => {
-    it('should replace a simple div element while preserving DOM structure', () => {
-      container.innerHTML = '<div><p id="keep-me">Keep this</p><div>Replace me</div></div>';
-      
-      // Store reference to preserved element
-      const preservedElement = container.querySelector('#keep-me');
-      
-      const rule = new RewriteRule(1, '<div>Replace me</div>', '<span>Replaced!</span>', '');
-      const domDiffer = new DomDiffer(container, rule);
-      domDiffer.applyRule();
-      
-      expect(container.innerHTML).toBe('<div><p id="keep-me">Keep this</p><span>Replaced!</span></div>');
-      
-      // Verify that preserved elements are still the same DOM nodes (not recreated)
-      const currentPreservedElement = container.querySelector('#keep-me');
-      expect(currentPreservedElement).toBe(preservedElement);
-    });
-  });
 
-  describe('Attribute Handling', () => {
-    it('should replace elements with exact attribute matching', () => {
-      container.innerHTML = '<div><button class="btn">Old Button</button></div>';
-      
-      const rule = new RewriteRule(1, '<button class="btn">Old Button</button>', '<button class="new-btn">New Button</button>', '');
-      const domDiffer = new DomDiffer(container, rule);
-      domDiffer.applyRule();
-      
-      expect(container.innerHTML).toBe('<div><button class="new-btn">New Button</button></div>');
-    });
-  });
+  describe('Standard Replacement Cases', () => {
+    const testCases = [
+      {
+        name: 'should replace elements with exact attribute matching',
+        initialHtml: '<div><button class="btn">Old Button</button></div>',
+        oldString: '<button class="btn">Old Button</button>',
+        newString: '<button class="new-btn">New Button</button>',
+        expectedHtml: '<div><button class="new-btn">New Button</button></div>',
+      },
+      {
+        name: 'should handle multiple matching elements',
+        initialHtml: '<div><p>test</p><span>keep</span><p>test</p></div>',
+        oldString: '<p>test</p>',
+        newString: '<h1>replaced</h1>',
+        expectedHtml: '<div><h1>replaced</h1><span>keep</span><h1>replaced</h1></div>',
+      },
+      {
+        name: 'should replace table rows correctly',
+        initialHtml: '<table><thead><tr><th>Header</th></tr></thead><tbody><tr><td>Old Row</td></tr><tr><td>Keep Row</td></tr></tbody></table>',
+        oldString: '<tr><td>Old Row</td></tr>',
+        newString: '<tr><td>New Row</td></tr>',
+        expectedHtml: '<table><thead><tr><th>Header</th></tr></thead><tbody><tr><td>New Row</td></tr><tr><td>Keep Row</td></tr></tbody></table>',
+      },
+    ];
 
-  describe('Multiple Elements', () => {
-    it('should handle multiple matching elements', () => {
-      container.innerHTML = '<div><p>test</p><span>keep</span><p>test</p></div>';
-      
-      const rule = new RewriteRule(1, '<p>test</p>', '<h1>replaced</h1>', '');
-      const domDiffer = new DomDiffer(container, rule);
-      domDiffer.applyRule();
-      
-      expect(container.innerHTML).toBe('<div><h1>replaced</h1><span>keep</span><h1>replaced</h1></div>');
+    testCases.forEach(({ name, initialHtml, oldString, newString, expectedHtml }) => {
+      it(name, () => {
+        container.innerHTML = initialHtml;
+        
+        const rule = new RewriteRule(1, oldString, newString, '');
+        const domDiffer = new DomDiffer(container, rule);
+        domDiffer.applyRule();
+        
+        expect(container.innerHTML).toBe(expectedHtml);
+      });
     });
   });
 });

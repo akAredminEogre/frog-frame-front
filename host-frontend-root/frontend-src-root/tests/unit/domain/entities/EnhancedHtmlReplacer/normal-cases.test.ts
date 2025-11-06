@@ -57,7 +57,7 @@ describe('EnhancedHtmlReplacer - 正常系', () => {
         newString: '<tr><td>replaced</td></tr>',
       },
       expected: {
-        html: '<table><tbody>replaced</tbody></table>',
+        html: '<table><tbody><tr><td>replaced</td></tr></tbody></table>',
       },
     },
     {
@@ -68,7 +68,7 @@ describe('EnhancedHtmlReplacer - 正常系', () => {
         newString: '<td>new cell</td>',
       },
       expected: {
-        html: '<table><tbody><tr>new cell<td>cell2</td></tr></tbody></table>',
+        html: '<table><tbody><tr><td>new cell</td><td>cell2</td></tr></tbody></table>',
       },
     },
     {
@@ -145,7 +145,7 @@ describe('EnhancedHtmlReplacer - 正常系', () => {
         newString: '<th>new</th>',
       },
       expected: {
-        html: '<table><tbody><tr>new</tr></tbody></table>',
+        html: '<table><tbody><tr><th>new</th></tr></tbody></table>',
       },
     },
   ];
