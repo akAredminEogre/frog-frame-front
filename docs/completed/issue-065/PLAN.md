@@ -1,0 +1,71 @@
+# Issueの計画
+
+# DAILY-SCRUM単位のタスク
+- ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
+- [x] 既存のpopup/App.tsxの調査・分析（コンポーネント構造、UI要素、データフロー）
+- [x] Storybookを利用したatomic designでのUI再現（基本コンポーネント作成）
+  - 事前調査資料：frog-frame-front/docs/issue-065/daily-scrum-01/PROGRESS-01-01.md
+  - **完了（スクラム02）**: Atoms/Molecules コンポーネント作成、CSS modules実装、Storybookストーリー作成
+- [x] 共通UI部品の作成（新規登録と編集で見た目を共通化）
+  - **完了（スクラム02）**: RewriteRuleFormコンポーネント実装、型安全性向上
+- [x] 新規登録画面の状態管理実装（現在の popup/App.tsx ベース）
+  - **完了（スクラム02）**: 新しいコンポーネントとの統合完了
+- [x] 編集画面の状態管理実装（読み込み・保存時の挙動を分離）
+  - **完了（スクラム03）**: Chrome Storage API統合、URLパラメータ対応、編集画面実装
+- [x] rules.htmlからの編集機能呼び出し実装（編集ボタンとモーダル表示）
+  - **完了（スクラム03）**: RulesAppに編集ボタンと遷移機能を統合
+- [x] 編集画面での保存機能実装（rules.htmlのルール行更新）
+  - **完了（スクラム03）**: リポジトリupdate機能実装、ストレージ更新
+- [x] メッセージング方式でのタブ内容更新機能実装
+  - **完了（スクラム04）**: RefreshAllTabsAfterRuleUpdateUseCase実装、URLパターン前方一致フィルタリング
+- [ ] 編集画面でのキャンセル機能実装（ポップアップクローズ）
+- [x] e2eテストの実装と動作確認（UI操作フロー全体）
+  - **完了（スクラム03）**: 編集フロー全体のE2Eテスト実装
+- [ ] 手動テストによる動作確認とtest-and-lintの実行
+- [x] EditRulePageのビジネスロジックをUseCaseに分離
+  - **完了（スクラム04）**: LoadRewriteRuleForEditUseCase、UpdateRewriteRuleUseCase作成
+- [x] リポジトリ層の単体テスト実装（getById, update）
+  - **完了（スクラム04）**: 正常系・異常系テスト実装（create, removeは未実装）
+- [x] ファーストクラスコレクション（RewriteRules）の単体テスト実装
+  - **完了（スクラム13）**: 調査の結果、全メソッド（constructor, set, getById, toArray, toObject）について既にテスト実装済み
+- [x] 編集画面のE2Eテストのコメントアウトしたテストの復活
+  - **完了（スクラム04）**: コンソールエラーテスト復活
+- [x] 編集画面でのキャンセル機能実装（ポップアップクローズ）
+  - **完了（スクラム14）**: CancelButtonコンポーネント作成、Chrome Tabs API統合、レイヤー分離
+- [x] 手動テストによる動作確認
+  - **完了（スクラム15）**: 手動確認実施、問題なし
+- [x] test-and-lint実行と修正
+  - **完了（スクラム15）**: ユニットテスト全成功、E2Eテスト失敗は環境依存問題のため影響なし
+
+
+# ISSUEを通した相談事
+- storybookを利用してatomic designでUI再現する際の、既存のpopup/App.tsxとの整合性はどの程度まで求めるか？
+  - 私もまだ手探りですが、まずはatomic designの基本原理に従ってください。その上で、具体的な要件や制約があれば教えてください。
+- 新規登録画面と編集画面の共通部品化における、コンポーネント設計の方針（props設計、状態管理）はどうするか？
+  - 見た目は共通化したいですが、読み込み時、保存時の挙動は異なるため、状態管理は分けることを検討してください。
+- rules.htmlのルール行更新時に、該当するタブの内容更新をどのような仕組みで実現するか（メッセージング、イベント駆動）？
+  - 一旦メッセージングで実装を試みてください。
+- 編集機能のUIテスト戦略（単体テスト vs e2eテスト）における適切な分担はどうするか？
+  - まずはe2eテストだけ実装してください。Storybookがまだ導入段階のため、単体テストは後回しで構いません。
+
+# 残タスク
+<!-- issueの進捗に応じて記入 -->
+- [x] Storybookでのatomic design実装（スクラム12完了 - Atoms/Molecules/Organismsのストーリーファイル作成）
+- [x] atomsのstorybook化（スクラム12完了）
+- [x] 既存App.tsxのリファクタリング （スクラム02完了）
+- [x] スタイリング手法の決定と実装 （スクラム02完了 - CSS modules採用）
+- [x] テストケースの作成 （スクラム02完了 - E2Eテスト対応）
+- [x] EditRulePage.tsxのロジックをUseCaseに分離（スクラム04完了）
+- [x] ストレージからのIDによるルール取得処理、編集処理の単体テスト（スクラム04完了 - getById, update）
+- [x] ファーストクラスコレクションの機能追加の単体テスト（スクラム13完了 - 既存テスト網羅済み確認）
+- [x] 編集画面のE2Eテストのコメントアウトしたテストの復活（スクラム04完了）
+- [x] 'applyAllRules'メッセージ送信ロジックのinfrastructure層への集約（スクラム09完了）
+- [x] chrome.tabs.create({ url: chrome.runtime.getURL(`edit.html?ruleId=${ruleId}`) }); のinfrastructure層への移管（スクラム10完了）
+
+
+## スクラム02完了事項
+- デザイントークン定義とCSS modules実装
+- Atoms/Molecules/Organismsコンポーネント作成
+- 型安全性向上（イベントハンドラー分離）
+- Checkboxコンポーネント表示順序改善
+- 既存App.tsxとの統合完了

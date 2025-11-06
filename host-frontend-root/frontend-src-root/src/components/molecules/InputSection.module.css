@@ -1,0 +1,19 @@
+.inputSection {
+  margin-bottom: 16px;
+}
+
+.labelRow {
+  margin-bottom: 8px;
+}
+
+.label {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.inputWrapper {
+  position: relative;
+}

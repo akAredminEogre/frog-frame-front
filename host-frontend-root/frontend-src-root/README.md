@@ -1,50 +1,63 @@
-# React + TypeScript + Vite
+# Favorite Keyword Link Frog
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ウェブページ内の特定のキーワードにリンクを付与するChrome拡張機能です。
 
-Currently, two official plugins are available:
+## 概要
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Favorite Keyword Link Frogは、ブラウザに表示したDOMを操作し、要素の書き換え、文字列のリンク化を行う拡張機能です。正規表現を利用し、自由なDOM操作が可能です。
 
-## Expanding the ESLint configuration
+## 主な機能
+- 正規表現によりDOMを指定し、要素の書き換えが可能
+- 書き換えルールの保存と管理
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## スクリーンショット
 
-- Configure the top-level `parserOptions` property like this:
+<!-- スクリーンショットは別途追加予定 -->
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 技術スタック
+
+- **フレームワーク**: React 18.3
+- **ビルドツール**: WXT 0.20
+- **言語**: TypeScript 5.6
+- **テスト**: 
+  - Vitest (単体テスト)
+  - Playwright (E2Eテスト)
+- **UI開発**: Storybook
+- **DI**: tsyringe
+- **アーキテクチャ**: Clean Architecture
+
+## プロジェクト構造
+
+```
+src/
+├── application/     # ユースケース層
+├── components/      # UIコンポーネント
+├── domain/          # ドメイン層（ビジネスロジック）
+├── entrypoints/     # 拡張機能のエントリーポイント
+├── infrastructure/  # インフラ層（Chrome API等）
+└── utils/           # ユーティリティ
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### アーキテクチャ原則
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+このプロジェクトはClean Architectureに基づいて設計されています：
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- **ドメイン層**: ビジネスロジックを含み、他の層に依存しません
+- **アプリケーション層**: ユースケースを実装し、ドメイン層とインフラ層を調整します
+- **インフラ層**: Chrome APIやブラウザAPIなどの外部依存を扱います
+- **コンポーネント層**: UI表示を担当します
+
+## コーディング規約
+
+- オブジェクト指向の9つのルール（ThoughtWorksアンソロジー）に準拠
+- Clean Architectureの原則を遵守
+- 絶対パスでのimport (`src/` から始まる)
+- 単体テストの徹底（メソッド単位でのテスト）
+
+## ライセンス
+
+MIT License
+
+Copyright (c) 2025 [Your Name]
+
+詳細は [LICENSE](../../LICENSE) ファイルを参照してください。

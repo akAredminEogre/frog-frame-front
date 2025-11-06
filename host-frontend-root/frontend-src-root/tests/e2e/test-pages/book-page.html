@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>書籍情報テストページ</title>
+  <style>
+    /* E2Eテスト専用スタイル */
+    .w-\[200px\] { width: 200px !important; }
+  </style>
+</head>
+<body>
+  <!-- E2Eテスト用のローカルHTMLファイル（test-pages配下） -->
+  <!-- 外部Webサイトへの依存を排除し、テストの安定性と実行速度を向上 -->
+  <h1>書籍情報</h1>
+  <div class="book-info">
+    <!-- テスト対象: ISBN番号の正規表現置換 -->
+    <p>ISBN: <span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable="">9784065396209</span></p>
+  </div>
+</body>
+</html>
