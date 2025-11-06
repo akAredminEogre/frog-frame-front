@@ -1,5 +1,5 @@
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { EnhancedHtmlReplacer } from 'src/domain/entities/EnhancedHtmlReplacer';
+import { DomDiffer } from 'src/domain/entities/DomDiffer';
 
 export class ApplySavedRulesOnPageLoadUseCase {
   private repository: IRewriteRuleRepository;
@@ -25,8 +25,8 @@ export class ApplySavedRulesOnPageLoadUseCase {
           }
         }
 
-        const replacer = new EnhancedHtmlReplacer(targetElement, rule);
-        replacer.replace();
+        const domDiffer = new DomDiffer(targetElement, rule);
+        domDiffer.applyRule();
       });
     } catch (error) {
       // エラーが発生しても処理を続行（ログ出力などは必要に応じて追加）

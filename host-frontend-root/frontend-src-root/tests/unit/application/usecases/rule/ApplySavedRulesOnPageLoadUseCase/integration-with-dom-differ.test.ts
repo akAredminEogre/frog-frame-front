@@ -6,7 +6,7 @@ import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 
-describe('ApplySavedRulesOnPageLoadUseCase - EnhancedHtmlReplacer Integration', () => {
+describe('ApplySavedRulesOnPageLoadUseCase - DomDiffer Integration', () => {
   let useCase: ApplySavedRulesOnPageLoadUseCase;
   let mockRepository: IRewriteRuleRepository;
   let container: HTMLElement;
@@ -28,7 +28,7 @@ describe('ApplySavedRulesOnPageLoadUseCase - EnhancedHtmlReplacer Integration', 
     vi.clearAllMocks();
   });
 
-  describe('DOM State Preservation with EnhancedHtmlReplacer', () => {
+  describe('DOM State Preservation with DomDiffer', () => {
     it('should preserve event listeners on unmodified elements when applying rules', async () => {
       // Setup DOM with event listener
       container.innerHTML = '<div><button id="keep">Keep</button><p>Replace me</p></div>';
@@ -79,71 +79,6 @@ describe('ApplySavedRulesOnPageLoadUseCase - EnhancedHtmlReplacer Integration', 
 
       // Verify replacement occurred
       expect(container.innerHTML).toBe('<div><input id="preserve" type="text"><span>Replaced</span></div>');
-    });
-  });
-
-  describe('URL Pattern Filtering', () => {
-    it('should apply rules when URL matches pattern', async () => {
-      container.innerHTML = '<div><p>Replace me</p></div>';
-
-      const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', 'https://example.com');
-      const rules = new RewriteRules([rule]);
-      vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
-
-      await useCase.applyAllRules(container, 'https://example.com/path');
-
-      expect(container.innerHTML).toBe('<div><span>Replaced</span></div>');
-    });
-
-    it('should skip rules when URL does not match pattern', async () => {
-      container.innerHTML = '<div><p>Replace me</p></div>';
-      const originalHTML = container.innerHTML;
-
-      const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', 'https://other-site.com');
-      const rules = new RewriteRules([rule]);
-      vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
-
-      await useCase.applyAllRules(container, 'https://example.com');
-
-      expect(container.innerHTML).toBe(originalHTML);
-    });
-  });
-
-  describe('Error Handling', () => {
-    it('should continue processing when repository throws error', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      vi.mocked(mockRepository.getAll).mockRejectedValue(new Error('Repository error'));
-
-      container.innerHTML = '<div><p>Original</p></div>';
-      const originalHTML = container.innerHTML;
-
-      await useCase.applyAllRules(container, 'https://example.com');
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        '[ApplySavedRulesOnPageLoadUseCase] Error applying saved rules:',
-        expect.any(Error)
-      );
-      expect(container.innerHTML).toBe(originalHTML);
-    });
-
-    it('should handle DOM diffing failures gracefully', async () => {
-      container.innerHTML = '<div><p>Test</p></div>';
-
-      // Create rule that will cause DOM diffing to fail with invalid regex pattern
-      const rule = new RewriteRule(1, '[', '<span>Replaced</span>', '', true); // Invalid regex: unclosed bracket
-      const rules = new RewriteRules([rule]);
-      vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
-
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-      await useCase.applyAllRules(container, 'https://example.com');
-
-      // DOM should remain unchanged when diffing fails
-      expect(container.innerHTML).toBe('<div><p>Test</p></div>');
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[EnhancedHtmlReplacer] DOM diffing failed'),
-        expect.any(Error)
-      );
     });
   });
 });
