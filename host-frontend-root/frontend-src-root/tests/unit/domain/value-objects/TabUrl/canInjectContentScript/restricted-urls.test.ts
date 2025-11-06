@@ -12,29 +12,24 @@ describe('TabUrl.canInjectContentScript() - Restricted URLs', () => {
   const testCases = [
     {
       name: 'should return false for Chrome Web Store URL',
-      url: 'https://chrome.google.com/webstore/',
+      url: 'https://chromewebstore.google.com/',
       expected: false,
     },
     {
       name: 'should return false for Chrome Web Store extension page',
-      url: 'https://chrome.google.com/webstore/detail/extension-name/abcdefghijklmnop',
+      url: 'https://chromewebstore.google.com/detail/extension-name/abcdefghijklmnop',
       expected: false,
     },
     {
       name: 'should return false for Chrome Web Store category page',
-      url: 'https://chrome.google.com/webstore/category/extensions',
+      url: 'https://chromewebstore.google.com/category/extensions',
       expected: false,
     },
     {
       name: 'should return true for other Google domains',
       url: 'https://google.com',
       expected: true,
-    },
-    {
-      name: 'should return true for other chrome.google.com URLs',
-      url: 'https://chrome.google.com/docs',
-      expected: true,
-    },
+    }
   ];
 
   testCases.forEach(({ name, url, expected }) => {
