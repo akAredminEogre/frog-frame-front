@@ -14,9 +14,9 @@
 - `src/domain/entities/DomDiffer.ts` (Table Row Replacement対応)
 
 ## スクラム内残タスク
-- [ ] basic-replacement.test.ts のテストケースのarrange/act/assert共通化とテスト配列化リファクタリング
-- [ ] Table Row Replacement機能のプロダクションコード実装
-- [ ] リファクタリング後のテスト実行確認
+- [x] basic-replacement.test.ts のテストケースのarrange/act/assert共通化とテスト配列化リファクタリング
+- [x] Table Row Replacement機能のプロダクションコード実装
+- [x] リファクタリング後のテスト実行確認
 
 ## 相談事項
 <!-- 特になし -->
@@ -26,9 +26,28 @@
 
 # DAILY SCRUM-05作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+- DomDiffer の basic-replacement.test.ts のテストケースリファクタリング完了
+  - 'Simple Element Replacement' 以外のテストケース（Attribute Handling, Multiple Elements, Table Row Replacement）をarrange/act/assert共通化
+  - テスト配列化のコード規約に沿ったリファクタリング実施、Standard Replacement Cases として統一
+- Table Row Replacement機能のプロダクションコード実装完了
+  - ReplaceElementPreservingState にテーブル要素用の適切なHTMLパーサーコンテキスト機能を追加
+  - テーブル関連要素（tr, td, th, thead, tbody, tfoot）に対して正しいHTML構造を保持する機能を実装
+- 既存のEnhancedHtmlReplacerテストケースの期待値修正
+  - テーブル関連テストケースの期待値をTable要素の正しい構造保持に合わせて更新
 
 ## 修正したファイル
-<!-- スクラム単位での変更を記入 -->
-<!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+- `tests/unit/domain/entities/DomDiffer/basic-replacement.test.ts` - テストケースリファクタリング
+- `src/domain/entities/ReplaceElementPreservingState.ts` - Table要素用HTMLパーサー機能追加
+- `tests/unit/domain/entities/EnhancedHtmlReplacer/normal-cases.test.ts` - Table関連テストケース期待値修正
+- `src/domain/entities/ParserContextStrategy.ts` - Strategy Pattern完全統合実装
+- `tests/unit/domain/entities/ParserContextStrategy/ParserContextStrategyFactory/createContainer/normal-cases.test.ts` - 統合テスト
+- `tests/unit/domain/entities/DomDiffer/simple-element-replacement.test.ts` - Simple Element Replacementテスト分離
+
+## 削除したファイル
+- `tests/unit/domain/entities/ParserContextStrategy/TableParserContextStrategy/` - ディレクトリ全体
+- `tests/unit/domain/entities/ParserContextStrategy/DefaultParserContextStrategy/` - ディレクトリ全体
+
+## 最終テスト結果
+- 全unit tests: 246/246 passed
+- TypeScript compilation: エラーなし
+- E2E tests: 12/12 passed
