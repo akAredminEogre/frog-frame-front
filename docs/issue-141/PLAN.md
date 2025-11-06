@@ -19,9 +19,9 @@
 - [ ] ネットワーク接続に依存するE2Eテストの安定化（外部サイトアクセス関連）
 - [ ] 正規表現キャプチャグループの統合動作確認
 - [ ] E2Eテストで失敗している正規表現置換機能の詳細調査と修正（一部のテストでタイムアウトが発生）
-- [ ] frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/entities/DomDiffer/basic-replacement.test.ts
-  - [ ] 'Simple Element Replacement' 以外のテストケースはarrange / act / assert を共通化できそうなので、テスト配列化のコード規約に沿ってリファクタリングする(規約から外れる場合は断念する)
-  - [ ] 'Table Row Replacement' のテストケースが新たに追加されたので、それをpassするようにプロダクションコードを修正する
+- [x] frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/entities/DomDiffer/basic-replacement.test.ts
+  - [x] 'Simple Element Replacement' 以外のテストケースはarrange / act / assert を共通化できそうなので、テスト配列化のコード規約に沿ってリファクタリングする(規約から外れる場合は断念する)
+  - [x] 'Table Row Replacement' のテストケースが新たに追加されたので、それをpassするようにプロダクションコードを修正する
 - [ ] PRレビュー対応
   - [ ] host-frontend-root/frontend-src-root/tests/unit/domain/entities/EnhancedHtmlReplacer/normal-cases.test.ts
     - [ ] のテストケースの復元
