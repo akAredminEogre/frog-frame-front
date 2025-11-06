@@ -1,0 +1,150 @@
+@startuml GetElementSelectionUseCase-sequence
+title GetElementSelectionUseCaseが呼び出される経路全体 (Clean Architecture層付き)\n(entrypointからユーザーに情報が返されるまで)
+
+!define INTERFACE_COLOR #E8F4FD
+!define APPLICATION_COLOR #FFF2CC
+!define DOMAIN_COLOR #D5E8D4
+!define INFRASTRUCTURE_COLOR #F8CECC
+
+actor User
+
+box "Interface Layer (外側)" INTERFACE_COLOR
+participant "background.ts\n(WXT Entrypoint)" as Background
+note over Background: onClicked.tsを含む
+participant "App.tsx\n(Popup Entrypoint)" as PopupApp
+end box
+
+box "Application Layer" APPLICATION_COLOR
+participant "HandleContextMenuReplaceDomElement\n(Use Case)" as HandleContextMenuUseCase
+participant "IChromeTabsService\n(Port)" as TabsService
+participant "IPopupService\n(Port)" as PopupService
+participant "PopupInitFormUseCase\n(Use Case)" as PopupInitFormUseCase
+participant "ISelectedPageTextRepository\n(Port)" as SelectedPageTextRepo
+end box
+
+box "Infrastructure Layer" INFRASTRUCTURE_COLOR
+participant "ChromeTabsService\n(Implementation)" as TabsServiceImpl
+participant "ChromePopupService\n(Implementation)" as PopupServiceImpl
+participant "SelectedPageTextRepository\n(Implementation)" as SelectedPageTextRepository
+end box
+
+box "Domain Layer (内側)" DOMAIN_COLOR
+participant "ElementSelector\n(Entity)" as ElementSelector
+end box
+
+box "Infrastructure Layer" INFRASTRUCTURE_COLOR
+participant "GetSelectionService\n(Implementation)" as SelectionServiceImpl
+end box
+
+box "Application Layer" APPLICATION_COLOR
+participant "IGetSelectionService\n(Port)" as SelectionService
+participant "GetElementSelectionUseCase\n(Use Case)" as GetElementUseCase
+end box
+
+box "Interface Layer (外側)" INTERFACE_COLOR
+participant "content.ts\n(WXT Entrypoint)" as Content
+note over Content: messageRouter.ts,\ngetElementSelectionHandler.tsを含む
+end box
+
+== ユーザー操作フェーズ ==
+User -> Background: コンテキストメニューをクリック
+note right: ウェブページ上で右クリック\nメニューから選択\n（onClicked.tsで処理）
+
+Background -> HandleContextMenuUseCase: execute(tabId)
+note right: menuItemId === 'context-menu-replace-dom-element'\nの場合に実行
+
+== メッセージ送信フェーズ ==
+HandleContextMenuUseCase -> TabsService: sendMessage(tabId, { type: 'getElementSelection' })
+note right: Background ScriptからContent Scriptへ\nメッセージを送信
+
+TabsService -> TabsServiceImpl: sendMessage()
+TabsServiceImpl -> Content: chrome.runtime.onMessage
+note right: Chrome Runtime APIを通じて\nContent Scriptにメッセージが届く
+
+== メッセージ処理フェーズ ==
+Content -> Content: onMessage受信・route(messageRequest)
+note left: messageRouter.ts、getElementSelectionHandler.ts\nの処理を統合して実行
+
+Content -> GetElementUseCase: new GetElementSelectionUseCase()
+Content -> GetElementUseCase: getElementSelectionInfo()
+note left: message.type === 'getElementSelection'\nの場合にUseCase実行
+
+GetElementUseCase -> SelectionService: getFirstRange()
+note left: 現在の選択範囲の最初の\nRangeオブジェクトを取得
+
+SelectionService -> SelectionServiceImpl: getFirstRange()
+SelectionServiceImpl -> SelectionService: Range | null
+SelectionService -> GetElementUseCase: Range | null
+
+GetElementUseCase -> SelectionService: getSelectedText()
+note left: 選択範囲のテキスト内容を取得
+
+SelectionService -> SelectionServiceImpl: getSelectedText()
+SelectionServiceImpl -> SelectionService: string
+SelectionService -> GetElementUseCase: string
+
+GetElementUseCase -> ElementSelector: getElementFromSelection(range, selectedText)
+note left: 選択されたテキストを含む\n最小のHTML要素を特定
+
+ElementSelector -> GetElementUseCase: string (selected element info)
+
+GetElementUseCase -> Content: { selection: string }
+note left: 選択された要素の情報を返却
+
+== レスポンス返却フェーズ ==
+Content -> TabsServiceImpl: sendResponse(routingResult)
+note left: chrome.runtime.onMessage.addListenerの\nsendResponseコールバックで返却
+
+TabsServiceImpl -> TabsService: response
+TabsService -> HandleContextMenuUseCase: response.selection
+note left: Background Scriptに選択情報が返却
+
+== データ保存・UI表示フェーズ ==
+HandleContextMenuUseCase -> SelectedPageTextRepo: setSelectedPageText(selection)
+note right: 選択されたテキストを\nブラウザストレージに保存
+
+SelectedPageTextRepo -> SelectedPageTextRepository: setSelectedPageText()
+
+HandleContextMenuUseCase -> PopupService: openPopup()
+note right: 拡張機能のポップアップを開く
+
+PopupService -> PopupServiceImpl: openPopup()
+PopupServiceImpl -> User: ポップアップ表示
+
+== ポップアップ初期化フェーズ ==
+PopupServiceImpl -> PopupApp: ポップアップ表示
+note right: Interface Layerのentrypointとして\nApp.tsxが起動
+
+PopupApp -> PopupInitFormUseCase: execute()
+note right: App.tsxのuseEffectで\nポップアップ初期化UseCase実行
+
+PopupInitFormUseCase -> SelectedPageTextRepo: getSelectedPageTextAndRemove()
+note right: 選択されたテキストを\nストレージから取得・削除
+
+SelectedPageTextRepo -> SelectedPageTextRepository: getSelectedPageTextAndRemove()
+SelectedPageTextRepository -> SelectedPageTextRepo: SelectedPageText
+SelectedPageTextRepo -> PopupInitFormUseCase: SelectedPageText
+
+PopupInitFormUseCase -> PopupInitFormUseCase: getCurrentTab()
+note right: 現在のタブのURL情報を取得
+
+PopupInitFormUseCase -> PopupApp: { selectedText, urlPattern }
+note right: 選択されたテキストと\nURLパターンを返却
+
+PopupApp -> User: ポップアップに、選択されたテキストとURLパターンを表示
+note right: Interface LayerのApp.tsxが\nフォームを初期化してUI表示
+
+note over User, SelectedPageTextRepository
+Chrome拡張機能の技術的制約:
+- GetSelectionService(window.getSelection())はDOM APIのため、
+  Webページのコンテキスト(content script)でのみ実行可能
+- background scriptはWebページのDOMにアクセス不可
+- そのためmessage passingでcontent scriptに処理を委譲
+
+Clean Architecture層の依存関係:
+外側 → 内側への依存のみ許可
+Interface → Application → Domain
+Infrastructure → Application, Domain
+end note
+
+@enduml

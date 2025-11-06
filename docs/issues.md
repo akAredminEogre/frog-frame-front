@@ -1,0 +1,76 @@
+
+# 0.1.1
+- [x] アプリ名、リポジトリ名変更
+- [x] デモ画像の追加
+- [x] 開発者アカウントの登録
+- [x] ソース内機密情報の取捨選択
+- [x] アイコン画像の準備（各サイズ: 16x16, 48x48, 128x128）
+- [x] Chrome Web Store用のスクリーンショット・プロモーション画像の準備
+
+# 0.1.2
+- [x] tsr,knipの設定で、使われていない変数、メソッドは表示だけで削除にしない
+- [x] 開発環境のセットアップ方法
+- [x] storageの入出力をRewriteRuleParams経由に変更するか検討
+- [x] 編集後のタブリロード
+- [x] RewriteRuleオブジェクトを全部setしない
+- [x] indexedDBへの完全移行
+  - [x] RewriteRuleのidをstring→numberに変更
+  - [x] テストコードの修正
+  - [x] 移行期間のid文字列変換ロジックを削除
+  - [x] repositoryの切り替え
+- [x] RewriteRulesのtoObject()の廃止
+- [ ] Chrome Web Storeへの実際の登録作業
+- [ ] ビルド・パッケージング手順の確認
+
+# 0.1.3
+- [x] makeコマンド
+- [ ] コーディング規約ドキュメントまとめ
+- [x] (node:12933) [DEP0066] DeprecationWarning: OutgoingMessage.
+- [x] background.ts関係のinfrastructure層の整理
+- [x] content.ts関係のinfrastructure層の整理
+- [x] persistence層のディレクトリ整理
+- [ ] 採番バッチ化
+- [ ] e2eテストのflaky解消
+
+# 0.2.0
+- [ ] GetElementSelectionUseCaseのシーケンスのリファクタリング
+- [ ] ルールの有効/無効切り替え機能
+
+# 0.3.0
+- [ ] 書き換えルールの削除機能
+- [x] await chrome.storage.local.remove('selectedPageText'); をインフラ層に移動
+
+# 0.4.0
+- [ ] 正規表現の適用範囲拡大
+
+## phase02
+- [ ] chrome apiのディレクトリ整理
+- [ ] { type: 'getElementSelection' }をクラス化
+- [ ] edit/app.tsxのloadingをatomsに移動
+- [ ] edit/app.tsxのuseEffectの整理
+- [ ] e2eテストのエラー修正を部品化
+- [ ] RewriteRuleのfromParamsファクトリメソッドの導入
+- [ ] モックの切り出し
+- [ ] フロントエンドコンポーネントのフロントエンドテスト
+- [ ] urlPatternの空文字、null、undefinedのバリデーション
+- [ ] urlPatternの値オブジェクト化
+- [ ] 編集ページはポップアップとしても使えるようにする
+- [ ] UseCaseレベルでのテスト作成
+- [ ] HandleContextMenuReplaceDomElemenのテストコード
+- [ ] registerTabsOnUpdatedの'complete'ハードコード解消
+- [ ] 不正な正規表現入力のエラーハンドリング
+- [ ] rewriteRules.toArray().forEachの書き方をファーストクラスコレクションに移管
+- [ ] HtmlReplacerのメンバ変数化
+- [ ] application層からinfrastructureの実装をしているのを解消
+- [ ] issue-012: 右クリック入力のe2eテスト
+- [ ] ElementSelectorの返り値をValueObjectに変更
+- [ ] no-consoleも無視しない
+- [ ] SelectionServiceのテストケース追加
+  - [ ] hasValidSelectionのテストと、ElementSelector.test.tsの重複削除
+- [ ] mockSelectionServiceが変更可能なのは大丈夫か確認
+- [ ] 選択されたテキストが複数のHTML要素にまたがる場合の処理方針について
+- [ ] 右クリック入力のロジック分離
+- [ ] ElementSelectorの詳細テスト追加
+- [ ] ElementSelector.test.tsのテストケース分割
+- [ ] isInvalidAncestor、getStartElementの切り出し
+- [ ] isMultiElementSelection、findOptimalElementのif文整理

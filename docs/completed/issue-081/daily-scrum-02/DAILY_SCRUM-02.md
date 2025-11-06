@@ -1,0 +1,54 @@
+# DAILY SCRUM-02回目
+# DAILY SCRUM-作業計画
+<!-- 作業計画は作業前のみ記入 -->
+
+## 本スクラムの作業予定
+<!-- PLAN.mdの計画の中でどのユーザーストーリーに取り組むか記載してください。 -->
+- マニフェストファイル（manifest.json）の最終確認（バージョン、権限、アイコン等）
+- package.jsonのバージョン更新（`0.0.0` → 適切なリリースバージョン）
+- package.jsonのdescription更新（`"manifest.json description"` → 拡張機能の適切な説明文）
+
+## 修正予定ファイル
+<!-- 修正予定のファイルを記載してください。 -->
+- `host-frontend-root/frontend-src-root/package.json`
+- `host-frontend-root/frontend-src-root/public/manifest.json`（存在する場合）
+
+## スクラム内残タスク
+
+## 相談事項
+<!-- workflow:01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
+<!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
+<!-- について、体言止めでの相談ではなににどう答えればよいのか明確にならないので使わないでください-->
+<!-- 相談は具体的な内容を記載してください。 -->
+<!-- 質問は不明点を明確に記載してください。 -->
+<!-- レビューしてほしいことは、レビュー対象を具体的に記載してください。 -->
+<!-- また上記相談・質問・レビューのトピックが重複する場合は、まとめて記載してください。 -->
+
+- リリースバージョン番号について、セマンティックバージョニングに従い、初回リリースとして`0.1.0`を使用するか、`1.0.0`とするか方針を確認したい
+  - 0.1.0で問題ない認識です。
+- Chrome拡張機能として必要な権限（permissions）が適切に設定されているか、manifest.jsonの内容をレビューしてほしい
+ - → 設定されている認識です。
+
+## 一言コメント
+<!-- 感情ベースで一言コメントをお願いします。 -->
+リリースに向けて着実に進めていきます。
+
+# DAILY SCRUM-02作業実績
+## 本スクラムでの作業実績内容
+<!-- 本スクラムでの作業内容を記載してください。 -->
+<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+
+package.jsonのバージョンとdescriptionを更新しました。
+- バージョン: 0.0.0 → 0.1.0 (初回リリース版)
+- description: "manifest.json description" → "A Chrome extension that adds links to specific keywords on web pages"
+
+wxt.config.tsでmanifest設定を確認し、権限設定が適切であることを確認しました。
+
+テスト・Lintチェックを実行し、すべて正常に完了しました:
+- ユニットテスト: 72ファイル、262テスト - すべてパス
+- E2Eテスト: 9テスト - すべてパス
+- Knip: 未使用コードなし
+
+## 修正したファイル
+
+- host-frontend-root/frontend-src-root/package.json

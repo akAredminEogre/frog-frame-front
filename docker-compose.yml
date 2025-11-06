@@ -1,13 +1,24 @@
 services:
   frontend:
-    image: frontend-image
-    container_name: frontend-container
-    build: .
+    image: ${FRONTEND_IMAGE_NAME}
+    build:
+      context: .
+      args:
+        - FRONTEND_WORKDIR=${FRONTEND_WORKDIR}
+        - HOST_FRONTEND_ROOT_PATH=${HOST_FRONTEND_ROOT_PATH}
+        - CONTAINER_APP_ROOT=${CONTAINER_APP_ROOT}
+        - FRONTEND_UID=${FRONTEND_UID}
+        - FRONTEND_GID=${FRONTEND_GID}
+    env_file:
+      - .env
     restart: always
     tty: true
     volumes:
-      - ./host-frontend-root/frontend-src-root:/opt/frontend-container-app-root/frontend-src-root
-    ports:
-      - "5173:5173"  # ポートフォワーディングの設定
+      - ${HOST_FRONTEND_ROOT_PATH}:${CONTAINER_APP_ROOT}/
+      - ${FIX_PERMISSIONS_SCRIPT_PATH}:/fix-permissions.sh
     environment:
-      - HOST=0.0.0.0  # サーバーのバインドアドレスを設定
+      - HOST=${HOST_ENV}
+      - DOTENV_CONFIG_QUIET=true
+    network_mode: host
+    ipc: host  # Playwrightのためのipc共有設定
+    entrypoint: ["/bin/sh", "-c", "chmod +x /fix-permissions.sh && /fix-permissions.sh && /bin/sh"]

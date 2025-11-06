@@ -1,0 +1,54 @@
+/* デザイントークン定義 */
+
+/* カラーパレット（既存App.tsxのスタイルを参考） */
+:root {
+  --color-primary: #1ea7fd;
+  --color-secondary: #666;
+  --color-text: #333;
+  --color-text-light: #666;
+  --color-background: #fff;
+  --color-border: rgba(0, 0, 0, 0.15);
+  --color-hover: #0e7fcd;
+}
+
+/* サイズ */
+:root {
+  --size-xs: 4px;
+  --size-sm: 8px;
+  --size-md: 16px;
+  --size-lg: 24px;
+  --size-xl: 32px;
+}
+
+/* フォント */
+:root {
+  --font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+}
+
+/* ボーダー */
+:root {
+  --border-radius: 4px;
+  --border-width: 1px;
+}
+
+/* 間隔 */
+:root {
+  --spacing-xs: 2px;
+  --spacing-sm: 4px;
+  --spacing-md: 8px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+}
+
+/* 最小サイズ */
+:root {
+  --min-height-input: 60px;
+  --width-popup: 300px;
+  --padding-popup: 10px;
+}

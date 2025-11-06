@@ -1,0 +1,19 @@
+{
+  "ignoreDirs": [
+    "tests",
+    "test",
+    "spec",
+    "__tests__",
+    "e2e"
+  ],
+  "ignores": [
+    "@wxt-dev/module-react"
+  ],
+  "skipMissing": true,
+  "ignorePatterns": [
+    "*.test.ts",
+    "*.spec.ts",
+    "*.test.tsx",
+    "*.spec.tsx"
+  ]
+}

@@ -1,7 +1,28 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "extends": "./.wxt/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "src/*": [
+        "./src/*"
+      ],
+      "entrypoints/*": [
+        "./src/entrypoints/*"
+      ],
+      "tests/*": [
+        "./tests/*"
+      ]
+    },
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": [
+      "chrome",
+      "vitest/globals"
+    ]
+  }
 }
