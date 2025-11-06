@@ -3,7 +3,10 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
-describe('DomDiffer - Simple Element Replacement', () => {
+/**
+ * 1. DOM構造保持での単純div要素置換処理
+ */
+describe('DomDiffer - DOM Structure Preservation', () => {
   let container: HTMLElement;
 
   beforeEach(() => {
@@ -15,8 +18,8 @@ describe('DomDiffer - Simple Element Replacement', () => {
     document.body.removeChild(container);
   });
 
-  describe('Simple Element Replacement', () => {
-    it('should replace a simple div element while preserving DOM structure', () => {
+  describe('DOM Node Reference Preservation', () => {
+    it('DOM構造保持での単純div要素置換処理', () => {
       container.innerHTML = '<div><p id="keep-me">Keep this</p><div>Replace me</div></div>';
       
       // Store reference to preserved element
