@@ -1,5 +1,6 @@
 import { RegexConstants } from 'src/domain/constants/RegexConstants';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { ParserContextStrategyFactory } from 'src/domain/entities/ParserContextStrategy';
 
 /**
  * 要素の状態を保持しながら置換を実行するクラス
@@ -25,7 +26,7 @@ export class ReplaceElementPreservingState {
     const replacementContent = this.getReplacementContent();
     
     // 置換コンテンツを解析して置換ノードを作成するためのHTMLパーサーコンテナ
-    const htmlParserContainer = document.createElement('div');
+    const htmlParserContainer = ParserContextStrategyFactory.createContainer(this.element);
     htmlParserContainer.innerHTML = replacementContent;
     
     // すべての置換ノードを挿入
