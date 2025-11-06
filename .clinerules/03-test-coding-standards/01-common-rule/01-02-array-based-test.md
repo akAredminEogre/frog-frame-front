@@ -8,7 +8,7 @@ workflow-array-based-test
 3. 新しい専用ファイルに切り出す
 4. 元のファイルから該当テストケースを削除
 5. 入力値は input:{hoge: 'hoge'}, 期待値は expected:{hoge: 'moge'} のようにまとめる
-6. テストをまとめた配列は、1ファイルに1つとする。
+6. テストをまとめた配列は、1ファイルに1つとし、それ以外のテストケースは別ファイルに切り出す
 
 ```typescript
 const testCases = [
@@ -44,3 +44,5 @@ testCases.forEach((testCase) => {
   - 入力値/期待値の構造や型が異なる場合
   - その他 `testCases.forEach` の中でif文が必要になる場合。
     - if文が必要ということはarrange/act/assertの手法が異なるので、テストファイルを分けること
+- JSDoc
+  - 配列化したテストケース群のJSDocは日本語で記述し、配列内の`description`は必ず一致させること
