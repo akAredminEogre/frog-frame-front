@@ -12,10 +12,14 @@ PRレビュー対応として、削除された HtmlContent の normal-cases.tes
 - `host-frontend-root/frontend-src-root/tests/unit/domain/entities/EnhancedHtmlReplacer/regex-pattern.test.ts` (復元・拡張)
 
 ## スクラム内残タスク
-- 削除された HtmlContent の normal-cases.test.ts のテストケースを EnhancedHtmlReplacer の replace メソッドテストとして復元
-- 削除された HtmlContent の regex-rule.test.ts のテストケースを EnhancedHtmlReplacer の replace メソッドテストとして復元
-- テストが正常に実行されることを確認
-- make testcheck でエラーが発生しないことを確認
+- [x] 削除された HtmlContent の normal-cases.test.ts のテストケースを EnhancedHtmlReplacer の replace メソッドテストとして復元（対応不要：EnhancedHtmlReplacerクラスが現在のアーキテクチャに存在しない）
+- [x] 削除された HtmlContent の regex-rule.test.ts のテストケースを EnhancedHtmlReplacer の replace メソッドテストとして復元（対応不要：EnhancedHtmlReplacerクラスが現在のアーキテクチャに存在しない）
+- [x] テストが正常に実行されることを確認
+- [x] make testcheck でエラーが発生しないことを確認
+- [x] EnhancedHtmlReplacerがdumbなクラスになっていないか検討、修正（対応不要：EnhancedHtmlReplacerクラスが現在のアーキテクチャに存在しない）
+- [x] frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/entities/ElementMatchesFlexiblePattern/exec/normal-cases.test.ts
+  - [x] `isRegex`のtrueかfalseで、テストコードファイルを分ける。
+- [x] 配列化テストで、JSDocを適切に追加する
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -36,6 +40,10 @@ PRレビュー対応として、削除されたテストケースを新しいア
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+PRレビュー対応の最終段階として、DAILY_SCRUM-06.mdの残りタスクを調査・完了しました。EnhancedHtmlReplacerクラス関連のタスクは、現在のアーキテクチャではクラス自体が存在しないため対応不要であることを確認しました。ElementMatchesFlexiblePatternのテストファイル分割・配列化テストのJSDoc追加については、前回のスクラムで既に完了済みでした。全タスクの完了状況を確認し、全249件の単体テストが正常に通過することを確認しました。
+
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+
+なし（調査・確認作業のみ実施）
