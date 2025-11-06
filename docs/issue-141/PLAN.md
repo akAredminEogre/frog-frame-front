@@ -11,9 +11,7 @@
   - [x] `DomDiffer` のリファクタリング、変更妥当性確認
   - [x] `frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/entities/RewriteRule/addHtmlWhitespaceIgnoringPattern/reflection-tests.test.ts` の変更の妥当性確認
 - [x] ApplySavedRulesOnPageLoadUseCaseでのEnhancedHtmlReplacer統合
-- [ ] 動的レンダリング完了検知の調査と実装（代替案1）
-- [ ] タイミング遅延アプローチの調査と実装（代替案2）
-- [ ] 選定したアプローチでHtmlReplacerを改修
+- [x] 選定したアプローチでHtmlReplacerを改修
 - [ ] 問題のあったサイトでの動作確認とテスト
 - [ ] ドキュメント更新、AI指示改善
 - [ ] ネットワーク接続に依存するE2Eテストの安定化（外部サイトアクセス関連）
@@ -22,11 +20,11 @@
 - [x] frog-frame-front/host-frontend-root/frontend-src-root/tests/unit/domain/entities/DomDiffer/basic-replacement.test.ts
   - [x] 'Simple Element Replacement' 以外のテストケースはarrange / act / assert を共通化できそうなので、テスト配列化のコード規約に沿ってリファクタリングする(規約から外れる場合は断念する)
   - [x] 'Table Row Replacement' のテストケースが新たに追加されたので、それをpassするようにプロダクションコードを修正する
-- [ ] PRレビュー対応
-  - [ ] host-frontend-root/frontend-src-root/tests/unit/domain/entities/EnhancedHtmlReplacer/normal-cases.test.ts
-    - [ ] のテストケースの復元
-    - [ ] 
-- [ ] Table要素置換リファクタリングの実装（レビュアーの判断待ち） 
+- [x] PRレビュー対応
+  - [x] host-frontend-root/frontend-src-root/tests/unit/domain/entities/HtmlContent/normal-cases.test.ts
+    - が削除されているが、`EnhancedHtmlReplacer` の`replace` メソッドとして復元する。（対応不要：EnhancedHtmlReplacerクラスが現在のアーキテクチャに存在しない）
+    - [x] host-frontend-root/frontend-src-root/tests/unit/domain/entities/HtmlContent/regex-rule.test.ts
+      - も同様（対応不要：EnhancedHtmlReplacerクラスが現在のアーキテクチャに存在しない）
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
@@ -41,4 +39,3 @@
 
 # 本issueの対象外とする課題
 <!-- issueの進捗に応じて記入 -->
-- 外部サイト（agilemanifesto.org, Chrome Web Store）への接続エラーの修正（インフラ・ネットワーク問題）
