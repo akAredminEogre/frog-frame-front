@@ -14,6 +14,9 @@
 - 各種テストファイルのJSDocコメント追加（テスト規約準拠）
 
 ## スクラム内残タスク
+- [x] PRレビュー対応事項の最終対応
+  - [x] 削除された`host-frontend-root/frontend-src-root/tests/unit/HtmlContent/`のテストケースをDOM書き換えを行うメソッドのテストケースとして復元する
+  - [x] 本PR内のテストコードについて、JSDocコメントの追加をテストコード規約に沿って実施する
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -34,6 +37,26 @@ issue-141の最後の仕上げとなるPRレビュー対応事項に取り組み
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+### PRレビュー対応事項完了
+
+#### 1. 削除されたHtmlContentテストケースの復元
+- 削除された`host-frontend-root/frontend-src-root/tests/unit/HtmlContent/`のテストケースをDomDifferアーキテクチャで復元
+- 作成したファイル:
+  - `tests/unit/domain/entities/DomDiffer/regex-capture-group.test.ts` - 正規表現キャプチャグループテスト（4テストケース）
+  - `tests/unit/domain/entities/DomDiffer/string-pattern-replacement.test.ts` - 文字列パターン置換テスト（6テストケース）
+
+#### 2. JSDocコメント追加
+- 新規作成したテストファイルにテストコード規約に沿ったJSDocコメントを追加
+- `.clinerules/03-test-coding-standards/01-common-rule/01-02-array-based-test.md`の規約に準拠
+
+#### 3. テスト検証完了
+- 全259ユニットテスト成功
+- E2Eテスト: 10/12成功（2件はflaky testで retry後成功）
+- TypeScript compilation成功
+- ESLint検証成功
+
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+- 新規作成: `tests/unit/domain/entities/DomDiffer/regex-capture-group.test.ts`
+- 新規作成: `tests/unit/domain/entities/DomDiffer/string-pattern-replacement.test.ts`
