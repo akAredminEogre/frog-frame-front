@@ -2,7 +2,7 @@
   "name": "frog-frame-front",
   "description": "A Chrome extension that manipulates DOM as you like.",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "dev": "wxt",
