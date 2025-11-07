@@ -1,66 +1,64 @@
 # ISSUE-141 PULL REQUEST
 
 ## タイトル
-feat: DOM書き換え時のスタイル・スクリプト保持機能の実装
+feat: DOM差分書き換えアプローチによるサイト保存状態の保持機能
 
 ## 概要と理由
-DOM書き換え機能使用時に、サイト本来のスタイルやスクリプトが失われる問題を解決するため、DOM差分書き換えアプローチを実装しました。
+DOM書き換えに成功すると、サイトのもともとのスタイルやスクリプトが保持されなくなる問題を解決するため、DOM差分書き換えアプローチを実装しました。
 
-**問題:**
-- DOM書き換え後にスタイルやスクリプトが失われる（モーダル表示→通常リンク化、ボタンスタイル消失等）
-- `innerHTML`による全体書き換えでDOMノード再作成が発生し、イベントリスナーや外部ライブラリ状態が喪失
-
-**解決アプローチ:**
-- DOM差分書き換えによる選択的更新の実装
-- `EnhancedHtmlReplacer`と`DomDiffer`による責任分離設計
-- 要素単位での置換によりDOM状態保持を実現
+従来の`innerHTML`による全体書き換えではなく、DomDifferによる差分書き換えを採用することで、以下の問題を解決：
+- モーダル表示機能の消失
+- CSSフレームワークスタイルの失効  
+- 動的レンダリング（lazyload等）との競合
+- JavaScriptイベントリスナーの削除
 
 ## 主な変更点
 
-### 新規作成ファイル
-- `src/domain/entities/EnhancedHtmlReplacer.ts` - DOM差分書き換えを制御するメインクラス
-- `src/domain/entities/DomDiffer.ts` - DOM要素の選択的更新を実行
-- `src/domain/value-objects/MatchingElements.ts` - マッチした要素群の管理
-- `src/domain/entities/ElementMatchesFlexiblePattern.ts` - 要素の正規表現マッチング判定
-- `src/domain/entities/ReplaceElementPreservingState.ts` - 要素置換処理の専用クラス
+### 1. 新規DOM差分書き換えアーキテクチャ
+- **DomDiffer**: DOM差分検出・置換の中核クラス
+- **ReplaceElementPreservingState**: 状態保持要素置換クラス
+- **ParserContextStrategy**: HTML構造別パーサー選択戦略
 
-### 既存ファイル更新
-- `src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase.ts` - `EnhancedHtmlReplacer`統合
-- `src/domain/entities/RewriteRule/RewriteRule.ts` - `addHtmlWhitespaceIgnoringPattern`改善
-- 各種テストファイル - 包括的なテストカバレッジ実装
+### 2. 既存アーキテクチャのリファクタリング
+- **HtmlReplacer**: DOM差分書き換えアプローチへの移行
+- **ApplySavedRulesOnPageLoadUseCase**: DomDiffer統合
+- **ElementMatchesFlexiblePattern**: Strategy Pattern適用
 
-### 実装の特徴
-1. **DOM差分書き換え**: 全体置換ではなく、一致要素のみを選択的に更新
-2. **状態保持**: イベントリスナー、フォーム状態、外部ライブラリ状態を維持
-3. **正規表現対応**: 改行・スペース正規化による堅牢なパターンマッチング
-4. **テスト駆動開発**: 237項目のユニットテストによる品質保証
+### 3. テストコード品質向上
+- 259件のユニットテスト（全成功）
+- 12件のE2Eテスト（10件成功、2件flaky）
+- PRレビュー対応：削除されたHtmlContentテストケースの復元
+- JSDocコメントの規約準拠
 
-### レビュー対応による品質改善
-- **PROGRESS-04-15**: `tempContainer`変数名改善、`ReplaceElementPreservingState`クラス分離
-- **PROGRESS-04-16**: 冗長処理削除、`createRedundantPattern`直接使用
-- **PROGRESS-04-17**: 究極的簡素化、4行実装への最適化
+### 4. 技術的改善
+- 正規表現キャプチャグループ機能の安定化
+- Table要素のHTMLパーサーコンテキスト対応
+- 改行・空白文字無視機能の実装
+- Strategy Patternによるelse-if chain除去
+
+### 5. 開発プロセス改善
+- .clinerules改善（35項目の改善提案反映）
+- AI指示改善ドキュメント作成
+- 9回のDaily Scrum実施による段階的開発
 
 ## テスト方法
 [動作確認の手順]
-- `make testcheck` で回帰テスト通過を確認
+- `make testlint` で回帰テスト通過を確認
   - 既存自動テストとlinterを同時に確認
-- ユニットテスト: 237項目すべて通過
-- E2Eテスト: 主要機能の動作確認済み（一部外部URL制限関連は除く）
-- コンパイル・Lint・未使用コード検出をクリア
+- E2Eテストによる実際のDOM書き換え動作確認
+- 正規表現・文字列両方の置換パターン検証
 
 ## 補足
 [追加の文脈や注意点]
-
-
-### パフォーマンス考慮
-- DOM要素の選択的更新により処理効率化
-- 正規化処理の最適化
-- 不要な分岐・例外処理の削除
+- DOM差分書き換えアプローチにより、サイトの元の状態（スタイル・スクリプト）を完全保持
+- 正規表現キャプチャグループ機能による高度な置換パターン対応
+- Strategy Patternによる拡張性の高い設計
+- comprehensive test coverageによる品質保証
 
 ## 本スコープの対象外となったタスク
-
-これらのタスクは、DOM差分書き換え基盤が確立された今回の実装をベースに、次期開発で順次対応予定です。
-
+- 動的レンダリング完了検知機能（DOM差分アプローチで根本解決）
+- タイミング遅延実装（DOM差分アプローチで不要化）
+- innerHTML全体書き換えフォールバック機能（設計思想変更により除去）
 
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/02-submit-pull-request.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/03-merge-pull-request.md -->
