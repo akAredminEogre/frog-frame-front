@@ -13,7 +13,6 @@
 - [x] ApplySavedRulesOnPageLoadUseCaseでのEnhancedHtmlReplacer統合
 - [x] 選定したアプローチでHtmlReplacerを改修
 - [x] 問題のあったサイトでの動作確認とテスト（スクラム07で検証完了：DOM差分書き換えアプローチにより解決済み）
-- [ ] ドキュメント更新、AI指示改善
 - [x] ネットワーク接続に依存するE2Eテストの安定化（外部サイトアクセス関連）（スクラム07で確認完了：既に安定化済み）
 - [x] 正規表現キャプチャグループの統合動作確認（スクラム07で確認完了：E2Eテストで正常動作を検証）
 - [x] E2Eテストで失敗している正規表現置換機能の詳細調査と修正（一部のテストでタイムアウトが発生）（スクラム07で確認完了：リトライ機能により解決済み）
@@ -25,6 +24,8 @@
     - が削除されているが、`EnhancedHtmlReplacer` の`replace` メソッドとして復元する。（対応不要：EnhancedHtmlReplacerクラスが現在のアーキテクチャに存在しない）
     - [x] host-frontend-root/frontend-src-root/tests/unit/domain/entities/HtmlContent/regex-rule.test.ts
       - も同様（対応不要：EnhancedHtmlReplacerクラスが現在のアーキテクチャに存在しない）
+- [ ] ドキュメント更新、AI指示改善
+  - このスクラムで記述された、RETROSPECTIVE.mdの `### 提案する開発者→AIの指示における改善点` を全て `frog-frame-front/docs/issue-141/IMPROVE_AI_INSTRUCTION.md` にまとめる
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
