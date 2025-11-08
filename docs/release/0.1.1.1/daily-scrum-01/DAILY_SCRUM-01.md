@@ -10,11 +10,11 @@ Chrome Web Store審査拒否対応として、未使用のscripting権限をmani
 - 関連するTypeScript設定ファイル（必要に応じて）
 
 ## スクラム内残タスク
-- [ ] 現在のmanifest.jsonを確認し、scripting権限の使用状況を調査
-- [ ] scriptingキーワードでコードベース全体を検索し、実際の使用箇所を特定
-- [ ] manifest.jsonからscripting権限を削除
-- [ ] 削除後の動作確認とテスト実施
-- [ ] 他の権限についても使用状況を簡易確認
+- [x] 現在のmanifest.jsonを確認し、scripting権限の使用状況を調査
+- [x] scriptingキーワードでコードベース全体を検索し、実際の使用箇所を特定
+- [x] manifest.jsonからscripting権限を削除
+- [x] 削除後の動作確認とテスト実施
+- [x] 他の権限についても使用状況を簡易確認
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -31,9 +31,19 @@ Chrome Web Storeの審査拒否は想定外でしたが、権限の精査は良�
 
 # DAILY SCRUM-01作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+
+Chrome Web Store審査拒否への対応を完了しました。
+
+### 実施内容
+1. **権限使用状況の調査**: wxt.config.tsでscripting権限を確認し、ソースコード全体でscriptingAPIの使用箇所を検索
+2. **権限削除の実施**: wxt.config.tsからscripting権限を削除
+3. **他の権限使用確認**: contextMenus、storage、tabsの使用状況を確認し、削除対象はscriptingのみと判断
+4. **機能テスト実施**: 全テスト実行（Unit: 227件、E2E: 12件）で動作確認
+5. **レビュー対応**: package.jsonバージョン0.1.1.1更新とversion.txt分離システム実装
 
 ## 修正したファイル
-<!-- スクラム単位での変更を記入 -->
-<!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+- host-frontend-root/frontend-src-root/wxt.config.ts（scripting権限削除）
+- host-frontend-root/frontend-src-root/package.json（バージョン更新、npm script追加）
+- host-frontend-root/frontend-src-root/version.txt（新規作成）
+- host-frontend-root/frontend-src-root/scripts/update-version.cjs（新規作成）
+- host-frontend-root/frontend-src-root/VERSION_MANAGEMENT.md（新規作成）
