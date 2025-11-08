@@ -12,6 +12,7 @@ RewriteRuleエンティティに`isActive`プロパティを追加する作業�
 - `src/domain/entities/RewriteRule/RewriteRule.test.ts`（テストの更新）
 
 ## スクラム内残タスク
+- [x] RewriteRuleエンティティに`isActive`プロパティを追加
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -32,6 +33,36 @@ RewriteRuleエンティティに`isActive`プロパティを追加する作業�
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
 
+RewriteRuleエンティティに`isActive`プロパティを追加し、レビューコメントに応じて設計を改善しました。
+
+### 主要な作業内容
+1. **RewriteRuleエンティティへのisActive追加**：コンストラクタ・パラメータ型・ファクトリメソッドすべてに対応
+2. **レビュー対応**：RewriteRuleParamsとコンストラクタの両方でisActiveをoptionalに変更し、デフォルト値をtrue設定
+3. **UI層の簡略化**：Storybook、EditRulePage、popup AppからisActive指定を削除
+4. **テスト更新**：エンティティテスト・UseCaseテストをoptional対応に更新
+5. **設計の一貫性向上**：ドメイン層でのビジネスルール管理を強化
+
+### 検証結果
+- TypeScript compilation: ✅ 全ファイルコンパイル成功
+- Unit tests: ✅ 全261テスト成功
+- Clean Architecture原則: ✅ 責務分離が適切に実装
+
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+
+### ドメイン層
+- `src/domain/entities/RewriteRule/RewriteRule.ts` - isActiveプロパティ追加・optional対応
+
+### アプリケーション層
+- `src/application/types/RewriteRuleParams.ts` - isActiveプロパティ追加・optional化
+
+### コンポーネント層
+- `src/components/organisms/RewriteRuleForm.stories.tsx` - 不要なisActive設定削除
+- `src/components/pages/EditRulePage.tsx` - 不要なisActive設定削除
+- `src/entrypoints/popup/App.tsx` - 不要なisActive設定削除
+
+### テスト層
+- `tests/unit/domain/entities/RewriteRule/constructor/normal-cases.test.ts` - optional対応・新規テスト追加
+- `tests/unit/domain/entities/RewriteRule/fromPlainObject/normal-cases.test.ts` - optional対応
+- `tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts` - optional対応
