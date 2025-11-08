@@ -59,7 +59,8 @@ describe('IndexedDB Environment Verification', () => {
       oldString: 'test',
       newString: 'test',
       urlPattern: '',
-      isRegex: false
+      isRegex: false,
+      isActive: true
     });
 
     // Assert
