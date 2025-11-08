@@ -2,9 +2,9 @@
 
 # DAILY-SCRUM単位のタスク
 - Chrome Web Store審査拒否に対する対応（未使用のscripting権限削除）
-- [ ] manifest.jsonから未使用のscripting権限を削除
-- [ ] 他の権限についても使用状況を確認し、不要な権限を削除
-- [ ] Chrome拡張機能の機能動作確認（権限削除後のテスト）
+- [x] manifest.jsonから未使用のscripting権限を削除
+- [x] 他の権限についても使用状況を確認し、不要な権限を削除
+- [x] Chrome拡張機能の機能動作確認（権限削除後のテスト）
 - [ ] Chrome Web Storeに再申請
 
 # ISSUEを通した相談事
