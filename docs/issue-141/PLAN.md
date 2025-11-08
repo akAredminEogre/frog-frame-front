@@ -27,9 +27,8 @@
 - [x] ドキュメント更新、AI指示改善（スクラム08で完了）
   - このスクラムで記述された、RETROSPECTIVE.mdの `### 提案する開発者→AIの指示における改善点` を全て `frog-frame-front/docs/issue-141/IMPROVE_AI_INSTRUCTION.md` にまとめる
   - レビューコメント対応により.clinerules改善も実施完了
-- [ ] PRレビュー対応事項
-  - [ ] 削除された`host-frontend-root/frontend-src-root/tests/unit/HtmlContent/`のテストケースをDOM書き換えを行うメソッドのテストケースとして復元する
-  - [ ] 本PR内のテストコードについて、JSDocコメントの追加をテストコード規約に沿って実施する
+- [x] PRレビュー対応事項
+  - [x] 削除された`host-frontend-root/frontend-src-root/tests/unit/HtmlContent/`のテストケースをDOM書き換えを行うメソッドのテストケースとして復元する
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
