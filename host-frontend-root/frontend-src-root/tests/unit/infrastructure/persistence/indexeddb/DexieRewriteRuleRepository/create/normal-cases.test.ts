@@ -104,7 +104,8 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
       'old',
       'new',
       'https://test.com/*',
-      true
+      true,
+      false
     );
 
     // Act
@@ -120,5 +121,6 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
     expect(rulesArray[0].newString).toBe('new');
     expect(rulesArray[0].urlPattern).toBe('https://test.com/*');
     expect(rulesArray[0].isRegex).toBe(true);
+    expect(rulesArray[0].isActive).toBe(false);
   });
 });
