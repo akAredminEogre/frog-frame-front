@@ -2,7 +2,7 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] RewriteRuleエンティティに`isActive`プロパティを追加
+- [x] RewriteRuleエンティティに`isActive`プロパティを追加
 - [ ] Repository層で`isActive`カラムの操作を実装
 - [ ] Repository層のテストコードを追加・更新
 - [ ] make testcheckの実行と修正
