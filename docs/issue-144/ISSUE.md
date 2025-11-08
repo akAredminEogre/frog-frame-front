@@ -7,7 +7,7 @@ IndexedDBのRewriteRulesテーブルに、`isActive`カラムを追加し、Rewr
 # 受け入れ条件
 <!-- チケットをクローズできる条件を状態として表現する -->
 - [ ] カラム`isActive`がRewriteRulesテーブルに追加されている
-- [ ] `isActive`カラムはboolean型で、デフォルト値は`true`である
+- [x] `isActive`カラムはboolean型で、デフォルト値は`true`である
 - [ ] repositoryのCRUD操作に`isActive`カラムの操作が反映されている
   - [ ] そのメソッドのテストコードが追加されている
 - [ ] make testcheckがすべて通過する
