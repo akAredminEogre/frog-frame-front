@@ -17,7 +17,7 @@ mkdir -p docs/issue-nnn/daily-scrum-kk/
 - DAILY_SCRUM-kk.md作成後の手順
   - ## 相談事項セクションに記入がない場合
     - workflow-start-coding-according-to-daily-scrum
-    - を始める
+    - の手順を **指示を待たずに自動的に** 実行する
   - ## 相談事項セクションに記入がある場合
   　- チャットスレッドに記入がある旨表示し、本ワークフローを終了する
 ```

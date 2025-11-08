@@ -70,7 +70,9 @@
       "Bash(test:*)",
       "Bash(tree:*)",
       "Bash(tee:*)",
-      "Bash(npm test:*)"
+      "Bash(npm test:*)",
+      "Bash(timeout:*)",
+      "Bash(npx vitest run:*)"
     ],
     "deny": [
       "Bash(git config:*)"
