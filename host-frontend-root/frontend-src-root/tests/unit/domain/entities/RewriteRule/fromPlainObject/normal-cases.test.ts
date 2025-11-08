@@ -4,6 +4,7 @@
  * 2. 必須パラメータのみのプレーンオブジェクトからのインスタンス生成
  * 3. isRegexデフォルト値の確認
  * 4. urlPatternが未定義の場合の処理
+ * 5. isActiveパラメータの確認
  */
 import { describe, expect,it } from 'vitest';
 
@@ -26,6 +27,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
     expect(rule.newString).toBe('new text');
     expect(rule.urlPattern).toBe('https://example.com/*');
     expect(rule.isRegex).toBe(true);
+    expect(rule.isActive).toBe(true);
   });
 
   it('should create RewriteRule instance from plain object with required parameters only', () => {
@@ -42,6 +44,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
     expect(rule.newString).toBe('replace text');
     expect(rule.urlPattern).toBeUndefined();
     expect(rule.isRegex).toBe(false); // デフォルト値
+    expect(rule.isActive).toBe(true); // default value when not provided
   });
 
   it('should create RewriteRule instance with isRegex false when explicitly set', () => {
@@ -60,6 +63,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
     expect(rule.newString).toBe('replacement');
     expect(rule.urlPattern).toBe('https://test.com/*');
     expect(rule.isRegex).toBe(false);
+    expect(rule.isActive).toBe(true);
   });
 
   it('should create RewriteRule instance with urlPattern undefined when not provided', () => {
@@ -77,6 +81,7 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
     expect(rule.newString).toBe('result');
     expect(rule.urlPattern).toBeUndefined();
     expect(rule.isRegex).toBe(true);
+    expect(rule.isActive).toBe(true); // default value when not provided
   });
 
   it('should preserve null values for optional parameters', () => {
@@ -95,5 +100,6 @@ describe('RewriteRule.fromPlainObject - 正常系', () => {
     expect(rule.newString).toBe('target');
     expect(rule.urlPattern).toBe(null);
     expect(rule.isRegex).toBe(null);
+    expect(rule.isActive).toBe(true);
   });
 });
