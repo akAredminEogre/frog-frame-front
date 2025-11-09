@@ -30,11 +30,13 @@ Phase 2では以下のドキュメントを作成する必要があります:
 
 ## デイリースクラム単位のタスク
 
-- [ ] **Day 1**: 既存実装の調査と00-overview.md作成
+- [x] **Day 1**: 既存実装の調査と00-overview.md作成
   - 既存のsrcディレクトリ構造を調査
   - 既存の実装されたUseCaseを調査
   - プロジェクト概要・方式設計書（00-overview.md）を作成
   - 技術スタック、採用理由、アーキテクチャ方針を記述
+  - PlantUML図作成（architecture-layers.puml）
+  - Git Flowリリースブランチの記述追加
 
 - [ ] **Day 2**: アーキテクチャ詳細設計と制約マトリックス作成
   - 01-architecture.mdを作成（Clean Architecture層別詳細）
