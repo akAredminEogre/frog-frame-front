@@ -57,7 +57,8 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
       'new-pattern',
       'new-replacement',
       'https://example.com',
-      true
+      true,
+      false
     );
 
     // Act
@@ -71,6 +72,7 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
     expect(updatedRuleInDb.newString).toBe('new-replacement');
     expect(updatedRuleInDb.urlPattern).toBe('https://example.com');
     expect(updatedRuleInDb.isRegex).toBe(true);
+    expect(updatedRuleInDb.isActive).toBe(false);
 
     // Assert - 他のルールが変更されていないことを確認
     const allRules = await repository.getAll();
@@ -115,6 +117,7 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
     expect(updatedRuleInDb.newString).toBe('replacement');
     expect(updatedRuleInDb.urlPattern).toBe('https://old.com');
     expect(updatedRuleInDb.isRegex).toBe(false);
+    expect(updatedRuleInDb.isActive).toBe(true);
   });
 
   it('should preserve all rules when updating one rule', async () => {

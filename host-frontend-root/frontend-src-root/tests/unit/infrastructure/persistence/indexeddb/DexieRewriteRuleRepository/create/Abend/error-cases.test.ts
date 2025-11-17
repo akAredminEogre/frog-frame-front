@@ -49,7 +49,8 @@ describe('DexieRewriteRuleRepository.create - 異常系', () => {
         oldString: 'pattern2',
         newString: 'replacement2',
         urlPattern: '',
-        isRegex: false
+        isRegex: false,
+        isActive: true
       })
     ).rejects.toThrow();
   });
