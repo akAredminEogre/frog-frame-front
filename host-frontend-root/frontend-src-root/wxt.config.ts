@@ -10,7 +10,7 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   srcDir: 'src',
   manifest: {
-    permissions: ['contextMenus', 'storage', 'tabs', 'scripting'],
+    permissions: ['contextMenus', 'storage', 'tabs'],
     host_permissions: ['<all_urls>'],
     options_page: 'rules.html'
   },

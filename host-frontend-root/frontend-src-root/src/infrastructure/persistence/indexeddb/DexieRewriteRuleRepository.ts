@@ -84,7 +84,8 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
       oldString: rule.oldString,
       newString: rule.newString,
       urlPattern: rule.urlPattern,
-      isRegex: rule.isRegex
+      isRegex: rule.isRegex,
+      isActive: rule.isActive
     };
   }
 
@@ -99,7 +100,8 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
       oldString: rule.oldString,
       newString: rule.newString,
       urlPattern: rule.urlPattern,
-      isRegex: rule.isRegex
+      isRegex: rule.isRegex,
+      isActive: rule.isActive
     };
   }
 
@@ -114,7 +116,8 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
       schema.oldString,
       schema.newString,
       schema.urlPattern,
-      schema.isRegex
+      schema.isRegex,
+      schema.isActive
     );
   }
 

@@ -9,13 +9,19 @@ export class RewriteRule {
   private readonly htmlWhitespaceBeforeOpenTag: string;
   private readonly htmlWhitespaceAfterCloseTag: string;
 
+  public readonly isActive: boolean;
+
   constructor(
     public readonly id: number,
     public readonly oldString: string,
     public readonly newString: string,
     public readonly urlPattern: string,
-    public readonly isRegex: boolean = false
+    public readonly isRegex: boolean = false,
+    isActive?: boolean
   ) {
+    // isActiveのデフォルト値設定
+    this.isActive = isActive ?? true;
+    
     // 正規表現関連の定数をメンバ変数として初期化
     this.htmlOpenTagPattern = RegexConstants.HTML_OPEN_TAG_PATTERN;
     this.htmlCloseTagPattern = RegexConstants.HTML_CLOSE_TAG_PATTERN;
@@ -35,7 +41,8 @@ export class RewriteRule {
       params.oldString,
       params.newString,
       params.urlPattern,
-      params.isRegex
+      params.isRegex,
+      params.isActive ?? true
     );
   }
 
@@ -66,7 +73,8 @@ export class RewriteRule {
       ruleData.oldString,
       ruleData.newString,
       ruleData.urlPattern,
-      ruleData.isRegex
+      ruleData.isRegex,
+      ruleData.isActive
     );
   }
 

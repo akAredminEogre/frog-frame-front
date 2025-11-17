@@ -61,6 +61,7 @@ describe('DexieRewriteRuleRepository.getById - 正常系', () => {
     expect(result.newString).toBe('replacement1');
     expect(result.urlPattern).toBe('');
     expect(result.isRegex).toBe(false);
+    expect(result.isActive).toBe(true);
   });
 
   it('should correctly retrieve rule with all properties', async () => {
@@ -70,7 +71,8 @@ describe('DexieRewriteRuleRepository.getById - 正常系', () => {
       'old',
       'new',
       'https://test.com/*',
-      true
+      true,
+      false
     );
 
     await repository.create(ruleWithAllProps);
@@ -90,5 +92,6 @@ describe('DexieRewriteRuleRepository.getById - 正常系', () => {
     expect(result.newString).toBe('new');
     expect(result.urlPattern).toBe('https://test.com/*');
     expect(result.isRegex).toBe(true);
+    expect(result.isActive).toBe(false);
   });
 });
