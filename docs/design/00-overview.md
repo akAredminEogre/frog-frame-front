@@ -43,35 +43,11 @@
 
 **層構造:**
 
-```
-┌─────────────────────────────────────┐
-│  Presentation (UI)                  │
-│  - components/ (Atomic Design)      │
-│  - entrypoints/ (WXT entry points)  │
-└──────────────┬──────────────────────┘
-               │ 依存
-┌──────────────▼──────────────────────┐
-│  Application (UseCase)              │
-│  - usecases/                        │
-│  - ports/ (Interface定義)           │
-└──────────────┬──────────────────────┘
-               │ 依存
-┌──────────────▼──────────────────────┐
-│  Domain (Entity, ValueObject)       │
-│  - entities/                        │
-│  - value-objects/                   │
-│  - constants/                       │
-│  - errors/                          │
-└─────────────────────────────────────┘
-               ▲
-               │ 実装
-┌──────────────┴──────────────────────┐
-│  Infrastructure                     │
-│  - persistence/ (Dexie)             │
-│  - browser/ (Chrome API)            │
-│  - di/ (DI Container)               │
-└─────────────────────────────────────┘
-```
+![Clean Architecture 層構造](../diagrams/exports/architecture-layers.svg)
+
+**PlantUML ソース:** [architecture-layers.puml](../diagrams/architecture-layers.puml)
+
+> **Note:** SVG画像はPlantUMLソースから生成されます。画像が表示されない場合は、PlantUMLサーバーを使用してソースから生成してください。
 
 **依存関係ルール:**
 - 外側の層は内側の層に依存できる
@@ -277,19 +253,27 @@ host-frontend-root/frontend-src-root/src/
 
 ## 4. ブランチ戦略
 
-### Git Flow（簡易版）
+### Git Flow（簡易版 + リリースブランチ）
 
 ```
 main          ────●────────●──────●─────→ (プロダクション)
                ↗        ↗        ↗
-develop    ───●───●───●───●───●───●───→ (開発中)
+0.1.1.1    ───●         │        │        (リリースブランチ)
+             ↗          │        │
+develop    ─●───●───●───●───●───●───●───→ (開発中)
              ↗   ↗   ↗   ↗   ↗   ↗
 issue-nnn ─●   ●   ●   ●   ●   ●
 ```
 
-- `main`: リリース用ブランチ
-- `develop`: 開発中ブランチ（デフォルト）
+**ブランチの役割:**
+
+- `main`: 本番環境リリース用ブランチ
+- `develop`: 開発中ブランチ（デフォルト、全Issue作業の起点）
 - `issue-nnn-xxx`: Issue番号ベースの機能開発ブランチ
+- `x.y.z.w` (例: `0.1.1.1`): リリース準備ブランチ
+  - developから特定の機能群をリリースする際に作成
+  - リリース前のバグフィックスやドキュメント整備を実施
+  - リリース後の緊急修正もこのブランチで実施可能
 
 ---
 
