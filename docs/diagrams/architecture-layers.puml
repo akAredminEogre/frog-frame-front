@@ -1,0 +1,54 @@
+@startuml architecture-layers
+
+!define LAYER_COLOR_PRESENTATION #E1F5FE
+!define LAYER_COLOR_APPLICATION #FFF9C4
+!define LAYER_COLOR_DOMAIN #C8E6C9
+!define LAYER_COLOR_INFRASTRUCTURE #FFCCBC
+
+skinparam packageStyle rectangle
+skinparam defaultFontName "Noto Sans CJK JP"
+skinparam shadowing false
+
+package "Presentation Layer" as presentation LAYER_COLOR_PRESENTATION {
+  [components/\n(Atomic Design)]
+  [entrypoints/\n(WXT entry points)]
+}
+
+package "Application Layer" as application LAYER_COLOR_APPLICATION {
+  [usecases/]
+  [ports/\n(Interface定義)]
+}
+
+package "Domain Layer" as domain LAYER_COLOR_DOMAIN {
+  [entities/]
+  [value-objects/]
+  [constants/]
+  [errors/]
+}
+
+package "Infrastructure Layer" as infrastructure LAYER_COLOR_INFRASTRUCTURE {
+  [persistence/\n(Dexie)]
+  [browser/\n(Chrome API)]
+  [di/\n(DI Container)]
+}
+
+presentation -down-> application : 依存
+application -down-> domain : 依存
+infrastructure -up-> domain : 実装
+infrastructure -up-> application : 実装
+
+note right of domain
+  **Domain層は完全に独立**
+  - 他の層に依存しない
+  - Chrome APIやDOM APIは使用不可
+  - 純粋なビジネスロジックのみ
+end note
+
+note left of infrastructure
+  **Infrastructure層**
+  - ポート(Interface)を実装
+  - 外部システムとの接続
+  - Chrome API, IndexedDB等
+end note
+
+@enduml
