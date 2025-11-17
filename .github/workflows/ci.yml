@@ -16,6 +16,8 @@ jobs:
     defaults:
       run:
         working-directory: host-frontend-root/frontend-src-root
+    env:
+      EXTENSION_DIR: .output/chrome-mv3
 
     steps:
       - name: Checkout code
@@ -55,6 +57,8 @@ jobs:
     defaults:
       run:
         working-directory: host-frontend-root/frontend-src-root
+    env:
+      EXTENSION_DIR: .output/chrome-mv3
 
     steps:
       - name: Checkout code
