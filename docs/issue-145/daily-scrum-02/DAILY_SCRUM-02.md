@@ -27,24 +27,27 @@ PLAN.mdのDay 2タスクに取り組みます:
 
 ## スクラム内残タスク
 
-- [ ] 既存のentrypoints/background.ts実装パターン調査
-- [ ] 既存のentrypoints/content.ts実装パターン調査
-- [ ] Chrome拡張の実行コンテキスト制約の整理
-- [ ] 01-architecture.md作成
-  - [ ] Clean Architecture層別詳細
-  - [ ] Domain層の詳細設計方針
-  - [ ] Application層の詳細設計方針
-  - [ ] Infrastructure層の詳細設計方針
-  - [ ] Presentation層の詳細設計方針
-  - [ ] 層間の依存関係ルール
-  - [ ] メッセージング戦略
-- [ ] 08-constraints-matrix.md作成
-  - [ ] 実行コンテキスト別制約マトリックス
-  - [ ] Chrome API利用可能範囲
-  - [ ] DOM/Window APIアクセス制約
-  - [ ] メッセージング制約
-  - [ ] ストレージAPI制約
-  - [ ] セキュリティ制約（CSP等）
+- [x] 既存のentrypoints/background.ts実装パターン調査
+- [x] 既存のentrypoints/content.ts実装パターン調査
+- [x] Chrome拡張の実行コンテキスト制約の整理
+- [x] 01-architecture.md作成
+  - [x] Clean Architecture層別詳細
+  - [x] Domain層の詳細設計方針
+  - [x] Application層の詳細設計方針
+  - [x] Infrastructure層の詳細設計方針
+  - [x] Presentation層の詳細設計方針
+  - [x] 層間の依存関係ルール
+  - [x] メッセージング戦略
+  - [x] テスト戦略
+  - [x] 設計原則（SOLID、ThoughtWorks Anthology 9原則）
+- [x] 08-constraints-matrix.md作成
+  - [x] 実行コンテキスト別制約マトリックス
+  - [x] Chrome API利用可能範囲
+  - [x] DOM/Window APIアクセス制約
+  - [x] メッセージング制約
+  - [x] ストレージAPI制約
+  - [x] セキュリティ制約（CSP等）
+  - [x] トラブルシューティングセクション
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -62,9 +65,31 @@ Day 2では、Clean Architectureの各層の詳細設計とChrome拡張特有の
 
 # DAILY SCRUM-02作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+
+Day 2タスク「アーキテクチャ詳細設計と制約マトリックス作成」を完了しました。
+
+1. **既存実装パターンの調査完了**
+   - background.ts実装パターン（Composition Root、4つのイベントリスナー）
+   - content.ts実装パターン（matches設定、開発/本番切り替え）
+   - manifest設定（permissions, host_permissions）
+
+2. **アーキテクチャ詳細設計書（01-architecture.md）の作成**
+   - Clean Architecture層別詳細（Domain/Application/Infrastructure/Presentation）
+   - 依存関係ルールと禁止事項マトリックス
+   - メッセージング戦略
+   - テスト戦略
+   - 設計原則（SOLID、ThoughtWorks Anthology 9原則）
+
+3. **Chrome拡張制約マトリックス（08-constraints-matrix.md）の作成**
+   - 実行コンテキスト別制約マトリックス
+   - Background/Content/Popup詳細説明
+   - API別制約（tabs, storage, runtime, contextMenus）
+   - セキュリティ制約
+   - ストレージ戦略
+   - トラブルシューティング
 
 ## 修正したファイル
-<!-- スクラム単位での変更を記入 -->
-<!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+
+**新規作成:**
+- `docs/design/01-architecture.md` - アーキテクチャ詳細設計書（約600行）
+- `docs/design/08-constraints-matrix.md` - Chrome拡張制約マトリックス（約400行）
