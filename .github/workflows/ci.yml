@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - develop
+      - 'claude/**'
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  test-check:
+    name: Test Check (with warnings)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: host-frontend-root/frontend-src-root
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: host-frontend-root/frontend-src-root/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup matchUrl.ts
+        run: |
+          if [ ! -f src/utils/matchUrl.ts ]; then
+            cp src/utils/matchUrl.ts.example src/utils/matchUrl.ts
+          fi
+
+      - name: Prepare WXT
+        run: npx wxt prepare
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run test:check
+        run: npm run test:check
+
+  test-lint:
+    name: Test Lint (strict)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: host-frontend-root/frontend-src-root
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: host-frontend-root/frontend-src-root/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup matchUrl.ts
+        run: |
+          if [ ! -f src/utils/matchUrl.ts ]; then
+            cp src/utils/matchUrl.ts.example src/utils/matchUrl.ts
+          fi
+
+      - name: Prepare WXT
+        run: npx wxt prepare
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run test:lint
+        run: npm run test:lint
