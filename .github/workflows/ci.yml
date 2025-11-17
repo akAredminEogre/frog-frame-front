@@ -40,6 +40,9 @@ jobs:
       - name: Prepare WXT
         run: npx wxt prepare
 
+      - name: Build extension for E2E tests
+        run: npm run build
+
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
@@ -75,6 +78,9 @@ jobs:
 
       - name: Prepare WXT
         run: npx wxt prepare
+
+      - name: Build extension for E2E tests
+        run: npm run build
 
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps

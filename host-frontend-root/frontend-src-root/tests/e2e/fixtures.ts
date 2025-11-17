@@ -11,7 +11,9 @@ export const test = base.extend<{
   editPage: Page;
 }>({
   context: async ({}, use) => {
-    const pathToExtension = path.join(process.cwd(), '.output/chrome-mv3-dev');
+    // CI環境ではビルド済みの拡張機能を使用、ローカルではdev版を使用
+    const extensionDir = process.env.CI ? '.output/chrome-mv3' : '.output/chrome-mv3-dev';
+    const pathToExtension = path.join(process.cwd(), extensionDir);
     const context = await chromium.launchPersistentContext('', {
       headless: true,
       args: [
