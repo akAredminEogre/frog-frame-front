@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks, no-empty-pattern */
 import { type BrowserContext, chromium, type Page,test as base } from '@playwright/test';
 import path from 'path';
-
-import { getExtensionDirectory } from './config';
+import { getExtensionDirectory } from 'tests/e2e/config';
 
 export const test = base.extend<{
   context: BrowserContext;
