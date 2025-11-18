@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks, no-empty-pattern */
 import { type BrowserContext, chromium, type Page,test as base } from '@playwright/test';
 import path from 'path';
+import { getExtensionDirectory } from 'tests/e2e/config';
 
 export const test = base.extend<{
   context: BrowserContext;
@@ -11,7 +12,8 @@ export const test = base.extend<{
   editPage: Page;
 }>({
   context: async ({}, use) => {
-    const pathToExtension = path.join(process.cwd(), '.output/chrome-mv3-dev');
+    const extensionDir = getExtensionDirectory();
+    const pathToExtension = path.join(process.cwd(), extensionDir);
     const context = await chromium.launchPersistentContext('', {
       headless: true,
       args: [
