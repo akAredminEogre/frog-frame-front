@@ -14,31 +14,21 @@
 
 **責務:**
 - ビジネスルールの定義
-- Entityの定義
-- Value Objectの定義
-- ドメイン固有エラーの定義
-- ドメイン定数の定義
+  - DOM検索、置換ロジック
+  - 置換ルールの保存、編集
 
 **依存:**
-- なし（完全に独立）
-
-**重要原則:**
-- **外部依存の完全排除**: Chrome API, DOM API, window, document等のブラウザAPIは一切使用不可
-- **純粋性**: 副作用のない純粋なビジネスロジックのみを実装
-- **テスタビリティ**: 外部依存がないため、ユニットテストが容易
+- なし（他の層から完全に独立）
 
 **ファイル配置:**
 ```
 src/domain/
 ├── entities/                              # ビジネスロジックを持つエンティティ
-│   ├── RewriteRule/                       # 例：書き換えルール（Strategy Pattern使用）
-│   │   ├── RewriteRule.ts                 # メインエンティティ
-│   │   ├── PatternProcessingStrategyFactory.ts
-│   │   └── ...（Strategy実装クラス）
+│   ├── RewriteRule/                       # 例：書き換えルール に関するEntity
 │   ├── DomDiffer.ts                       # 例：DOM差分検出ロジック
 │   └── ...（その他のエンティティ：要素セレクタ、パース戦略等）
 ├── value-objects/                         # 値オブジェクト（イミュータブル）
-│   ├── RewriteRules.ts                    # 例：ルール集合
+│   ├── RewriteRules.ts                    # 例：RewriteRuleを配列として扱うファーストクラスコレクション
 │   ├── Tab.ts                             # 例：タブ情報
 │   └── ...（その他のVO：選択テキスト、URL等）
 ├── constants/                             # ドメイン定数
@@ -47,21 +37,6 @@ src/domain/
     └── RewriteRuleNotFoundError.ts
 ```
 
-**設計ガイドライン:**
-
-1. **Entityの設計:**
-   - イミュータブル（不変）を基本とする
-   - ビジネスルールをメソッドとして実装
-   - 状態変更は新しいインスタンスを返す
-
-2. **Value Objectの設計:**
-   - 値の等価性で比較
-   - イミュータブル
-   - バリデーションロジックを含む
-
-3. **Strategy Patternの活用:**
-   - RewriteRuleでは、正規表現パターン/文字列パターンの処理をStrategy Patternで実装
-   - PatternProcessingStrategyFactoryで適切なStrategyを生成
 
 ---
 
@@ -81,11 +56,7 @@ src/domain/
 src/application/
 ├── usecases/                              # ユースケース実装（機能別ディレクトリ）
 │   ├── rule/                              # 例：書き換えルール関連
-│   │   ├── SaveRewriteRuleAndApplyToCurrentTabUseCase.ts
-│   │   ├── GetAllRewriteRulesUseCase.ts
-│   │   └── ...（その他のルール操作UseCase）
 │   ├── contextmenu/                       # 例：コンテキストメニュー関連
-│   │   └── ...（メニュー設定、選択処理）
 │   └── ...（その他のカテゴリ：popup、selection、window等）
 ├── ports/                                 # Infrastructure層へのインターフェース定義
 │   ├── IRewriteRuleRepository.ts          # 例：ルールリポジトリ
@@ -101,11 +72,9 @@ src/application/
    - 1つのユーザーアクションに対応
    - Repository（ポート）を通じてデータを取得/永続化
    - Entityのビジネスロジックを呼び出す
-   - エラーハンドリング
 
 2. **ポート（Interface）の設計:**
    - Infrastructure層の具象実装に依存しない
-   - テスト時にMockに差し替え可能
    - 命名規則: `I` + サービス名 (例: `IRewriteRuleRepository`)
 
 3. **依存性注入:**
@@ -203,7 +172,7 @@ src/infrastructure/
    - リスナー登録関数をエクスポート
    - entrypoints/ から呼び出す
 
-**実装例（Reposito<br>ry）:**
+**実装例（Repository）:**
 ```typescript
 // infrastructure/persistence/indexeddb/DexieRewriteRuleRepository.ts
 import { injectable } from 'tsyringe';
