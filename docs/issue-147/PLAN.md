@@ -10,7 +10,7 @@
   - RulesApp.tsxを適切な粒度でコンポーネント化
   - Atomic Design原則に従った配置
   - 必要に応じてUSeCaseの分離
-- [ ] Storybookの作成
+- [x] Storybookの作成
   - 分割したコンポーネントのStoryを作成
   - 各状態やパターンのストーリーを網羅
 - [ ] テストコードの作成・更新
