@@ -1,9 +1,6 @@
-import 'src/entrypoints/rules/style.css';
-
 import { container } from 'src/infrastructure/di/container';
 
-import * as React from 'react';
-import { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
@@ -11,7 +8,7 @@ import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllR
 import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
-function RulesApp() {
+export const RulesListPage: React.FC = () => {
   const [rules, setRules] = useState<RewriteRule[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +31,12 @@ function RulesApp() {
     loadRules();
   }, []);
 
+  const handleEdit = async (ruleId: string | number) => {
+    const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
+    const openRuleEditPageUseCase = new OpenRuleEditPageUseCase(chromeTabsService);
+    await openRuleEditPageUseCase.execute(ruleId);
+  };
+
   if (loading) {
     return (
       <div className="container">
@@ -49,12 +52,6 @@ function RulesApp() {
       </div>
     );
   }
-
-  const handleEdit = async (ruleId: string | number) => {
-    const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
-    const openRuleEditPageUseCase = new OpenRuleEditPageUseCase(chromeTabsService);
-    await openRuleEditPageUseCase.execute(ruleId);
-  };
 
   return (
     <div className="container">
@@ -121,6 +118,4 @@ function RulesApp() {
       </div>
     </div>
   );
-}
-
-export default RulesApp;
+};
