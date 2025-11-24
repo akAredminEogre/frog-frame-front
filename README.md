@@ -107,3 +107,16 @@ Dockerイメージのビルド時は、効率化のため `package.json` と `pa
 3. `make init-dev` を実行して初回セットアップ（初回のみ）
 4. `make dev` を実行して開発サーバーを起動（2回目以降）
 5. 新しいissueブランチを作成する場合は、`.clinerules/02-workflow-automation/01-issue-launches/workflow-create-branch.md` を参照
+
+## デプロイメント
+
+### Chrome Web Storeへの自動公開
+
+`main` ブランチへのマージで、Chrome Web Storeへの自動公開が行われます。
+
+**セットアップが必要です**: 詳細な手順は [docs/chrome-web-store-auto-publish.md](docs/chrome-web-store-auto-publish.md) を参照してください。
+
+セットアップ後は、以下の流れで自動公開されます：
+1. `develop` ブランチで開発
+2. `main` ブランチにマージ
+3. GitHub Actionsが自動的にビルド・テスト・Chrome Web Storeへアップロードを実行

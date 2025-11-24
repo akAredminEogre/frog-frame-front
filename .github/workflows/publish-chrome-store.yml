@@ -1,0 +1,62 @@
+name: Publish to Chrome Web Store
+
+on:
+  push:
+    branches:
+      - main  # mainブランチへのマージで自動公開
+  workflow_dispatch:  # 手動実行も可能
+
+jobs:
+  publish:
+    name: Build and Publish to Chrome Web Store
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: host-frontend-root/frontend-src-root
+    env:
+      CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+      CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+      CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+      CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: host-frontend-root/frontend-src-root/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup matchUrl.ts
+        run: |
+          if [ ! -f src/utils/matchUrl.ts ]; then
+            cp src/utils/matchUrl.ts.example src/utils/matchUrl.ts
+          fi
+
+      - name: Prepare WXT
+        run: npx wxt prepare
+
+      - name: Run tests
+        run: npm run test:all
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Zip extension
+        run: npm run zip
+
+      - name: Submit to Chrome Web Store
+        run: npx wxt submit --chrome-zip=.output/chrome-mv3-*.zip
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-extension-${{ github.sha }}
+          path: host-frontend-root/frontend-src-root/.output/chrome-mv3-*.zip
+          retention-days: 30
