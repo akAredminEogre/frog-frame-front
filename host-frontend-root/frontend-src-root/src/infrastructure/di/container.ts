@@ -17,6 +17,8 @@ import { IWindowService } from 'src/application/ports/IWindowService';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
+import { ExportRulesToJsonUseCase } from 'src/application/usecases/rule/ExportRulesToJsonUseCase';
+import { ImportRulesFromJsonUseCase } from 'src/application/usecases/rule/ImportRulesFromJsonUseCase';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
@@ -44,6 +46,8 @@ container.register<IGetSelectionService>('IGetSelectionService', { useClass: Get
 container.register(HandleContextMenuReplaceDomElement, { useClass: HandleContextMenuReplaceDomElement });
 container.register(ContextMenuSetupUseCase, { useClass: ContextMenuSetupUseCase });
 container.register(DexieRewriteRuleRepository, { useClass: DexieRewriteRuleRepository });
+container.register(ExportRulesToJsonUseCase, { useClass: ExportRulesToJsonUseCase });
+container.register(ImportRulesFromJsonUseCase, { useClass: ImportRulesFromJsonUseCase });
 container.register(LoadRewriteRuleForEditUseCase, { useClass: LoadRewriteRuleForEditUseCase });
 container.register(UpdateRewriteRuleUseCase, { useClass: UpdateRewriteRuleUseCase });
 container.register(CloseCurrentWindowUseCase, { useClass: CloseCurrentWindowUseCase });

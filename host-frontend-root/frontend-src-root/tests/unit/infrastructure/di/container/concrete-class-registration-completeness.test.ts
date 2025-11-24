@@ -6,6 +6,8 @@ import { afterEach,beforeEach, describe, expect, it } from 'vitest';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
+import { ExportRulesToJsonUseCase } from 'src/application/usecases/rule/ExportRulesToJsonUseCase';
+import { ImportRulesFromJsonUseCase } from 'src/application/usecases/rule/ImportRulesFromJsonUseCase';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
@@ -43,11 +45,19 @@ describe('DI Container - 完全自動化具体クラス登録確認テスト', (
     },
     {
       class: ContextMenuSetupUseCase,
-      className: 'ContextMenuSetupUseCase'  
+      className: 'ContextMenuSetupUseCase'
     },
     {
       class: DexieRewriteRuleRepository,
       className: 'DexieRewriteRuleRepository'
+    },
+    {
+      class: ExportRulesToJsonUseCase,
+      className: 'ExportRulesToJsonUseCase'
+    },
+    {
+      class: ImportRulesFromJsonUseCase,
+      className: 'ImportRulesFromJsonUseCase'
     },
     {
       class: LoadRewriteRuleForEditUseCase,
