@@ -1,3 +1,4 @@
+import { DomMutationObserverService } from 'src/infrastructure/browser/content/mutation/DomMutationObserverService';
 import { runtimeOnMessageReceived } from 'src/infrastructure/browser/content/runtime/onMessageReceived';
 import { matchUrl } from 'src/utils/matchUrl';
 
@@ -11,5 +12,9 @@ export default defineContentScript({
   main() {
     // メッセージ受信リスナーを登録
     runtimeOnMessageReceived();
+
+    // DOM更新を監視してrewrite rulesを適用する
+    const mutationObserverService = new DomMutationObserverService(window.location.href);
+    mutationObserverService.startObserving();
   },
 });
