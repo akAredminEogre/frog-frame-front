@@ -1,4 +1,4 @@
-.PHONY: init-config help init-dev dev down ps unit e2e testall testcheck testlint sortimports
+.PHONY: init-config help init-dev dev down ps unit e2e testall testcheck testlint sortimports storybook
 
 help:
 	@echo "Available commands:"
@@ -13,6 +13,7 @@ help:
 	@echo "  make testcheck    - Run tests with warnings"
 	@echo "  make testlint     - Run comprehensive tests and linting (required before PR)"
 	@echo "  make sortimports  - Sort imports in all files"
+	@echo "  make storybook    - Start Storybook development server"
 	@echo "  make help         - Show this help message"
 
 init-config:
@@ -88,3 +89,7 @@ sortimports:
 npminstall:
 	@echo "Installing npm dependencies..."
 	@docker compose exec frontend npm install
+
+storybook:
+	@echo "Starting Storybook development server..."
+	@docker compose exec frontend npm run storybook
