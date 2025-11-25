@@ -42,13 +42,6 @@ export class DomMutationObserverService {
   }
 
   /**
-   * DOM監視を停止する
-   */
-  public stopObserving(): void {
-    this.observer.disconnect();
-  }
-
-  /**
    * Mutationイベントを処理する
    */
   private handleMutations(mutations: MutationRecord[]): void {
