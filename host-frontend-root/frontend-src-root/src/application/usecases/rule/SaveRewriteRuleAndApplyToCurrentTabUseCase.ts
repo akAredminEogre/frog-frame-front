@@ -16,8 +16,9 @@ interface SaveRewriteRuleAndApplyResult {
 /**
  * リライトルールを保存し、現在のタブに適用するUseCase
  */
+export
 @injectable()
-export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
+class SaveRewriteRuleAndApplyToCurrentTabUseCase {
   constructor(
     @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
     @inject('ICurrentTabService') private currentTabService: ICurrentTabService,

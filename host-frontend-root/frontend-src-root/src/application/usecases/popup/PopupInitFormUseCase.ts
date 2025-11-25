@@ -12,8 +12,9 @@ interface PopupInitFormResult {
  * ポップアップのフォーム初期化を行うUseCase
  * 右クリック選択テキストと現在のタブのoriginを取得してフォームを初期化する
  */
+export
 @injectable()
-export class PopupInitFormUseCase {
+class PopupInitFormUseCase {
   constructor(
     @inject('ICurrentTabService') private currentTabService: ICurrentTabService,
     @inject('ISelectedPageTextRepository') private selectedPageTextRepository: ISelectedPageTextRepository
