@@ -7,8 +7,9 @@ import { Tabs } from 'src/domain/value-objects/Tabs';
 /**
  * Chrome Tabs APIを使用して現在のタブにメッセージを送信するサービスの実装
  */
+export
 @injectable()
-export class ChromeTabsService implements IChromeTabsService {
+class ChromeTabsService implements IChromeTabsService {
   async sendMessage(tabId: number, message: any): Promise<any> {
     try {
       const response = await chrome.tabs.sendMessage(tabId, message);
