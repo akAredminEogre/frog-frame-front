@@ -1,15 +1,14 @@
-# JSON エクスポート/インポート機能 基本設計書
+# JSON インポート機能 基本設計書
 
 ## 1. 機能概要
 
 ### 1.1 目的
-ユーザーが作成したRewriteRuleをJSON形式でエクスポート・インポートできる機能を提供し、以下を実現する：
-- ルールのバックアップと復元
+ユーザーが作成したRewriteRuleをJSON形式でインポートできる機能を提供し、以下を実現する：
+- ルールのバックアップからの復元
 - 異なるデバイス間でのルール共有
-- ルールセットの配布と再利用
+- ルールセットの受け取りと適用
 
 ### 1.2 機能範囲
-- **エクスポート機能**: 保存済みの全ルールをJSON形式でダウンロード
 - **インポート機能**: JSONファイルから複数のルールを一括インポート
 - **バリデーション**: インポート時のデータ検証とエラーハンドリング
 
@@ -17,41 +16,34 @@
 
 ### 2.1 機能要件
 
-#### FR-1: エクスポート機能
-- **FR-1.1**: ユーザーはルール一覧ページから全ルールをエクスポートできる
-- **FR-1.2**: エクスポートされるファイル名は `rewrite-rules-{timestamp}.json` 形式とする
-- **FR-1.3**: エクスポートデータにはIDフィールドを含めない（インポート時に自動採番）
-- **FR-1.4**: エクスポート実行後、成功メッセージを表示する
+#### FR-1: インポート機能
+- **FR-1.1**: ユーザーはJSONファイルを選択してルールをインポートできる
+- **FR-1.2**: インポートされたルールは既存ルールに追加される（重複許可）
+- **FR-1.3**: インポート成功時、ルール一覧を再読み込みして最新状態を表示する
+- **FR-1.4**: インポート実行後、成功/失敗メッセージを表示する
 
-#### FR-2: インポート機能
-- **FR-2.1**: ユーザーはJSONファイルを選択してルールをインポートできる
-- **FR-2.2**: インポートされたルールは既存ルールに追加される（重複許可）
-- **FR-2.3**: インポート成功時、ルール一覧を再読み込みして最新状態を表示する
-- **FR-2.4**: インポート実行後、成功/失敗メッセージを表示する
-
-#### FR-3: データバリデーション
-- **FR-3.1**: JSON構文の妥当性を検証する
-- **FR-3.2**: 必須フィールドの存在を検証する
+#### FR-2: データバリデーション
+- **FR-2.1**: JSON構文の妥当性を検証する
+- **FR-2.2**: 必須フィールドの存在を検証する
   - ルートレベル: `version`, `rules`
   - ルールレベル: `oldString`, `newString`, `urlPattern`, `isRegex`, `isActive`
-- **FR-3.3**: 各フィールドの型を検証する
+- **FR-2.3**: 各フィールドの型を検証する
   - 文字列フィールド: `oldString`, `newString`, `urlPattern`
   - 真偽値フィールド: `isRegex`, `isActive`
-- **FR-3.4**: バリデーションエラー時、具体的なエラー内容をユーザーに通知する
+- **FR-2.4**: バリデーションエラー時、具体的なエラー内容をユーザーに通知する
 
 ### 2.2 非機能要件
 
 #### NFR-1: パフォーマンス
-- **NFR-1.1**: エクスポート処理は1000件のルールを1秒以内に完了する
-- **NFR-1.2**: インポート処理は100件のルールを3秒以内に完了する
+- **NFR-1.1**: インポート処理は100件のルールを3秒以内に完了する
 
 #### NFR-2: ユーザビリティ
 - **NFR-2.1**: ボタン配置は直感的で、操作手順が明確である
 - **NFR-2.2**: エラーメッセージは日本語で分かりやすく表示する
 
 #### NFR-3: 保守性
-- **NFR-3.3**: Clean Architecture + DDDに準拠した設計とする
-- **NFR-3.4**: 各層の責務を明確に分離する
+- **NFR-3.1**: Clean Architecture + DDDに準拠した設計とする
+- **NFR-3.2**: 各層の責務を明確に分離する
 
 ## 3. アーキテクチャ設計
 
@@ -60,13 +52,12 @@
 ```
 ┌─────────────────────────────────────────────┐
 │         Presentation Layer (UI)             │
-│  - RulesApp.tsx (ボタン、ファイル操作)      │
+│  - RulesApp.tsx (インポートボタン)          │
 │  - style.css (UIスタイル)                   │
 └──────────────────┬──────────────────────────┘
                    │
 ┌──────────────────▼──────────────────────────┐
 │         Application Layer                   │
-│  - ExportRulesToJsonUseCase                 │
 │  - ImportRulesFromJsonUseCase               │
 │  - ExportedRewriteRules (型定義)            │
 └──────────────────┬──────────────────────────┘
@@ -88,7 +79,7 @@
 
 | レイヤー | 責務 |
 |---------|------|
-| **Presentation** | ユーザー操作の受付、ファイルアップロード/ダウンロード、メッセージ表示 |
+| **Presentation** | ユーザー操作の受付、ファイルアップロード、メッセージ表示 |
 | **Application** | ビジネスロジックの調整、JSON変換、バリデーション |
 | **Domain** | ルールエンティティの定義、ドメインエラー |
 | **Infrastructure** | データ永続化、DI管理 |
@@ -139,40 +130,11 @@ interface ExportedRewriteRule {
 ```
 
 ### 4.3 ID設計
-- **エクスポート時**: IDフィールドを除外（インポート先で再採番されるため）
 - **インポート時**: ID=0でRewriteRuleを生成し、Repository.createが自動採番
 
 ## 5. クラス設計
 
-### 5.1 ExportRulesToJsonUseCase
-
-```typescript
-@injectable()
-class ExportRulesToJsonUseCase {
-  constructor(
-    @inject('IRewriteRuleRepository')
-    private readonly rewriteRuleRepository: IRewriteRuleRepository
-  )
-
-  // 全ルールをJSON文字列に変換してエクスポート
-  async execute(): Promise<string>
-}
-```
-
-**責務:**
-- リポジトリから全ルールを取得
-- IDフィールドを除外してExportedRewriteRule形式に変換
-- バージョン、エクスポート日時を付与
-- JSON文字列として返却（整形済み、インデント2スペース）
-
-**処理フロー:**
-1. `rewriteRuleRepository.getAll()` でルール取得
-2. 各ルールからIDを除外し、ExportedRewriteRule配列を生成
-3. ExportedRewriteRules構造を構築（version: "1.0", exportDate, rules）
-4. `JSON.stringify(data, null, 2)` で整形済みJSON文字列を生成
-5. JSON文字列を返却
-
-### 5.2 ImportRulesFromJsonUseCase
+### 5.1 ImportRulesFromJsonUseCase
 
 ```typescript
 @injectable()
@@ -220,13 +182,13 @@ class ImportRulesFromJsonUseCase {
 | rulesフィールド | 存在確認 | "Missing required field: rules" |
 | rules型 | Array.isArray | "Field \"rules\" must be an array" |
 | ルールオブジェクト | typeofがobject、nullでない | "Rule at index N must be an object" |
-| oldString | 存在と型(string) | "Rule at index N: Missing/invalid required field \"oldString\"" |
-| newString | 存在と型(string) | "Rule at index N: Missing/invalid required field \"newString\"" |
-| urlPattern | 存在と型(string) | "Rule at index N: Missing/invalid required field \"urlPattern\"" |
-| isRegex | 存在と型(boolean) | "Rule at index N: Missing/invalid required field \"isRegex\"" |
-| isActive | 存在と型(boolean) | "Rule at index N: Missing/invalid required field \"isActive\"" |
+| oldString | 存在と型(string) | "Rule at index N: Missing required field \"oldString\"" / "Field \"oldString\" must be a string" |
+| newString | 存在と型(string) | "Rule at index N: Missing required field \"newString\"" / "Field \"newString\" must be a string" |
+| urlPattern | 存在と型(string) | "Rule at index N: Missing required field \"urlPattern\"" / "Field \"urlPattern\" must be a string" |
+| isRegex | 存在と型(boolean) | "Rule at index N: Missing required field \"isRegex\"" / "Field \"isRegex\" must be a boolean" |
+| isActive | 存在と型(boolean) | "Rule at index N: Missing required field \"isActive\"" / "Field \"isActive\" must be a boolean" |
 
-### 5.3 InvalidImportDataError
+### 5.2 InvalidImportDataError
 
 ```typescript
 class InvalidImportDataError extends Error {
@@ -243,7 +205,7 @@ class InvalidImportDataError extends Error {
 
 ## 6. UI設計
 
-### 6.1 画面構成（Rules Page）
+### 6.1 画面構成（Rules Page - インポート部分）
 
 ```
 ┌────────────────────────────────────────────┐
@@ -251,15 +213,11 @@ class InvalidImportDataError extends Error {
 ├────────────────────────────────────────────┤
 │  [エクスポート]  [インポート]              │
 ├────────────────────────────────────────────┤
-│  ✓ ルールをエクスポートしました             │ ← 成功メッセージ
+│  ✓ ルールをインポートしました               │ ← 成功メッセージ
+│  または                                    │
+│  ✗ インポートエラー: Invalid JSON format  │ ← エラーメッセージ
 ├────────────────────────────────────────────┤
-│  ┌──────────────────────────────────────┐ │
-│  │ URLパターン │ 置換前 │ 置換後 │ 操作 │ │
-│  ├──────────────────────────────────────┤ │
-│  │ https://... │ old    │ new    │ 編集 │ │
-│  └──────────────────────────────────────┘ │
-├────────────────────────────────────────────┤
-│  合計 10 件のルールが保存されています       │
+│  (ルール一覧テーブル)                      │
 └────────────────────────────────────────────┘
 ```
 
@@ -267,10 +225,9 @@ class InvalidImportDataError extends Error {
 
 | 要素 | 種類 | 説明 |
 |-----|------|-----|
-| エクスポートボタン | button | 全ルールをJSON形式でダウンロード |
-| インポートボタン | button | JSONファイル選択ダイアログを開く |
+| インポートボタン | button.import-button | JSONファイル選択ダイアログを開く |
 | ファイル入力 | input[type=file] | 非表示、accept=".json" |
-| 成功メッセージ | div.success-message | 緑背景、インポート/エクスポート成功時表示 |
+| 成功メッセージ | div.success-message | 緑背景、インポート成功時表示 |
 | エラーメッセージ | div.error-message | 赤背景、エラー発生時表示 |
 
 ### 6.3 状態管理
@@ -283,21 +240,62 @@ const fileInputRef = React.useRef<HTMLInputElement>(null);
 
 ### 6.4 イベントハンドラ
 
-#### handleExport()
-1. エラー/成功メッセージをクリア
-2. ExportRulesToJsonUseCaseを実行してJSON文字列取得
-3. Blobオブジェクト作成（type: application/json）
-4. URLオブジェクト作成、ダウンロードリンク生成
-5. ファイル名設定: `rewrite-rules-${timestamp}.json`
-6. リンククリックでダウンロード実行
-7. クリーンアップ（link削除、URL解放）
-8. 成功メッセージ表示
-
 #### handleImportClick()
+
+```typescript
+const handleImportClick = () => {
+  setError(null);
+  setSuccessMessage(null);
+  if (fileInputRef.current) {
+    fileInputRef.current.click();
+  }
+};
+```
+
+**処理ステップ:**
 1. エラー/成功メッセージをクリア
 2. ファイル入力要素をプログラマティックにクリック
 
 #### handleFileChange(event)
+
+```typescript
+const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (!file) {
+    return;
+  }
+
+  try {
+    setError(null);
+    setSuccessMessage(null);
+    setLoading(true);
+
+    const fileContent = await file.text();
+    const importUseCase = container.resolve(ImportRulesFromJsonUseCase);
+    await importUseCase.execute(fileContent);
+
+    const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+    const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
+    const loadedRules = await getAllRulesUseCase.execute();
+    setRules(loadedRules);
+
+    setSuccessMessage('ルールをインポートしました');
+  } catch (err) {
+    if (err instanceof InvalidImportDataError) {
+      setError('インポートエラー: ' + err.message);
+    } else {
+      setError('インポートに失敗しました: ' + (err instanceof Error ? err.message : String(err)));
+    }
+  } finally {
+    setLoading(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }
+};
+```
+
+**処理ステップ:**
 1. ファイルが選択されているか確認
 2. エラー/成功メッセージをクリア、ローディング開始
 3. file.text()でファイル内容を読み込み
@@ -309,21 +307,7 @@ const fileInputRef = React.useRef<HTMLInputElement>(null);
 
 ## 7. シーケンス設計
 
-### 7.1 エクスポート処理
-
-```
-User → RulesApp: エクスポートボタンクリック
-RulesApp → ExportRulesToJsonUseCase: execute()
-ExportRulesToJsonUseCase → IRewriteRuleRepository: getAll()
-IRewriteRuleRepository → ExportRulesToJsonUseCase: RewriteRules
-ExportRulesToJsonUseCase → ExportRulesToJsonUseCase: ルール変換（ID除外）
-ExportRulesToJsonUseCase → ExportRulesToJsonUseCase: JSON文字列生成
-ExportRulesToJsonUseCase → RulesApp: JSON文字列
-RulesApp → Browser: Blob作成、ダウンロード実行
-RulesApp → User: 成功メッセージ表示
-```
-
-### 7.2 インポート処理（正常系）
+### 7.1 インポート処理（正常系）
 
 ```
 User → RulesApp: インポートボタンクリック
@@ -343,7 +327,7 @@ GetAllRewriteRulesUseCase → RulesApp: RewriteRule[]
 RulesApp → User: ルール一覧更新、成功メッセージ表示
 ```
 
-### 7.3 インポート処理（異常系）
+### 7.2 インポート処理（異常系）
 
 ```
 User → RulesApp: インポートボタンクリック、ファイル選択
@@ -387,28 +371,10 @@ try {
 ### 9.1 テスト戦略
 
 - **単体テスト**: Vitest
-- **テストカバレッジ**: 各Use Caseのメソッド単位
+- **テストカバレッジ**: ImportRulesFromJsonUseCaseの全メソッド
 - **モック**: IRewriteRuleRepositoryをモック化
 
-### 9.2 ExportRulesToJsonUseCase テストケース
-
-| テストケース | 入力 | 期待結果 |
-|-------------|------|---------|
-| 空のルールリスト | rules=[] | version="1.0", exportDate存在, rules=[] |
-| 単一ルール | rules=[1件] | 正しくJSON変換、IDなし |
-| 複数ルール | rules=[3件] | 全ルールがJSON配列に含まれる |
-| 正規表現ルール | isRegex=true | isRegex=trueで出力 |
-| 無効ルール | isActive=false | isActive=falseで出力 |
-
-**検証項目:**
-- JSON.parseで再パース可能
-- versionが"1.0"
-- exportDateがISO 8601形式
-- rulesが配列
-- 各ルールにidフィールドが含まれない
-- 各フィールドが元のルールと一致
-
-### 9.3 ImportRulesFromJsonUseCase テストケース
+### 9.2 テストケース
 
 #### 正常系
 
@@ -462,13 +428,10 @@ try {
 - エラーメッセージが期待値と一致
 - repository.createが呼び出されないこと
 
-### 9.4 テストファイル構成
+### 9.3 テストファイル構成
 
 ```
 tests/unit/application/usecases/rule/
-├── ExportRulesToJsonUseCase/
-│   └── execute/
-│       └── normal-cases.test.ts (5テスト)
 └── ImportRulesFromJsonUseCase/
     └── execute/
         ├── normal-cases.test.ts (4テスト)
@@ -478,7 +441,7 @@ tests/unit/application/usecases/rule/
             └── invalid-types.test.ts (5テスト)
 ```
 
-**テスト総数**: 27テストケース
+**テスト総数**: 22テストケース
 
 ## 10. 依存関係管理
 
@@ -487,10 +450,6 @@ tests/unit/application/usecases/rule/
 ```typescript
 // src/infrastructure/di/container.ts
 
-// Use Cases登録
-container.register(ExportRulesToJsonUseCase, {
-  useClass: ExportRulesToJsonUseCase
-});
 container.register(ImportRulesFromJsonUseCase, {
   useClass: ImportRulesFromJsonUseCase
 });
@@ -500,8 +459,8 @@ container.register(ImportRulesFromJsonUseCase, {
 
 ```typescript
 // UI層での使用例
-const exportUseCase = container.resolve(ExportRulesToJsonUseCase);
 const importUseCase = container.resolve(ImportRulesFromJsonUseCase);
+await importUseCase.execute(jsonString);
 ```
 
 ## 11. マイグレーション・互換性
@@ -527,49 +486,38 @@ const importUseCase = container.resolve(ImportRulesFromJsonUseCase);
 
 ## 13. パフォーマンス最適化
 
-### 13.1 エクスポート
-- ルール数が多い場合でもブロッキングしない（非同期処理）
-- JSON.stringifyは十分高速（1000件で1秒以内）
-
-### 13.2 インポート
+### 13.1 インポート処理
 - ルールのバリデーションは逐次実行（最初のエラーで中断）
 - repository.createは個別に実行（トランザクション非対応のため）
+- 非同期処理でUIブロッキングを防止
 
-## 14. 運用考慮事項
+## 14. 今後の拡張性
 
-### 14.1 ログ出力
-- エラー発生時、コンソールにスタックトレース出力（ブラウザ標準）
-
-### 14.2 モニタリング
-- ユーザーからのフィードバック（エラーメッセージ）で問題検出
-
-## 15. 今後の拡張性
-
-### 15.1 想定される拡張
-- **選択的エクスポート**: 特定ルールのみエクスポート
+### 14.1 想定される拡張
 - **マージインポート**: 既存ルールとの重複チェック、スキップ/上書きオプション
-- **フォーマット変更**: version 2.0でメタデータ追加
-- **クラウド同期**: リモートストレージへのバックアップ
+- **バッチインポート**: 大量ルールの効率的な一括登録
+- **進捗表示**: 大量ルールインポート時のプログレスバー
 
-### 15.2 アーキテクチャ上の拡張ポイント
-- Use Caseにオプションパラメータ追加
-- ExportedRewriteRules型の拡張（後方互換性維持）
+### 14.2 アーキテクチャ上の拡張ポイント
+- Use Caseにオプションパラメータ追加（例: マージモード）
 - バリデーションルールの抽象化（Strategy パターン）
 
-## 16. 実装完了チェックリスト
+## 15. 実装完了チェックリスト
 
-- [x] ExportRulesToJsonUseCase実装
 - [x] ImportRulesFromJsonUseCase実装
 - [x] InvalidImportDataError実装
 - [x] ExportedRewriteRules型定義
 - [x] DIコンテナ登録
-- [x] RulesApp UIコンポーネント更新
+- [x] RulesApp UIコンポーネント更新（インポートボタン）
 - [x] CSSスタイル追加
-- [x] 単体テスト実装（27テストケース）
+- [x] 単体テスト実装（22テストケース）
 - [x] TypeScriptコンパイル確認
 - [x] ESLint確認
 - [x] 全テスト成功確認
-- [x] Git commit & push
+
+## 関連ドキュメント
+
+- [JSON エクスポート機能 基本設計書](./json-export-feature.md)
 
 ---
 
