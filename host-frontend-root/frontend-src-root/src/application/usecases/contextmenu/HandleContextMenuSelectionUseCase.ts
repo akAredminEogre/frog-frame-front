@@ -7,8 +7,9 @@ import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPage
 /**
  * コンテキストメニューからのDOM要素置換処理を扱うユースケース
  */
+export
 @injectable()
-export class HandleContextMenuReplaceDomElement {
+class HandleContextMenuReplaceDomElement {
   constructor(
     @inject('IChromeTabsService') private readonly tabsService: IChromeTabsService,
     @inject('ISelectedPageTextRepository') private readonly selectedPageTextRepository: ISelectedPageTextRepository,

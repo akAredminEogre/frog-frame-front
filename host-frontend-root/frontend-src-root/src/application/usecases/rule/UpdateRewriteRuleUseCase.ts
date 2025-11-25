@@ -7,8 +7,9 @@ import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { Tab } from 'src/domain/value-objects/Tab';
 import { Tabs } from 'src/domain/value-objects/Tabs';
 
+export
 @injectable()
-export class UpdateRewriteRuleUseCase {
+class UpdateRewriteRuleUseCase {
   constructor(
     @inject('IRewriteRuleRepository')
     private readonly rewriteRuleRepository: IRewriteRuleRepository,

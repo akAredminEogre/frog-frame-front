@@ -2,8 +2,9 @@ import { inject,injectable } from 'tsyringe';
 
 import { IWindowService } from 'src/application/ports/IWindowService';
 
+export
 @injectable()
-export class CloseCurrentWindowUseCase {
+class CloseCurrentWindowUseCase {
   constructor(
     @inject('IWindowService')
     private readonly windowService: IWindowService
