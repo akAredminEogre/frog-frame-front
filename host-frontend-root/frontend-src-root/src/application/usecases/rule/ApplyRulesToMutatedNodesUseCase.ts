@@ -1,5 +1,6 @@
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
+import { TabUrl } from 'src/domain/value-objects/TabUrl';
 import { WindowLocationService } from 'src/infrastructure/windows/WindowLocationService';
 
 /**
@@ -24,12 +25,12 @@ export class ApplyRulesToMutatedNodesUseCase {
     nodes: Element[],
     isNodeInDocument: (node: Element) => boolean
   ): Promise<void> {
-    const currentUrl = this.windowLocationService.getCurrentUrl();
+    const tabUrl = new TabUrl(this.windowLocationService.getCurrentUrl());
     const applySavedRulesUseCase = new ApplySavedRulesOnPageLoadUseCase(this.repository);
 
     for (const node of nodes) {
       if (isNodeInDocument(node)) {
-        await applySavedRulesUseCase.applyAllRules(node, currentUrl);
+        await applySavedRulesUseCase.applyAllRules(node, tabUrl.value);
       }
     }
   }
