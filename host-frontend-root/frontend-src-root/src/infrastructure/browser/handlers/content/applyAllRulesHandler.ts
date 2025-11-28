@@ -1,9 +1,6 @@
 // cspell:ignore usecases
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
 import { contentContainer } from 'src/infrastructure/di/contentContainer';
-
-type ApplyAllRulesMessage = { type: 'applyAllRules'; tabUrl: string };
 
 /**
  * applyAllRules message handler for content script
@@ -15,13 +12,11 @@ type ApplyAllRulesMessage = { type: 'applyAllRules'; tabUrl: string };
  * 3. router/content/messageRouter.ts の createContentMessageRouter が message を適切な handler に振り分ける
  * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
  */
-export const applyAllRulesHandler = async (msg: ApplyAllRulesMessage) => {
-  // Content Script用: DI containerからリポジトリを解決（ChromeRuntimeRewriteRuleRepositoryが注入される）
-  const rewriteRuleRepository = contentContainer.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
-  const applySavedRulesOnPageLoadUseCase = new ApplySavedRulesOnPageLoadUseCase(
-    rewriteRuleRepository
-  );
+export const applyAllRulesHandler = async () => {
+  // Content Script用: DI containerからUseCaseを解決
+  // IRewriteRuleRepository と ICurrentUrlService が自動的に注入される
+  const applySavedRulesOnPageLoadUseCase = contentContainer.resolve(ApplySavedRulesOnPageLoadUseCase);
 
-  await applySavedRulesOnPageLoadUseCase.applyAllRules(document.body, msg.tabUrl);
+  await applySavedRulesOnPageLoadUseCase.exec(document.body);
   return { success: true };
 };

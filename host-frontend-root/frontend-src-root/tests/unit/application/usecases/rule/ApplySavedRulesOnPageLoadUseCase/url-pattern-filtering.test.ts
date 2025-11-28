@@ -1,6 +1,8 @@
+import { createMockCurrentUrlService } from 'tests/unit/application/ports/ICurrentUrlService/createMockCurrentUrlService';
 import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import type { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
@@ -9,11 +11,13 @@ import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 describe('ApplySavedRulesOnPageLoadUseCase - URL Pattern Filtering', () => {
   let useCase: ApplySavedRulesOnPageLoadUseCase;
   let mockRepository: IRewriteRuleRepository;
+  let mockCurrentUrlService: ICurrentUrlService;
   let container: HTMLElement;
 
   beforeEach(() => {
     mockRepository = createMockRewriteRuleRepository();
-    useCase = new ApplySavedRulesOnPageLoadUseCase(mockRepository);
+    mockCurrentUrlService = createMockCurrentUrlService();
+    useCase = new ApplySavedRulesOnPageLoadUseCase(mockRepository, mockCurrentUrlService);
     container = document.createElement('div');
     document.body.appendChild(container);
   });
@@ -59,8 +63,9 @@ describe('ApplySavedRulesOnPageLoadUseCase - URL Pattern Filtering', () => {
       const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', input.ruleUrlPattern);
       const rules = new RewriteRules([rule]);
       vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
+      vi.mocked(mockCurrentUrlService.getCurrentUrl).mockReturnValue(input.currentUrl);
 
-      await useCase.applyAllRules(container, input.currentUrl);
+      await useCase.exec(container);
 
       expect(container.innerHTML).toBe(expected.html);
     });
