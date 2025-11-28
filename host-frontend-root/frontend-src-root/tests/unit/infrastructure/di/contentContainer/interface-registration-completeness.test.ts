@@ -34,6 +34,10 @@ describe('Content DI Container - 完全自動化インターフェース登録�
     {
       interface: 'IRewriteRuleRepository',
       implementationName: 'ChromeRuntimeRewriteRuleRepository'
+    },
+    {
+      interface: 'ICurrentTabService',
+      implementationName: 'ChromeCurrentTabService'
     }
   ];
 
