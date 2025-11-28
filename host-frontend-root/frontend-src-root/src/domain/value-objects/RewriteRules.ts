@@ -1,3 +1,4 @@
+import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 /**
@@ -31,6 +32,21 @@ export class RewriteRules {
    */
   toArray(): RewriteRule[] {
     return Array.from(this.rules.values());
+  }
+
+  /**
+   * URLにマッチするルールをDomDifferで適用する
+   * @param currentUrl 現在のURL
+   * @param targetElement 適用対象のDOM要素
+   */
+  applyRulesWithDomDiffer(currentUrl: string, targetElement: Element): void {
+    this.toArray().forEach((rule) => {
+      if (!rule.matchesUrl(currentUrl)) {
+        return;
+      }
+      const domDiffer = new DomDiffer(targetElement, rule);
+      domDiffer.applyRule();
+    });
   }
 
 }

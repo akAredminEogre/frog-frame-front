@@ -43,7 +43,8 @@ describe('ApplyRulesOnPageLoadUseCase - DomDiffer Integration', () => {
       button.addEventListener('click', clickHandler);
 
       // Setup mock repository with replacement rule
-      const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', '');
+      // urlPattern matches the mock current URL
+      const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', 'https://example.com');
       const rules = new RewriteRules([rule]);
       vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
       vi.mocked(mockCurrentUrlService.getCurrentUrl).mockReturnValue('https://example.com');
@@ -70,7 +71,8 @@ describe('ApplyRulesOnPageLoadUseCase - DomDiffer Integration', () => {
       input.value = 'important data';
 
       // Setup mock repository with replacement rule
-      const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', '');
+      // urlPattern matches the mock current URL
+      const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', 'https://example.com');
       const rules = new RewriteRules([rule]);
       vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
       vi.mocked(mockCurrentUrlService.getCurrentUrl).mockReturnValue('https://example.com');
