@@ -124,6 +124,40 @@ export default [js.configs.recommended, {
     ],
   },
 }, {
+  // Background handlers: prohibit contentContainer import
+  // Background script should use the main container with DexieRewriteRuleRepository
+  files: ['**/handlers/background/**/*.{ts,tsx}'],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['**/contentContainer', '**/contentContainer.ts'],
+            message: 'Background handlers must use "container" (not "contentContainer"). contentContainer is for Content Script only.',
+          },
+        ],
+      },
+    ],
+  },
+}, {
+  // Content handlers: prohibit main container import
+  // Content script should use contentContainer with ChromeRuntimeRewriteRuleRepository
+  files: ['**/handlers/content/**/*.{ts,tsx}'],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['**/di/container', '**/di/container.ts'],
+            message: 'Content handlers must use "contentContainer" (not "container"). container is for Background Script only.',
+          },
+        ],
+      },
+    ],
+  },
+}, {
   ignores: [
     'dist/**',
     'node_modules/**',
