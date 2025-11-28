@@ -1,11 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { Tab } from 'src/domain/value-objects/Tab';
 import { observerOnMutate } from 'src/infrastructure/browser/content/observer/onMutate';
 
-// Mock the ApplyRulesToMutatedNodesUseCase
-vi.mock('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase', () => ({
-  ApplyRulesToMutatedNodesUseCase: vi.fn().mockImplementation(() => ({
-    applyRules: vi.fn().mockResolvedValue(undefined),
+// Mock the ApplySavedRulesOnPageLoadUseCase
+vi.mock('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase', () => ({
+  ApplySavedRulesOnPageLoadUseCase: vi.fn().mockImplementation(() => ({
+    applyAllRules: vi.fn().mockResolvedValue(undefined),
   })),
 }));
 
@@ -16,7 +17,7 @@ vi.mock('src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository
 
 // Mock the ChromeCurrentTabService
 vi.mock('src/infrastructure/browser/tabs/ChromeCurrentTabService', () => ({
-  ChromeCurrentTabService: vi.fn().mockImplementation(() => ({})),
+  ChromeCurrentTabService: vi.fn(),
 }));
 
 // Mock the CollectAddedNodesUseCase - use actual implementation for integration testing
@@ -48,13 +49,20 @@ describe('observerOnMutate - 無限ループ防止', () => {
   let mockDisconnect: ReturnType<typeof vi.fn>;
   let capturedCallback: ((mutations: MutationRecord[]) => void) | null;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
 
     mockObserve = vi.fn();
     mockDisconnect = vi.fn();
     capturedCallback = null;
+
+    // Setup ChromeCurrentTabService mock
+    const { ChromeCurrentTabService } = await import('src/infrastructure/browser/tabs/ChromeCurrentTabService');
+    vi.mocked(ChromeCurrentTabService).mockImplementation(() => ({
+      getCurrentTab: vi.fn().mockResolvedValue(new Tab(1, 'https://example.com')),
+      getTabById: vi.fn(),
+    }) as any);
 
     vi.stubGlobal('MutationObserver', vi.fn().mockImplementation((callback) => {
       capturedCallback = callback;
@@ -73,15 +81,15 @@ describe('observerOnMutate - 無限ループ防止', () => {
 
   it('should ignore mutations that occur during rule application', async () => {
     // Arrange
-    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
+    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
 
-    let applyRulesCallCount = 0;
-    const mockApplyRules = vi.fn().mockImplementation(async () => {
-      applyRulesCallCount++;
+    let applyAllRulesCallCount = 0;
+    const mockApplyAllRules = vi.fn().mockImplementation(async () => {
+      applyAllRulesCallCount++;
 
       // Simulate the extension modifying DOM during rule application
       // This would trigger another mutation
-      if (applyRulesCallCount === 1) {
+      if (applyAllRulesCallCount === 1) {
         const nestedElement = document.createElement('span');
         document.body.appendChild(nestedElement);
 
@@ -96,8 +104,8 @@ describe('observerOnMutate - 無限ループ防止', () => {
       }
     });
 
-    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
-      applyRules: mockApplyRules,
+    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
+      applyAllRules: mockApplyAllRules,
     }) as any);
 
     observerOnMutate();
@@ -118,9 +126,9 @@ describe('observerOnMutate - 無限ループ防止', () => {
     // Wait for any additional debounces
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - applyRules should only be called once for the initial element
+    // Assert - applyAllRules should only be called once for the initial element
     // The nested mutation should be ignored because isApplyingRules is true
-    expect(mockApplyRules).toHaveBeenCalledTimes(1);
+    expect(mockApplyAllRules).toHaveBeenCalledTimes(1);
 
     // Cleanup
     document.body.removeChild(initialElement);
@@ -128,10 +136,10 @@ describe('observerOnMutate - 無限ループ防止', () => {
 
   it('should process new mutations after rule application completes', async () => {
     // Arrange
-    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
-    const mockApplyRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
-      applyRules: mockApplyRules,
+    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
+    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
+      applyAllRules: mockApplyAllRules,
     }) as any);
 
     observerOnMutate();
@@ -148,7 +156,7 @@ describe('observerOnMutate - 無限ループ防止', () => {
     await vi.advanceTimersByTimeAsync(150);
 
     // Reset mock to track new calls
-    mockApplyRules.mockClear();
+    mockApplyAllRules.mockClear();
 
     // Act - second mutation after first completes
     const element2 = document.createElement('span');
@@ -162,10 +170,10 @@ describe('observerOnMutate - 無限ループ防止', () => {
     await vi.advanceTimersByTimeAsync(150);
 
     // Assert - second mutation should be processed normally
-    expect(mockApplyRules).toHaveBeenCalledTimes(1);
-    expect(mockApplyRules).toHaveBeenCalledWith(
-      [element2],
-      expect.any(Function)
+    expect(mockApplyAllRules).toHaveBeenCalledTimes(1);
+    expect(mockApplyAllRules).toHaveBeenCalledWith(
+      element2,
+      'https://example.com'
     );
 
     // Cleanup
