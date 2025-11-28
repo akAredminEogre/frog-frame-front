@@ -2,10 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { observerOnMutate } from 'src/infrastructure/browser/content/observer/onMutate';
 
-// Mock the ApplySavedRulesOnPageLoadUseCase
-vi.mock('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase', () => ({
-  ApplySavedRulesOnPageLoadUseCase: vi.fn().mockImplementation(() => ({
-    applyAllRules: vi.fn().mockResolvedValue(undefined),
+// Mock the ApplyRulesToMutatedNodesUseCase
+vi.mock('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase', () => ({
+  ApplyRulesToMutatedNodesUseCase: vi.fn().mockImplementation(() => ({
+    applyRules: vi.fn().mockResolvedValue(undefined),
   })),
 }));
 
@@ -81,10 +81,10 @@ describe('observerOnMutate - 正常系', () => {
 
   it('should apply rules to added Element nodes', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
-    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
+    const mockApplyRules = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
+      applyRules: mockApplyRules,
     }) as any);
 
     observerOnMutate();
@@ -103,7 +103,11 @@ describe('observerOnMutate - 正常系', () => {
     await vi.advanceTimersByTimeAsync(150);
 
     // Assert
-    expect(mockApplyAllRules).toHaveBeenCalledWith(addedElement, 'https://example.com');
+    expect(mockApplyRules).toHaveBeenCalledWith(
+      [addedElement],
+      'https://example.com',
+      expect.any(Function)
+    );
 
     // Cleanup
     document.body.removeChild(addedElement);
@@ -111,10 +115,10 @@ describe('observerOnMutate - 正常系', () => {
 
   it('should ignore non-Element nodes (text nodes)', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
-    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
+    const mockApplyRules = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
+      applyRules: mockApplyRules,
     }) as any);
 
     observerOnMutate();
@@ -131,16 +135,16 @@ describe('observerOnMutate - 正常系', () => {
     // Wait for debounce
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - applyAllRules should not be called for text nodes
-    expect(mockApplyAllRules).not.toHaveBeenCalled();
+    // Assert - applyRules should not be called for text nodes (empty array)
+    expect(mockApplyRules).not.toHaveBeenCalled();
   });
 
   it('should debounce multiple rapid mutations', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
-    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
+    const mockApplyRules = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
+      applyRules: mockApplyRules,
     }) as any);
 
     observerOnMutate();
@@ -165,29 +169,38 @@ describe('observerOnMutate - 正常系', () => {
     // Wait for debounce to complete
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - both elements should be processed together after debounce
-    expect(mockApplyAllRules).toHaveBeenCalledTimes(2);
+    // Assert - both elements should be processed together in one call after debounce
+    expect(mockApplyRules).toHaveBeenCalledTimes(1);
+    expect(mockApplyRules).toHaveBeenCalledWith(
+      expect.arrayContaining([element1, element2]),
+      'https://example.com',
+      expect.any(Function)
+    );
 
     // Cleanup
     document.body.removeChild(element1);
     document.body.removeChild(element2);
   });
 
-  it('should skip nodes that are no longer in the document', async () => {
+  it('should pass isNodeInDocument function to use case', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
-    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
+    let capturedIsNodeInDocument: ((node: Element) => boolean) | null = null;
+    const mockApplyRules = vi.fn().mockImplementation((_nodes, _url, isNodeInDocument) => {
+      capturedIsNodeInDocument = isNodeInDocument;
+      return Promise.resolve();
+    });
+    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
+      applyRules: mockApplyRules,
     }) as any);
 
     observerOnMutate();
 
-    const removedElement = document.createElement('div');
-    // Don't append to document - simulate an element that was added then removed
+    const addedElement = document.createElement('div');
+    document.body.appendChild(addedElement);
 
     const mockMutation: Partial<MutationRecord> = {
-      addedNodes: [removedElement] as unknown as NodeList,
+      addedNodes: [addedElement] as unknown as NodeList,
     };
 
     // Act
@@ -196,7 +209,14 @@ describe('observerOnMutate - 正常系', () => {
     // Wait for debounce
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - applyAllRules should not be called for removed elements
-    expect(mockApplyAllRules).not.toHaveBeenCalled();
+    // Assert - isNodeInDocument function should correctly check document.body.contains
+    expect(capturedIsNodeInDocument).not.toBeNull();
+    expect(capturedIsNodeInDocument!(addedElement)).toBe(true);
+
+    const removedElement = document.createElement('span');
+    expect(capturedIsNodeInDocument!(removedElement)).toBe(false);
+
+    // Cleanup
+    document.body.removeChild(addedElement);
   });
 });
