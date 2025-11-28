@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { DomMutationObserverService } from 'src/infrastructure/browser/content/mutation/DomMutationObserverService';
+import { observerOnMutate } from 'src/infrastructure/browser/content/observer/onMutate';
 
 // Mock the ApplySavedRulesOnPageLoadUseCase
 vi.mock('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase', () => ({
@@ -14,14 +14,23 @@ vi.mock('src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository
   ChromeRuntimeRewriteRuleRepository: vi.fn().mockImplementation(() => ({})),
 }));
 
+// Mock the WindowLocationService
+vi.mock('src/infrastructure/windows/WindowLocationService', () => ({
+  WindowLocationService: class {
+    getCurrentUrl() {
+      return 'https://example.com';
+    }
+  },
+}));
+
 /**
- * DomMutationObserverService mutation handling - 正常系テスト
+ * observerOnMutate - 正常系テスト
  *
- * 1. DOMにノードが追加された時、ルールが適用される
- * 2. ルール適用中は無限ループを防ぐため新しいmutationは無視される
+ * 1. observerOnMutateを呼び出すとMutationObserverが登録される
+ * 2. DOM更新を検知してrewrite rulesを適用する
  * 3. デバウンス処理により複数のmutationがまとめて処理される
  */
-describe('DomMutationObserverService handleMutations - 正常系', () => {
+describe('observerOnMutate - 正常系', () => {
   let mockObserve: ReturnType<typeof vi.fn>;
   let mockDisconnect: ReturnType<typeof vi.fn>;
   let capturedCallback: ((mutations: MutationRecord[]) => void) | null;
@@ -49,16 +58,28 @@ describe('DomMutationObserverService handleMutations - 正常系', () => {
     vi.useRealTimers();
   });
 
-  it('should capture MutationObserver callback during construction', () => {
-    // Arrange & Act
-    new DomMutationObserverService('https://example.com');
+  it('should register MutationObserver when called', () => {
+    // Act
+    observerOnMutate();
+
+    // Assert
+    expect(mockObserve).toHaveBeenCalledTimes(1);
+    expect(mockObserve).toHaveBeenCalledWith(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  });
+
+  it('should capture MutationObserver callback', () => {
+    // Act
+    observerOnMutate();
 
     // Assert
     expect(capturedCallback).not.toBeNull();
     expect(typeof capturedCallback).toBe('function');
   });
 
-  it('should collect added Element nodes from mutations', async () => {
+  it('should apply rules to added Element nodes', async () => {
     // Arrange
     const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
     const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
@@ -66,8 +87,7 @@ describe('DomMutationObserverService handleMutations - 正常系', () => {
       applyAllRules: mockApplyAllRules,
     }) as any);
 
-    const service = new DomMutationObserverService('https://example.com');
-    service.startObserving();
+    observerOnMutate();
 
     const addedElement = document.createElement('div');
     document.body.appendChild(addedElement);
@@ -97,8 +117,7 @@ describe('DomMutationObserverService handleMutations - 正常系', () => {
       applyAllRules: mockApplyAllRules,
     }) as any);
 
-    const service = new DomMutationObserverService('https://example.com');
-    service.startObserving();
+    observerOnMutate();
 
     const textNode = document.createTextNode('test text');
 
@@ -124,8 +143,7 @@ describe('DomMutationObserverService handleMutations - 正常系', () => {
       applyAllRules: mockApplyAllRules,
     }) as any);
 
-    const service = new DomMutationObserverService('https://example.com');
-    service.startObserving();
+    observerOnMutate();
 
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
@@ -163,8 +181,7 @@ describe('DomMutationObserverService handleMutations - 正常系', () => {
       applyAllRules: mockApplyAllRules,
     }) as any);
 
-    const service = new DomMutationObserverService('https://example.com');
-    service.startObserving();
+    observerOnMutate();
 
     const removedElement = document.createElement('div');
     // Don't append to document - simulate an element that was added then removed
