@@ -5,6 +5,8 @@ import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 
 type DebouncedFunction = ReturnType<typeof debounce>;
 
+const INITIAL_DEBOUNCE_DELAY_MS = 0;
+
 /**
  * デバウンスタイマーの実装
  * npmパッケージ'debounce'を使用してタイマー状態を管理する
@@ -16,7 +18,7 @@ export class DebounceTimer implements IDebounceTimer {
 
   constructor() {
     this.pendingCallback = () => {};
-    this.debouncedExecutor = debounce(() => this.pendingCallback(), 0);
+    this.debouncedExecutor = debounce(() => this.pendingCallback(), INITIAL_DEBOUNCE_DELAY_MS);
   }
 
   schedule(callback: () => void, delayMs: number): void {

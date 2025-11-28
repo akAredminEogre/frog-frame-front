@@ -4,7 +4,8 @@ import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
-import { PendingNodes } from 'src/domain/value-objects/PendingNodes/PendingNodes';
+import { Elements } from 'src/domain/value-objects/Elements/Elements';
+import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
 const DEBOUNCE_DELAY_MS = 100;
 
@@ -15,7 +16,7 @@ const DEBOUNCE_DELAY_MS = 100;
 export
 @injectable()
 class HandleMutationsUseCase {
-  private pendingNodes: PendingNodes;
+  private elements: Elements;
   private isApplyingRules: boolean;
 
   constructor(
@@ -23,7 +24,7 @@ class HandleMutationsUseCase {
     @inject('ICurrentTabService') private currentTabService: ICurrentTabService,
     @inject('IDebounceTimer') private debounceTimer: IDebounceTimer
   ) {
-    this.pendingNodes = new PendingNodes();
+    this.elements = new Elements();
     this.isApplyingRules = false;
   }
 
@@ -36,18 +37,19 @@ class HandleMutationsUseCase {
       return;
     }
 
-    this.pendingNodes.collectFromMutations(mutations);
+    const mutationRecords = new MutationRecords(mutations);
+    this.elements.collectFromMutations(mutationRecords);
     this.debounceTimer.schedule(() => {
-      this.applyRulesToPendingNodes();
+      this.applyRulesToElements();
     }, DEBOUNCE_DELAY_MS);
   }
 
-  private async applyRulesToPendingNodes(): Promise<void> {
-    if (!this.pendingNodes.hasNodes()) {
+  private async applyRulesToElements(): Promise<void> {
+    if (!this.elements.hasElements()) {
       return;
     }
 
-    const nodesToProcess = this.pendingNodes.extractAll();
+    const elementsToProcess = this.elements.extractAll();
 
     this.isApplyingRules = true;
 
@@ -55,9 +57,9 @@ class HandleMutationsUseCase {
       const currentTab = await this.currentTabService.getCurrentTab();
       const applySavedRulesUseCase = new ApplySavedRulesOnPageLoadUseCase(this.repository);
 
-      for (const node of nodesToProcess) {
-        if (document.body.contains(node)) {
-          await applySavedRulesUseCase.applyAllRules(node, currentTab.getTabUrl().value);
+      for (const element of elementsToProcess) {
+        if (document.body.contains(element)) {
+          await applySavedRulesUseCase.applyAllRules(element, currentTab.getTabUrl().value);
         }
       }
     } finally {
