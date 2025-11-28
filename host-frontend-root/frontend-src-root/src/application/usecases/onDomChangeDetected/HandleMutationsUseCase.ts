@@ -1,27 +1,27 @@
+import { inject, injectable } from 'tsyringe';
+
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { CollectAddedNodesUseCase } from 'src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase';
 import { ScheduleRuleApplicationUseCase } from 'src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
 
-type RepositoryFactory = () => IRewriteRuleRepository;
-type CurrentTabServiceFactory = () => ICurrentTabService;
-
 /**
  * MutationObserverからのmutationを処理するユースケース
  * ルール適用中でなければノードを収集し、ルール適用をスケジュールする
  */
-export class HandleMutationsUseCase {
-  private repositoryFactory: RepositoryFactory;
-  private currentTabServiceFactory: CurrentTabServiceFactory;
+export
+@injectable()
+class HandleMutationsUseCase {
   private pendingNodes: Set<Element>;
   private isApplyingRules: boolean;
   private collectAddedNodesUseCase: CollectAddedNodesUseCase;
   private scheduleRuleApplicationUseCase: ScheduleRuleApplicationUseCase;
 
-  constructor(repositoryFactory: RepositoryFactory, currentTabServiceFactory: CurrentTabServiceFactory) {
-    this.repositoryFactory = repositoryFactory;
-    this.currentTabServiceFactory = currentTabServiceFactory;
+  constructor(
+    @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
+    @inject('ICurrentTabService') private currentTabService: ICurrentTabService
+  ) {
     this.pendingNodes = new Set();
     this.isApplyingRules = false;
     this.collectAddedNodesUseCase = new CollectAddedNodesUseCase(this.pendingNodes);
@@ -54,10 +54,8 @@ export class HandleMutationsUseCase {
     this.isApplyingRules = true;
 
     try {
-      const repository = this.repositoryFactory();
-      const currentTabService = this.currentTabServiceFactory();
-      const currentTab = await currentTabService.getCurrentTab();
-      const applySavedRulesUseCase = new ApplySavedRulesOnPageLoadUseCase(repository);
+      const currentTab = await this.currentTabService.getCurrentTab();
+      const applySavedRulesUseCase = new ApplySavedRulesOnPageLoadUseCase(this.repository);
 
       for (const node of nodesToProcess) {
         if (document.body.contains(node)) {

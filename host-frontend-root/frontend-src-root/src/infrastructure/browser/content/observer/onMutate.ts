@@ -1,6 +1,5 @@
 import { HandleMutationsUseCase } from 'src/application/usecases/onDomChangeDetected/HandleMutationsUseCase';
-import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
-import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
+import { contentScriptContainer } from 'src/infrastructure/di/contentScriptContainer';
 
 /**
  * 呼び出し元: entrypoints/content.ts
@@ -9,10 +8,7 @@ import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeC
  * Lazy load等で遅れてくるDOM更新に対応する
  */
 export function observerOnMutate() {
-  const handleMutationsUseCase = new HandleMutationsUseCase(
-    () => new ChromeRuntimeRewriteRuleRepository(),
-    () => new ChromeCurrentTabService()
-  );
+  const handleMutationsUseCase = contentScriptContainer.resolve(HandleMutationsUseCase);
 
   const observer = new MutationObserver((mutations) => {
     handleMutationsUseCase.exec(mutations);

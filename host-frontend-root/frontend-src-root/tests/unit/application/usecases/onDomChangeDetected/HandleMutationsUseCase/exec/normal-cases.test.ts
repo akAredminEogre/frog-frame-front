@@ -18,8 +18,6 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
   let mockCurrentTabService: ICurrentTabService;
   let mockGetAll: ReturnType<typeof vi.fn>;
   let mockGetCurrentTab: ReturnType<typeof vi.fn>;
-  let repositoryFactory: () => IRewriteRuleRepository;
-  let currentTabServiceFactory: () => ICurrentTabService;
 
   beforeEach(() => {
     vi.useFakeTimers();
@@ -39,9 +37,6 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
       getCurrentTab: mockGetCurrentTab,
       getTabById: vi.fn(),
     } as ICurrentTabService;
-
-    repositoryFactory = () => mockRepository;
-    currentTabServiceFactory = () => mockCurrentTabService;
   });
 
   afterEach(() => {
@@ -51,7 +46,7 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
 
   it('should process mutations and schedule rule application', () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(repositoryFactory, currentTabServiceFactory);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
     const element = document.createElement('div');
     const mutation: Partial<MutationRecord> = {
       addedNodes: [element] as unknown as NodeList,
@@ -68,7 +63,7 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
 
   it('should handle empty mutations array', () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(repositoryFactory, currentTabServiceFactory);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
 
     // Act
     useCase.exec([]);
@@ -81,7 +76,7 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
 
   it('should ignore mutations while rules are being applied', async () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(repositoryFactory, currentTabServiceFactory);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
     const mutation1: Partial<MutationRecord> = {
@@ -118,7 +113,7 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
 
   it('should collect multiple nodes from mutations', () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(repositoryFactory, currentTabServiceFactory);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
     const mutation: Partial<MutationRecord> = {
@@ -135,7 +130,7 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
 
   it('should batch multiple exec calls within debounce window', () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(repositoryFactory, currentTabServiceFactory);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
     const mutation1: Partial<MutationRecord> = {
