@@ -20,12 +20,5 @@ contentContainer.register<IRewriteRuleRepository>('IRewriteRuleRepository', { us
 // (chrome.tabs API is not available in content scripts)
 contentContainer.register<ICurrentUrlService>('ICurrentUrlService', { useClass: WindowCurrentUrlService });
 
-// Register UseCase classes with explicit factory
-// Note: esbuild doesn't emit decorator metadata, so @inject() decorators don't work.
-// We use useFactory to explicitly resolve dependencies.
-contentContainer.register(ApplyRulesOnPageLoadUseCase, {
-  useFactory: (c) => new ApplyRulesOnPageLoadUseCase(
-    c.resolve<IRewriteRuleRepository>('IRewriteRuleRepository'),
-    c.resolve<ICurrentUrlService>('ICurrentUrlService')
-  )
-});
+// Register UseCase classes (required for container.resolve() to work)
+contentContainer.register(ApplyRulesOnPageLoadUseCase, { useClass: ApplyRulesOnPageLoadUseCase });
