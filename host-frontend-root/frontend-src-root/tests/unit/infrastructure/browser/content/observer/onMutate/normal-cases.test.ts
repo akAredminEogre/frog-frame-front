@@ -20,6 +20,12 @@ vi.mock('src/infrastructure/browser/tabs/ChromeCurrentTabService', () => ({
   ChromeCurrentTabService: vi.fn(),
 }));
 
+// Mock the DebounceTimer - use actual implementation for integration testing
+vi.mock('src/infrastructure/browser/timer/DebounceTimer', async () => {
+  const actual = await vi.importActual('src/infrastructure/browser/timer/DebounceTimer');
+  return actual;
+});
+
 // Mock the CollectAddedNodesUseCase - use actual implementation for integration testing
 vi.mock('src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase', async () => {
   const actual = await vi.importActual('src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase');

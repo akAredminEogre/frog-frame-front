@@ -1,80 +1,74 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { ScheduleRuleApplicationUseCase } from 'src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase';
 
 /**
  * ScheduleRuleApplicationUseCase.exec - 正常系テスト
  *
- * 1. デバウンス後にコールバックを呼び出す
- * 2. 連続した呼び出しをデバウンスする
- * 3. デバウンス中に新しい呼び出しがあれば前のタイマーをキャンセルする
+ * 1. デバウンスタイマーにコールバックをスケジュールする
+ * 2. 連続した呼び出しでも毎回スケジュールが行われる（タイマー側でデバウンス処理）
+ * 3. 正しい遅延時間でスケジュールされる
  */
 describe('ScheduleRuleApplicationUseCase.exec - 正常系', () => {
+  let mockDebounceTimer: IDebounceTimer;
+  let mockSchedule: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
-    vi.useFakeTimers();
+    vi.clearAllMocks();
+    mockSchedule = vi.fn();
+    mockDebounceTimer = {
+      schedule: mockSchedule,
+    };
   });
 
   afterEach(() => {
-    vi.useRealTimers();
+    vi.resetAllMocks();
   });
 
-  it('should call callback after debounce delay', async () => {
+  it('should schedule callback with debounce timer', () => {
     // Arrange
     const mockCallback = vi.fn().mockResolvedValue(undefined);
-    const useCase = new ScheduleRuleApplicationUseCase(mockCallback);
+    const useCase = new ScheduleRuleApplicationUseCase(mockDebounceTimer, mockCallback);
 
     // Act
     useCase.exec();
 
-    // Assert - callback should not be called immediately
-    expect(mockCallback).not.toHaveBeenCalled();
-
-    // Advance timer past debounce delay (100ms)
-    await vi.advanceTimersByTimeAsync(150);
-
-    // Assert - callback should be called after debounce
-    expect(mockCallback).toHaveBeenCalledTimes(1);
+    // Assert - schedule should be called with callback and delay
+    expect(mockSchedule).toHaveBeenCalledTimes(1);
+    expect(mockSchedule).toHaveBeenCalledWith(expect.any(Function), 100);
   });
 
-  it('should debounce multiple rapid calls', async () => {
+  it('should schedule on each exec call', () => {
     // Arrange
     const mockCallback = vi.fn().mockResolvedValue(undefined);
-    const useCase = new ScheduleRuleApplicationUseCase(mockCallback);
+    const useCase = new ScheduleRuleApplicationUseCase(mockDebounceTimer, mockCallback);
 
-    // Act - call multiple times rapidly
+    // Act - call multiple times
     useCase.exec();
-    await vi.advanceTimersByTimeAsync(50);
     useCase.exec();
-    await vi.advanceTimersByTimeAsync(50);
     useCase.exec();
 
-    // Advance timer past debounce delay
-    await vi.advanceTimersByTimeAsync(150);
-
-    // Assert - callback should only be called once
-    expect(mockCallback).toHaveBeenCalledTimes(1);
+    // Assert - schedule should be called each time (timer handles debounce internally)
+    expect(mockSchedule).toHaveBeenCalledTimes(3);
   });
 
-  it('should cancel previous timer when called again', async () => {
+  it('should pass correct callback to debounce timer', () => {
     // Arrange
     const mockCallback = vi.fn().mockResolvedValue(undefined);
-    const useCase = new ScheduleRuleApplicationUseCase(mockCallback);
+    const useCase = new ScheduleRuleApplicationUseCase(mockDebounceTimer, mockCallback);
+    let capturedCallback: (() => void) | undefined;
+    mockSchedule.mockImplementation((callback: () => void) => {
+      capturedCallback = callback;
+    });
 
-    // Act - first call
+    // Act
     useCase.exec();
-    await vi.advanceTimersByTimeAsync(50);
 
-    // Second call should reset the timer
-    useCase.exec();
-    await vi.advanceTimersByTimeAsync(50);
+    // Simulate timer firing
+    capturedCallback!();
 
-    // At this point, 100ms has passed since first call, but only 50ms since second
-    expect(mockCallback).not.toHaveBeenCalled();
-
-    // Wait for full debounce from second call
-    await vi.advanceTimersByTimeAsync(100);
-
-    // Assert
+    // Assert - original callback should be invoked
     expect(mockCallback).toHaveBeenCalledTimes(1);
   });
 });

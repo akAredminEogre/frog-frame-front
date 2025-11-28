@@ -38,6 +38,10 @@ describe('Content DI Container - 完全自動化インターフェース登録�
     {
       interface: 'ICurrentTabService',
       implementationName: 'ChromeCurrentTabService'
+    },
+    {
+      interface: 'IDebounceTimer',
+      implementationName: 'DebounceTimer'
     }
   ];
 

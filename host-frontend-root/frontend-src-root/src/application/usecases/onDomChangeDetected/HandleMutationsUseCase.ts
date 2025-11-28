@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
+import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { CollectAddedNodesUseCase } from 'src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase';
 import { ScheduleRuleApplicationUseCase } from 'src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase';
@@ -20,12 +21,14 @@ class HandleMutationsUseCase {
 
   constructor(
     @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
-    @inject('ICurrentTabService') private currentTabService: ICurrentTabService
+    @inject('ICurrentTabService') private currentTabService: ICurrentTabService,
+    @inject('IDebounceTimer') debounceTimer: IDebounceTimer
   ) {
     this.pendingNodes = new Set();
     this.isApplyingRules = false;
     this.collectAddedNodesUseCase = new CollectAddedNodesUseCase(this.pendingNodes);
     this.scheduleRuleApplicationUseCase = new ScheduleRuleApplicationUseCase(
+      debounceTimer,
       this.applyRulesToPendingNodes.bind(this)
     );
   }
