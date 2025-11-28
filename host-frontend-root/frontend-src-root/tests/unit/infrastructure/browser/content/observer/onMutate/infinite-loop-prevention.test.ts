@@ -151,7 +151,6 @@ describe('observerOnMutate - 無限ループ防止', () => {
     expect(mockApplyRules).toHaveBeenCalledTimes(1);
     expect(mockApplyRules).toHaveBeenCalledWith(
       [element2],
-      'https://example.com',
       expect.any(Function)
     );
 

@@ -105,7 +105,6 @@ describe('observerOnMutate - 正常系', () => {
     // Assert
     expect(mockApplyRules).toHaveBeenCalledWith(
       [addedElement],
-      'https://example.com',
       expect.any(Function)
     );
 
@@ -173,7 +172,6 @@ describe('observerOnMutate - 正常系', () => {
     expect(mockApplyRules).toHaveBeenCalledTimes(1);
     expect(mockApplyRules).toHaveBeenCalledWith(
       expect.arrayContaining([element1, element2]),
-      'https://example.com',
       expect.any(Function)
     );
 
@@ -186,7 +184,7 @@ describe('observerOnMutate - 正常系', () => {
     // Arrange
     const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
     let capturedIsNodeInDocument: ((node: Element) => boolean) | null = null;
-    const mockApplyRules = vi.fn().mockImplementation((_nodes, _url, isNodeInDocument) => {
+    const mockApplyRules = vi.fn().mockImplementation((_nodes, isNodeInDocument) => {
       capturedIsNodeInDocument = isNodeInDocument;
       return Promise.resolve();
     });

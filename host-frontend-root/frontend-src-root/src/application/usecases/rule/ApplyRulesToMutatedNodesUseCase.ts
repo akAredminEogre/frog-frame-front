@@ -1,5 +1,6 @@
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
+import { WindowLocationService } from 'src/infrastructure/windows/WindowLocationService';
 
 /**
  * DOM Mutationで追加されたノードにルールを適用するユースケース
@@ -7,22 +8,23 @@ import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/
  */
 export class ApplyRulesToMutatedNodesUseCase {
   private repository: IRewriteRuleRepository;
+  private windowLocationService: WindowLocationService;
 
-  constructor(repository: IRewriteRuleRepository) {
+  constructor(repository: IRewriteRuleRepository, windowLocationService: WindowLocationService) {
     this.repository = repository;
+    this.windowLocationService = windowLocationService;
   }
 
   /**
    * 追加されたノードにルールを適用する
    * @param nodes 適用対象のノード配列
-   * @param currentUrl 現在のページURL
    * @param isNodeInDocument ノードがdocument内に存在するかを判定する関数
    */
   async applyRules(
     nodes: Element[],
-    currentUrl: string,
     isNodeInDocument: (node: Element) => boolean
   ): Promise<void> {
+    const currentUrl = this.windowLocationService.getCurrentUrl();
     const applySavedRulesUseCase = new ApplySavedRulesOnPageLoadUseCase(this.repository);
 
     for (const node of nodes) {
