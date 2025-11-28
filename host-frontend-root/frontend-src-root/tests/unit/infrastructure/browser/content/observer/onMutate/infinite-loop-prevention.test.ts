@@ -14,9 +14,9 @@ vi.mock('src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository
   ChromeRuntimeRewriteRuleRepository: vi.fn().mockImplementation(() => ({})),
 }));
 
-// Mock the ContentCurrentTabService
-vi.mock('src/infrastructure/browser/content/tabs/ContentCurrentTabService', () => ({
-  ContentCurrentTabService: vi.fn().mockImplementation(() => ({})),
+// Mock the ChromeCurrentTabService
+vi.mock('src/infrastructure/browser/tabs/ChromeCurrentTabService', () => ({
+  ChromeCurrentTabService: vi.fn().mockImplementation(() => ({})),
 }));
 
 /**
