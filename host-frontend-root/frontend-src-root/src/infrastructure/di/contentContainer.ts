@@ -9,7 +9,7 @@ export const contentContainer = container.createChildContainer();
 import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
-import { WindowCurrentUrlService } from 'src/infrastructure/browser/url/WindowCurrentUrlService';
+import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
 
 // Content Script uses ChromeRuntimeRewriteRuleRepository instead of DexieRewriteRuleRepository
 // because Content Script cannot directly access IndexedDB - it communicates via Chrome Runtime Messaging

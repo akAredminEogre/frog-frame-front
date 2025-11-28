@@ -6,7 +6,7 @@ import { DomDiffer } from 'src/domain/entities/DomDiffer';
 
 export
 @injectable()
-class ApplySavedRulesOnPageLoadUseCase {
+class ApplyRulesOnPageLoadUseCase {
   constructor(
     @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
     @inject('ICurrentUrlService') private currentUrlService: ICurrentUrlService
@@ -31,7 +31,7 @@ class ApplySavedRulesOnPageLoadUseCase {
       });
     } catch (error) {
       // エラーが発生しても処理を続行（ログ出力などは必要に応じて追加）
-      console.error('[ApplySavedRulesOnPageLoadUseCase] Error applying saved rules:', error);
+      console.error('[ApplyRulesOnPageLoadUseCase] Error applying saved rules:', error);
     }
   }
 }

@@ -1,5 +1,5 @@
 // cspell:ignore usecases
-import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
+import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
 import { contentContainer } from 'src/infrastructure/di/contentContainer';
 
 /**
@@ -15,8 +15,8 @@ import { contentContainer } from 'src/infrastructure/di/contentContainer';
 export const applyAllRulesHandler = async () => {
   // Content Script用: DI containerからUseCaseを解決
   // IRewriteRuleRepository と ICurrentUrlService が自動的に注入される
-  const applySavedRulesOnPageLoadUseCase = contentContainer.resolve(ApplySavedRulesOnPageLoadUseCase);
+  const applyRulesOnPageLoadUseCase = contentContainer.resolve(ApplyRulesOnPageLoadUseCase);
 
-  await applySavedRulesOnPageLoadUseCase.exec(document.body);
+  await applyRulesOnPageLoadUseCase.exec(document.body);
   return { success: true };
 };
