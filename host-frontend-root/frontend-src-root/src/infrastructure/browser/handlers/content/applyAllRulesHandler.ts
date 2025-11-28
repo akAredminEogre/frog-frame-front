@@ -1,6 +1,7 @@
 // cspell:ignore usecases
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
-import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
+import { contentContainer } from 'src/infrastructure/di/contentContainer';
 
 type ApplyAllRulesMessage = { type: 'applyAllRules'; tabUrl: string };
 
@@ -15,8 +16,8 @@ type ApplyAllRulesMessage = { type: 'applyAllRules'; tabUrl: string };
  * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
  */
 export const applyAllRulesHandler = async (msg: ApplyAllRulesMessage) => {
-  // Content Script用: Chrome Runtime Messaging経由でデータアクセス
-  const rewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository();
+  // Content Script用: DI containerからリポジトリを解決（ChromeRuntimeRewriteRuleRepositoryが注入される）
+  const rewriteRuleRepository = contentContainer.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
   const applySavedRulesOnPageLoadUseCase = new ApplySavedRulesOnPageLoadUseCase(
     rewriteRuleRepository
   );
