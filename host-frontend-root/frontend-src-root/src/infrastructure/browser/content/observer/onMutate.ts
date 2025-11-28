@@ -1,5 +1,5 @@
 import { HandleMutationsUseCase } from 'src/application/usecases/onDomChangeDetected/HandleMutationsUseCase';
-import { contentScriptContainer } from 'src/infrastructure/di/contentScriptContainer';
+import { contentContainer } from 'src/infrastructure/di/contentContainer';
 
 /**
  * 呼び出し元: entrypoints/content.ts
@@ -8,7 +8,7 @@ import { contentScriptContainer } from 'src/infrastructure/di/contentScriptConta
  * Lazy load等で遅れてくるDOM更新に対応する
  */
 export function observerOnMutate() {
-  const handleMutationsUseCase = contentScriptContainer.resolve(HandleMutationsUseCase);
+  const handleMutationsUseCase = contentContainer.resolve(HandleMutationsUseCase);
 
   const observer = new MutationObserver((mutations) => {
     handleMutationsUseCase.exec(mutations);
