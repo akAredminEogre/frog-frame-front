@@ -14,13 +14,9 @@ vi.mock('src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository
   ChromeRuntimeRewriteRuleRepository: vi.fn().mockImplementation(() => ({})),
 }));
 
-// Mock the WindowLocationService
-vi.mock('src/infrastructure/windows/WindowLocationService', () => ({
-  WindowLocationService: class {
-    getCurrentUrl() {
-      return 'https://example.com';
-    }
-  },
+// Mock the ContentCurrentTabService
+vi.mock('src/infrastructure/browser/content/tabs/ContentCurrentTabService', () => ({
+  ContentCurrentTabService: vi.fn().mockImplementation(() => ({})),
 }));
 
 /**
