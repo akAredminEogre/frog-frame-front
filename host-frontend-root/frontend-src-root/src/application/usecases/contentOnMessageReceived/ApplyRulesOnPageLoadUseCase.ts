@@ -2,7 +2,6 @@ import { inject, injectable } from 'tsyringe';
 
 import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { DomDiffer } from 'src/domain/entities/DomDiffer';
 
 export
 @injectable()
@@ -20,15 +19,7 @@ class ApplyRulesOnPageLoadUseCase {
       const currentUrl = this.currentUrlService.getCurrentUrl();
       const rewriteRules = await this.repository.getAll();
 
-      rewriteRules.toArray().forEach((rule) => {
-        // URLがマッチしない場合はスキップ（空のurlPatternは全URLにマッチ）
-        if (!rule.matchesUrl(currentUrl)) {
-          return;
-        }
-
-        const domDiffer = new DomDiffer(targetElement, rule);
-        domDiffer.applyRule();
-      });
+      rewriteRules.applyRulesWithDomDiffer(currentUrl, targetElement);
     } catch (error) {
       // エラーが発生しても処理を続行（ログ出力などは必要に応じて追加）
       console.error('[ApplyRulesOnPageLoadUseCase] Error applying saved rules:', error);

@@ -54,7 +54,8 @@ describe('ApplyRulesOnPageLoadUseCase - Error Handling', () => {
       container.innerHTML = '<div><p>Test</p></div>';
 
       // Create rule that will cause DOM diffing to fail with invalid regex pattern
-      const rule = new RewriteRule(1, '[', '<span>Replaced</span>', '', true); // Invalid regex: unclosed bracket
+      // urlPattern matches the mock current URL
+      const rule = new RewriteRule(1, '[', '<span>Replaced</span>', 'https://example.com', true); // Invalid regex: unclosed bracket
       const rules = new RewriteRules([rule]);
       vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
       vi.mocked(mockCurrentUrlService.getCurrentUrl).mockReturnValue('https://example.com');
