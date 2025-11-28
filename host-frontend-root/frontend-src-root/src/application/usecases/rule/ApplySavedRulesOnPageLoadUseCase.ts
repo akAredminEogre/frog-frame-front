@@ -1,28 +1,29 @@
+import { inject, injectable } from 'tsyringe';
+
+import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
 
-export class ApplySavedRulesOnPageLoadUseCase {
-  private repository: IRewriteRuleRepository;
-
-  constructor(repository: IRewriteRuleRepository) {
-    this.repository = repository;
-  }
+export
+@injectable()
+class ApplySavedRulesOnPageLoadUseCase {
+  constructor(
+    @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
+    @inject('ICurrentUrlService') private currentUrlService: ICurrentUrlService
+  ) {}
 
   /**
    * ストレージに保存されている全てのルールを取得して適用する
    */
-  async applyAllRules(targetElement: Element = document.body, currentUrl: string): Promise<void> {
+  async exec(targetElement: Element = document.body): Promise<void> {
     try {
-      // リポジトリを使用してルール集合を取得
+      const currentUrl = this.currentUrlService.getCurrentUrl();
       const rewriteRules = await this.repository.getAll();
-      
-      // RewriteRulesオブジェクトから各ルールを処理
+
       rewriteRules.toArray().forEach((rule) => {
-        // URLパターンをチェック
-        if (rule.urlPattern) {
-          if (!currentUrl.startsWith(rule.urlPattern)) {
-            return;
-          }
+        // URLパターンが指定されていて、URLがマッチしない場合はスキップ
+        if (rule.urlPattern && !rule.matchesUrl(currentUrl)) {
+          return;
         }
 
         const domDiffer = new DomDiffer(targetElement, rule);

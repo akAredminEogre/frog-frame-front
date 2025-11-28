@@ -1,6 +1,8 @@
+import { createMockCurrentUrlService } from 'tests/unit/application/ports/ICurrentUrlService/createMockCurrentUrlService';
 import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import type { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
@@ -9,14 +11,16 @@ import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 describe('ApplySavedRulesOnPageLoadUseCase - DomDiffer Integration', () => {
   let useCase: ApplySavedRulesOnPageLoadUseCase;
   let mockRepository: IRewriteRuleRepository;
+  let mockCurrentUrlService: ICurrentUrlService;
   let container: HTMLElement;
 
   beforeEach(() => {
     // Create mock repository using standard factory
     mockRepository = createMockRewriteRuleRepository();
+    mockCurrentUrlService = createMockCurrentUrlService();
 
     // Create usecase instance
-    useCase = new ApplySavedRulesOnPageLoadUseCase(mockRepository);
+    useCase = new ApplySavedRulesOnPageLoadUseCase(mockRepository, mockCurrentUrlService);
 
     // Setup DOM container
     container = document.createElement('div');
@@ -32,7 +36,7 @@ describe('ApplySavedRulesOnPageLoadUseCase - DomDiffer Integration', () => {
     it('should preserve event listeners on unmodified elements when applying rules', async () => {
       // Setup DOM with event listener
       container.innerHTML = '<div><button id="keep">Keep</button><p>Replace me</p></div>';
-      
+
       const button = container.querySelector('#keep') as HTMLButtonElement;
       let clickCount = 0;
       const clickHandler = () => { clickCount++; };
@@ -42,14 +46,15 @@ describe('ApplySavedRulesOnPageLoadUseCase - DomDiffer Integration', () => {
       const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', '');
       const rules = new RewriteRules([rule]);
       vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
+      vi.mocked(mockCurrentUrlService.getCurrentUrl).mockReturnValue('https://example.com');
 
       // Apply rules through use case
-      await useCase.applyAllRules(container, 'https://example.com');
+      await useCase.exec(container);
 
       // Verify event listener is preserved
       const preservedButton = container.querySelector('#keep') as HTMLButtonElement;
       expect(preservedButton).toBe(button); // Same DOM node
-      
+
       preservedButton.click();
       expect(clickCount).toBe(1);
 
@@ -60,7 +65,7 @@ describe('ApplySavedRulesOnPageLoadUseCase - DomDiffer Integration', () => {
     it('should preserve form input values when applying rules', async () => {
       // Setup DOM with form input
       container.innerHTML = '<div><input id="preserve" type="text"><p>Replace me</p></div>';
-      
+
       const input = container.querySelector('#preserve') as HTMLInputElement;
       input.value = 'important data';
 
@@ -68,9 +73,10 @@ describe('ApplySavedRulesOnPageLoadUseCase - DomDiffer Integration', () => {
       const rule = new RewriteRule(1, '<p>Replace me</p>', '<span>Replaced</span>', '');
       const rules = new RewriteRules([rule]);
       vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
+      vi.mocked(mockCurrentUrlService.getCurrentUrl).mockReturnValue('https://example.com');
 
       // Apply rules through use case
-      await useCase.applyAllRules(container, 'https://example.com');
+      await useCase.exec(container);
 
       // Verify input value is preserved
       const preservedInput = container.querySelector('#preserve') as HTMLInputElement;

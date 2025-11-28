@@ -1,6 +1,8 @@
+import { createMockCurrentUrlService } from 'tests/unit/application/ports/ICurrentUrlService/createMockCurrentUrlService';
 import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import type { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
@@ -9,14 +11,16 @@ import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 describe('ApplySavedRulesOnPageLoadUseCase - Error Handling', () => {
   let useCase: ApplySavedRulesOnPageLoadUseCase;
   let mockRepository: IRewriteRuleRepository;
+  let mockCurrentUrlService: ICurrentUrlService;
   let container: HTMLElement;
 
   beforeEach(() => {
     // Create mock repository using standard factory
     mockRepository = createMockRewriteRuleRepository();
+    mockCurrentUrlService = createMockCurrentUrlService();
 
     // Create usecase instance
-    useCase = new ApplySavedRulesOnPageLoadUseCase(mockRepository);
+    useCase = new ApplySavedRulesOnPageLoadUseCase(mockRepository, mockCurrentUrlService);
 
     // Setup DOM container
     container = document.createElement('div');
@@ -32,11 +36,12 @@ describe('ApplySavedRulesOnPageLoadUseCase - Error Handling', () => {
     it('should continue processing when repository throws error', async () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       vi.mocked(mockRepository.getAll).mockRejectedValue(new Error('Repository error'));
+      vi.mocked(mockCurrentUrlService.getCurrentUrl).mockReturnValue('https://example.com');
 
       container.innerHTML = '<div><p>Original</p></div>';
       const originalHTML = container.innerHTML;
 
-      await useCase.applyAllRules(container, 'https://example.com');
+      await useCase.exec(container);
 
       expect(consoleSpy).toHaveBeenCalledWith(
         '[ApplySavedRulesOnPageLoadUseCase] Error applying saved rules:',
@@ -52,10 +57,11 @@ describe('ApplySavedRulesOnPageLoadUseCase - Error Handling', () => {
       const rule = new RewriteRule(1, '[', '<span>Replaced</span>', '', true); // Invalid regex: unclosed bracket
       const rules = new RewriteRules([rule]);
       vi.mocked(mockRepository.getAll).mockResolvedValue(rules);
+      vi.mocked(mockCurrentUrlService.getCurrentUrl).mockReturnValue('https://example.com');
 
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-      await useCase.applyAllRules(container, 'https://example.com');
+      await useCase.exec(container);
 
       // DOM should remain unchanged when diffing fails
       expect(container.innerHTML).toBe('<div><p>Test</p></div>');
