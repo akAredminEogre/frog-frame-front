@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { DomMutationObserverService } from 'src/infrastructure/browser/content/mutation/DomMutationObserverService';
+import { observerOnMutate } from 'src/infrastructure/browser/content/observer/onMutate';
 
 // Mock the ApplySavedRulesOnPageLoadUseCase
 vi.mock('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase', () => ({
@@ -14,13 +14,22 @@ vi.mock('src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository
   ChromeRuntimeRewriteRuleRepository: vi.fn().mockImplementation(() => ({})),
 }));
 
+// Mock the WindowLocationService
+vi.mock('src/infrastructure/windows/WindowLocationService', () => ({
+  WindowLocationService: class {
+    getCurrentUrl() {
+      return 'https://example.com';
+    }
+  },
+}));
+
 /**
- * DomMutationObserverService 無限ループ防止テスト
+ * observerOnMutate - 無限ループ防止テスト
  *
  * 拡張機能がDOMを更新した際に無限ループが発生しないことを確認
  * ルール適用中にトリガーされた新しいmutationは無視される
  */
-describe('DomMutationObserverService handleMutations - 無限ループ防止', () => {
+describe('observerOnMutate - 無限ループ防止', () => {
   let mockObserve: ReturnType<typeof vi.fn>;
   let mockDisconnect: ReturnType<typeof vi.fn>;
   let capturedCallback: ((mutations: MutationRecord[]) => void) | null;
@@ -77,8 +86,7 @@ describe('DomMutationObserverService handleMutations - 無限ループ防止', (
       applyAllRules: mockApplyAllRules,
     }) as any);
 
-    const service = new DomMutationObserverService('https://example.com');
-    service.startObserving();
+    observerOnMutate();
 
     const initialElement = document.createElement('div');
     document.body.appendChild(initialElement);
@@ -112,8 +120,7 @@ describe('DomMutationObserverService handleMutations - 無限ループ防止', (
       applyAllRules: mockApplyAllRules,
     }) as any);
 
-    const service = new DomMutationObserverService('https://example.com');
-    service.startObserving();
+    observerOnMutate();
 
     const element1 = document.createElement('div');
     document.body.appendChild(element1);
