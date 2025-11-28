@@ -1,9 +1,8 @@
 /**
  * RewriteRule.matchesUrl - 正常系テスト (falseを返すケース)
- * 1. URLパターンが空文字列の場合はfalseを返す
- * 2. 前方一致の境界値テスト - 類似パスで不一致
- * 3. URLが前方一致しない場合はfalseを返す - 異なるドメイン
- * 4. URLが前方一致しない場合はfalseを返す - 異なるプロトコル
+ * 1. 前方一致の境界値テスト - 類似パスで不一致
+ * 2. URLが前方一致しない場合はfalseを返す - 異なるドメイン
+ * 3. URLが前方一致しない場合はfalseを返す - 異なるプロトコル
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -15,13 +14,6 @@ describe('RewriteRule.matchesUrl - 正常系 (falseを返すケース)', () => {
   });
 
   const testCases = [
-    {
-      description: 'URLパターンが空文字列の場合はfalseを返す',
-      input: {
-        urlPattern: '',
-        targetUrl: 'https://example.com/page',
-      },
-    },
     {
       description: '前方一致の境界値テスト - 類似パスで不一致',
       input: {

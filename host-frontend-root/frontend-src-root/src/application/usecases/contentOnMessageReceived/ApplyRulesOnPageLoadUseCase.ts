@@ -21,8 +21,8 @@ class ApplyRulesOnPageLoadUseCase {
       const rewriteRules = await this.repository.getAll();
 
       rewriteRules.toArray().forEach((rule) => {
-        // URLパターンが指定されていて、URLがマッチしない場合はスキップ
-        if (rule.urlPattern && !rule.matchesUrl(currentUrl)) {
+        // URLがマッチしない場合はスキップ（空のurlPatternは全URLにマッチ）
+        if (!rule.matchesUrl(currentUrl)) {
           return;
         }
 
