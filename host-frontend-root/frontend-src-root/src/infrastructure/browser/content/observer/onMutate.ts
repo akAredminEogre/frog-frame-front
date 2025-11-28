@@ -11,9 +11,6 @@ const DEBOUNCE_DELAY_MS = 100;
  * Lazy load等で遅れてくるDOM更新に対応する
  */
 export function observerOnMutate() {
-  const windowLocationService = new WindowLocationService();
-  const currentUrl = windowLocationService.getCurrentUrl();
-
   let isApplyingRules = false;
   const pendingNodes: Set<Element> = new Set();
   let debounceTimer: number | null = null;
@@ -31,11 +28,11 @@ export function observerOnMutate() {
 
     try {
       const rewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository();
-      const useCase = new ApplyRulesToMutatedNodesUseCase(rewriteRuleRepository);
+      const windowLocationService = new WindowLocationService();
+      const useCase = new ApplyRulesToMutatedNodesUseCase(rewriteRuleRepository, windowLocationService);
 
       await useCase.applyRules(
         nodesToProcess,
-        currentUrl,
         (node) => document.body.contains(node)
       );
     } finally {
