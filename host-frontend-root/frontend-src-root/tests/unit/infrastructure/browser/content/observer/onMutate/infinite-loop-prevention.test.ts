@@ -26,18 +26,6 @@ vi.mock('src/infrastructure/browser/timer/DebounceTimer', async () => {
   return actual;
 });
 
-// Mock the CollectAddedNodesUseCase - use actual implementation for integration testing
-vi.mock('src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase', async () => {
-  const actual = await vi.importActual('src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase');
-  return actual;
-});
-
-// Mock the ScheduleRuleApplicationUseCase - use actual implementation for integration testing
-vi.mock('src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase', async () => {
-  const actual = await vi.importActual('src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase');
-  return actual;
-});
-
 // Mock the HandleMutationsUseCase - use actual implementation for integration testing
 vi.mock('src/application/usecases/onDomChangeDetected/HandleMutationsUseCase', async () => {
   const actual = await vi.importActual('src/application/usecases/onDomChangeDetected/HandleMutationsUseCase');
