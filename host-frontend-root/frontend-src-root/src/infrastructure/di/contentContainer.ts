@@ -8,6 +8,7 @@ export const contentContainer = container.createChildContainer();
 // Register Content Script specific implementations
 import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
 
@@ -18,3 +19,6 @@ contentContainer.register<IRewriteRuleRepository>('IRewriteRuleRepository', { us
 // Content Script uses WindowCurrentUrlService to get current URL from window.location.href
 // (chrome.tabs API is not available in content scripts)
 contentContainer.register<ICurrentUrlService>('ICurrentUrlService', { useClass: WindowCurrentUrlService });
+
+// Register UseCase classes (required for container.resolve() to work without decorator metadata)
+contentContainer.register(ApplyRulesOnPageLoadUseCase, { useClass: ApplyRulesOnPageLoadUseCase });
