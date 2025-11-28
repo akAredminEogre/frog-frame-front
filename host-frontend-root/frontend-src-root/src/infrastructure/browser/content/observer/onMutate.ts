@@ -1,4 +1,5 @@
 import { CollectAddedNodesUseCase } from 'src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase';
+import { HandleMutationsUseCase } from 'src/application/usecases/onDomChangeDetected/HandleMutationsUseCase';
 import { ScheduleRuleApplicationUseCase } from 'src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase';
 import { ApplyRulesToMutatedNodesUseCase } from 'src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
@@ -40,17 +41,11 @@ export function observerOnMutate() {
 
   const collectAddedNodesUseCase = new CollectAddedNodesUseCase(pendingNodes);
   const scheduleRuleApplicationUseCase = new ScheduleRuleApplicationUseCase(applyRulesToPendingNodes);
+  const handleMutationsUseCase = new HandleMutationsUseCase(collectAddedNodesUseCase, scheduleRuleApplicationUseCase);
 
-  const handleMutations = (mutations: MutationRecord[]) => {
-    if (isApplyingRules) {
-      return;
-    }
-
-    collectAddedNodesUseCase.exec(mutations);
-    scheduleRuleApplicationUseCase.exec();
-  };
-
-  const observer = new MutationObserver(handleMutations);
+  const observer = new MutationObserver((mutations) => {
+    handleMutationsUseCase.exec(mutations, () => isApplyingRules);
+  });
 
   observer.observe(document.body, {
     childList: true,

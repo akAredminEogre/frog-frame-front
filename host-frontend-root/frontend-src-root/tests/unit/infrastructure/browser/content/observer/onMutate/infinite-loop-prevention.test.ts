@@ -31,6 +31,12 @@ vi.mock('src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUse
   return actual;
 });
 
+// Mock the HandleMutationsUseCase - use actual implementation for integration testing
+vi.mock('src/application/usecases/onDomChangeDetected/HandleMutationsUseCase', async () => {
+  const actual = await vi.importActual('src/application/usecases/onDomChangeDetected/HandleMutationsUseCase');
+  return actual;
+});
+
 /**
  * observerOnMutate - 無限ループ防止テスト
  *
