@@ -1,1 +1,4 @@
 .env
+
+# Git worktree directories
+worktrees/

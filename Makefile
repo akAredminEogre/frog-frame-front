@@ -1,4 +1,4 @@
-.PHONY: init-config help init-dev dev down ps unit e2e testall testcheck testlint sortimports storybook
+.PHONY: init-config help init-dev dev down ps unit e2e testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune
 
 help:
 	@echo "Available commands:"
@@ -14,6 +14,10 @@ help:
 	@echo "  make testlint     - Run comprehensive tests and linting (required before PR)"
 	@echo "  make sortimports  - Sort imports in all files"
 	@echo "  make storybook    - Start Storybook development server"
+	@echo "  make wt-list      - List all git worktrees"
+	@echo "  make wt-add       - Add a new worktree (usage: make wt-add BRANCH=branch-name)"
+	@echo "  make wt-remove    - Remove a worktree (usage: make wt-remove BRANCH=branch-name)"
+	@echo "  make wt-prune     - Prune stale worktree references"
 	@echo "  make help         - Show this help message"
 
 init-config:
@@ -93,3 +97,40 @@ npminstall:
 storybook:
 	@echo "Starting Storybook development server..."
 	@docker compose exec frontend npm run storybook
+
+# Git Worktree Commands
+WORKTREE_DIR := worktrees
+
+wt-list:
+	@echo "Listing all git worktrees..."
+	@git worktree list
+
+wt-add:
+ifndef BRANCH
+	@echo "Error: BRANCH is required"
+	@echo "Usage: make wt-add BRANCH=branch-name"
+	@exit 1
+endif
+	@echo "Creating worktree for branch: $(BRANCH)..."
+	@mkdir -p $(WORKTREE_DIR)
+	@git worktree add $(WORKTREE_DIR)/$(BRANCH) $(BRANCH) 2>/dev/null || git worktree add -b $(BRANCH) $(WORKTREE_DIR)/$(BRANCH)
+	@echo "Worktree created at: $(WORKTREE_DIR)/$(BRANCH)"
+	@echo ""
+	@echo "To start development in this worktree:"
+	@echo "  cd $(WORKTREE_DIR)/$(BRANCH)"
+	@echo "  make dev"
+
+wt-remove:
+ifndef BRANCH
+	@echo "Error: BRANCH is required"
+	@echo "Usage: make wt-remove BRANCH=branch-name"
+	@exit 1
+endif
+	@echo "Removing worktree for branch: $(BRANCH)..."
+	@git worktree remove $(WORKTREE_DIR)/$(BRANCH) --force 2>/dev/null || echo "Worktree not found: $(WORKTREE_DIR)/$(BRANCH)"
+	@echo "Worktree removed"
+
+wt-prune:
+	@echo "Pruning stale worktree references..."
+	@git worktree prune -v
+	@echo "Prune complete"
