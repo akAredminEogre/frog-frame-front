@@ -4,12 +4,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import type { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
+import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 
-describe('ApplySavedRulesOnPageLoadUseCase - Error Handling', () => {
-  let useCase: ApplySavedRulesOnPageLoadUseCase;
+describe('ApplyRulesOnPageLoadUseCase - Error Handling', () => {
+  let useCase: ApplyRulesOnPageLoadUseCase;
   let mockRepository: IRewriteRuleRepository;
   let mockCurrentUrlService: ICurrentUrlService;
   let container: HTMLElement;
@@ -20,7 +20,7 @@ describe('ApplySavedRulesOnPageLoadUseCase - Error Handling', () => {
     mockCurrentUrlService = createMockCurrentUrlService();
 
     // Create usecase instance
-    useCase = new ApplySavedRulesOnPageLoadUseCase(mockRepository, mockCurrentUrlService);
+    useCase = new ApplyRulesOnPageLoadUseCase(mockRepository, mockCurrentUrlService);
 
     // Setup DOM container
     container = document.createElement('div');
@@ -44,7 +44,7 @@ describe('ApplySavedRulesOnPageLoadUseCase - Error Handling', () => {
       await useCase.exec(container);
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        '[ApplySavedRulesOnPageLoadUseCase] Error applying saved rules:',
+        '[ApplyRulesOnPageLoadUseCase] Error applying saved rules:',
         expect.any(Error)
       );
       expect(container.innerHTML).toBe(originalHTML);
@@ -66,7 +66,7 @@ describe('ApplySavedRulesOnPageLoadUseCase - Error Handling', () => {
       // DOM should remain unchanged when diffing fails
       expect(container.innerHTML).toBe('<div><p>Test</p></div>');
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[ApplySavedRulesOnPageLoadUseCase] Error applying saved rules'),
+        expect.stringContaining('[ApplyRulesOnPageLoadUseCase] Error applying saved rules'),
         expect.any(Error)
       );
     });
