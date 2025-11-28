@@ -102,13 +102,13 @@ export class RewriteRule {
   }
 
   /**
-   * 指定されたURLがこのルールのURLパターンに前方一致するかどうかを判定する
+   * 指定されたURLがこのルールのURLパターンにマッチするかどうかを判定する
    * @param url 判定対象のURL文字列
-   * @returns URLパターンが空文字列の場合はfalse、前方一致する場合はtrue
+   * @returns URLパターンが空文字列の場合はtrue（全URLにマッチ）、それ以外は前方一致で判定
    */
   public matchesUrl(url: string): boolean {
     if (this.urlPattern === '') {
-      return false;
+      return true;
     }
     return url.startsWith(this.urlPattern);
   }
