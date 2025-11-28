@@ -1,11 +1,9 @@
 /**
  * RewriteRules.applyRulesWithDomDiffer - エッジケーステスト
- * 1. 空のRewriteRulesでもエラーが発生しない
- * 2. 空のurlPatternを持つルールは適用されない
+ * 空のRewriteRulesでもエラーが発生しない
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 
 describe('RewriteRules.applyRulesWithDomDiffer - エッジケース', () => {
@@ -28,26 +26,10 @@ describe('RewriteRules.applyRulesWithDomDiffer - エッジケース', () => {
 
     // Act - should not throw
     expect(() => {
-      emptyRules.applyRulesWithDomDiffer('https://example.com', container);
+      emptyRules.applyRulesWithDomDiffer(container);
     }).not.toThrow();
 
     // Assert - content remains unchanged
     expect(container.innerHTML).toBe('<p>Hello World</p>');
-  });
-
-  it('空のurlPatternを持つルールは適用されない', () => {
-    // Arrange
-    const rulesObject: Record<string, RewriteRule> = {
-      1: new RewriteRule(1, '<p>Hello</p>', '<p>Goodbye</p>', ''),
-    };
-    const rewriteRules = new RewriteRules(rulesObject);
-    container.innerHTML = '<p>Hello</p>';
-
-    // Act
-    rewriteRules.applyRulesWithDomDiffer('https://example.com/page', container);
-
-    // Assert - content remains unchanged because empty urlPattern returns false
-    expect(container.innerHTML).toContain('Hello');
-    expect(container.innerHTML).not.toContain('Goodbye');
   });
 });
