@@ -16,6 +16,10 @@
 - [x] テストコードの作成・更新
   - 新しいコンポーネントのユニットテスト作成
   - 既存テストの修正
+- [ ] DAILY_SCRUM-02で設計したコンポーネント分割の実装
+  - Organism層: RulesTable, EmptyStateMessage の作成
+  - Molecule層: RuleTableRow, LoadingMessage, ErrorMessage の作成  
+  - 既存のRulesListPageをこれらのコンポーネントを使った構成に更新
 - [ ] 最終確認とリファクタリング
   - コードレビューと最適化
   - make testlintの実行と修正

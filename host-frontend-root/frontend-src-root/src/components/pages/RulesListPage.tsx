@@ -6,6 +6,10 @@ import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
 import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
+import { ErrorMessage } from 'src/components/molecules/ErrorMessage';
+import { LoadingMessage } from 'src/components/molecules/LoadingMessage';
+import { EmptyStateMessage } from 'src/components/organisms/EmptyStateMessage';
+import { RulesTable } from 'src/components/organisms/RulesTable';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 export const RulesListPage: React.FC = () => {
@@ -38,19 +42,11 @@ export const RulesListPage: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="container">
-        <div className="loading">ルールを読み込んでいます...</div>
-      </div>
-    );
+    return <LoadingMessage />;
   }
 
   if (error) {
-    return (
-      <div className="container">
-        <div className="error">{error}</div>
-      </div>
-    );
+    return <ErrorMessage error={error} />;
   }
 
   return (
@@ -58,59 +54,9 @@ export const RulesListPage: React.FC = () => {
       <h1>保存されたルール一覧</h1>
       
       {rules.length === 0 ? (
-        <div className="empty-state">
-          <p>保存されたルールがありません。</p>
-          <p>拡張機能のポップアップからルールを作成してください。</p>
-        </div>
+        <EmptyStateMessage />
       ) : (
-        <div className="rules-table-container">
-          <table className="rules-table">
-            <thead>
-              <tr>
-                <th>URLパターン</th>
-                <th>置換前</th>
-                <th>置換後</th>
-                <th>正規表現</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rules.map((rule) => (
-                <tr key={rule.id} className="rule-row">
-                  <td className="rule-url-pattern" title={rule.urlPattern || ''}>
-                    {rule.urlPattern 
-                      ? (rule.urlPattern.length > 40 
-                         ? rule.urlPattern.substring(0, 40) + '...'
-                         : rule.urlPattern)
-                      : '-'}
-                  </td>
-                  <td className="rule-old-string" title={rule.oldString}>
-                    {rule.oldString}
-                  </td>
-                  <td className="rule-new-string" title={rule.newString}>
-                    {rule.newString}
-                  </td>
-                  <td className="rule-regex">
-                    {rule.isRegex ? (
-                      <span className="regex-badge">✓</span>
-                    ) : (
-                      <span className="no-regex">-</span>
-                    )}
-                  </td>
-                  <td className="rule-actions">
-                    <button
-                      className="edit-button"
-                      onClick={() => handleEdit(rule.id)}
-                      type="button"
-                    >
-                      編集
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <RulesTable rules={rules} onEditRule={handleEdit} />
       )}
       
       <div className="footer">
