@@ -9,9 +9,10 @@ import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeC
  * Lazy load等で遅れてくるDOM更新に対応する
  */
 export function observerOnMutate() {
-  const repository = new ChromeRuntimeRewriteRuleRepository();
-  const currentTabService = new ChromeCurrentTabService();
-  const handleMutationsUseCase = new HandleMutationsUseCase(repository, currentTabService);
+  const handleMutationsUseCase = new HandleMutationsUseCase(
+    () => new ChromeRuntimeRewriteRuleRepository(),
+    () => new ChromeCurrentTabService()
+  );
 
   const observer = new MutationObserver((mutations) => {
     handleMutationsUseCase.exec(mutations);
