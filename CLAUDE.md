@@ -99,6 +99,16 @@ make testlint
 ```
 This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
 
+### Git Worktree (Parallel Development)
+For working on multiple branches simultaneously:
+```bash
+make wt-list                    # List all worktrees
+make wt-add BRANCH=feature-x    # Create worktree for branch
+make wt-remove BRANCH=feature-x # Remove worktree
+make wt-prune                   # Clean up stale references
+```
+See `docs/GIT_WORKTREE.md` for detailed usage guide.
+
 ## Architecture Overview
 
 ### Clean Architecture Layers
