@@ -1,11 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { Tab } from 'src/domain/value-objects/Tab';
 import { observerOnMutate } from 'src/infrastructure/browser/content/observer/onMutate';
 
-// Mock the ApplyRulesToMutatedNodesUseCase
-vi.mock('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase', () => ({
-  ApplyRulesToMutatedNodesUseCase: vi.fn().mockImplementation(() => ({
-    applyRules: vi.fn().mockResolvedValue(undefined),
+// Mock the ApplySavedRulesOnPageLoadUseCase
+vi.mock('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase', () => ({
+  ApplySavedRulesOnPageLoadUseCase: vi.fn().mockImplementation(() => ({
+    applyAllRules: vi.fn().mockResolvedValue(undefined),
   })),
 }));
 
@@ -16,7 +17,7 @@ vi.mock('src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository
 
 // Mock the ChromeCurrentTabService
 vi.mock('src/infrastructure/browser/tabs/ChromeCurrentTabService', () => ({
-  ChromeCurrentTabService: vi.fn().mockImplementation(() => ({})),
+  ChromeCurrentTabService: vi.fn(),
 }));
 
 // Mock the CollectAddedNodesUseCase - use actual implementation for integration testing
@@ -49,13 +50,20 @@ describe('observerOnMutate - 正常系', () => {
   let mockDisconnect: ReturnType<typeof vi.fn>;
   let capturedCallback: ((mutations: MutationRecord[]) => void) | null;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
 
     mockObserve = vi.fn();
     mockDisconnect = vi.fn();
     capturedCallback = null;
+
+    // Setup ChromeCurrentTabService mock
+    const { ChromeCurrentTabService } = await import('src/infrastructure/browser/tabs/ChromeCurrentTabService');
+    vi.mocked(ChromeCurrentTabService).mockImplementation(() => ({
+      getCurrentTab: vi.fn().mockResolvedValue(new Tab(1, 'https://example.com')),
+      getTabById: vi.fn(),
+    }) as any);
 
     vi.stubGlobal('MutationObserver', vi.fn().mockImplementation((callback) => {
       capturedCallback = callback;
@@ -95,10 +103,10 @@ describe('observerOnMutate - 正常系', () => {
 
   it('should apply rules to added Element nodes', async () => {
     // Arrange
-    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
-    const mockApplyRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
-      applyRules: mockApplyRules,
+    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
+    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
+      applyAllRules: mockApplyAllRules,
     }) as any);
 
     observerOnMutate();
@@ -117,9 +125,9 @@ describe('observerOnMutate - 正常系', () => {
     await vi.advanceTimersByTimeAsync(150);
 
     // Assert
-    expect(mockApplyRules).toHaveBeenCalledWith(
-      [addedElement],
-      expect.any(Function)
+    expect(mockApplyAllRules).toHaveBeenCalledWith(
+      addedElement,
+      'https://example.com'
     );
 
     // Cleanup
@@ -128,10 +136,10 @@ describe('observerOnMutate - 正常系', () => {
 
   it('should ignore non-Element nodes (text nodes)', async () => {
     // Arrange
-    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
-    const mockApplyRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
-      applyRules: mockApplyRules,
+    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
+    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
+      applyAllRules: mockApplyAllRules,
     }) as any);
 
     observerOnMutate();
@@ -148,16 +156,16 @@ describe('observerOnMutate - 正常系', () => {
     // Wait for debounce
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - applyRules should not be called for text nodes (empty array)
-    expect(mockApplyRules).not.toHaveBeenCalled();
+    // Assert - applyAllRules should not be called for text nodes (empty array)
+    expect(mockApplyAllRules).not.toHaveBeenCalled();
   });
 
   it('should debounce multiple rapid mutations', async () => {
     // Arrange
-    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
-    const mockApplyRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
-      applyRules: mockApplyRules,
+    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
+    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
+      applyAllRules: mockApplyAllRules,
     }) as any);
 
     observerOnMutate();
@@ -182,37 +190,32 @@ describe('observerOnMutate - 正常系', () => {
     // Wait for debounce to complete
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - both elements should be processed together in one call after debounce
-    expect(mockApplyRules).toHaveBeenCalledTimes(1);
-    expect(mockApplyRules).toHaveBeenCalledWith(
-      expect.arrayContaining([element1, element2]),
-      expect.any(Function)
-    );
+    // Assert - both elements should be processed together after debounce
+    // applyAllRules is called once per element
+    expect(mockApplyAllRules).toHaveBeenCalledTimes(2);
+    expect(mockApplyAllRules).toHaveBeenCalledWith(element1, 'https://example.com');
+    expect(mockApplyAllRules).toHaveBeenCalledWith(element2, 'https://example.com');
 
     // Cleanup
     document.body.removeChild(element1);
     document.body.removeChild(element2);
   });
 
-  it('should pass isNodeInDocument function to use case', async () => {
+  it('should skip nodes that are no longer in the document', async () => {
     // Arrange
-    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
-    let capturedIsNodeInDocument: ((node: Element) => boolean) | null = null;
-    const mockApplyRules = vi.fn().mockImplementation((_nodes, isNodeInDocument) => {
-      capturedIsNodeInDocument = isNodeInDocument;
-      return Promise.resolve();
-    });
-    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
-      applyRules: mockApplyRules,
+    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
+    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
+      applyAllRules: mockApplyAllRules,
     }) as any);
 
     observerOnMutate();
 
-    const addedElement = document.createElement('div');
-    document.body.appendChild(addedElement);
+    // Create an element but don't add it to the document
+    const detachedElement = document.createElement('div');
 
     const mockMutation: Partial<MutationRecord> = {
-      addedNodes: [addedElement] as unknown as NodeList,
+      addedNodes: [detachedElement] as unknown as NodeList,
     };
 
     // Act
@@ -221,14 +224,7 @@ describe('observerOnMutate - 正常系', () => {
     // Wait for debounce
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - isNodeInDocument function should correctly check document.body.contains
-    expect(capturedIsNodeInDocument).not.toBeNull();
-    expect(capturedIsNodeInDocument!(addedElement)).toBe(true);
-
-    const removedElement = document.createElement('span');
-    expect(capturedIsNodeInDocument!(removedElement)).toBe(false);
-
-    // Cleanup
-    document.body.removeChild(addedElement);
+    // Assert - applyAllRules should not be called for nodes not in document
+    expect(mockApplyAllRules).not.toHaveBeenCalled();
   });
 });

@@ -2,7 +2,7 @@ import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { CollectAddedNodesUseCase } from 'src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase';
 import { ScheduleRuleApplicationUseCase } from 'src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase';
-import { ApplyRulesToMutatedNodesUseCase } from 'src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase';
+import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
 
 type RepositoryFactory = () => IRewriteRuleRepository;
 type CurrentTabServiceFactory = () => ICurrentTabService;
@@ -56,8 +56,14 @@ export class HandleMutationsUseCase {
     try {
       const repository = this.repositoryFactory();
       const currentTabService = this.currentTabServiceFactory();
-      const useCase = new ApplyRulesToMutatedNodesUseCase(repository, currentTabService);
-      await useCase.applyRules(nodesToProcess, (node) => document.body.contains(node));
+      const currentTab = await currentTabService.getCurrentTab();
+      const applySavedRulesUseCase = new ApplySavedRulesOnPageLoadUseCase(repository);
+
+      for (const node of nodesToProcess) {
+        if (document.body.contains(node)) {
+          await applySavedRulesUseCase.applyAllRules(node, currentTab.getTabUrl().value);
+        }
+      }
     } finally {
       this.isApplyingRules = false;
     }
