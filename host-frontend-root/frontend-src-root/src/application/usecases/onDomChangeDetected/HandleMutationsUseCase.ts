@@ -4,21 +4,24 @@ import { CollectAddedNodesUseCase } from 'src/application/usecases/onDomChangeDe
 import { ScheduleRuleApplicationUseCase } from 'src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase';
 import { ApplyRulesToMutatedNodesUseCase } from 'src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase';
 
+type RepositoryFactory = () => IRewriteRuleRepository;
+type CurrentTabServiceFactory = () => ICurrentTabService;
+
 /**
  * MutationObserverからのmutationを処理するユースケース
  * ルール適用中でなければノードを収集し、ルール適用をスケジュールする
  */
 export class HandleMutationsUseCase {
-  private repository: IRewriteRuleRepository;
-  private currentTabService: ICurrentTabService;
+  private repositoryFactory: RepositoryFactory;
+  private currentTabServiceFactory: CurrentTabServiceFactory;
   private pendingNodes: Set<Element>;
   private isApplyingRules: boolean;
   private collectAddedNodesUseCase: CollectAddedNodesUseCase;
   private scheduleRuleApplicationUseCase: ScheduleRuleApplicationUseCase;
 
-  constructor(repository: IRewriteRuleRepository, currentTabService: ICurrentTabService) {
-    this.repository = repository;
-    this.currentTabService = currentTabService;
+  constructor(repositoryFactory: RepositoryFactory, currentTabServiceFactory: CurrentTabServiceFactory) {
+    this.repositoryFactory = repositoryFactory;
+    this.currentTabServiceFactory = currentTabServiceFactory;
     this.pendingNodes = new Set();
     this.isApplyingRules = false;
     this.collectAddedNodesUseCase = new CollectAddedNodesUseCase(this.pendingNodes);
@@ -51,7 +54,9 @@ export class HandleMutationsUseCase {
     this.isApplyingRules = true;
 
     try {
-      const useCase = new ApplyRulesToMutatedNodesUseCase(this.repository, this.currentTabService);
+      const repository = this.repositoryFactory();
+      const currentTabService = this.currentTabServiceFactory();
+      const useCase = new ApplyRulesToMutatedNodesUseCase(repository, currentTabService);
       await useCase.applyRules(nodesToProcess, (node) => document.body.contains(node));
     } finally {
       this.isApplyingRules = false;
