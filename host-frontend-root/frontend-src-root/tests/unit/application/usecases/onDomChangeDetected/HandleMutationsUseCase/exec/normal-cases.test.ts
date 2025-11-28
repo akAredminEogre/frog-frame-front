@@ -1,78 +1,152 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CollectAddedNodesUseCase } from 'src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase';
+import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { HandleMutationsUseCase } from 'src/application/usecases/onDomChangeDetected/HandleMutationsUseCase';
-import { ScheduleRuleApplicationUseCase } from 'src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase';
+import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+import { Tab } from 'src/domain/value-objects/Tab';
 
 /**
  * HandleMutationsUseCase.exec - 正常系テスト
  *
- * 1. ルール適用中でなければノードを収集してスケジュールする
- * 2. ルール適用中であれば何もしない
+ * 1. ミューテーションを処理してノードを収集し、ルール適用をスケジュールする
+ * 2. 空のミューテーション配列でも正常に処理する
+ * 3. ルール適用中は追加のミューテーションを無視する
  */
 describe('HandleMutationsUseCase.exec - 正常系', () => {
-  let mockCollectExec: ReturnType<typeof vi.fn>;
-  let mockScheduleExec: ReturnType<typeof vi.fn>;
-  let mockCollectAddedNodesUseCase: CollectAddedNodesUseCase;
-  let mockScheduleRuleApplicationUseCase: ScheduleRuleApplicationUseCase;
+  let mockRepository: IRewriteRuleRepository;
+  let mockCurrentTabService: ICurrentTabService;
+  let mockGetAll: ReturnType<typeof vi.fn>;
+  let mockGetCurrentTab: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    mockCollectExec = vi.fn();
-    mockScheduleExec = vi.fn();
-    mockCollectAddedNodesUseCase = {
-      exec: mockCollectExec,
-    } as unknown as CollectAddedNodesUseCase;
-    mockScheduleRuleApplicationUseCase = {
-      exec: mockScheduleExec,
-    } as unknown as ScheduleRuleApplicationUseCase;
+    vi.useFakeTimers();
+    vi.clearAllMocks();
+
+    mockGetAll = vi.fn().mockResolvedValue(new RewriteRules([]));
+    mockGetCurrentTab = vi.fn().mockResolvedValue(new Tab(1, 'https://example.com'));
+
+    mockRepository = {
+      getAll: mockGetAll,
+      create: vi.fn(),
+      update: vi.fn(),
+      getById: vi.fn(),
+    } as IRewriteRuleRepository;
+
+    mockCurrentTabService = {
+      getCurrentTab: mockGetCurrentTab,
+      getTabById: vi.fn(),
+    } as ICurrentTabService;
   });
 
-  it('should collect nodes and schedule rule application when not applying rules', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.resetAllMocks();
+  });
+
+  it('should process mutations and schedule rule application', () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(mockCollectAddedNodesUseCase, mockScheduleRuleApplicationUseCase);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
     const element = document.createElement('div');
     const mutation: Partial<MutationRecord> = {
       addedNodes: [element] as unknown as NodeList,
     };
-    const isApplyingRules = () => false;
 
     // Act
-    useCase.exec([mutation as MutationRecord], isApplyingRules);
+    useCase.exec([mutation as MutationRecord]);
 
-    // Assert
-    expect(mockCollectExec).toHaveBeenCalledTimes(1);
-    expect(mockCollectExec).toHaveBeenCalledWith([mutation]);
-    expect(mockScheduleExec).toHaveBeenCalledTimes(1);
+    // Assert - debounce timer should be set
+    // After debounce delay, rules should be applied
+    vi.advanceTimersByTime(100);
+    expect(mockGetCurrentTab).toHaveBeenCalledTimes(1);
   });
 
-  it('should not collect nodes or schedule when applying rules', () => {
+  it('should handle empty mutations array', () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(mockCollectAddedNodesUseCase, mockScheduleRuleApplicationUseCase);
-    const element = document.createElement('div');
-    const mutation: Partial<MutationRecord> = {
-      addedNodes: [element] as unknown as NodeList,
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
+
+    // Act
+    useCase.exec([]);
+
+    // Assert - with empty mutations, no nodes to process
+    vi.advanceTimersByTime(100);
+    // Since no nodes were added, applyRules should not be called
+    expect(mockGetCurrentTab).not.toHaveBeenCalled();
+  });
+
+  it('should ignore mutations while rules are being applied', async () => {
+    // Arrange
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
+    const element1 = document.createElement('div');
+    const element2 = document.createElement('span');
+    const mutation1: Partial<MutationRecord> = {
+      addedNodes: [element1] as unknown as NodeList,
     };
-    const isApplyingRules = () => true;
+    const mutation2: Partial<MutationRecord> = {
+      addedNodes: [element2] as unknown as NodeList,
+    };
 
-    // Act
-    useCase.exec([mutation as MutationRecord], isApplyingRules);
+    // Make applyRules take time to simulate async processing
+    let resolveApply: () => void;
+    const applyPromise = new Promise<void>((resolve) => {
+      resolveApply = resolve;
+    });
+    mockGetAll.mockReturnValue(applyPromise.then(() => new RewriteRules([])));
 
-    // Assert
-    expect(mockCollectExec).not.toHaveBeenCalled();
-    expect(mockScheduleExec).not.toHaveBeenCalled();
+    // Act - first mutation
+    useCase.exec([mutation1 as MutationRecord]);
+
+    // Trigger debounce and start applying rules
+    vi.advanceTimersByTime(100);
+
+    // While rules are being applied, send another mutation
+    useCase.exec([mutation2 as MutationRecord]);
+
+    // Resolve the apply operation
+    resolveApply!();
+    await vi.runAllTimersAsync();
+
+    // Assert - getCurrentTab should only be called once (for the first batch)
+    // The second mutation should have been ignored while isApplyingRules was true
+    expect(mockGetCurrentTab).toHaveBeenCalledTimes(1);
   });
 
-  it('should handle empty mutations array when not applying rules', () => {
+  it('should collect multiple nodes from mutations', () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(mockCollectAddedNodesUseCase, mockScheduleRuleApplicationUseCase);
-    const isApplyingRules = () => false;
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
+    const element1 = document.createElement('div');
+    const element2 = document.createElement('span');
+    const mutation: Partial<MutationRecord> = {
+      addedNodes: [element1, element2] as unknown as NodeList,
+    };
 
     // Act
-    useCase.exec([], isApplyingRules);
+    useCase.exec([mutation as MutationRecord]);
+    vi.advanceTimersByTime(100);
 
     // Assert
-    expect(mockCollectExec).toHaveBeenCalledTimes(1);
-    expect(mockCollectExec).toHaveBeenCalledWith([]);
-    expect(mockScheduleExec).toHaveBeenCalledTimes(1);
+    expect(mockGetCurrentTab).toHaveBeenCalledTimes(1);
+  });
+
+  it('should batch multiple exec calls within debounce window', () => {
+    // Arrange
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService);
+    const element1 = document.createElement('div');
+    const element2 = document.createElement('span');
+    const mutation1: Partial<MutationRecord> = {
+      addedNodes: [element1] as unknown as NodeList,
+    };
+    const mutation2: Partial<MutationRecord> = {
+      addedNodes: [element2] as unknown as NodeList,
+    };
+
+    // Act - multiple rapid calls
+    useCase.exec([mutation1 as MutationRecord]);
+    vi.advanceTimersByTime(50); // Half of debounce time
+    useCase.exec([mutation2 as MutationRecord]);
+    vi.advanceTimersByTime(100); // Full debounce time from second call
+
+    // Assert - only one rule application should happen
+    expect(mockGetCurrentTab).toHaveBeenCalledTimes(1);
   });
 });
