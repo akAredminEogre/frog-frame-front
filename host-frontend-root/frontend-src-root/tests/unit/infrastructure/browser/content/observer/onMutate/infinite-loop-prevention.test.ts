@@ -2,10 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { observerOnMutate } from 'src/infrastructure/browser/content/observer/onMutate';
 
-// Mock the ApplySavedRulesOnPageLoadUseCase
-vi.mock('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase', () => ({
-  ApplySavedRulesOnPageLoadUseCase: vi.fn().mockImplementation(() => ({
-    applyAllRules: vi.fn().mockResolvedValue(undefined),
+// Mock the ApplyRulesToMutatedNodesUseCase
+vi.mock('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase', () => ({
+  ApplyRulesToMutatedNodesUseCase: vi.fn().mockImplementation(() => ({
+    applyRules: vi.fn().mockResolvedValue(undefined),
   })),
 }));
 
@@ -59,10 +59,10 @@ describe('observerOnMutate - 無限ループ防止', () => {
 
   it('should ignore mutations that occur during rule application', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
+    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
 
     let applyRulesCallCount = 0;
-    const mockApplyAllRules = vi.fn().mockImplementation(async () => {
+    const mockApplyRules = vi.fn().mockImplementation(async () => {
       applyRulesCallCount++;
 
       // Simulate the extension modifying DOM during rule application
@@ -82,8 +82,8 @@ describe('observerOnMutate - 無限ループ防止', () => {
       }
     });
 
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
+      applyRules: mockApplyRules,
     }) as any);
 
     observerOnMutate();
@@ -104,9 +104,9 @@ describe('observerOnMutate - 無限ループ防止', () => {
     // Wait for any additional debounces
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - applyAllRules should only be called once for the initial element
+    // Assert - applyRules should only be called once for the initial element
     // The nested mutation should be ignored because isApplyingRules is true
-    expect(mockApplyAllRules).toHaveBeenCalledTimes(1);
+    expect(mockApplyRules).toHaveBeenCalledTimes(1);
 
     // Cleanup
     document.body.removeChild(initialElement);
@@ -114,10 +114,10 @@ describe('observerOnMutate - 無限ループ防止', () => {
 
   it('should process new mutations after rule application completes', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
-    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    const { ApplyRulesToMutatedNodesUseCase } = await import('src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase');
+    const mockApplyRules = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplyRulesToMutatedNodesUseCase).mockImplementation(() => ({
+      applyRules: mockApplyRules,
     }) as any);
 
     observerOnMutate();
@@ -134,7 +134,7 @@ describe('observerOnMutate - 無限ループ防止', () => {
     await vi.advanceTimersByTimeAsync(150);
 
     // Reset mock to track new calls
-    mockApplyAllRules.mockClear();
+    mockApplyRules.mockClear();
 
     // Act - second mutation after first completes
     const element2 = document.createElement('span');
@@ -148,8 +148,12 @@ describe('observerOnMutate - 無限ループ防止', () => {
     await vi.advanceTimersByTimeAsync(150);
 
     // Assert - second mutation should be processed normally
-    expect(mockApplyAllRules).toHaveBeenCalledTimes(1);
-    expect(mockApplyAllRules).toHaveBeenCalledWith(element2, 'https://example.com');
+    expect(mockApplyRules).toHaveBeenCalledTimes(1);
+    expect(mockApplyRules).toHaveBeenCalledWith(
+      [element2],
+      'https://example.com',
+      expect.any(Function)
+    );
 
     // Cleanup
     document.body.removeChild(element1);

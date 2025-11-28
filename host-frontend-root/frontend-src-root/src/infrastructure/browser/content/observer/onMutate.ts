@@ -1,4 +1,4 @@
-import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
+import { ApplyRulesToMutatedNodesUseCase } from 'src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
 import { WindowLocationService } from 'src/infrastructure/windows/WindowLocationService';
 
@@ -31,13 +31,13 @@ export function observerOnMutate() {
 
     try {
       const rewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository();
-      const useCase = new ApplySavedRulesOnPageLoadUseCase(rewriteRuleRepository);
+      const useCase = new ApplyRulesToMutatedNodesUseCase(rewriteRuleRepository);
 
-      for (const node of nodesToProcess) {
-        if (document.body.contains(node)) {
-          await useCase.applyAllRules(node, currentUrl);
-        }
-      }
+      await useCase.applyRules(
+        nodesToProcess,
+        currentUrl,
+        (node) => document.body.contains(node)
+      );
     } finally {
       isApplyingRules = false;
     }
