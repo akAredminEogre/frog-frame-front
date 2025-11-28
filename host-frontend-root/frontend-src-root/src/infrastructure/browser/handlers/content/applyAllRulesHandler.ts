@@ -1,4 +1,6 @@
 // cspell:ignore usecases
+import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
 import { contentContainer } from 'src/infrastructure/di/contentContainer';
 
@@ -13,9 +15,12 @@ import { contentContainer } from 'src/infrastructure/di/contentContainer';
  * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
  */
 export const applyAllRulesHandler = async () => {
-  // Content Script用: DI containerからUseCaseを解決
-  // IRewriteRuleRepository と ICurrentUrlService が自動的に注入される
-  const applyRulesOnPageLoadUseCase = contentContainer.resolve(ApplyRulesOnPageLoadUseCase);
+  // Content Script用: DI containerから依存関係を解決
+  // Content Scriptでは@injectable()デコレーターが正しく動作しない場合があるため、
+  // 依存関係を手動で解決してUseCaseを作成する
+  const repository = contentContainer.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+  const currentUrlService = contentContainer.resolve<ICurrentUrlService>('ICurrentUrlService');
+  const applyRulesOnPageLoadUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
 
   await applyRulesOnPageLoadUseCase.exec(document.body);
   return { success: true };
