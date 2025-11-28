@@ -15,14 +15,9 @@ class ApplyRulesOnPageLoadUseCase {
    * ストレージに保存されている全てのルールを取得して適用する
    */
   async exec(targetElement: Element = document.body): Promise<void> {
-    try {
-      const currentUrl = this.currentUrlService.getCurrentUrl();
-      const rewriteRules = await this.repository.getRulesMatchingUrl(currentUrl);
+    const currentUrl = this.currentUrlService.getCurrentUrl();
+    const rewriteRules = await this.repository.getRulesMatchingUrl(currentUrl);
 
-      rewriteRules.applyRulesWithDomDiffer(targetElement);
-    } catch (error) {
-      // エラーが発生しても処理を続行（ログ出力などは必要に応じて追加）
-      console.error('[ApplyRulesOnPageLoadUseCase] Error applying saved rules:', error);
-    }
+    rewriteRules.applyRulesWithDomDiffer(targetElement);
   }
 }
