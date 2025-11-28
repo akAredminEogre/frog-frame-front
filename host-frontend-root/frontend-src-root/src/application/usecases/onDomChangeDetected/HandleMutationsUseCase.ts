@@ -3,9 +3,10 @@ import { inject, injectable } from 'tsyringe';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { CollectAddedNodesUseCase } from 'src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase';
-import { ScheduleRuleApplicationUseCase } from 'src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
+import { PendingNodes } from 'src/domain/value-objects/PendingNodes/PendingNodes';
+
+const DEBOUNCE_DELAY_MS = 100;
 
 /**
  * MutationObserverからのmutationを処理するユースケース
@@ -14,23 +15,16 @@ import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/
 export
 @injectable()
 class HandleMutationsUseCase {
-  private pendingNodes: Set<Element>;
+  private pendingNodes: PendingNodes;
   private isApplyingRules: boolean;
-  private collectAddedNodesUseCase: CollectAddedNodesUseCase;
-  private scheduleRuleApplicationUseCase: ScheduleRuleApplicationUseCase;
 
   constructor(
     @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
     @inject('ICurrentTabService') private currentTabService: ICurrentTabService,
-    @inject('IDebounceTimer') debounceTimer: IDebounceTimer
+    @inject('IDebounceTimer') private debounceTimer: IDebounceTimer
   ) {
-    this.pendingNodes = new Set();
+    this.pendingNodes = new PendingNodes();
     this.isApplyingRules = false;
-    this.collectAddedNodesUseCase = new CollectAddedNodesUseCase(this.pendingNodes);
-    this.scheduleRuleApplicationUseCase = new ScheduleRuleApplicationUseCase(
-      debounceTimer,
-      this.applyRulesToPendingNodes.bind(this)
-    );
   }
 
   /**
@@ -42,17 +36,18 @@ class HandleMutationsUseCase {
       return;
     }
 
-    this.collectAddedNodesUseCase.exec(mutations);
-    this.scheduleRuleApplicationUseCase.exec();
+    this.pendingNodes.collectFromMutations(mutations);
+    this.debounceTimer.schedule(() => {
+      this.applyRulesToPendingNodes();
+    }, DEBOUNCE_DELAY_MS);
   }
 
   private async applyRulesToPendingNodes(): Promise<void> {
-    if (this.pendingNodes.size === 0) {
+    if (!this.pendingNodes.hasNodes()) {
       return;
     }
 
-    const nodesToProcess = Array.from(this.pendingNodes);
-    this.pendingNodes.clear();
+    const nodesToProcess = this.pendingNodes.extractAll();
 
     this.isApplyingRules = true;
 
