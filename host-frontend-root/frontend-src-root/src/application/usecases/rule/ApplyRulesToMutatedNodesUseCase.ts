@@ -1,7 +1,6 @@
+import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
-import { TabUrl } from 'src/domain/value-objects/TabUrl';
-import { WindowLocationService } from 'src/infrastructure/windows/WindowLocationService';
 
 /**
  * DOM Mutationで追加されたノードにルールを適用するユースケース
@@ -9,11 +8,11 @@ import { WindowLocationService } from 'src/infrastructure/windows/WindowLocation
  */
 export class ApplyRulesToMutatedNodesUseCase {
   private repository: IRewriteRuleRepository;
-  private windowLocationService: WindowLocationService;
+  private currentTabService: ICurrentTabService;
 
-  constructor(repository: IRewriteRuleRepository, windowLocationService: WindowLocationService) {
+  constructor(repository: IRewriteRuleRepository, currentTabService: ICurrentTabService) {
     this.repository = repository;
-    this.windowLocationService = windowLocationService;
+    this.currentTabService = currentTabService;
   }
 
   /**
@@ -25,12 +24,12 @@ export class ApplyRulesToMutatedNodesUseCase {
     nodes: Element[],
     isNodeInDocument: (node: Element) => boolean
   ): Promise<void> {
-    const tabUrl = new TabUrl(this.windowLocationService.getCurrentUrl());
+    const currentTab = await this.currentTabService.getCurrentTab();
     const applySavedRulesUseCase = new ApplySavedRulesOnPageLoadUseCase(this.repository);
 
     for (const node of nodes) {
       if (isNodeInDocument(node)) {
-        await applySavedRulesUseCase.applyAllRules(node, tabUrl.value);
+        await applySavedRulesUseCase.applyAllRules(node, currentTab.getTabUrl().value);
       }
     }
   }

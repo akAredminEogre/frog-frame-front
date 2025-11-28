@@ -1,6 +1,6 @@
 import { ApplyRulesToMutatedNodesUseCase } from 'src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase';
+import { ContentCurrentTabService } from 'src/infrastructure/browser/content/tabs/ContentCurrentTabService';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
-import { WindowLocationService } from 'src/infrastructure/windows/WindowLocationService';
 
 const DEBOUNCE_DELAY_MS = 100;
 
@@ -28,8 +28,8 @@ export function observerOnMutate() {
 
     try {
       const rewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository();
-      const windowLocationService = new WindowLocationService();
-      const useCase = new ApplyRulesToMutatedNodesUseCase(rewriteRuleRepository, windowLocationService);
+      const contentCurrentTabService = new ContentCurrentTabService();
+      const useCase = new ApplyRulesToMutatedNodesUseCase(rewriteRuleRepository, contentCurrentTabService);
 
       await useCase.applyRules(
         nodesToProcess,
