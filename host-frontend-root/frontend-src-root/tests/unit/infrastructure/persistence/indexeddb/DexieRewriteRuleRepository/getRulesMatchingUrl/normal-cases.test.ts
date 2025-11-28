@@ -25,51 +25,62 @@ describe('DexieRewriteRuleRepository.getRulesMatchingUrl - 正常系', () => {
     await dexieDatabase.rewriteRules.clear();
   });
 
-  it('URLにマッチするルールのみを取得する', async () => {
-    // Arrange
-    const matchingRule = new RewriteRule(1, 'old1', 'new1', 'https://example.com', false);
-    const nonMatchingRule = new RewriteRule(2, 'old2', 'new2', 'https://other.com', false);
+  const testCases = [
+    {
+      description: 'URLにマッチするルールのみを取得する',
+      rulesToCreate: [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: false },
+      ],
+      currentUrl: 'https://example.com/page',
+      expectedLength: 1,
+      expectedOldStrings: ['old1'],
+    },
+    {
+      description: 'マッチするルールがない場合は空のRewriteRulesを返す',
+      rulesToCreate: [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://other.com', isRegex: false },
+      ],
+      currentUrl: 'https://example.com/page',
+      expectedLength: 0,
+      expectedOldStrings: [],
+    },
+    {
+      description: '空のurlPatternを持つルールは取得されない',
+      rulesToCreate: [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: '', isRegex: false },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://example.com', isRegex: false },
+      ],
+      currentUrl: 'https://example.com/page',
+      expectedLength: 1,
+      expectedOldStrings: ['old2'],
+    },
+  ];
 
-    await repository.create(matchingRule);
-    await repository.create(nonMatchingRule);
+  testCases.forEach(({ description, rulesToCreate, currentUrl, expectedLength, expectedOldStrings }) => {
+    it(description, async () => {
+      // Arrange
+      for (const ruleData of rulesToCreate) {
+        const rule = new RewriteRule(
+          ruleData.id,
+          ruleData.oldString,
+          ruleData.newString,
+          ruleData.urlPattern,
+          ruleData.isRegex
+        );
+        await repository.create(rule);
+      }
 
-    // Act
-    const result = await repository.getRulesMatchingUrl('https://example.com/page');
+      // Act
+      const result = await repository.getRulesMatchingUrl(currentUrl);
 
-    // Assert
-    expect(result).toBeInstanceOf(RewriteRules);
-    const rulesArray = result.toArray();
-    expect(rulesArray).toHaveLength(1);
-    expect(rulesArray[0].oldString).toBe('old1');
-  });
-
-  it('マッチするルールがない場合は空のRewriteRulesを返す', async () => {
-    // Arrange
-    const rule = new RewriteRule(1, 'old1', 'new1', 'https://other.com', false);
-    await repository.create(rule);
-
-    // Act
-    const result = await repository.getRulesMatchingUrl('https://example.com/page');
-
-    // Assert
-    expect(result).toBeInstanceOf(RewriteRules);
-    expect(result.toArray()).toHaveLength(0);
-  });
-
-  it('空のurlPatternを持つルールは取得されない', async () => {
-    // Arrange
-    const emptyPatternRule = new RewriteRule(1, 'old1', 'new1', '', false);
-    const matchingRule = new RewriteRule(2, 'old2', 'new2', 'https://example.com', false);
-
-    await repository.create(emptyPatternRule);
-    await repository.create(matchingRule);
-
-    // Act
-    const result = await repository.getRulesMatchingUrl('https://example.com/page');
-
-    // Assert
-    const rulesArray = result.toArray();
-    expect(rulesArray).toHaveLength(1);
-    expect(rulesArray[0].oldString).toBe('old2');
+      // Assert
+      expect(result).toBeInstanceOf(RewriteRules);
+      const rulesArray = result.toArray();
+      expect(rulesArray).toHaveLength(expectedLength);
+      expectedOldStrings.forEach((expectedOldString, index) => {
+        expect(rulesArray[index].oldString).toBe(expectedOldString);
+      });
+    });
   });
 });
