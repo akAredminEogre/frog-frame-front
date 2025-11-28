@@ -1,8 +1,8 @@
+import { CollectAddedNodesUseCase } from 'src/application/usecases/onDomChangeDetected/CollectAddedNodesUseCase';
+import { ScheduleRuleApplicationUseCase } from 'src/application/usecases/onDomChangeDetected/ScheduleRuleApplicationUseCase';
 import { ApplyRulesToMutatedNodesUseCase } from 'src/application/usecases/rule/ApplyRulesToMutatedNodesUseCase';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
-
-const DEBOUNCE_DELAY_MS = 100;
 
 /**
  * 呼び出し元: entrypoints/content.ts
@@ -13,7 +13,6 @@ const DEBOUNCE_DELAY_MS = 100;
 export function observerOnMutate() {
   let isApplyingRules = false;
   const pendingNodes: Set<Element> = new Set();
-  let debounceTimer: number | null = null;
 
   const applyRulesToPendingNodes = async () => {
     if (pendingNodes.size === 0) {
@@ -22,7 +21,6 @@ export function observerOnMutate() {
 
     const nodesToProcess = Array.from(pendingNodes);
     pendingNodes.clear();
-    debounceTimer = null;
 
     isApplyingRules = true;
 
@@ -40,33 +38,16 @@ export function observerOnMutate() {
     }
   };
 
-  const scheduleRuleApplication = () => {
-    if (debounceTimer !== null) {
-      window.clearTimeout(debounceTimer);
-    }
-
-    debounceTimer = window.setTimeout(() => {
-      applyRulesToPendingNodes();
-    }, DEBOUNCE_DELAY_MS);
-  };
-
-  const collectAddedNodes = (mutations: MutationRecord[]) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
-        if (node instanceof Element) {
-          pendingNodes.add(node);
-        }
-      });
-    });
-  };
+  const collectAddedNodesUseCase = new CollectAddedNodesUseCase(pendingNodes);
+  const scheduleRuleApplicationUseCase = new ScheduleRuleApplicationUseCase(applyRulesToPendingNodes);
 
   const handleMutations = (mutations: MutationRecord[]) => {
     if (isApplyingRules) {
       return;
     }
 
-    collectAddedNodes(mutations);
-    scheduleRuleApplication();
+    collectAddedNodesUseCase.exec(mutations);
+    scheduleRuleApplicationUseCase.exec();
   };
 
   const observer = new MutationObserver(handleMutations);
