@@ -1,28 +1,28 @@
+import debounce from 'debounce';
 import { injectable } from 'tsyringe';
 
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 
+type DebouncedFunction = ReturnType<typeof debounce>;
+
 /**
  * デバウンスタイマーの実装
- * window.setTimeout/clearTimeoutをラップし、タイマー状態を内部で管理する
+ * npmパッケージ'debounce'を使用してタイマー状態を管理する
  */
 @injectable()
 export class DebounceTimer implements IDebounceTimer {
-  private timerId: number | undefined;
+  private pendingCallback: () => void;
+  private debouncedExecutor: DebouncedFunction;
 
-  schedule(callback: () => void, delayMs: number): void {
-    this.cancelExistingTimer();
-    this.timerId = window.setTimeout(() => {
-      this.timerId = undefined;
-      callback();
-    }, delayMs);
+  constructor() {
+    this.pendingCallback = () => {};
+    this.debouncedExecutor = debounce(() => this.pendingCallback(), 0);
   }
 
-  private cancelExistingTimer(): void {
-    if (this.timerId === undefined) {
-      return;
-    }
-    window.clearTimeout(this.timerId);
-    this.timerId = undefined;
+  schedule(callback: () => void, delayMs: number): void {
+    this.debouncedExecutor.clear();
+    this.pendingCallback = callback;
+    this.debouncedExecutor = debounce(() => this.pendingCallback(), delayMs);
+    this.debouncedExecutor();
   }
 }
