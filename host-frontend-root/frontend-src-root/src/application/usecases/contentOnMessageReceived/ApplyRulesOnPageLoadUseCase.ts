@@ -17,9 +17,9 @@ class ApplyRulesOnPageLoadUseCase {
   async exec(targetElement: Element = document.body): Promise<void> {
     try {
       const currentUrl = this.currentUrlService.getCurrentUrl();
-      const rewriteRules = await this.repository.getAll();
+      const rewriteRules = await this.repository.getRulesMatchingUrl(currentUrl);
 
-      rewriteRules.applyRulesWithDomDiffer(currentUrl, targetElement);
+      rewriteRules.applyRulesWithDomDiffer(targetElement);
     } catch (error) {
       // エラーが発生しても処理を続行（ログ出力などは必要に応じて追加）
       console.error('[ApplyRulesOnPageLoadUseCase] Error applying saved rules:', error);

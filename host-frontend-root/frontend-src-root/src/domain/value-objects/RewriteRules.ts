@@ -35,15 +35,11 @@ export class RewriteRules {
   }
 
   /**
-   * URLにマッチするルールをDomDifferで適用する
-   * @param currentUrl 現在のURL
+   * 全てのルールをDomDifferで適用する
    * @param targetElement 適用対象のDOM要素
    */
-  applyRulesWithDomDiffer(currentUrl: string, targetElement: Element): void {
+  applyRulesWithDomDiffer(targetElement: Element): void {
     this.toArray().forEach((rule) => {
-      if (!rule.matchesUrl(currentUrl)) {
-        return;
-      }
       const domDiffer = new DomDiffer(targetElement, rule);
       domDiffer.applyRule();
     });
