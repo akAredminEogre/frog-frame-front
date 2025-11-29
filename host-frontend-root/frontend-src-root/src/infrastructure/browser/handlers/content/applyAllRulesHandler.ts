@@ -1,6 +1,7 @@
 // cspell:ignore usecases
 import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
-import { contentContainer } from 'src/infrastructure/di/contentContainer';
+import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
+import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
 
 /**
  * applyAllRules message handler for content script
@@ -13,9 +14,11 @@ import { contentContainer } from 'src/infrastructure/di/contentContainer';
  * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
  */
 export const applyAllRulesHandler = async () => {
-  // Content Script用: DI containerからUseCaseを解決
-  // ApplyRulesOnPageLoadUseCaseはcontentContainerに明示的に登録されている
-  const applyRulesOnPageLoadUseCase = contentContainer.resolve(ApplyRulesOnPageLoadUseCase);
+  // 手動DI解決: tsyringeのデコレーターメタデータ問題を回避するため
+  // 依存関係を明示的にインスタンス化してUseCaseを作成
+  const repository = new ChromeRuntimeRewriteRuleRepository();
+  const currentUrlService = new WindowCurrentUrlService();
+  const applyRulesOnPageLoadUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
 
   await applyRulesOnPageLoadUseCase.exec(document.body);
   return { success: true };
