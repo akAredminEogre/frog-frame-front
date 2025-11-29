@@ -16,18 +16,14 @@ vi.mock('src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository
 
 // Mock the WindowCurrentUrlService
 vi.mock('src/infrastructure/browser/window/WindowCurrentUrlService', () => ({
-  WindowCurrentUrlService: vi.fn(),
+  WindowCurrentUrlService: vi.fn().mockImplementation(() => ({
+    getCurrentUrl: vi.fn().mockReturnValue('https://example.com'),
+  })),
 }));
 
 // Mock the DebounceTimer - use actual implementation for integration testing
 vi.mock('src/infrastructure/browser/timer/DebounceTimer', async () => {
   const actual = await vi.importActual('src/infrastructure/browser/timer/DebounceTimer');
-  return actual;
-});
-
-// Mock the HandleMutationsUseCase - use actual implementation for integration testing
-vi.mock('src/application/usecases/onDomChangeDetected/HandleMutationsUseCase', async () => {
-  const actual = await vi.importActual('src/application/usecases/onDomChangeDetected/HandleMutationsUseCase');
   return actual;
 });
 
@@ -49,12 +45,6 @@ describe('observerOnMutate - 無限ループ防止', () => {
     mockObserve = vi.fn();
     mockDisconnect = vi.fn();
     capturedCallback = null;
-
-    // Setup WindowCurrentUrlService mock
-    const { WindowCurrentUrlService } = await import('src/infrastructure/browser/window/WindowCurrentUrlService');
-    vi.mocked(WindowCurrentUrlService).mockImplementation(() => ({
-      getCurrentUrl: vi.fn().mockReturnValue('https://example.com'),
-    }) as any);
 
     vi.stubGlobal('MutationObserver', vi.fn().mockImplementation((callback) => {
       capturedCallback = callback;
