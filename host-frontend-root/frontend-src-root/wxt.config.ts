@@ -1,5 +1,4 @@
 import { defineConfig } from 'wxt';
-import swc from 'vite-plugin-swc-transform';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 // 環境変数から開発サーバー設定を取得
@@ -25,24 +24,11 @@ export default defineConfig({
     disabled: true,
   },
   vite:() =>  ({
-    plugins: [
-      tsconfigPaths(),
-      swc({
-        swcOptions: {
-          jsc: {
-            target: 'es2021',
-            transform: {
-              legacyDecorator: true,
-              useDefineForClassFields: false,
-            },
-          },
-        },
-      }),
-    ],
+    plugins: [tsconfigPaths()],
     server: {
       host: devHost,
       port: devPort,
-      strictPort: true, 
+      strictPort: true,
       hmr: {
         port: devPort,
       }
