@@ -12,22 +12,17 @@ import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnM
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
 
-// All registrations use useFactory to avoid decorator metadata dependency.
-// Without decoratorMetadata in SWC config, @injectable()/@inject() decorators don't emit metadata.
-
 // Content Script uses ChromeRuntimeRewriteRuleRepository instead of DexieRewriteRuleRepository
 // because Content Script cannot directly access IndexedDB - it communicates via Chrome Runtime Messaging
-contentContainer.register<IRewriteRuleRepository>('IRewriteRuleRepository', {
-  useFactory: () => new ChromeRuntimeRewriteRuleRepository()
-});
+// Note: useClass works for classes without constructor parameters (no @injectable() needed)
+contentContainer.register<IRewriteRuleRepository>('IRewriteRuleRepository', { useClass: ChromeRuntimeRewriteRuleRepository });
 
 // Content Script uses WindowCurrentUrlService to get current URL from window.location.href
 // (chrome.tabs API is not available in content scripts)
-contentContainer.register<ICurrentUrlService>('ICurrentUrlService', {
-  useFactory: () => new WindowCurrentUrlService()
-});
+contentContainer.register<ICurrentUrlService>('ICurrentUrlService', { useClass: WindowCurrentUrlService });
 
-// Register UseCase classes with explicit factory to resolve dependencies
+// UseCase classes require useFactory because @inject() decorators don't emit metadata
+// without decoratorMetadata in SWC config (which causes build errors with interface imports)
 contentContainer.register(ApplyRulesOnPageLoadUseCase, {
   useFactory: (c) => new ApplyRulesOnPageLoadUseCase(
     c.resolve<IRewriteRuleRepository>('IRewriteRuleRepository'),
