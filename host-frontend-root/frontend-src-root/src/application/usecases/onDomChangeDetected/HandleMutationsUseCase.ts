@@ -1,9 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
-import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
+import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { ApplySavedRulesOnPageLoadUseCase } from 'src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase';
+import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
@@ -21,7 +21,7 @@ class HandleMutationsUseCase {
 
   constructor(
     @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
-    @inject('ICurrentTabService') private currentTabService: ICurrentTabService,
+    @inject('ICurrentUrlService') private currentUrlService: ICurrentUrlService,
     @inject('IDebounceTimer') private debounceTimer: IDebounceTimer
   ) {
     this.elements = new Elements();
@@ -54,12 +54,11 @@ class HandleMutationsUseCase {
     this.isApplyingRules = true;
 
     try {
-      const currentTab = await this.currentTabService.getCurrentTab();
-      const applySavedRulesUseCase = new ApplySavedRulesOnPageLoadUseCase(this.repository);
+      const applyRulesUseCase = new ApplyRulesOnPageLoadUseCase(this.repository, this.currentUrlService);
 
       for (const element of elementsToProcess) {
         if (document.body.contains(element)) {
-          await applySavedRulesUseCase.applyAllRules(element, currentTab.getTabUrl().value);
+          await applyRulesUseCase.exec(element);
         }
       }
     } finally {

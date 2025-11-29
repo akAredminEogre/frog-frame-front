@@ -36,8 +36,8 @@ describe('Content DI Container - 完全自動化インターフェース登録�
       implementationName: 'ChromeRuntimeRewriteRuleRepository'
     },
     {
-      interface: 'ICurrentTabService',
-      implementationName: 'ChromeCurrentTabService'
+      interface: 'ICurrentUrlService',
+      implementationName: 'WindowCurrentUrlService'
     },
     {
       interface: 'IDebounceTimer',
