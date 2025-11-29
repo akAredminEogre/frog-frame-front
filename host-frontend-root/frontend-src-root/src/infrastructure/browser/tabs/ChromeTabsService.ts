@@ -36,8 +36,7 @@ class ChromeTabsService implements IChromeTabsService {
       const response = await chrome.tabs.sendMessage(
         tab.getTabId().value,
         {
-          type: 'applyAllRules',
-          tabUrl: tab.getTabUrl().value
+          type: 'applyAllRules'
         }
       );
       return response;
