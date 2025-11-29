@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
@@ -10,6 +10,17 @@ import { MutationRecords } from 'src/domain/value-objects/MutationRecords/Mutati
  * 2. 要素がない場合はfalseを返す
  */
 describe('Elements.hasElements - 正常系', () => {
+  let testContainer: HTMLElement;
+
+  beforeEach(() => {
+    testContainer = document.createElement('div');
+    document.body.appendChild(testContainer);
+  });
+
+  afterEach(() => {
+    document.body.removeChild(testContainer);
+  });
+
   it('should return true when elements exist', () => {
     // Arrange
     const element = document.createElement('div');
@@ -42,6 +53,8 @@ describe('Elements.hasElements - 正常系', () => {
   it('should return false after extraction', () => {
     // Arrange
     const element = document.createElement('div');
+    testContainer.appendChild(element);
+
     const nodeList = [element] as unknown as NodeList;
     (nodeList as any).forEach = Array.prototype.forEach.bind([element]);
 
@@ -49,7 +62,7 @@ describe('Elements.hasElements - 正常系', () => {
     const mutationRecords = new MutationRecords([mockRecord]);
     const elements = new Elements();
     elements.collectFromMutations(mutationRecords);
-    elements.extractAll();
+    elements.extractAttachedElements();
 
     // Act
     const result = elements.hasElements();

@@ -9,13 +9,9 @@ export class AddedNodes {
   }
 
   /**
-   * Element要素のみに対して処理を実行する
+   * Element要素のみを抽出して配列として返す
    */
-  forEachElement(callback: (element: Element) => void): void {
-    this.nodes.forEach((node) => {
-      if (node instanceof Element) {
-        callback(node);
-      }
-    });
+  filterElements(): Element[] {
+    return Array.from(this.nodes).filter((node): node is Element => node instanceof Element);
   }
 }

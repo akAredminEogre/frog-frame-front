@@ -23,40 +23,16 @@ export function observerOnMutate() {
   const debounceTimer = new DebounceTimer();
 
   const elements = new Elements();
-  let isApplyingRules = false;
 
   const applyRulesToElements = async () => {
-    if (!elements.hasElements()) {
-      return;
-    }
-
-    const elementsToProcess = elements.extractAll();
-
-    isApplyingRules = true;
-
-    try {
-      const applyRulesUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
-
-      for (const element of elementsToProcess) {
-        if (document.body.contains(element)) {
-          await applyRulesUseCase.exec(element);
-        }
-      }
-    } finally {
-      isApplyingRules = false;
-    }
+    const applyRulesUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
+    await elements.forEachAsync((element) => applyRulesUseCase.exec(element));
   };
 
   const observer = new MutationObserver((mutations) => {
-    if (isApplyingRules) {
-      return;
-    }
-
     const mutationRecords = new MutationRecords(mutations);
     elements.collectFromMutations(mutationRecords);
-    debounceTimer.schedule(() => {
-      applyRulesToElements();
-    }, DEBOUNCE_DELAY_MS);
+    debounceTimer.scheduleWithGuard(applyRulesToElements, DEBOUNCE_DELAY_MS);
   });
 
   observer.observe(document.body, {

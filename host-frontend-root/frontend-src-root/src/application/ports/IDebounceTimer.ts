@@ -10,4 +10,17 @@ export interface IDebounceTimer {
    * @param delayMs 遅延時間（ミリ秒）
    */
   schedule(callback: () => void, delayMs: number): void;
+
+  /**
+   * 実行中かどうかを返す
+   */
+  isExecuting(): boolean;
+
+  /**
+   * ガード付きでスケジュールする
+   * 実行中の場合はスケジュールをスキップする
+   * @param callback 実行するコールバック関数
+   * @param delayMs 遅延時間（ミリ秒）
+   */
+  scheduleWithGuard(callback: () => Promise<void>, delayMs: number): void;
 }
