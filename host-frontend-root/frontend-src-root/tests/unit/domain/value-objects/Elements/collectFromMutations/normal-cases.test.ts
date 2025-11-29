@@ -39,7 +39,6 @@ describe('Elements.collectFromMutations - 正常系', () => {
     elements.collectFromMutations(mutationRecords);
 
     // Assert
-    expect(elements.hasElements()).toBe(true);
     expect(elements.extractAttachedElements()).toEqual([element]);
   });
 
@@ -52,7 +51,7 @@ describe('Elements.collectFromMutations - 正常系', () => {
     elements.collectFromMutations(mutationRecords);
 
     // Assert
-    expect(elements.hasElements()).toBe(false);
+    expect(elements.extractAttachedElements()).toEqual([]);
   });
 
   it('should collect elements from multiple MutationRecords', () => {
@@ -120,6 +119,6 @@ describe('Elements.collectFromMutations - 正常系', () => {
     elements.collectFromMutations(mutationRecords);
 
     // Assert
-    expect(elements.hasElements()).toBe(false);
+    expect(elements.extractAttachedElements()).toEqual([]);
   });
 });

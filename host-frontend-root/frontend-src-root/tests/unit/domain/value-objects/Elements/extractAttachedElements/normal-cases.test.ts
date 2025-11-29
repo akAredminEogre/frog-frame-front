@@ -52,7 +52,6 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     elements.extractAttachedElements();
 
     // Assert
-    expect(elements.hasElements()).toBe(false);
     expect(elements.extractAttachedElements()).toEqual([]);
 
     // Cleanup

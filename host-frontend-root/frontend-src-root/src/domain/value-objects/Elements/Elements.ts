@@ -27,13 +27,6 @@ export class Elements {
   }
 
   /**
-   * 要素があるかどうかを確認する
-   */
-  hasElements(): boolean {
-    return this.nodes.size > 0;
-  }
-
-  /**
    * 各要素に対して非同期処理を実行する
    */
   async forEachAsync(callback: (element: Element) => Promise<void>): Promise<void> {
