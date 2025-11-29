@@ -93,3 +93,21 @@ Day 2タスク「アーキテクチャ詳細設計と制約マトリックス作
 **新規作成:**
 - `docs/design/01-architecture.md` - アーキテクチャ詳細設計書（約600行）
 - `docs/design/08-constraints-matrix.md` - Chrome拡張制約マトリックス（約400行）
+
+## レビューコメント対応（4回目）
+
+**レビューコメント内容:**
+- `{"permissions": ["tabs", "scripting"]}` とありますが、現在のコードベースでは`scripting`は使用していないように見えます。確認をお願いします
+
+**対応内容:**
+1. **アーキテクチャ状況調査実施**
+   - 現在のwxt.config.ts確認：scripting権限は既に削除済み
+   - Git履歴調査：release 0.1.1.1で削除済み
+   - ソースコード調査：chrome.scripting API使用箇所なし
+
+2. **ドキュメント修正**
+   - `docs/design/08-constraints-matrix.md` line 187の権限例を修正
+   - `"permissions": ["tabs", "scripting"]` → `"permissions": ["tabs"]`
+
+**修正したファイル（追加）:**
+- `docs/design/08-constraints-matrix.md` - 古い権限例を現在の設定に更新

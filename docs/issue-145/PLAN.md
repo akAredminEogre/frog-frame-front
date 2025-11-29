@@ -38,7 +38,7 @@ Phase 2では以下のドキュメントを作成する必要があります:
   - PlantUML図作成（architecture-layers.puml）
   - Git Flowリリースブランチの記述追加
 
-- [ ] **Day 2**: アーキテクチャ詳細設計と制約マトリックス作成
+- [x] **Day 2**: アーキテクチャ詳細設計と制約マトリックス作成
   - 01-architecture.mdを作成（Clean Architecture層別詳細）
   - 08-constraints-matrix.mdを作成（Chrome拡張特有の制約）
   - 既存のentrypoints/background.ts, content.tsの実装パターンを文書化
