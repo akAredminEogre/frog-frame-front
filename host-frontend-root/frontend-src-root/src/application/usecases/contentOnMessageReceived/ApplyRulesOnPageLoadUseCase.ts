@@ -1,14 +1,14 @@
-import { inject, injectable } from 'tsyringe';
-
 import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 
-export
-@injectable()
-class ApplyRulesOnPageLoadUseCase {
+/**
+ * Content Script用UseCase - 手動DI解決で使用
+ * tsyringeデコレーターを使用しない（バンドラーとの互換性問題を回避）
+ */
+export class ApplyRulesOnPageLoadUseCase {
   constructor(
-    @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
-    @inject('ICurrentUrlService') private currentUrlService: ICurrentUrlService
+    private repository: IRewriteRuleRepository,
+    private currentUrlService: ICurrentUrlService
   ) {}
 
   /**
