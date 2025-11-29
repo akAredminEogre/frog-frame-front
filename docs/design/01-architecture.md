@@ -16,6 +16,7 @@
 - ビジネスルールの定義
   - DOM検索、置換ロジック
   - 置換ルールの保存、編集
+  - タブへの適用判定
 
 **依存:**
 - なし（他の層から完全に独立）
@@ -89,8 +90,10 @@ import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 
+// Storybookで読み込めるように、この単語順が必要
+export
 @injectable()
-export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
+class SaveRewriteRuleAndApplyToCurrentTabUseCase {
   constructor(
     @inject('IRewriteRuleRepository')
     private ruleRepository: IRewriteRuleRepository,
@@ -172,50 +175,6 @@ src/infrastructure/
    - リスナー登録関数をエクスポート
    - entrypoints/ から呼び出す
 
-**実装例（Repository）:**
-```typescript
-// infrastructure/persistence/indexeddb/DexieRewriteRuleRepository.ts
-import { injectable } from 'tsyringe';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { db } from './DexieDatabase';
-
-@injectable()
-export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
-  async save(rule: RewriteRule): Promise<void> {
-    await db.rewriteRules.put({
-      id: rule.getId(),
-      urlPattern: rule.getUrlPattern(),
-      oldString: rule.getOldString(),
-      newString: rule.getNewString(),
-      isRegex: rule.getIsRegex(),
-    });
-  }
-
-  async findAll(): Promise<RewriteRule[]> {
-    const records = await db.rewriteRules.toArray();
-    return records.map(r => new RewriteRule(
-      r.id, r.urlPattern, r.oldString, r.newString, r.isRegex
-    ));
-  }
-}
-```
-
-**実装例（Chrome APIラッパー）:**
-```typescript
-// infrastructure/browser/tabs/ChromeTabsService.ts
-import { injectable } from 'tsyringe';
-import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { Tab } from 'src/domain/value-objects/Tab';
-
-@injectable()
-export class ChromeTabsService implements IChromeTabsService {
-  async query(queryInfo: chrome.tabs.QueryInfo): Promise<Tab[]> {
-    const tabs = await chrome.tabs.query(queryInfo);
-    return tabs.map(t => new Tab(t.id!, t.url!));
-  }
-}
-```
 
 ---
 
@@ -398,6 +357,8 @@ Content Script
 | **Presentation** | E2E Test | Playwright | - |
 
 ### 4.2 テスト実装場所
+- テストファイルはすべて `tests/` ディレクトリに集約
+- tests/unit/ の下に各層別ディレクトリを配置
 
 ```
 tests/

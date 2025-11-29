@@ -124,21 +124,6 @@ export default defineContentScript({
 });
 ```
 
-**DOM操作の実装例:**
-```typescript
-// infrastructure/browser/content/runtime/onMessageReceived.ts
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'rewriteDOM') {
-    // DOM操作: Content Scriptでのみ可能
-    const elements = document.querySelectorAll(message.selector);
-    elements.forEach(el => {
-      el.textContent = message.newText;
-    });
-    sendResponse({ success: true });
-  }
-});
-```
-
 ---
 
 ### 2.3 Popup / Options
@@ -164,20 +149,6 @@ chrome.runtime.sendMessage({ ... });
 // ❌ 不可（Webページの）
 // Webページのdocumentには直接アクセス不可
 // → Content Scriptを経由する必要がある
-```
-
-**実装パターン:**
-```typescript
-// entrypoints/popup/App.tsx
-const App: React.FC = () => {
-  const handleSave = async () => {
-    // UseCaseを通じてChrome APIを間接的に呼び出す
-    const useCase = container.resolve(SaveRewriteRuleAndApplyToCurrentTabUseCase);
-    await useCase.execute({ ... });
-  };
-
-  return <RewriteRuleForm onSave={handleSave} />;
-};
 ```
 
 ---
@@ -213,7 +184,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 **必要なパーミッション:**
 ```json
 {
-  "permissions": ["tabs", "scripting"]
+  "permissions": ["tabs"]
 }
 ```
 
@@ -232,19 +203,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 |-----|------|----------|------|
 | `chrome.storage.local` | ローカルストレージ | 10MB | なし |
 | `chrome.storage.sync` | 同期ストレージ | 100KB | デバイス間同期 |
-| `chrome.storage.session` | セッションストレージ | 10MB | セッション単位 |
-
-**使用例:**
-```typescript
-// 保存
-await chrome.storage.local.set({ key: 'value' });
-
-// 取得
-const result = await chrome.storage.local.get('key');
-
-// 削除
-await chrome.storage.local.remove('key');
-```
 
 **本プロジェクトでの使用:**
 - 現状: 一時的なデータ共有（contextMenuとpopup間）
@@ -259,22 +217,6 @@ await chrome.storage.local.remove('key');
 - ✅ Content Script
 - ✅ Popup/Options
 
-**メッセージング:**
-```typescript
-// 送信側（Content Script → Background）
-chrome.runtime.sendMessage({ type: 'getData', id: 123 }, (response) => {
-  console.log(response);
-});
-
-// 受信側（Background）
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'getData') {
-    // 処理
-    sendResponse({ data: '...' });
-    return true;  // 非同期レスポンス
-  }
-});
-```
 
 **ライフサイクルイベント:**
 ```typescript
@@ -358,13 +300,11 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 |----------|------|------|---------------------|
 | **IndexedDB (Dexie)** | 無制限（実質的） | 大量データ、構造化データ | ✅ RewriteRule永続化 |
 | **chrome.storage.local** | 10MB | 設定値、一時データ | ⚠️ 一時的な共有（将来廃止予定） |
-| **chrome.storage.sync** | 100KB | ユーザー設定（同期） | ❌ 未使用 |
 
 ### 5.2 推奨事項
 
 1. **大量データ**: IndexedDB (Dexie) を使用
 2. **設定値**: chrome.storage.local（軽量な場合）
-3. **デバイス間同期**: chrome.storage.sync
 
 ---
 
@@ -399,34 +339,6 @@ Content Script (onMessage listener)
 | **Content Script** | DOM操作、ページ内容取得 |
 | **Popup/Options** | ユーザーインターフェース |
 
-### 7.2 Clean Architectureとの対応
-
-```
-Background      → Infrastructure層（Repository実装、Chrome APIラッパー）
-Content Script  → Infrastructure層（DOM操作サービス）
-Popup/Options   → Presentation層（Reactコンポーネント）
-UseCase         → Application層（すべてのコンテキストから呼び出し可能）
-```
-
----
-
-## 8. トラブルシューティング
-
-### 8.1 よくあるエラー
-
-**エラー:** `Cannot read property 'query' of undefined`
-```typescript
-// Content Scriptで chrome.tabs を使おうとした場合
-chrome.tabs.query({ active: true });  // ❌ undefined
-```
-**解決策:** Backgroundにメッセージを送信して間接的に取得
-
-**エラー:** `document is not defined`
-```typescript
-// Backgroundで document を使おうとした場合
-document.querySelector('.element');  // ❌ not defined
-```
-**解決策:** Content Scriptでの DOM操作に変更
 
 ---
 
