@@ -89,7 +89,7 @@ describe('Elements.forEachAsync - 正常系', () => {
     await elements.forEachAsync(callback);
 
     // Assert
-    expect(elements.hasElements()).toBe(false);
+    expect(elements.extractAttachedElements()).toEqual([]);
 
     // Cleanup
     document.body.removeChild(element);
