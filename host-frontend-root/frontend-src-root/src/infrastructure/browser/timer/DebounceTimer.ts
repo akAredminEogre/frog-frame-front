@@ -1,5 +1,4 @@
 import debounce from 'debounce';
-import { injectable } from 'tsyringe';
 
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 
@@ -10,8 +9,11 @@ const INITIAL_DEBOUNCE_DELAY_MS = 0;
 /**
  * デバウンスタイマーの実装
  * npmパッケージ'debounce'を使用してタイマー状態を管理する
+ *
+ * Note: @injectable()デコレーターは使用しない
+ * Content Scriptではtsyringeのデコレーターメタデータが正しく動作しないため
+ * 手動DI解決で使用する
  */
-@injectable()
 export class DebounceTimer implements IDebounceTimer {
   private pendingCallback: () => void;
   private debouncedExecutor: DebouncedFunction;
