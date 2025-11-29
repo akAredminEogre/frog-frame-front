@@ -81,5 +81,11 @@ kk=02
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
-
+**必要なパーミッション:**
+```json
+{
+  "permissions": ["tabs", "scripting"]
+}
+```
+とありますが、現在のコードベースでは`scripting`は使用していないように見えます。確認をお願いします
 ---
