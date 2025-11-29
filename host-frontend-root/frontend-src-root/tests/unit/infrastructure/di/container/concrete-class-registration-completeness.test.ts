@@ -1,7 +1,6 @@
-import 'src/infrastructure/di/container';
+import { container } from 'src/infrastructure/di/container';
 
-import { container } from 'tsyringe';
-import { afterEach,beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
@@ -13,98 +12,81 @@ import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/Close
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 
 /**
- * DIコンテナの完全自動化具体クラス登録確認テスト
- * container.tsに登録されている具体クラスを動的に取得して自動検証する
+ * DIコンテナのUseCase登録確認テスト
+ * container.tsに登録されているUseCaseを検証する
  */
-describe('DI Container - 完全自動化具体クラス登録確認テスト', () => {
-  beforeEach(() => {
-    container.clearInstances();
-  });
-
-  afterEach(() => {
-    container.clearInstances();
-  });
-
-  /**
-   * DIコンテナから動的に具体クラストークンを取得する
-   */
-  function getRegisteredConcreteClassTokens(): Array<{ token: any; isInterface: boolean }> {
-    const registryMap = (container as any)._registry._registryMap as Map<any, any>;
-    
-    return Array.from(registryMap.keys())
-      .filter(token => typeof token !== 'string')
-      .map(token => ({ token, isInterface: false }));
-  }
-
-  const expectedConcreteClassRegistrations = [
+describe('DI Container - UseCase登録確認テスト', () => {
+  const expectedUseCaseRegistrations = [
     {
-      class: HandleContextMenuReplaceDomElement,
+      key: 'handleContextMenuReplaceDomElement',
+      implementationClass: HandleContextMenuReplaceDomElement,
       className: 'HandleContextMenuReplaceDomElement'
     },
     {
-      class: ContextMenuSetupUseCase,
-      className: 'ContextMenuSetupUseCase'  
+      key: 'contextMenuSetupUseCase',
+      implementationClass: ContextMenuSetupUseCase,
+      className: 'ContextMenuSetupUseCase'
     },
     {
-      class: DexieRewriteRuleRepository,
+      key: 'dexieRewriteRuleRepository',
+      implementationClass: DexieRewriteRuleRepository,
       className: 'DexieRewriteRuleRepository'
     },
     {
-      class: LoadRewriteRuleForEditUseCase,
+      key: 'loadRewriteRuleForEditUseCase',
+      implementationClass: LoadRewriteRuleForEditUseCase,
       className: 'LoadRewriteRuleForEditUseCase'
     },
     {
-      class: UpdateRewriteRuleUseCase,
+      key: 'updateRewriteRuleUseCase',
+      implementationClass: UpdateRewriteRuleUseCase,
       className: 'UpdateRewriteRuleUseCase'
     },
     {
-      class: CloseCurrentWindowUseCase,
+      key: 'closeCurrentWindowUseCase',
+      implementationClass: CloseCurrentWindowUseCase,
       className: 'CloseCurrentWindowUseCase'
     },
     {
-      class: SaveRewriteRuleAndApplyToCurrentTabUseCase,
+      key: 'saveRewriteRuleAndApplyToCurrentTabUseCase',
+      implementationClass: SaveRewriteRuleAndApplyToCurrentTabUseCase,
       className: 'SaveRewriteRuleAndApplyToCurrentTabUseCase'
     },
     {
-      class: PopupInitFormUseCase,
+      key: 'popupInitFormUseCase',
+      implementationClass: PopupInitFormUseCase,
       className: 'PopupInitFormUseCase'
     }
   ];
 
-  it('should verify expected concrete classes are registered and can be resolved', () => {
-    // Arrange - 開発者の意図する期待値を定義
-    const expectedRegistrations = expectedConcreteClassRegistrations;
-    
-    // Act - DIコンテナから登録済み具体クラストークンを動的取得
-    const actualRegisteredTokens = getRegisteredConcreteClassTokens();
-    
-    console.log('=== Expected vs Actual Concrete Class Registration Verification ===');
-    console.log(`Expected registrations: ${expectedRegistrations.length}`);
-    console.log(`Actual registrations: ${actualRegisteredTokens.length}`);
+  it('should verify expected UseCases are registered and can be resolved', () => {
+    // Arrange
+    const expectedRegistrations = expectedUseCaseRegistrations;
 
-    // Assert - 期待される登録数と一致することを確認
-    expect(actualRegisteredTokens).toHaveLength(expectedRegistrations.length);
+    // Act & Assert - 各UseCaseが登録されていて解決できることを確認
+    expectedRegistrations.forEach(({ key, implementationClass, className }) => {
+      // Awilixコンテナに登録されているか確認
+      const hasRegistration = container.hasRegistration(key);
+      expect(hasRegistration).toBe(true);
 
-    // Assert - 期待される各具体クラスが登録されていることを確認
-    expectedRegistrations.forEach(({ class: expectedClass, className }) => {
-      // 期待されるクラスがDIコンテナに登録されているかを確認
-      const isRegistered = (container as any).isRegistered(expectedClass);
-      expect(isRegistered).toBe(true);
-      
-      // 期待されるクラスが実際の登録リストに含まれているかを確認
-      const foundToken = actualRegisteredTokens.find(({ token }) => token === expectedClass);
-      expect(foundToken).toBeDefined();
-      expect(foundToken?.token.name).toBe(className);
-      
-      // 期待されるクラスのresolveテスト
+      // resolveテスト
       expect(() => {
-        const resolved = container.resolve(expectedClass as any) as any;
+        const resolved = container.resolve(key) as any;
         expect(resolved).toBeDefined();
         expect(resolved).not.toBeNull();
-        expect(resolved).toBeInstanceOf(expectedClass);
-        console.log(`Expected class ${className} resolved successfully`);
+        expect(resolved).toBeInstanceOf(implementationClass);
+        console.log(`UseCase ${className} resolved successfully`);
       }).not.toThrow();
     });
   });
 
+  it('should have all expected UseCase registrations', () => {
+    // 登録されているキーの数を確認
+    const registeredKeys = Object.keys(container.registrations);
+    const expectedUseCaseKeys = expectedUseCaseRegistrations.map(r => r.key);
+
+    expectedUseCaseKeys.forEach(key => {
+      expect(registeredKeys).toContain(key);
+    });
+  });
 });

@@ -1,7 +1,5 @@
 import 'src/entrypoints/rules/style.css';
 
-import { container } from 'src/infrastructure/di/container';
-
 import * as React from 'react';
 import { useEffect,useState } from 'react';
 
@@ -10,6 +8,7 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
 import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { container } from 'src/infrastructure/di/container';
 
 function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);
@@ -20,7 +19,7 @@ function RulesApp() {
     const loadRules = async () => {
       try {
         setLoading(true);
-        const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+        const repository = container.resolve<IRewriteRuleRepository>('rewriteRuleRepository');
         const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
         const loadedRules = await getAllRulesUseCase.execute();
         setRules(loadedRules);
@@ -51,7 +50,7 @@ function RulesApp() {
   }
 
   const handleEdit = async (ruleId: string | number) => {
-    const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
+    const chromeTabsService = container.resolve<IChromeTabsService>('tabsService');
     const openRuleEditPageUseCase = new OpenRuleEditPageUseCase(chromeTabsService);
     await openRuleEditPageUseCase.execute(ruleId);
   };

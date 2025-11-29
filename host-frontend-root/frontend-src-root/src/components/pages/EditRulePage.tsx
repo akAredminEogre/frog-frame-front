@@ -1,5 +1,3 @@
-import { container } from 'src/infrastructure/di/container';
-
 import React, { useEffect,useState } from 'react';
 
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
@@ -7,6 +5,7 @@ import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/Loa
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
+import { container } from 'src/infrastructure/di/container';
 
 interface EditRulePageProps {
   ruleId?: string; // 編集対象のルールID（URLパラメータから取得想定、numberに変換して使用）
@@ -31,7 +30,7 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
       setIsLoading(true);
       setError(null);
       try {
-        const loadUseCase = container.resolve(LoadRewriteRuleForEditUseCase);
+        const loadUseCase = container.resolve<LoadRewriteRuleForEditUseCase>('loadRewriteRuleForEditUseCase');
         const loadedRule = await loadUseCase.execute(Number(ruleId));
         
         if (loadedRule) {
@@ -59,7 +58,7 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
     
     setIsSaving(true);
     try {
-      const updateUseCase = container.resolve(UpdateRewriteRuleUseCase);
+      const updateUseCase = container.resolve<UpdateRewriteRuleUseCase>('updateRewriteRuleUseCase');
       await updateUseCase.execute(Number(ruleId), rule);
       
       alert('Rule updated successfully!');
@@ -72,7 +71,7 @@ export const EditRulePage: React.FC<EditRulePageProps> = ({ ruleId }) => {
   };
 
   const handleCancel = async () => {
-    const closeWindowUseCase = container.resolve(CloseCurrentWindowUseCase);
+    const closeWindowUseCase = container.resolve<CloseCurrentWindowUseCase>('closeCurrentWindowUseCase');
     await closeWindowUseCase.execute();
   };
 

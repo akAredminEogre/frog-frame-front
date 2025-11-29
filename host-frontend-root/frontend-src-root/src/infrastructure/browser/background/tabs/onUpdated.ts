@@ -1,16 +1,15 @@
-import { container } from 'src/infrastructure/di/container';
-
 import { TabId } from 'src/domain/value-objects/TabId';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
+import { container } from 'src/infrastructure/di/container';
 
 export function tabsOnUpdated() {
   chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
     if (changeInfo.status === 'complete') {
       try {
         // currentTabServiceを使用して特定のタブ情報を取得
-        const currentTabService = container.resolve(ChromeCurrentTabService);
-        const chromeTabsService = container.resolve(ChromeTabsService);
+        const currentTabService = container.resolve<ChromeCurrentTabService>('chromeCurrentTabService');
+        const chromeTabsService = container.resolve<ChromeTabsService>('chromeTabsService');
         const currentTab = await currentTabService.getTabById(new TabId(tabId));
 
         // コンテンツスクリプトを注入できるURLかチェック

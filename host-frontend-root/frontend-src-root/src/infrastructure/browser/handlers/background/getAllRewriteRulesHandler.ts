@@ -1,7 +1,6 @@
-import { container } from 'src/infrastructure/di/container';
-
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
+import { container } from 'src/infrastructure/di/container';
 
 /**
  * getAllRules message handler
@@ -9,7 +8,7 @@ import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllR
  */
 export const getAllRewriteRulesHandler = async () => {
   try {
-    const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+    const repository = container.resolve<IRewriteRuleRepository>('rewriteRuleRepository');
     const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
     const rules = await getAllRulesUseCase.execute();
     

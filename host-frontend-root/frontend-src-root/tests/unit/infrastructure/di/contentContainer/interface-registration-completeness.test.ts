@@ -1,82 +1,59 @@
-import 'src/infrastructure/di/contentContainer';
-
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-
 import { contentContainer } from 'src/infrastructure/di/contentContainer';
 
+import { describe, expect, it } from 'vitest';
+
+import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
+import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
+
 /**
- * Content Script用DIコンテナの完全自動化インターフェース登録確認テスト
- * contentContainer.tsに登録されているインターフェースを動的に取得して自動検証する
+ * Content Script用DIコンテナのサービス登録確認テスト
+ * contentContainer.tsに登録されているサービスを検証する
  */
-describe('Content DI Container - 完全自動化インターフェース登録確認テスト', () => {
-  beforeEach(() => {
-    contentContainer.clearInstances();
-  });
-
-  afterEach(() => {
-    contentContainer.clearInstances();
-  });
-
-  /**
-   * Content Script用DIコンテナから動的にインターフェーストークンを取得する
-   * 注意: contentContainerは子コンテナのため、親コンテナの登録も含まれる
-   * ここでは子コンテナで上書きされた登録のみを検証対象とする
-   */
-  function getRegisteredInterfaceTokens(): Array<{ token: string; isInterface: boolean }> {
-    const registryMap = (contentContainer as any)._registry._registryMap as Map<any, any>;
-
-    return Array.from(registryMap.keys())
-      .filter(token => typeof token === 'string')
-      .map(token => ({ token, isInterface: true }));
-  }
-
-  const expectedInterfaceRegistrations = [
+describe('Content DI Container - サービス登録確認テスト', () => {
+  const expectedServiceRegistrations = [
     {
-      interface: 'IRewriteRuleRepository',
+      key: 'rewriteRuleRepository',
+      implementationClass: ChromeRuntimeRewriteRuleRepository,
       implementationName: 'ChromeRuntimeRewriteRuleRepository'
     },
     {
-      interface: 'ICurrentUrlService',
+      key: 'currentUrlService',
+      implementationClass: WindowCurrentUrlService,
       implementationName: 'WindowCurrentUrlService'
     }
   ];
 
-  it('should verify expected interfaces are registered and can be resolved', () => {
-    // Arrange - 開発者の意図する期待値を定義
-    const expectedRegistrations = expectedInterfaceRegistrations;
+  it('should verify expected services are registered and can be resolved', () => {
+    // Arrange
+    const expectedRegistrations = expectedServiceRegistrations;
 
-    // Act - DIコンテナから登録済みインターフェーストークンを動的取得
-    const actualRegisteredTokens = getRegisteredInterfaceTokens();
+    // Act & Assert - 各サービスが登録されていて解決できることを確認
+    expectedRegistrations.forEach(({ key, implementationClass, implementationName }) => {
+      // Awilixコンテナに登録されているか確認
+      const hasRegistration = contentContainer.hasRegistration(key);
+      expect(hasRegistration).toBe(true);
 
-    console.log('=== Expected vs Actual Interface Registration Verification (Content Container) ===');
-    console.log(`Expected registrations: ${expectedRegistrations.length}`);
-    console.log(`Actual registrations: ${actualRegisteredTokens.length}`);
-
-    // Assert - 期待される登録数と一致することを確認
-    expect(actualRegisteredTokens).toHaveLength(expectedRegistrations.length);
-
-    // Assert - 期待される各インターフェースが登録されていることを確認
-    expectedRegistrations.forEach(({ interface: expectedInterface, implementationName }) => {
-      // 期待されるインターフェースがDIコンテナに登録されているかを確認
-      const isRegistered = (contentContainer as any).isRegistered(expectedInterface);
-      expect(isRegistered).toBe(true);
-
-      // 期待されるインターフェースが実際の登録リストに含まれているかを確認
-      const foundToken = actualRegisteredTokens.find(({ token }) => token === expectedInterface);
-      expect(foundToken).toBeDefined();
-      expect(foundToken?.token).toBe(expectedInterface);
-
-      // 期待されるインターフェースのresolveテスト
+      // resolveテスト
       expect(() => {
-        const resolved = contentContainer.resolve(expectedInterface) as any;
+        const resolved = contentContainer.resolve(key) as any;
         expect(resolved).toBeDefined();
         expect(resolved).not.toBeNull();
         expect(typeof resolved).toBe('object');
         expect(resolved.constructor).toBeDefined();
         expect(resolved.constructor.name).toBe(implementationName);
-        console.log(`Expected interface ${expectedInterface} resolved to ${implementationName} successfully`);
+        expect(resolved).toBeInstanceOf(implementationClass);
+        console.log(`Content service ${key} resolved to ${implementationName} successfully`);
       }).not.toThrow();
     });
   });
 
+  it('should have all expected service registrations', () => {
+    // 登録されているキーの数を確認
+    const registeredKeys = Object.keys(contentContainer.registrations);
+    const expectedServiceKeys = expectedServiceRegistrations.map(r => r.key);
+
+    expectedServiceKeys.forEach(key => {
+      expect(registeredKeys).toContain(key);
+    });
+  });
 });

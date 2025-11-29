@@ -1,5 +1,3 @@
-import { inject, injectable } from 'tsyringe';
-
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { IPopupService } from 'src/application/ports/IPopupService';
 import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
@@ -7,13 +5,11 @@ import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPage
 /**
  * コンテキストメニューからのDOM要素置換処理を扱うユースケース
  */
-export
-@injectable()
-class HandleContextMenuReplaceDomElement {
+export class HandleContextMenuReplaceDomElement {
   constructor(
-    @inject('IChromeTabsService') private readonly tabsService: IChromeTabsService,
-    @inject('ISelectedPageTextRepository') private readonly selectedPageTextRepository: ISelectedPageTextRepository,
-    @inject('IPopupService') private readonly popupService: IPopupService
+    private readonly tabsService: IChromeTabsService,
+    private readonly selectedPageTextRepository: ISelectedPageTextRepository,
+    private readonly popupService: IPopupService
   ) { }
   
   /**

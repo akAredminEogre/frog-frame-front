@@ -1,19 +1,5 @@
-import 'reflect-metadata';
+import { asClass, AwilixContainer, createContainer, InjectionMode } from 'awilix';
 
-import { container } from 'tsyringe';
-
-// Export the tsyringe container for use throughout the application
-export { container };
-
-// Register services with tsyringe
-import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
-import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
-import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
-import { IPopupService } from 'src/application/ports/IPopupService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
-import { IWindowService } from 'src/application/ports/IWindowService';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
@@ -30,22 +16,35 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/index
 import { SelectedPageTextRepository } from 'src/infrastructure/persistence/storage/SelectedPageTextRepository';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
-// Register implementations for interfaces (抽象化のため)
-container.register<IChromeTabsService>('IChromeTabsService', { useClass: ChromeTabsService });
-container.register<IPopupService>('IPopupService', { useClass: ChromePopupService });
-container.register<IRewriteRuleRepository>('IRewriteRuleRepository', { useClass: DexieRewriteRuleRepository });
-container.register<IWindowService>('IWindowService', { useClass: ChromeWindowService });
-container.register<ISelectedPageTextRepository>('ISelectedPageTextRepository', { useClass: SelectedPageTextRepository });
-container.register<ICurrentTabService>('ICurrentTabService', { useClass: ChromeCurrentTabService });
-container.register<IChromeRuntimeService>('IChromeRuntimeService', { useClass: ChromeRuntimeService });
-container.register<IGetSelectionService>('IGetSelectionService', { useClass: GetSelectionService });
+// Awilixコンテナを作成（CLASSIC modeでコンストラクタ引数名ベースのDI）
+export const container: AwilixContainer = createContainer({
+  injectionMode: InjectionMode.CLASSIC
+});
 
-// Register concrete classes (required for container.resolve() to work)
-container.register(HandleContextMenuReplaceDomElement, { useClass: HandleContextMenuReplaceDomElement });
-container.register(ContextMenuSetupUseCase, { useClass: ContextMenuSetupUseCase });
-container.register(DexieRewriteRuleRepository, { useClass: DexieRewriteRuleRepository });
-container.register(LoadRewriteRuleForEditUseCase, { useClass: LoadRewriteRuleForEditUseCase });
-container.register(UpdateRewriteRuleUseCase, { useClass: UpdateRewriteRuleUseCase });
-container.register(CloseCurrentWindowUseCase, { useClass: CloseCurrentWindowUseCase });
-container.register(SaveRewriteRuleAndApplyToCurrentTabUseCase, { useClass: SaveRewriteRuleAndApplyToCurrentTabUseCase });
-container.register(PopupInitFormUseCase, { useClass: PopupInitFormUseCase });
+// Register infrastructure services (引数名ベースで登録)
+container.register({
+  // Infrastructure services - 引数名と同じ名前で登録
+  tabsService: asClass(ChromeTabsService).singleton(),
+  popupService: asClass(ChromePopupService).singleton(),
+  rewriteRuleRepository: asClass(DexieRewriteRuleRepository).singleton(),
+  windowService: asClass(ChromeWindowService).singleton(),
+  selectedPageTextRepository: asClass(SelectedPageTextRepository).singleton(),
+  currentTabService: asClass(ChromeCurrentTabService).singleton(),
+  chromeRuntimeService: asClass(ChromeRuntimeService).singleton(),
+  getSelectionService: asClass(GetSelectionService).singleton(),
+  repository: asClass(DexieRewriteRuleRepository).singleton(),
+
+  // UseCases - クラス名のcamelCase形式で登録
+  handleContextMenuReplaceDomElement: asClass(HandleContextMenuReplaceDomElement).transient(),
+  contextMenuSetupUseCase: asClass(ContextMenuSetupUseCase).transient(),
+  loadRewriteRuleForEditUseCase: asClass(LoadRewriteRuleForEditUseCase).transient(),
+  updateRewriteRuleUseCase: asClass(UpdateRewriteRuleUseCase).transient(),
+  closeCurrentWindowUseCase: asClass(CloseCurrentWindowUseCase).transient(),
+  saveRewriteRuleAndApplyToCurrentTabUseCase: asClass(SaveRewriteRuleAndApplyToCurrentTabUseCase).transient(),
+  popupInitFormUseCase: asClass(PopupInitFormUseCase).transient(),
+
+  // 具象クラスの直接解決用エイリアス（camelCase形式）
+  chromeTabsService: asClass(ChromeTabsService).singleton(),
+  chromeCurrentTabService: asClass(ChromeCurrentTabService).singleton(),
+  dexieRewriteRuleRepository: asClass(DexieRewriteRuleRepository).singleton()
+});

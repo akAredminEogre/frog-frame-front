@@ -1,7 +1,6 @@
-import { container } from 'src/infrastructure/di/container';
-
 import { Tab } from 'src/domain/value-objects/Tab';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
+import { container } from 'src/infrastructure/di/container';
 
 type ApplyAllRulesMessage = { type: 'applyAllRules'; tabId: number; tabUrl: string };
 
@@ -14,7 +13,7 @@ export const applyAllRulesHandler = async (msg: ApplyAllRulesMessage) => {
     const { tabId, tabUrl } = msg;
 
     // Infrastructure層のサービスを使用してcontent scriptにメッセージを転送
-    const chromeTabsService = container.resolve(ChromeTabsService);
+    const chromeTabsService = container.resolve<ChromeTabsService>('chromeTabsService');
     const tab = new Tab(tabId, tabUrl);
     const response = await chromeTabsService.sendApplyAllRulesMessage(tab);
     
