@@ -1,16 +1,16 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
 /**
- * MutationRecords.forEachAddedNodes - 正常系テスト
+ * MutationRecords.extractAddedElements - 正常系テスト
  *
- * 1. 各MutationRecordのaddedNodesに対してコールバックを実行する
- * 2. 空の配列の場合はコールバックを実行しない
- * 3. 複数のMutationRecordがある場合、それぞれに対してコールバックを実行する
+ * 1. 全てのMutationRecordから追加されたElement要素を抽出する
+ * 2. 空の配列の場合は空配列を返す
+ * 3. 複数のMutationRecordからElement要素をフラットに抽出する
  */
-describe('MutationRecords.forEachAddedNodes - 正常系', () => {
-  it('should call callback for each MutationRecord', () => {
+describe('MutationRecords.extractAddedElements - 正常系', () => {
+  it('should extract Element from MutationRecords', () => {
     // Arrange
     const element = document.createElement('div');
     const nodeList = [element] as unknown as NodeList;
@@ -21,28 +21,27 @@ describe('MutationRecords.forEachAddedNodes - 正常系', () => {
     } as MutationRecord;
 
     const mutationRecords = new MutationRecords([mockRecord]);
-    const callback = vi.fn();
 
     // Act
-    mutationRecords.forEachAddedNodes(callback);
+    const result = mutationRecords.extractAddedElements();
 
     // Assert
-    expect(callback).toHaveBeenCalledTimes(1);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toBe(element);
   });
 
-  it('should not call callback for empty records array', () => {
+  it('should return empty array for empty records array', () => {
     // Arrange
     const mutationRecords = new MutationRecords([]);
-    const callback = vi.fn();
 
     // Act
-    mutationRecords.forEachAddedNodes(callback);
+    const result = mutationRecords.extractAddedElements();
 
     // Assert
-    expect(callback).not.toHaveBeenCalled();
+    expect(result).toHaveLength(0);
   });
 
-  it('should call callback for each record when multiple records exist', () => {
+  it('should extract elements from multiple records and flatten', () => {
     // Arrange
     const element1 = document.createElement('div');
     const nodeList1 = [element1] as unknown as NodeList;
@@ -56,12 +55,13 @@ describe('MutationRecords.forEachAddedNodes - 正常系', () => {
     const mockRecord2 = { addedNodes: nodeList2 } as MutationRecord;
 
     const mutationRecords = new MutationRecords([mockRecord1, mockRecord2]);
-    const callback = vi.fn();
 
     // Act
-    mutationRecords.forEachAddedNodes(callback);
+    const result = mutationRecords.extractAddedElements();
 
     // Assert
-    expect(callback).toHaveBeenCalledTimes(2);
+    expect(result).toHaveLength(2);
+    expect(result).toContain(element1);
+    expect(result).toContain(element2);
   });
 });

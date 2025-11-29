@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
@@ -12,9 +12,22 @@ import { MutationRecords } from 'src/domain/value-objects/MutationRecords/Mutati
  * 4. 重複する要素は1つにまとめる
  */
 describe('Elements.collectFromMutations - 正常系', () => {
+  let testContainer: HTMLElement;
+
+  beforeEach(() => {
+    testContainer = document.createElement('div');
+    document.body.appendChild(testContainer);
+  });
+
+  afterEach(() => {
+    document.body.removeChild(testContainer);
+  });
+
   it('should collect Element from MutationRecords', () => {
     // Arrange
     const element = document.createElement('div');
+    testContainer.appendChild(element);
+
     const nodeList = [element] as unknown as NodeList;
     (nodeList as any).forEach = Array.prototype.forEach.bind([element]);
 
@@ -27,7 +40,7 @@ describe('Elements.collectFromMutations - 正常系', () => {
 
     // Assert
     expect(elements.hasElements()).toBe(true);
-    expect(elements.extractAll()).toEqual([element]);
+    expect(elements.extractAttachedElements()).toEqual([element]);
   });
 
   it('should not collect anything from empty MutationRecords', () => {
@@ -45,10 +58,13 @@ describe('Elements.collectFromMutations - 正常系', () => {
   it('should collect elements from multiple MutationRecords', () => {
     // Arrange
     const element1 = document.createElement('div');
+    const element2 = document.createElement('span');
+    testContainer.appendChild(element1);
+    testContainer.appendChild(element2);
+
     const nodeList1 = [element1] as unknown as NodeList;
     (nodeList1 as any).forEach = Array.prototype.forEach.bind([element1]);
 
-    const element2 = document.createElement('span');
     const nodeList2 = [element2] as unknown as NodeList;
     (nodeList2 as any).forEach = Array.prototype.forEach.bind([element2]);
 
@@ -61,7 +77,7 @@ describe('Elements.collectFromMutations - 正常系', () => {
     elements.collectFromMutations(mutationRecords);
 
     // Assert
-    const extracted = elements.extractAll();
+    const extracted = elements.extractAttachedElements();
     expect(extracted).toHaveLength(2);
     expect(extracted).toContain(element1);
     expect(extracted).toContain(element2);
@@ -70,6 +86,8 @@ describe('Elements.collectFromMutations - 正常系', () => {
   it('should deduplicate same element', () => {
     // Arrange
     const element = document.createElement('div');
+    testContainer.appendChild(element);
+
     const nodeList1 = [element] as unknown as NodeList;
     (nodeList1 as any).forEach = Array.prototype.forEach.bind([element]);
 
@@ -85,7 +103,7 @@ describe('Elements.collectFromMutations - 正常系', () => {
     elements.collectFromMutations(mutationRecords);
 
     // Assert
-    expect(elements.extractAll()).toEqual([element]);
+    expect(elements.extractAttachedElements()).toEqual([element]);
   });
 
   it('should ignore non-Element nodes', () => {

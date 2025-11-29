@@ -11,11 +11,9 @@ export class MutationRecords {
   }
 
   /**
-   * 各MutationRecordのaddedNodesに対して処理を実行する
+   * 全てのMutationRecordから追加されたElement要素を抽出して配列として返す
    */
-  forEachAddedNodes(callback: (addedNodes: AddedNodes) => void): void {
-    this.records.forEach((record) => {
-      callback(new AddedNodes(record.addedNodes));
-    });
+  extractAddedElements(): Element[] {
+    return this.records.flatMap((record) => new AddedNodes(record.addedNodes).filterElements());
   }
 }
