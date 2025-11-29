@@ -1,11 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
+import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { HandleMutationsUseCase } from 'src/application/usecases/onDomChangeDetected/HandleMutationsUseCase';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
-import { Tab } from 'src/domain/value-objects/Tab';
 
 /**
  * HandleMutationsUseCase.exec - 正常系テスト
@@ -16,34 +15,36 @@ import { Tab } from 'src/domain/value-objects/Tab';
  */
 describe('HandleMutationsUseCase.exec - 正常系', () => {
   let mockRepository: IRewriteRuleRepository;
-  let mockCurrentTabService: ICurrentTabService;
+  let mockCurrentUrlService: ICurrentUrlService;
   let mockDebounceTimer: IDebounceTimer;
-  let mockGetAll: ReturnType<typeof vi.fn>;
-  let mockGetCurrentTab: ReturnType<typeof vi.fn>;
+  let mockGetRulesMatchingUrl: ReturnType<typeof vi.fn>;
+  let mockGetCurrentUrl: ReturnType<typeof vi.fn>;
   let mockSchedule: ReturnType<typeof vi.fn>;
   let scheduledCallback: (() => void) | undefined;
+  let addedElements: Element[] = [];
 
   beforeEach(() => {
     vi.clearAllMocks();
     scheduledCallback = undefined;
+    addedElements = [];
 
-    mockGetAll = vi.fn().mockResolvedValue(new RewriteRules([]));
-    mockGetCurrentTab = vi.fn().mockResolvedValue(new Tab(1, 'https://example.com'));
+    mockGetRulesMatchingUrl = vi.fn().mockResolvedValue(new RewriteRules([]));
+    mockGetCurrentUrl = vi.fn().mockReturnValue('https://example.com');
     mockSchedule = vi.fn().mockImplementation((callback: () => void) => {
       scheduledCallback = callback;
     });
 
     mockRepository = {
-      getAll: mockGetAll,
+      getAll: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
       getById: vi.fn(),
+      getRulesMatchingUrl: mockGetRulesMatchingUrl,
     } as IRewriteRuleRepository;
 
-    mockCurrentTabService = {
-      getCurrentTab: mockGetCurrentTab,
-      getTabById: vi.fn(),
-    } as ICurrentTabService;
+    mockCurrentUrlService = {
+      getCurrentUrl: mockGetCurrentUrl,
+    } as ICurrentUrlService;
 
     mockDebounceTimer = {
       schedule: mockSchedule,
@@ -52,12 +53,22 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
 
   afterEach(() => {
     vi.resetAllMocks();
+    // Cleanup elements added to the body
+    addedElements.forEach((element) => {
+      if (document.body.contains(element)) {
+        document.body.removeChild(element);
+      }
+    });
+    addedElements = [];
   });
 
   it('should process mutations and schedule rule application', async () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService, mockDebounceTimer);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentUrlService, mockDebounceTimer);
     const element = document.createElement('div');
+    document.body.appendChild(element);
+    addedElements.push(element);
+
     const mutation: Partial<MutationRecord> = {
       addedNodes: [element] as unknown as NodeList,
     };
@@ -71,13 +82,13 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
     // Simulate debounce timer firing
     await scheduledCallback!();
 
-    // Assert - rules should be applied
-    expect(mockGetCurrentTab).toHaveBeenCalledTimes(1);
+    // Assert - URL service should be called
+    expect(mockGetCurrentUrl).toHaveBeenCalledTimes(1);
   });
 
   it('should handle empty mutations array', async () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService, mockDebounceTimer);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentUrlService, mockDebounceTimer);
 
     // Act
     useCase.exec([]);
@@ -88,15 +99,19 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
     // Simulate debounce timer firing
     await scheduledCallback!();
 
-    // Since no nodes were added, getCurrentTab should not be called
-    expect(mockGetCurrentTab).not.toHaveBeenCalled();
+    // Since no nodes were added, getCurrentUrl should not be called
+    expect(mockGetCurrentUrl).not.toHaveBeenCalled();
   });
 
   it('should ignore mutations while rules are being applied', async () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService, mockDebounceTimer);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentUrlService, mockDebounceTimer);
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
+    document.body.appendChild(element1);
+    document.body.appendChild(element2);
+    addedElements.push(element1, element2);
+
     const mutation1: Partial<MutationRecord> = {
       addedNodes: [element1] as unknown as NodeList,
     };
@@ -109,7 +124,7 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
     const applyPromise = new Promise<void>((resolve) => {
       resolveApply = resolve;
     });
-    mockGetAll.mockReturnValue(applyPromise.then(() => new RewriteRules([])));
+    mockGetRulesMatchingUrl.mockReturnValue(applyPromise.then(() => new RewriteRules([])));
 
     // Act - first mutation
     useCase.exec([mutation1 as MutationRecord]);
@@ -125,16 +140,20 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
     resolveApply!();
     await applyingPromise;
 
-    // Assert - getCurrentTab should only be called once (for the first batch)
+    // Assert - getCurrentUrl should only be called once (for the first batch)
     // The second mutation should have been ignored while isApplyingRules was true
-    expect(mockGetCurrentTab).toHaveBeenCalledTimes(1);
+    expect(mockGetCurrentUrl).toHaveBeenCalledTimes(1);
   });
 
   it('should collect multiple nodes from mutations', async () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService, mockDebounceTimer);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentUrlService, mockDebounceTimer);
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
+    document.body.appendChild(element1);
+    document.body.appendChild(element2);
+    addedElements.push(element1, element2);
+
     const mutation: Partial<MutationRecord> = {
       addedNodes: [element1, element2] as unknown as NodeList,
     };
@@ -144,14 +163,18 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
     await scheduledCallback!();
 
     // Assert
-    expect(mockGetCurrentTab).toHaveBeenCalledTimes(1);
+    expect(mockGetCurrentUrl).toHaveBeenCalledTimes(1);
   });
 
   it('should batch multiple exec calls within debounce window', async () => {
     // Arrange
-    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentTabService, mockDebounceTimer);
+    const useCase = new HandleMutationsUseCase(mockRepository, mockCurrentUrlService, mockDebounceTimer);
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
+    document.body.appendChild(element1);
+    document.body.appendChild(element2);
+    addedElements.push(element1, element2);
+
     const mutation1: Partial<MutationRecord> = {
       addedNodes: [element1] as unknown as NodeList,
     };
@@ -170,6 +193,6 @@ describe('HandleMutationsUseCase.exec - 正常系', () => {
     await scheduledCallback!();
 
     // Assert - only one rule application should happen
-    expect(mockGetCurrentTab).toHaveBeenCalledTimes(1);
+    expect(mockGetCurrentUrl).toHaveBeenCalledTimes(1);
   });
 });

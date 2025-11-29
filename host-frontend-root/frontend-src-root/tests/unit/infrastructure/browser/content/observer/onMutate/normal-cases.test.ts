@@ -1,12 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { Tab } from 'src/domain/value-objects/Tab';
 import { observerOnMutate } from 'src/infrastructure/browser/content/observer/onMutate';
 
-// Mock the ApplySavedRulesOnPageLoadUseCase
-vi.mock('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase', () => ({
-  ApplySavedRulesOnPageLoadUseCase: vi.fn().mockImplementation(() => ({
-    applyAllRules: vi.fn().mockResolvedValue(undefined),
+// Mock the ApplyRulesOnPageLoadUseCase
+vi.mock('src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase', () => ({
+  ApplyRulesOnPageLoadUseCase: vi.fn().mockImplementation(() => ({
+    exec: vi.fn().mockResolvedValue(undefined),
   })),
 }));
 
@@ -15,9 +14,9 @@ vi.mock('src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository
   ChromeRuntimeRewriteRuleRepository: vi.fn().mockImplementation(() => ({})),
 }));
 
-// Mock the ChromeCurrentTabService
-vi.mock('src/infrastructure/browser/tabs/ChromeCurrentTabService', () => ({
-  ChromeCurrentTabService: vi.fn(),
+// Mock the WindowCurrentUrlService
+vi.mock('src/infrastructure/browser/window/WindowCurrentUrlService', () => ({
+  WindowCurrentUrlService: vi.fn(),
 }));
 
 // Mock the DebounceTimer - use actual implementation for integration testing
@@ -52,11 +51,10 @@ describe('observerOnMutate - 正常系', () => {
     mockDisconnect = vi.fn();
     capturedCallback = null;
 
-    // Setup ChromeCurrentTabService mock
-    const { ChromeCurrentTabService } = await import('src/infrastructure/browser/tabs/ChromeCurrentTabService');
-    vi.mocked(ChromeCurrentTabService).mockImplementation(() => ({
-      getCurrentTab: vi.fn().mockResolvedValue(new Tab(1, 'https://example.com')),
-      getTabById: vi.fn(),
+    // Setup WindowCurrentUrlService mock
+    const { WindowCurrentUrlService } = await import('src/infrastructure/browser/window/WindowCurrentUrlService');
+    vi.mocked(WindowCurrentUrlService).mockImplementation(() => ({
+      getCurrentUrl: vi.fn().mockReturnValue('https://example.com'),
     }) as any);
 
     vi.stubGlobal('MutationObserver', vi.fn().mockImplementation((callback) => {
@@ -97,10 +95,10 @@ describe('observerOnMutate - 正常系', () => {
 
   it('should apply rules to added Element nodes', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
-    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    const { ApplyRulesOnPageLoadUseCase } = await import('src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase');
+    const mockExec = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplyRulesOnPageLoadUseCase).mockImplementation(() => ({
+      exec: mockExec,
     }) as any);
 
     observerOnMutate();
@@ -119,10 +117,7 @@ describe('observerOnMutate - 正常系', () => {
     await vi.advanceTimersByTimeAsync(150);
 
     // Assert
-    expect(mockApplyAllRules).toHaveBeenCalledWith(
-      addedElement,
-      'https://example.com'
-    );
+    expect(mockExec).toHaveBeenCalledWith(addedElement);
 
     // Cleanup
     document.body.removeChild(addedElement);
@@ -130,10 +125,10 @@ describe('observerOnMutate - 正常系', () => {
 
   it('should ignore non-Element nodes (text nodes)', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
-    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    const { ApplyRulesOnPageLoadUseCase } = await import('src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase');
+    const mockExec = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplyRulesOnPageLoadUseCase).mockImplementation(() => ({
+      exec: mockExec,
     }) as any);
 
     observerOnMutate();
@@ -150,16 +145,16 @@ describe('observerOnMutate - 正常系', () => {
     // Wait for debounce
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - applyAllRules should not be called for text nodes (empty array)
-    expect(mockApplyAllRules).not.toHaveBeenCalled();
+    // Assert - exec should not be called for text nodes (empty array)
+    expect(mockExec).not.toHaveBeenCalled();
   });
 
   it('should debounce multiple rapid mutations', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
-    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    const { ApplyRulesOnPageLoadUseCase } = await import('src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase');
+    const mockExec = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplyRulesOnPageLoadUseCase).mockImplementation(() => ({
+      exec: mockExec,
     }) as any);
 
     observerOnMutate();
@@ -185,10 +180,10 @@ describe('observerOnMutate - 正常系', () => {
     await vi.advanceTimersByTimeAsync(150);
 
     // Assert - both elements should be processed together after debounce
-    // applyAllRules is called once per element
-    expect(mockApplyAllRules).toHaveBeenCalledTimes(2);
-    expect(mockApplyAllRules).toHaveBeenCalledWith(element1, 'https://example.com');
-    expect(mockApplyAllRules).toHaveBeenCalledWith(element2, 'https://example.com');
+    // exec is called once per element
+    expect(mockExec).toHaveBeenCalledTimes(2);
+    expect(mockExec).toHaveBeenCalledWith(element1);
+    expect(mockExec).toHaveBeenCalledWith(element2);
 
     // Cleanup
     document.body.removeChild(element1);
@@ -197,10 +192,10 @@ describe('observerOnMutate - 正常系', () => {
 
   it('should skip nodes that are no longer in the document', async () => {
     // Arrange
-    const { ApplySavedRulesOnPageLoadUseCase } = await import('src/application/usecases/rule/ApplySavedRulesOnPageLoadUseCase');
-    const mockApplyAllRules = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(ApplySavedRulesOnPageLoadUseCase).mockImplementation(() => ({
-      applyAllRules: mockApplyAllRules,
+    const { ApplyRulesOnPageLoadUseCase } = await import('src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase');
+    const mockExec = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(ApplyRulesOnPageLoadUseCase).mockImplementation(() => ({
+      exec: mockExec,
     }) as any);
 
     observerOnMutate();
@@ -218,7 +213,7 @@ describe('observerOnMutate - 正常系', () => {
     // Wait for debounce
     await vi.advanceTimersByTimeAsync(150);
 
-    // Assert - applyAllRules should not be called for nodes not in document
-    expect(mockApplyAllRules).not.toHaveBeenCalled();
+    // Assert - exec should not be called for nodes not in document
+    expect(mockExec).not.toHaveBeenCalled();
   });
 });

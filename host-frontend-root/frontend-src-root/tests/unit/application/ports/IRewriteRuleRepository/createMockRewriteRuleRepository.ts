@@ -11,5 +11,6 @@ export function createMockRewriteRuleRepository(): IRewriteRuleRepository {
     update: vi.fn(),
     getAll: vi.fn(),
     getById: vi.fn(),
+    getRulesMatchingUrl: vi.fn(),
   };
 }

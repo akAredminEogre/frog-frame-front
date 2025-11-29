@@ -1,3 +1,4 @@
+import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 /**
@@ -31,6 +32,17 @@ export class RewriteRules {
    */
   toArray(): RewriteRule[] {
     return Array.from(this.rules.values());
+  }
+
+  /**
+   * 全てのルールをDomDifferで適用する
+   * @param targetElement 適用対象のDOM要素
+   */
+  applyRulesWithDomDiffer(targetElement: Element): void {
+    this.toArray().forEach((rule) => {
+      const domDiffer = new DomDiffer(targetElement, rule);
+      domDiffer.applyRule();
+    });
   }
 
 }
