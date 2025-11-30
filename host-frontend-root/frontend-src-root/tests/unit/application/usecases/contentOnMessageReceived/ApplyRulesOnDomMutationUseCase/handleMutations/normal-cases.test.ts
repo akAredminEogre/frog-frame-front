@@ -16,6 +16,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
   let mockRepository: any;
   let mockCurrentUrlService: any;
   let mockDebounceTimer: any;
+  let mockObserverControl: any;
   let scheduledCallback: (() => Promise<void>) | null;
   let mockApplyRulesWithDomDiffer: ReturnType<typeof vi.fn>;
   let useCase: ApplyRulesOnDomMutationUseCase;
@@ -39,12 +40,17 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
       }),
       isExecuting: vi.fn().mockReturnValue(false),
     };
+    mockObserverControl = {
+      disconnect: vi.fn(),
+      reconnect: vi.fn(),
+    };
 
     // UseCaseを作成し、applyRulesToRootを呼び出して初回ロード完了状態にする
     useCase = new ApplyRulesOnDomMutationUseCase(
       mockRepository,
       mockCurrentUrlService,
-      mockDebounceTimer
+      mockDebounceTimer,
+      mockObserverControl
     );
     await useCase.applyRulesToRoot(document.body);
 

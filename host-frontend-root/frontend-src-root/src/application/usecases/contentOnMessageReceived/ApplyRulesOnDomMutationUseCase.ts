@@ -1,5 +1,6 @@
 import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
+import { IObserverControl } from 'src/application/ports/IObserverControl';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
@@ -16,28 +17,33 @@ const DEBOUNCE_DELAY_MS = 100;
  * 状態管理:
  * - hasInitialLoadCompleted: 初回applyRulesToRoot完了後にtrue
  *   → 初回ロード完了前はMutationObserverによるルール適用を抑制
- * - isApplyingToRoot: applyRulesToRoot実行中にtrue
- *   → 実行中のMutationによる重複適用を防止
+ *
+ * MutationObserver制御:
+ * - IObserverControlを使用してルール適用中はMutationObserverを一時停止
+ * - これにより、DOM変更がMutationObserverをトリガーし重複適用を引き起こすのを防ぐ
  */
 export class ApplyRulesOnDomMutationUseCase {
   private elements: Elements;
   private repository: IRewriteRuleRepository;
   private currentUrlService: ICurrentUrlService;
   private debounceTimer: IDebounceTimer;
-  private isApplyingToRoot: boolean;
+  private observerControl: IObserverControl;
   private hasInitialLoadCompleted: boolean;
+  private isApplyingToRoot: boolean;
 
   constructor(
     repository: IRewriteRuleRepository,
     currentUrlService: ICurrentUrlService,
-    debounceTimer: IDebounceTimer
+    debounceTimer: IDebounceTimer,
+    observerControl: IObserverControl
   ) {
     this.repository = repository;
     this.currentUrlService = currentUrlService;
     this.debounceTimer = debounceTimer;
+    this.observerControl = observerControl;
     this.elements = new Elements();
-    this.isApplyingToRoot = false;
     this.hasInitialLoadCompleted = false;
+    this.isApplyingToRoot = false;
   }
 
   /**
@@ -69,10 +75,9 @@ export class ApplyRulesOnDomMutationUseCase {
    * 初回呼び出し完了後、hasInitialLoadCompletedをtrueに設定し、
    * 以降のMutationObserverによるルール適用を許可する
    *
-   * 重要: applyRulesWithDomDifferによるDOM変更がMutationObserverをトリガーするが、
-   * そのコールバックはマイクロタスクとしてスケジュールされる。
-   * setTimeout(0)でマクロタスクを待つことで、MutationObserverコールバックが
-   * isApplyingToRoot=true の状態で処理されることを保証する。
+   * 注意: 呼び出し元（applyAllRulesHandler）がMutationObserverを
+   * disconnect/reconnectすることで、ルール適用中のDOM変更による
+   * 重複適用を防止している
    */
   async applyRulesToRoot(root: Element): Promise<void> {
     this.isApplyingToRoot = true;
@@ -81,10 +86,6 @@ export class ApplyRulesOnDomMutationUseCase {
     try {
       const rewriteRules = await this.fetchMatchingRules();
       rewriteRules.applyRulesWithDomDiffer(root);
-
-      // MutationObserverコールバック（マイクロタスク）が処理されるのを待つ
-      // これにより、DOM変更で発火したMutationがisApplyingToRoot=trueの間に処理される
-      await new Promise((resolve) => setTimeout(resolve, 0));
     } finally {
       this.isApplyingToRoot = false;
       this.hasInitialLoadCompleted = true;
@@ -97,8 +98,8 @@ export class ApplyRulesOnDomMutationUseCase {
       return;
     }
 
-    // ルール適用中フラグを立てて、DOM変更によるMutationObserverの再トリガーを防ぐ
     this.isApplyingToRoot = true;
+    this.observerControl.disconnect();
 
     try {
       const attachedElements = this.elements.extractAttachedElements();
@@ -106,10 +107,8 @@ export class ApplyRulesOnDomMutationUseCase {
       for (const element of attachedElements.toArray()) {
         rewriteRules.applyRulesWithDomDiffer(element);
       }
-
-      // MutationObserverコールバック（マイクロタスク）が処理されるのを待つ
-      await new Promise((resolve) => setTimeout(resolve, 0));
     } finally {
+      this.observerControl.reconnect();
       this.isApplyingToRoot = false;
     }
   }
