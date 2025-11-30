@@ -68,6 +68,11 @@ export class ApplyRulesOnDomMutationUseCase {
    *
    * 初回呼び出し完了後、hasInitialLoadCompletedをtrueに設定し、
    * 以降のMutationObserverによるルール適用を許可する
+   *
+   * 重要: applyRulesWithDomDifferによるDOM変更がMutationObserverをトリガーするが、
+   * そのコールバックはマイクロタスクとしてスケジュールされる。
+   * setTimeout(0)でマクロタスクを待つことで、MutationObserverコールバックが
+   * isApplyingToRoot=true の状態で処理されることを保証する。
    */
   async applyRulesToRoot(root: Element): Promise<void> {
     this.isApplyingToRoot = true;
@@ -76,6 +81,10 @@ export class ApplyRulesOnDomMutationUseCase {
     try {
       const rewriteRules = await this.fetchMatchingRules();
       rewriteRules.applyRulesWithDomDiffer(root);
+
+      // MutationObserverコールバック（マイクロタスク）が処理されるのを待つ
+      // これにより、DOM変更で発火したMutationがisApplyingToRoot=trueの間に処理される
+      await new Promise((resolve) => setTimeout(resolve, 0));
     } finally {
       this.isApplyingToRoot = false;
       this.hasInitialLoadCompleted = true;
@@ -88,10 +97,20 @@ export class ApplyRulesOnDomMutationUseCase {
       return;
     }
 
-    const attachedElements = this.elements.extractAttachedElements();
-    const rewriteRules = await this.fetchMatchingRules();
-    for (const element of attachedElements.toArray()) {
-      rewriteRules.applyRulesWithDomDiffer(element);
+    // ルール適用中フラグを立てて、DOM変更によるMutationObserverの再トリガーを防ぐ
+    this.isApplyingToRoot = true;
+
+    try {
+      const attachedElements = this.elements.extractAttachedElements();
+      const rewriteRules = await this.fetchMatchingRules();
+      for (const element of attachedElements.toArray()) {
+        rewriteRules.applyRulesWithDomDiffer(element);
+      }
+
+      // MutationObserverコールバック（マイクロタスク）が処理されるのを待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    } finally {
+      this.isApplyingToRoot = false;
     }
   }
 
