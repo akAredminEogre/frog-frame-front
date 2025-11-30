@@ -28,11 +28,13 @@ export function observerOnMutate() {
     await attachedElements.applyRules(repository, currentUrlService);
   };
 
-  const observer = new MutationObserver((mutations) => {
+  const callback = (mutations: MutationRecord[]) => {
     const mutationRecords = new MutationRecords(mutations);
     elements.merge(mutationRecords.extractAddedElements());
     debounceTimer.scheduleWithGuard(applyRulesToElements, DEBOUNCE_DELAY_MS);
-  });
+  };
+
+  const observer = new MutationObserver(callback);
 
   observer.observe(document.body, {
     childList: true,
