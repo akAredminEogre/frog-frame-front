@@ -1,4 +1,5 @@
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
+import { RuleApplicationGuard } from 'src/infrastructure/browser/content/guard/RuleApplicationGuard';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
 import { DebounceTimer } from 'src/infrastructure/browser/timer/DebounceTimer';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
@@ -16,7 +17,12 @@ export function observerOnMutate() {
   const repository = new ChromeRuntimeRewriteRuleRepository();
   const currentUrlService = new WindowCurrentUrlService();
   const debounceTimer = new DebounceTimer();
-  const useCase = new ApplyRulesOnDomMutationUseCase(repository, currentUrlService, debounceTimer);
+  const useCase = new ApplyRulesOnDomMutationUseCase(
+    repository,
+    currentUrlService,
+    debounceTimer,
+    RuleApplicationGuard
+  );
 
   const observer = new MutationObserver((mutations) => useCase.handleMutations(mutations));
   observer.observe(document.body, { childList: true, subtree: true });
