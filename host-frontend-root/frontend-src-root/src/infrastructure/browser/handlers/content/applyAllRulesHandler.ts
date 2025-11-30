@@ -1,4 +1,5 @@
 import { domMutationUseCaseInstance } from 'src/infrastructure/browser/content/instance/domMutationUseCaseInstance';
+import { disconnectObserver, reconnectObserver } from 'src/infrastructure/browser/content/observer/onMutate';
 
 /**
  * applyAllRules message handler for content script
@@ -12,8 +13,17 @@ import { domMutationUseCaseInstance } from 'src/infrastructure/browser/content/i
  *
  * domMutationUseCaseInstanceはシングルトンで、onMutate.tsと共有される
  * これにより、ページロード時とDOM Mutation時のルール適用の状態管理が簡素化される
+ *
+ * MutationObserverはルール適用中に一時停止される:
+ * - DOM変更がMutationObserverをトリガーし、重複適用を引き起こすのを防ぐ
+ * - 適用完了後に再開され、lazy loadコンテンツなどを監視する
  */
 export const applyAllRulesHandler = async () => {
-  await domMutationUseCaseInstance.applyRulesToRoot(document.body);
-  return { success: true };
+  disconnectObserver();
+  try {
+    await domMutationUseCaseInstance.applyRulesToRoot(document.body);
+    return { success: true };
+  } finally {
+    reconnectObserver();
+  }
 };
