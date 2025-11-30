@@ -26,7 +26,8 @@ export function observerOnMutate() {
 
   const applyRulesToElements = async () => {
     const applyRulesUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
-    for (const element of elements.extractAttachedElements()) {
+    const attachedElements = elements.extractAttachedElements();
+    for (const element of attachedElements) {
       await applyRulesUseCase.exec(element);
     }
   };
