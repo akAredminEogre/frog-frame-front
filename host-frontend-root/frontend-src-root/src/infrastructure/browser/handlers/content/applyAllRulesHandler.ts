@@ -1,5 +1,6 @@
 // cspell:ignore usecases
 import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
+import { RuleApplicationGuard } from 'src/infrastructure/browser/content/guard/RuleApplicationGuard';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
 
@@ -14,12 +15,28 @@ import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/Windo
  * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
  */
 export const applyAllRulesHandler = async () => {
-  // 手動DI解決: tsyringeのデコレーターメタデータ問題を回避するため
-  // 依存関係を明示的にインスタンス化してUseCaseを作成
-  const repository = new ChromeRuntimeRewriteRuleRepository();
-  const currentUrlService = new WindowCurrentUrlService();
-  const applyRulesOnPageLoadUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
+  // 既にルール適用中の場合はスキップ（MutationObserverとの重複防止）
+  if (RuleApplicationGuard.isApplicationInProgress()) {
+    return { success: true, skipped: true };
+  }
 
-  await applyRulesOnPageLoadUseCase.exec(document.body);
-  return { success: true };
+  // MutationObserverの蓄積をクリアするよう要求
+  RuleApplicationGuard.requestClearPending();
+
+  // ルール適用開始をマーク
+  RuleApplicationGuard.startApplication();
+
+  try {
+    // 手動DI解決: tsyringeのデコレーターメタデータ問題を回避するため
+    // 依存関係を明示的にインスタンス化してUseCaseを作成
+    const repository = new ChromeRuntimeRewriteRuleRepository();
+    const currentUrlService = new WindowCurrentUrlService();
+    const applyRulesOnPageLoadUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
+
+    await applyRulesOnPageLoadUseCase.exec(document.body);
+    return { success: true };
+  } finally {
+    // ルール適用完了をマーク
+    RuleApplicationGuard.endApplication();
+  }
 };
