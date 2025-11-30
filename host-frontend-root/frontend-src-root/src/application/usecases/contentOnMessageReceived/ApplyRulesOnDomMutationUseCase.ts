@@ -1,7 +1,6 @@
 import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
@@ -41,9 +40,10 @@ export class ApplyRulesOnDomMutationUseCase {
 
   private async applyRules(): Promise<void> {
     const attachedElements = this.elements.extractAttachedElements();
-    const applyRulesUseCase = new ApplyRulesOnPageLoadUseCase(this.repository, this.currentUrlService);
+    const currentUrl = this.currentUrlService.getCurrentUrl();
+    const rewriteRules = await this.repository.getRulesMatchingUrl(currentUrl);
     for (const element of attachedElements.toArray()) {
-      await applyRulesUseCase.exec(element);
+      rewriteRules.applyRulesWithDomDiffer(element);
     }
   }
 }
