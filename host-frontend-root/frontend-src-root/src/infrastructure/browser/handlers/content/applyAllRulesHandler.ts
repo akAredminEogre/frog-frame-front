@@ -1,8 +1,4 @@
-// cspell:ignore usecases
-import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
-import { RuleApplicationGuard } from 'src/infrastructure/browser/content/guard/RuleApplicationGuard';
-import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
-import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
+import { domMutationUseCaseInstance } from 'src/infrastructure/browser/content/instance/domMutationUseCaseInstance';
 
 /**
  * applyAllRules message handler for content script
@@ -13,30 +9,11 @@ import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/Windo
  * 2. listeners/runtime/content.onMessage.ts の registerRuntimeOnMessageForContent が message を route 関数に渡す
  * 3. router/content/messageRouter.ts の createContentMessageRouter が message を適切な handler に振り分ける
  * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
+ *
+ * domMutationUseCaseInstanceはシングルトンで、onMutate.tsと共有される
+ * これにより、ページロード時とDOM Mutation時のルール適用の状態管理が簡素化される
  */
 export const applyAllRulesHandler = async () => {
-  // 既にルール適用中の場合はスキップ（MutationObserverとの重複防止）
-  if (RuleApplicationGuard.isApplicationInProgress()) {
-    return { success: true, skipped: true };
-  }
-
-  // MutationObserverの蓄積をクリアするよう要求
-  RuleApplicationGuard.requestClearPending();
-
-  // ルール適用開始をマーク
-  RuleApplicationGuard.startApplication();
-
-  try {
-    // 手動DI解決: tsyringeのデコレーターメタデータ問題を回避するため
-    // 依存関係を明示的にインスタンス化してUseCaseを作成
-    const repository = new ChromeRuntimeRewriteRuleRepository();
-    const currentUrlService = new WindowCurrentUrlService();
-    const applyRulesOnPageLoadUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
-
-    await applyRulesOnPageLoadUseCase.exec(document.body);
-    return { success: true };
-  } finally {
-    // ルール適用完了をマーク
-    RuleApplicationGuard.endApplication();
-  }
+  await domMutationUseCaseInstance.applyRulesToRoot(document.body);
+  return { success: true };
 };

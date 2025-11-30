@@ -13,7 +13,6 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
   let mockRepository: any;
   let mockCurrentUrlService: any;
   let mockDebounceTimer: any;
-  let mockRuleApplicationGuard: any;
   let scheduledCallback: (() => Promise<void>) | null;
   let mockApplyRulesWithDomDiffer: ReturnType<typeof vi.fn>;
 
@@ -36,10 +35,6 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
       }),
       isExecuting: vi.fn().mockReturnValue(false),
     };
-    mockRuleApplicationGuard = {
-      shouldClearPending: vi.fn().mockReturnValue(false),
-      isApplicationInProgress: vi.fn().mockReturnValue(false),
-    };
   });
 
   afterEach(() => {
@@ -51,8 +46,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     const useCase = new ApplyRulesOnDomMutationUseCase(
       mockRepository,
       mockCurrentUrlService,
-      mockDebounceTimer,
-      mockRuleApplicationGuard
+      mockDebounceTimer
     );
 
     const element = document.createElement('div');
@@ -87,8 +81,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     const useCase = new ApplyRulesOnDomMutationUseCase(
       mockRepository,
       mockCurrentUrlService,
-      mockDebounceTimer,
-      mockRuleApplicationGuard
+      mockDebounceTimer
     );
 
     const element1 = document.createElement('div');
@@ -127,8 +120,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     const useCase = new ApplyRulesOnDomMutationUseCase(
       mockRepository,
       mockCurrentUrlService,
-      mockDebounceTimer,
-      mockRuleApplicationGuard
+      mockDebounceTimer
     );
 
     const textNode = document.createTextNode('test');
@@ -153,8 +145,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     const useCase = new ApplyRulesOnDomMutationUseCase(
       mockRepository,
       mockCurrentUrlService,
-      mockDebounceTimer,
-      mockRuleApplicationGuard
+      mockDebounceTimer
     );
 
     const detachedElement = document.createElement('div');
