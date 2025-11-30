@@ -26,14 +26,9 @@ describe('MutationRecords.extractAddedElements - 正常系', () => {
     const result = mutationRecords.extractAddedElements();
 
     // Assert
-    let count = 0;
-    let extractedElement: Element | null = null;
-    result.forEach((el) => {
-      count++;
-      extractedElement = el;
-    });
-    expect(count).toBe(1);
-    expect(extractedElement).toBe(element);
+    const elements = result.toArray();
+    expect(elements).toHaveLength(1);
+    expect(elements[0]).toBe(element);
   });
 
   it('should return empty Elements for empty records array', () => {
@@ -44,11 +39,7 @@ describe('MutationRecords.extractAddedElements - 正常系', () => {
     const result = mutationRecords.extractAddedElements();
 
     // Assert
-    let count = 0;
-    result.forEach(() => {
-      count++;
-    });
-    expect(count).toBe(0);
+    expect(result.toArray()).toHaveLength(0);
   });
 
   it('should extract elements from multiple records and flatten', () => {
@@ -70,8 +61,7 @@ describe('MutationRecords.extractAddedElements - 正常系', () => {
     const result = mutationRecords.extractAddedElements();
 
     // Assert
-    const elements: Element[] = [];
-    result.forEach((el) => elements.push(el));
+    const elements = result.toArray();
     expect(elements).toHaveLength(2);
     expect(elements).toContain(element1);
     expect(elements).toContain(element2);
