@@ -8,6 +8,9 @@ import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/content
  * 1. mutationsを受け取り、要素を蓄積してデバウンスでルール適用する
  * 2. 複数のmutationsをまとめて処理する
  * 3. Element以外のノードは無視する
+ *
+ * 注意: handleMutationsは初回ロード完了後（applyRulesToRoot呼び出し後）にのみ動作する
+ * そのため、各テストでapplyRulesToRootを先に呼び出して初回ロード完了状態を作る
  */
 describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
   let mockRepository: any;
@@ -15,8 +18,9 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
   let mockDebounceTimer: any;
   let scheduledCallback: (() => Promise<void>) | null;
   let mockApplyRulesWithDomDiffer: ReturnType<typeof vi.fn>;
+  let useCase: ApplyRulesOnDomMutationUseCase;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
     scheduledCallback = null;
     mockApplyRulesWithDomDiffer = vi.fn();
@@ -35,6 +39,21 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
       }),
       isExecuting: vi.fn().mockReturnValue(false),
     };
+
+    // UseCaseを作成し、applyRulesToRootを呼び出して初回ロード完了状態にする
+    useCase = new ApplyRulesOnDomMutationUseCase(
+      mockRepository,
+      mockCurrentUrlService,
+      mockDebounceTimer
+    );
+    await useCase.applyRulesToRoot(document.body);
+
+    // applyRulesToRootでのモック呼び出しをクリア
+    mockRepository.getRulesMatchingUrl.mockClear();
+    mockApplyRulesWithDomDiffer.mockClear();
+    mockCurrentUrlService.getCurrentUrl.mockClear();
+    mockDebounceTimer.scheduleWithGuard.mockClear();
+    scheduledCallback = null;
   });
 
   afterEach(() => {
@@ -43,12 +62,6 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
 
   it('should accumulate elements and schedule debounced rule application', async () => {
     // Arrange
-    const useCase = new ApplyRulesOnDomMutationUseCase(
-      mockRepository,
-      mockCurrentUrlService,
-      mockDebounceTimer
-    );
-
     const element = document.createElement('div');
     document.body.appendChild(element);
 
@@ -78,12 +91,6 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
 
   it('should accumulate elements from multiple handleMutations calls', async () => {
     // Arrange
-    const useCase = new ApplyRulesOnDomMutationUseCase(
-      mockRepository,
-      mockCurrentUrlService,
-      mockDebounceTimer
-    );
-
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
     document.body.appendChild(element1);
@@ -117,12 +124,6 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
 
   it('should ignore non-Element nodes', async () => {
     // Arrange
-    const useCase = new ApplyRulesOnDomMutationUseCase(
-      mockRepository,
-      mockCurrentUrlService,
-      mockDebounceTimer
-    );
-
     const textNode = document.createTextNode('test');
 
     const nodeList = [textNode] as unknown as NodeList;
@@ -142,12 +143,6 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
 
   it('should skip elements no longer in document', async () => {
     // Arrange
-    const useCase = new ApplyRulesOnDomMutationUseCase(
-      mockRepository,
-      mockCurrentUrlService,
-      mockDebounceTimer
-    );
-
     const detachedElement = document.createElement('div');
     // Not appending to document.body
 

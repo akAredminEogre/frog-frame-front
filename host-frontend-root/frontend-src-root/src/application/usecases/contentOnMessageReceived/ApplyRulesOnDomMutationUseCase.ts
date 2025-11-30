@@ -12,6 +12,12 @@ const DEBOUNCE_DELAY_MS = 100;
  * MutationObserverからのmutationsを受け取り、デバウンスしながらルールを適用する
  * Lazy load等で遅れてくるDOM更新に対応する
  * ページロード時のルール適用も担当する（applyRulesToRoot）
+ *
+ * 状態管理:
+ * - hasInitialLoadCompleted: 初回applyRulesToRoot完了後にtrue
+ *   → 初回ロード完了前はMutationObserverによるルール適用を抑制
+ * - isApplyingToRoot: applyRulesToRoot実行中にtrue
+ *   → 実行中のMutationによる重複適用を防止
  */
 export class ApplyRulesOnDomMutationUseCase {
   private elements: Elements;
@@ -19,6 +25,7 @@ export class ApplyRulesOnDomMutationUseCase {
   private currentUrlService: ICurrentUrlService;
   private debounceTimer: IDebounceTimer;
   private isApplyingToRoot: boolean;
+  private hasInitialLoadCompleted: boolean;
 
   constructor(
     repository: IRewriteRuleRepository,
@@ -30,14 +37,24 @@ export class ApplyRulesOnDomMutationUseCase {
     this.debounceTimer = debounceTimer;
     this.elements = new Elements();
     this.isApplyingToRoot = false;
+    this.hasInitialLoadCompleted = false;
   }
 
   /**
    * MutationObserverからのmutationsを処理する
+   *
+   * 初回ページロード完了前は要素の蓄積のみ行い、ルール適用はスケジュールしない
+   * これにより、ページロード中にMutationObserverが連鎖的にルール適用を
+   * 引き起こし、ページロードが完了しない問題を防止する
    */
   handleMutations(mutations: MutationRecord[]): void {
     // ルートへの適用中はスキップ（ページロード/ルール保存時との重複防止）
     if (this.isApplyingToRoot) {
+      return;
+    }
+
+    // 初回ロード完了前は蓄積しない（applyRulesToRootでdocument.body全体を処理するため）
+    if (!this.hasInitialLoadCompleted) {
       return;
     }
 
@@ -48,6 +65,9 @@ export class ApplyRulesOnDomMutationUseCase {
 
   /**
    * ページロード時またはルール保存時に、ルート要素全体にルールを適用する
+   *
+   * 初回呼び出し完了後、hasInitialLoadCompletedをtrueに設定し、
+   * 以降のMutationObserverによるルール適用を許可する
    */
   async applyRulesToRoot(root: Element): Promise<void> {
     this.isApplyingToRoot = true;
@@ -58,6 +78,7 @@ export class ApplyRulesOnDomMutationUseCase {
       rewriteRules.applyRulesWithDomDiffer(root);
     } finally {
       this.isApplyingToRoot = false;
+      this.hasInitialLoadCompleted = true;
     }
   }
 
