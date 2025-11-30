@@ -37,14 +37,4 @@ export class Elements {
     this.nodes.clear();
     return elements;
   }
-
-  /**
-   * 各要素に対して非同期処理を実行する
-   */
-  async forEachAsync(callback: (element: Element) => Promise<void>): Promise<void> {
-    const elements = this.extractAttachedElements();
-    for (const element of elements) {
-      await callback(element);
-    }
-  }
 }
