@@ -1,4 +1,3 @@
-import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
@@ -26,10 +25,7 @@ export function observerOnMutate() {
 
   const applyRulesToElements = async () => {
     const attachedElements = elements.extractAttachedElements();
-    await attachedElements.applyRules(() => {
-      const applyRulesUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
-      return (element) => applyRulesUseCase.exec(element);
-    });
+    await attachedElements.applyRules(repository, currentUrlService);
   };
 
   const observer = new MutationObserver((mutations) => {

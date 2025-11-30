@@ -1,3 +1,7 @@
+import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
+
 /**
  * DOM要素を管理するファーストクラスコレクション
  */
@@ -43,12 +47,14 @@ export class Elements {
 
   /**
    * 各要素に対して非同期でルール適用処理を実行する
-   * @param createApplyRule ルール適用関数を生成するファクトリ関数
    */
-  async applyRules(createApplyRule: () => (element: Element) => Promise<void>): Promise<void> {
-    const applyRule = createApplyRule();
+  async applyRules(
+    repository: IRewriteRuleRepository,
+    currentUrlService: ICurrentUrlService
+  ): Promise<void> {
+    const applyRulesUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
     for (const element of this.nodes) {
-      await applyRule(element);
+      await applyRulesUseCase.exec(element);
     }
   }
 }
