@@ -1,7 +1,3 @@
-import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
-
 /**
  * DOM要素を管理するファーストクラスコレクション
  */
@@ -43,18 +39,5 @@ export class Elements {
       .forEach((element) => attachedElements.addElement(element));
     this.nodes.clear();
     return attachedElements;
-  }
-
-  /**
-   * 各要素に対して非同期でルール適用処理を実行する
-   */
-  async applyRules(
-    repository: IRewriteRuleRepository,
-    currentUrlService: ICurrentUrlService
-  ): Promise<void> {
-    const applyRulesUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
-    for (const element of this.nodes) {
-      await applyRulesUseCase.exec(element);
-    }
   }
 }
