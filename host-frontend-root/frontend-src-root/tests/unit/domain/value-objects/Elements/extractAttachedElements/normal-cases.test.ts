@@ -12,12 +12,6 @@ import { MutationRecords } from 'src/domain/value-objects/MutationRecords/Mutati
  * 4. document.bodyに存在しない要素は除外する
  */
 describe('Elements.extractAttachedElements - 正常系', () => {
-  const toArray = (elements: Elements): Element[] => {
-    const result: Element[] = [];
-    elements.forEach((el) => result.push(el));
-    return result;
-  };
-
   it('should return collected elements that are in document body', () => {
     // Arrange
     const element = document.createElement('div');
@@ -35,7 +29,7 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     const result = elements.extractAttachedElements();
 
     // Assert
-    expect(toArray(result)).toEqual([element]);
+    expect(result.toArray()).toEqual([element]);
 
     // Cleanup
     document.body.removeChild(element);
@@ -58,7 +52,7 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     elements.extractAttachedElements();
 
     // Assert
-    expect(toArray(elements.extractAttachedElements())).toEqual([]);
+    expect(elements.extractAttachedElements().toArray()).toEqual([]);
 
     // Cleanup
     document.body.removeChild(element);
@@ -72,7 +66,7 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     const result = elements.extractAttachedElements();
 
     // Assert
-    expect(toArray(result)).toEqual([]);
+    expect(result.toArray()).toEqual([]);
   });
 
   it('should exclude elements not in document body', () => {
@@ -93,7 +87,7 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     const result = elements.extractAttachedElements();
 
     // Assert
-    const resultArray = toArray(result);
+    const resultArray = result.toArray();
     expect(resultArray).toEqual([attachedElement]);
     expect(resultArray).not.toContain(detachedElement);
 

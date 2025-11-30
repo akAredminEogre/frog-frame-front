@@ -20,17 +20,17 @@ export class Elements {
   }
 
   /**
-   * 各要素に対してコールバックを実行する
+   * 要素を配列として取得する
    */
-  forEach(callback: (element: Element) => void): void {
-    this.nodes.forEach(callback);
+  toArray(): Element[] {
+    return Array.from(this.nodes);
   }
 
   /**
    * 他のElementsコレクションの要素をマージする
    */
   merge(other: Elements): void {
-    other.forEach((element) => this.nodes.add(element));
+    other.nodes.forEach((element) => this.nodes.add(element));
   }
 
   /**
