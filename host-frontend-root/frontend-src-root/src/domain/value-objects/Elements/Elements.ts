@@ -43,8 +43,10 @@ export class Elements {
 
   /**
    * 各要素に対して非同期でルール適用処理を実行する
+   * @param createApplyRule ルール適用関数を生成するファクトリ関数
    */
-  async applyRules(applyRule: (element: Element) => Promise<void>): Promise<void> {
+  async applyRules(createApplyRule: () => (element: Element) => Promise<void>): Promise<void> {
+    const applyRule = createApplyRule();
     for (const element of this.nodes) {
       await applyRule(element);
     }
