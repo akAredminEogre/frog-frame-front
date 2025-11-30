@@ -2,13 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
 
-// Mock ApplyRulesOnPageLoadUseCase (used by Elements.applyRules)
-vi.mock('src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase', () => ({
-  ApplyRulesOnPageLoadUseCase: vi.fn().mockImplementation(() => ({
-    exec: vi.fn().mockResolvedValue(undefined),
-  })),
-}));
-
 /**
  * ApplyRulesOnDomMutationUseCase.handleMutations - 正常系テスト
  *
@@ -21,25 +14,18 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
   let mockCurrentUrlService: any;
   let mockDebounceTimer: any;
   let scheduledCallback: (() => Promise<void>) | null;
-  let mockExec: ReturnType<typeof vi.fn>;
+  let mockApplyRulesWithDomDiffer: ReturnType<typeof vi.fn>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     vi.clearAllMocks();
     scheduledCallback = null;
-    mockExec = vi.fn().mockResolvedValue(undefined);
+    mockApplyRulesWithDomDiffer = vi.fn();
 
-    // Re-mock the UseCase for each test
-    const { ApplyRulesOnPageLoadUseCase } = await import(
-      'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase'
-    );
-    vi.mocked(ApplyRulesOnPageLoadUseCase).mockImplementation(
-      () =>
-        ({
-          exec: mockExec,
-        }) as any
-    );
-
-    mockRepository = {};
+    mockRepository = {
+      getRulesMatchingUrl: vi.fn().mockResolvedValue({
+        applyRulesWithDomDiffer: mockApplyRulesWithDomDiffer,
+      }),
+    };
     mockCurrentUrlService = {
       getCurrentUrl: vi.fn().mockReturnValue('https://example.com'),
     };
@@ -82,7 +68,9 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
 
     // Execute the scheduled callback
     await scheduledCallback!();
-    expect(mockExec).toHaveBeenCalledWith(element);
+    expect(mockCurrentUrlService.getCurrentUrl).toHaveBeenCalled();
+    expect(mockRepository.getRulesMatchingUrl).toHaveBeenCalledWith('https://example.com');
+    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element);
 
     // Cleanup
     document.body.removeChild(element);
@@ -118,9 +106,9 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     await scheduledCallback!();
 
     // Assert
-    expect(mockExec).toHaveBeenCalledTimes(2);
-    expect(mockExec).toHaveBeenCalledWith(element1);
-    expect(mockExec).toHaveBeenCalledWith(element2);
+    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledTimes(2);
+    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element1);
+    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element2);
 
     // Cleanup
     document.body.removeChild(element1);
@@ -149,7 +137,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     await scheduledCallback!();
 
     // Assert
-    expect(mockExec).not.toHaveBeenCalled();
+    expect(mockApplyRulesWithDomDiffer).not.toHaveBeenCalled();
   });
 
   it('should skip elements no longer in document', async () => {
@@ -175,6 +163,6 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     await scheduledCallback!();
 
     // Assert
-    expect(mockExec).not.toHaveBeenCalled();
+    expect(mockApplyRulesWithDomDiffer).not.toHaveBeenCalled();
   });
 });
