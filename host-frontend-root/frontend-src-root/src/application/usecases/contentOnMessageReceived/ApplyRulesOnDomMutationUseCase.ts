@@ -54,18 +54,23 @@ export class ApplyRulesOnDomMutationUseCase {
    * 引き起こし、ページロードが完了しない問題を防止する
    */
   handleMutations(mutations: MutationRecord[]): void {
+    console.log('[DEBUG] handleMutations: called with', mutations.length, 'mutations');
+    console.log('[DEBUG] handleMutations: isApplyingToRoot=', this.isApplyingToRoot, 'hasInitialLoadCompleted=', this.hasInitialLoadCompleted);
     // ルートへの適用中はスキップ（ページロード/ルール保存時との重複防止）
     if (this.isApplyingToRoot) {
+      console.log('[DEBUG] handleMutations: SKIPPED (isApplyingToRoot=true)');
       return;
     }
 
     // 初回ロード完了前は蓄積しない（applyRulesToRootでdocument.body全体を処理するため）
     if (!this.hasInitialLoadCompleted) {
+      console.log('[DEBUG] handleMutations: SKIPPED (hasInitialLoadCompleted=false)');
       return;
     }
 
     const mutationRecords = new MutationRecords(mutations);
     this.elements.merge(mutationRecords.extractAddedElements());
+    console.log('[DEBUG] handleMutations: scheduling debounce');
     this.debounceTimer.scheduleWithGuard(() => this.applyRulesToMutatedElements(), DEBOUNCE_DELAY_MS);
   }
 
@@ -80,36 +85,49 @@ export class ApplyRulesOnDomMutationUseCase {
    * 重複適用を防止している
    */
   async applyRulesToRoot(root: Element): Promise<void> {
+    console.log('[DEBUG] applyRulesToRoot: START');
     this.isApplyingToRoot = true;
     this.elements = new Elements();
 
     try {
+      console.log('[DEBUG] applyRulesToRoot: fetching rules');
       const rewriteRules = await this.fetchMatchingRules();
+      console.log('[DEBUG] applyRulesToRoot: applying rules with DomDiffer');
       rewriteRules.applyRulesWithDomDiffer(root);
+      console.log('[DEBUG] applyRulesToRoot: rules applied');
     } finally {
       this.isApplyingToRoot = false;
       this.hasInitialLoadCompleted = true;
+      console.log('[DEBUG] applyRulesToRoot: END (isApplyingToRoot=false, hasInitialLoadCompleted=true)');
     }
   }
 
   private async applyRulesToMutatedElements(): Promise<void> {
+    console.log('[DEBUG] applyRulesToMutatedElements: START');
     // 適用直前にも再度チェック（デバウンス待ち中にapplyRulesToRootが実行された可能性）
     if (this.isApplyingToRoot) {
+      console.log('[DEBUG] applyRulesToMutatedElements: SKIPPED (isApplyingToRoot=true)');
       return;
     }
 
     this.isApplyingToRoot = true;
+    console.log('[DEBUG] applyRulesToMutatedElements: calling observerControl.disconnect');
     this.observerControl.disconnect();
+    console.log('[DEBUG] applyRulesToMutatedElements: observerControl.disconnect done');
 
     try {
       const attachedElements = this.elements.extractAttachedElements();
+      console.log('[DEBUG] applyRulesToMutatedElements: processing', attachedElements.toArray().length, 'elements');
       const rewriteRules = await this.fetchMatchingRules();
       for (const element of attachedElements.toArray()) {
         rewriteRules.applyRulesWithDomDiffer(element);
       }
+      console.log('[DEBUG] applyRulesToMutatedElements: rules applied');
     } finally {
+      console.log('[DEBUG] applyRulesToMutatedElements: calling observerControl.reconnect');
       this.observerControl.reconnect();
       this.isApplyingToRoot = false;
+      console.log('[DEBUG] applyRulesToMutatedElements: END');
     }
   }
 

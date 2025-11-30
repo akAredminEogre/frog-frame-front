@@ -13,8 +13,13 @@ let observer: MutationObserver | null = null;
  * これにより、ページロード時とDOM Mutation時のルール適用の状態管理が簡素化される
  */
 export function observerOnMutate() {
-  observer = new MutationObserver((mutations) => domMutationUseCaseInstance.handleMutations(mutations));
+  console.log('[DEBUG] observerOnMutate: creating MutationObserver');
+  observer = new MutationObserver((mutations) => {
+    console.log('[DEBUG] MutationObserver callback: received', mutations.length, 'mutations');
+    domMutationUseCaseInstance.handleMutations(mutations);
+  });
   observer.observe(document.body, { childList: true, subtree: true });
+  console.log('[DEBUG] observerOnMutate: observer started');
 }
 
 /**
@@ -24,7 +29,9 @@ export function observerOnMutate() {
  * 適用完了後はreconnectObserverを呼び出すこと
  */
 export function disconnectObserver() {
+  console.log('[DEBUG] disconnectObserver: called, observer=', observer ? 'exists' : 'null');
   observer?.disconnect();
+  console.log('[DEBUG] disconnectObserver: done');
 }
 
 /**
@@ -33,7 +40,9 @@ export function disconnectObserver() {
  * disconnectObserverで停止したobserverを再開する
  */
 export function reconnectObserver() {
+  console.log('[DEBUG] reconnectObserver: called, observer=', observer ? 'exists' : 'null');
   observer?.observe(document.body, { childList: true, subtree: true });
+  console.log('[DEBUG] reconnectObserver: done');
 }
 
 /**

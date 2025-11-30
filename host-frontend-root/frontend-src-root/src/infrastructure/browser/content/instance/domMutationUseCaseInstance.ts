@@ -29,11 +29,15 @@ const debounceTimer = new DebounceTimer();
  */
 const lazyObserverControl: IObserverControl = {
   disconnect: () => {
+    console.log('[DEBUG] lazyObserverControl.disconnect: called');
     const { observerControlInstance } = require('src/infrastructure/browser/content/observer/onMutate');
+    console.log('[DEBUG] lazyObserverControl.disconnect: observerControlInstance=', observerControlInstance ? 'exists' : 'undefined');
     observerControlInstance.disconnect();
   },
   reconnect: () => {
+    console.log('[DEBUG] lazyObserverControl.reconnect: called');
     const { observerControlInstance } = require('src/infrastructure/browser/content/observer/onMutate');
+    console.log('[DEBUG] lazyObserverControl.reconnect: observerControlInstance=', observerControlInstance ? 'exists' : 'undefined');
     observerControlInstance.reconnect();
   },
 };
