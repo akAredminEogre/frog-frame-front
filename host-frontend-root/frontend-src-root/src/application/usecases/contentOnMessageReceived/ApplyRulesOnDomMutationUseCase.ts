@@ -1,7 +1,6 @@
 import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { IRuleApplicationGuard } from 'src/application/ports/IRuleApplicationGuard';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
@@ -12,58 +11,71 @@ const DEBOUNCE_DELAY_MS = 100;
  *
  * MutationObserverからのmutationsを受け取り、デバウンスしながらルールを適用する
  * Lazy load等で遅れてくるDOM更新に対応する
+ * ページロード時のルール適用も担当する（applyRulesToRoot）
  */
 export class ApplyRulesOnDomMutationUseCase {
   private elements: Elements;
   private repository: IRewriteRuleRepository;
   private currentUrlService: ICurrentUrlService;
   private debounceTimer: IDebounceTimer;
-  private ruleApplicationGuard: IRuleApplicationGuard;
+  private isApplyingToRoot: boolean;
 
   constructor(
     repository: IRewriteRuleRepository,
     currentUrlService: ICurrentUrlService,
-    debounceTimer: IDebounceTimer,
-    ruleApplicationGuard: IRuleApplicationGuard
+    debounceTimer: IDebounceTimer
   ) {
     this.repository = repository;
     this.currentUrlService = currentUrlService;
     this.debounceTimer = debounceTimer;
-    this.ruleApplicationGuard = ruleApplicationGuard;
     this.elements = new Elements();
+    this.isApplyingToRoot = false;
   }
 
   /**
    * MutationObserverからのmutationsを処理する
    */
   handleMutations(mutations: MutationRecord[]): void {
-    // applyAllRulesがペンディング要素のクリアを要求している場合はクリア
-    if (this.ruleApplicationGuard.shouldClearPending()) {
-      this.elements = new Elements();
-      return;
-    }
-
-    // 既にルール適用中の場合はスキップ（applyAllRulesとの重複防止）
-    if (this.ruleApplicationGuard.isApplicationInProgress()) {
+    // ルートへの適用中はスキップ（ページロード/ルール保存時との重複防止）
+    if (this.isApplyingToRoot) {
       return;
     }
 
     const mutationRecords = new MutationRecords(mutations);
     this.elements.merge(mutationRecords.extractAddedElements());
-    this.debounceTimer.scheduleWithGuard(() => this.applyRules(), DEBOUNCE_DELAY_MS);
+    this.debounceTimer.scheduleWithGuard(() => this.applyRulesToMutatedElements(), DEBOUNCE_DELAY_MS);
   }
 
-  private async applyRules(): Promise<void> {
-    // 適用直前にも再度チェック（デバウンス待ち中にapplyAllRulesが実行された可能性）
-    if (this.ruleApplicationGuard.isApplicationInProgress()) {
+  /**
+   * ページロード時またはルール保存時に、ルート要素全体にルールを適用する
+   */
+  async applyRulesToRoot(root: Element): Promise<void> {
+    this.isApplyingToRoot = true;
+    this.elements = new Elements();
+
+    try {
+      const rewriteRules = await this.fetchMatchingRules();
+      rewriteRules.applyRulesWithDomDiffer(root);
+    } finally {
+      this.isApplyingToRoot = false;
+    }
+  }
+
+  private async applyRulesToMutatedElements(): Promise<void> {
+    // 適用直前にも再度チェック（デバウンス待ち中にapplyRulesToRootが実行された可能性）
+    if (this.isApplyingToRoot) {
       return;
     }
 
     const attachedElements = this.elements.extractAttachedElements();
-    const currentUrl = this.currentUrlService.getCurrentUrl();
-    const rewriteRules = await this.repository.getRulesMatchingUrl(currentUrl);
+    const rewriteRules = await this.fetchMatchingRules();
     for (const element of attachedElements.toArray()) {
       rewriteRules.applyRulesWithDomDiffer(element);
     }
+  }
+
+  private async fetchMatchingRules() {
+    const currentUrl = this.currentUrlService.getCurrentUrl();
+    return await this.repository.getRulesMatchingUrl(currentUrl);
   }
 }
