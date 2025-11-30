@@ -1,5 +1,3 @@
-import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
-
 /**
  * DOM要素を管理するファーストクラスコレクション
  */
@@ -11,10 +9,24 @@ export class Elements {
   }
 
   /**
-   * MutationRecordsから追加されたElement要素を収集してコレクションに追加する
+   * 要素を追加する
    */
-  collectFromMutations(mutationRecords: MutationRecords): void {
-    mutationRecords.extractAddedElements().forEach((element) => this.nodes.add(element));
+  addElement(element: Element): void {
+    this.nodes.add(element);
+  }
+
+  /**
+   * 各要素に対してコールバックを実行する
+   */
+  forEach(callback: (element: Element) => void): void {
+    this.nodes.forEach(callback);
+  }
+
+  /**
+   * 他のElementsコレクションの要素をマージする
+   */
+  merge(other: Elements): void {
+    other.forEach((element) => this.nodes.add(element));
   }
 
   /**

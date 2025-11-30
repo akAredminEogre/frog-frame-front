@@ -23,7 +23,7 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     const mockRecord = { addedNodes: nodeList } as MutationRecord;
     const mutationRecords = new MutationRecords([mockRecord]);
     const elements = new Elements();
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     // Act
     const result = elements.extractAttachedElements();
@@ -46,7 +46,7 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     const mockRecord = { addedNodes: nodeList } as MutationRecord;
     const mutationRecords = new MutationRecords([mockRecord]);
     const elements = new Elements();
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     // Act
     elements.extractAttachedElements();
@@ -81,7 +81,7 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     const mockRecord = { addedNodes: nodeList } as MutationRecord;
     const mutationRecords = new MutationRecords([mockRecord]);
     const elements = new Elements();
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     // Act
     const result = elements.extractAttachedElements();

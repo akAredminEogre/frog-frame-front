@@ -4,14 +4,14 @@ import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
 /**
- * Elements.collectFromMutations - 正常系テスト
+ * Elements.merge - 正常系テスト
  *
- * 1. MutationRecordsからElement要素を収集する
- * 2. 空のMutationRecordsの場合は何も収集しない
- * 3. 複数のMutationRecordから要素を収集する
+ * 1. 他のElementsコレクションから要素をマージする
+ * 2. 空のElementsをマージしても何も変わらない
+ * 3. 複数の要素を持つElementsをマージする
  * 4. 重複する要素は1つにまとめる
  */
-describe('Elements.collectFromMutations - 正常系', () => {
+describe('Elements.merge - 正常系', () => {
   let testContainer: HTMLElement;
 
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('Elements.collectFromMutations - 正常系', () => {
     document.body.removeChild(testContainer);
   });
 
-  it('should collect Element from MutationRecords', () => {
+  it('should merge Elements from MutationRecords', () => {
     // Arrange
     const element = document.createElement('div');
     testContainer.appendChild(element);
@@ -36,25 +36,25 @@ describe('Elements.collectFromMutations - 正常系', () => {
     const elements = new Elements();
 
     // Act
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
     expect(elements.extractAttachedElements()).toEqual([element]);
   });
 
-  it('should not collect anything from empty MutationRecords', () => {
+  it('should not change when merging empty Elements', () => {
     // Arrange
     const mutationRecords = new MutationRecords([]);
     const elements = new Elements();
 
     // Act
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
     expect(elements.extractAttachedElements()).toEqual([]);
   });
 
-  it('should collect elements from multiple MutationRecords', () => {
+  it('should merge elements from multiple MutationRecords', () => {
     // Arrange
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
@@ -73,7 +73,7 @@ describe('Elements.collectFromMutations - 正常系', () => {
     const elements = new Elements();
 
     // Act
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
     const extracted = elements.extractAttachedElements();
@@ -99,7 +99,7 @@ describe('Elements.collectFromMutations - 正常系', () => {
     const elements = new Elements();
 
     // Act
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
     expect(elements.extractAttachedElements()).toEqual([element]);
@@ -116,7 +116,7 @@ describe('Elements.collectFromMutations - 正常系', () => {
     const elements = new Elements();
 
     // Act
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
     expect(elements.extractAttachedElements()).toEqual([]);

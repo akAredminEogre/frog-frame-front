@@ -5,12 +5,12 @@ import { MutationRecords } from 'src/domain/value-objects/MutationRecords/Mutati
 /**
  * MutationRecords.extractAddedElements - 正常系テスト
  *
- * 1. 全てのMutationRecordから追加されたElement要素を抽出する
- * 2. 空の配列の場合は空配列を返す
+ * 1. 全てのMutationRecordから追加されたElement要素を抽出してElementsとして返す
+ * 2. 空の配列の場合は空のElementsを返す
  * 3. 複数のMutationRecordからElement要素をフラットに抽出する
  */
 describe('MutationRecords.extractAddedElements - 正常系', () => {
-  it('should extract Element from MutationRecords', () => {
+  it('should extract Element from MutationRecords and return as Elements', () => {
     // Arrange
     const element = document.createElement('div');
     const nodeList = [element] as unknown as NodeList;
@@ -26,11 +26,17 @@ describe('MutationRecords.extractAddedElements - 正常系', () => {
     const result = mutationRecords.extractAddedElements();
 
     // Assert
-    expect(result).toHaveLength(1);
-    expect(result[0]).toBe(element);
+    let count = 0;
+    let extractedElement: Element | null = null;
+    result.forEach((el) => {
+      count++;
+      extractedElement = el;
+    });
+    expect(count).toBe(1);
+    expect(extractedElement).toBe(element);
   });
 
-  it('should return empty array for empty records array', () => {
+  it('should return empty Elements for empty records array', () => {
     // Arrange
     const mutationRecords = new MutationRecords([]);
 
@@ -38,7 +44,11 @@ describe('MutationRecords.extractAddedElements - 正常系', () => {
     const result = mutationRecords.extractAddedElements();
 
     // Assert
-    expect(result).toHaveLength(0);
+    let count = 0;
+    result.forEach(() => {
+      count++;
+    });
+    expect(count).toBe(0);
   });
 
   it('should extract elements from multiple records and flatten', () => {
@@ -60,8 +70,10 @@ describe('MutationRecords.extractAddedElements - 正常系', () => {
     const result = mutationRecords.extractAddedElements();
 
     // Assert
-    expect(result).toHaveLength(2);
-    expect(result).toContain(element1);
-    expect(result).toContain(element2);
+    const elements: Element[] = [];
+    result.forEach((el) => elements.push(el));
+    expect(elements).toHaveLength(2);
+    expect(elements).toContain(element1);
+    expect(elements).toContain(element2);
   });
 });
