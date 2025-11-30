@@ -27,9 +27,7 @@ export function observerOnMutate() {
   const applyRulesToElements = async () => {
     const applyRulesUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
     const attachedElements = elements.extractAttachedElements();
-    for (const element of attachedElements) {
-      await applyRulesUseCase.exec(element);
-    }
+    await attachedElements.applyRules((element) => applyRulesUseCase.exec(element));
   };
 
   const observer = new MutationObserver((mutations) => {

@@ -14,6 +14,12 @@ import { MutationRecords } from 'src/domain/value-objects/MutationRecords/Mutati
 describe('Elements.merge - 正常系', () => {
   let testContainer: HTMLElement;
 
+  const toArray = (elements: Elements): Element[] => {
+    const result: Element[] = [];
+    elements.forEach((el) => result.push(el));
+    return result;
+  };
+
   beforeEach(() => {
     testContainer = document.createElement('div');
     document.body.appendChild(testContainer);
@@ -39,7 +45,7 @@ describe('Elements.merge - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    expect(elements.extractAttachedElements()).toEqual([element]);
+    expect(toArray(elements.extractAttachedElements())).toEqual([element]);
   });
 
   it('should not change when merging empty Elements', () => {
@@ -51,7 +57,7 @@ describe('Elements.merge - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    expect(elements.extractAttachedElements()).toEqual([]);
+    expect(toArray(elements.extractAttachedElements())).toEqual([]);
   });
 
   it('should merge elements from multiple MutationRecords', () => {
@@ -76,7 +82,7 @@ describe('Elements.merge - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    const extracted = elements.extractAttachedElements();
+    const extracted = toArray(elements.extractAttachedElements());
     expect(extracted).toHaveLength(2);
     expect(extracted).toContain(element1);
     expect(extracted).toContain(element2);
@@ -102,7 +108,7 @@ describe('Elements.merge - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    expect(elements.extractAttachedElements()).toEqual([element]);
+    expect(toArray(elements.extractAttachedElements())).toEqual([element]);
   });
 
   it('should ignore non-Element nodes', () => {
@@ -119,6 +125,6 @@ describe('Elements.merge - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    expect(elements.extractAttachedElements()).toEqual([]);
+    expect(toArray(elements.extractAttachedElements())).toEqual([]);
   });
 });
