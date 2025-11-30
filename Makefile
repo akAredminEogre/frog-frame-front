@@ -1,4 +1,4 @@
-.PHONY: init-config help init-dev dev down ps unit e2e testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune
+.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune
 
 help:
 	@echo "Available commands:"
@@ -9,6 +9,7 @@ help:
 	@echo "  make ps           - List running containers"
 	@echo "  make unit         - Run unit tests only"
 	@echo "  make e2e          - Run E2E tests only"
+	@echo "  make check        - Run compile, knip, tsr, and lint checks"
 	@echo "  make testall      - Run all tests (unit + E2E)"
 	@echo "  make testcheck    - Run tests with warnings"
 	@echo "  make testlint     - Run comprehensive tests and linting (required before PR)"
@@ -73,6 +74,10 @@ unit:
 e2e:
 	@echo "Running E2E tests..."
 	@docker compose exec frontend npm run test:e2e
+
+check:
+	@echo "Running compile, knip, tsr, and lint checks..."
+	@docker compose exec frontend sh -c 'npm run compile && (npm run knip:all || true) && (npm run tsr:check || true) && (npm run lint || true)'
 
 testall:
 	@echo "Running all tests..."
