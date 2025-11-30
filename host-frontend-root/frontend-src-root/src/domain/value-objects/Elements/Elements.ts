@@ -30,11 +30,23 @@ export class Elements {
   }
 
   /**
-   * 保持している要素のうち、documentに存在するものを配列として取り出し、コレクションをクリアする
+   * 保持している要素のうち、documentに存在するものを新しいElementsとして取り出し、コレクションをクリアする
    */
-  extractAttachedElements(): Element[] {
-    const elements = Array.from(this.nodes).filter((element) => document.body.contains(element));
+  extractAttachedElements(): Elements {
+    const attachedElements = new Elements();
+    Array.from(this.nodes)
+      .filter((element) => document.body.contains(element))
+      .forEach((element) => attachedElements.addElement(element));
     this.nodes.clear();
-    return elements;
+    return attachedElements;
+  }
+
+  /**
+   * 各要素に対して非同期でルール適用処理を実行する
+   */
+  async applyRules(applyRule: (element: Element) => Promise<void>): Promise<void> {
+    for (const element of this.nodes) {
+      await applyRule(element);
+    }
   }
 }
