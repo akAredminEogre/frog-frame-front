@@ -25,7 +25,7 @@ describe('Elements.forEachAsync - 正常系', () => {
     const mockRecord = { addedNodes: nodeList } as MutationRecord;
     const mutationRecords = new MutationRecords([mockRecord]);
     const elements = new Elements();
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     const callback = vi.fn().mockResolvedValue(undefined);
 
@@ -54,7 +54,7 @@ describe('Elements.forEachAsync - 正常系', () => {
     const mockRecord = { addedNodes: nodeList } as MutationRecord;
     const mutationRecords = new MutationRecords([mockRecord]);
     const elements = new Elements();
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     const callback = vi.fn().mockResolvedValue(undefined);
 
@@ -81,7 +81,7 @@ describe('Elements.forEachAsync - 正常系', () => {
     const mockRecord = { addedNodes: nodeList } as MutationRecord;
     const mutationRecords = new MutationRecords([mockRecord]);
     const elements = new Elements();
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
 
     const callback = vi.fn().mockResolvedValue(undefined);
 

@@ -31,7 +31,7 @@ export function observerOnMutate() {
 
   const observer = new MutationObserver((mutations) => {
     const mutationRecords = new MutationRecords(mutations);
-    elements.collectFromMutations(mutationRecords);
+    elements.merge(mutationRecords.extractAddedElements());
     debounceTimer.scheduleWithGuard(applyRulesToElements, DEBOUNCE_DELAY_MS);
   });
 
