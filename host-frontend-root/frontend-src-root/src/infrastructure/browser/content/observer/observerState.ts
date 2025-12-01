@@ -12,10 +12,6 @@ export function setObserver(obs: MutationObserver) {
   observer = obs;
 }
 
-export function getObserver(): MutationObserver | null {
-  return observer;
-}
-
 /**
  * MutationObserverを一時停止する
  */
