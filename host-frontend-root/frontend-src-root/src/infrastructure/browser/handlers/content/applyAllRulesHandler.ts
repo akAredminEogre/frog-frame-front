@@ -1,7 +1,5 @@
-// cspell:ignore usecases
-import { ApplyRulesOnPageLoadUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnPageLoadUseCase';
-import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
-import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
+import { domMutationUseCaseInstance } from 'src/infrastructure/browser/content/instance/domMutationUseCaseInstance';
+import { disconnectObserver, reconnectObserver } from 'src/infrastructure/browser/content/observer/onMutate';
 
 /**
  * applyAllRules message handler for content script
@@ -12,14 +10,20 @@ import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/Windo
  * 2. listeners/runtime/content.onMessage.ts の registerRuntimeOnMessageForContent が message を route 関数に渡す
  * 3. router/content/messageRouter.ts の createContentMessageRouter が message を適切な handler に振り分ける
  * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
+ *
+ * domMutationUseCaseInstanceはシングルトンで、onMutate.tsと共有される
+ * これにより、ページロード時とDOM Mutation時のルール適用の状態管理が簡素化される
+ *
+ * MutationObserverはルール適用中に一時停止される:
+ * - DOM変更がMutationObserverをトリガーし、重複適用を引き起こすのを防ぐ
+ * - 適用完了後に再開され、lazy loadコンテンツなどを監視する
  */
 export const applyAllRulesHandler = async () => {
-  // 手動DI解決: tsyringeのデコレーターメタデータ問題を回避するため
-  // 依存関係を明示的にインスタンス化してUseCaseを作成
-  const repository = new ChromeRuntimeRewriteRuleRepository();
-  const currentUrlService = new WindowCurrentUrlService();
-  const applyRulesOnPageLoadUseCase = new ApplyRulesOnPageLoadUseCase(repository, currentUrlService);
-
-  await applyRulesOnPageLoadUseCase.exec(document.body);
-  return { success: true };
+  disconnectObserver();
+  try {
+    await domMutationUseCaseInstance.applyRulesToRoot(document.body);
+    return { success: true };
+  } finally {
+    reconnectObserver();
+  }
 };
