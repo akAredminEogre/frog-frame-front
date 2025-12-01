@@ -16,8 +16,6 @@ export default defineConfig({
     // tests/ ディレクトリのVitestテストファイルのみを対象とする
     include: ['tests/**/*.test.ts'],
     // Playwrightテストファイルとnode_modulesを明示的に除外
-    exclude: ['**/*.spec.ts', 'e2e/**/*', 'node_modules/**/*'],
-    // tsyringeのreflect-metadataをグローバルに設定
-    setupFiles: ['reflect-metadata']
+    exclude: ['**/*.spec.ts', 'e2e/**/*', 'node_modules/**/*']
   },
 });

@@ -1,32 +1,12 @@
-import 'src/infrastructure/di/container';
+import { container } from 'src/infrastructure/di/container';
 
-import { container } from 'tsyringe';
-import { afterEach,beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 /**
- * DIコンテナの完全自動化インターフェース登録確認テスト
- * container.tsに登録されているインターフェースを動的に取得して自動検証する
+ * DIコンテナのインターフェース登録確認テスト (Awilix)
+ * container.resolve()でインターフェーストークンを解決できることを検証する
  */
-describe('DI Container - 完全自動化インターフェース登録確認テスト', () => {
-  beforeEach(() => {
-    container.clearInstances();
-  });
-
-  afterEach(() => {
-    container.clearInstances();
-  });
-
-  /**
-   * DIコンテナから動的にインターフェーストークンを取得する
-   */
-  function getRegisteredInterfaceTokens(): Array<{ token: string; isInterface: boolean }> {
-    const registryMap = (container as any)._registry._registryMap as Map<any, any>;
-    
-    return Array.from(registryMap.keys())
-      .filter(token => typeof token === 'string')
-      .map(token => ({ token, isInterface: true }));
-  }
-
+describe('DI Container - インターフェース登録確認テスト (Awilix)', () => {
   const expectedInterfaceRegistrations = [
     {
       interface: 'IChromeTabsService',
@@ -62,34 +42,17 @@ describe('DI Container - 完全自動化インターフェース登録確認テ�
     }
   ];
 
-  it('should verify expected interfaces are registered and can be resolved', () => {
-    // Arrange - 開発者の意図する期待値を定義
+  it('should verify expected interfaces can be resolved to their implementations', () => {
+    // Arrange
     const expectedRegistrations = expectedInterfaceRegistrations;
-    
-    // Act - DIコンテナから登録済みインターフェーストークンを動的取得
-    const actualRegisteredTokens = getRegisteredInterfaceTokens();
-    
-    console.log('=== Expected vs Actual Interface Registration Verification ===');
+
+    console.log('=== Interface Resolution Verification (Awilix) ===');
     console.log(`Expected registrations: ${expectedRegistrations.length}`);
-    console.log(`Actual registrations: ${actualRegisteredTokens.length}`);
 
-    // Assert - 期待される登録数と一致することを確認
-    expect(actualRegisteredTokens).toHaveLength(expectedRegistrations.length);
-
-    // Assert - 期待される各インターフェースが登録されていることを確認
+    // Assert - 期待される各インターフェースが解決できることを確認
     expectedRegistrations.forEach(({ interface: expectedInterface, implementationName }) => {
-      // 期待されるインターフェースがDIコンテナに登録されているかを確認
-      const isRegistered = (container as any).isRegistered(expectedInterface);
-      expect(isRegistered).toBe(true);
-      
-      // 期待されるインターフェースが実際の登録リストに含まれているかを確認
-      const foundToken = actualRegisteredTokens.find(({ token }) => token === expectedInterface);
-      expect(foundToken).toBeDefined();
-      expect(foundToken?.token).toBe(expectedInterface);
-      
-      // 期待されるインターフェースのresolveテスト
       expect(() => {
-        const resolved = container.resolve(expectedInterface) as any;
+        const resolved = container.resolve(expectedInterface as any) as any;
         expect(resolved).toBeDefined();
         expect(resolved).not.toBeNull();
         expect(typeof resolved).toBe('object');
@@ -99,5 +62,4 @@ describe('DI Container - 完全自動化インターフェース登録確認テ�
       }).not.toThrow();
     });
   });
-
 });
