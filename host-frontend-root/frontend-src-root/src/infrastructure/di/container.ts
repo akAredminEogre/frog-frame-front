@@ -1,4 +1,4 @@
-import { asClass, createContainer, InjectionMode } from 'awilix';
+import { asClass, createContainer } from 'awilix';
 
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
@@ -24,15 +24,16 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/index
 import { SelectedPageTextRepository } from 'src/infrastructure/persistence/storage/SelectedPageTextRepository';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
-// Create Awilix container with CLASSIC injection mode (constructor parameter names)
+// Create Awilix container
+// Note: 明示的インジェクションを使用するため、InjectionMode は不要
 const awilixContainer = createContainer({
-  injectionMode: InjectionMode.CLASSIC,
   strict: true
 });
 
-// Register implementations for interfaces
+// Register implementations for interfaces with explicit injection
+// ミニファイ後もパラメータ名に依存しないよう、inject() で依存関係を明示する
 awilixContainer.register({
-  // Infrastructure services (interfaces)
+  // Infrastructure services (interfaces) - 依存関係なし
   chromeTabsService: asClass(ChromeTabsService).singleton(),
   popupService: asClass(ChromePopupService).singleton(),
   rewriteRuleRepository: asClass(DexieRewriteRuleRepository).singleton(),
@@ -42,14 +43,46 @@ awilixContainer.register({
   chromeRuntimeService: asClass(ChromeRuntimeService).singleton(),
   getSelectionService: asClass(GetSelectionService).singleton(),
 
-  // Use Cases
-  handleContextMenuReplaceDomElement: asClass(HandleContextMenuReplaceDomElement).singleton(),
+  // Use Cases with explicit dependency injection
+  handleContextMenuReplaceDomElement: asClass(HandleContextMenuReplaceDomElement)
+    .singleton()
+    .inject(() => ({
+      rewriteRuleRepository: awilixContainer.resolve('rewriteRuleRepository'),
+      chromeTabsService: awilixContainer.resolve('chromeTabsService'),
+      selectedPageTextRepository: awilixContainer.resolve('selectedPageTextRepository'),
+      getSelectionService: awilixContainer.resolve('getSelectionService')
+    })),
   contextMenuSetupUseCase: asClass(ContextMenuSetupUseCase).singleton(),
-  loadRewriteRuleForEditUseCase: asClass(LoadRewriteRuleForEditUseCase).singleton(),
-  updateRewriteRuleUseCase: asClass(UpdateRewriteRuleUseCase).singleton(),
-  closeCurrentWindowUseCase: asClass(CloseCurrentWindowUseCase).singleton(),
-  saveRewriteRuleAndApplyToCurrentTabUseCase: asClass(SaveRewriteRuleAndApplyToCurrentTabUseCase).singleton(),
-  popupInitFormUseCase: asClass(PopupInitFormUseCase).singleton(),
+  loadRewriteRuleForEditUseCase: asClass(LoadRewriteRuleForEditUseCase)
+    .singleton()
+    .inject(() => ({
+      rewriteRuleRepository: awilixContainer.resolve('rewriteRuleRepository')
+    })),
+  updateRewriteRuleUseCase: asClass(UpdateRewriteRuleUseCase)
+    .singleton()
+    .inject(() => ({
+      rewriteRuleRepository: awilixContainer.resolve('rewriteRuleRepository'),
+      chromeTabsService: awilixContainer.resolve('chromeTabsService'),
+      chromeRuntimeService: awilixContainer.resolve('chromeRuntimeService')
+    })),
+  closeCurrentWindowUseCase: asClass(CloseCurrentWindowUseCase)
+    .singleton()
+    .inject(() => ({
+      windowService: awilixContainer.resolve('windowService')
+    })),
+  saveRewriteRuleAndApplyToCurrentTabUseCase: asClass(SaveRewriteRuleAndApplyToCurrentTabUseCase)
+    .singleton()
+    .inject(() => ({
+      rewriteRuleRepository: awilixContainer.resolve('rewriteRuleRepository'),
+      currentTabService: awilixContainer.resolve('currentTabService'),
+      chromeRuntimeService: awilixContainer.resolve('chromeRuntimeService')
+    })),
+  popupInitFormUseCase: asClass(PopupInitFormUseCase)
+    .singleton()
+    .inject(() => ({
+      popupService: awilixContainer.resolve('popupService'),
+      selectedPageTextRepository: awilixContainer.resolve('selectedPageTextRepository')
+    })),
 
   // Concrete classes for direct resolution
   dexieRewriteRuleRepository: asClass(DexieRewriteRuleRepository).singleton(),
