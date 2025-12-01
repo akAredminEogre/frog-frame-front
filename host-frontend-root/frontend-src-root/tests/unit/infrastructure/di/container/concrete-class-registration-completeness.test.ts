@@ -16,59 +16,67 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/index
  * container.resolve()で具体クラスを解決できることを検証する
  */
 describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
-  it('should resolve HandleContextMenuReplaceDomElement', () => {
-    const resolved = container.resolve(HandleContextMenuReplaceDomElement);
-    expect(resolved).toBeDefined();
-    expect(resolved).not.toBeNull();
-    expect(resolved).toBeInstanceOf(HandleContextMenuReplaceDomElement);
-  });
+  /**
+   * 具体クラス解決テストケース
+   * 各クラスがcontainer.resolve()で正しく解決できることを検証する
+   */
+  const testCases = [
+    {
+      description: 'HandleContextMenuReplaceDomElementを解決できること',
+      input: { classToken: HandleContextMenuReplaceDomElement },
+      expected: { className: 'HandleContextMenuReplaceDomElement' }
+    },
+    {
+      description: 'ContextMenuSetupUseCaseを解決できること',
+      input: { classToken: ContextMenuSetupUseCase },
+      expected: { className: 'ContextMenuSetupUseCase' }
+    },
+    {
+      description: 'DexieRewriteRuleRepositoryを解決できること',
+      input: { classToken: DexieRewriteRuleRepository },
+      expected: { className: 'DexieRewriteRuleRepository' }
+    },
+    {
+      description: 'LoadRewriteRuleForEditUseCaseを解決できること',
+      input: { classToken: LoadRewriteRuleForEditUseCase },
+      expected: { className: 'LoadRewriteRuleForEditUseCase' }
+    },
+    {
+      description: 'UpdateRewriteRuleUseCaseを解決できること',
+      input: { classToken: UpdateRewriteRuleUseCase },
+      expected: { className: 'UpdateRewriteRuleUseCase' }
+    },
+    {
+      description: 'CloseCurrentWindowUseCaseを解決できること',
+      input: { classToken: CloseCurrentWindowUseCase },
+      expected: { className: 'CloseCurrentWindowUseCase' }
+    },
+    {
+      description: 'SaveRewriteRuleAndApplyToCurrentTabUseCaseを解決できること',
+      input: { classToken: SaveRewriteRuleAndApplyToCurrentTabUseCase },
+      expected: { className: 'SaveRewriteRuleAndApplyToCurrentTabUseCase' }
+    },
+    {
+      description: 'PopupInitFormUseCaseを解決できること',
+      input: { classToken: PopupInitFormUseCase },
+      expected: { className: 'PopupInitFormUseCase' }
+    }
+  ];
 
-  it('should resolve ContextMenuSetupUseCase', () => {
-    const resolved = container.resolve(ContextMenuSetupUseCase);
-    expect(resolved).toBeDefined();
-    expect(resolved).not.toBeNull();
-    expect(resolved).toBeInstanceOf(ContextMenuSetupUseCase);
-  });
+  testCases.forEach((testCase) => {
+    it(testCase.description, () => {
+      // Arrange
+      const { classToken } = testCase.input;
+      const { className } = testCase.expected;
 
-  it('should resolve DexieRewriteRuleRepository', () => {
-    const resolved = container.resolve(DexieRewriteRuleRepository);
-    expect(resolved).toBeDefined();
-    expect(resolved).not.toBeNull();
-    expect(resolved).toBeInstanceOf(DexieRewriteRuleRepository);
-  });
+      // Act
+      const resolved = container.resolve<InstanceType<typeof classToken>>(classToken);
 
-  it('should resolve LoadRewriteRuleForEditUseCase', () => {
-    const resolved = container.resolve(LoadRewriteRuleForEditUseCase);
-    expect(resolved).toBeDefined();
-    expect(resolved).not.toBeNull();
-    expect(resolved).toBeInstanceOf(LoadRewriteRuleForEditUseCase);
-  });
-
-  it('should resolve UpdateRewriteRuleUseCase', () => {
-    const resolved = container.resolve(UpdateRewriteRuleUseCase);
-    expect(resolved).toBeDefined();
-    expect(resolved).not.toBeNull();
-    expect(resolved).toBeInstanceOf(UpdateRewriteRuleUseCase);
-  });
-
-  it('should resolve CloseCurrentWindowUseCase', () => {
-    const resolved = container.resolve(CloseCurrentWindowUseCase);
-    expect(resolved).toBeDefined();
-    expect(resolved).not.toBeNull();
-    expect(resolved).toBeInstanceOf(CloseCurrentWindowUseCase);
-  });
-
-  it('should resolve SaveRewriteRuleAndApplyToCurrentTabUseCase', () => {
-    const resolved = container.resolve(SaveRewriteRuleAndApplyToCurrentTabUseCase);
-    expect(resolved).toBeDefined();
-    expect(resolved).not.toBeNull();
-    expect(resolved).toBeInstanceOf(SaveRewriteRuleAndApplyToCurrentTabUseCase);
-  });
-
-  it('should resolve PopupInitFormUseCase', () => {
-    const resolved = container.resolve(PopupInitFormUseCase);
-    expect(resolved).toBeDefined();
-    expect(resolved).not.toBeNull();
-    expect(resolved).toBeInstanceOf(PopupInitFormUseCase);
+      // Assert
+      expect(resolved).toBeDefined();
+      expect(resolved).not.toBeNull();
+      expect(resolved).toBeInstanceOf(classToken);
+      expect((resolved as any).constructor.name).toBe(className);
+    });
   });
 });

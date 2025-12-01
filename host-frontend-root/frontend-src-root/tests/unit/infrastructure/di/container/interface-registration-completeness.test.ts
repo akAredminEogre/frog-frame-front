@@ -7,59 +7,68 @@ import { describe, expect, it } from 'vitest';
  * container.resolve()でインターフェーストークンを解決できることを検証する
  */
 describe('DI Container - インターフェース登録確認テスト (Awilix)', () => {
-  const expectedInterfaceRegistrations = [
+  /**
+   * インターフェース解決テストケース
+   * 各インターフェーストークンが正しい実装クラスに解決されることを検証する
+   */
+  const testCases = [
     {
-      interface: 'IChromeTabsService',
-      implementationName: 'ChromeTabsService'
+      description: 'IChromeTabsServiceをChromeTabsServiceに解決できること',
+      input: { interfaceToken: 'IChromeTabsService' as const },
+      expected: { implementationName: 'ChromeTabsService' }
     },
     {
-      interface: 'IPopupService',
-      implementationName: 'ChromePopupService'
+      description: 'IPopupServiceをChromePopupServiceに解決できること',
+      input: { interfaceToken: 'IPopupService' as const },
+      expected: { implementationName: 'ChromePopupService' }
     },
     {
-      interface: 'IRewriteRuleRepository',
-      implementationName: 'DexieRewriteRuleRepository'
+      description: 'IRewriteRuleRepositoryをDexieRewriteRuleRepositoryに解決できること',
+      input: { interfaceToken: 'IRewriteRuleRepository' as const },
+      expected: { implementationName: 'DexieRewriteRuleRepository' }
     },
     {
-      interface: 'IWindowService',
-      implementationName: 'ChromeWindowService'
+      description: 'IWindowServiceをChromeWindowServiceに解決できること',
+      input: { interfaceToken: 'IWindowService' as const },
+      expected: { implementationName: 'ChromeWindowService' }
     },
     {
-      interface: 'ISelectedPageTextRepository',
-      implementationName: 'SelectedPageTextRepository'
+      description: 'ISelectedPageTextRepositoryをSelectedPageTextRepositoryに解決できること',
+      input: { interfaceToken: 'ISelectedPageTextRepository' as const },
+      expected: { implementationName: 'SelectedPageTextRepository' }
     },
     {
-      interface: 'ICurrentTabService',
-      implementationName: 'ChromeCurrentTabService'
+      description: 'ICurrentTabServiceをChromeCurrentTabServiceに解決できること',
+      input: { interfaceToken: 'ICurrentTabService' as const },
+      expected: { implementationName: 'ChromeCurrentTabService' }
     },
     {
-      interface: 'IChromeRuntimeService',
-      implementationName: 'ChromeRuntimeService'
+      description: 'IChromeRuntimeServiceをChromeRuntimeServiceに解決できること',
+      input: { interfaceToken: 'IChromeRuntimeService' as const },
+      expected: { implementationName: 'ChromeRuntimeService' }
     },
     {
-      interface: 'IGetSelectionService',
-      implementationName: 'GetSelectionService'
+      description: 'IGetSelectionServiceをGetSelectionServiceに解決できること',
+      input: { interfaceToken: 'IGetSelectionService' as const },
+      expected: { implementationName: 'GetSelectionService' }
     }
   ];
 
-  it('should verify expected interfaces can be resolved to their implementations', () => {
-    // Arrange
-    const expectedRegistrations = expectedInterfaceRegistrations;
+  testCases.forEach((testCase) => {
+    it(testCase.description, () => {
+      // Arrange
+      const { interfaceToken } = testCase.input;
+      const { implementationName } = testCase.expected;
 
-    console.log('=== Interface Resolution Verification (Awilix) ===');
-    console.log(`Expected registrations: ${expectedRegistrations.length}`);
+      // Act
+      const resolved = container.resolve(interfaceToken) as any;
 
-    // Assert - 期待される各インターフェースが解決できることを確認
-    expectedRegistrations.forEach(({ interface: expectedInterface, implementationName }) => {
-      expect(() => {
-        const resolved = container.resolve(expectedInterface as any) as any;
-        expect(resolved).toBeDefined();
-        expect(resolved).not.toBeNull();
-        expect(typeof resolved).toBe('object');
-        expect(resolved.constructor).toBeDefined();
-        expect(resolved.constructor.name).toBe(implementationName);
-        console.log(`Expected interface ${expectedInterface} resolved to ${implementationName} successfully`);
-      }).not.toThrow();
+      // Assert
+      expect(resolved).toBeDefined();
+      expect(resolved).not.toBeNull();
+      expect(typeof resolved).toBe('object');
+      expect(resolved.constructor).toBeDefined();
+      expect(resolved.constructor.name).toBe(implementationName);
     });
   });
 });

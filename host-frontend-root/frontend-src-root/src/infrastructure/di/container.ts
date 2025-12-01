@@ -136,6 +136,8 @@ interface Container {
   resolve(token: typeof ChromeTabsService): ChromeTabsService;
   resolve(token: typeof ChromeCurrentTabService): ChromeCurrentTabService;
   resolve<T>(token: InterfaceToken): T;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  resolve<T>(token: Function): T;
 }
 
 // Wrapper to provide tsyringe-compatible API
