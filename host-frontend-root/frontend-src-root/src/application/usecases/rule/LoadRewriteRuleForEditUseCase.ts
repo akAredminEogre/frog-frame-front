@@ -1,13 +1,8 @@
-import { inject,injectable } from 'tsyringe';
-
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
-export
-@injectable()
-class LoadRewriteRuleForEditUseCase {
+export class LoadRewriteRuleForEditUseCase {
   constructor(
-    @inject('IRewriteRuleRepository')
     private readonly rewriteRuleRepository: IRewriteRuleRepository
   ) {}
 
