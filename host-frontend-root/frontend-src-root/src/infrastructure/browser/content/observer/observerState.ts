@@ -20,18 +20,14 @@ export function getObserver(): MutationObserver | null {
  * MutationObserverを一時停止する
  */
 export function disconnectObserver() {
-  console.log('[DEBUG] disconnectObserver: called, observer=', observer ? 'exists' : 'null');
   observer?.disconnect();
-  console.log('[DEBUG] disconnectObserver: done');
 }
 
 /**
  * MutationObserverを再開する
  */
 export function reconnectObserver() {
-  console.log('[DEBUG] reconnectObserver: called, observer=', observer ? 'exists' : 'null');
   observer?.observe(document.body, { childList: true, subtree: true });
-  console.log('[DEBUG] reconnectObserver: done');
 }
 
 /**

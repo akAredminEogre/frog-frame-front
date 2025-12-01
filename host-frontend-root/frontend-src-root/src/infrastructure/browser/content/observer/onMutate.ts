@@ -14,12 +14,9 @@ export { disconnectObserver, reconnectObserver } from 'src/infrastructure/browse
  * これにより、ページロード時とDOM Mutation時のルール適用の状態管理が簡素化される
  */
 export function observerOnMutate() {
-  console.log('[DEBUG] observerOnMutate: creating MutationObserver');
   const observer = new MutationObserver((mutations) => {
-    console.log('[DEBUG] MutationObserver callback: received', mutations.length, 'mutations');
     domMutationUseCaseInstance.handleMutations(mutations);
   });
   setObserver(observer);
   observer.observe(document.body, { childList: true, subtree: true });
-  console.log('[DEBUG] observerOnMutate: observer started');
 }

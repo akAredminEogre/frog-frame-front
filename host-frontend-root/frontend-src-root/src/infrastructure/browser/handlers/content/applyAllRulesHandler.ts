@@ -19,18 +19,11 @@ import { disconnectObserver, reconnectObserver } from 'src/infrastructure/browse
  * - 適用完了後に再開され、lazy loadコンテンツなどを監視する
  */
 export const applyAllRulesHandler = async () => {
-  console.log('[DEBUG] applyAllRulesHandler: START');
-  console.log('[DEBUG] applyAllRulesHandler: calling disconnectObserver');
   disconnectObserver();
-  console.log('[DEBUG] applyAllRulesHandler: disconnectObserver done');
   try {
-    console.log('[DEBUG] applyAllRulesHandler: calling applyRulesToRoot');
     await domMutationUseCaseInstance.applyRulesToRoot(document.body);
-    console.log('[DEBUG] applyAllRulesHandler: applyRulesToRoot done');
     return { success: true };
   } finally {
-    console.log('[DEBUG] applyAllRulesHandler: calling reconnectObserver');
     reconnectObserver();
-    console.log('[DEBUG] applyAllRulesHandler: END');
   }
 };

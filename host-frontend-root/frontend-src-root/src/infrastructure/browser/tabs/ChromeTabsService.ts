@@ -32,7 +32,6 @@ class ChromeTabsService implements IChromeTabsService {
   }
 
   async sendApplyAllRulesMessage(tab: Tab): Promise<any> {
-    console.log('[DEBUG] ChromeTabsService.sendApplyAllRulesMessage: START, tabId=', tab.getTabId().value);
     try {
       const response = await chrome.tabs.sendMessage(
         tab.getTabId().value,
@@ -40,10 +39,9 @@ class ChromeTabsService implements IChromeTabsService {
           type: 'applyAllRules'
         }
       );
-      console.log('[DEBUG] ChromeTabsService.sendApplyAllRulesMessage: SUCCESS, response=', response);
       return response;
     } catch (error) {
-      console.error('[DEBUG] ChromeTabsService.sendApplyAllRulesMessage: ERROR:', error);
+      console.error('[ChromeTabsService] sendApplyAllRulesMessage error:', error);
       throw error;
     }
   }
