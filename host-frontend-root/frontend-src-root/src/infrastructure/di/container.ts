@@ -118,11 +118,6 @@ const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [ChromeCurrentTabService, 'chromeCurrentTabService']
 ]);
 
-// Type-safe class resolution mapping
-type ClassTokenMap = {
-  [K in keyof typeof classToKeyMap extends infer U ? U : never]: K extends Function ? InstanceType<K & (new (...args: any[]) => any)> : never;
-};
-
 // Container interface with overloaded resolve
 interface Container {
   resolve(token: typeof HandleContextMenuReplaceDomElement): HandleContextMenuReplaceDomElement;
@@ -136,7 +131,6 @@ interface Container {
   resolve(token: typeof ChromeTabsService): ChromeTabsService;
   resolve(token: typeof ChromeCurrentTabService): ChromeCurrentTabService;
   resolve<T>(token: InterfaceToken): T;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   resolve<T>(token: Function): T;
 }
 
