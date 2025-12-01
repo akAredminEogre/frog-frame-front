@@ -1,4 +1,4 @@
-import { asClass, createContainer } from 'awilix';
+import { asValue, createContainer } from 'awilix';
 
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
@@ -25,68 +25,67 @@ import { SelectedPageTextRepository } from 'src/infrastructure/persistence/stora
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 // Create Awilix container
-// Note: 明示的インジェクションを使用するため、InjectionMode は不要
 const awilixContainer = createContainer({
   strict: true
 });
 
-// Register implementations for interfaces with explicit injection
-// ミニファイ後もパラメータ名に依存しないよう、inject() で依存関係を明示する
+// Infrastructure services (singleton instances)
+const chromeTabsService = new ChromeTabsService();
+const popupService = new ChromePopupService();
+const rewriteRuleRepository = new DexieRewriteRuleRepository();
+const windowService = new ChromeWindowService();
+const selectedPageTextRepository = new SelectedPageTextRepository();
+const currentTabService = new ChromeCurrentTabService();
+const chromeRuntimeService = new ChromeRuntimeService();
+const getSelectionService = new GetSelectionService();
+
+// Use Cases (singleton instances with manual dependency injection)
+// ミニファイ後もパラメータ名に依存しないよう、手動でインスタンスを生成
+const handleContextMenuReplaceDomElement = new HandleContextMenuReplaceDomElement(
+  rewriteRuleRepository,
+  chromeTabsService,
+  selectedPageTextRepository,
+  getSelectionService
+);
+const contextMenuSetupUseCase = new ContextMenuSetupUseCase();
+const loadRewriteRuleForEditUseCase = new LoadRewriteRuleForEditUseCase(rewriteRuleRepository);
+const updateRewriteRuleUseCase = new UpdateRewriteRuleUseCase(
+  rewriteRuleRepository,
+  chromeTabsService,
+  chromeRuntimeService
+);
+const closeCurrentWindowUseCase = new CloseCurrentWindowUseCase(windowService);
+const saveRewriteRuleAndApplyToCurrentTabUseCase = new SaveRewriteRuleAndApplyToCurrentTabUseCase(
+  rewriteRuleRepository,
+  currentTabService,
+  chromeRuntimeService
+);
+const popupInitFormUseCase = new PopupInitFormUseCase(popupService, selectedPageTextRepository);
+
+// Register all instances with asValue (no automatic injection needed)
 awilixContainer.register({
-  // Infrastructure services (interfaces) - 依存関係なし
-  chromeTabsService: asClass(ChromeTabsService).singleton(),
-  popupService: asClass(ChromePopupService).singleton(),
-  rewriteRuleRepository: asClass(DexieRewriteRuleRepository).singleton(),
-  windowService: asClass(ChromeWindowService).singleton(),
-  selectedPageTextRepository: asClass(SelectedPageTextRepository).singleton(),
-  currentTabService: asClass(ChromeCurrentTabService).singleton(),
-  chromeRuntimeService: asClass(ChromeRuntimeService).singleton(),
-  getSelectionService: asClass(GetSelectionService).singleton(),
+  // Infrastructure services
+  chromeTabsService: asValue(chromeTabsService),
+  popupService: asValue(popupService),
+  rewriteRuleRepository: asValue(rewriteRuleRepository),
+  windowService: asValue(windowService),
+  selectedPageTextRepository: asValue(selectedPageTextRepository),
+  currentTabService: asValue(currentTabService),
+  chromeRuntimeService: asValue(chromeRuntimeService),
+  getSelectionService: asValue(getSelectionService),
 
-  // Use Cases with explicit dependency injection
-  handleContextMenuReplaceDomElement: asClass(HandleContextMenuReplaceDomElement)
-    .singleton()
-    .inject(() => ({
-      rewriteRuleRepository: awilixContainer.resolve('rewriteRuleRepository'),
-      chromeTabsService: awilixContainer.resolve('chromeTabsService'),
-      selectedPageTextRepository: awilixContainer.resolve('selectedPageTextRepository'),
-      getSelectionService: awilixContainer.resolve('getSelectionService')
-    })),
-  contextMenuSetupUseCase: asClass(ContextMenuSetupUseCase).singleton(),
-  loadRewriteRuleForEditUseCase: asClass(LoadRewriteRuleForEditUseCase)
-    .singleton()
-    .inject(() => ({
-      rewriteRuleRepository: awilixContainer.resolve('rewriteRuleRepository')
-    })),
-  updateRewriteRuleUseCase: asClass(UpdateRewriteRuleUseCase)
-    .singleton()
-    .inject(() => ({
-      rewriteRuleRepository: awilixContainer.resolve('rewriteRuleRepository'),
-      chromeTabsService: awilixContainer.resolve('chromeTabsService'),
-      chromeRuntimeService: awilixContainer.resolve('chromeRuntimeService')
-    })),
-  closeCurrentWindowUseCase: asClass(CloseCurrentWindowUseCase)
-    .singleton()
-    .inject(() => ({
-      windowService: awilixContainer.resolve('windowService')
-    })),
-  saveRewriteRuleAndApplyToCurrentTabUseCase: asClass(SaveRewriteRuleAndApplyToCurrentTabUseCase)
-    .singleton()
-    .inject(() => ({
-      rewriteRuleRepository: awilixContainer.resolve('rewriteRuleRepository'),
-      currentTabService: awilixContainer.resolve('currentTabService'),
-      chromeRuntimeService: awilixContainer.resolve('chromeRuntimeService')
-    })),
-  popupInitFormUseCase: asClass(PopupInitFormUseCase)
-    .singleton()
-    .inject(() => ({
-      popupService: awilixContainer.resolve('popupService'),
-      selectedPageTextRepository: awilixContainer.resolve('selectedPageTextRepository')
-    })),
+  // Use Cases
+  handleContextMenuReplaceDomElement: asValue(handleContextMenuReplaceDomElement),
+  contextMenuSetupUseCase: asValue(contextMenuSetupUseCase),
+  loadRewriteRuleForEditUseCase: asValue(loadRewriteRuleForEditUseCase),
+  updateRewriteRuleUseCase: asValue(updateRewriteRuleUseCase),
+  closeCurrentWindowUseCase: asValue(closeCurrentWindowUseCase),
+  saveRewriteRuleAndApplyToCurrentTabUseCase: asValue(saveRewriteRuleAndApplyToCurrentTabUseCase),
+  popupInitFormUseCase: asValue(popupInitFormUseCase),
 
-  // Concrete classes for direct resolution
-  dexieRewriteRuleRepository: asClass(DexieRewriteRuleRepository).singleton(),
-  chromeCurrentTabService: asClass(ChromeCurrentTabService).singleton()
+  // Concrete classes for direct resolution (aliases)
+  dexieRewriteRuleRepository: asValue(rewriteRuleRepository),
+  chromeCurrentTabService: asValue(currentTabService)
 });
 
 // Type definitions for container resolution
