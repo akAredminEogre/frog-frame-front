@@ -42,17 +42,15 @@ const getSelectionService = new GetSelectionService();
 // Use Cases (singleton instances with manual dependency injection)
 // ミニファイ後もパラメータ名に依存しないよう、手動でインスタンスを生成
 const handleContextMenuReplaceDomElement = new HandleContextMenuReplaceDomElement(
-  rewriteRuleRepository,
   chromeTabsService,
   selectedPageTextRepository,
-  getSelectionService
+  popupService
 );
 const contextMenuSetupUseCase = new ContextMenuSetupUseCase();
 const loadRewriteRuleForEditUseCase = new LoadRewriteRuleForEditUseCase(rewriteRuleRepository);
 const updateRewriteRuleUseCase = new UpdateRewriteRuleUseCase(
   rewriteRuleRepository,
-  chromeTabsService,
-  chromeRuntimeService
+  chromeTabsService
 );
 const closeCurrentWindowUseCase = new CloseCurrentWindowUseCase(windowService);
 const saveRewriteRuleAndApplyToCurrentTabUseCase = new SaveRewriteRuleAndApplyToCurrentTabUseCase(
@@ -60,7 +58,7 @@ const saveRewriteRuleAndApplyToCurrentTabUseCase = new SaveRewriteRuleAndApplyTo
   currentTabService,
   chromeRuntimeService
 );
-const popupInitFormUseCase = new PopupInitFormUseCase(popupService, selectedPageTextRepository);
+const popupInitFormUseCase = new PopupInitFormUseCase(currentTabService, selectedPageTextRepository);
 
 // Register all instances with asValue (no automatic injection needed)
 awilixContainer.register({
