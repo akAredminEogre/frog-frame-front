@@ -10,13 +10,10 @@ export default defineContentScript({
   // injection: 'document_idle', // 必要に応じてタイミングを指定
 
   main() {
-    console.log('[DEBUG] content.ts main: START');
     // メッセージ受信リスナーを登録
     runtimeOnMessageReceived();
-    console.log('[DEBUG] content.ts main: runtimeOnMessageReceived done');
 
     // DOM更新を監視してrewrite rulesを適用する
     observerOnMutate();
-    console.log('[DEBUG] content.ts main: observerOnMutate done, END');
   },
 });
