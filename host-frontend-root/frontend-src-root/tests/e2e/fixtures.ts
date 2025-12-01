@@ -14,12 +14,23 @@ export const test = base.extend<{
   context: async ({}, use) => {
     const extensionDir = getExtensionDirectory();
     const pathToExtension = path.join(process.cwd(), extensionDir);
+    const isCI = !!process.env.CI;
+
+    // Base Chrome args for loading extension
+    const args = [
+      `--disable-extensions-except=${pathToExtension}`,
+      `--load-extension=${pathToExtension}`,
+    ];
+
+    // CI requires sandbox bypass and headed mode (with xvfb-run for virtual display)
+    // Local/Docker can use headless mode
+    if (isCI) {
+      args.push('--no-sandbox', '--disable-setuid-sandbox');
+    }
+
     const context = await chromium.launchPersistentContext('', {
-      headless: true,
-      args: [
-        `--disable-extensions-except=${pathToExtension}`,
-        `--load-extension=${pathToExtension}`,
-      ],
+      headless: !isCI, // CI uses headed mode with xvfb-run virtual display
+      args,
     });
     await use(context);
     await context.close();
