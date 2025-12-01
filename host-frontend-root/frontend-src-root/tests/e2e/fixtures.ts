@@ -15,12 +15,10 @@ export const test = base.extend<{
     const extensionDir = getExtensionDirectory();
     const pathToExtension = path.join(process.cwd(), extensionDir);
     const context = await chromium.launchPersistentContext('', {
-      headless: false, // Chrome拡張機能はheadlessモードでは動作しない（CI環境ではxvfb-runを使用）
+      headless: true,
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
-        '--no-sandbox', // CI環境用
-        '--disable-setuid-sandbox', // CI環境用
       ],
     });
     await use(context);
