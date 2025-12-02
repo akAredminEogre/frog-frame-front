@@ -175,6 +175,98 @@ export default [js.configs.recommended, {
     ],
   },
 }, {
+  // Clean Architecture - Enterprise Business Rules Layer
+  // This layer should not import from any other layers
+  files: ['**/enterprise-business-rules/**/*.{ts,tsx}'],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: [
+              '**/application-business-rules/**',
+              '**/interface-adapters/**',
+              '**/frameworks-and-drivers/**',
+              '**/application/**',
+              '**/infrastructure/**',
+              '**/components/**',
+              '**/entrypoints/**',
+            ],
+            message: 'Enterprise Business Rules layer must not depend on any other layers. It should contain only pure domain logic.',
+          },
+        ],
+      },
+    ],
+  },
+}, {
+  // Clean Architecture - Application Business Rules Layer
+  // This layer can only import from Enterprise Business Rules
+  files: ['**/application-business-rules/**/*.{ts,tsx}'],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: [
+              '**/interface-adapters/**',
+              '**/frameworks-and-drivers/**',
+              '**/infrastructure/**',
+              '**/components/**',
+              '**/entrypoints/**',
+            ],
+            message: 'Application Business Rules layer can only depend on Enterprise Business Rules layer, not on outer layers.',
+          },
+        ],
+      },
+    ],
+  },
+}, {
+  // Clean Architecture - Interface Adapters Layer
+  // This layer can import from inner layers but not from Frameworks & Drivers
+  files: ['**/interface-adapters/**/*.{ts,tsx}'],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: [
+              '**/frameworks-and-drivers/**',
+              '**/infrastructure/browser/**',
+              '**/infrastructure/persistance/**',
+              '**/entrypoints/**',
+            ],
+            message: 'Interface Adapters layer must not depend on Frameworks & Drivers layer. It can only depend on inner layers.',
+          },
+        ],
+      },
+    ],
+  },
+}, {
+  // Naming convention for directories - enforce kebab-case
+  files: [
+    '**/enterprise-business-rules/**/*.{ts,tsx}',
+    '**/application-business-rules/**/*.{ts,tsx}',
+    '**/interface-adapters/**/*.{ts,tsx}',
+    '**/frameworks-and-drivers/**/*.{ts,tsx}',
+  ],
+  rules: {
+    // This rule will help enforce naming conventions through file path validation
+    'no-restricted-imports': [
+      'warn',
+      {
+        patterns: [
+          {
+            group: ['**/*[A-Z]*/**'],
+            message: 'Directory names should use kebab-case (lowercase with hyphens) according to docs/design/naming-rule.md',
+          },
+        ],
+      },
+    ],
+  },
+}, {
   ignores: [
     'dist/**',
     'node_modules/**',
