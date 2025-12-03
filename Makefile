@@ -121,7 +121,36 @@ ifndef BRANCH
 endif
 	@echo "Creating worktree for branch: $(BRANCH)..."
 	@mkdir -p $(WORKTREE_DIR)
-	@git worktree add $(WORKTREE_DIR)/$(BRANCH) $(BRANCH) 2>/dev/null || git worktree add -b $(BRANCH) $(WORKTREE_DIR)/$(BRANCH)
+	@# Check if worktree already exists in git
+	@if git worktree list | grep -q "$(WORKTREE_DIR)/$(BRANCH)"; then \
+		echo "Error: Worktree already exists at $(WORKTREE_DIR)/$(BRANCH)"; \
+		echo "To remove it, run: make wt-remove BRANCH=$(BRANCH)"; \
+		exit 1; \
+	fi
+	@# Check if directory exists but not registered as worktree
+	@if [ -d "$(WORKTREE_DIR)/$(BRANCH)" ]; then \
+		echo "Warning: Directory $(WORKTREE_DIR)/$(BRANCH) exists but is not a registered worktree."; \
+		echo "Attempting to remove orphaned directory..."; \
+		if rm -rf "$(WORKTREE_DIR)/$(BRANCH)" 2>/dev/null; then \
+			echo "Successfully removed orphaned directory."; \
+		else \
+			echo "Error: Cannot remove directory due to permission issues."; \
+			echo "Please run: sudo rm -rf $(WORKTREE_DIR)/$(BRANCH)"; \
+			echo "Then run this command again."; \
+			exit 1; \
+		fi \
+	fi
+	@# Check if branch exists locally
+	@if git show-ref --verify --quiet refs/heads/$(BRANCH); then \
+		echo "Using existing local branch: $(BRANCH)"; \
+		git worktree add $(WORKTREE_DIR)/$(BRANCH) $(BRANCH); \
+	elif git ls-remote --exit-code --heads origin $(BRANCH) >/dev/null 2>&1; then \
+		echo "Creating local branch from remote: origin/$(BRANCH)"; \
+		git worktree add --track -b $(BRANCH) $(WORKTREE_DIR)/$(BRANCH) origin/$(BRANCH); \
+	else \
+		echo "Creating new branch: $(BRANCH)"; \
+		git worktree add -b $(BRANCH) $(WORKTREE_DIR)/$(BRANCH); \
+	fi
 	@echo "Worktree created at: $(WORKTREE_DIR)/$(BRANCH)"
 	@echo ""
 	@echo "To start development in this worktree:"
@@ -176,7 +205,7 @@ endif
 	@echo ""
 	@echo "Environment variable set: CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH)"
 	@echo "To start development:"
-	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec frontend npm run dev"
+	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"
 
 wt-current:
 	@echo "Checking current worktree configuration..."
@@ -237,12 +266,12 @@ endif
 	@echo "Switching to worktree for initialization..."
 	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) $(MAKE) wt-use BRANCH=$(BRANCH)
 	@echo "Installing npm dependencies in worktree..."
-	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec frontend npm install
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm install
 	@echo "Preparing WXT (generating .wxt/tsconfig.json) in worktree..."
-	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec frontend npx wxt prepare
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npx wxt prepare
 	@echo ""
 	@echo "✅ Worktree $(BRANCH) initialization complete!"
 	@echo "The worktree is ready for development."
 	@echo ""
 	@echo "To start development:"
-	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec frontend npm run dev"
+	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"

@@ -11,7 +11,7 @@
   - docker-compose.override.yml.exampleテンプレートの作成
   - 環境変数ベースの自動生成機能の実装
   - 現在のworktreeディレクトリ検出機能の実装
-- [ ] worktree初期化の改善
+- [x] worktree初期化の改善
   - `make wt-init`コマンドの作成（worktree用のinit-dev）
   - 各worktreeでの初回セットアップ自動化
   - メインリポジトリとの設定同期方法の確立
