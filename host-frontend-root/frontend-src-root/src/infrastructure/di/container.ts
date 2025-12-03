@@ -24,7 +24,7 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/index
 import { SelectedPageTextRepository } from 'src/infrastructure/persistence/storage/SelectedPageTextRepository';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
-// Create Awilix container
+/** @public - exported for test verification of DI container registrations */
 export const awilixContainer = createContainer({
   strict: true
 });
@@ -123,7 +123,8 @@ type InterfaceToken =
   | 'IChromeRuntimeService'
   | 'IGetSelectionService';
 
-const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
+/** @public - exported for test verification of interface registration completeness */
+export const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeTabsService': 'chromeTabsService',
   'IPopupService': 'popupService',
   'IRewriteRuleRepository': 'rewriteRuleRepository',

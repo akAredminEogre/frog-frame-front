@@ -1,21 +1,10 @@
-import { awilixContainer, container } from 'src/infrastructure/di/container';
+import {
+  awilixContainer,
+  container,
+  interfaceToKeyMap
+} from 'src/infrastructure/di/container';
 
 import { describe, expect, it } from 'vitest';
-
-/**
- * インターフェーストークンとAwilix登録キーのマッピング
- * container.tsのinterfaceToKeyMapと同じマッピングを定義
- */
-const interfaceTokenToKeyMap: Record<string, string> = {
-  'IChromeTabsService': 'chromeTabsService',
-  'IPopupService': 'popupService',
-  'IRewriteRuleRepository': 'rewriteRuleRepository',
-  'IWindowService': 'windowService',
-  'ISelectedPageTextRepository': 'selectedPageTextRepository',
-  'ICurrentTabService': 'currentTabService',
-  'IChromeRuntimeService': 'chromeRuntimeService',
-  'IGetSelectionService': 'getSelectionService'
-};
 
 /**
  * DIコンテナから登録済みインターフェースキーの一覧を取得する
@@ -23,7 +12,7 @@ const interfaceTokenToKeyMap: Record<string, string> = {
  */
 function getRegisteredInterfaceKeys(): string[] {
   const allKeys = Object.keys(awilixContainer.registrations);
-  const interfaceKeys = Object.values(interfaceTokenToKeyMap);
+  const interfaceKeys = Object.values(interfaceToKeyMap);
   return allKeys.filter(key => interfaceKeys.includes(key));
 }
 
@@ -111,7 +100,7 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
     // Assert - 各テストケースのインターフェースがDIコンテナに登録されていることを確認
     const actualKeySet = new Set(actualRegisteredKeys);
     testCases.forEach(({ input: { interfaceToken } }) => {
-      const expectedKey = interfaceTokenToKeyMap[interfaceToken];
+      const expectedKey = interfaceToKeyMap[interfaceToken];
       expect(actualKeySet.has(expectedKey),
         `Test case exists for ${interfaceToken} but key '${expectedKey}' is not registered in awilixContainer`
       ).toBe(true);
@@ -119,7 +108,7 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
 
     // Assert - DIコンテナに登録されている各インターフェースキーにテストケースが存在することを確認
     const testCaseKeySet = new Set<string>(
-      testCases.map(tc => interfaceTokenToKeyMap[tc.input.interfaceToken])
+      testCases.map(tc => interfaceToKeyMap[tc.input.interfaceToken])
     );
     actualRegisteredKeys.forEach((key) => {
       expect(testCaseKeySet.has(key),
