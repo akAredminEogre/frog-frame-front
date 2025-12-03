@@ -123,7 +123,7 @@ type InterfaceToken =
   | 'IChromeRuntimeService'
   | 'IGetSelectionService';
 
-const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
+export const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeTabsService': 'chromeTabsService',
   'IPopupService': 'popupService',
   'IRewriteRuleRepository': 'rewriteRuleRepository',
