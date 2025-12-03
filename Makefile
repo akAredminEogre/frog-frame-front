@@ -108,83 +108,67 @@ storybook:
 
 # Git Worktree Commands
 WORKTREE_DIR := worktrees
+WORKTREE_PATH = $(WORKTREE_DIR)/$(BRANCH)
 
-wt-list:
-	@echo "Listing all git worktrees..."
-	@git worktree list
+# Internal helper targets (not for direct use)
+.PHONY: _wt-check-branch _wt-remove-orphaned _wt-check-exists _wt-setup-env _wt-create-override
 
-wt-add:
+# Check if BRANCH variable is defined
+_wt-check-branch:
 ifndef BRANCH
 	@echo "Error: BRANCH is required"
-	@echo "Usage: make wt-add BRANCH=branch-name"
+	@echo "Usage: make $(MAKECMDGOALS) BRANCH=branch-name"
 	@exit 1
 endif
-	@echo "Creating worktree for branch: $(BRANCH)..."
-	@mkdir -p $(WORKTREE_DIR)
-	@# Check if worktree already exists in git
-	@if git worktree list | grep -q "$(WORKTREE_DIR)/$(BRANCH)"; then \
-		echo "Error: Worktree already exists at $(WORKTREE_DIR)/$(BRANCH)"; \
-		echo "To remove it, run: make wt-remove BRANCH=$(BRANCH)"; \
+
+# Remove orphaned worktree directory
+_wt-remove-orphaned:
+	@if rm -rf "$(WORKTREE_PATH)" 2>/dev/null; then \
+		echo "Successfully removed orphaned directory."; \
+	else \
+		echo "Error: Cannot remove directory due to permission issues."; \
+		echo "Please run: sudo rm -rf $(WORKTREE_PATH)"; \
+		echo "Then run this command again."; \
 		exit 1; \
 	fi
-	@# Check if directory exists but not registered as worktree
-	@if [ -d "$(WORKTREE_DIR)/$(BRANCH)" ]; then \
-		echo "Warning: Directory $(WORKTREE_DIR)/$(BRANCH) exists but is not a registered worktree."; \
-		echo "Attempting to remove orphaned directory..."; \
-		if rm -rf "$(WORKTREE_DIR)/$(BRANCH)" 2>/dev/null; then \
-			echo "Successfully removed orphaned directory."; \
-		else \
-			echo "Error: Cannot remove directory due to permission issues."; \
-			echo "Please run: sudo rm -rf $(WORKTREE_DIR)/$(BRANCH)"; \
-			echo "Then run this command again."; \
-			exit 1; \
-		fi \
-	fi
-	@# Check if branch exists locally
-	@if git show-ref --verify --quiet refs/heads/$(BRANCH); then \
-		echo "Using existing local branch: $(BRANCH)"; \
-		git worktree add $(WORKTREE_DIR)/$(BRANCH) $(BRANCH); \
-	elif git ls-remote --exit-code --heads origin $(BRANCH) >/dev/null 2>&1; then \
-		echo "Creating local branch from remote: origin/$(BRANCH)"; \
-		git worktree add --track -b $(BRANCH) $(WORKTREE_DIR)/$(BRANCH) origin/$(BRANCH); \
-	else \
-		echo "Creating new branch: $(BRANCH)"; \
-		git worktree add -b $(BRANCH) $(WORKTREE_DIR)/$(BRANCH); \
-	fi
-	@echo "Worktree created at: $(WORKTREE_DIR)/$(BRANCH)"
-	@echo ""
-	@echo "To start development in this worktree:"
-	@echo "  cd $(WORKTREE_DIR)/$(BRANCH)"
-	@echo "  make dev"
 
-wt-remove:
-ifndef BRANCH
-	@echo "Error: BRANCH is required"
-	@echo "Usage: make wt-remove BRANCH=branch-name"
-	@exit 1
-endif
-	@echo "Removing worktree for branch: $(BRANCH)..."
-	@git worktree remove $(WORKTREE_DIR)/$(BRANCH) --force 2>/dev/null || echo "Worktree not found: $(WORKTREE_DIR)/$(BRANCH)"
-	@echo "Worktree removed"
-
-wt-prune:
-	@echo "Pruning stale worktree references..."
-	@git worktree prune -v
-	@echo "Prune complete"
-
-wt-use:
-ifndef BRANCH
-	@echo "Error: BRANCH is required"
-	@echo "Usage: make wt-use BRANCH=branch-name"
-	@exit 1
-endif
-	@echo "Switching to worktree for branch: $(BRANCH)..."
-	@if [ ! -d "$(WORKTREE_DIR)/$(BRANCH)" ]; then \
-		echo "Error: Worktree not found at $(WORKTREE_DIR)/$(BRANCH)"; \
+# Check if worktree directory exists
+_wt-check-exists:
+	@if [ ! -d "$(WORKTREE_PATH)" ]; then \
+		echo "Error: Worktree not found at $(WORKTREE_PATH)"; \
 		echo "Available worktrees:"; \
 		ls -1 $(WORKTREE_DIR) 2>/dev/null || echo "No worktrees found"; \
 		exit 1; \
 	fi
+
+# Setup .env files for worktree
+_wt-setup-env:
+	@echo "Setting up configuration files..."
+	@if [ -f .env ]; then \
+		cp .env $(WORKTREE_PATH)/.env; \
+		echo "Copied .env to worktree"; \
+	else \
+		echo "Warning: .env not found in main repository"; \
+		if [ -f .env.example ]; then \
+			cp .env.example $(WORKTREE_PATH)/.env; \
+			echo "Copied .env.example to worktree as .env"; \
+		fi \
+	fi
+	@if [ -f host-frontend-root/frontend-src-root/src/utils/matchUrl.ts ]; then \
+		mkdir -p $(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/; \
+		cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts $(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts; \
+		echo "Copied matchUrl.ts to worktree"; \
+	else \
+		echo "Warning: matchUrl.ts not found, checking for example file"; \
+		if [ -f host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example ]; then \
+			mkdir -p $(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/; \
+			cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example $(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts; \
+			echo "Copied matchUrl.ts.example to worktree as matchUrl.ts"; \
+		fi \
+	fi
+
+# Create docker-compose.override.yml
+_wt-create-override:
 	@echo "Setting up docker-compose.override.yml with environment variable..."
 	@if [ ! -f "docker-compose.override.yml.example" ]; then \
 		echo "Error: Template file docker-compose.override.yml.example not found"; \
@@ -192,20 +176,69 @@ endif
 	fi
 	@echo "# Auto-generated by 'make wt-use' for worktree: $(BRANCH)" > docker-compose.override.yml
 	@echo "# This file uses CURRENT_WORKTREE_PATH environment variable" >> docker-compose.override.yml
-	@echo "# Set CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) before running docker compose" >> docker-compose.override.yml
+	@echo "# Set CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) before running docker compose" >> docker-compose.override.yml
 	@echo "" >> docker-compose.override.yml
 	@cat docker-compose.override.yml.example >> docker-compose.override.yml
 	@echo "Setting CURRENT_WORKTREE_PATH environment variable..."
-	@echo "CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH)" > .env.worktree
+	@echo "CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH)" > .env.worktree
+
+wt-list:
+	@echo "Listing all git worktrees..."
+	@git worktree list
+
+wt-add: _wt-check-branch
+	@echo "Creating worktree for branch: $(BRANCH)..."
+	@mkdir -p $(WORKTREE_DIR)
+	@# Check if worktree already exists in git
+	@if git worktree list | grep -q "$(WORKTREE_PATH)"; then \
+		echo "Error: Worktree already exists at $(WORKTREE_PATH)"; \
+		echo "To remove it, run: make wt-remove BRANCH=$(BRANCH)"; \
+		exit 1; \
+	fi
+	@# Check if directory exists but not registered as worktree
+	@if [ -d "$(WORKTREE_PATH)" ]; then \
+		echo "Warning: Directory $(WORKTREE_PATH) exists but is not a registered worktree."; \
+		echo "Attempting to remove orphaned directory..."; \
+		$(MAKE) _wt-remove-orphaned BRANCH=$(BRANCH); \
+	fi
+	@# Check if branch exists locally
+	@if git show-ref --verify --quiet refs/heads/$(BRANCH); then \
+		echo "Using existing local branch: $(BRANCH)"; \
+		git worktree add $(WORKTREE_PATH) $(BRANCH); \
+	elif git ls-remote --exit-code --heads origin $(BRANCH) >/dev/null 2>&1; then \
+		echo "Creating local branch from remote: origin/$(BRANCH)"; \
+		git worktree add --track -b $(BRANCH) $(WORKTREE_PATH) origin/$(BRANCH); \
+	else \
+		echo "Creating new branch: $(BRANCH)"; \
+		git worktree add -b $(BRANCH) $(WORKTREE_PATH); \
+	fi
+	@echo "Worktree created at: $(WORKTREE_PATH)"
+	@echo ""
+	@echo "To start development in this worktree:"
+	@echo "  cd $(WORKTREE_PATH)"
+	@echo "  make dev"
+
+wt-remove: _wt-check-branch
+	@echo "Removing worktree for branch: $(BRANCH)..."
+	@git worktree remove $(WORKTREE_PATH) --force 2>/dev/null || echo "Worktree not found: $(WORKTREE_PATH)"
+	@echo "Worktree removed"
+
+wt-prune:
+	@echo "Pruning stale worktree references..."
+	@git worktree prune -v
+	@echo "Prune complete"
+
+wt-use: _wt-check-branch _wt-check-exists _wt-create-override
+	@echo "Switching to worktree for branch: $(BRANCH)..."
 	@echo "Applying worktree configuration..."
-	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose up -d
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose up -d
 	@echo ""
 	@echo "✅ Switched to worktree: $(BRANCH)"
-	@echo "The Docker container now uses: $(WORKTREE_DIR)/$(BRANCH)"
+	@echo "The Docker container now uses: $(WORKTREE_PATH)"
 	@echo ""
-	@echo "Environment variable set: CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH)"
+	@echo "Environment variable set: CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH)"
 	@echo "To start development:"
-	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"
+	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"
 
 wt-current:
 	@echo "Checking current worktree configuration..."
@@ -223,55 +256,23 @@ wt-current:
 		echo "No worktree override active (using main repository)"; \
 	fi
 
-wt-init:
-ifndef BRANCH
-	@echo "Error: BRANCH is required"
-	@echo "Usage: make wt-init BRANCH=branch-name"
-	@exit 1
-endif
+wt-init: _wt-check-branch _wt-check-exists
 	@echo "Initializing worktree for development: $(BRANCH)..."
-	@if [ ! -d "$(WORKTREE_DIR)/$(BRANCH)" ]; then \
-		echo "Error: Worktree not found at $(WORKTREE_DIR)/$(BRANCH)"; \
-		echo "Please create the worktree first with: make wt-add BRANCH=$(BRANCH)"; \
-		exit 1; \
-	fi
 	@echo "Cleaning up duplicate frontend-src-root directory..."
-	@if [ -d "$(WORKTREE_DIR)/$(BRANCH)/frontend-src-root" ]; then \
-		rm -rf $(WORKTREE_DIR)/$(BRANCH)/frontend-src-root; \
+	@if [ -d "$(WORKTREE_PATH)/frontend-src-root" ]; then \
+		rm -rf $(WORKTREE_PATH)/frontend-src-root; \
 		echo "Removed duplicate frontend-src-root directory"; \
 	fi
-	@echo "Setting up configuration files..."
-	@if [ -f .env ]; then \
-		cp .env $(WORKTREE_DIR)/$(BRANCH)/.env; \
-		echo "Copied .env to worktree"; \
-	else \
-		echo "Warning: .env not found in main repository"; \
-		if [ -f .env.example ]; then \
-			cp .env.example $(WORKTREE_DIR)/$(BRANCH)/.env; \
-			echo "Copied .env.example to worktree as .env"; \
-		fi \
-	fi
-	@if [ -f host-frontend-root/frontend-src-root/src/utils/matchUrl.ts ]; then \
-		mkdir -p $(WORKTREE_DIR)/$(BRANCH)/host-frontend-root/frontend-src-root/src/utils/; \
-		cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts $(WORKTREE_DIR)/$(BRANCH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts; \
-		echo "Copied matchUrl.ts to worktree"; \
-	else \
-		echo "Warning: matchUrl.ts not found, checking for example file"; \
-		if [ -f host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example ]; then \
-			mkdir -p $(WORKTREE_DIR)/$(BRANCH)/host-frontend-root/frontend-src-root/src/utils/; \
-			cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example $(WORKTREE_DIR)/$(BRANCH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts; \
-			echo "Copied matchUrl.ts.example to worktree as matchUrl.ts"; \
-		fi \
-	fi
+	@$(MAKE) _wt-setup-env BRANCH=$(BRANCH)
 	@echo "Switching to worktree for initialization..."
-	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) $(MAKE) wt-use BRANCH=$(BRANCH)
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) $(MAKE) wt-use BRANCH=$(BRANCH)
 	@echo "Installing npm dependencies in worktree..."
-	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm install
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm install
 	@echo "Preparing WXT (generating .wxt/tsconfig.json) in worktree..."
-	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npx wxt prepare
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npx wxt prepare
 	@echo ""
 	@echo "✅ Worktree $(BRANCH) initialization complete!"
 	@echo "The worktree is ready for development."
 	@echo ""
 	@echo "To start development:"
-	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"
+	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"
