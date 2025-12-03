@@ -175,6 +175,19 @@ export default [js.configs.recommended, {
     ],
   },
 }, {
+  // Domain layer entities: prohibit direct access to global document object
+  // See: docs/design/clean-architecture/domain/entities.md
+  files: ['**/domain/entities/ElementSelector.ts'],
+  rules: {
+    'no-restricted-globals': [
+      'error',
+      {
+        name: 'document',
+        message: 'Direct access to "document" is prohibited in Domain layer. Use IDomRootChecker via dependency injection instead.',
+      },
+    ],
+  },
+}, {
   ignores: [
     'dist/**',
     'node_modules/**',
