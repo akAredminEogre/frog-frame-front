@@ -1,8 +1,6 @@
 import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
 import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
-import { DomRootChecker } from 'src/infrastructure/document/DomRootChecker';
-import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 /**
  * 要素選択情報を取得するユースケース
@@ -11,10 +9,9 @@ export class GetElementSelectionUseCase {
   private elementSelector: ElementSelector;
   private selectionService: IGetSelectionService;
 
-  // TODO: DIコンテナで解決する
-  constructor(selectionService?: IGetSelectionService, domRootChecker?: IDomRootChecker) {
-    this.elementSelector = new ElementSelector(domRootChecker || new DomRootChecker());
-    this.selectionService = selectionService || new GetSelectionService();
+  constructor(selectionService: IGetSelectionService, domRootChecker: IDomRootChecker) {
+    this.elementSelector = new ElementSelector(domRootChecker);
+    this.selectionService = selectionService;
   }
 
   /**
