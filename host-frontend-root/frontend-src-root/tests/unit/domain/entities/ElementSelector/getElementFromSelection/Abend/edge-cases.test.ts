@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 
 describe('ElementSelector - getElementFromSelection - edge cases', () => {
   let elementSelector: ElementSelector;
