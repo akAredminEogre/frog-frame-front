@@ -41,5 +41,40 @@ git worktree作成時に、不要な`frontend-src-root`ディレクトリがwork
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
+動作確認をしようとしたところ、下記のエラーが出てしまいました
+```
+$ make wt-init BRANCH=issue-131-feat-numbering-shell
+Initializing worktree for development: issue-131-feat-numbering-shell...
+Cleaning up duplicate frontend-src-root directory...
+Setting up configuration files...
+Copied .env to worktree
+Copied matchUrl.ts to worktree
+Switching to worktree for initialization...
+make[1]: Entering directory '/home/akaredmineogre/akAredminEogre-project/frog-frame-front'
+Switching to worktree for branch: issue-131-feat-numbering-shell...
+Setting up docker-compose.override.yml with environment variable...
+Setting CURRENT_WORKTREE_PATH environment variable...
+Applying worktree configuration...
+[+] Running 1/1
+ ✔ Container frog-frame-front-frontend-1  Started                                                                                            13.6s 
 
+✅ Switched to worktree: issue-131-feat-numbering-shell
+The Docker container now uses: worktrees/issue-131-feat-numbering-shell
+
+Environment variable set: CURRENT_WORKTREE_PATH=./worktrees/issue-131-feat-numbering-shell
+To start development:
+  CURRENT_WORKTREE_PATH=./worktrees/issue-131-feat-numbering-shell docker compose exec frontend npm run dev
+make[1]: Leaving directory '/home/akaredmineogre/akAredminEogre-project/frog-frame-front'
+Installing npm dependencies in worktree...
+npm error code ENOENT
+npm error syscall open
+npm error path /opt/frontend-container-app-root/frontend-src-root/package.json
+npm error errno -2
+npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/opt/frontend-container-app-root/frontend-src-root/package.json'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: /home/node/.npm/_logs/2025-12-03T07_40_31_249Z-debug-0.log
+make: *** [Makefile:213: wt-init] Error 254
+akaredmineogre@MSI:~/akAredminEogre-project/frog-frame-front$ 
+```
 ---
