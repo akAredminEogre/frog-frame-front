@@ -2,7 +2,7 @@ import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 
 /**
  * ユーザーのテキスト選択範囲から、置換対象となる最適なHTML要素を特定するドメインエンティティ。
- * 複雑なDOM構造や複数ノードにまたがる選択に対応し、最小かつ意味のある要素を返却します。
+ * 複雑なDOM構造や複数ノードにまたがる選択に対応し、最小かつ意味のある要素を返却する。
  */
 export class ElementSelector {
   private domRootChecker: IDomRootChecker;
@@ -11,10 +11,10 @@ export class ElementSelector {
     this.domRootChecker = domRootChecker;
   }
   /**
-   * 指定された選択範囲から最適なHTML要素を取得します。
+   * 指定された選択範囲から最適なHTML要素を取得する。
    * @param range - ユーザーの選択範囲
    * @param selectedText - 選択されたテキスト（フォールバック用）
-   * @returns 発見された要素のouterHTML。適切な要素が見つからない場合は選択範囲のテキストを返します。
+   * @returns 発見された要素のouterHTML。適切な要素が見つからない場合は選択範囲のテキストを返す。
    */
   public getElementFromSelection(range: Range, selectedText: string): string {
     const element = this.findOptimalElement(range);
@@ -23,7 +23,7 @@ export class ElementSelector {
   }
 
   /**
-   * 指定されたRangeから最適な要素を見つけ出します。
+   * 指定されたRangeから最適な要素を見つけ出す。
    * @param range - ユーザーの選択範囲。
    * @returns 最適なHTML要素。見つからない場合はnull。
    */
@@ -38,12 +38,12 @@ export class ElementSelector {
   }
 
   /**
-   * 共通祖先コンテナが無効（documentやbody）かどうかを判定します。
+   * 共通祖先コンテナが無効（documentやbody）かどうかを判定する。
    *
-   * Node型はブラウザDOM APIの型ですが、Chrome拡張機能ではDOM操作がビジネスロジックの
-   * 本質であるため、データ構造体としてDomain層での使用を許容しています。
+   * Node型はブラウザDOM APIの型だが、Chrome拡張機能ではDOM操作がビジネスロジックの
+   * 本質であるため、データ構造体としてDomain層での使用を許容している。
    * ただし、グローバルオブジェクト（document等）への直接アクセスはIDomRootCheckerを
-   * 通じてInfrastructure層に委譲し、依存性逆転の原則に従っています。
+   * 通じてInfrastructure層に委譲し、依存性逆転の原則に従っている。
    *
    * @param container - 判定対象のノード。
    * @returns 無効な場合はtrue。
@@ -53,7 +53,7 @@ export class ElementSelector {
   }
 
   /**
-   * 選択範囲を完全に包含する要素を見つけます。
+   * 選択範囲を完全に包含する要素を見つける。
    * @param range - ユーザーの選択範囲。
    * @param container - 共通祖先コンテナ。
    * @returns 発見されたHTML要素。見つからない場合はnull。
@@ -72,7 +72,7 @@ export class ElementSelector {
   }
 
   /**
-   * 選択範囲の開始コンテナから要素を取得します。
+   * 選択範囲の開始コンテナから要素を取得する。
    * @param range - ユーザーの選択範囲。
    * @returns 開始要素。
    */
@@ -85,7 +85,7 @@ export class ElementSelector {
   }
 
   /**
-   * 選択が複数の要素にまたがっているかを判定します。
+   * 選択が複数の要素にまたがっているかを判定する。
    * @param range - ユーザーの選択範囲。
    * @returns 複数要素にまたがる場合はtrue。
    */
