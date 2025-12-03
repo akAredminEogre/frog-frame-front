@@ -1,0 +1,9 @@
+# Template for worktree-specific Docker Compose overrides
+# This file is used by 'make wt-use' command with CURRENT_WORKTREE_PATH environment variable
+# DO NOT EDIT this template directly
+
+services:
+  frontend:
+    volumes:
+      - ${CURRENT_WORKTREE_PATH:-./host-frontend-root}:${CONTAINER_APP_ROOT}/
+      - ${FIX_PERMISSIONS_SCRIPT_PATH}:/fix-permissions.sh
