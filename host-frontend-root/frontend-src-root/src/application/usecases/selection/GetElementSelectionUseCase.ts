@@ -11,6 +11,7 @@ export class GetElementSelectionUseCase {
   private elementSelector: ElementSelector;
   private selectionService: IGetSelectionService;
 
+  // TODO: DIコンテナで解決する
   constructor(selectionService?: IGetSelectionService, domRootChecker?: IDomRootChecker) {
     this.elementSelector = new ElementSelector(domRootChecker || new DomRootChecker());
     this.selectionService = selectionService || new GetSelectionService();
