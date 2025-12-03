@@ -7,10 +7,12 @@ import { IObserverControl } from 'src/application/ports/IObserverControl';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { observerControl } from 'src/infrastructure/browser/content/observer/observerState';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
 import { DebounceTimer } from 'src/infrastructure/browser/timer/DebounceTimer';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
+import { DomRootChecker } from 'src/infrastructure/document/DomRootChecker';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 // Create Awilix container for content script
@@ -23,6 +25,7 @@ const chromeRuntimeRewriteRuleRepository = new ChromeRuntimeRewriteRuleRepositor
 const windowCurrentUrlService = new WindowCurrentUrlService();
 const debounceTimer = new DebounceTimer();
 const getSelectionService = new GetSelectionService();
+const domRootChecker = new DomRootChecker();
 
 // Use Cases (singleton instances with manual dependency injection)
 // ミニファイ後もパラメータ名に依存しないよう、手動でインスタンスを生成
@@ -33,7 +36,7 @@ const applyRulesOnDomMutationUseCase = new ApplyRulesOnDomMutationUseCase(
   observerControl
 );
 
-const getElementSelectionUseCase = new GetElementSelectionUseCase(getSelectionService);
+const getElementSelectionUseCase = new GetElementSelectionUseCase(getSelectionService, domRootChecker);
 
 // Register all instances with asValue (no automatic injection needed)
 awilixContainer.register({
@@ -43,6 +46,7 @@ awilixContainer.register({
   debounceTimer: asValue(debounceTimer),
   observerControl: asValue(observerControl),
   getSelectionService: asValue(getSelectionService),
+  domRootChecker: asValue(domRootChecker),
 
   // Use Cases
   applyRulesOnDomMutationUseCase: asValue(applyRulesOnDomMutationUseCase),
@@ -57,6 +61,7 @@ interface ContentContainerCradle {
   debounceTimer: IDebounceTimer;
   observerControl: IObserverControl;
   getSelectionService: IGetSelectionService;
+  domRootChecker: IDomRootChecker;
 
   // Use Cases
   applyRulesOnDomMutationUseCase: ApplyRulesOnDomMutationUseCase;
@@ -70,7 +75,8 @@ const classToKeyMap = new Map<Function, keyof ContentContainerCradle>([
   [ChromeRuntimeRewriteRuleRepository, 'chromeRuntimeRewriteRuleRepository'],
   [WindowCurrentUrlService, 'windowCurrentUrlService'],
   [DebounceTimer, 'debounceTimer'],
-  [GetSelectionService, 'getSelectionService']
+  [GetSelectionService, 'getSelectionService'],
+  [DomRootChecker, 'domRootChecker']
 ]);
 
 // Container interface with overloaded resolve
@@ -81,6 +87,7 @@ interface ContentContainer {
   resolve(token: typeof WindowCurrentUrlService): WindowCurrentUrlService;
   resolve(token: typeof DebounceTimer): DebounceTimer;
   resolve(token: typeof GetSelectionService): GetSelectionService;
+  resolve(token: typeof DomRootChecker): DomRootChecker;
   resolve<T>(token: Function): T;
 }
 
