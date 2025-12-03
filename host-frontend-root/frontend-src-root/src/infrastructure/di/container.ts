@@ -164,6 +164,14 @@ interface Container {
   resolve<T>(token: Function): T;
 }
 
+/**
+ * テスト用: 登録済み具体クラストークンの一覧を取得する
+ * DIコンテナに登録されている具体クラスを動的に取得するために使用
+ */
+export function getRegisteredConcreteClassTokens(): Array<{ token: Function; key: string }> {
+  return Array.from(classToKeyMap.entries()).map(([token, key]) => ({ token, key }));
+}
+
 // Wrapper to provide tsyringe-compatible API
 export const container: Container = {
   resolve(token: InterfaceToken | Function): any {
