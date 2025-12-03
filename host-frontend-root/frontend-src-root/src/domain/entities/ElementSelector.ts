@@ -39,6 +39,12 @@ export class ElementSelector {
 
   /**
    * 共通祖先コンテナが無効（documentやbody）かどうかを判定します。
+   *
+   * Node型はブラウザDOM APIの型ですが、Chrome拡張機能ではDOM操作がビジネスロジックの
+   * 本質であるため、データ構造体としてDomain層での使用を許容しています。
+   * ただし、グローバルオブジェクト（document等）への直接アクセスはIDomRootCheckerを
+   * 通じてInfrastructure層に委譲し、依存性逆転の原則に従っています。
+   *
    * @param container - 判定対象のノード。
    * @returns 無効な場合はtrue。
    */
