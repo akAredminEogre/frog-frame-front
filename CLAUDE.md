@@ -104,9 +104,27 @@ For working on multiple branches simultaneously:
 ```bash
 make wt-list                    # List all worktrees
 make wt-add BRANCH=feature-x    # Create worktree for branch
+make wt-init BRANCH=feature-x   # Initialize worktree (required after wt-add)
+make wt-use BRANCH=feature-x    # Switch to existing worktree
 make wt-remove BRANCH=feature-x # Remove worktree
 make wt-prune                   # Clean up stale references
 ```
+
+**Typical Worktree Workflow:**
+```bash
+# 1. Create and initialize new worktree
+make wt-add BRANCH=new-feature
+make wt-init BRANCH=new-feature
+
+# 2. Start development
+make wt-use BRANCH=new-feature
+make dev
+
+# 3. Switch between worktrees
+make wt-use BRANCH=other-feature
+make dev
+```
+
 See `docs/GIT_WORKTREE.md` for detailed usage guide.
 
 ## Architecture Overview

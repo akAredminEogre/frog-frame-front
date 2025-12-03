@@ -38,6 +38,30 @@ make wt-add BRANCH=feature-branch
 make wt-add BRANCH=new-feature-branch
 ```
 
+### worktree初期化
+
+worktreeを作成した後、開発環境の初期化を行います：
+
+```bash
+# worktree作成後の初期化（推奨）
+make wt-init BRANCH=feature-branch
+```
+
+wt-initコマンドは以下の処理を自動実行します：
+- 設定ファイル（.env、matchUrl.ts）の自動コピー
+- Docker環境の切り替え
+- npm install の実行
+- WXT準備（npx wxt prepare）の実行
+
+### worktree切り替え
+
+既存のworktreeに切り替えて開発を続ける場合：
+
+```bash
+# 別のworktreeに切り替え
+make wt-use BRANCH=other-branch
+```
+
 ### worktree削除
 
 ```bash
@@ -59,9 +83,12 @@ make wt-prune
 # 緊急バグ修正のためhotfixブランチを作成
 make wt-add BRANCH=hotfix-critical-bug
 
+# worktreeの初期化
+make wt-init BRANCH=hotfix-critical-bug
+
 # hotfixディレクトリで作業
 cd worktrees/hotfix-critical-bug
-make init-dev  # 初期セットアップ（初回のみ）
+make dev  # 開発サーバー起動
 # ... バグ修正作業 ...
 
 # 作業完了後、worktreeを削除
@@ -78,17 +105,22 @@ make wt-add BRANCH=feature-A
 # feature-Bのworktreeを作成
 make wt-add BRANCH=feature-B
 
-# 各worktreeで独立して開発
-# ターミナル1: cd worktrees/feature-A && make dev
-# ターミナル2: cd worktrees/feature-B && make dev
+# 各worktreeの初期化
+make wt-init BRANCH=feature-A
+make wt-init BRANCH=feature-B
+
+# 各worktreeで独立して開発（異なるターミナルで）
+# ターミナル1: make wt-use BRANCH=feature-A && make dev
+# ターミナル2: make wt-use BRANCH=feature-B && make dev
 ```
 
 ## 注意事項
 
-1. **Docker環境**: 各worktreeで`make init-dev`を実行する必要があります（初回のみ）
-2. **ポート競合**: 複数のworktreeで同時に`make dev`を実行する場合、ポートが競合する可能性があります。`.env`ファイルでポートを変更してください
+1. **Docker環境**: 各worktreeで`make wt-init`を実行してください（初回のみ）
+2. **ポート競合**: 現在の実装では同時に開発サーバーを起動できるのは1つのworktreeのみです。別のworktreeで開発する場合は`make wt-use`で切り替えてください
 3. **ディスク容量**: 各worktreeはnode_modulesを持つため、ディスク容量に注意してください
 4. **worktreeディレクトリ**: `worktrees/`ディレクトリは`.gitignore`で除外されています
+5. **自動化された初期化**: `wt-init`コマンドにより設定ファイルコピーやDocker環境切り替えが自動化されています
 
 ## 直接gitコマンドを使用する場合
 
