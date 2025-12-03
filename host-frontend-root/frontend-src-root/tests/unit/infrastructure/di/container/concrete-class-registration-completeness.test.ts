@@ -120,10 +120,11 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
     });
 
     // Assert - DIコンテナに登録されている各クラスにテストケースが存在することを確認
-    const testCaseTokenSet = new Set(testCases.map(tc => tc.input.classToken));
+    const testCaseTokenSet = new Set<Function>(testCases.map(tc => tc.input.classToken));
     actualRegisteredTokens.forEach(({ token }) => {
       expect(testCaseTokenSet.has(token),
         `Class ${(token as any).name} is registered in classToKeyMap but missing a test case`
       ).toBe(true);
     });
+  });
 });
