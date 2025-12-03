@@ -217,10 +217,6 @@ wt-add: _wt-check-branch
 	@echo "Worktree created at: $(WORKTREE_PATH)"
 	@echo "Initializing worktree..."
 	@$(MAKE) wt-init BRANCH=$(BRANCH)
-	@echo ""
-	@echo "✅ Worktree $(BRANCH) is ready for development!"
-	@echo "To start development:"
-	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"
 
 wt-remove: _wt-check-branch
 	@echo "Removing worktree for branch: $(BRANCH)..."
