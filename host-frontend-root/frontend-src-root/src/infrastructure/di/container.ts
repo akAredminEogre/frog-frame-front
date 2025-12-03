@@ -135,7 +135,7 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
 };
 
 // Class to key mappings for class-based resolution
-const classToKeyMap = new Map<Function, keyof ContainerCradle>([
+export const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [HandleContextMenuReplaceDomElement, 'handleContextMenuReplaceDomElement'],
   [ContextMenuSetupUseCase, 'contextMenuSetupUseCase'],
   [LoadRewriteRuleForEditUseCase, 'loadRewriteRuleForEditUseCase'],
