@@ -206,6 +206,11 @@ endif
 		echo "Please create the worktree first with: make wt-add BRANCH=$(BRANCH)"; \
 		exit 1; \
 	fi
+	@echo "Cleaning up duplicate frontend-src-root directory..."
+	@if [ -d "$(WORKTREE_DIR)/$(BRANCH)/frontend-src-root" ]; then \
+		rm -rf $(WORKTREE_DIR)/$(BRANCH)/frontend-src-root; \
+		echo "Removed duplicate frontend-src-root directory"; \
+	fi
 	@echo "Setting up configuration files..."
 	@if [ -f .env ]; then \
 		cp .env $(WORKTREE_DIR)/$(BRANCH)/.env; \

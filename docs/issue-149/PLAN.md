@@ -17,8 +17,9 @@
   - メインリポジトリとの設定同期方法の確立
 - [ ] テストとドキュメント作成
   - 新しいworktree運用フローのテスト
-  - GIT_WORKTREE.mdの更新
+  - GIT_WORKTREE.mdの更新（新しいwt-initコマンドの説明追加）
   - CLAUDE.mdへの運用手順追加
+  - 複数worktreeの並行運用テストのさらなる検証
 
 # ISSUEを通した相談事
 
