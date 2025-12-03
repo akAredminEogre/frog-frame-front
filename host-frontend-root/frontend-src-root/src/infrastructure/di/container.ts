@@ -123,8 +123,7 @@ type InterfaceToken =
   | 'IChromeRuntimeService'
   | 'IGetSelectionService';
 
-/** @public - exported for test verification of interface registration completeness */
-export const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
+const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeTabsService': 'chromeTabsService',
   'IPopupService': 'popupService',
   'IRewriteRuleRepository': 'rewriteRuleRepository',
@@ -185,3 +184,6 @@ export const container: Container = {
     return awilixContainer.resolve(key);
   }
 };
+
+// Attach internal mappings for test introspection (similar to tsyringe's _registry)
+(container as any)._interfaceToKeyMap = interfaceToKeyMap;

@@ -1,10 +1,14 @@
-import {
-  awilixContainer,
-  container,
-  interfaceToKeyMap
-} from 'src/infrastructure/di/container';
+import { awilixContainer, container } from 'src/infrastructure/di/container';
 
 import { describe, expect, it } from 'vitest';
+
+/**
+ * containerの内部プロパティからinterfaceToKeyMapを動的に取得する
+ * tsyringeの_registry._registryMapと同様のアクセスパターン
+ */
+function getInterfaceToKeyMap(): Record<string, string> {
+  return (container as any)._interfaceToKeyMap;
+}
 
 /**
  * DIコンテナから登録済みインターフェースキーの一覧を取得する
@@ -12,7 +16,7 @@ import { describe, expect, it } from 'vitest';
  */
 function getRegisteredInterfaceKeys(): string[] {
   const allKeys = Object.keys(awilixContainer.registrations);
-  const interfaceKeys = Object.values(interfaceToKeyMap);
+  const interfaceKeys = Object.values(getInterfaceToKeyMap());
   return allKeys.filter(key => interfaceKeys.includes(key));
 }
 
@@ -98,9 +102,10 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
     expect(actualRegisteredKeys).toHaveLength(testCases.length);
 
     // Assert - 各テストケースのインターフェースがDIコンテナに登録されていることを確認
+    const interfaceMapping = getInterfaceToKeyMap();
     const actualKeySet = new Set(actualRegisteredKeys);
     testCases.forEach(({ input: { interfaceToken } }) => {
-      const expectedKey = interfaceToKeyMap[interfaceToken];
+      const expectedKey = interfaceMapping[interfaceToken];
       expect(actualKeySet.has(expectedKey),
         `Test case exists for ${interfaceToken} but key '${expectedKey}' is not registered in awilixContainer`
       ).toBe(true);
@@ -108,7 +113,7 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
 
     // Assert - DIコンテナに登録されている各インターフェースキーにテストケースが存在することを確認
     const testCaseKeySet = new Set<string>(
-      testCases.map(tc => interfaceToKeyMap[tc.input.interfaceToken])
+      testCases.map(tc => interfaceMapping[tc.input.interfaceToken])
     );
     actualRegisteredKeys.forEach((key) => {
       expect(testCaseKeySet.has(key),
