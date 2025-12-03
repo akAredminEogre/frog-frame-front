@@ -1,4 +1,4 @@
-.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune wt-use wt-current wt-init
+.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune wt-use wt-current wt-init wt-dev
 
 help:
 	@echo "Available commands:"
@@ -22,6 +22,7 @@ help:
 	@echo "  make wt-use       - Switch to a worktree (usage: make wt-use BRANCH=branch-name)"
 	@echo "  make wt-current   - Show the currently active worktree"
 	@echo "  make wt-init      - Initialize a worktree for development (usage: make wt-init BRANCH=branch-name)"
+	@echo "  make wt-dev       - Start development server for worktree (usage: make wt-dev BRANCH=branch-name)"
 	@echo "  make help         - Show this help message"
 
 init-config:
@@ -111,7 +112,7 @@ WORKTREE_DIR := worktrees
 WORKTREE_PATH = $(WORKTREE_DIR)/$(BRANCH)
 
 # Internal helper targets (not for direct use)
-.PHONY: _wt-check-branch _wt-remove-orphaned _wt-check-exists _wt-setup-env _wt-create-override
+.PHONY: _wt-check-branch _wt-remove-orphaned _wt-check-exists _wt-setup-env _wt-create-override _wt-dev-server
 
 # Check if BRANCH variable is defined
 _wt-check-branch:
@@ -182,6 +183,11 @@ _wt-create-override:
 	@echo "Setting CURRENT_WORKTREE_PATH environment variable..."
 	@echo "CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH)" > .env.worktree
 
+# Start development server for worktree
+_wt-dev-server:
+	@echo "Starting development server for worktree $(BRANCH)..."
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev
+
 wt-list:
 	@echo "Listing all git worktrees..."
 	@git worktree list
@@ -195,12 +201,8 @@ wt-add: _wt-check-branch
 		echo "To remove it, run: make wt-remove BRANCH=$(BRANCH)"; \
 		exit 1; \
 	fi
-	@# Check if directory exists but not registered as worktree
-	@if [ -d "$(WORKTREE_PATH)" ]; then \
-		echo "Warning: Directory $(WORKTREE_PATH) exists but is not a registered worktree."; \
-		echo "Attempting to remove orphaned directory..."; \
-		$(MAKE) _wt-remove-orphaned BRANCH=$(BRANCH); \
-	fi
+	@# Remove any orphaned directory
+	@$(MAKE) _wt-remove-orphaned BRANCH=$(BRANCH) 2>/dev/null || true
 	@# Check if branch exists locally
 	@if git show-ref --verify --quiet refs/heads/$(BRANCH); then \
 		echo "Using existing local branch: $(BRANCH)"; \
@@ -213,10 +215,12 @@ wt-add: _wt-check-branch
 		git worktree add -b $(BRANCH) $(WORKTREE_PATH); \
 	fi
 	@echo "Worktree created at: $(WORKTREE_PATH)"
+	@echo "Initializing worktree..."
+	@$(MAKE) wt-init BRANCH=$(BRANCH)
 	@echo ""
-	@echo "To start development in this worktree:"
-	@echo "  cd $(WORKTREE_PATH)"
-	@echo "  make dev"
+	@echo "✅ Worktree $(BRANCH) is ready for development!"
+	@echo "To start development:"
+	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"
 
 wt-remove: _wt-check-branch
 	@echo "Removing worktree for branch: $(BRANCH)..."
@@ -237,8 +241,8 @@ wt-use: _wt-check-branch _wt-check-exists _wt-create-override
 	@echo "The Docker container now uses: $(WORKTREE_PATH)"
 	@echo ""
 	@echo "Environment variable set: CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH)"
-	@echo "To start development:"
-	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"
+	@echo "To start development server, run:"
+	@echo "  make wt-dev BRANCH=$(BRANCH)"
 
 wt-current:
 	@echo "Checking current worktree configuration..."
@@ -270,4 +274,6 @@ wt-init: _wt-check-branch _wt-check-exists
 	@echo "The worktree is ready for development."
 	@echo ""
 	@echo "To start development:"
-	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev"
+	@echo "  make wt-dev BRANCH=$(BRANCH)"
+
+wt-dev: _wt-check-branch _wt-dev-server
