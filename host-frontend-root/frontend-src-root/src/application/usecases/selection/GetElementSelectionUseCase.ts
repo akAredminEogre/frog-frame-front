@@ -1,4 +1,4 @@
-import { IDomRootChecker } from 'src/application/ports/IDomRootChecker';
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
 import { DomRootChecker } from 'src/infrastructure/windows/DomRootChecker';

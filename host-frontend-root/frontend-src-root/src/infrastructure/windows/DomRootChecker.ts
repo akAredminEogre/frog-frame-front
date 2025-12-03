@@ -1,4 +1,4 @@
-import { IDomRootChecker } from 'src/application/ports/IDomRootChecker';
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 
 /**
  * DOMルート要素（document, document.body）の判定を行うインフラストラクチャサービス。
