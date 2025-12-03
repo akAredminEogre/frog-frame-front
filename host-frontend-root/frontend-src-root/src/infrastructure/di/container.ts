@@ -123,6 +123,7 @@ type InterfaceToken =
   | 'IChromeRuntimeService'
   | 'IGetSelectionService';
 
+/** @public - exported for test verification of interface registration completeness */
 export const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeTabsService': 'chromeTabsService',
   'IPopupService': 'popupService',
@@ -134,7 +135,7 @@ export const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = 
   'IGetSelectionService': 'getSelectionService'
 };
 
-// Class to key mappings for class-based resolution
+/** @public - exported for test verification of concrete class registration completeness */
 export const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [HandleContextMenuReplaceDomElement, 'handleContextMenuReplaceDomElement'],
   [ContextMenuSetupUseCase, 'contextMenuSetupUseCase'],
