@@ -1,5 +1,7 @@
+import { IDomRootChecker } from 'src/application/ports/IDomRootChecker';
 import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
+import { DomRootChecker } from 'src/infrastructure/windows/DomRootChecker';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 /**
@@ -9,8 +11,8 @@ export class GetElementSelectionUseCase {
   private elementSelector: ElementSelector;
   private selectionService: IGetSelectionService;
 
-  constructor(selectionService?: IGetSelectionService) {
-    this.elementSelector = new ElementSelector();
+  constructor(selectionService?: IGetSelectionService, domRootChecker?: IDomRootChecker) {
+    this.elementSelector = new ElementSelector(domRootChecker || new DomRootChecker());
     this.selectionService = selectionService || new GetSelectionService();
   }
 

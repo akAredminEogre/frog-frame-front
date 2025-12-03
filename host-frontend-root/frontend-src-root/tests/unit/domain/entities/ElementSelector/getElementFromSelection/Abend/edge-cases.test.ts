@@ -1,16 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { IDomRootChecker } from 'src/application/ports/IDomRootChecker';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
 
 describe('ElementSelector - getElementFromSelection - edge cases', () => {
   let elementSelector: ElementSelector;
+  let mockDomRootChecker: IDomRootChecker;
 
   beforeEach(() => {
-    elementSelector = new ElementSelector();
+    mockDomRootChecker = {
+      isDocumentRoot: vi.fn().mockReturnValue(false)
+    };
+    elementSelector = new ElementSelector(mockDomRootChecker);
     vi.clearAllMocks();
   });
 
   it('共通祖先がdocumentの場合、フォールバック処理を実行する', () => {
+    const mockDocumentNode = { nodeType: Node.DOCUMENT_NODE };
     const mockTextNode = {
       nodeType: Node.TEXT_NODE,
       parentElement: {
@@ -20,8 +26,12 @@ describe('ElementSelector - getElementFromSelection - edge cases', () => {
 
     const mockRangeForDocument = {
       startContainer: mockTextNode,
-      commonAncestorContainer: document
+      commonAncestorContainer: mockDocumentNode
     };
+
+    vi.mocked(mockDomRootChecker.isDocumentRoot).mockImplementation(
+      (node) => node === (mockDocumentNode as unknown as Node)
+    );
 
     const result = elementSelector.getElementFromSelection(mockRangeForDocument as any, 'test content');
 
@@ -29,6 +39,7 @@ describe('ElementSelector - getElementFromSelection - edge cases', () => {
   });
 
   it('共通祖先がdocument.bodyの場合、フォールバック処理を実行する', () => {
+    const mockBodyNode = { nodeType: Node.ELEMENT_NODE, tagName: 'BODY' };
     const mockElement = {
       nodeType: Node.ELEMENT_NODE,
       outerHTML: '<div>test content</div>'
@@ -36,8 +47,12 @@ describe('ElementSelector - getElementFromSelection - edge cases', () => {
 
     const mockRangeForBody = {
       startContainer: mockElement,
-      commonAncestorContainer: document.body
+      commonAncestorContainer: mockBodyNode
     };
+
+    vi.mocked(mockDomRootChecker.isDocumentRoot).mockImplementation(
+      (node) => node === (mockBodyNode as unknown as Node)
+    );
 
     const result = elementSelector.getElementFromSelection(mockRangeForBody as any, 'test content');
 

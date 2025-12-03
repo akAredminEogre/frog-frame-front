@@ -1,8 +1,15 @@
+import { IDomRootChecker } from 'src/application/ports/IDomRootChecker';
+
 /**
  * ユーザーのテキスト選択範囲から、置換対象となる最適なHTML要素を特定するドメインエンティティ。
  * 複雑なDOM構造や複数ノードにまたがる選択に対応し、最小かつ意味のある要素を返却します。
  */
 export class ElementSelector {
+  private domRootChecker: IDomRootChecker;
+
+  constructor(domRootChecker: IDomRootChecker) {
+    this.domRootChecker = domRootChecker;
+  }
   /**
    * 指定された選択範囲から最適なHTML要素を取得します。
    * @param range - ユーザーの選択範囲
@@ -36,7 +43,7 @@ export class ElementSelector {
    * @returns 無効な場合はtrue。
    */
   private isInvalidAncestor(container: Node): boolean {
-    return container === document || container === document.body;
+    return this.domRootChecker.isDocumentRoot(container);
   }
 
   /**
