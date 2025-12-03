@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { IDomRootChecker } from 'src/application/ports/IDomRootChecker';
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
 
 describe('ElementSelector - getElementFromSelection - normal cases', () => {

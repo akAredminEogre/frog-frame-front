@@ -1,4 +1,4 @@
-import { IDomRootChecker } from 'src/application/ports/IDomRootChecker';
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 
 /**
  * ユーザーのテキスト選択範囲から、置換対象となる最適なHTML要素を特定するドメインエンティティ。
