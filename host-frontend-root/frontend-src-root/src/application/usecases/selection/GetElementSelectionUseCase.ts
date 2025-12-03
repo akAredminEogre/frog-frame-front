@@ -1,7 +1,7 @@
 import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
 import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
-import { DomRootChecker } from 'src/infrastructure/windows/DomRootChecker';
+import { DomRootChecker } from 'src/infrastructure/document/DomRootChecker';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 /**
