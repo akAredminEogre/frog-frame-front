@@ -111,10 +111,19 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
     // Assert - 期待される登録数と一致することを確認
     expect(actualRegisteredTokens).toHaveLength(testCases.length);
 
-    // Assert - 期待される各具体クラスがDIコンテナに登録されていることを確認
+    // Assert - 各具体クラスがDIコンテナに登録されていることを確認
     const actualTokenSet = new Set(actualRegisteredTokens.map(({ token }) => token));
     testCases.forEach(({ input: { classToken } }) => {
-      expect(actualTokenSet.has(classToken)).toBe(true);
+      expect(actualTokenSet.has(classToken),
+        `Test case exists for ${classToken.name} but it's not registered in classToKeyMap`
+      ).toBe(true);
     });
-  });
+
+    // Assert - DIコンテナに登録されている各クラスにテストケースが存在することを確認
+    const testCaseTokenSet = new Set(testCases.map(tc => tc.input.classToken));
+    actualRegisteredTokens.forEach(({ token }) => {
+      expect(testCaseTokenSet.has(token),
+        `Class ${(token as any).name} is registered in classToKeyMap but missing a test case`
+      ).toBe(true);
+    });
 });
