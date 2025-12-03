@@ -56,5 +56,10 @@ Daily Scrum 02の作業予定であったworktree初期化の改善を完了し�
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
-
+issue-131のブランチに対して、wt-initコマンドを実行したところ、
+frog-frame-front/worktrees/issue-131-feat-numbering-shell/frontend-src-root/package-lock.json
+frog-frame-front/worktrees/issue-131-feat-numbering-shell/host-frontend-root/frontend-src-root/package-lock.json
+が二重に生成されてしまいました。
+frog-frame-front/worktrees/issue-131-feat-numbering-shell/frontend-src-root/package-lock.json
+は本来不要なはずですので、生成されないように修正してください
 ---
