@@ -1,4 +1,4 @@
-import { classToKeyMap, container } from 'src/infrastructure/di/container';
+import { container } from 'src/infrastructure/di/container';
 
 import { describe, expect, it } from 'vitest';
 
@@ -14,11 +14,19 @@ import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsSer
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 
 /**
+ * containerの内部プロパティからclassToKeyMapを動的に取得する
+ * tsyringeの_registry._registryMapと同様のアクセスパターン
+ */
+function getClassToKeyMap(): Map<Function, string> {
+  return (container as any)._classToKeyMap;
+}
+
+/**
  * DIコンテナから登録済み具体クラストークンの一覧を取得する
  * container.tsのclassToKeyMapから動的に取得
  */
 function getRegisteredConcreteClassTokens(): Array<{ token: Function; key: string }> {
-  return Array.from(classToKeyMap.entries()).map(([token, key]) => ({ token, key }));
+  return Array.from(getClassToKeyMap().entries()).map(([token, key]) => ({ token, key }));
 }
 
 /**
