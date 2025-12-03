@@ -135,7 +135,7 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
 };
 
 // Class to key mappings for class-based resolution
-export const classToKeyMap = new Map<Function, keyof ContainerCradle>([
+const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [HandleContextMenuReplaceDomElement, 'handleContextMenuReplaceDomElement'],
   [ContextMenuSetupUseCase, 'contextMenuSetupUseCase'],
   [LoadRewriteRuleForEditUseCase, 'loadRewriteRuleForEditUseCase'],
@@ -184,3 +184,8 @@ export const container: Container = {
     return awilixContainer.resolve(key);
   }
 };
+
+// Attach internal data for test introspection (similar to tsyringe's _registry)
+(container as any)._interfaceToKeyMap = interfaceToKeyMap;
+(container as any)._classToKeyMap = classToKeyMap;
+(container as any)._awilixContainer = awilixContainer;
