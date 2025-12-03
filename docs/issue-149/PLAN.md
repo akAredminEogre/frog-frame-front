@@ -2,13 +2,14 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] Docker Override機能の実装準備
+- [x] Docker Override機能の実装準備
   - docker-compose.override.ymlの仕組みを確認
   - .gitignoreへのoverride.yml追加
   - 現在のworktree検出ロジックの設計
-- [ ] worktree切り替えコマンドの実装
+- [x] worktree切り替えコマンドの実装
   - `make wt-use`コマンドの作成
-  - docker-compose.override.yml自動生成機能の実装
+  - docker-compose.override.yml.exampleテンプレートの作成
+  - 環境変数ベースの自動生成機能の実装
   - 現在のworktreeディレクトリ検出機能の実装
 - [ ] worktree初期化の改善
   - `make wt-init`コマンドの作成（worktree用のinit-dev）
