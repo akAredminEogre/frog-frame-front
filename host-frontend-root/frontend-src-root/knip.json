@@ -1,9 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
-  "ignoreExports": [
-    "interfaceToKeyMap",
-    "classToKeyMap"
-  ],
   "ignore": [
     ".output/**",
     ".wxt/**",

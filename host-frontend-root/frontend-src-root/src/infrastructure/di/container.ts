@@ -25,7 +25,7 @@ import { SelectedPageTextRepository } from 'src/infrastructure/persistence/stora
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 // Create Awilix container
-const awilixContainer = createContainer({
+export const awilixContainer = createContainer({
   strict: true
 });
 
@@ -123,8 +123,7 @@ type InterfaceToken =
   | 'IChromeRuntimeService'
   | 'IGetSelectionService';
 
-/** @public - exported for test verification of interface registration completeness */
-export const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
+const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeTabsService': 'chromeTabsService',
   'IPopupService': 'popupService',
   'IRewriteRuleRepository': 'rewriteRuleRepository',
@@ -135,8 +134,8 @@ export const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = 
   'IGetSelectionService': 'getSelectionService'
 };
 
-/** @public - exported for test verification of concrete class registration completeness */
-export const classToKeyMap = new Map<Function, keyof ContainerCradle>([
+// Class to key mappings for class-based resolution
+const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [HandleContextMenuReplaceDomElement, 'handleContextMenuReplaceDomElement'],
   [ContextMenuSetupUseCase, 'contextMenuSetupUseCase'],
   [LoadRewriteRuleForEditUseCase, 'loadRewriteRuleForEditUseCase'],
