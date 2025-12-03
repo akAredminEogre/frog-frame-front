@@ -24,8 +24,8 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/index
 import { SelectedPageTextRepository } from 'src/infrastructure/persistence/storage/SelectedPageTextRepository';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
-/** @public - exported for test verification of DI container registrations */
-export const awilixContainer = createContainer({
+// Create Awilix container
+const awilixContainer = createContainer({
   strict: true
 });
 
@@ -185,5 +185,6 @@ export const container: Container = {
   }
 };
 
-// Attach internal mappings for test introspection (similar to tsyringe's _registry)
+// Attach internal data for test introspection (similar to tsyringe's _registry)
 (container as any)._interfaceToKeyMap = interfaceToKeyMap;
+(container as any)._awilixContainer = awilixContainer;

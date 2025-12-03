@@ -1,4 +1,4 @@
-import { awilixContainer, container } from 'src/infrastructure/di/container';
+import { container } from 'src/infrastructure/di/container';
 
 import { describe, expect, it } from 'vitest';
 
@@ -11,11 +11,18 @@ function getInterfaceToKeyMap(): Record<string, string> {
 }
 
 /**
+ * containerの内部プロパティからawilixContainerを動的に取得する
+ */
+function getAwilixContainer(): { registrations: Record<string, unknown> } {
+  return (container as any)._awilixContainer;
+}
+
+/**
  * DIコンテナから登録済みインターフェースキーの一覧を取得する
  * awilixContainerのregistrationsから動的に取得し、インターフェース関連のキーのみをフィルタ
  */
 function getRegisteredInterfaceKeys(): string[] {
-  const allKeys = Object.keys(awilixContainer.registrations);
+  const allKeys = Object.keys(getAwilixContainer().registrations);
   const interfaceKeys = Object.values(getInterfaceToKeyMap());
   return allKeys.filter(key => interfaceKeys.includes(key));
 }
