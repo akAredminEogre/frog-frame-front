@@ -15,7 +15,7 @@
   - `make wt-init`コマンドの作成（worktree用のinit-dev）
   - 各worktreeでの初回セットアップ自動化
   - メインリポジトリとの設定同期方法の確立
-- [ ] テストとドキュメント作成
+- [x] テストとドキュメント作成
   - 新しいworktree運用フローのテスト
   - GIT_WORKTREE.mdの更新（新しいwt-initコマンドの説明追加）
   - CLAUDE.mdへの運用手順追加
