@@ -258,11 +258,6 @@ wt-current:
 
 wt-init: _wt-check-branch _wt-check-exists
 	@echo "Initializing worktree for development: $(BRANCH)..."
-	@echo "Cleaning up duplicate frontend-src-root directory..."
-	@if [ -d "$(WORKTREE_PATH)/frontend-src-root" ]; then \
-		rm -rf $(WORKTREE_PATH)/frontend-src-root; \
-		echo "Removed duplicate frontend-src-root directory"; \
-	fi
 	@$(MAKE) _wt-setup-env BRANCH=$(BRANCH)
 	@echo "Switching to worktree for initialization..."
 	@CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) $(MAKE) wt-use BRANCH=$(BRANCH)
