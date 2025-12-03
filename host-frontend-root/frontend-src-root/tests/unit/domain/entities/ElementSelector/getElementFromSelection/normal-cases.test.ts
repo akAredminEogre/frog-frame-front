@@ -1,12 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { IDomRootChecker } from 'src/application/ports/IDomRootChecker';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
 
 describe('ElementSelector - getElementFromSelection - normal cases', () => {
   let elementSelector: ElementSelector;
+  let mockDomRootChecker: IDomRootChecker;
 
   beforeEach(() => {
-    elementSelector = new ElementSelector();
+    mockDomRootChecker = {
+      isDocumentRoot: vi.fn().mockReturnValue(false)
+    };
+    elementSelector = new ElementSelector(mockDomRootChecker);
     vi.clearAllMocks();
   });
 
