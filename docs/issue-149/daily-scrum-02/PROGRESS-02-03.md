@@ -46,5 +46,12 @@ wt-initコマンドでDocker内のnpm installが失敗していました。原�
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
-もしDockerFileを直すことで、make wt-initコマンドがシンプルになるのであれば、その方法で修正してください
+```
+$ make wt-add BRANCH=issue-131-feat-numbering-shell
+Creating worktree for branch: issue-131-feat-numbering-shell...
+Preparing worktree (new branch 'issue-131-feat-numbering-shell')
+fatal: a branch named 'issue-131-feat-numbering-shell' already exists
+make: *** [Makefile:124: wt-add] Error 255
+```
+と表示されたので対応をお願いします
 ---
