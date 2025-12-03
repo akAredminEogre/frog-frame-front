@@ -1,4 +1,4 @@
-import { container } from 'src/infrastructure/di/container';
+import { container, getRegisteredConcreteClassTokens } from 'src/infrastructure/di/container';
 
 import { describe, expect, it } from 'vitest';
 
@@ -9,6 +9,8 @@ import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/Loa
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
+import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
+import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 
 /**
@@ -60,6 +62,16 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
       description: 'PopupInitFormUseCaseを解決できること',
       input: { classToken: PopupInitFormUseCase },
       expected: { className: 'PopupInitFormUseCase' }
+    },
+    {
+      description: 'ChromeTabsServiceを解決できること',
+      input: { classToken: ChromeTabsService },
+      expected: { className: 'ChromeTabsService' }
+    },
+    {
+      description: 'ChromeCurrentTabServiceを解決できること',
+      input: { classToken: ChromeCurrentTabService },
+      expected: { className: 'ChromeCurrentTabService' }
     }
   ];
 
@@ -77,6 +89,24 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
       expect(resolved).not.toBeNull();
       expect(resolved).toBeInstanceOf(classToken);
       expect((resolved as any).constructor.name).toBe(className);
+    });
+  });
+
+  /**
+   * DIコンテナに登録されている具体クラス数と、テストケースで期待する数が一致することを検証
+   * これにより、DIコンテナに新しいクラスが追加された場合にテストケースの追加漏れを検出できる
+   */
+  it('DIコンテナ登録数とテストケース数が一致すること', () => {
+    // Act - DIコンテナから登録済み具体クラストークンを動的取得
+    const actualRegisteredTokens = getRegisteredConcreteClassTokens();
+
+    // Assert - 期待される登録数と一致することを確認
+    expect(actualRegisteredTokens).toHaveLength(testCases.length);
+
+    // Assert - 期待される各具体クラスがDIコンテナに登録されていることを確認
+    const actualTokenSet = new Set(actualRegisteredTokens.map(({ token }) => token));
+    testCases.forEach(({ input: { classToken } }) => {
+      expect(actualTokenSet.has(classToken)).toBe(true);
     });
   });
 });
