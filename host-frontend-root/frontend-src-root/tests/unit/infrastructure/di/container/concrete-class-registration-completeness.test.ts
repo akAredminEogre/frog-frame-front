@@ -1,4 +1,4 @@
-import { container, getRegisteredConcreteClassTokens } from 'src/infrastructure/di/container';
+import { classToKeyMap, container } from 'src/infrastructure/di/container';
 
 import { describe, expect, it } from 'vitest';
 
@@ -12,6 +12,14 @@ import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/Close
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
+
+/**
+ * DIコンテナから登録済み具体クラストークンの一覧を取得する
+ * container.tsのclassToKeyMapから動的に取得
+ */
+function getRegisteredConcreteClassTokens(): Array<{ token: Function; key: string }> {
+  return Array.from(classToKeyMap.entries()).map(([token, key]) => ({ token, key }));
+}
 
 /**
  * DIコンテナの具体クラス登録確認テスト (Awilix)

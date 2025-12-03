@@ -135,7 +135,7 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
 };
 
 // Class to key mappings for class-based resolution
-const classToKeyMap = new Map<Function, keyof ContainerCradle>([
+export const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [HandleContextMenuReplaceDomElement, 'handleContextMenuReplaceDomElement'],
   [ContextMenuSetupUseCase, 'contextMenuSetupUseCase'],
   [LoadRewriteRuleForEditUseCase, 'loadRewriteRuleForEditUseCase'],
@@ -162,14 +162,6 @@ interface Container {
   resolve(token: typeof ChromeCurrentTabService): ChromeCurrentTabService;
   resolve<T>(token: InterfaceToken): T;
   resolve<T>(token: Function): T;
-}
-
-/**
- * テスト用: 登録済み具体クラストークンの一覧を取得する
- * DIコンテナに登録されている具体クラスを動的に取得するために使用
- */
-export function getRegisteredConcreteClassTokens(): Array<{ token: Function; key: string }> {
-  return Array.from(classToKeyMap.entries()).map(([token, key]) => ({ token, key }));
 }
 
 // Wrapper to provide tsyringe-compatible API
