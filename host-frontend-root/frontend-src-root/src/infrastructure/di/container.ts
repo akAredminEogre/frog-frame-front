@@ -187,4 +187,5 @@ export const container: Container = {
 
 // Attach internal data for test introspection (similar to tsyringe's _registry)
 (container as any)._interfaceToKeyMap = interfaceToKeyMap;
+(container as any)._classToKeyMap = classToKeyMap;
 (container as any)._awilixContainer = awilixContainer;
