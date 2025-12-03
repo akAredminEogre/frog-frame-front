@@ -1,4 +1,4 @@
-.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune wt-use wt-current
+.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune wt-use wt-current wt-init
 
 help:
 	@echo "Available commands:"
@@ -21,6 +21,7 @@ help:
 	@echo "  make wt-prune     - Prune stale worktree references"
 	@echo "  make wt-use       - Switch to a worktree (usage: make wt-use BRANCH=branch-name)"
 	@echo "  make wt-current   - Show the currently active worktree"
+	@echo "  make wt-init      - Initialize a worktree for development (usage: make wt-init BRANCH=branch-name)"
 	@echo "  make help         - Show this help message"
 
 init-config:
@@ -192,3 +193,51 @@ wt-current:
 	else \
 		echo "No worktree override active (using main repository)"; \
 	fi
+
+wt-init:
+ifndef BRANCH
+	@echo "Error: BRANCH is required"
+	@echo "Usage: make wt-init BRANCH=branch-name"
+	@exit 1
+endif
+	@echo "Initializing worktree for development: $(BRANCH)..."
+	@if [ ! -d "$(WORKTREE_DIR)/$(BRANCH)" ]; then \
+		echo "Error: Worktree not found at $(WORKTREE_DIR)/$(BRANCH)"; \
+		echo "Please create the worktree first with: make wt-add BRANCH=$(BRANCH)"; \
+		exit 1; \
+	fi
+	@echo "Setting up configuration files..."
+	@if [ -f .env ]; then \
+		cp .env $(WORKTREE_DIR)/$(BRANCH)/.env; \
+		echo "Copied .env to worktree"; \
+	else \
+		echo "Warning: .env not found in main repository"; \
+		if [ -f .env.example ]; then \
+			cp .env.example $(WORKTREE_DIR)/$(BRANCH)/.env; \
+			echo "Copied .env.example to worktree as .env"; \
+		fi \
+	fi
+	@if [ -f host-frontend-root/frontend-src-root/src/utils/matchUrl.ts ]; then \
+		mkdir -p $(WORKTREE_DIR)/$(BRANCH)/host-frontend-root/frontend-src-root/src/utils/; \
+		cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts $(WORKTREE_DIR)/$(BRANCH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts; \
+		echo "Copied matchUrl.ts to worktree"; \
+	else \
+		echo "Warning: matchUrl.ts not found, checking for example file"; \
+		if [ -f host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example ]; then \
+			mkdir -p $(WORKTREE_DIR)/$(BRANCH)/host-frontend-root/frontend-src-root/src/utils/; \
+			cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example $(WORKTREE_DIR)/$(BRANCH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts; \
+			echo "Copied matchUrl.ts.example to worktree as matchUrl.ts"; \
+		fi \
+	fi
+	@echo "Switching to worktree for initialization..."
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) $(MAKE) wt-use BRANCH=$(BRANCH)
+	@echo "Installing npm dependencies in worktree..."
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec frontend npm install
+	@echo "Preparing WXT (generating .wxt/tsconfig.json) in worktree..."
+	@CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec frontend npx wxt prepare
+	@echo ""
+	@echo "✅ Worktree $(BRANCH) initialization complete!"
+	@echo "The worktree is ready for development."
+	@echo ""
+	@echo "To start development:"
+	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec frontend npm run dev"
