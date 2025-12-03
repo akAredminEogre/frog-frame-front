@@ -15,9 +15,9 @@ Docker Override機能の実装準備を行います。具体的には：
 - `Makefile`（wt-useコマンドの準備）
 
 ## スクラム内残タスク
-- [ ] docker-compose.override.ymlの動作確認
-- [ ] .gitignoreへの追加
-- [ ] worktree検出ロジックの設計とプロトタイプ作成
+- [x] docker-compose.override.ymlの動作確認
+- [x] .gitignoreへの追加
+- [x] worktree検出ロジックの設計とプロトタイプ作成
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -37,7 +37,18 @@ worktree運用を改善できることにワクワクしています！ハイブ
 ## 本スクラムでの作業実績内容
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+- docker-compose.override.ymlの動作メカニズムを検証し、正常に動作することを確認
+- .gitignoreにdocker-compose.override.ymlと.env.worktreeを追加
+- Makefileに`wt-use`と`wt-current`コマンドを実装（環境変数アプローチで改善）
+  - `wt-use`: worktreeを切り替えるためのコマンド（環境変数ベースの実装）
+  - `wt-current`: 現在アクティブなworktreeを確認するコマンド
+- docker-compose.override.yml.exampleテンプレートファイルを作成
+- レビュー指摘を受けてsedアプローチから環境変数アプローチに改善
+- 3回のコードレビューを経て高品質な実装を完成
 
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+- `.gitignore`
+- `Makefile`
+- `docker-compose.override.yml.example` (新規作成)
