@@ -38,29 +38,31 @@ make wt-add BRANCH=feature-branch
 make wt-add BRANCH=new-feature-branch
 ```
 
-### worktree初期化
+`wt-add`コマンドは以下の処理を自動実行します：
+- worktreeディレクトリの作成
+- ブランチの作成/チェックアウト
+- **自動初期化**: 設定ファイル（.env、matchUrl.ts）の自動コピー
+- **自動初期化**: Docker環境の切り替え
+- **自動初期化**: npm install の実行
+- **自動初期化**: WXT準備（npx wxt prepare）の実行
 
-worktreeを作成した後、開発環境の初期化を行います：
-
-```bash
-# worktree作成後の初期化（推奨）
-make wt-init BRANCH=feature-branch
-```
-
-wt-initコマンドは以下の処理を自動実行します：
-- 設定ファイル（.env、matchUrl.ts）の自動コピー
-- Docker環境の切り替え
-- npm install の実行
-- WXT準備（npx wxt prepare）の実行
+**注意**: `wt-init`コマンドは`wt-add`内で自動実行されるため、通常は手動で実行する必要はありません。
 
 ### worktree切り替え
 
-既存のworktreeに切り替えて開発を続ける場合：
-
 ```bash
+# worktreeの開発サーバーを起動（自動的に他のコンテナを停止）
+make wt-dev BRANCH=feature-branch
+
 # 別のworktreeに切り替え
-make wt-use BRANCH=other-branch
+make wt-dev BRANCH=other-branch
 ```
+
+`wt-dev`コマンドは以下を自動実行します：
+- 他のworktreeのDockerコンテナを自動停止
+- ポート3000の競合回避
+- 指定されたworktreeディレクトリで独立した開発環境を起動
+
 
 ### worktree削除
 
@@ -136,11 +138,30 @@ make wt-dev BRANCH=feature-review
 
 ## 注意事項
 
-1. **Docker環境**: 各worktreeで`make wt-init`を実行してください（初回のみ）
-2. **ポート競合**: 現在の実装では同時に開発サーバーを起動できるのは1つのworktreeのみです。別のworktreeで開発する場合は`make wt-use`で切り替えてください
+1. **自動初期化**: `wt-add`実行時に自動的に初期化されるため、`wt-init`を手動実行する必要はありません
+2. **推奨コマンド**: 切り替えには`make wt-dev`を使用してください（自動でポート競合を回避）
 3. **ディスク容量**: 各worktreeはnode_modulesを持つため、ディスク容量に注意してください
 4. **worktreeディレクトリ**: `worktrees/`ディレクトリは`.gitignore`で除外されています
-5. **自動化された初期化**: `wt-init`コマンドにより設定ファイルコピーやDocker環境切り替えが自動化されています
+5. **自動化された切り替え**: `wt-dev`コマンドにより他のコンテナ停止・環境切り替え・開発サーバー起動が自動化されています
+
+## 簡単ワークフロー（まとめ）
+
+**初回セットアップ（1回のみ）**：
+```bash
+make wt-add BRANCH=your-branch
+# これだけで、worktree作成・ブランチ設定・環境初期化が全て完了
+```
+
+**worktree切り替え（日常使用）**：
+```bash
+make wt-dev BRANCH=your-branch
+# これだけで他のworktreeを停止して、指定したworktreeの開発サーバーが起動
+```
+
+**不要になったらクリーンアップ**：
+```bash
+make wt-remove BRANCH=your-branch
+```
 
 ## 直接gitコマンドを使用する場合
 
