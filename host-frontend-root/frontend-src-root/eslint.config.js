@@ -179,7 +179,7 @@ export default [js.configs.recommended, {
   // See: docs/design/clean-architecture/domain/entities.md
   files: [
     '**/domain/entities/ElementSelector.ts',
-    '**/domain/entities/Elements.ts',
+    '**/domain/value-objects/Elements/Elements.ts',
   ],
   rules: {
     'no-restricted-globals': [
