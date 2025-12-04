@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
@@ -12,10 +13,15 @@ import { MutationRecords } from 'src/domain/value-objects/MutationRecords/Mutati
  * 4. document.bodyに存在しない要素は除外する
  */
 describe('Elements.extractAttachedElements - 正常系', () => {
+  const createMockDomRootChecker = (attachedElements: Set<Element>): IDomRootChecker => ({
+    isDocumentRoot: () => false,
+    isAttachedToDocument: (element: Element) => attachedElements.has(element)
+  });
+
   it('should return collected elements that are in document body', () => {
     // Arrange
     const element = document.createElement('div');
-    document.body.appendChild(element);
+    const mockDomRootChecker = createMockDomRootChecker(new Set([element]));
 
     const nodeList = [element] as unknown as NodeList;
     (nodeList as any).forEach = Array.prototype.forEach.bind([element]);
@@ -26,19 +32,16 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Act
-    const result = elements.extractAttachedElements();
+    const result = elements.extractAttachedElements(mockDomRootChecker);
 
     // Assert
     expect(result.toArray()).toEqual([element]);
-
-    // Cleanup
-    document.body.removeChild(element);
   });
 
   it('should clear collection after extraction', () => {
     // Arrange
     const element = document.createElement('div');
-    document.body.appendChild(element);
+    const mockDomRootChecker = createMockDomRootChecker(new Set([element]));
 
     const nodeList = [element] as unknown as NodeList;
     (nodeList as any).forEach = Array.prototype.forEach.bind([element]);
@@ -49,21 +52,19 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Act
-    elements.extractAttachedElements();
+    elements.extractAttachedElements(mockDomRootChecker);
 
     // Assert
-    expect(elements.extractAttachedElements().toArray()).toEqual([]);
-
-    // Cleanup
-    document.body.removeChild(element);
+    expect(elements.extractAttachedElements(mockDomRootChecker).toArray()).toEqual([]);
   });
 
   it('should return empty Elements when no elements collected', () => {
     // Arrange
     const elements = new Elements();
+    const mockDomRootChecker = createMockDomRootChecker(new Set());
 
     // Act
-    const result = elements.extractAttachedElements();
+    const result = elements.extractAttachedElements(mockDomRootChecker);
 
     // Assert
     expect(result.toArray()).toEqual([]);
@@ -72,8 +73,8 @@ describe('Elements.extractAttachedElements - 正常系', () => {
   it('should exclude elements not in document body', () => {
     // Arrange
     const attachedElement = document.createElement('div');
-    document.body.appendChild(attachedElement);
     const detachedElement = document.createElement('span');
+    const mockDomRootChecker = createMockDomRootChecker(new Set([attachedElement]));
 
     const nodeList = [attachedElement, detachedElement] as unknown as NodeList;
     (nodeList as any).forEach = Array.prototype.forEach.bind([attachedElement, detachedElement]);
@@ -84,14 +85,11 @@ describe('Elements.extractAttachedElements - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Act
-    const result = elements.extractAttachedElements();
+    const result = elements.extractAttachedElements(mockDomRootChecker);
 
     // Assert
     const resultArray = result.toArray();
     expect(resultArray).toEqual([attachedElement]);
     expect(resultArray).not.toContain(detachedElement);
-
-    // Cleanup
-    document.body.removeChild(attachedElement);
   });
 });

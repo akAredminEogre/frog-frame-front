@@ -177,7 +177,10 @@ export default [js.configs.recommended, {
 }, {
   // Domain layer entities: prohibit direct access to global document object
   // See: docs/design/clean-architecture/domain/entities.md
-  files: ['**/domain/entities/ElementSelector.ts'],
+  files: [
+    '**/domain/entities/ElementSelector.ts',
+    '**/domain/value-objects/Elements/Elements.ts',
+  ],
   rules: {
     'no-restricted-globals': [
       'error',
