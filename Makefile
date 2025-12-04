@@ -228,17 +228,6 @@ wt-prune:
 	@git worktree prune -v
 	@echo "Prune complete"
 
-wt-use: _wt-check-branch _wt-check-exists _wt-create-override
-	@echo "Switching to worktree for branch: $(BRANCH)..."
-	@echo "Applying worktree configuration..."
-	@CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose up -d
-	@echo ""
-	@echo "✅ Switched to worktree: $(BRANCH)"
-	@echo "The Docker container now uses: $(WORKTREE_PATH)"
-	@echo ""
-	@echo "Environment variable set: CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH)"
-	@echo "To start development server, run:"
-	@echo "  make wt-dev BRANCH=$(BRANCH)"
 
 wt-current:
 	@echo "Checking current worktree configuration..."
