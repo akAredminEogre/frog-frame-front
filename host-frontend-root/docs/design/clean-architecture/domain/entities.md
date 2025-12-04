@@ -13,7 +13,7 @@ Domain層のEntitiesは、ビジネスロジックの中核を担うクラスで
 現状、以下のファイルが対象である：
 
 - `src/domain/entities/ElementSelector.ts`
-- `src/domain/entities/Elements.ts`
+- `src/domain/value-objects/Elements/Elements.ts`
 
 ### 禁止事項
 
