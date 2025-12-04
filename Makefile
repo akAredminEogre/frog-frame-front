@@ -1,4 +1,4 @@
-.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune wt-current wt-init wt-dev
+.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune wt-current _wt-init wt-dev
 
 help:
 	@echo "Available commands:"
@@ -20,7 +20,6 @@ help:
 	@echo "  make wt-remove    - Remove a worktree (usage: make wt-remove BRANCH=branch-name)"
 	@echo "  make wt-prune     - Prune stale worktree references"
 	@echo "  make wt-current   - Show the currently active worktree"
-	@echo "  make wt-init      - Initialize a worktree for development (usage: make wt-init BRANCH=branch-name)"
 	@echo "  make wt-dev       - Start development server for worktree (usage: make wt-dev BRANCH=branch-name)"
 	@echo "  make help         - Show this help message"
 
@@ -232,7 +231,7 @@ wt-add: _wt-check-branch
 	fi
 	@echo "Worktree created at: $(WORKTREE_PATH)"
 	@echo "Initializing worktree..."
-	@$(MAKE) wt-init BRANCH=$(BRANCH)
+	@$(MAKE) _wt-init BRANCH=$(BRANCH)
 
 wt-remove: _wt-check-branch
 	@echo "Removing worktree for branch: $(BRANCH)..."
@@ -279,7 +278,7 @@ wt-current:
 	@echo "Branch: $$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 	@echo "Path: $$(grep CURRENT_WORKTREE_PATH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 
-wt-init: _wt-check-branch _wt-check-exists
+_wt-init: _wt-check-branch _wt-check-exists
 	@echo "Initializing worktree for development: $(BRANCH)..."
 	@$(MAKE) _wt-setup-env BRANCH=$(BRANCH)
 	@echo "Switching to worktree for initialization..."
