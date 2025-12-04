@@ -1,6 +1,7 @@
 import { RegexConstants } from 'src/domain/constants/RegexConstants';
 import { ParserContextStrategyFactory } from 'src/domain/entities/ParserContextStrategy';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
 
 /**
  * 要素の状態を保持しながら置換を実行するクラス
@@ -17,16 +18,18 @@ export class ReplaceElementPreservingState {
 
   /**
    * 要素の状態を保持しながら置換を実行する
+   * @param elementFactory HTML要素を作成するためのファクトリ
    */
-  public exec(): void {
+  public exec(elementFactory: IElementFactory): void {
     const parent = this.element.parentNode;
     if (!parent) return;
 
     // 実際の置換コンテンツを取得（必要に応じて正規表現置換を適用）
     const replacementContent = this.getReplacementContent();
-    
+
     // 置換コンテンツを解析して置換ノードを作成するためのHTMLパーサーコンテナ
-    const htmlParserContainer = ParserContextStrategyFactory.createContainer(this.element);
+    const parserContextStrategyFactory = new ParserContextStrategyFactory(elementFactory);
+    const htmlParserContainer = parserContextStrategyFactory.createContainer(this.element);
     htmlParserContainer.innerHTML = replacementContent;
     
     // すべての置換ノードを挿入

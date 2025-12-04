@@ -2,6 +2,14 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
+
+/**
+ * テスト用のIElementFactory実装
+ */
+const mockElementFactory: IElementFactory = {
+  createElement: (tagName: string) => document.createElement(tagName)
+};
 
 /**
  * 1. h1タグの正規表現パターン置換処理
@@ -77,7 +85,7 @@ describe('DomDiffer - Regex Replacement Cases', () => {
       container.innerHTML = input.initialHtml;
       const rule = new RewriteRule(1, input.oldString, input.newString, '', true); // isRegex = true
       const domDiffer = new DomDiffer(container, rule);
-      domDiffer.applyRule();
+      domDiffer.applyRule(mockElementFactory);
       expect(container.innerHTML).toBe(expected.html);
     });
   });

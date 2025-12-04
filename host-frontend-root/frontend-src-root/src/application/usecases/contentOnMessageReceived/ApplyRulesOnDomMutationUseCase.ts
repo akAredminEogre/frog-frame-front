@@ -3,6 +3,7 @@ import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IObserverControl } from 'src/application/ports/IObserverControl';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
@@ -30,6 +31,7 @@ export class ApplyRulesOnDomMutationUseCase {
   private debounceTimer: IDebounceTimer;
   private observerControl: IObserverControl;
   private domRootChecker: IDomRootChecker;
+  private elementFactory: IElementFactory;
   private hasInitialLoadCompleted: boolean;
   private isApplyingToRoot: boolean;
 
@@ -39,13 +41,15 @@ export class ApplyRulesOnDomMutationUseCase {
     currentUrlService: ICurrentUrlService,
     debounceTimer: IDebounceTimer,
     observerControl: IObserverControl,
-    domRootChecker: IDomRootChecker
+    domRootChecker: IDomRootChecker,
+    elementFactory: IElementFactory
   ) {
     this.repository = repository;
     this.currentUrlService = currentUrlService;
     this.debounceTimer = debounceTimer;
     this.observerControl = observerControl;
     this.domRootChecker = domRootChecker;
+    this.elementFactory = elementFactory;
     this.elements = new Elements();
     this.hasInitialLoadCompleted = false;
     this.isApplyingToRoot = false;
@@ -90,7 +94,7 @@ export class ApplyRulesOnDomMutationUseCase {
 
     try {
       const rewriteRules = await this.fetchMatchingRules();
-      rewriteRules.applyRulesWithDomDiffer(root);
+      rewriteRules.applyRulesWithDomDiffer(root, this.elementFactory);
     } finally {
       this.isApplyingToRoot = false;
       this.hasInitialLoadCompleted = true;
@@ -110,7 +114,7 @@ export class ApplyRulesOnDomMutationUseCase {
       const attachedElements = this.elements.extractAttachedElements(this.domRootChecker);
       const rewriteRules = await this.fetchMatchingRules();
       for (const element of attachedElements.toArray()) {
-        rewriteRules.applyRulesWithDomDiffer(element);
+        rewriteRules.applyRulesWithDomDiffer(element, this.elementFactory);
       }
     } finally {
       this.observerControl.reconnect();

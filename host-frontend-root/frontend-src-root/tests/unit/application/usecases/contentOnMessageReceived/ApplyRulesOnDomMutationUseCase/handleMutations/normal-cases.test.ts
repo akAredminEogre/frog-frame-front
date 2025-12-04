@@ -1,6 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
+
+/**
+ * テスト用のIElementFactory実装
+ */
+const mockElementFactory: IElementFactory = {
+  createElement: (tagName: string) => document.createElement(tagName)
+};
 
 /**
  * ApplyRulesOnDomMutationUseCase.handleMutations - 正常系テスト
@@ -59,7 +67,8 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
       mockCurrentUrlService,
       mockDebounceTimer,
       mockObserverControl,
-      mockDomRootChecker
+      mockDomRootChecker,
+      mockElementFactory
     );
     await useCase.applyRulesToRoot(document.body);
 
@@ -98,7 +107,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     await scheduledCallback!();
     expect(mockCurrentUrlService.getCurrentUrl).toHaveBeenCalled();
     expect(mockRepository.getRulesMatchingUrl).toHaveBeenCalledWith('https://example.com');
-    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element);
+    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element, mockElementFactory);
   });
 
   it('should accumulate elements from multiple handleMutations calls', async () => {
@@ -126,8 +135,8 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
 
     // Assert
     expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledTimes(2);
-    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element1);
-    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element2);
+    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element1, mockElementFactory);
+    expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element2, mockElementFactory);
   });
 
   it('should ignore non-Element nodes', async () => {

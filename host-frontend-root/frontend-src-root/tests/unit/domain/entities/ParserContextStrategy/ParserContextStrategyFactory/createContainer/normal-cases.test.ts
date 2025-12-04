@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
 import { ParserContextStrategyFactory } from 'src/domain/entities/ParserContextStrategy';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
+
+/**
+ * テスト用のIElementFactory実装
+ * テスト環境（happy-dom）のdocument.createElementを使用
+ */
+const mockElementFactory: IElementFactory = {
+  createElement: (tagName: string) => document.createElement(tagName)
+};
 
 describe('ParserContextStrategyFactory', () => {
   describe('createContainer', () => {
@@ -66,13 +75,14 @@ describe('ParserContextStrategyFactory', () => {
         it(description, () => {
           // Arrange
           const element = document.createElement(tagName);
+          const factory = new ParserContextStrategyFactory(mockElementFactory);
 
           // Act
-          const container = ParserContextStrategyFactory.createContainer(element);
+          const container = factory.createContainer(element);
 
           // Assert
           expect(container.tagName.toLowerCase()).toBe(expectedContainer);
-          
+
           if (expectedParent) {
             expect(container.parentElement?.tagName.toLowerCase()).toBe(expectedParent);
           }

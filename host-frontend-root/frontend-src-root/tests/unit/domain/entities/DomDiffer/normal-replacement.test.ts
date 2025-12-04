@@ -2,6 +2,14 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
+
+/**
+ * テスト用のIElementFactory実装
+ */
+const mockElementFactory: IElementFactory = {
+  createElement: (tagName: string) => document.createElement(tagName)
+};
 
 /**
  * 1. 単純要素の置換処理（div/p要素）
@@ -137,7 +145,7 @@ describe('DomDiffer - Normal Replacement Cases', () => {
       container.innerHTML = input.initialHtml;
       const rule = new RewriteRule(1, input.oldString, input.newString, '');
       const domDiffer = new DomDiffer(container, rule);
-      domDiffer.applyRule();
+      domDiffer.applyRule(mockElementFactory);
       expect(container.innerHTML).toBe(expected.html);
     });
   });
