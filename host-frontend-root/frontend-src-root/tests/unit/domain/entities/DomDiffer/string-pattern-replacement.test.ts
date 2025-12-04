@@ -2,6 +2,14 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
+
+/**
+ * テスト用のIElementFactory実装
+ */
+const mockElementFactory: IElementFactory = {
+  createElement: (tagName: string) => document.createElement(tagName)
+};
 
 /**
  * 文字列パターン置換テスト
@@ -101,7 +109,7 @@ describe('DomDiffer - 通常文字列での置換の回帰テスト', () => {
 
       // Act
       const domDiffer = new DomDiffer(container, rule);
-      domDiffer.applyRule();
+      domDiffer.applyRule(mockElementFactory);
 
       // Assert
       expect(container.innerHTML).toBe(expected.html);

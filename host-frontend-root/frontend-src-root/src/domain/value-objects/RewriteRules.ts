@@ -1,5 +1,6 @@
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
 
 /**
  * RewriteRuleのファーストコレクションオブジェクト
@@ -37,11 +38,12 @@ export class RewriteRules {
   /**
    * 全てのルールをDomDifferで適用する
    * @param targetElement 適用対象のDOM要素
+   * @param elementFactory HTML要素を作成するためのファクトリ
    */
-  applyRulesWithDomDiffer(targetElement: Element): void {
+  applyRulesWithDomDiffer(targetElement: Element, elementFactory: IElementFactory): void {
     this.toArray().forEach((rule) => {
       const domDiffer = new DomDiffer(targetElement, rule);
-      domDiffer.applyRule();
+      domDiffer.applyRule(elementFactory);
     });
   }
 

@@ -1,3 +1,5 @@
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
+
 /**
  * テーブル要素の種類を表すenum
  */
@@ -12,50 +14,54 @@ enum TableElementType {
 
 /**
  * パーサーコンテキスト戦略ファクトリー
- * 要素の種類に応じて適切なHTMLパーサーコンテナを直接作成する
+ * 要素の種類に応じて適切なHTMLパーサーコンテナを作成する
+ * 依存性の逆転の原則に従い、IElementFactoryを通じて要素を生成する
  */
 export class ParserContextStrategyFactory {
-  private static readonly containerCreators = new Map<string, () => HTMLElement>([
-    [TableElementType.TR, () => ParserContextStrategyFactory.createTbodyInTable()],
-    [TableElementType.TD, () => ParserContextStrategyFactory.createTrInTbodyInTable()],
-    [TableElementType.TH, () => ParserContextStrategyFactory.createTrInTbodyInTable()],
-    [TableElementType.THEAD, () => ParserContextStrategyFactory.createTable()],
-    [TableElementType.TBODY, () => ParserContextStrategyFactory.createTable()],
-    [TableElementType.TFOOT, () => ParserContextStrategyFactory.createTable()]
-  ]);
-  
+  private elementFactory: IElementFactory;
+
+  constructor(elementFactory: IElementFactory) {
+    this.elementFactory = elementFactory;
+  }
+
   /**
    * 要素に基づいて適切なHTMLパーサーコンテナを作成する
    * @param element 対象となる要素
    * @returns 適切なコンテキストを持つHTMLコンテナ要素
    */
-  static createContainer(element: Element): HTMLElement {
+  createContainer(element: Element): HTMLElement {
     const tagName = element.tagName.toLowerCase();
-    const creator = this.containerCreators.get(tagName);
-    
-    if (creator) {
-      return creator();
+
+    switch (tagName) {
+      case TableElementType.TR:
+        return this.createTbodyInTable();
+      case TableElementType.TD:
+      case TableElementType.TH:
+        return this.createTrInTbodyInTable();
+      case TableElementType.THEAD:
+      case TableElementType.TBODY:
+      case TableElementType.TFOOT:
+        return this.createTable();
+      default:
+        return this.elementFactory.createElement('div');
     }
-    
-    // デフォルトはdivコンテナ
-    return document.createElement('div');
   }
 
   /**
    * table要素を作成する
    * @returns table要素
    */
-  private static createTable(): HTMLElement {
-    return document.createElement('table');
+  private createTable(): HTMLElement {
+    return this.elementFactory.createElement('table');
   }
 
   /**
    * table > tbody の構造を作成してtbodyを返す
    * @returns tbody要素（tableに配置済み）
    */
-  private static createTbodyInTable(): HTMLElement {
-    const table = document.createElement('table');
-    const tbody = document.createElement('tbody');
+  private createTbodyInTable(): HTMLElement {
+    const table = this.elementFactory.createElement('table');
+    const tbody = this.elementFactory.createElement('tbody');
     table.appendChild(tbody);
     return tbody;
   }
@@ -64,10 +70,10 @@ export class ParserContextStrategyFactory {
    * table > tbody > tr の構造を作成してtrを返す
    * @returns tr要素（tbody > table階層に配置済み）
    */
-  private static createTrInTbodyInTable(): HTMLElement {
-    const table = document.createElement('table');
-    const tbody = document.createElement('tbody');
-    const tr = document.createElement('tr');
+  private createTrInTbodyInTable(): HTMLElement {
+    const table = this.elementFactory.createElement('table');
+    const tbody = this.elementFactory.createElement('tbody');
+    const tr = this.elementFactory.createElement('tr');
     tbody.appendChild(tr);
     table.appendChild(tbody);
     return tr;

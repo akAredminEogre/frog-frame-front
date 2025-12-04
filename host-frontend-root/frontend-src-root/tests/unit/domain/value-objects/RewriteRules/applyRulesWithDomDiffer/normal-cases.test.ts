@@ -5,7 +5,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+
+/**
+ * テスト用のIElementFactory実装
+ */
+const mockElementFactory: IElementFactory = {
+  createElement: (tagName: string) => document.createElement(tagName)
+};
 
 describe('RewriteRules.applyRulesWithDomDiffer - 正常系', () => {
   let container: HTMLElement;
@@ -32,7 +40,7 @@ describe('RewriteRules.applyRulesWithDomDiffer - 正常系', () => {
     container.innerHTML = '<p>Hello</p><span>World</span><div>Keep</div>';
 
     // Act
-    rewriteRules.applyRulesWithDomDiffer(container);
+    rewriteRules.applyRulesWithDomDiffer(container, mockElementFactory);
 
     // Assert - 全てのルールが適用される
     expect(container.innerHTML).toContain('Hi');

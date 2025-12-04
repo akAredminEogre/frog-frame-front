@@ -4,7 +4,15 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+
+/**
+ * テスト用のIElementFactory実装
+ */
+const mockElementFactory: IElementFactory = {
+  createElement: (tagName: string) => document.createElement(tagName)
+};
 
 describe('RewriteRules.applyRulesWithDomDiffer - エッジケース', () => {
   let container: HTMLElement;
@@ -26,7 +34,7 @@ describe('RewriteRules.applyRulesWithDomDiffer - エッジケース', () => {
 
     // Act - should not throw
     expect(() => {
-      emptyRules.applyRulesWithDomDiffer(container);
+      emptyRules.applyRulesWithDomDiffer(container, mockElementFactory);
     }).not.toThrow();
 
     // Assert - content remains unchanged
