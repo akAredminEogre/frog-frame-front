@@ -33,6 +33,7 @@ export class ApplyRulesOnDomMutationUseCase {
   private hasInitialLoadCompleted: boolean;
   private isApplyingToRoot: boolean;
 
+  // TODO: このconstructorをDIで解決する
   constructor(
     repository: IRewriteRuleRepository,
     currentUrlService: ICurrentUrlService,
