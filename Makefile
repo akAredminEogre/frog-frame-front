@@ -245,6 +245,27 @@ wt-prune:
 	@echo "Prune complete"
 
 
+# Internal helper: Check if no worktree is active
+_wt-check-no-active:
+	@if [ ! -f .env.worktree ] && [ ! -f docker-compose.override.yml ]; then \
+		echo "No worktree override active (using main repository)"; \
+		exit 0; \
+	fi
+
+# Internal helper: Check for custom override (not managed by worktree)
+_wt-check-custom-override:
+	@if [ ! -f .env.worktree ] && [ -f docker-compose.override.yml ]; then \
+		echo "Custom docker-compose.override.yml detected (not managed by worktree system)"; \
+		exit 0; \
+	fi
+
+# Internal helper: Check for incomplete worktree setup
+_wt-check-incomplete-setup:
+	@if [ -f .env.worktree ] && [ ! -f docker-compose.override.yml ]; then \
+		echo "Worktree environment configured but docker-compose.override.yml missing"; \
+		exit 0; \
+	fi
+
 wt-current:
 	@echo "Checking current worktree configuration..."
 	@if [ -f docker-compose.override.yml ]; then \
