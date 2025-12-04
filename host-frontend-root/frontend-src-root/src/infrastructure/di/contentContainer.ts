@@ -97,9 +97,6 @@ const classToKeyMap = new Map<Function, keyof ContentContainerCradle>([
   [DomRootChecker, 'domRootChecker']
 ]);
 
-// Export interfaceToKeyMap for testing
-export { interfaceToKeyMap };
-
 // Container interface with overloaded resolve
 interface ContentContainer {
   resolve(token: typeof ApplyRulesOnDomMutationUseCase): ApplyRulesOnDomMutationUseCase;
