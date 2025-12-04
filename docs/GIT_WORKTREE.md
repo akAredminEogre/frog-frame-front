@@ -31,10 +31,10 @@ make wt-list
 ### 新規worktree作成
 
 ```bash
-# 既存ブランチをworktreeとして追加
+# 既存ブランチをworktreeとして追加（自動で初期化も実行）
 make wt-add BRANCH=feature-branch
 
-# 新しいブランチを作成してworktreeとして追加
+# 新しいブランチを作成してworktreeとして追加（自動で初期化も実行）
 make wt-add BRANCH=new-feature-branch
 ```
 
