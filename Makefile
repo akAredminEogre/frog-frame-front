@@ -167,6 +167,14 @@ _wt-setup-env:
 		fi \
 	fi
 
+# Load worktree environment variables and execute command
+# set -a と set +a で囲むことにより、.env.worktree 由来の変数だけを確実にエクスポートする
+_wt-load-env-exec = set -a && . ./.env.worktree && set +a &&
+
+# Common paths for worktree operations
+# WXT_WORKDIR is derived from CONTAINER_APP_ROOT in .env file
+WXT_WORKDIR = $${CONTAINER_APP_ROOT}/host-frontend-root/frontend-src-root
+
 # Create docker-compose.override.yml
 _wt-create-override:
 	@echo "Setting up docker-compose.override.yml with environment variable..."
