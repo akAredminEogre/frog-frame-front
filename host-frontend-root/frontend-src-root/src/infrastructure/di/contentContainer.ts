@@ -33,7 +33,8 @@ const applyRulesOnDomMutationUseCase = new ApplyRulesOnDomMutationUseCase(
   chromeRuntimeRewriteRuleRepository,
   windowCurrentUrlService,
   debounceTimer,
-  observerControl
+  observerControl,
+  domRootChecker
 );
 
 const getElementSelectionUseCase = new GetElementSelectionUseCase(getSelectionService, domRootChecker);

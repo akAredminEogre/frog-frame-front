@@ -9,7 +9,8 @@ describe('ElementSelector - getElementFromSelection - edge cases', () => {
 
   beforeEach(() => {
     mockDomRootChecker = {
-      isDocumentRoot: vi.fn().mockReturnValue(false)
+      isDocumentRoot: vi.fn().mockReturnValue(false),
+      isAttachedToDocument: vi.fn().mockReturnValue(true)
     };
     elementSelector = new ElementSelector(mockDomRootChecker);
     vi.clearAllMocks();
