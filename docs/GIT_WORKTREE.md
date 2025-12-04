@@ -91,26 +91,47 @@ make wt-dev BRANCH=hotfix-critical-bug
 make wt-dev BRANCH=feature-A
 
 # 作業完了後、worktreeを削除
-cd ../..
 make wt-remove BRANCH=hotfix-critical-bug
 ```
 
-### 例2: 複数機能の並行開発
+### 例2: 複数機能の切り替え開発
 
 ```bash
-# feature-Aのworktreeを作成
+# feature-Aのworktreeを作成（自動で初期化も実行）
 make wt-add BRANCH=feature-A
 
-# feature-Bのworktreeを作成
+# feature-Bのworktreeを作成（自動で初期化も実行）
 make wt-add BRANCH=feature-B
 
-# 各worktreeの初期化
-make wt-init BRANCH=feature-A
-make wt-init BRANCH=feature-B
+# feature-Aで開発開始
+make wt-dev BRANCH=feature-A
+# ... 機能A開発 ...
 
-# 各worktreeで独立して開発（異なるターミナルで）
-# ターミナル1: make wt-use BRANCH=feature-A && make dev
-# ターミナル2: make wt-use BRANCH=feature-B && make dev
+# feature-Bに切り替え（自動的にfeature-Aの環境を停止）
+make wt-dev BRANCH=feature-B
+# ... 機能B開発 ...
+
+# 再度feature-Aに戻る
+make wt-dev BRANCH=feature-A
+```
+
+### 例3: レビュー中の並行開発
+
+```bash
+# 現在PR中のfeature-reviewと新機能feature-nextを並行作業
+make wt-add BRANCH=feature-review
+make wt-add BRANCH=feature-next
+
+# レビュー対応作業
+make wt-dev BRANCH=feature-review
+# ... レビュー修正 ...
+
+# 新機能開発に切り替え
+make wt-dev BRANCH=feature-next
+# ... 新機能開発 ...
+
+# またレビュー対応に戻る
+make wt-dev BRANCH=feature-review
 ```
 
 ## 注意事項
