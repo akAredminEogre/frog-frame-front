@@ -68,6 +68,24 @@ interface ContentContainerCradle {
   getElementSelectionUseCase: GetElementSelectionUseCase;
 }
 
+// Token mappings for interface-based resolution
+type InterfaceToken =
+  | 'IRewriteRuleRepository'
+  | 'ICurrentUrlService'
+  | 'IDebounceTimer'
+  | 'IObserverControl'
+  | 'IGetSelectionService'
+  | 'IDomRootChecker';
+
+const interfaceToKeyMap: Record<InterfaceToken, keyof ContentContainerCradle> = {
+  'IRewriteRuleRepository': 'chromeRuntimeRewriteRuleRepository',
+  'ICurrentUrlService': 'windowCurrentUrlService',
+  'IDebounceTimer': 'debounceTimer',
+  'IObserverControl': 'observerControl',
+  'IGetSelectionService': 'getSelectionService',
+  'IDomRootChecker': 'domRootChecker'
+};
+
 // Class to key mappings for class-based resolution
 const classToKeyMap = new Map<Function, keyof ContentContainerCradle>([
   [ApplyRulesOnDomMutationUseCase, 'applyRulesOnDomMutationUseCase'],
@@ -88,12 +106,23 @@ interface ContentContainer {
   resolve(token: typeof DebounceTimer): DebounceTimer;
   resolve(token: typeof GetSelectionService): GetSelectionService;
   resolve(token: typeof DomRootChecker): DomRootChecker;
+  resolve<T>(token: InterfaceToken): T;
   resolve<T>(token: Function): T;
 }
 
 // Wrapper to provide container API
 export const contentContainer: ContentContainer = {
-  resolve(token: Function): any {
+  resolve(token: InterfaceToken | Function): any {
+    // Interface token resolution
+    if (typeof token === 'string') {
+      const key = interfaceToKeyMap[token as InterfaceToken];
+      if (!key) {
+        throw new Error(`Unknown interface token: ${token}`);
+      }
+      return awilixContainer.resolve(key);
+    }
+
+    // Class-based resolution
     const key = classToKeyMap.get(token);
     if (!key) {
       throw new Error(`Unknown class token: ${(token as any).name}`);
@@ -101,3 +130,8 @@ export const contentContainer: ContentContainer = {
     return awilixContainer.resolve(key);
   }
 };
+
+// Attach internal data for test introspection (similar to tsyringe's _registry)
+(contentContainer as any)._interfaceToKeyMap = interfaceToKeyMap;
+(contentContainer as any)._classToKeyMap = classToKeyMap;
+(contentContainer as any)._awilixContainer = awilixContainer;
