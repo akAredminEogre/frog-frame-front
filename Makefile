@@ -111,7 +111,7 @@ WORKTREE_DIR := worktrees
 WORKTREE_PATH = $(WORKTREE_DIR)/$(BRANCH)
 
 # Internal helper targets (not for direct use)
-.PHONY: _wt-check-branch _wt-remove-orphaned _wt-check-exists _wt-setup-env _wt-create-override _wt-dev-server
+.PHONY: _wt-check-branch _wt-remove-orphaned _wt-check-exists _wt-setup-env _wt-create-override
 
 # Check if BRANCH variable is defined
 _wt-check-branch:
@@ -203,11 +203,6 @@ _wt-dev-in-worktree:
 	@lsof -ti:3000 | xargs -r kill -9 2>/dev/null || true
 	@echo "Starting development server in worktree $(BRANCH)..."
 	@cd $(WORKTREE_PATH) && make dev
-
-# Start development server for worktree
-_wt-dev-server:
-	@echo "Starting development server for worktree $(BRANCH)..."
-	@CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH) docker compose exec -w /opt/frontend-container-app-root/host-frontend-root/frontend-src-root frontend npm run dev
 
 wt-list:
 	@echo "Listing all git worktrees..."
