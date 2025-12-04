@@ -80,16 +80,15 @@ make wt-prune
 
 ```bash
 # メインでfeature-Aを開発中
-# 緊急バグ修正のためhotfixブランチを作成
+# 緊急バグ修正のためhotfixブランチを作成（自動で初期化も実行）
 make wt-add BRANCH=hotfix-critical-bug
 
-# worktreeの初期化
-make wt-init BRANCH=hotfix-critical-bug
-
-# hotfixディレクトリで作業
-cd worktrees/hotfix-critical-bug
-make dev  # 開発サーバー起動
+# hotfixブランチに切り替えて開発開始
+make wt-dev BRANCH=hotfix-critical-bug
 # ... バグ修正作業 ...
+
+# 元のfeature-Aブランチに戻る
+make wt-dev BRANCH=feature-A
 
 # 作業完了後、worktreeを削除
 cd ../..
