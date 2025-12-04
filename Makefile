@@ -1,4 +1,4 @@
-.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune wt-use wt-current wt-init wt-dev
+.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune wt-current wt-init wt-dev
 
 help:
 	@echo "Available commands:"
@@ -19,7 +19,6 @@ help:
 	@echo "  make wt-add       - Add a new worktree (usage: make wt-add BRANCH=branch-name)"
 	@echo "  make wt-remove    - Remove a worktree (usage: make wt-remove BRANCH=branch-name)"
 	@echo "  make wt-prune     - Prune stale worktree references"
-	@echo "  make wt-use       - Switch to a worktree (usage: make wt-use BRANCH=branch-name)"
 	@echo "  make wt-current   - Show the currently active worktree"
 	@echo "  make wt-init      - Initialize a worktree for development (usage: make wt-init BRANCH=branch-name)"
 	@echo "  make wt-dev       - Start development server for worktree (usage: make wt-dev BRANCH=branch-name)"
