@@ -1,3 +1,5 @@
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
+
 /**
  * DOM要素を管理するファーストクラスコレクション
  */
@@ -32,10 +34,10 @@ export class Elements {
   /**
    * 保持している要素のうち、documentに存在するものを新しいElementsとして取り出し、コレクションをクリアする
    */
-  extractAttachedElements(): Elements {
+  extractAttachedElements(domRootChecker: IDomRootChecker): Elements {
     const attachedElements = new Elements();
     Array.from(this.nodes)
-      .filter((element) => document.body.contains(element))
+      .filter((element) => domRootChecker.isAttachedToDocument(element))
       .forEach((element) => attachedElements.addElement(element));
     this.nodes.clear();
     return attachedElements;

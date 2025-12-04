@@ -1,5 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
@@ -12,21 +13,15 @@ import { MutationRecords } from 'src/domain/value-objects/MutationRecords/Mutati
  * 4. 重複する要素は1つにまとめる
  */
 describe('Elements.merge - 正常系', () => {
-  let testContainer: HTMLElement;
-
-  beforeEach(() => {
-    testContainer = document.createElement('div');
-    document.body.appendChild(testContainer);
-  });
-
-  afterEach(() => {
-    document.body.removeChild(testContainer);
+  const createMockDomRootChecker = (attachedElements: Set<Element>): IDomRootChecker => ({
+    isDocumentRoot: () => false,
+    isAttachedToDocument: (element: Element) => attachedElements.has(element)
   });
 
   it('should merge Elements from MutationRecords', () => {
     // Arrange
     const element = document.createElement('div');
-    testContainer.appendChild(element);
+    const mockDomRootChecker = createMockDomRootChecker(new Set([element]));
 
     const nodeList = [element] as unknown as NodeList;
     (nodeList as any).forEach = Array.prototype.forEach.bind([element]);
@@ -39,27 +34,27 @@ describe('Elements.merge - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    expect(elements.extractAttachedElements().toArray()).toEqual([element]);
+    expect(elements.extractAttachedElements(mockDomRootChecker).toArray()).toEqual([element]);
   });
 
   it('should not change when merging empty Elements', () => {
     // Arrange
     const mutationRecords = new MutationRecords([]);
     const elements = new Elements();
+    const mockDomRootChecker = createMockDomRootChecker(new Set());
 
     // Act
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    expect(elements.extractAttachedElements().toArray()).toEqual([]);
+    expect(elements.extractAttachedElements(mockDomRootChecker).toArray()).toEqual([]);
   });
 
   it('should merge elements from multiple MutationRecords', () => {
     // Arrange
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
-    testContainer.appendChild(element1);
-    testContainer.appendChild(element2);
+    const mockDomRootChecker = createMockDomRootChecker(new Set([element1, element2]));
 
     const nodeList1 = [element1] as unknown as NodeList;
     (nodeList1 as any).forEach = Array.prototype.forEach.bind([element1]);
@@ -76,7 +71,7 @@ describe('Elements.merge - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    const extracted = elements.extractAttachedElements().toArray();
+    const extracted = elements.extractAttachedElements(mockDomRootChecker).toArray();
     expect(extracted).toHaveLength(2);
     expect(extracted).toContain(element1);
     expect(extracted).toContain(element2);
@@ -85,7 +80,7 @@ describe('Elements.merge - 正常系', () => {
   it('should deduplicate same element', () => {
     // Arrange
     const element = document.createElement('div');
-    testContainer.appendChild(element);
+    const mockDomRootChecker = createMockDomRootChecker(new Set([element]));
 
     const nodeList1 = [element] as unknown as NodeList;
     (nodeList1 as any).forEach = Array.prototype.forEach.bind([element]);
@@ -102,7 +97,7 @@ describe('Elements.merge - 正常系', () => {
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    expect(elements.extractAttachedElements().toArray()).toEqual([element]);
+    expect(elements.extractAttachedElements(mockDomRootChecker).toArray()).toEqual([element]);
   });
 
   it('should ignore non-Element nodes', () => {
@@ -114,11 +109,12 @@ describe('Elements.merge - 正常系', () => {
     const mockRecord = { addedNodes: nodeList } as MutationRecord;
     const mutationRecords = new MutationRecords([mockRecord]);
     const elements = new Elements();
+    const mockDomRootChecker = createMockDomRootChecker(new Set());
 
     // Act
     elements.merge(mutationRecords.extractAddedElements());
 
     // Assert
-    expect(elements.extractAttachedElements().toArray()).toEqual([]);
+    expect(elements.extractAttachedElements(mockDomRootChecker).toArray()).toEqual([]);
   });
 });

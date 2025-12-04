@@ -10,4 +10,11 @@ export interface IDomRootChecker {
    * @returns documentまたはdocument.bodyの場合はtrue。
    */
   isDocumentRoot(node: Node): boolean;
+
+  /**
+   * 指定された要素がドキュメントに接続されているかどうかを判定します。
+   * @param element 判定対象の要素。
+   * @returns document.body.contains(element)の結果。
+   */
+  isAttachedToDocument(element: Element): boolean;
 }
