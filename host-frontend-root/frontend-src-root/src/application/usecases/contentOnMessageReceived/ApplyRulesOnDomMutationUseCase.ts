@@ -2,6 +2,7 @@ import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IObserverControl } from 'src/application/ports/IObserverControl';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
@@ -28,6 +29,7 @@ export class ApplyRulesOnDomMutationUseCase {
   private currentUrlService: ICurrentUrlService;
   private debounceTimer: IDebounceTimer;
   private observerControl: IObserverControl;
+  private domRootChecker: IDomRootChecker;
   private hasInitialLoadCompleted: boolean;
   private isApplyingToRoot: boolean;
 
@@ -35,12 +37,14 @@ export class ApplyRulesOnDomMutationUseCase {
     repository: IRewriteRuleRepository,
     currentUrlService: ICurrentUrlService,
     debounceTimer: IDebounceTimer,
-    observerControl: IObserverControl
+    observerControl: IObserverControl,
+    domRootChecker: IDomRootChecker
   ) {
     this.repository = repository;
     this.currentUrlService = currentUrlService;
     this.debounceTimer = debounceTimer;
     this.observerControl = observerControl;
+    this.domRootChecker = domRootChecker;
     this.elements = new Elements();
     this.hasInitialLoadCompleted = false;
     this.isApplyingToRoot = false;
@@ -102,7 +106,7 @@ export class ApplyRulesOnDomMutationUseCase {
     this.observerControl.disconnect();
 
     try {
-      const attachedElements = this.elements.extractAttachedElements();
+      const attachedElements = this.elements.extractAttachedElements(this.domRootChecker);
       const rewriteRules = await this.fetchMatchingRules();
       for (const element of attachedElements.toArray()) {
         rewriteRules.applyRulesWithDomDiffer(element);

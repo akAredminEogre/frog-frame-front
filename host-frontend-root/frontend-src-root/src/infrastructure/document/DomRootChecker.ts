@@ -14,4 +14,13 @@ export class DomRootChecker implements IDomRootChecker {
   public isDocumentRoot(node: Node): boolean {
     return node === document || node === document.body;
   }
+
+  /**
+   * 指定された要素がドキュメントに接続されているかどうかを判定します。
+   * @param element 判定対象の要素。
+   * @returns document.body.contains(element)の結果。
+   */
+  public isAttachedToDocument(element: Element): boolean {
+    return document.body.contains(element);
+  }
 }
