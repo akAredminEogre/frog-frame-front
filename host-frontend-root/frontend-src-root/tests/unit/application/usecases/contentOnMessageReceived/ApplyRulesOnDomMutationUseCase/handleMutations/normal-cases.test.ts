@@ -47,6 +47,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
       disconnect: vi.fn(),
       reconnect: vi.fn(),
     };
+    // TODO: mockDomRootCheckerを他のmockを参考に切り出す
     mockDomRootChecker = {
       isDocumentRoot: vi.fn().mockReturnValue(false),
       isAttachedToDocument: vi.fn().mockImplementation((element: Element) => attachedElements.has(element)),
