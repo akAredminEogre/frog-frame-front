@@ -191,6 +191,14 @@ _wt-create-override:
 	@echo "CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH)" >> .env.worktree
 	@echo "WORKTREE_ACTIVE_BRANCH=$(BRANCH)" >> .env.worktree
 
+# Internal helper: Stop worktree containers
+wt-down:
+	@$(_wt-load-env-exec) docker compose down || true
+
+# Internal helper: Start worktree containers
+wt-up:
+	@$(_wt-load-env-exec) docker compose up -d
+
 # Run make dev inside the worktree directory
 _wt-dev-in-worktree:
 	@echo "Stopping other worktree containers to avoid port conflicts..."
@@ -201,7 +209,11 @@ _wt-dev-in-worktree:
 	@# Also kill any process using port 3000 (in case dev server is running directly)
 	@lsof -ti:3000 | xargs -r kill -9 2>/dev/null || true
 	@echo "Starting development server in worktree $(BRANCH)..."
-	@cd $(WORKTREE_PATH) && make dev
+	@echo "Setting up docker environment for worktree..."
+	@$(MAKE) wt-down
+	@$(MAKE) wt-up
+	@echo "Starting npm dev in worktree container..."
+	@$(_wt-load-env-exec) docker compose exec frontend npm run dev
 
 wt-list:
 	@echo "Listing all git worktrees..."
