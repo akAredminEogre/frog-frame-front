@@ -183,7 +183,7 @@ _wt-setup-env:
 
 # Load worktree environment variables and execute command
 # Load both .env and .env.worktree to ensure all required variables are available
-_wt-load-env-exec = set -a && . ./.env && . ./.env.worktree && set +a &&
+_wt-load-env-exec = set -a && [ -f .env ] && . ./.env; [ -f .env.worktree ] && . ./.env.worktree; set +a &&
 
 # Common paths for worktree operations
 # WXT_WORKDIR is derived from CONTAINER_APP_ROOT in .env file
