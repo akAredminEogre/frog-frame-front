@@ -1,6 +1,6 @@
 import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
 import { ElementSelector } from 'src/domain/entities/ElementSelector';
-import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
+import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 
 /**
  * 要素選択情報を取得するユースケース
@@ -9,9 +9,9 @@ export class GetElementSelectionUseCase {
   private elementSelector: ElementSelector;
   private selectionService: IGetSelectionService;
 
-  constructor(selectionService?: IGetSelectionService) {
-    this.elementSelector = new ElementSelector();
-    this.selectionService = selectionService || new GetSelectionService();
+  constructor(selectionService: IGetSelectionService, domRootChecker: IDomRootChecker) {
+    this.elementSelector = new ElementSelector(domRootChecker);
+    this.selectionService = selectionService;
   }
 
   /**

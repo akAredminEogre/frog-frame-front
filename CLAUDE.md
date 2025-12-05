@@ -65,6 +65,8 @@ make init-dev       # Build containers, install dependencies, generate .wxt/tsco
 make dev            # Start development server (stops containers, restarts, and runs dev server)
 make down           # Stop Docker containers
 make ps             # List running containers
+make npminstall     # Install npm dependencies
+make storybook      # Start Storybook development server
 ```
 
 ### Inside Container Commands
@@ -83,6 +85,8 @@ make e2e          # E2E tests only
 make testall      # Both unit and E2E tests
 
 # Code quality checks
+make check        # Run compile, knip, tsr, and lint checks
+make sortimports  # Sort imports in all files
 docker compose exec frontend npm run compile        # TypeScript compilation check
 docker compose exec frontend npm run lint           # Run ESLint
 docker compose exec frontend npm run lint:fix       # Auto-fix ESLint issues
@@ -98,6 +102,66 @@ docker compose exec frontend npm run knip:all           # Check for unused expor
 make testlint
 ```
 This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
+
+### Git Worktree (Parallel Development)
+For working on multiple branches simultaneously:
+
+**Basic Commands:**
+```bash
+make wt-list                    # List all worktrees
+make wt-add BRANCH=feature-x    # Create worktree for branch (includes auto-initialization)
+make wt-remove BRANCH=feature-x # Remove worktree
+make wt-prune                   # Clean up stale references
+make wt-current                 # Show currently active worktree
+```
+
+**Development Commands:**
+```bash
+make wt-dev BRANCH=feature-x    # Start dev server for worktree (RECOMMENDED)
+make wt-down                    # Stop worktree Docker containers
+make wt-up                      # Start worktree Docker containers
+make wt-disable                 # Disable worktree mode, return to main repository
+```
+
+**Navigation Commands:**
+```bash
+source <(make wt-cd-current)    # Navigate to current worktree directory
+# Or if shell function is set up:
+wt-cd-current                   # Navigate to current worktree
+wtcd                           # Short alias for wt-cd-current
+```
+
+**Shell Function Setup (Optional but Recommended):**
+Add to your `~/.bashrc` or `~/.zshrc`:
+```bash
+source /path/to/frog-frame-front/scripts/wt-cd.sh
+```
+
+**Recommended Worktree Workflow:**
+```bash
+# 1. Create new worktree (auto-initialization included)
+make wt-add BRANCH=new-feature
+
+# 2. Start development with one command (RECOMMENDED)
+make wt-dev BRANCH=new-feature
+
+# 3. Switch between worktrees (auto-stops other containers)
+make wt-dev BRANCH=other-feature
+
+# 4. Return to main repository (when done with worktree development)
+make wt-disable
+
+# 5. Clean up worktree when done
+make wt-remove BRANCH=new-feature
+```
+
+**Key Features:**
+- `make wt-add` automatically initializes the worktree (copies .env, matchUrl.ts, runs npm install, etc.)
+- `make wt-dev` automatically stops other worktree containers to avoid port conflicts
+- Each worktree has its own node_modules and package.json (no cross-branch contamination)
+- Internal helper commands (starting with `_`) should not be used directly
+
+See `docs/GIT_WORKTREE.md` for detailed usage guide.
 
 ## Architecture Overview
 

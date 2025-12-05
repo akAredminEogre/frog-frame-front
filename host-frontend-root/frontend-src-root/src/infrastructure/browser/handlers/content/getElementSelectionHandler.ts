@@ -1,5 +1,6 @@
 // cspell:ignore usecases
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
+import { contentContainer } from 'src/infrastructure/di/contentContainer';
 
 type GetElementSelectionMessage = { type: 'getElementSelection' };
 
@@ -14,9 +15,11 @@ type GetElementSelectionMessage = { type: 'getElementSelection' };
  * 2. listeners/runtime/content.onMessage.ts の registerRuntimeOnMessageForContent が message を route 関数に渡す
  * 3. router/content/messageRouter.ts の createContentMessageRouter が message を適切な handler に振り分ける
  * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
+ *
+ * Awilix DIコンテナから解決: contentContainer.tsで登録されたインスタンスを取得
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
 export const getElementSelectionHandler = async (_msg: GetElementSelectionMessage) => {
-  const getElementSelectionUseCase = new GetElementSelectionUseCase();
+  const getElementSelectionUseCase = contentContainer.resolve(GetElementSelectionUseCase);
   return getElementSelectionUseCase.getElementSelectionInfo();
 };
