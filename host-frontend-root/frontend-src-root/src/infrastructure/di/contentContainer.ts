@@ -8,11 +8,13 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
 import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
 import { observerControl } from 'src/infrastructure/browser/content/observer/observerState';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
 import { DebounceTimer } from 'src/infrastructure/browser/timer/DebounceTimer';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
 import { DomRootChecker } from 'src/infrastructure/document/DomRootChecker';
+import { ElementFactory } from 'src/infrastructure/document/ElementFactory';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 // Create Awilix container for content script
@@ -26,6 +28,7 @@ const windowCurrentUrlService = new WindowCurrentUrlService();
 const debounceTimer = new DebounceTimer();
 const getSelectionService = new GetSelectionService();
 const domRootChecker = new DomRootChecker();
+const elementFactory = new ElementFactory();
 
 // Use Cases (singleton instances with manual dependency injection)
 // ミニファイ後もパラメータ名に依存しないよう、手動でインスタンスを生成
@@ -34,7 +37,8 @@ const applyRulesOnDomMutationUseCase = new ApplyRulesOnDomMutationUseCase(
   windowCurrentUrlService,
   debounceTimer,
   observerControl,
-  domRootChecker
+  domRootChecker,
+  elementFactory
 );
 
 const getElementSelectionUseCase = new GetElementSelectionUseCase(getSelectionService, domRootChecker);
@@ -48,6 +52,7 @@ awilixContainer.register({
   observerControl: asValue(observerControl),
   getSelectionService: asValue(getSelectionService),
   domRootChecker: asValue(domRootChecker),
+  elementFactory: asValue(elementFactory),
 
   // Use Cases
   applyRulesOnDomMutationUseCase: asValue(applyRulesOnDomMutationUseCase),
@@ -63,6 +68,7 @@ interface ContentContainerCradle {
   observerControl: IObserverControl;
   getSelectionService: IGetSelectionService;
   domRootChecker: IDomRootChecker;
+  elementFactory: IElementFactory;
 
   // Use Cases
   applyRulesOnDomMutationUseCase: ApplyRulesOnDomMutationUseCase;
@@ -76,7 +82,8 @@ type InterfaceToken =
   | 'IDebounceTimer'
   | 'IObserverControl'
   | 'IGetSelectionService'
-  | 'IDomRootChecker';
+  | 'IDomRootChecker'
+  | 'IElementFactory';
 
 const interfaceToKeyMap: Record<InterfaceToken, keyof ContentContainerCradle> = {
   'IRewriteRuleRepository': 'chromeRuntimeRewriteRuleRepository',
@@ -84,7 +91,8 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContentContainerCradle> = 
   'IDebounceTimer': 'debounceTimer',
   'IObserverControl': 'observerControl',
   'IGetSelectionService': 'getSelectionService',
-  'IDomRootChecker': 'domRootChecker'
+  'IDomRootChecker': 'domRootChecker',
+  'IElementFactory': 'elementFactory'
 };
 
 // Class to key mappings for class-based resolution
@@ -95,7 +103,8 @@ const classToKeyMap = new Map<Function, keyof ContentContainerCradle>([
   [WindowCurrentUrlService, 'windowCurrentUrlService'],
   [DebounceTimer, 'debounceTimer'],
   [GetSelectionService, 'getSelectionService'],
-  [DomRootChecker, 'domRootChecker']
+  [DomRootChecker, 'domRootChecker'],
+  [ElementFactory, 'elementFactory']
 ]);
 
 // Container interface with overloaded resolve
@@ -107,6 +116,7 @@ interface ContentContainer {
   resolve(token: typeof DebounceTimer): DebounceTimer;
   resolve(token: typeof GetSelectionService): GetSelectionService;
   resolve(token: typeof DomRootChecker): DomRootChecker;
+  resolve(token: typeof ElementFactory): ElementFactory;
   resolve<T>(token: InterfaceToken): T;
   resolve<T>(token: Function): T;
 }

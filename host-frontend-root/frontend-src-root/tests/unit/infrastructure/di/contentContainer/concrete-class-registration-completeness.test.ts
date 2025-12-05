@@ -7,6 +7,7 @@ import { DebounceTimer } from 'src/infrastructure/browser/timer/DebounceTimer';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
 import { contentContainer } from 'src/infrastructure/di/contentContainer';
 import { DomRootChecker } from 'src/infrastructure/document/DomRootChecker';
+import { ElementFactory } from 'src/infrastructure/document/ElementFactory';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
 /**
@@ -69,6 +70,11 @@ describe('Content DI Container - 具体クラス登録確認テスト (Awilix)',
       description: 'DomRootCheckerを解決できること',
       input: { classToken: DomRootChecker },
       expected: { className: 'DomRootChecker' }
+    },
+    {
+      description: 'ElementFactoryを解決できること',
+      input: { classToken: ElementFactory },
+      expected: { className: 'ElementFactory' }
     }
   ];
 

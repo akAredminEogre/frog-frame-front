@@ -1,6 +1,7 @@
 import { ElementMatchesFlexiblePattern } from 'src/domain/entities/ElementMatchesFlexiblePattern';
 import { ReplaceElementPreservingState } from 'src/domain/entities/ReplaceElementPreservingState';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IElementFactory } from 'src/domain/ports/IElementFactory';
 import { MatchingElements } from 'src/domain/value-objects/MatchingElements';
 
 /**
@@ -20,15 +21,16 @@ export class DomDiffer {
    * Apply a rewrite rule to a DOM element using selective updates
    * Uses createRedundantPattern to handle newline-ignoring patterns like the original HtmlContent
    * Preserves DOM nodes that are not being replaced to maintain event listeners and state
+   * @param elementFactory HTML要素を作成するためのファクトリ
    */
-  applyRule(): void {
+  applyRule(elementFactory: IElementFactory): void {
     // Find all elements that match the oldString pattern using createRedundantPattern
     const matchingElements = this.findMatchingElementsWithPattern();
 
     // Apply the transformation to each matching element individually
     matchingElements.applyReplacements(this.rule, (element, rule) => {
       const replaceElementPreservingState = new ReplaceElementPreservingState(element, rule);
-      replaceElementPreservingState.exec();
+      replaceElementPreservingState.exec(elementFactory);
     });
   }
 
