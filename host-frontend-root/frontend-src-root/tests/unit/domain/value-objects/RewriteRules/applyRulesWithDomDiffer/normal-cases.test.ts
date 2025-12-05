@@ -2,10 +2,13 @@
  * RewriteRules.applyRulesWithDomDiffer - 正常系テスト
  * 全てのルールがDOMに適用される
  */
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+
+const mockElementFactory = createMockElementFactory();
 
 describe('RewriteRules.applyRulesWithDomDiffer - 正常系', () => {
   let container: HTMLElement;
@@ -32,7 +35,7 @@ describe('RewriteRules.applyRulesWithDomDiffer - 正常系', () => {
     container.innerHTML = '<p>Hello</p><span>World</span><div>Keep</div>';
 
     // Act
-    rewriteRules.applyRulesWithDomDiffer(container);
+    rewriteRules.applyRulesWithDomDiffer(container, mockElementFactory);
 
     // Assert - 全てのルールが適用される
     expect(container.innerHTML).toContain('Hi');

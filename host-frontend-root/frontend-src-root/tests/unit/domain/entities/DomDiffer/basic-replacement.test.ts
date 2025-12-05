@@ -1,7 +1,10 @@
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+
+const mockElementFactory = createMockElementFactory();
 
 /**
  * 1. 属性厳密マッチでの要素置換処理
@@ -63,11 +66,11 @@ describe('DomDiffer - Basic Replacement', () => {
   basicReplacementTestCases.forEach(({ description, input, expected }) => {
     it(description, () => {
       container.innerHTML = input.initialHtml;
-      
+
       const rule = new RewriteRule(1, input.oldString, input.newString, '');
       const domDiffer = new DomDiffer(container, rule);
-      domDiffer.applyRule();
-      
+      domDiffer.applyRule(mockElementFactory);
+
       expect(container.innerHTML).toBe(expected.html);
     });
   });
