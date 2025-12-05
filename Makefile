@@ -167,8 +167,8 @@ _wt-setup-env:
 	fi
 
 # Load worktree environment variables and execute command
-# set -a と set +a で囲むことにより、.env.worktree 由来の変数だけを確実にエクスポートする
-_wt-load-env-exec = set -a && . ./.env.worktree && set +a &&
+# Load both .env and .env.worktree to ensure all required variables are available
+_wt-load-env-exec = set -a && . ./.env && . ./.env.worktree && set +a &&
 
 # Common paths for worktree operations
 # WXT_WORKDIR is derived from CONTAINER_APP_ROOT in .env file
