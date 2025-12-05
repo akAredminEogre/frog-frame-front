@@ -1,6 +1,6 @@
+import { createMockDomRootChecker } from 'tests/unit/domain/ports/IDomRootChecker/createMockDomRootChecker';
 import { describe, expect, it } from 'vitest';
 
-import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
 import { MutationRecords } from 'src/domain/value-objects/MutationRecords/MutationRecords';
 
@@ -13,10 +13,6 @@ import { MutationRecords } from 'src/domain/value-objects/MutationRecords/Mutati
  * 4. 重複する要素は1つにまとめる
  */
 describe('Elements.merge - 正常系', () => {
-  const createMockDomRootChecker = (attachedElements: Set<Element>): IDomRootChecker => ({
-    isDocumentRoot: () => false,
-    isAttachedToDocument: (element: Element) => attachedElements.has(element)
-  });
 
   it('should merge Elements from MutationRecords', () => {
     // Arrange
