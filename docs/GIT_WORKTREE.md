@@ -204,6 +204,12 @@ make wt-dev BRANCH=your-branch
 # これだけで他のworktreeを停止して、指定したworktreeの開発サーバーが起動
 ```
 
+**通常モードに戻る**：
+```bash
+make wt-disable
+# worktreeモードを無効化して、メインリポジトリのソースコードで開発サーバーを起動
+```
+
 **不要になったらクリーンアップ**：
 ```bash
 make wt-remove BRANCH=your-branch
@@ -220,6 +226,7 @@ make wt-remove BRANCH=your-branch
 | `wt-current` | 現在アクティブなworktreeを表示 | `make wt-current` |
 | `wt-cd-current` | worktreeディレクトリへ移動 | `source <(make wt-cd-current)` |
 | `wt-dev` | worktreeで開発サーバーを起動 | `make wt-dev BRANCH=feature-x` |
+| `wt-disable` | worktreeモードを無効化、メインリポジトリに戻る | `make wt-disable` |
 | `wt-down` | worktreeのDockerコンテナを停止 | `make wt-down` |
 | `wt-up` | worktreeのDockerコンテナを起動 | `make wt-up` |
 

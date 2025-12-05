@@ -345,3 +345,11 @@ _wt-init: _wt-check-branch _wt-check-exists
 	@echo "  make wt-dev BRANCH=$(BRANCH)"
 
 wt-dev: _wt-check-branch _wt-check-exists _wt-dev-in-worktree
+
+# Disable worktree mode and return to main repository
+wt-disable:
+	@echo "Disabling worktree mode, returning to main repository..."
+	@$(MAKE) down
+	@rm -f docker-compose.override.yml .env.worktree
+	@$(MAKE) dev
+	@echo "Switched back to main repository mode"
