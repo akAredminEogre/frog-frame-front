@@ -206,11 +206,11 @@ _wt-create-override:
 	@echo "CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH)" >> .env.worktree
 	@echo "WORKTREE_ACTIVE_BRANCH=$(BRANCH)" >> .env.worktree
 
-# Internal helper: Stop worktree containers
+# Stop worktree Docker containers
 wt-down:
 	@$(_wt-load-env-exec) docker compose down || true
 
-# Internal helper: Start worktree containers
+# Start worktree Docker containers
 wt-up:
 	@$(_wt-load-env-exec) docker compose up -d
 
