@@ -222,7 +222,7 @@ _wt-dev-in-worktree:
 		docker stop $$container || true; \
 	done
 	@# Also kill any process using port 3000 (in case dev server is running directly)
-	@lsof -ti:3000 | xargs -r kill -9 2>/dev/null || true
+	@if lsof -ti:3000 >/dev/null 2>&1; then lsof -ti:3000 | xargs kill -9 2>/dev/null || true; fi
 	@echo "Starting development server in worktree $(BRANCH)..."
 	@echo "Setting up docker environment for worktree..."
 	@$(MAKE) wt-down
