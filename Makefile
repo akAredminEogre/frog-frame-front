@@ -1,26 +1,41 @@
-.PHONY: init-config help init-dev dev down ps unit e2e check testall testcheck testlint sortimports storybook wt-list wt-add wt-remove wt-prune wt-current _wt-init wt-dev
+.PHONY: help init-config init-dev dev down ps unit e2e check testall testcheck testlint sortimports npminstall storybook wt-list wt-add wt-remove wt-prune wt-current wt-cd-current wt-dev wt-down wt-up _wt-check-branch _wt-remove-orphaned _wt-check-exists _wt-setup-env _wt-copy-override-template _wt-create-override _wt-dev-in-worktree _wt-check-no-active _wt-check-custom-override _wt-check-incomplete-setup _wt-init
 
 help:
 	@echo "Available commands:"
+	@echo ""
+	@echo "## Setup Commands"
 	@echo "  make init-config  - Apply git configuration from template"
 	@echo "  make init-dev     - Initial setup for development (first time only)"
+	@echo ""
+	@echo "## Development Commands"
 	@echo "  make dev          - Start development server"
 	@echo "  make down         - Stop Docker containers"
 	@echo "  make ps           - List running containers"
+	@echo "  make npminstall   - Install npm dependencies"
+	@echo "  make storybook    - Start Storybook development server"
+	@echo ""
+	@echo "## Testing Commands"
 	@echo "  make unit         - Run unit tests only"
 	@echo "  make e2e          - Run E2E tests only"
-	@echo "  make check        - Run compile, knip, tsr, and lint checks"
 	@echo "  make testall      - Run all tests (unit + E2E)"
 	@echo "  make testcheck    - Run tests with warnings"
 	@echo "  make testlint     - Run comprehensive tests and linting (required before PR)"
+	@echo ""
+	@echo "## Code Quality Commands"
+	@echo "  make check        - Run compile, knip, tsr, and lint checks"
 	@echo "  make sortimports  - Sort imports in all files"
-	@echo "  make storybook    - Start Storybook development server"
+	@echo ""
+	@echo "## Git Worktree Commands"
 	@echo "  make wt-list      - List all git worktrees"
 	@echo "  make wt-add       - Add a new worktree (usage: make wt-add BRANCH=branch-name)"
 	@echo "  make wt-remove    - Remove a worktree (usage: make wt-remove BRANCH=branch-name)"
 	@echo "  make wt-prune     - Prune stale worktree references"
 	@echo "  make wt-current   - Show the currently active worktree"
+	@echo "  make wt-cd-current - Generate shell commands to cd to worktree (use: source <(make wt-cd-current))"
 	@echo "  make wt-dev       - Start development server for worktree (usage: make wt-dev BRANCH=branch-name)"
+	@echo "  make wt-down      - Stop worktree Docker containers"
+	@echo "  make wt-up        - Start worktree Docker containers"
+	@echo ""
 	@echo "  make help         - Show this help message"
 
 init-config:
@@ -318,11 +333,11 @@ _wt-init: _wt-check-branch _wt-check-exists
 	@echo "Switching to worktree for initialization..."
 	@$(MAKE) _wt-create-override BRANCH=$(BRANCH)
 	@echo "Starting Docker services for worktree..."
-	@$(_wt-load-env-exec) docker compose up -d
+	@$(MAKE) wt-up
 	@echo "Installing npm dependencies in worktree..."
-	@$(_wt-load-env-exec) docker compose exec -w $(WXT_WORKDIR) frontend npm install
+	@$(_wt-load-env-exec) docker compose exec frontend npm install
 	@echo "Preparing WXT (generating .wxt/tsconfig.json) in worktree..."
-	@$(_wt-load-env-exec) docker compose exec -w $(WXT_WORKDIR) frontend npx wxt prepare
+	@$(_wt-load-env-exec) docker compose exec frontend npx wxt prepare
 	@echo ""
 	@echo "✅ Worktree $(BRANCH) initialization complete!"
 	@echo "The worktree is ready for development."
