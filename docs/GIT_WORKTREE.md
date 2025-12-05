@@ -2,6 +2,19 @@
 
 Git worktreeは、同じリポジトリの複数のブランチを同時にチェックアウトできる機能です。これにより、ブランチの切り替えなしで複数の機能を並行開発できます。
 
+## シェル関数の設定（推奨）
+
+便利なworktree移動コマンドを使用するため、以下をシェル設定ファイルに追加してください：
+
+```bash
+# ~/.bashrcまたは~/.zshrcに追加
+source /path/to/frog-frame-front/scripts/wt-cd.sh
+```
+
+これにより以下のコマンドが使用可能になります：
+- `wt-cd-current` - 現在のworktreeディレクトリに移動
+- `wtcd` - 上記のエイリアス（短縮形）
+
 ## 利点
 
 - **並行開発**: 複数のブランチで同時に作業可能
@@ -22,13 +35,15 @@ frog-frame-front/           # メインワークツリー（developブランチ�
 
 ## Makeコマンド
 
-### worktree一覧表示
+### 基本コマンド
+
+#### worktree一覧表示
 
 ```bash
 make wt-list
 ```
 
-### 新規worktree作成
+#### 新規worktree作成
 
 ```bash
 # 既存ブランチをworktreeとして追加（自動で初期化も実行）
@@ -46,9 +61,21 @@ make wt-add BRANCH=new-feature-branch
 - **自動初期化**: npm install の実行
 - **自動初期化**: WXT準備（npx wxt prepare）の実行
 
-**注意**: `wt-init`コマンドは`wt-add`内で自動実行されるため、通常は手動で実行する必要はありません。
+#### worktree削除
 
-### worktree切り替え
+```bash
+make wt-remove BRANCH=feature-branch
+```
+
+#### 不要なworktree参照を削除
+
+```bash
+make wt-prune
+```
+
+### 開発コマンド
+
+#### worktreeで開発サーバー起動
 
 ```bash
 # worktreeの開発サーバーを起動（自動的に他のコンテナを停止）
@@ -63,17 +90,35 @@ make wt-dev BRANCH=other-branch
 - ポート3000の競合回避
 - 指定されたworktreeディレクトリで独立した開発環境を起動
 
-
-### worktree削除
+#### Dockerコンテナ管理
 
 ```bash
-make wt-remove BRANCH=feature-branch
+# worktreeのDockerコンテナを停止
+make wt-down
+
+# worktreeのDockerコンテナを起動
+make wt-up
 ```
 
-### 不要なworktree参照を削除
+注：これらのコマンドは`.env.worktree`の設定を使用します。
+
+### ナビゲーションコマンド
+
+#### 現在のworktree確認
 
 ```bash
-make wt-prune
+# 現在アクティブなworktreeを表示
+make wt-current
+```
+
+#### worktreeディレクトリへ移動
+
+```bash
+# 現在アクティブなworktreeディレクトリへ移動（sourceコマンドで実行）
+source <(make wt-cd-current)
+
+# シェル関数を設定済みの場合
+wt-cd-current  # または短縮形: wtcd
 ```
 
 ## 使用例
@@ -138,11 +183,12 @@ make wt-dev BRANCH=feature-review
 
 ## 注意事項
 
-1. **自動初期化**: `wt-add`実行時に自動的に初期化されるため、`wt-init`を手動実行する必要はありません
+1. **自動初期化**: `wt-add`実行時に自動的に初期化されるため、手動での初期化は不要です
 2. **推奨コマンド**: 切り替えには`make wt-dev`を使用してください（自動でポート競合を回避）
 3. **ディスク容量**: 各worktreeはnode_modulesを持つため、ディスク容量に注意してください
 4. **worktreeディレクトリ**: `worktrees/`ディレクトリは`.gitignore`で除外されています
 5. **自動化された切り替え**: `wt-dev`コマンドにより他のコンテナ停止・環境切り替え・開発サーバー起動が自動化されています
+6. **内部ヘルパー関数**: `_`で始まるコマンド（例：`_wt-init`）は内部使用のみで、直接実行する必要はありません
 
 ## 簡単ワークフロー（まとめ）
 
@@ -162,6 +208,20 @@ make wt-dev BRANCH=your-branch
 ```bash
 make wt-remove BRANCH=your-branch
 ```
+
+## コマンドリファレンス
+
+| コマンド | 説明 | 使用例 |
+|---------|------|--------|
+| `wt-list` | すべてのworktreeを一覧表示 | `make wt-list` |
+| `wt-add` | 新しいworktreeを作成（自動初期化） | `make wt-add BRANCH=feature-x` |
+| `wt-remove` | worktreeを削除 | `make wt-remove BRANCH=feature-x` |
+| `wt-prune` | 不要なworktree参照を削除 | `make wt-prune` |
+| `wt-current` | 現在アクティブなworktreeを表示 | `make wt-current` |
+| `wt-cd-current` | worktreeディレクトリへ移動 | `source <(make wt-cd-current)` |
+| `wt-dev` | worktreeで開発サーバーを起動 | `make wt-dev BRANCH=feature-x` |
+| `wt-down` | worktreeのDockerコンテナを停止 | `make wt-down` |
+| `wt-up` | worktreeのDockerコンテナを起動 | `make wt-up` |
 
 ## 直接gitコマンドを使用する場合
 
