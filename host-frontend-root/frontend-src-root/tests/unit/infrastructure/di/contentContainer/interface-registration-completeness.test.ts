@@ -1,20 +1,20 @@
-import { container } from 'src/infrastructure/di/container';
-
 import { describe, expect, it } from 'vitest';
 
+import { contentContainer } from 'src/infrastructure/di/contentContainer';
+
 /**
- * containerの内部プロパティからinterfaceToKeyMapを動的に取得する
+ * contentContainerの内部プロパティからinterfaceToKeyMapを動的に取得する
  * tsyringeの_registry._registryMapと同様のアクセスパターン
  */
 function getInterfaceToKeyMap(): Record<string, string> {
-  return (container as any)._interfaceToKeyMap;
+  return (contentContainer as any)._interfaceToKeyMap;
 }
 
 /**
- * containerの内部プロパティからawilixContainerを動的に取得する
+ * contentContainerの内部プロパティからawilixContainerを動的に取得する
  */
 function getAwilixContainer(): { registrations: Record<string, unknown> } {
-  return (container as any)._awilixContainer;
+  return (contentContainer as any)._awilixContainer;
 }
 
 /**
@@ -28,54 +28,44 @@ function getRegisteredInterfaceKeys(): string[] {
 }
 
 /**
- * DIコンテナのインターフェース登録確認テスト (Awilix)
- * container.resolve()でインターフェーストークンを解決できることを検証する
+ * Content Script用DIコンテナのインターフェース登録確認テスト (Awilix)
+ * contentContainer.resolve()でインターフェーストークンを解決できることを検証する
  */
-describe('DI Container - インターフェース登録確認テスト (Awilix)', () => {
+describe('Content DI Container - インターフェース登録確認テスト (Awilix)', () => {
   /**
    * インターフェース解決テストケース
    * 各インターフェーストークンが正しい実装クラスに解決されることを検証する
    */
   const testCases = [
     {
-      description: 'IChromeTabsServiceをChromeTabsServiceに解決できること',
-      input: { interfaceToken: 'IChromeTabsService' as const },
-      expected: { implementationName: 'ChromeTabsService' }
-    },
-    {
-      description: 'IPopupServiceをChromePopupServiceに解決できること',
-      input: { interfaceToken: 'IPopupService' as const },
-      expected: { implementationName: 'ChromePopupService' }
-    },
-    {
-      description: 'IRewriteRuleRepositoryをDexieRewriteRuleRepositoryに解決できること',
+      description: 'IRewriteRuleRepositoryをChromeRuntimeRewriteRuleRepositoryに解決できること',
       input: { interfaceToken: 'IRewriteRuleRepository' as const },
-      expected: { implementationName: 'DexieRewriteRuleRepository' }
+      expected: { implementationName: 'ChromeRuntimeRewriteRuleRepository' }
     },
     {
-      description: 'IWindowServiceをChromeWindowServiceに解決できること',
-      input: { interfaceToken: 'IWindowService' as const },
-      expected: { implementationName: 'ChromeWindowService' }
+      description: 'ICurrentUrlServiceをWindowCurrentUrlServiceに解決できること',
+      input: { interfaceToken: 'ICurrentUrlService' as const },
+      expected: { implementationName: 'WindowCurrentUrlService' }
     },
     {
-      description: 'ISelectedPageTextRepositoryをSelectedPageTextRepositoryに解決できること',
-      input: { interfaceToken: 'ISelectedPageTextRepository' as const },
-      expected: { implementationName: 'SelectedPageTextRepository' }
+      description: 'IDebounceTimerをDebounceTimerに解決できること',
+      input: { interfaceToken: 'IDebounceTimer' as const },
+      expected: { implementationName: 'DebounceTimer' }
     },
     {
-      description: 'ICurrentTabServiceをChromeCurrentTabServiceに解決できること',
-      input: { interfaceToken: 'ICurrentTabService' as const },
-      expected: { implementationName: 'ChromeCurrentTabService' }
-    },
-    {
-      description: 'IChromeRuntimeServiceをChromeRuntimeServiceに解決できること',
-      input: { interfaceToken: 'IChromeRuntimeService' as const },
-      expected: { implementationName: 'ChromeRuntimeService' }
+      description: 'IObserverControlをobserverControlに解決できること',
+      input: { interfaceToken: 'IObserverControl' as const },
+      expected: { implementationName: 'Object' }
     },
     {
       description: 'IGetSelectionServiceをGetSelectionServiceに解決できること',
       input: { interfaceToken: 'IGetSelectionService' as const },
       expected: { implementationName: 'GetSelectionService' }
+    },
+    {
+      description: 'IDomRootCheckerをDomRootCheckerに解決できること',
+      input: { interfaceToken: 'IDomRootChecker' as const },
+      expected: { implementationName: 'DomRootChecker' }
     }
   ];
 
@@ -86,7 +76,7 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
       const { implementationName } = testCase.expected;
 
       // Act
-      const resolved = container.resolve(interfaceToken) as any;
+      const resolved = contentContainer.resolve(interfaceToken) as any;
 
       // Assert
       expect(resolved).toBeDefined();
