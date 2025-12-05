@@ -1,7 +1,7 @@
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 import { describe, expect, it } from 'vitest';
 
 import { ParserContextStrategyFactory } from 'src/domain/entities/ParserContextStrategy';
-import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 
 const mockElementFactory = createMockElementFactory();
 
