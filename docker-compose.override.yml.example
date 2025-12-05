@@ -1,9 +1,15 @@
 # Template for worktree-specific Docker Compose overrides
-# This file is used by 'make wt-use' command with CURRENT_WORKTREE_PATH environment variable
 # DO NOT EDIT this template directly
+#
+# Environment variables:
+#   CURRENT_WORKTREE_PATH: Path to the active worktree (set by worktree system)
+#   WORKTREE_ACTIVE_BRANCH: Currently active worktree branch name (for tracking)
 
 services:
   frontend:
     volumes:
-      - ${CURRENT_WORKTREE_PATH:-./host-frontend-root}:${CONTAINER_APP_ROOT}/
+      - ${CURRENT_WORKTREE_PATH:-./host-frontend-root}:${CONTAINER_APP_ROOT}/host-frontend-root/frontend-src-root
       - ${FIX_PERMISSIONS_SCRIPT_PATH}:/fix-permissions.sh
+    environment:
+      # Tracking variable to identify worktree usage
+      - WORKTREE_ACTIVE_BRANCH=${WORKTREE_ACTIVE_BRANCH:-}
