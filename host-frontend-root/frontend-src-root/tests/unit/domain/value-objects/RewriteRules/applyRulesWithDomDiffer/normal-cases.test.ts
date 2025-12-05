@@ -2,11 +2,11 @@
  * RewriteRules.applyRulesWithDomDiffer - 正常系テスト
  * 全てのルールがDOMに適用される
  */
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
-import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 
 const mockElementFactory = createMockElementFactory();
 

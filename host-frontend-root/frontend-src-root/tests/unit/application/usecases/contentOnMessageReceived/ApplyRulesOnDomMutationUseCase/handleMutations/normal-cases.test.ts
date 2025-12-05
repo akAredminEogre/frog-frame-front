@@ -1,7 +1,7 @@
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
-import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 
 /**
  * TODO: モックはcreateMockクラスに切り出す
