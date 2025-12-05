@@ -290,6 +290,28 @@ wt-current:
 	@echo "Branch: $$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 	@echo "Path: $$(grep CURRENT_WORKTREE_PATH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 
+wt-cd-current:
+	@# Note: This command outputs shell commands to be executed with source
+	@# Check if .env.worktree exists
+	@if [ ! -f .env.worktree ]; then \
+		echo "echo 'No active worktree. Staying in the main repository.'"; \
+		exit 0; \
+	fi
+	@# Get the worktree path from .env.worktree
+	@WORKTREE_PATH=$$(grep CURRENT_WORKTREE_PATH .env.worktree 2>/dev/null | cut -d'=' -f2 | sed 's|^\\./||'); \
+	if [ -z "$$WORKTREE_PATH" ]; then \
+		echo "echo 'Error: Cannot determine current worktree path'"; \
+		echo "false"; \
+		exit 0; \
+	fi; \
+	if [ ! -d "$$WORKTREE_PATH" ]; then \
+		echo "echo 'Error: Worktree directory does not exist: $$WORKTREE_PATH'"; \
+		echo "false"; \
+		exit 0; \
+	fi; \
+	echo "echo 'Moving to worktree: $$WORKTREE_PATH'"; \
+	echo "cd $$WORKTREE_PATH"
+
 _wt-init: _wt-check-branch _wt-check-exists
 	@echo "Initializing worktree for development: $(BRANCH)..."
 	@$(MAKE) _wt-setup-env BRANCH=$(BRANCH)
