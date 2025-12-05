@@ -1,10 +1,10 @@
 # ISSUE-149 PULL REQUEST - Git Worktree運用の効率化
 
 ## タイトル
-feat: Git worktreeの運用効率を改善するMakeコマンドとドキュメントの整備
+feat: Git worktreeの運用効率を改善するMakeコマンドとドキュメントの整備 (最新developマージ済み)
 
 ## 概要と理由
-Git worktree運用における課題（worktree作成時のセットアップの煩雑さ、worktree切り替え時のコンテナ管理の手間）を解決するため、Docker Compose Override機能を活用した効率的な管理システムを実装しました。これにより、複数のworktreeで並行開発を行う際の作業効率が大幅に向上します。
+Git worktree運用における課題（worktree作成時のセットアップの煩雑さ、worktree切り替え時のコンテナ管理の手間）を解決するため、Docker Compose Override機能を活用した効率的な管理システムを実装しました。これにより、複数のworktreeで並行開発を行う際の作業効率が大幅に向上します。最新のdevelopブランチの変更も取り込み済みです。
 
 ## 主な変更点
 - **Worktree管理用Makeコマンドの追加**
