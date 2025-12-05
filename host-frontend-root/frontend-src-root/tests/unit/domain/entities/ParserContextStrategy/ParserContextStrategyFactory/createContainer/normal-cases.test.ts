@@ -1,6 +1,9 @@
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 import { describe, expect, it } from 'vitest';
 
 import { ParserContextStrategyFactory } from 'src/domain/entities/ParserContextStrategy';
+
+const mockElementFactory = createMockElementFactory();
 
 describe('ParserContextStrategyFactory', () => {
   describe('createContainer', () => {
@@ -66,13 +69,14 @@ describe('ParserContextStrategyFactory', () => {
         it(description, () => {
           // Arrange
           const element = document.createElement(tagName);
+          const factory = new ParserContextStrategyFactory(mockElementFactory);
 
           // Act
-          const container = ParserContextStrategyFactory.createContainer(element);
+          const container = factory.createContainer(element);
 
           // Assert
           expect(container.tagName.toLowerCase()).toBe(expectedContainer);
-          
+
           if (expectedParent) {
             expect(container.parentElement?.tagName.toLowerCase()).toBe(expectedParent);
           }

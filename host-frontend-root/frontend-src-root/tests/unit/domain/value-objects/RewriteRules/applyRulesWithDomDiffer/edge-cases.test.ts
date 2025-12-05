@@ -2,9 +2,12 @@
  * RewriteRules.applyRulesWithDomDiffer - エッジケーステスト
  * 空のRewriteRulesでもエラーが発生しない
  */
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+
+const mockElementFactory = createMockElementFactory();
 
 describe('RewriteRules.applyRulesWithDomDiffer - エッジケース', () => {
   let container: HTMLElement;
@@ -26,7 +29,7 @@ describe('RewriteRules.applyRulesWithDomDiffer - エッジケース', () => {
 
     // Act - should not throw
     expect(() => {
-      emptyRules.applyRulesWithDomDiffer(container);
+      emptyRules.applyRulesWithDomDiffer(container, mockElementFactory);
     }).not.toThrow();
 
     // Assert - content remains unchanged
