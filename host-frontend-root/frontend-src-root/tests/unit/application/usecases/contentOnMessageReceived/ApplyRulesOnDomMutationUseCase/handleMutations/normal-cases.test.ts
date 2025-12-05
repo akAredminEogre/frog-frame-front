@@ -1,11 +1,9 @@
+import { createMockDomRootChecker } from 'tests/unit/domain/ports/IDomRootChecker/createMockDomRootChecker';
 import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
 
-/**
- * TODO: モックはcreateMockクラスに切り出す
- */
 const mockElementFactory = createMockElementFactory();
 
 /**
@@ -53,11 +51,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
       disconnect: vi.fn(),
       reconnect: vi.fn(),
     };
-    // TODO: mockDomRootCheckerを他のmockを参考に切り出す
-    mockDomRootChecker = {
-      isDocumentRoot: vi.fn().mockReturnValue(false),
-      isAttachedToDocument: vi.fn().mockImplementation((element: Element) => attachedElements.has(element)),
-    };
+    mockDomRootChecker = createMockDomRootChecker(attachedElements);
 
     // UseCaseを作成し、applyRulesToRootを呼び出して初回ロード完了状態にする
     useCase = new ApplyRulesOnDomMutationUseCase(
