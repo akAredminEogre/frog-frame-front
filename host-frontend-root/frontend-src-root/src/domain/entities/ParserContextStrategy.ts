@@ -19,9 +19,18 @@ enum TableElementType {
  */
 export class ParserContextStrategyFactory {
   private elementFactory: IElementFactory;
+  private readonly containerCreators: Map<string, () => HTMLElement>;
 
   constructor(elementFactory: IElementFactory) {
     this.elementFactory = elementFactory;
+    this.containerCreators = new Map<string, () => HTMLElement>([
+      [TableElementType.TR, () => this.createTbodyInTable()],
+      [TableElementType.TD, () => this.createTrInTbodyInTable()],
+      [TableElementType.TH, () => this.createTrInTbodyInTable()],
+      [TableElementType.THEAD, () => this.createTable()],
+      [TableElementType.TBODY, () => this.createTable()],
+      [TableElementType.TFOOT, () => this.createTable()]
+    ]);
   }
 
   /**
@@ -31,20 +40,14 @@ export class ParserContextStrategyFactory {
    */
   createContainer(element: Element): HTMLElement {
     const tagName = element.tagName.toLowerCase();
+    const creator = this.containerCreators.get(tagName);
 
-    switch (tagName) {
-      case TableElementType.TR:
-        return this.createTbodyInTable();
-      case TableElementType.TD:
-      case TableElementType.TH:
-        return this.createTrInTbodyInTable();
-      case TableElementType.THEAD:
-      case TableElementType.TBODY:
-      case TableElementType.TFOOT:
-        return this.createTable();
-      default:
-        return this.elementFactory.createElement('div');
+    if (creator) {
+      return creator();
     }
+
+    // デフォルトはdivコンテナ
+    return this.elementFactory.createElement('div');
   }
 
   /**
