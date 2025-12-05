@@ -187,7 +187,6 @@ _wt-load-env-exec = set -a && [ -f .env ] && . ./.env; [ -f .env.worktree ] && .
 
 # Common paths for worktree operations
 # WXT_WORKDIR is derived from CONTAINER_APP_ROOT in .env file
-WXT_WORKDIR = $${CONTAINER_APP_ROOT}/host-frontend-root/frontend-src-root
 
 # Internal helper: Copy override template to docker-compose.override.yml
 _wt-copy-override-template:
