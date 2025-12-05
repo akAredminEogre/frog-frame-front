@@ -5,6 +5,7 @@ import { IElementFactory } from 'src/domain/ports/IElementFactory';
 
 /**
  * テスト用のIElementFactory実装
+ * TODO: モックはcreateMockクラスに切り出す
  */
 const mockElementFactory: IElementFactory = {
   createElement: (tagName: string) => document.createElement(tagName)
