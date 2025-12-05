@@ -66,6 +66,11 @@ describe('Content DI Container - インターフェース登録確認テスト (
       description: 'IDomRootCheckerをDomRootCheckerに解決できること',
       input: { interfaceToken: 'IDomRootChecker' as const },
       expected: { implementationName: 'DomRootChecker' }
+    },
+    {
+      description: 'IElementFactoryをElementFactoryに解決できること',
+      input: { interfaceToken: 'IElementFactory' as const },
+      expected: { implementationName: 'ElementFactory' }
     }
   ];
 
