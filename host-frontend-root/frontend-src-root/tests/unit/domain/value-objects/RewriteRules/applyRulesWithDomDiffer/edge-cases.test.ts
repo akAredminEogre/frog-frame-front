@@ -4,15 +4,10 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { IElementFactory } from 'src/domain/ports/IElementFactory';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 
-/**
- * テスト用のIElementFactory実装
- */
-const mockElementFactory: IElementFactory = {
-  createElement: (tagName: string) => document.createElement(tagName)
-};
+const mockElementFactory = createMockElementFactory();
 
 describe('RewriteRules.applyRulesWithDomDiffer - エッジケース', () => {
   let container: HTMLElement;

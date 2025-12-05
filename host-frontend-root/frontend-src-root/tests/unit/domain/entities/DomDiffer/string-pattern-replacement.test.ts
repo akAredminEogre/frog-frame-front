@@ -2,14 +2,9 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { IElementFactory } from 'src/domain/ports/IElementFactory';
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 
-/**
- * テスト用のIElementFactory実装
- */
-const mockElementFactory: IElementFactory = {
-  createElement: (tagName: string) => document.createElement(tagName)
-};
+const mockElementFactory = createMockElementFactory();
 
 /**
  * 文字列パターン置換テスト

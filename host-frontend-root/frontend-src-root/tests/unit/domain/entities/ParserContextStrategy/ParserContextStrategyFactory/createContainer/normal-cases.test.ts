@@ -1,15 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import { ParserContextStrategyFactory } from 'src/domain/entities/ParserContextStrategy';
-import { IElementFactory } from 'src/domain/ports/IElementFactory';
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 
-/**
- * テスト用のIElementFactory実装
- * テスト環境（happy-dom）のdocument.createElementを使用
- */
-const mockElementFactory: IElementFactory = {
-  createElement: (tagName: string) => document.createElement(tagName)
-};
+const mockElementFactory = createMockElementFactory();
 
 describe('ParserContextStrategyFactory', () => {
   describe('createContainer', () => {

@@ -1,15 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
-import { IElementFactory } from 'src/domain/ports/IElementFactory';
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
 
 /**
- * テスト用のIElementFactory実装
  * TODO: モックはcreateMockクラスに切り出す
  */
-const mockElementFactory: IElementFactory = {
-  createElement: (tagName: string) => document.createElement(tagName)
-};
+const mockElementFactory = createMockElementFactory();
 
 /**
  * ApplyRulesOnDomMutationUseCase.handleMutations - 正常系テスト
