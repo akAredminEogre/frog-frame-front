@@ -1,4 +1,6 @@
 .env
+.env.worktree
+docker-compose.override.yml
 
 # Git worktree directories
 worktrees/
