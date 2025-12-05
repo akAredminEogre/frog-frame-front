@@ -17,6 +17,8 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
   let mockCurrentUrlService: any;
   let mockDebounceTimer: any;
   let mockObserverControl: any;
+  let mockDomRootChecker: any;
+  let attachedElements: Set<Element>;
   let scheduledCallback: (() => Promise<void>) | null;
   let mockApplyRulesWithDomDiffer: ReturnType<typeof vi.fn>;
   let useCase: ApplyRulesOnDomMutationUseCase;
@@ -25,6 +27,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     vi.clearAllMocks();
     scheduledCallback = null;
     mockApplyRulesWithDomDiffer = vi.fn();
+    attachedElements = new Set();
 
     mockRepository = {
       getRulesMatchingUrl: vi.fn().mockResolvedValue({
@@ -44,13 +47,19 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
       disconnect: vi.fn(),
       reconnect: vi.fn(),
     };
+    // TODO: mockDomRootCheckerを他のmockを参考に切り出す
+    mockDomRootChecker = {
+      isDocumentRoot: vi.fn().mockReturnValue(false),
+      isAttachedToDocument: vi.fn().mockImplementation((element: Element) => attachedElements.has(element)),
+    };
 
     // UseCaseを作成し、applyRulesToRootを呼び出して初回ロード完了状態にする
     useCase = new ApplyRulesOnDomMutationUseCase(
       mockRepository,
       mockCurrentUrlService,
       mockDebounceTimer,
-      mockObserverControl
+      mockObserverControl,
+      mockDomRootChecker
     );
     await useCase.applyRulesToRoot(document.body);
 
@@ -69,7 +78,7 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
   it('should accumulate elements and schedule debounced rule application', async () => {
     // Arrange
     const element = document.createElement('div');
-    document.body.appendChild(element);
+    attachedElements.add(element);
 
     const nodeList = [element] as unknown as NodeList;
     (nodeList as any).forEach = Array.prototype.forEach.bind([element]);
@@ -90,17 +99,14 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     expect(mockCurrentUrlService.getCurrentUrl).toHaveBeenCalled();
     expect(mockRepository.getRulesMatchingUrl).toHaveBeenCalledWith('https://example.com');
     expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element);
-
-    // Cleanup
-    document.body.removeChild(element);
   });
 
   it('should accumulate elements from multiple handleMutations calls', async () => {
     // Arrange
     const element1 = document.createElement('div');
     const element2 = document.createElement('span');
-    document.body.appendChild(element1);
-    document.body.appendChild(element2);
+    attachedElements.add(element1);
+    attachedElements.add(element2);
 
     const nodeList1 = [element1] as unknown as NodeList;
     (nodeList1 as any).forEach = Array.prototype.forEach.bind([element1]);
@@ -122,10 +128,6 @@ describe('ApplyRulesOnDomMutationUseCase.handleMutations - 正常系', () => {
     expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledTimes(2);
     expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element1);
     expect(mockApplyRulesWithDomDiffer).toHaveBeenCalledWith(element2);
-
-    // Cleanup
-    document.body.removeChild(element1);
-    document.body.removeChild(element2);
   });
 
   it('should ignore non-Element nodes', async () => {
