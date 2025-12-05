@@ -120,6 +120,7 @@ make wt-current                 # Show currently active worktree
 make wt-dev BRANCH=feature-x    # Start dev server for worktree (RECOMMENDED)
 make wt-down                    # Stop worktree Docker containers
 make wt-up                      # Start worktree Docker containers
+make wt-disable                 # Disable worktree mode, return to main repository
 ```
 
 **Navigation Commands:**
@@ -147,7 +148,10 @@ make wt-dev BRANCH=new-feature
 # 3. Switch between worktrees (auto-stops other containers)
 make wt-dev BRANCH=other-feature
 
-# 4. Clean up when done
+# 4. Return to main repository (when done with worktree development)
+make wt-disable
+
+# 5. Clean up worktree when done
 make wt-remove BRANCH=new-feature
 ```
 
