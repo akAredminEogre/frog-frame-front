@@ -1,16 +1,10 @@
 # Git Worktree Internal Helpers
 # These targets are not meant for direct use (prefixed with _)
-.PHONY: _wt-check-branch _wt-remove-orphaned _wt-check-exists _wt-setup-env
-.PHONY: _wt-copy-override-template _wt-create-override _wt-dev-in-worktree
-.PHONY: _wt-check-no-active _wt-check-custom-override _wt-check-incomplete-setup _wt-init
+.PHONY: _wt-remove-orphaned _wt-setup-env
+.PHONY: _wt-copy-override-template _wt-create-override _wt-dev-in-worktree _wt-init
 
-# Check if BRANCH variable is defined
-_wt-check-branch:
-ifndef BRANCH
-	@echo "Error: BRANCH is required"
-	@echo "Usage: make $(MAKECMDGOALS) BRANCH=branch-name"
-	@exit 1
-endif
+# Include check logic
+include make/worktree/helpers/check_logic.mk
 
 # Remove orphaned worktree directory
 _wt-remove-orphaned:
@@ -20,15 +14,6 @@ _wt-remove-orphaned:
 		echo "Error: Cannot remove directory due to permission issues."; \
 		echo "Please run: sudo rm -rf $(WORKTREE_PATH)"; \
 		echo "Then run this command again."; \
-		exit 1; \
-	fi
-
-# Check if worktree directory exists
-_wt-check-exists:
-	@if [ ! -d "$(WORKTREE_PATH)" ]; then \
-		echo "Error: Worktree not found at $(WORKTREE_PATH)"; \
-		echo "Available worktrees:"; \
-		ls -1 $(WORKTREE_DIR) 2>/dev/null || echo "No worktrees found"; \
 		exit 1; \
 	fi
 
@@ -90,27 +75,6 @@ _wt-dev-in-worktree:
 	@$(MAKE) wt-up
 	@echo "Starting npm dev in worktree container..."
 	@$(_wt-load-env-exec) docker compose exec frontend npm run dev
-
-# Internal helper: Check if no worktree is active
-_wt-check-no-active:
-	@if [ ! -f .env.worktree ] && [ ! -f docker-compose.override.yml ]; then \
-		echo "No worktree override active (using main repository)"; \
-		exit 0; \
-	fi
-
-# Internal helper: Check for custom override (not managed by worktree)
-_wt-check-custom-override:
-	@if [ ! -f .env.worktree ] && [ -f docker-compose.override.yml ]; then \
-		echo "Custom docker-compose.override.yml detected (not managed by worktree system)"; \
-		exit 0; \
-	fi
-
-# Internal helper: Check for incomplete worktree setup
-_wt-check-incomplete-setup:
-	@if [ -f .env.worktree ] && [ ! -f docker-compose.override.yml ]; then \
-		echo "Worktree environment configured but docker-compose.override.yml missing"; \
-		exit 0; \
-	fi
 
 # Initialize worktree for development
 _wt-init: _wt-check-branch _wt-check-exists
