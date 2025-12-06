@@ -271,3 +271,30 @@ git worktree remove worktrees/branch-name --force
 ```bash
 make wt-prune
 ```
+
+### VSCodeでモジュールが見つからないエラーが表示される
+
+worktreeで開発中に、VSCodeで「モジュール '@storybook/react-vite' またはそれに対応する型宣言が見つかりません」などのエラーが表示される場合：
+
+**原因**: worktreeの初期化時に`node_modules`や`.wxt/tsconfig.json`がホスト側に正しく反映されていない可能性があります。
+
+**解決方法**:
+1. worktreeを一度削除して再作成します：
+   ```bash
+   make wt-remove BRANCH=your-branch
+   make wt-add BRANCH=your-branch
+   ```
+
+2. または、手動で再初期化します：
+   ```bash
+   # worktreeのDocker環境を起動
+   make wt-dev BRANCH=your-branch
+
+   # 別ターミナルでnpm installとwxt prepareを再実行
+   docker compose exec frontend npm install
+   docker compose exec frontend npx wxt prepare
+   ```
+
+3. VSCodeを再起動（またはTypeScriptサーバーを再起動: Cmd/Ctrl+Shift+P → "TypeScript: Restart TS Server"）
+
+**補足**: この問題は、DockerコンテナとホストのボリュームマウントによりVSCodeがコンテナ内の`node_modules`を参照できるようになっています。正しく初期化されていれば、worktreeの`host-frontend-root/frontend-src-root/node_modules/`にパッケージがインストールされます。
