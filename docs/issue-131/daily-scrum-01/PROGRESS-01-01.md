@@ -34,5 +34,8 @@ kk=01
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
-ddddddd
+.clinerules/scripts/get-issue-number.sh は、
+.clinerules/scripts/get-issue-number.sh
+frog-frame-front/worktrees/issue-131-feat-numbering-shell/scripts/.clinerules/get-issue-number.sh
+に移してください。
 ---
