@@ -55,6 +55,8 @@ _wt-create-override:
 	@echo "# Worktree environment variables" > .env.worktree
 	@echo "CURRENT_WORKTREE_PATH=./$(WORKTREE_PATH)" >> .env.worktree
 	@echo "WORKTREE_ACTIVE_BRANCH=$(BRANCH)" >> .env.worktree
+	@echo "# Override HOST_FRONTEND_ROOT_PATH to mount worktree source directory" >> .env.worktree
+	@echo "HOST_FRONTEND_ROOT_PATH=./$(WORKTREE_PATH)/host-frontend-root" >> .env.worktree
 
 # Initialize worktree for development
 _wt-init: _wt-check-branch _wt-check-exists
