@@ -1,0 +1,41 @@
+# Git Worktree Check Logic
+# Validation and check helpers for worktree operations
+.PHONY: _wt-check-branch _wt-check-exists _wt-check-no-active _wt-check-custom-override _wt-check-incomplete-setup
+
+# Check if BRANCH variable is defined
+_wt-check-branch:
+ifndef BRANCH
+	@echo "Error: BRANCH is required"
+	@echo "Usage: make $(MAKECMDGOALS) BRANCH=branch-name"
+	@exit 1
+endif
+
+# Check if worktree directory exists
+_wt-check-exists:
+	@if [ ! -d "$(WORKTREE_PATH)" ]; then \
+		echo "Error: Worktree not found at $(WORKTREE_PATH)"; \
+		echo "Available worktrees:"; \
+		ls -1 $(WORKTREE_DIR) 2>/dev/null || echo "No worktrees found"; \
+		exit 1; \
+	fi
+
+# Internal helper: Check if no worktree is active
+_wt-check-no-active:
+	@if [ ! -f .env.worktree ] && [ ! -f docker-compose.override.yml ]; then \
+		echo "No worktree override active (using main repository)"; \
+		exit 0; \
+	fi
+
+# Internal helper: Check for custom override (not managed by worktree)
+_wt-check-custom-override:
+	@if [ ! -f .env.worktree ] && [ -f docker-compose.override.yml ]; then \
+		echo "Custom docker-compose.override.yml detected (not managed by worktree system)"; \
+		exit 0; \
+	fi
+
+# Internal helper: Check for incomplete worktree setup
+_wt-check-incomplete-setup:
+	@if [ -f .env.worktree ] && [ ! -f docker-compose.override.yml ]; then \
+		echo "Worktree environment configured but docker-compose.override.yml missing"; \
+		exit 0; \
+	fi
