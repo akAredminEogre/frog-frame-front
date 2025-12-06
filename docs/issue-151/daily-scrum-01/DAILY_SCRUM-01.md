@@ -13,7 +13,7 @@ Day 1: 既存のworkflow-create-branchを分析し、wt-create-branchコマン�
 ## 修正予定ファイル
 <!-- 修正予定のファイルを記載してください。 -->
 - .clinerules/02-workflow-automation/01-issue-launches/workflow-create-worktree.md (修正)
-- .claude/commands/workflow-create-worktree.yml (新規作成)
+- .claude/commands/workflow-create-worktree.md (新規作成)
 - Makefile (wt-create-branchコマンドの確認と必要に応じて修正)
 - CLAUDE.md (必要に応じて更新)
 
