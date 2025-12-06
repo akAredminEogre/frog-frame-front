@@ -1,0 +1,148 @@
+/* ルール一覧テーブル */
+.rulesTableContainer {
+  margin: 20px 0;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e1e5e9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rulesTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.rulesTable thead th {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 600;
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 2px solid #e1e5e9;
+  position: sticky;
+  top: 0;
+}
+
+.rulesTable tbody tr {
+  background-color: #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+.rulesTable tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.rulesTable tbody tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+.rulesTable tbody tr:nth-child(even):hover {
+  background-color: #f8f9fa;
+}
+
+.rulesTable td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #f1f3f4;
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ruleUrlPattern {
+  width: 30%;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  color: #3498db;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ruleOldString {
+  width: 30%;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  color: #e74c3c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ruleNewString {
+  width: 30%;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  color: #27ae60;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ruleRegex {
+  width: 60px;
+  text-align: center;
+}
+
+.ruleActions {
+  width: 80px;
+  text-align: center;
+}
+
+.regexBadge {
+  background-color: #9b59b6;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.noRegex {
+  color: #bdc3c7;
+  font-size: 14px;
+}
+
+.editButton {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.editButton:hover {
+  background-color: #2980b9;
+}
+
+.editButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 600px) {
+  .rulesTableContainer {
+    font-size: 12px;
+  }
+  
+  .ruleOldString,
+  .ruleNewString,
+  .ruleUrlPattern {
+    width: auto;
+    min-width: 100px;
+  }
+  
+  .rulesTable td {
+    padding: 8px 4px;
+  }
+  
+  .rulesTable thead th {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+}
