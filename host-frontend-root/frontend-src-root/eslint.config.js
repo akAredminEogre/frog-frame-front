@@ -124,6 +124,74 @@ export default [js.configs.recommended, {
     ],
   },
 }, {
+  // Background handlers: prohibit contentContainer import
+  // Background script should use the main container with DexieRewriteRuleRepository
+  files: ['**/handlers/background/**/*.{ts,tsx}'],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['**/contentContainer', '**/contentContainer.ts'],
+            message: 'Background handlers must use "container" (not "contentContainer"). contentContainer is for Content Script only.',
+          },
+        ],
+      },
+    ],
+  },
+}, {
+  // Content handlers: prohibit main container import
+  // Content script should use contentContainer with ChromeRuntimeRewriteRuleRepository
+  files: ['**/handlers/content/**/*.{ts,tsx}'],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['**/di/container', '**/di/container.ts'],
+            message: 'Content handlers must use "contentContainer" (not "container"). container is for Background Script only.',
+          },
+        ],
+      },
+    ],
+  },
+}, {
+  // contentOnMessageReceived UseCases: prohibit IChromeTabsService import
+  // Content script context cannot use chrome.tabs API (only available in extension pages)
+  files: ['**/usecases/contentOnMessageReceived/**/*.{ts,tsx}'],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['**/IChromeTabsService', '**/IChromeTabsService.ts'],
+            message: 'contentOnMessageReceived UseCases cannot use IChromeTabsService. chrome.tabs API is not available in Content Script context.',
+          },
+        ],
+      },
+    ],
+  },
+}, {
+  // Domain layer entities: prohibit direct access to global document object
+  // See: docs/design/clean-architecture/domain/entities.md
+  files: [
+    '**/domain/entities/ElementSelector.ts',
+    '**/domain/entities/ParserContextStrategy.ts',
+    '**/domain/value-objects/Elements/Elements.ts',
+  ],
+  rules: {
+    'no-restricted-globals': [
+      'error',
+      {
+        name: 'document',
+        message: 'Direct access to "document" is prohibited in Domain layer. Use IDomRootChecker via dependency injection instead.',
+      },
+    ],
+  },
+}, {
   ignores: [
     'dist/**',
     'node_modules/**',
