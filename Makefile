@@ -2,9 +2,9 @@
 .PHONY: help
 
 # Include modular command files
-include make/dev.mk
-include make/test.mk
-include make/worktree.mk
+include make/dev/main.mk
+include make/test/main.mk
+include make/worktree/main.mk
 
 help:
 	@echo "Available commands:"
