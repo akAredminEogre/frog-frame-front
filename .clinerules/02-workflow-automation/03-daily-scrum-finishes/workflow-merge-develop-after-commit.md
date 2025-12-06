@@ -11,15 +11,17 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 - 最新のdevelopをフェッチ
   - git fetch origin develop
 
-- developのマージを試行
-  - git merge origin/develop --no-commit --no-ff
-  - このコマンドはマージをコミットせずに試行する
-
-- マージ結果の判定
-  - すでに最新の場合（Already up to date）:
+- developがすでに最新かどうかを事前に確認
+  - git merge-base --is-ancestor origin/develop HEAD
+  - 終了コード0の場合:
     - 「developはすでに最新です。マージの必要はありません。」と報告
     - 手順終了
+  - 終了コードが0以外の場合:
+    - developのマージを試行
+      - git merge origin/develop --no-commit --no-ff
+      - このコマンドはマージをコミットせずに試行する
 
+- マージ結果の判定
   - 競合なくマージできた場合:
     - マージをコミットする
       - git commit -m "merge: developの最新変更を取り込み"
