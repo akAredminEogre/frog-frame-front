@@ -75,6 +75,25 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
   }
 
   /**
+   * 指定されたURLにマッチするルールを取得する
+   * @param currentUrl 現在のURL
+   * @returns urlPatternがcurrentUrlの前方一致となるルールのRewriteRulesオブジェクト
+   */
+  async getRulesMatchingUrl(currentUrl: string): Promise<RewriteRules> {
+    const schemas = await this.database.rewriteRules
+      .filter(schema => currentUrl.startsWith(schema.urlPattern) && schema.urlPattern !== '')
+      .toArray();
+
+    const rulesObject: Record<string, RewriteRule> = {};
+    schemas.forEach(schema => {
+      const rule = this.convertSchemaToRule(schema);
+      rulesObject[rule.id] = rule;
+    });
+
+    return new RewriteRules(rulesObject);
+  }
+
+  /**
    * RewriteRuleをRewriteRuleSchemaに変換する（新規作成用）
    * @param rule 変換元のRewriteRule
    * @returns 変換されたRewriteRuleSchema（idフィールドなし - DB側で自動採番）

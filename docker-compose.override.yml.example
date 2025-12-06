@@ -1,0 +1,20 @@
+# Template for worktree-specific Docker Compose overrides
+# DO NOT EDIT this template directly
+#
+# Environment variables:
+#   CURRENT_WORKTREE_PATH: Path to the active worktree (set by worktree system)
+#   WORKTREE_ACTIVE_BRANCH: Currently active worktree branch name (for tracking)
+#   HOST_FRONTEND_ROOT_PATH: Overridden in .env.worktree to point to worktree's host-frontend-root
+#
+# Note: Volume mounts use HOST_FRONTEND_ROOT_PATH from .env.worktree, which overrides
+# the default value from .env to correctly mount the worktree's source directory.
+# This allows node_modules and .wxt/tsconfig.json generated inside the container
+# to be visible on the host side, enabling VSCode to resolve module imports.
+
+services:
+  frontend:
+    env_file:
+      - .env.worktree
+    environment:
+      # Tracking variable to identify worktree usage
+      - WORKTREE_ACTIVE_BRANCH=${WORKTREE_ACTIVE_BRANCH:-}

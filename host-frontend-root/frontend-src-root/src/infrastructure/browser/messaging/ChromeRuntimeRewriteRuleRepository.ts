@@ -74,4 +74,21 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
   async getById(id: number): Promise<RewriteRule> {
     throw new RewriteRuleNotFoundError(id);
   }
+
+  /**
+   * 指定されたURLにマッチするルールを取得する
+   * @param currentUrl 現在のURL
+   * @returns urlPatternがcurrentUrlの前方一致となるルールのRewriteRulesオブジェクト
+   */
+  async getRulesMatchingUrl(currentUrl: string): Promise<RewriteRules> {
+    const allRules = await this.getAll();
+    const matchingRules = allRules.toArray().filter((rule) => rule.matchesUrl(currentUrl));
+
+    const rulesObject: Record<string, RewriteRule> = {};
+    matchingRules.forEach((rule) => {
+      rulesObject[rule.id] = rule;
+    });
+
+    return new RewriteRules(rulesObject);
+  }
 }

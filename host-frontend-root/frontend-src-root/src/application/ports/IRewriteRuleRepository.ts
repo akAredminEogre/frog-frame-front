@@ -6,4 +6,5 @@ export interface IRewriteRuleRepository {
   update(rule: RewriteRule): Promise<void>;
   getAll(): Promise<RewriteRules>;
   getById(id: number): Promise<RewriteRule>;
+  getRulesMatchingUrl(currentUrl: string): Promise<RewriteRules>;
 }
