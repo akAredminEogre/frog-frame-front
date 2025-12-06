@@ -12,8 +12,9 @@ source /path/to/frog-frame-front/scripts/wt-cd.sh
 ```
 
 これにより以下のコマンドが使用可能になります：
-- `wt-cd-current` - 現在のworktreeディレクトリに移動
-- `wtcd` - 上記のエイリアス（短縮形）
+- `wt-cd <branch>` - 指定したworktreeディレクトリに移動
+- `wt-cd-current` - 現在のworktreeディレクトリに移動（内部で`wt-cd`を使用）
+- `wtcd` - `wt-cd-current`のエイリアス（短縮形）
 
 ## 利点
 
@@ -114,11 +115,15 @@ make wt-current
 #### worktreeディレクトリへ移動
 
 ```bash
-# 現在アクティブなworktreeディレクトリへ移動（sourceコマンドで実行）
+# 特定のworktreeディレクトリへ移動（sourceコマンドで実行）
+source <(make wt-cd BRANCH=feature-branch)
+
+# 現在アクティブなworktreeディレクトリへ移動（内部でwt-cdを使用）
 source <(make wt-cd-current)
 
 # シェル関数を設定済みの場合
-wt-cd-current  # または短縮形: wtcd
+wt-cd feature-branch  # 特定のworktreeへ移動
+wt-cd-current         # 現在のworktreeへ移動（短縮形: wtcd）
 ```
 
 ## 使用例
@@ -224,7 +229,8 @@ make wt-remove BRANCH=your-branch
 | `wt-remove` | worktreeを削除 | `make wt-remove BRANCH=feature-x` |
 | `wt-prune` | 不要なworktree参照を削除 | `make wt-prune` |
 | `wt-current` | 現在アクティブなworktreeを表示 | `make wt-current` |
-| `wt-cd-current` | worktreeディレクトリへ移動 | `source <(make wt-cd-current)` |
+| `wt-cd` | 指定したworktreeディレクトリへ移動 | `source <(make wt-cd BRANCH=feature-x)` |
+| `wt-cd-current` | 現在のworktreeディレクトリへ移動 | `source <(make wt-cd-current)` |
 | `wt-dev` | worktreeで開発サーバーを起動 | `make wt-dev BRANCH=feature-x` |
 | `wt-disable` | worktreeモードを無効化、メインリポジトリに戻る | `make wt-disable` |
 | `wt-down` | worktreeのDockerコンテナを停止 | `make wt-down` |

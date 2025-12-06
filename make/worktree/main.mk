@@ -1,5 +1,5 @@
 # Git Worktree Commands
-.PHONY: wt-list wt-add wt-remove wt-prune wt-current wt-cd-current wt-dev wt-down wt-up wt-disable
+.PHONY: wt-list wt-add wt-remove wt-prune wt-current wt-cd wt-cd-current wt-dev wt-down wt-up wt-disable
 
 # Common variables
 WORKTREE_DIR := worktrees
@@ -66,27 +66,34 @@ wt-current:
 	@echo "Branch: $$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 	@echo "Path: $$(grep CURRENT_WORKTREE_PATH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 
+wt-cd: _wt-check-branch
+	@# Note: This command outputs shell commands to be executed with source
+	@# Usage: source <(make wt-cd BRANCH=branch-name)
+	@TARGET_PATH="$(WORKTREE_DIR)/$(BRANCH)"; \
+	if [ ! -d "$$TARGET_PATH" ]; then \
+		echo "echo 'Error: Worktree directory does not exist: $$TARGET_PATH'"; \
+		echo "false"; \
+		exit 0; \
+	fi; \
+	echo "echo 'Moving to worktree: $$TARGET_PATH'"; \
+	echo "cd $$TARGET_PATH"
+
 wt-cd-current:
 	@# Note: This command outputs shell commands to be executed with source
+	@# Internally uses wt-cd with the current active branch
 	@# Check if .env.worktree exists
 	@if [ ! -f .env.worktree ]; then \
 		echo "echo 'No active worktree. Staying in the main repository.'"; \
 		exit 0; \
 	fi
-	@# Get the worktree path from .env.worktree
-	@WORKTREE_PATH=$$(grep CURRENT_WORKTREE_PATH .env.worktree 2>/dev/null | cut -d'=' -f2 | sed 's|^\\./||'); \
-	if [ -z "$$WORKTREE_PATH" ]; then \
-		echo "echo 'Error: Cannot determine current worktree path'"; \
+	@# Get the branch name from .env.worktree and delegate to wt-cd
+	@BRANCH=$$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2); \
+	if [ -z "$$BRANCH" ]; then \
+		echo "echo 'Error: Cannot determine current worktree branch'"; \
 		echo "false"; \
 		exit 0; \
 	fi; \
-	if [ ! -d "$$WORKTREE_PATH" ]; then \
-		echo "echo 'Error: Worktree directory does not exist: $$WORKTREE_PATH'"; \
-		echo "false"; \
-		exit 0; \
-	fi; \
-	echo "echo 'Moving to worktree: $$WORKTREE_PATH'"; \
-	echo "cd $$WORKTREE_PATH"
+	$(MAKE) -s wt-cd BRANCH=$$BRANCH
 
 wt-down:
 	@$(_wt-load-env-exec) docker compose down || true
