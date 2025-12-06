@@ -16,4 +16,8 @@ workflow-commit-daily-scrum
       - 存在しなければスキップ
   - コミットメッセージ
     - docs: スクラムkk回目の終了、振り返り
+
+- developの最新変更をマージ
+  - workflow-merge-develop-after-commit
+    - の手順に従う
 ```
