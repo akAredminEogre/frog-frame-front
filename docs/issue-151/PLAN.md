@@ -2,7 +2,7 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] Day 1: 既存のworkflow-create-branchを分析し、wt-create-branchコマンドと統合する新しいworkflow-create-worktreeを作成
+- [x] Day 1: 既存のworkflow-create-branchを分析し、wt-create-branchコマンドと統合する新しいworkflow-create-worktreeを作成
   - 既存のworkflow-create-branchの仕組みを理解
   - Makefileの`wt-create-branch`コマンドの実装確認
   - 新しいworkflow-create-worktreeの作成
