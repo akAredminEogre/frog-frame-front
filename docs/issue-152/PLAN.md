@@ -2,8 +2,8 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] workflow-create-worktree.mdの問題を調査し、カレントブランチでのworktree作成エラーの原因を特定する
-- [ ] worktreeコマンドの実行順序を修正し、適切にブランチ切り替えを行うよう修正する
+- [x] workflow-create-worktree.mdの問題を調査し、カレントブランチでのworktree作成エラーの原因を特定する
+- [x] worktreeコマンドの実行順序を修正し、適切にブランチ切り替えを行うよう修正する
 - [ ] 修正したworkflow-create-worktree.mdをテストし、正常に動作することを確認する
 
 # ISSUEを通した相談事
