@@ -9,7 +9,7 @@ WORKTREE_PATH = $(WORKTREE_DIR)/$(BRANCH)
 _wt-load-env-exec = set -a && [ -f .env ] && . ./.env; [ -f .env.worktree ] && . ./.env.worktree; set +a &&
 
 # Include internal helpers
-include make/worktree/helpers.mk
+include make/worktree/helpers/main.mk
 
 # Public commands
 
