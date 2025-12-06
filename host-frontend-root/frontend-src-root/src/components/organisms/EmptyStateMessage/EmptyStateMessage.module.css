@@ -1,0 +1,19 @@
+/* 空の状態 */
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: #7f8c8d;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #bdc3c7;
+  margin: 20px 0;
+}
+
+.emptyState p {
+  margin: 8px 0;
+}
+
+.emptyState p:first-child {
+  font-size: 18px;
+  color: #5a6c7d;
+}
