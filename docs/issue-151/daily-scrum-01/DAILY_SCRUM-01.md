@@ -18,9 +18,9 @@ Day 1: 既存のworkflow-create-branchを分析し、wt-create-branchコマン�
 - CLAUDE.md (必要に応じて更新)
 
 ## スクラム内残タスク
-- workflow-create-worktreeの実装
-- .claude/commandsへの追加
-- 動作確認
+- [x] workflow-create-worktreeの実装
+- [x] .claude/commandsへの追加
+- [ ] 動作確認
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -40,7 +40,13 @@ Day 1: 既存のworkflow-create-branchを分析し、wt-create-branchコマン�
 ## 本スクラムでの作業実績内容
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+- workflow-create-branchの仕組みを分析し理解した
+- Makefileにはwt-create-branchコマンドが存在しないことを確認した
+- workflow-create-worktree.mdを更新し、ブランチ作成とワークツリー作成を統合したワークフローを作成した
+- .claude/commands/workflow-create-worktree.mdを新規作成し、コマンドとして登録した
 
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+- .clinerules/02-workflow-automation/01-issue-launches/workflow-create-worktree.md (修正)
+- .claude/commands/workflow-create-worktree.md (新規作成)
