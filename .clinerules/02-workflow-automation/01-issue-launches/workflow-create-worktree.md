@@ -13,6 +13,8 @@ nnn=(上記で表示されたブランチ名からissue番号+1を取得)
 - ブランチを作成
   - issue-nnn-<branch-suffix>
 - 作成したブランチをgit push originしてください
+- developブランチに戻る
+  - git checkout develop
 - 作成したブランチに対して`make wt-add BRANCH=issue-nnn-<branch-suffix>`コマンドを実行してワークツリーを作成してください
 - 作成したブランチに対して`make wt-dev BRANCH=issue-nnn-<branch-suffix>`コマンドを実行してワークツリーの開発環境を起動してください
 ```
