@@ -125,8 +125,10 @@ make wt-disable                 # Disable worktree mode, return to main reposito
 
 **Navigation Commands:**
 ```bash
-source <(make wt-cd-current)    # Navigate to current worktree directory
+source <(make wt-cd BRANCH=feature-x)  # Navigate to specific worktree directory
+source <(make wt-cd-current)           # Navigate to current worktree directory
 # Or if shell function is set up:
+wt-cd feature-x                 # Navigate to specific worktree
 wt-cd-current                   # Navigate to current worktree
 wtcd                           # Short alias for wt-cd-current
 ```
