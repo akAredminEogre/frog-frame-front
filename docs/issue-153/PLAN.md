@@ -2,15 +2,18 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] issue-147の成果と現在のコードベースの差分を調査
+- [x] issue-147の成果と現在のコードベースの差分を調査
   - issue-147で実装予定だったコンポーネント構造の確認
   - インフラ・アーキテクチャの変更点の把握
   - 現在のRulesApp.tsxとその関連コンポーネントの状態確認
-- [ ] RulesApp.tsxのコンポーネント分割と実装
-  - Organism層: RulesTable, EmptyStateMessage の作成
-  - Molecule層: RuleTableRow, LoadingMessage, ErrorMessage の作成
+- [ ] RulesTable、EmptyStateMessageコンポーネントの実装
+  - Organism層としてRulesTable, EmptyStateMessageを作成
+- [ ] RuleTableRow、LoadingMessage、ErrorMessageコンポーネントの実装
+  - Molecule層としてRuleTableRow, LoadingMessage, ErrorMessageを作成
+- [ ] RulesApp.tsxのリファクタリング
+  - 作成したコンポーネントを使用してRulesApp.tsxを再構成
   - Clean Architecture原則に従った実装
-- [ ] Storybookの作成と更新
+- [ ] Storybookの作成
   - 分割したコンポーネントのStoryを作成
   - 各状態やパターンのストーリーを網羅
 - [ ] テストコードの作成・更新
