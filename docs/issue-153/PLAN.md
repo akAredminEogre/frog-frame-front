@@ -8,7 +8,7 @@
   - 現在のRulesApp.tsxとその関連コンポーネントの状態確認
 - [x] RulesTable、EmptyStateMessageコンポーネントの実装
   - Organism層としてRulesTable, EmptyStateMessageを作成
-- [ ] RuleTableRow、LoadingMessage、ErrorMessageコンポーネントの実装
+- [x] RuleTableRow、LoadingMessage、ErrorMessageコンポーネントの実装
   - Molecule層としてRuleTableRow, LoadingMessage, ErrorMessageを作成
 - [ ] RulesApp.tsxのリファクタリング
   - 作成したコンポーネントを使用してRulesApp.tsxを再構成
