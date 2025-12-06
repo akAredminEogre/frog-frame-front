@@ -6,7 +6,7 @@
   - issue-147で実装予定だったコンポーネント構造の確認
   - インフラ・アーキテクチャの変更点の把握
   - 現在のRulesApp.tsxとその関連コンポーネントの状態確認
-- [ ] RulesTable、EmptyStateMessageコンポーネントの実装
+- [x] RulesTable、EmptyStateMessageコンポーネントの実装
   - Organism層としてRulesTable, EmptyStateMessageを作成
 - [ ] RuleTableRow、LoadingMessage、ErrorMessageコンポーネントの実装
   - Molecule層としてRuleTableRow, LoadingMessage, ErrorMessageを作成
