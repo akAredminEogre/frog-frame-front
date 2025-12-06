@@ -15,8 +15,8 @@ Day 2: テストと動作確認、ドキュメント更新
 - その他、動作確認の結果によって必要なファイル
 
 ## スクラム内残タスク
-- workflow-create-worktreeの実際の動作確認
-- CLAUDE.mdの更新要否確認と必要に応じた更新
+- [x] workflow-create-worktreeの実際の動作確認
+- [x] CLAUDE.mdの更新要否確認と必要に応じた更新
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -36,7 +36,12 @@ Day 2: テストと動作確認、ドキュメント更新
 ## 本スクラムでの作業実績内容
 <!-- 本スクラムでの作業内容を記載してください。 -->
 <!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+- workflow-create-worktreeの動作確認を実施
+- .claude/commands/workflow-create-worktree.mdと.clinerules/workflow-create-worktree.mdが正常に連携していることを確認
+- CLAUDE.mdに新しいワークフローへの参照を追加
+- TypeScriptコンパイルとLintチェックが正常に通ることを確認
 
 ## 修正したファイル
 <!-- スクラム単位での変更を記入 -->
 <!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+- CLAUDE.md (workflow-create-worktreeへの参照を追加)
