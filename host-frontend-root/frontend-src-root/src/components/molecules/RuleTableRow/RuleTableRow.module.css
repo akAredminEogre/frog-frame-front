@@ -1,0 +1,46 @@
+.ruleRow {
+  border-bottom: 1px solid var(--colors-border);
+}
+
+.ruleRow:hover {
+  background-color: var(--colors-bg-hover);
+}
+
+.ruleUrlPattern,
+.ruleOldString,
+.ruleNewString {
+  padding: var(--spacing-s);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ruleRegex,
+.ruleActions {
+  padding: var(--spacing-s);
+  text-align: center;
+}
+
+.regexBadge {
+  color: var(--colors-success);
+  font-weight: bold;
+}
+
+.noRegex {
+  color: var(--colors-muted);
+}
+
+.editButton {
+  background-color: var(--colors-primary);
+  color: var(--colors-white);
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-s);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+}
+
+.editButton:hover {
+  background-color: var(--colors-primary-dark);
+}
