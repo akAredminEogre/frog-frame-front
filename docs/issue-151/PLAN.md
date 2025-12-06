@@ -7,7 +7,7 @@
   - Makefileの`wt-create-branch`コマンドの実装確認
   - 新しいworkflow-create-worktreeの作成
   - .claude/commandsにwt版のコマンドを追加
-- [ ] Day 2: テストと動作確認、ドキュメント更新
+- [x] Day 2: テストと動作確認、ドキュメント更新
   - 実際にワークフローを実行して動作確認
   - CLAUDE.mdへの反映が必要か確認
   - 必要に応じてドキュメント更新
