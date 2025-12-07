@@ -6,8 +6,8 @@
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Get the repository root directory
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# Get the repository root directory using git
+REPO_ROOT="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)"
 
 # Source the check logic functions
 source "$SCRIPT_DIR/worktree/check_logic.sh"
