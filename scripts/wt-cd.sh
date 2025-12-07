@@ -20,6 +20,8 @@ wt-cd() {
         return 1
     fi
 
+    # TODO: "worktrees" is hardcoded here but also defined as WORKTREE_DIR in make/worktree/main.mk
+    # Consider reading from a centralized config or environment variable for single source of truth
     local WORKTREE_PATH="worktrees/$BRANCH"
 
     if [ ! -d "$WORKTREE_PATH" ]; then
