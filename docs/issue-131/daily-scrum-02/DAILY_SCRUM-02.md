@@ -11,9 +11,9 @@ PLAN.mdの計画の残りタスクである「.clinerules内の採番指示を�
 - 該当箇所を調査して特定し、シェルスクリプト実行形式に変更
 
 ## スクラム内残タスク
-- [ ] .clinerules内の採番指示箇所を調査・特定する
-- [ ] 各ワークフローファイルでシェルスクリプトを実行する形式に変更する
-- [ ] 変更後の動作確認を実施する
+- [x] .clinerules内の採番指示箇所を調査・特定する
+- [x] 各ワークフローファイルでシェルスクリプトを実行する形式に変更する
+- [x] 変更後の動作確認を実施する
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -30,9 +30,12 @@ PLAN.mdの計画の残りタスクである「.clinerules内の採番指示を�
 
 # DAILY SCRUM-02作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+.clinerules内の採番指示を、作成したシェルスクリプトを実行する形式に変更しました。
+具体的には、.clinerules内の19個のワークフローファイルで使用されている `nnn=(カレントブランチ名からissue番号を取得)` の記述を `nnn=$(scripts/.clinerules/get-issue-number.sh)` に一括変更し、動作確認を完了しました。
 
 ## 修正したファイル
-<!-- スクラム単位での変更を記入 -->
-<!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+.clinerules内の以下19個のファイルを修正：
+- 02-workflow-automation/03-daily-scrum-finishes/ (6ファイル)
+- 02-workflow-automation/04-pull-request/ (5ファイル)
+- 02-workflow-automation/02-daily-scrum-starts/ (5ファイル)
+- 02-workflow-automation/01-issue-launches/ (3ファイル)
