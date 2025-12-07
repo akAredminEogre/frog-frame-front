@@ -3,7 +3,7 @@
 # 使用例: nnn=$(scripts/.clinerules/get-issue-number.sh)
 
 # カレントブランチ名を取得
-branch_name=$(git branch --show-current)
+branch_name="$(git branch --show-current)"
 
 # issue-XXX形式からXXXを抽出
 # 例: issue-131-feat-numbering-shell -> 131
