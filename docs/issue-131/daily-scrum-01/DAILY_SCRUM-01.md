@@ -43,3 +43,10 @@
 ## 修正したファイル
 - 新規作成: `.clinerules/scripts/get-issue-number.sh` (ブランチ名からissue番号を取得するシェルスクリプト)
 - 新規作成: `.clinerules/scripts/` ディレクトリ
+
+## レビュー対応での追加修正
+レビューコメントに対応し、スクリプトファイルを正しい場所に移動しました：
+- 移動: `.clinerules/scripts/get-issue-number.sh` → `scripts/.clinerules/get-issue-number.sh`
+- 削除: `.clinerules/scripts/` ディレクトリ（空になったため）
+- 作成: `scripts/.clinerules/` ディレクトリ
+- 実行権限の付与と動作確認も完了
