@@ -32,7 +32,6 @@ help:
 	@echo "  make wt-remove    - Remove a worktree (usage: make wt-remove BRANCH=branch-name)"
 	@echo "  make wt-prune     - Prune stale worktree references"
 	@echo "  make wt-current   - Show the currently active worktree"
-	@echo "  make wt-cd-current - Generate shell commands to cd to worktree (use: source <(make wt-cd-current))"
 	@echo "  make wt-dev       - Start development server for worktree (usage: make wt-dev BRANCH=branch-name)"
 	@echo "  make wt-down      - Stop worktree Docker containers"
 	@echo "  make wt-up        - Start worktree Docker containers"
