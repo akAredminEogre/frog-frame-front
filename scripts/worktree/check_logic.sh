@@ -14,7 +14,8 @@ check_env_worktree_exists() {
 }
 
 # Get active branch from .env.worktree and validate it's not empty
-# Sets BRANCH variable and returns: 0 if valid, 1 if empty/invalid (with error message)
+# Outputs: branch name to stdout if valid
+# Returns: 0 if valid, 1 if empty/invalid (with error message)
 get_and_check_active_branch() {
     local branch
     branch=$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2)
