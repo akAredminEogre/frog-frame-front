@@ -69,14 +69,13 @@ wt-current:
 wt-cd: _wt-check-branch
 	@# Note: This command outputs shell commands to be executed with source
 	@# Usage: source <(make wt-cd BRANCH=branch-name)
-	@TARGET_PATH="$(WORKTREE_DIR)/$(BRANCH)"; \
-	if [ ! -d "$$TARGET_PATH" ]; then \
-		echo "echo 'Error: Worktree directory does not exist: $$TARGET_PATH'"; \
+	@if [ ! -d "$(WORKTREE_PATH)" ]; then \
+		echo "echo 'Error: Worktree directory does not exist: $(WORKTREE_PATH)'"; \
 		echo "false"; \
 		exit 0; \
 	fi; \
-	echo "echo 'Moving to worktree: $$TARGET_PATH'"; \
-	echo "cd $$TARGET_PATH"
+	echo "echo 'Moving to worktree: $(WORKTREE_PATH)'"; \
+	echo "cd $(WORKTREE_PATH)"
 
 wt-cd-current:
 	@# Note: This command outputs shell commands to be executed with source
