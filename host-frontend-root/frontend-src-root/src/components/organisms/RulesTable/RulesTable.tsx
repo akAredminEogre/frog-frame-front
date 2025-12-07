@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import RuleTableRow from 'src/components/molecules/RuleTableRow/RuleTableRow';
 import styles from 'src/components/organisms/RulesTable/RulesTable.module.css';
 
 interface RulesTableProps {
@@ -23,37 +24,7 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit }) => {
         </thead>
         <tbody>
           {rules.map((rule) => (
-            <tr key={rule.id} className={styles.ruleRow}>
-              <td className={styles.ruleUrlPattern} title={rule.urlPattern || ''}>
-                {rule.urlPattern 
-                  ? (rule.urlPattern.length > 40 
-                     ? rule.urlPattern.substring(0, 40) + '...'
-                     : rule.urlPattern)
-                  : '-'}
-              </td>
-              <td className={styles.ruleOldString} title={rule.oldString}>
-                {rule.oldString}
-              </td>
-              <td className={styles.ruleNewString} title={rule.newString}>
-                {rule.newString}
-              </td>
-              <td className={styles.ruleRegex}>
-                {rule.isRegex ? (
-                  <span className={styles.regexBadge}>✓</span>
-                ) : (
-                  <span className={styles.noRegex}>-</span>
-                )}
-              </td>
-              <td className={styles.ruleActions}>
-                <button
-                  className={styles.editButton}
-                  onClick={() => onEdit(rule.id)}
-                  type="button"
-                >
-                  編集
-                </button>
-              </td>
-            </tr>
+            <RuleTableRow key={rule.id} rule={rule} onEdit={onEdit} />
           ))}
         </tbody>
       </table>
