@@ -66,16 +66,11 @@ wt-current:
 	@echo "Branch: $$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 	@echo "Path: $$(grep CURRENT_WORKTREE_PATH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 
-wt-cd: _wt-check-branch
+wt-cd: _wt-check-branch _wt-check-exists
 	@# Note: This command outputs shell commands to be executed with source
 	@# Usage: source <(make wt-cd BRANCH=branch-name)
-	@if [ ! -d "$(WORKTREE_PATH)" ]; then \
-		echo "echo 'Error: Worktree directory does not exist: $(WORKTREE_PATH)'"; \
-		echo "false"; \
-		exit 0; \
-	fi; \
-	echo "echo 'Moving to worktree: $(WORKTREE_PATH)'"; \
-	echo "cd $(WORKTREE_PATH)"
+	@echo "echo 'Moving to worktree: $(WORKTREE_PATH)'"
+	@echo "cd $(WORKTREE_PATH)"
 
 wt-cd-current:
 	@# Note: This command outputs shell commands to be executed with source

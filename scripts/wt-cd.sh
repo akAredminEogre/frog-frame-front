@@ -46,6 +46,3 @@ wt-cd-current() {
     # Delegate to wt-cd
     wt-cd "$BRANCH"
 }
-
-# Aliases for convenience
-alias wtcd='wt-cd-current'
