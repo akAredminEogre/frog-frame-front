@@ -4,9 +4,11 @@
 # Add this to your shell profile: source /path/to/scripts/wt-cd.sh
 
 # Get the directory where this script is located
+# Note: These variables are evaluated once when sourcing this file
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Get the repository root directory using git
+# Note: These variables are evaluated once when sourcing this file
 REPO_ROOT="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)"
 
 # Source the check logic functions
