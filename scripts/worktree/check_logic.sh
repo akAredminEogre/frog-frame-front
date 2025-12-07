@@ -16,11 +16,13 @@ check_env_worktree_exists() {
 # Get active branch from .env.worktree and validate it's not empty
 # Sets BRANCH variable and returns: 0 if valid, 1 if empty/invalid (with error message)
 get_and_check_active_branch() {
-    BRANCH=$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2)
+    local branch
+    branch=$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2)
 
-    if [ -z "$BRANCH" ]; then
-        echo "Error: Cannot determine current worktree branch"
+    if [ -z "$branch" ]; then
+        echo "Error: Cannot determine current worktree branch" >&2
         return 1
     fi
+    echo "$branch"
     return 0
 }
