@@ -6,6 +6,9 @@
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Get the repository root directory
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 # Source the check logic functions
 source "$SCRIPT_DIR/worktree/check_logic.sh"
 
@@ -22,7 +25,7 @@ wt-cd() {
 
     # TODO: "worktrees" is hardcoded here but also defined as WORKTREE_DIR in make/worktree/main.mk
     # Consider reading from a centralized config or environment variable for single source of truth
-    local WORKTREE_PATH="worktrees/$BRANCH"
+    local WORKTREE_PATH="$REPO_ROOT/worktrees/$BRANCH"
 
     if [ ! -d "$WORKTREE_PATH" ]; then
         echo "Error: Worktree directory does not exist: $WORKTREE_PATH"
