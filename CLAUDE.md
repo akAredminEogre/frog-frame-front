@@ -130,7 +130,6 @@ source <(make wt-cd-current)           # Navigate to current worktree directory
 # Or if shell function is set up:
 wt-cd feature-x                 # Navigate to specific worktree
 wt-cd-current                   # Navigate to current worktree
-wtcd                           # Short alias for wt-cd-current
 ```
 
 **Shell Function Setup (Optional but Recommended):**

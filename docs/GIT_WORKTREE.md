@@ -14,7 +14,6 @@ source /path/to/frog-frame-front/scripts/wt-cd.sh
 これにより以下のコマンドが使用可能になります：
 - `wt-cd <branch>` - 指定したworktreeディレクトリに移動
 - `wt-cd-current` - 現在のworktreeディレクトリに移動（内部で`wt-cd`を使用）
-- `wtcd` - `wt-cd-current`のエイリアス（短縮形）
 
 ## 利点
 
