@@ -44,9 +44,8 @@ wt-cd-current() {
     fi
 
     # Get the branch name from .env.worktree and validate
-    if ! get_and_check_active_branch; then
-        return 1
-    fi
+    local BRANCH
+    BRANCH=$(get_and_check_active_branch) || return 1
 
     # Delegate to wt-cd
     wt-cd "$BRANCH"
