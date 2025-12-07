@@ -137,6 +137,19 @@ Add to your `~/.bashrc` or `~/.zshrc`:
 source /path/to/frog-frame-front/scripts/wt-cd.sh
 ```
 
+This enables:
+- **Tab completion for branch names** with `wt-add`, `wt-remove`, `wt-dev` commands
+- Wrapper functions that are easier to type than make commands
+
+**Shell Wrapper Commands (with Tab Completion):**
+```bash
+wt-add <branch>     # Create worktree (completes all local/remote branches)
+wt-remove <branch>  # Remove worktree (completes existing worktrees)
+wt-dev <branch>     # Start dev server (completes existing worktrees)
+wt-cd-current       # Navigate to current worktree
+wtcd                # Alias for wt-cd-current
+```
+
 **Recommended Worktree Workflow:**
 ```bash
 # 1. Create new worktree (auto-initialization included)
