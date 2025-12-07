@@ -1,7 +1,7 @@
 frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-create-daily-scrum.md
 
 ```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
+nnn=$(scripts/.clinerules/get-issue-number.sh)
 kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナンバーの最大数+1)
 スクラムkk回目の作業を計画を立ててもらいます。
 - 下記コマンドを実行
