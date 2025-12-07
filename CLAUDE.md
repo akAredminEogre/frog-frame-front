@@ -123,16 +123,13 @@ make wt-up                      # Start worktree Docker containers
 make wt-disable                 # Disable worktree mode, return to main repository
 ```
 
-**Navigation Commands:**
+**Navigation Commands (requires shell function setup):**
 ```bash
-source <(make wt-cd BRANCH=feature-x)  # Navigate to specific worktree directory
-source <(make wt-cd-current)           # Navigate to current worktree directory
-# Or if shell function is set up:
 wt-cd feature-x                 # Navigate to specific worktree
 wt-cd-current                   # Navigate to current worktree
 ```
 
-**Shell Function Setup (Optional but Recommended):**
+**Shell Function Setup (Required for navigation commands):**
 Add to your `~/.bashrc` or `~/.zshrc`:
 ```bash
 source /path/to/frog-frame-front/scripts/wt-cd.sh
