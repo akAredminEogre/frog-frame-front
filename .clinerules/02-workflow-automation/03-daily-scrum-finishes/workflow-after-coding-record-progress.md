@@ -5,7 +5,7 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 手順全体表示はあなたの確認のために行うものなので、開発者の指示・操作を待たずその表示した手順に従って実行してください
 
 ```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
+nnn=$(scripts/.clinerules/get-issue-number.sh)
 kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナンバーの最大数+1)
 作業ありがとうございました。今回の作業を
 スクラムkk回目として記録します。

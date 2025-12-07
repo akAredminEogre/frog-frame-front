@@ -7,7 +7,7 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 
 ```cline-instructions
 - 下記の内容で採番を行う
-  - nnn=(カレントブランチ名からissue番号を取得)
+  - nnn=$(scripts/.clinerules/get-issue-number.sh)
   - kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
   - ii=(docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-ii.mdの進捗の最大の番号。01から始まる連番。ない場合はii=01)
 
