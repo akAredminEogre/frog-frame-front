@@ -1,6 +1,6 @@
 #!/bin/bash
 # ブランチ名からissue番号を取得するスクリプト
-# 使用例: nnn=$(bash .clinerules/scripts/get-issue-number.sh)
+# 使用例: nnn=$(scripts/.clinerules/get-issue-number.sh)
 
 # カレントブランチ名を取得
 branch_name=$(git branch --show-current)
