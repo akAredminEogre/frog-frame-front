@@ -18,7 +18,7 @@ check_env_worktree_exists() {
 # Returns: 0 if valid, 1 if empty/invalid (with error message)
 get_and_check_active_branch() {
     local branch
-    branch=$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2)
+    branch=$(grep '^WORKTREE_ACTIVE_BRANCH=' .env.worktree 2>/dev/null | cut -d'=' -f2-)
 
     if [ -z "$branch" ]; then
         echo "Error: Cannot determine current worktree branch" >&2
