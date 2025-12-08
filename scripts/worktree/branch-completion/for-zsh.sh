@@ -6,15 +6,13 @@
 # Register completions from _WT_COMPLETION_DEFS
 # Example: _WT_COMPLETION_DEFS=("wt-add=_wt_get_all_branches" "wt-dev=_wt_get_worktrees")
 for def in "${_WT_COMPLETION_DEFS[@]}"; do
-    # Extract command name from definition using parameter expansion
-    # ${var%%pattern} removes longest match of pattern from the end
+    # Extract command name using helper function
     # Example: "wt-add=_wt_get_all_branches" -> "wt-add"
-    cmd="${def%%=*}"
+    cmd="$(_wt_get_command_name "$def")"
 
-    # Extract source function name from definition using parameter expansion
-    # ${var#pattern} removes shortest match of pattern from the beginning
+    # Extract source function name using helper function
     # Example: "wt-add=_wt_get_all_branches" -> "_wt_get_all_branches"
-    source_fn="${def#*=}"
+    source_fn="$(_wt_get_source_function_name "$def")"
 
     # Generate completion function name
     # ${cmd//-/_} replaces all "-" with "_" in cmd (e.g., "wt-add" -> "wt_add")
