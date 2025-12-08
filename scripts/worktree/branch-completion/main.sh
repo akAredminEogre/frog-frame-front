@@ -32,6 +32,20 @@ _WT_COMPLETION_DEFS=(
     "wt-cd=_wt_get_worktrees"
 )
 
+# Extract command name from definition
+# Example: "wt-add=_wt_get_all_branches" -> "wt-add"
+_wt_get_command_name() {
+    local def="$1"
+    echo "${def%%=*}"
+}
+
+# Extract source function name from definition
+# Example: "wt-add=_wt_get_all_branches" -> "_wt_get_all_branches"
+_wt_get_source_function_name() {
+    local def="$1"
+    echo "${def#*=}"
+}
+
 # Source shell-specific completion
 if [ -n "$BASH_VERSION" ]; then
     source "$COMPLETION_DIR/for-bash.sh"
