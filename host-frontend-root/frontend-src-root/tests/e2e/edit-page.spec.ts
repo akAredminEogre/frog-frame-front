@@ -91,15 +91,15 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   await expect(rulesPage.locator('body')).toBeVisible({ timeout: 60000 });
 
   // 11. Assert: 保存されたルールが表示されている(空の状態ではない)
-  const emptyState = rulesPage.locator('.empty-state');
+  const emptyState = rulesPage.locator('[data-testid="empty-state"]');
   await expect(emptyState).not.toBeVisible({ timeout: 10000 });
 
   // 12. Assert: ルール一覧の内容確認
-  const rulesTableContainer = rulesPage.locator('.rules-table-container');
+  const rulesTableContainer = rulesPage.locator('[data-testid="rules-table-container"]');
   await expect(rulesTableContainer).toBeVisible({ timeout: 60000 });
 
   // 13. Assert: ルールテーブルが表示されている
-  const rulesTable = rulesPage.locator('.rules-table');
+  const rulesTable = rulesPage.locator('[data-testid="rules-table"]');
   await expect(rulesTable).toBeVisible({ timeout: 60000 });
 
   // 14. Assert: 保存したURLパターンが表示されている
@@ -164,7 +164,7 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   await rulesPage.reload();
 
   // 28. Assert: 変更されたルールが表示されている
-  await expect(rulesPage.locator('.rules-table')).toBeVisible({ timeout: 60000 });
+  await expect(rulesPage.locator('[data-testid="rules-table"]')).toBeVisible({ timeout: 60000 });
 
   // 29. Assert: 保存した置換後文字列が変更されている
   await expect(rulesPage.locator('.rule-new-string').filter({ hasText: newTextWithLink })).toBeVisible({ timeout: 60000 });
@@ -246,7 +246,7 @@ test('編集画面でキャンセルボタンをクリックすると、ポッ�
 
   // 8. ルール一覧ページをリロード
   await rulesPage.reload();
-  await expect(rulesPage.locator('.rules-table')).toBeVisible({ timeout: 60000 });
+  await expect(rulesPage.locator('[data-testid="rules-table"]')).toBeVisible({ timeout: 60000 });
 
   // 9. 保存したルールの編集ボタンをクリック
   const editButton = rulesPage.locator('button:has-text("編集")').first();

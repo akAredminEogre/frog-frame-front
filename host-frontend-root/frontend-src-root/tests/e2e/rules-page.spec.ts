@@ -32,7 +32,7 @@ test('ルール一覧ページが正しく表示される', async ({ context, ex
   await expect(header).toBeVisible();
   
   // テスト4: 初期状態でルールがない場合の表示確認
-  const emptyState = optionsPage.locator('.empty-state');
+  const emptyState = optionsPage.locator('[data-testid="empty-state"]');
   await expect(emptyState).toBeVisible();
   
   // テスト5: 空の状態メッセージが正しく表示される

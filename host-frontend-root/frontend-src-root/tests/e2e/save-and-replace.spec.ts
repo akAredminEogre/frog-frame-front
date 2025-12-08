@@ -70,15 +70,15 @@ test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, po
   await expect(rulesPage.locator('body')).toBeVisible({ timeout: 60000 });
 
   // 11. Assert: 保存されたルールが表示されている（空の状態ではない）
-  const emptyState = rulesPage.locator('.empty-state');
+  const emptyState = rulesPage.locator('[data-testid="empty-state"]');
   await expect(emptyState).not.toBeVisible({ timeout: 10000 });
 
   // 12. Assert: ルール一覧の内容確認
-  const rulesTableContainer = rulesPage.locator('.rules-table-container');
+  const rulesTableContainer = rulesPage.locator('[data-testid="rules-table-container"]');
   await expect(rulesTableContainer).toBeVisible({ timeout: 60000 });
 
   // 13. Assert: ルールテーブルが表示されている
-  const rulesTable = rulesPage.locator('.rules-table');
+  const rulesTable = rulesPage.locator('[data-testid="rules-table"]');
   await expect(rulesTable).toBeVisible({ timeout: 60000 });
 
   // 14. Assert: 保存したURLパターンが表示されている
