@@ -10,7 +10,7 @@
   - Organism層としてRulesTable, EmptyStateMessageを作成
 - [x] RuleTableRow、LoadingMessage、ErrorMessageコンポーネントの実装
   - Molecule層としてRuleTableRow, LoadingMessage, ErrorMessageを作成
-- [ ] RulesApp.tsxのリファクタリング
+- [x] RulesApp.tsxのリファクタリング
   - 作成したコンポーネントを使用してRulesApp.tsxを再構成
   - Clean Architecture原則に従った実装
 - [x] Storybookの作成
