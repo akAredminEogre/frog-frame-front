@@ -14,20 +14,11 @@
 - テストやlint結果によって修正が必要なファイル（実行後に判明）
 
 ## スクラム内残タスク
-- [ ] make testlintの実行
-  - [ ] 下記のエラーが出ているので対応する
-  ```bash
-    4 failed
-    [chromium] › tests/e2e/edit-page.spec.ts:12:1 › 正規表現で取得した値をタグ内に埋め込んだルールが、一覧に表示され、編集できる 
-    [chromium] › tests/e2e/edit-page.spec.ts:185:1 › 編集画面でキャンセルボタンをクリックすると、ポップアップが閉じる ────
-    [chromium] › tests/e2e/rules-page.spec.ts:7:1 › ルール一覧ページが正しく表示される ────────────────────
-    [chromium] › tests/e2e/save-and-replace.spec.ts:5:1 › 正規表現を使ったDOM置換機能のe2eテスト ─────────
-  8 passed (3.5m)
-make: *** [make/test/main.mk:22: testcheck] Error 1
-  ```
-- [ ] エラーや警告の修正
-- [ ] コードレビューと最適化
-- [ ] 最終動作確認
+- [x] make testlintの実行
+  - [x] E2Eテストエラーの対応完了（CSS Modulesの統一、正規表現バッジ削除）
+- [x] エラーや警告の修正
+- [x] コードレビューと最適化（レビューコメント対応完了）
+- [x] 最終動作確認（全E2Eテストが成功）
 
 ## 相談事項
 <!-- workflow-01-create-daily-scrum-doc-after-coding.mdの場合は作成しない -->
@@ -45,9 +36,26 @@ issue-153の最終段階に入りました。これまでの成果を総合的�
 
 # DAILY SCRUM-08作業実績
 ## 本スクラムでの作業実績内容
-<!-- 本スクラムでの作業内容を記載してください。 -->
-<!-- 結果的に不要になった作業や試行錯誤は記述しないでください -->
+1. **E2Eテストエラーの解決**: CSS class名不一致の問題を解決し、4つの失敗していたテストを修正
+2. **CSS Modulesの統一**: 後方互換クラス名を削除し、CSS Modulesのみを使用する統一されたアプローチに変更
+3. **data-testid導入**: E2Eテスト用にdata-testid属性を追加してテストの安定性を向上
+4. **設計仕様書の整備**: rule-table.mdをdocs/design/pages/に移動し設計文書として明確化
+5. **正規表現バッジの完全削除**: 設計仕様書に従い、正規表現バッジ機能を完全に削除
+6. **レビューコメント対応**: CSS Modules直接参照についての技術的・理念的根拠を整理し説明
 
 ## 修正したファイル
-<!-- スクラム単位での変更を記入 -->
-<!-- 進捗としては変化があっても、スクラムとして変更がなかったファイルは記入しない -->
+### コンポーネントファイル
+- src/components/organisms/RulesTable/RulesTable.tsx
+- src/components/organisms/EmptyStateMessage/EmptyStateMessage.tsx  
+- src/components/molecules/RuleTableRow/RuleTableRow.tsx
+- src/components/molecules/RuleTableRow/RuleTableRow.module.css
+- src/entrypoints/rules/style.css
+
+### テストファイル
+- tests/e2e/rules-page.spec.ts
+- tests/e2e/save-and-replace.spec.ts
+- tests/e2e/edit-page.spec.ts
+
+### ドキュメントファイル
+- docs/design/pages/rule-table.md（移動により作成）
+- docs/issue-153/daily-scrum-08/PROGRESS-08-01.md〜06.md（進捗記録）
