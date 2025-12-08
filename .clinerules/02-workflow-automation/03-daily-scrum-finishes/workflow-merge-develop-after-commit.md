@@ -6,7 +6,7 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 
 ```cline-instructions
 - 下記の内容で採番を行う
-  - nnn=(カレントブランチ名からissue番号を取得)
+  - nnn=$(scripts/.clinerules/get-issue-number.sh)
 
 - 最新のdevelopをフェッチ
   - git fetch origin develop

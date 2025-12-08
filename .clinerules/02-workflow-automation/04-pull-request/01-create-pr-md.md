@@ -1,6 +1,6 @@
 workflow-create-pr-md
 ```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
+nnn=$(scripts/.clinerules/get-issue-number.sh)
 issue-nnnのプルリクエストの本文を作成してください。
 
 反映すべき内容：

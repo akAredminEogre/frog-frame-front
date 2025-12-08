@@ -1,7 +1,7 @@
 workflow-create-daily-scrum-doc-after-coding
 
 ```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
+nnn=$(scripts/.clinerules/get-issue-number.sh)
 kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナンバーの最大数+1)
 作業ありがとうございました。今回の作業を
 スクラムkk回目として記録します。

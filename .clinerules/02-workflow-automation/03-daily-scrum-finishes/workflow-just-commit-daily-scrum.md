@@ -1,8 +1,8 @@
-workflow-commit-daily-scrum
+workflow-just-commit-daily-scrum
 
 ```cline-instructions
 - 下記の内容で採番を行う
-  - nnn=(カレントブランチ名からissue番号を取得)
+  - nnn=$(scripts/.clinerules/get-issue-number.sh)
   - kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 
 - デイリースクラムドキュメントのコミット
