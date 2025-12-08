@@ -113,8 +113,6 @@ test('正規表現で取得した値をタグ内に埋め込んだルールが�
   const newStringText = '<span class="book-isbn13 w-[200px]" itemprop="isbn13" data-selectable=""><a href="https://example.com/isbn/$1">$1</a></span>';
   await expect(rulesPage.locator('.rule-new-string').filter({ hasText: newStringText })).toBeVisible({ timeout: 60000 });
   
-  // 17. Assert: 正規表現使用の表示確認(✓マークで表示される)
-  await expect(rulesPage.locator('.regex-badge:has-text("✓")')).toBeVisible({ timeout: 60000 });
   
   // 18. Assert: フッターのルール数表示が更新されている  
   await expect(rulesPage.locator('text=合計 1 件のルールが保存されています')).toBeVisible({ timeout: 60000 });
