@@ -118,6 +118,7 @@ make wt-current                 # Show currently active worktree
 **Development Commands:**
 ```bash
 make wt-dev BRANCH=feature-x    # Start dev server for worktree (RECOMMENDED)
+make wt-storybook               # Start Storybook in worktree mode
 make wt-down                    # Stop worktree Docker containers
 make wt-up                      # Start worktree Docker containers
 make wt-disable                 # Disable worktree mode, return to main repository
@@ -129,10 +130,19 @@ wt-cd feature-x                 # Navigate to specific worktree
 wt-cd-current                   # Navigate to current worktree
 ```
 
-**Shell Function Setup (Required for navigation commands):**
+**Shell Wrapper Commands with Tab Completion (requires shell function setup):**
+```bash
+wt-add feature-x                # Create worktree (Tab completes all branches)
+wt-remove feature-x             # Remove worktree (Tab completes existing worktrees)
+wt-dev feature-x                # Start dev server (Tab completes existing worktrees)
+```
+
+These wrapper functions provide shorter alternatives to `make wt-add BRANCH=...` commands with Tab completion support for both Bash and Zsh.
+
+**Shell Function Setup (Required for navigation and wrapper commands):**
 Add to your `~/.bashrc` or `~/.zshrc`:
 ```bash
-source /path/to/frog-frame-front/scripts/wt-cd.sh
+source /path/to/frog-frame-front/scripts/main.sh
 ```
 
 **Recommended Worktree Workflow:**

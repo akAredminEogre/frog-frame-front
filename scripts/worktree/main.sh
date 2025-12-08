@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Worktree navigation helper functions
-# Add this to your shell profile: source /path/to/scripts/wt-cd.sh
+# This file is sourced by scripts/main.sh
 
 # Get the directory where this script is located
 # Note: These variables are evaluated once when sourcing this file
@@ -12,7 +12,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)"
 
 # Source the check logic functions
-source "$SCRIPT_DIR/worktree/check_logic.sh"
+source "$SCRIPT_DIR/check_logic.sh"
 
 # Navigate to a specific worktree by branch name
 # Usage: wt-cd branch-name
@@ -52,3 +52,42 @@ wt-cd-current() {
     # Delegate to wt-cd
     wt-cd "$BRANCH"
 }
+
+# Shell wrapper functions for worktree commands with Tab completion
+# These provide shorter alternatives to make commands
+
+# wt-add: Create worktree for branch
+# Usage: wt-add <branch-name>
+wt-add() {
+    local BRANCH="$1"
+    if [ -z "$BRANCH" ]; then
+        echo "Usage: wt-add <branch-name>"
+        return 1
+    fi
+    make -C "$REPO_ROOT" wt-add BRANCH="$BRANCH"
+}
+
+# wt-remove: Remove worktree
+# Usage: wt-remove <branch-name>
+wt-remove() {
+    local BRANCH="$1"
+    if [ -z "$BRANCH" ]; then
+        echo "Usage: wt-remove <branch-name>"
+        return 1
+    fi
+    make -C "$REPO_ROOT" wt-remove BRANCH="$BRANCH"
+}
+
+# wt-dev: Start development server for worktree
+# Usage: wt-dev <branch-name>
+wt-dev() {
+    local BRANCH="$1"
+    if [ -z "$BRANCH" ]; then
+        echo "Usage: wt-dev <branch-name>"
+        return 1
+    fi
+    make -C "$REPO_ROOT" wt-dev BRANCH="$BRANCH"
+}
+
+# Source branch completion functions
+source "$SCRIPT_DIR/branch-completion/main.sh"
