@@ -141,7 +141,7 @@ These wrapper functions provide shorter alternatives to `make wt-add BRANCH=...`
 **Shell Function Setup (Required for navigation and wrapper commands):**
 Add to your `~/.bashrc` or `~/.zshrc`:
 ```bash
-source /path/to/frog-frame-front/scripts/wt-cd.sh
+source /path/to/frog-frame-front/scripts/main.sh
 ```
 
 **Recommended Worktree Workflow:**

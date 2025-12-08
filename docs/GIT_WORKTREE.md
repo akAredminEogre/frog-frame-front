@@ -8,7 +8,7 @@ Git worktreeは、同じリポジトリの複数のブランチを同時にチ�
 
 ```bash
 # ~/.bashrcまたは~/.zshrcに追加
-source /path/to/frog-frame-front/scripts/wt-cd.sh
+source /path/to/frog-frame-front/scripts/main.sh
 ```
 
 これにより以下のコマンドが使用可能になります：
@@ -277,7 +277,7 @@ make wt-remove BRANCH=your-branch
 
 ### シェルラッパーコマンド（Tab補完対応）
 
-シェル関数設定後（`source scripts/wt-cd.sh`）に使用可能。
+シェル関数設定後（`source scripts/main.sh`）に使用可能。
 
 | コマンド | 説明 | Tab補完対象 |
 |---------|------|-------------|
