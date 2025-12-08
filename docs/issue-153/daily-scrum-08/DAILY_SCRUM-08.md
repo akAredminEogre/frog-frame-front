@@ -15,6 +15,16 @@
 
 ## スクラム内残タスク
 - [ ] make testlintの実行
+  - [ ] 下記のエラーが出ているので対応する
+  ```bash
+    4 failed
+    [chromium] › tests/e2e/edit-page.spec.ts:12:1 › 正規表現で取得した値をタグ内に埋め込んだルールが、一覧に表示され、編集できる 
+    [chromium] › tests/e2e/edit-page.spec.ts:185:1 › 編集画面でキャンセルボタンをクリックすると、ポップアップが閉じる ────
+    [chromium] › tests/e2e/rules-page.spec.ts:7:1 › ルール一覧ページが正しく表示される ────────────────────
+    [chromium] › tests/e2e/save-and-replace.spec.ts:5:1 › 正規表現を使ったDOM置換機能のe2eテスト ─────────
+  8 passed (3.5m)
+make: *** [make/test/main.mk:22: testcheck] Error 1
+  ```
 - [ ] エラーや警告の修正
 - [ ] コードレビューと最適化
 - [ ] 最終動作確認
