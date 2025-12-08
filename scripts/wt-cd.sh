@@ -52,3 +52,126 @@ wt-cd-current() {
     # Delegate to wt-cd
     wt-cd "$BRANCH"
 }
+
+# Shell wrapper functions for worktree commands with Tab completion
+# These provide shorter alternatives to make commands
+
+# wt-add: Create worktree for branch
+# Usage: wt-add <branch-name>
+wt-add() {
+    local BRANCH="$1"
+    if [ -z "$BRANCH" ]; then
+        echo "Usage: wt-add <branch-name>"
+        return 1
+    fi
+    make -C "$REPO_ROOT" wt-add BRANCH="$BRANCH"
+}
+
+# wt-remove: Remove worktree
+# Usage: wt-remove <branch-name>
+wt-remove() {
+    local BRANCH="$1"
+    if [ -z "$BRANCH" ]; then
+        echo "Usage: wt-remove <branch-name>"
+        return 1
+    fi
+    make -C "$REPO_ROOT" wt-remove BRANCH="$BRANCH"
+}
+
+# wt-dev: Start development server for worktree
+# Usage: wt-dev <branch-name>
+wt-dev() {
+    local BRANCH="$1"
+    if [ -z "$BRANCH" ]; then
+        echo "Usage: wt-dev <branch-name>"
+        return 1
+    fi
+    make -C "$REPO_ROOT" wt-dev BRANCH="$BRANCH"
+}
+
+# ============================================================
+# Bash/Zsh completion functions
+# ============================================================
+
+# Get list of all branches (local and remote)
+_wt_get_all_branches() {
+    git -C "$REPO_ROOT" branch -a 2>/dev/null | \
+        sed 's/^[* ]*//' | \
+        sed 's|^remotes/origin/||' | \
+        grep -v '^HEAD' | \
+        sort -u
+}
+
+# Get list of existing worktrees
+_wt_get_worktrees() {
+    local worktree_dir="$REPO_ROOT/worktrees"
+    if [ -d "$worktree_dir" ]; then
+        ls -1 "$worktree_dir" 2>/dev/null
+    fi
+}
+
+# Bash completion
+if [ -n "$BASH_VERSION" ]; then
+    # Completion for wt-add (all branches)
+    _wt_add_completion() {
+        local cur="${COMP_WORDS[COMP_CWORD]}"
+        COMPREPLY=($(compgen -W "$(_wt_get_all_branches)" -- "$cur"))
+    }
+    complete -F _wt_add_completion wt-add
+
+    # Completion for wt-remove (existing worktrees)
+    _wt_remove_completion() {
+        local cur="${COMP_WORDS[COMP_CWORD]}"
+        COMPREPLY=($(compgen -W "$(_wt_get_worktrees)" -- "$cur"))
+    }
+    complete -F _wt_remove_completion wt-remove
+
+    # Completion for wt-dev (existing worktrees)
+    _wt_dev_completion() {
+        local cur="${COMP_WORDS[COMP_CWORD]}"
+        COMPREPLY=($(compgen -W "$(_wt_get_worktrees)" -- "$cur"))
+    }
+    complete -F _wt_dev_completion wt-dev
+
+    # Completion for wt-cd (existing worktrees)
+    _wt_cd_completion() {
+        local cur="${COMP_WORDS[COMP_CWORD]}"
+        COMPREPLY=($(compgen -W "$(_wt_get_worktrees)" -- "$cur"))
+    }
+    complete -F _wt_cd_completion wt-cd
+fi
+
+# Zsh completion
+if [ -n "$ZSH_VERSION" ]; then
+    # Completion for wt-add (all branches)
+    _wt_add() {
+        local branches
+        branches=("${(@f)$(_wt_get_all_branches)}")
+        _describe 'branch' branches
+    }
+    compdef _wt_add wt-add
+
+    # Completion for wt-remove (existing worktrees)
+    _wt_remove() {
+        local worktrees
+        worktrees=("${(@f)$(_wt_get_worktrees)}")
+        _describe 'worktree' worktrees
+    }
+    compdef _wt_remove wt-remove
+
+    # Completion for wt-dev (existing worktrees)
+    _wt_dev() {
+        local worktrees
+        worktrees=("${(@f)$(_wt_get_worktrees)}")
+        _describe 'worktree' worktrees
+    }
+    compdef _wt_dev wt-dev
+
+    # Completion for wt-cd (existing worktrees)
+    _wt_cd() {
+        local worktrees
+        worktrees=("${(@f)$(_wt_get_worktrees)}")
+        _describe 'worktree' worktrees
+    }
+    compdef _wt_cd wt-cd
+fi
