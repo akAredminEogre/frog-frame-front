@@ -4,7 +4,7 @@ import styles from 'src/components/organisms/EmptyStateMessage/EmptyStateMessage
 
 const EmptyStateMessage: React.FC = () => {
   return (
-    <div className={styles.emptyState}>
+    <div className={styles.emptyState} data-testid="empty-state">
       <p>保存されたルールがありません。</p>
       <p>拡張機能のポップアップからルールを作成してください。</p>
     </div>

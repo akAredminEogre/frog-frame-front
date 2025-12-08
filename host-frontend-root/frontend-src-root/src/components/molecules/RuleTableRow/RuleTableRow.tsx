@@ -20,17 +20,17 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit }) => {
           編集
         </button>
       </td>
-      <td title={rule.urlPattern || ''}>
+      <td title={rule.urlPattern || ''} className="rule-url-pattern">
         {rule.urlPattern 
           ? (rule.urlPattern.length > 30 
              ? rule.urlPattern.substring(0, 30) + '...'
              : rule.urlPattern)
           : '-'}
       </td>
-      <td title={rule.oldString}>
+      <td title={rule.oldString} className="rule-old-string">
         {rule.oldString}
       </td>
-      <td title={rule.newString}>
+      <td title={rule.newString} className="rule-new-string">
         {rule.newString}
       </td>
     </tr>

@@ -11,8 +11,8 @@ interface RulesTableProps {
 
 const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit }) => {
   return (
-    <div className={styles.rulesTableContainer}>
-      <table className={styles.rulesTable}>
+    <div className={styles.rulesTableContainer} data-testid="rules-table-container">
+      <table className={styles.rulesTable} data-testid="rules-table">
         <thead>
           <tr>
             <th>操作</th>
