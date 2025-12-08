@@ -5,28 +5,28 @@
 
 # Register completions from _WT_COMPLETION_DEFS
 # Example: _WT_COMPLETION_DEFS=("wt-add=_wt_get_all_branches" "wt-dev=_wt_get_worktrees")
-for def in "${_WT_COMPLETION_DEFS[@]}"; do
+for definition in "${_WT_COMPLETION_DEFS[@]}"; do
     # Extract command name using helper function
     # Example: "wt-add=_wt_get_all_branches" -> "wt-add"
-    cmd="$(_wt_get_command_name "$def")"
+    command_name="$(_wt_get_command_name "$definition")"
 
     # Extract source function name using helper function
     # Example: "wt-add=_wt_get_all_branches" -> "_wt_get_all_branches"
-    source_fn="$(_wt_get_source_function_name "$def")"
+    source_function_name="$(_wt_get_source_function_name "$definition")"
 
     # Generate completion function name
-    # ${cmd//-/_} replaces all "-" with "_" in cmd (e.g., "wt-add" -> "wt_add")
+    # ${command_name//-/_} replaces all "-" with "_" (e.g., "wt-add" -> "wt_add")
     # Example: "wt-add" -> "_wt_add_completion"
-    completion_fn="_${cmd//-/_}_completion"
+    completion_function_name="_${command_name//-/_}_completion"
 
     # Create completion function dynamically
-    # The function calls $source_fn to get completion candidates
-    eval "$completion_fn() {
+    # The function calls $source_function_name to get completion candidates
+    eval "$completion_function_name() {
         local cur=\"\${COMP_WORDS[COMP_CWORD]}\"
-        COMPREPLY=(\$(compgen -W \"\$($source_fn)\" -- \"\$cur\"))
+        COMPREPLY=(\$(compgen -W \"\$($source_function_name)\" -- \"\$cur\"))
     }"
 
     # Register the completion function for the command
     # Example: complete -F _wt_add_completion wt-add
-    complete -F "$completion_fn" "$cmd"
+    complete -F "$completion_function_name" "$command_name"
 done
