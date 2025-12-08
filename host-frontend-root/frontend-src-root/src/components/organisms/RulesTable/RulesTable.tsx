@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import RuleTableRow from 'src/components/molecules/RuleTableRow/RuleTableRow';
 import styles from 'src/components/organisms/RulesTable/RulesTable.module.css';
+import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 
 interface RulesTableProps {
   rules: RewriteRule[];
@@ -15,11 +15,10 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit }) => {
       <table className={styles.rulesTable}>
         <thead>
           <tr>
+            <th>操作</th>
             <th>URLパターン</th>
             <th>置換前</th>
             <th>置換後</th>
-            <th>正規表現</th>
-            <th>操作</th>
           </tr>
         </thead>
         <tbody>
