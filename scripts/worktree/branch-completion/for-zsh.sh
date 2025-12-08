@@ -14,10 +14,9 @@ for definition in "${_WT_COMPLETION_DEFS[@]}"; do
     # Example: "wt-add=_wt_get_all_branches" -> "_wt_get_all_branches"
     source_function_name="$(_wt_get_source_function_name "$definition")"
 
-    # Generate completion function name
-    # ${command_name//-/_} replaces all "-" with "_" (e.g., "wt-add" -> "wt_add")
+    # Generate completion function name using helper function
     # Example: "wt-add" -> "_wt_add"
-    completion_function_name="_${command_name//-/_}"
+    completion_function_name="$(_wt_get_completion_function_name "$command_name")"
 
     # Create completion function dynamically
     # The function calls $source_function_name to get completion candidates
