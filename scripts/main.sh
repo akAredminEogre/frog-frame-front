@@ -7,4 +7,4 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Source all shell function scripts
-source "$SCRIPT_DIR/wt-cd.sh"
+source "$SCRIPT_DIR/worktree/main.sh"

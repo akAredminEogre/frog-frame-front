@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Worktree navigation helper functions
-# Add this to your shell profile: source /path/to/scripts/wt-cd.sh
+# This file is sourced by scripts/main.sh
 
 # Get the directory where this script is located
 # Note: These variables are evaluated once when sourcing this file
@@ -12,7 +12,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)"
 
 # Source the check logic functions
-source "$SCRIPT_DIR/worktree/check_logic.sh"
+source "$SCRIPT_DIR/check_logic.sh"
 
 # Navigate to a specific worktree by branch name
 # Usage: wt-cd branch-name
