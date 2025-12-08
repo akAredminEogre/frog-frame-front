@@ -118,6 +118,7 @@ make wt-current                 # Show currently active worktree
 **Development Commands:**
 ```bash
 make wt-dev BRANCH=feature-x    # Start dev server for worktree (RECOMMENDED)
+make wt-storybook               # Start Storybook in worktree mode
 make wt-down                    # Stop worktree Docker containers
 make wt-up                      # Start worktree Docker containers
 make wt-disable                 # Disable worktree mode, return to main repository
