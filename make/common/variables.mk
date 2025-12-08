@@ -5,4 +5,5 @@
 # This enables unified commands that work for both main repository and worktree modes
 # - Main repository: only .env is loaded
 # - Worktree mode: .env is loaded first, then .env.worktree overrides specific values
-_load-env-exec = set -a && [ -f .env ] && . ./.env; [ -f .env.worktree ] && . ./.env.worktree; set +a &&
+# Note: Uses $(CURDIR) for absolute paths to ensure correct file resolution
+_load-env-exec = set -a && [ -f $(CURDIR)/.env ] && . $(CURDIR)/.env; [ -f $(CURDIR)/.env.worktree ] && . $(CURDIR)/.env.worktree; set +a &&
