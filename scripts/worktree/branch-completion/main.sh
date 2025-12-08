@@ -23,6 +23,15 @@ _wt_get_worktrees() {
     fi
 }
 
+# Completion definitions: command=source_function
+# Add new commands here to enable completion
+_WT_COMPLETION_DEFS=(
+    "wt-add=_wt_get_all_branches"
+    "wt-remove=_wt_get_worktrees"
+    "wt-dev=_wt_get_worktrees"
+    "wt-cd=_wt_get_worktrees"
+)
+
 # Source shell-specific completion
 if [ -n "$BASH_VERSION" ]; then
     source "$COMPLETION_DIR/for-bash.sh"

@@ -1,32 +1,19 @@
 #!/bin/bash
 
 # Bash completion for worktree commands
-# This file is sourced by scripts/worktree/main.sh
+# This file is sourced by scripts/worktree/branch-completion/main.sh
 
-# Completion for wt-add (all branches)
-_wt_add_completion() {
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=($(compgen -W "$(_wt_get_all_branches)" -- "$cur"))
-}
-complete -F _wt_add_completion wt-add
+# Register completions from _WT_COMPLETION_DEFS
+for def in "${_WT_COMPLETION_DEFS[@]}"; do
+    cmd="${def%%=*}"
+    source_fn="${def#*=}"
 
-# Completion for wt-remove (existing worktrees)
-_wt_remove_completion() {
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=($(compgen -W "$(_wt_get_worktrees)" -- "$cur"))
-}
-complete -F _wt_remove_completion wt-remove
+    # Create completion function dynamically
+    eval "_${cmd//-/_}_completion() {
+        local cur=\"\${COMP_WORDS[COMP_CWORD]}\"
+        COMPREPLY=(\$(compgen -W \"\$($source_fn)\" -- \"\$cur\"))
+    }"
 
-# Completion for wt-dev (existing worktrees)
-_wt_dev_completion() {
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=($(compgen -W "$(_wt_get_worktrees)" -- "$cur"))
-}
-complete -F _wt_dev_completion wt-dev
-
-# Completion for wt-cd (existing worktrees)
-_wt_cd_completion() {
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=($(compgen -W "$(_wt_get_worktrees)" -- "$cur"))
-}
-complete -F _wt_cd_completion wt-cd
+    # Register the completion
+    complete -F "_${cmd//-/_}_completion" "$cmd"
+done
