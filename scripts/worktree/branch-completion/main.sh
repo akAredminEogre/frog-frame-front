@@ -46,20 +46,6 @@ _wt_get_source_function_name() {
     echo "${def#*=}"
 }
 
-# Generate completion function name from command name
-# ${command_name//-/_} replaces all "-" with "_" (e.g., "wt-add" -> "wt_add")
-# Example (Bash): "wt-add" -> "_wt_add_completion"
-# Example (Zsh):  "wt-add" -> "_wt_add"
-_wt_get_completion_function_name() {
-    local command_name="$1"
-    local base_name="_${command_name//-/_}"
-    if [ -n "$BASH_VERSION" ]; then
-        echo "${base_name}_completion"
-    else
-        echo "$base_name"
-    fi
-}
-
 # Source shell-specific completion
 if [ -n "$BASH_VERSION" ]; then
     source "$COMPLETION_DIR/for-bash.sh"
