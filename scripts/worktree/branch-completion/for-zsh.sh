@@ -5,29 +5,29 @@
 
 # Register completions from _WT_COMPLETION_DEFS
 # Example: _WT_COMPLETION_DEFS=("wt-add=_wt_get_all_branches" "wt-dev=_wt_get_worktrees")
-for def in "${_WT_COMPLETION_DEFS[@]}"; do
+for definition in "${_WT_COMPLETION_DEFS[@]}"; do
     # Extract command name using helper function
     # Example: "wt-add=_wt_get_all_branches" -> "wt-add"
-    cmd="$(_wt_get_command_name "$def")"
+    command_name="$(_wt_get_command_name "$definition")"
 
     # Extract source function name using helper function
     # Example: "wt-add=_wt_get_all_branches" -> "_wt_get_all_branches"
-    source_fn="$(_wt_get_source_function_name "$def")"
+    source_function_name="$(_wt_get_source_function_name "$definition")"
 
     # Generate completion function name
-    # ${cmd//-/_} replaces all "-" with "_" in cmd (e.g., "wt-add" -> "wt_add")
+    # ${command_name//-/_} replaces all "-" with "_" (e.g., "wt-add" -> "wt_add")
     # Example: "wt-add" -> "_wt_add"
-    completion_fn="_${cmd//-/_}"
+    completion_function_name="_${command_name//-/_}"
 
     # Create completion function dynamically
-    # The function calls $source_fn to get completion candidates
-    eval "$completion_fn() {
+    # The function calls $source_function_name to get completion candidates
+    eval "$completion_function_name() {
         local items
-        items=(\"\${(@f)\$($source_fn)}\")
+        items=(\"\${(@f)\$($source_function_name)}\")
         _describe 'item' items
     }"
 
     # Register the completion function for the command
     # Example: compdef _wt_add wt-add
-    compdef "$completion_fn" "$cmd"
+    compdef "$completion_function_name" "$command_name"
 done
