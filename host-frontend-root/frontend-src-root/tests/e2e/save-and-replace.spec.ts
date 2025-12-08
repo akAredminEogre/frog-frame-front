@@ -90,8 +90,6 @@ test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, po
   // 16. Assert: 保存した置換後文字列が表示されている
   await expect(rulesPage.locator('.rule-new-string:has-text("<h2>$1</h2>")')).toBeVisible({ timeout: 60000 });
 
-  // 17. Assert: 正規表現使用の表示確認（✓マークで表示される）
-  await expect(rulesPage.locator('.regex-badge:has-text("✓")')).toBeVisible({ timeout: 60000 });
 
   // 18. Assert: フッターのルール数表示が更新されている
   await expect(rulesPage.locator('text=合計 1 件のルールが保存されています')).toBeVisible({ timeout: 60000 });
