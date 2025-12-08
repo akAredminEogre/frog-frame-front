@@ -16,16 +16,19 @@ for def in "${_WT_COMPLETION_DEFS[@]}"; do
     # Example: "wt-add=_wt_get_all_branches" -> "_wt_get_all_branches"
     source_fn="${def#*=}"
 
-    # Create completion function dynamically
+    # Generate completion function name
     # ${cmd//-/_} replaces all "-" with "_" in cmd (e.g., "wt-add" -> "wt_add")
-    # Example: For cmd="wt-add", creates function "_wt_add_completion"
+    # Example: "wt-add" -> "_wt_add_completion"
+    completion_fn="_${cmd//-/_}_completion"
+
+    # Create completion function dynamically
     # The function calls $source_fn to get completion candidates
-    eval "_${cmd//-/_}_completion() {
+    eval "$completion_fn() {
         local cur=\"\${COMP_WORDS[COMP_CWORD]}\"
         COMPREPLY=(\$(compgen -W \"\$($source_fn)\" -- \"\$cur\"))
     }"
 
     # Register the completion function for the command
     # Example: complete -F _wt_add_completion wt-add
-    complete -F "_${cmd//-/_}_completion" "$cmd"
+    complete -F "$completion_fn" "$cmd"
 done
