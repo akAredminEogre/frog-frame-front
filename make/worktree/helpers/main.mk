@@ -22,4 +22,4 @@ _wt-dev-in-worktree:
 	@$(MAKE) wt-down
 	@$(MAKE) wt-up
 	@echo "Starting npm dev in worktree container..."
-	@$(_wt-load-env-exec) docker compose exec frontend npm run dev
+	@$(_load-env-exec) docker compose exec frontend npm run dev

@@ -5,9 +5,6 @@
 WORKTREE_DIR := worktrees
 WORKTREE_PATH = $(WORKTREE_DIR)/$(BRANCH)
 
-# Load worktree environment variables and execute command
-_wt-load-env-exec = set -a && [ -f .env ] && . ./.env; [ -f .env.worktree ] && . ./.env.worktree; set +a &&
-
 # Include internal helpers
 include make/worktree/helpers/main.mk
 
@@ -67,10 +64,10 @@ wt-current:
 	@echo "Path: $$(grep CURRENT_WORKTREE_PATH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 
 wt-down:
-	@$(_wt-load-env-exec) docker compose down || true
+	@$(_load-env-exec) docker compose down || true
 
 wt-up:
-	@$(_wt-load-env-exec) docker compose up -d
+	@$(_load-env-exec) docker compose up -d
 
 wt-dev: _wt-check-branch _wt-check-exists _wt-dev-in-worktree
 
@@ -83,4 +80,4 @@ wt-disable:
 
 wt-storybook:
 	@echo "Starting Storybook in worktree mode..."
-	@$(_wt-load-env-exec) docker compose exec frontend npm run storybook
+	@$(_load-env-exec) docker compose exec frontend npm run storybook
