@@ -1,7 +1,7 @@
 workflow-update-pr-md
 
 ```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
+nnn=$(scripts/.clinerules/get-issue-number.sh)
 issue-nnnのプルリクエストの本文を変更してください。
 
 反映すべき内容：

@@ -6,7 +6,7 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 
 ```cline-instructions
 - デイリースクラムドキュメントのコミット
-  - workflow-commit-daily-scrum
+  - workflow-just-commit-daily-scrum
     - の手順に従う
 
 - 次のデイリースクラムドキュメントの作成

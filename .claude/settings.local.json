@@ -72,7 +72,8 @@
       "Bash(tee:*)",
       "Bash(npm test:*)",
       "Bash(timeout:*)",
-      "Bash(npx vitest run:*)"
+      "Bash(npx vitest run:*)",
+      "Bash(scripts/.clinerules/get-issue-number.sh:*)"
     ],
     "deny": [
       "Bash(git config:*)"
