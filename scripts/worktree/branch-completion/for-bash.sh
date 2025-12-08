@@ -3,6 +3,13 @@
 # Bash completion for worktree commands
 # This file is sourced by scripts/worktree/branch-completion/main.sh
 
+# Generate completion function name for Bash
+# Example: "wt-add" -> "_wt_add_completion"
+_wt_get_completion_function_name() {
+    local command_name="$1"
+    echo "_${command_name//-/_}_completion"
+}
+
 # Register completions from _WT_COMPLETION_DEFS
 # Example: _WT_COMPLETION_DEFS=("wt-add=_wt_get_all_branches" "wt-dev=_wt_get_worktrees")
 for definition in "${_WT_COMPLETION_DEFS[@]}"; do
