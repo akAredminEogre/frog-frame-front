@@ -26,4 +26,4 @@ npminstall:
 
 storybook:
 	@echo "Starting Storybook development server..."
-	@docker compose exec frontend npm run storybook
+	@$(_load-env-exec) docker compose exec frontend npm run storybook
