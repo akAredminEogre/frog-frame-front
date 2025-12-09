@@ -1,5 +1,7 @@
 # Git Worktree Guide
 
+<!-- Note: When updating this document, also sync relevant sections in CLAUDE.md -->
+
 Git worktreeは、同じリポジトリの複数のブランチを同時にチェックアウトできる機能です。これにより、ブランチの切り替えなしで複数の機能を並行開発できます。
 
 ## シェル関数の設定（推奨）
