@@ -21,6 +21,7 @@ function RulesApp() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // TODO: ロジックをUseCaseに分離するタスクを追加
     const loadRules = async () => {
       try {
         setLoading(true);
