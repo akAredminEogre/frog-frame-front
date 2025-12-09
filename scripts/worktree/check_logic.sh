@@ -5,7 +5,7 @@
 
 # Get script directory and source repository path helper
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../get_repository_top_absolute_paths.sh"
+source "$SCRIPT_DIR/../get_repository_top_absolute_path.sh"
 
 # Get repository top absolute path
 _REPOSITORY_TOP_ABSOLUTE_PATH=$(get_repository_top_absolute_path)

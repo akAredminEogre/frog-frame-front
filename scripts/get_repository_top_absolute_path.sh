@@ -4,8 +4,8 @@
 # regardless of the current working directory
 
 # Get the absolute path of the repository top directory
-# Uses the script's location to determine the repository root (2 levels up from scripts/)
-get_repository_top_absolute_paths() {
+# Uses the script's location to determine the repository root
+get_repository_top_absolute_path() {
     # Get the directory of this script using BASH_SOURCE for correct resolution when sourced
     local SCRIPT_DIR
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -14,7 +14,7 @@ get_repository_top_absolute_paths() {
 }
 
 # Allow direct execution for use in Makefiles
-# Usage: ./scripts/get_repository_top_absolute_paths.sh get_repository_top_absolute_paths
+# Usage: ./scripts/get_repository_top_absolute_path.sh get_repository_top_absolute_path
 if [ -n "$1" ]; then
     "$@"
 fi
