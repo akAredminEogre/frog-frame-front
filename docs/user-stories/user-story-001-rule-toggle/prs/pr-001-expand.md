@@ -48,8 +48,6 @@
 |---------|---------|------|------|
 | `src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.tsx` | 新規 | `return null;` | ⬜ |
 | `src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.module.css` | 新規 | 空ファイル | ⬜ |
-| `src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.tsx` | 新規 | `return null;` | ⬜ |
-| `src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.module.css` | 新規 | 空ファイル | ⬜ |
 
 ## スケルトン実装例
 

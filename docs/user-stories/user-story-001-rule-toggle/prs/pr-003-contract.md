@@ -23,7 +23,7 @@ PR-002で実装したコンポーネント・UseCaseをRulesAppから呼び出�
 
 | ファイル | 変更内容 | 状態 |
 |---------|---------|------|
-| `src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx` | Controller/Presenter統合、ToggleSwitch/RulePreviewToggle使用 | ⬜ |
+| `src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx` | Controller/Presenter統合、ToggleSwitch使用 | ⬜ |
 | `src/frameworks-and-drivers/entrypoints/rules/style.css` | 必要なスタイル追加（あれば） | ⬜ |
 
 ### DIコンテナ
@@ -44,7 +44,6 @@ PR-002で実装したコンポーネント・UseCaseをRulesAppから呼び出�
 
 ```typescript
 import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
-import { RulePreviewToggle } from 'src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle';
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/rule/ToggleRuleActiveInteractor';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/rule/ToggleRuleActiveController';
 import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/rule/ToggleRuleActivePresenter';
@@ -73,7 +72,8 @@ function RulesApp() {
         <tr>
           <th>有効</th>           {/* 新規追加 */}
           <th>URLパターン</th>
-          <th>置換内容</th>        {/* 変更: 置換前/後 → 置換内容 */}
+          <th>置換前</th>
+          <th>置換後</th>
           <th>正規表現</th>
           <th>操作</th>
         </tr>
@@ -88,12 +88,8 @@ function RulesApp() {
               />
             </td>
             <td>{rule.urlPattern}</td>
-            <td>
-              <RulePreviewToggle
-                beforeText={rule.oldString}
-                afterText={rule.newString}
-              />
-            </td>
+            <td>{rule.oldString}</td>
+            <td>{rule.newString}</td>
             <td>{rule.isRegex ? '✓' : '-'}</td>
             <td>
               <button onClick={() => handleEdit(rule.id)}>編集</button>
@@ -118,12 +114,6 @@ test('ルールのトグルで有効/無効を切り替えられる', async ({ p
   // 4. ページをリロード
   // 5. 状態が保持されていることを確認
 });
-
-test('プレビュー切り替えで置換前/後を表示できる', async ({ page }) => {
-  // 1. ルール一覧ページを開く
-  // 2. 「置換後」タブをクリック
-  // 3. 置換後の内容が表示されることを確認
-});
 ```
 
 ## 受け入れ条件との対応
@@ -133,14 +123,12 @@ test('プレビュー切り替えで置換前/後を表示できる', async ({ p
 | AC-1: トグル表示 | 目視確認 | ⬜ |
 | AC-2: トグル操作 | E2Eテスト | ⬜ |
 | AC-3: タブリロード | 手動確認 | ⬜ |
-| AC-4: プレビュー切替 | E2Eテスト | ⬜ |
-| AC-5: パフォーマンス | 手動確認 | ⬜ |
-| AC-6: アクセシビリティ | Storybook + 手動確認 | ⬜ |
+| AC-4: パフォーマンス | 手動確認 | ⬜ |
+| AC-5: アクセシビリティ | Storybook + 手動確認 | ⬜ |
 
 ## 完了条件
 
 - [ ] RulesAppにトグル機能が統合されている
-- [ ] RulesAppにプレビュー切替が統合されている
 - [ ] E2Eテストが全てパスする
 - [ ] `make testlint` がパスする
 - [ ] 受け入れ条件が全て満たされている
