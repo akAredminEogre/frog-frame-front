@@ -134,11 +134,11 @@ make wt-down
 # worktreeのDockerコンテナを起動
 make wt-up
 
-# worktreeモードでStorybookを起動
-make wt-storybook
+# Storybookを起動（メインリポジトリ・worktree両方で動作）
+make storybook
 ```
 
-注：これらのコマンドは`.env.worktree`の設定を使用します。
+注：`make storybook`は自動的に環境を検出し、worktreeモードでは`.env.worktree`の設定を使用します。
 
 ### ナビゲーション・シェルラッパーコマンド
 
@@ -274,7 +274,6 @@ make wt-remove BRANCH=your-branch
 | `wt-prune` | 不要なworktree参照を削除 | `make wt-prune` |
 | `wt-current` | 現在アクティブなworktreeを表示 | `make wt-current` |
 | `wt-dev` | worktreeで開発サーバーを起動 | `make wt-dev BRANCH=feature-x` |
-| `wt-storybook` | worktreeモードでStorybookを起動 | `make wt-storybook` |
 | `wt-disable` | worktreeモードを無効化、メインリポジトリに戻る | `make wt-disable` |
 | `wt-down` | worktreeのDockerコンテナを停止 | `make wt-down` |
 | `wt-up` | worktreeのDockerコンテナを起動 | `make wt-up` |
