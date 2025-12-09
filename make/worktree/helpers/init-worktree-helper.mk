@@ -64,6 +64,8 @@ _wt-init: _wt-check-branch _wt-check-exists
 	@$(MAKE) _wt-setup-env BRANCH=$(BRANCH)
 	@echo "Switching to worktree for initialization..."
 	@$(MAKE) _wt-create-override BRANCH=$(BRANCH)
+	@echo "Stopping existing Docker services..."
+	@$(MAKE) wt-down
 	@echo "Starting Docker services for worktree..."
 	@$(MAKE) wt-up
 	@echo "Installing npm dependencies in worktree..."
