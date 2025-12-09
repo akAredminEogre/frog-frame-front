@@ -22,30 +22,30 @@ PR-001で作成したスケルトンに実装を埋める。テストとStoryboo
 
 | ファイル | 変更内容 | 状態 |
 |---------|---------|------|
-| `src/usecases/dto/input/rule/ToggleRuleActiveInputData.ts` | constructor実装 | ⬜ |
-| `src/usecases/dto/output/rule/ToggleRuleActiveOutputData.ts` | constructor実装 | ⬜ |
-| `src/usecases/interactors/rule/ToggleRuleActiveInteractor.ts` | ビジネスロジック実装 | ⬜ |
+| `src/application-business-rules/dto/input/rule/ToggleRuleActiveInputData.ts` | constructor実装 | ⬜ |
+| `src/application-business-rules/dto/output/rule/ToggleRuleActiveOutputData.ts` | constructor実装 | ⬜ |
+| `src/application-business-rules/interactors/rule/ToggleRuleActiveInteractor.ts` | ビジネスロジック実装 | ⬜ |
 | `src/interface-adapters/controllers/rule/ToggleRuleActiveController.ts` | 入力変換実装 | ⬜ |
 | `src/interface-adapters/presenters/rule/ToggleRuleActivePresenter.ts` | 出力変換実装 | ⬜ |
-| `src/frameworks/ui/components/atoms/ToggleSwitch.tsx` | UI実装 | ⬜ |
-| `src/frameworks/ui/components/atoms/ToggleSwitch.module.css` | スタイル実装 | ⬜ |
-| `src/frameworks/ui/components/molecules/RulePreviewToggle.tsx` | UI実装 | ⬜ |
-| `src/frameworks/ui/components/molecules/RulePreviewToggle.module.css` | スタイル実装 | ⬜ |
+| `src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.tsx` | UI実装 | ⬜ |
+| `src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.module.css` | スタイル実装 | ⬜ |
+| `src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.tsx` | UI実装 | ⬜ |
+| `src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.module.css` | スタイル実装 | ⬜ |
 
 ### Storybook
 
 | ファイル | 変更種別 | 状態 |
 |---------|---------|------|
-| `src/frameworks/ui/components/atoms/ToggleSwitch.stories.tsx` | 新規 | ⬜ |
-| `src/frameworks/ui/components/molecules/RulePreviewToggle.stories.tsx` | 新規 | ⬜ |
+| `src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.stories.tsx` | 新規 | ⬜ |
+| `src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.stories.tsx` | 新規 | ⬜ |
 
 ### テストファイル
 
 | ファイル | 変更種別 | 状態 |
 |---------|---------|------|
-| `tests/unit/entities/RewriteRule/withActive/normal-cases.test.ts` | 新規 | ⬜ |
-| `tests/unit/usecases/interactors/rule/ToggleRuleActiveInteractor/execute/normal-cases.test.ts` | 新規 | ⬜ |
-| `tests/unit/usecases/interactors/rule/ToggleRuleActiveInteractor/execute/Abend/error-cases.test.ts` | 新規 | ⬜ |
+| `tests/unit/enterprise-business-rules/RewriteRule/withActive/normal-cases.test.ts` | 新規 | ⬜ |
+| `tests/unit/application-business-rules/interactors/rule/ToggleRuleActiveInteractor/execute/normal-cases.test.ts` | 新規 | ⬜ |
+| `tests/unit/application-business-rules/interactors/rule/ToggleRuleActiveInteractor/execute/Abend/error-cases.test.ts` | 新規 | ⬜ |
 | `tests/unit/interface-adapters/controllers/rule/ToggleRuleActiveController/toggleActive/normal-cases.test.ts` | 新規 | ⬜ |
 | `tests/unit/interface-adapters/presenters/rule/ToggleRuleActivePresenter/present/normal-cases.test.ts` | 新規 | ⬜ |
 

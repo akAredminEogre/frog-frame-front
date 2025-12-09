@@ -4,18 +4,18 @@
 
 ```
 src/
-├── entities/                                    ← 第1層: Entities
-├── usecases/                                    ← 第2層: Use Cases
+├── enterprise-business-rules/                   ← 第1層: Enterprise Business Rules
+├── application-business-rules/                  ← 第2層: Application Business Rules
 ├── interface-adapters/                          ← 第3層: Interface Adapters
-└── frameworks/                                  ← 第4層: Frameworks & Drivers
+└── frameworks-and-drivers/                      ← 第4層: Frameworks & Drivers
 ```
 
 ## 詳細構造
 
-### 第1層: entities/
+### 第1層: enterprise-business-rules/
 
 ```
-src/entities/
+src/enterprise-business-rules/
 ├── RewriteRule/
 │   ├── RewriteRule.ts                          ← withActive() 追加
 │   └── PatternProcessingStrategyFactory.ts
@@ -25,10 +25,10 @@ src/entities/
     └── RegexConstants.ts
 ```
 
-### 第2層: usecases/
+### 第2層: application-business-rules/
 
 ```
-src/usecases/
+src/application-business-rules/
 ├── ports/
 │   ├── input/
 │   │   └── rule/
@@ -62,10 +62,10 @@ src/interface-adapters/
     └── IRewriteRuleRepository.ts               ← Gateway Interface
 ```
 
-### 第4層: frameworks/
+### 第4層: frameworks-and-drivers/
 
 ```
-src/frameworks/
+src/frameworks-and-drivers/
 ├── ui/
 │   ├── components/
 │   │   ├── atoms/
@@ -100,17 +100,18 @@ src/frameworks/
 ## 依存関係図
 
 ```
-        内側（安定）                    外側（不安定）
-        ───────────────────────────────────────────→
+        内側（安定）                                        外側（不安定）
+        ─────────────────────────────────────────────────────────────────→
 
-┌──────────────┐   ┌──────────────┐   ┌──────────────────┐   ┌──────────────┐
-│   entities   │ ← │   usecases   │ ← │interface-adapters│ ← │  frameworks  │
-│              │   │              │   │                  │   │              │
-│ RewriteRule  │   │ Interactor   │   │ Controller       │   │ UI (React)   │
-│ RewriteRules │   │ InputPort    │   │ Presenter        │   │ Persistence  │
-│              │   │ OutputPort   │   │ Gateway(IF)      │   │ Browser API  │
-│              │   │ DTO          │   │                  │   │ DI Container │
-└──────────────┘   └──────────────┘   └──────────────────┘   └──────────────┘
+┌────────────────────┐   ┌────────────────────┐   ┌──────────────────┐   ┌─────────────────────┐
+│ enterprise-business│ ← │application-business│ ← │interface-adapters│ ← │frameworks-and-drivers│
+│       -rules       │   │       -rules       │   │                  │   │                     │
+│                    │   │                    │   │                  │   │                     │
+│ RewriteRule        │   │ Interactor         │   │ Controller       │   │ UI (React)          │
+│ RewriteRules       │   │ InputPort          │   │ Presenter        │   │ Persistence         │
+│                    │   │ OutputPort         │   │ Gateway(IF)      │   │ Browser API         │
+│                    │   │ DTO                │   │                  │   │ DI Container        │
+└────────────────────┘   └────────────────────┘   └──────────────────┘   └─────────────────────┘
 
 矢印の方向 = 依存の方向（外→内のみ許可）
 ```
@@ -119,15 +120,15 @@ src/frameworks/
 
 | # | 要素 | ディレクトリ |
 |---|------|-------------|
-| 1 | View | `frameworks/ui/` |
+| 1 | View | `frameworks-and-drivers/ui/` |
 | 2 | View Model | （省略: Presenterが直接更新） |
 | 3 | Controller | `interface-adapters/controllers/` |
 | 4 | Presenter | `interface-adapters/presenters/` |
-| 5 | Input Boundary | `usecases/ports/input/` |
-| 6 | Output Boundary | `usecases/ports/output/` |
-| 7 | Use Case Interactor | `usecases/interactors/` |
+| 5 | Input Boundary | `application-business-rules/ports/input/` |
+| 6 | Output Boundary | `application-business-rules/ports/output/` |
+| 7 | Use Case Interactor | `application-business-rules/interactors/` |
 | 8 | Data Access Interface | `interface-adapters/gateways/` |
-| 9 | Data Access | `frameworks/persistence/` |
+| 9 | Data Access | `frameworks-and-drivers/persistence/` |
 | 10 | Database | IndexedDB (Dexie) |
-| 11 | Entities | `entities/` |
-| 12 | External Interfaces | `frameworks/browser/` |
+| 11 | Entities | `enterprise-business-rules/` |
+| 12 | External Interfaces | `frameworks-and-drivers/browser/` |

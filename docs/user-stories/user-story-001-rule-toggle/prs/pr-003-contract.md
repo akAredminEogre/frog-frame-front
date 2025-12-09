@@ -23,14 +23,14 @@ PR-002で実装したコンポーネント・UseCaseをRulesAppから呼び出�
 
 | ファイル | 変更内容 | 状態 |
 |---------|---------|------|
-| `src/frameworks/ui/pages/rules/RulesApp.tsx` | Controller/Presenter統合、ToggleSwitch/RulePreviewToggle使用 | ⬜ |
-| `src/frameworks/entrypoints/rules/style.css` | 必要なスタイル追加（あれば） | ⬜ |
+| `src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx` | Controller/Presenter統合、ToggleSwitch/RulePreviewToggle使用 | ⬜ |
+| `src/frameworks-and-drivers/entrypoints/rules/style.css` | 必要なスタイル追加（あれば） | ⬜ |
 
 ### DIコンテナ
 
 | ファイル | 変更内容 | 状態 |
 |---------|---------|------|
-| `src/frameworks/di/container.ts` | 必要に応じてDI登録 | ⬜ |
+| `src/frameworks-and-drivers/di/container.ts` | 必要に応じてDI登録 | ⬜ |
 
 ### E2Eテスト
 
@@ -43,9 +43,9 @@ PR-002で実装したコンポーネント・UseCaseをRulesAppから呼び出�
 ### RulesApp.tsx の変更
 
 ```typescript
-import { ToggleSwitch } from 'src/frameworks/ui/components/atoms/ToggleSwitch';
-import { RulePreviewToggle } from 'src/frameworks/ui/components/molecules/RulePreviewToggle';
-import { ToggleRuleActiveInteractor } from 'src/usecases/interactors/rule/ToggleRuleActiveInteractor';
+import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
+import { RulePreviewToggle } from 'src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle';
+import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/rule/ToggleRuleActiveInteractor';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/rule/ToggleRuleActiveController';
 import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/rule/ToggleRuleActivePresenter';
 
