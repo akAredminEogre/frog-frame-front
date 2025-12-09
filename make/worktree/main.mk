@@ -17,7 +17,7 @@ wt-list:
 
 wt-add: _wt-check-branch
 	@echo "Creating worktree for branch: $(BRANCH)..."
-	@mkdir -p $(WORKTREE_DIR)
+	@mkdir -p $(dir $(WORKTREE_PATH))
 	@# Check if worktree already exists in git
 	@if git worktree list | awk '{print $$1}' | grep -q "^$(PWD)/$(WORKTREE_PATH)\$$"; then \
 		echo "Error: Worktree already exists at $(WORKTREE_PATH)"; \
