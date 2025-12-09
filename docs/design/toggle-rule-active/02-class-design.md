@@ -4,7 +4,7 @@
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                        frameworks/ (第4層)                               │
+│                     frameworks-and-drivers/ (第4層)                      │
 │  ┌────────────────────────────────────────────────────────────────────┐ │
 │  │ ui/pages/rules/RulesApp.tsx (View)                                 │ │
 │  │     - ユーザー操作を受け取る                                         │ │
@@ -28,7 +28,7 @@
                 │ InputData                    │ OutputData
                 ▼                              │
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                         usecases/ (第2層)                                │
+│                   application-business-rules/ (第2層)                    │
 │  ┌──────────────────────────────────────────────────────────────────┐   │
 │  │ interactors/rule/ToggleRuleActiveInteractor                      │   │
 │  │                                                                  │   │
@@ -42,7 +42,7 @@
                 │
                 ▼
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                         entities/ (第1層)                                │
+│                    enterprise-business-rules/ (第1層)                    │
 │  ┌──────────────────────────────────────────────────────────────────┐   │
 │  │ RewriteRule/RewriteRule.ts                                       │   │
 │  │                                                                  │   │
@@ -53,10 +53,10 @@
 
 ## 各クラスの詳細
 
-### 1. RewriteRule.withActive() [entities]
+### 1. RewriteRule.withActive() [enterprise-business-rules]
 
 ```typescript
-// src/entities/RewriteRule/RewriteRule.ts
+// src/enterprise-business-rules/RewriteRule/RewriteRule.ts
 
 /**
  * isActiveを変更した新しいインスタンスを返す（イミュータブル）
@@ -75,10 +75,10 @@ public withActive(isActive: boolean): RewriteRule {
 }
 ```
 
-### 2. ToggleRuleActiveInputData [usecases/dto]
+### 2. ToggleRuleActiveInputData [application-business-rules/dto]
 
 ```typescript
-// src/usecases/dto/input/rule/ToggleRuleActiveInputData.ts
+// src/application-business-rules/dto/input/rule/ToggleRuleActiveInputData.ts
 
 export class ToggleRuleActiveInputData {
   constructor(
@@ -87,12 +87,12 @@ export class ToggleRuleActiveInputData {
 }
 ```
 
-### 3. ToggleRuleActiveOutputData [usecases/dto]
+### 3. ToggleRuleActiveOutputData [application-business-rules/dto]
 
 ```typescript
-// src/usecases/dto/output/rule/ToggleRuleActiveOutputData.ts
+// src/application-business-rules/dto/output/rule/ToggleRuleActiveOutputData.ts
 
-import { RewriteRule } from 'src/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/RewriteRule/RewriteRule';
 
 export class ToggleRuleActiveOutputData {
   constructor(
@@ -101,40 +101,40 @@ export class ToggleRuleActiveOutputData {
 }
 ```
 
-### 4. IToggleRuleActiveUseCase [usecases/ports/input]
+### 4. IToggleRuleActiveUseCase [application-business-rules/ports/input]
 
 ```typescript
-// src/usecases/ports/input/rule/IToggleRuleActiveUseCase.ts
+// src/application-business-rules/ports/input/rule/IToggleRuleActiveUseCase.ts
 
-import { ToggleRuleActiveInputData } from 'src/usecases/dto/input/rule/ToggleRuleActiveInputData';
+import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/rule/ToggleRuleActiveInputData';
 
 export interface IToggleRuleActiveUseCase {
   execute(inputData: ToggleRuleActiveInputData): Promise<void>;
 }
 ```
 
-### 5. IToggleRuleActivePresenter [usecases/ports/output]
+### 5. IToggleRuleActivePresenter [application-business-rules/ports/output]
 
 ```typescript
-// src/usecases/ports/output/rule/IToggleRuleActivePresenter.ts
+// src/application-business-rules/ports/output/rule/IToggleRuleActivePresenter.ts
 
-import { ToggleRuleActiveOutputData } from 'src/usecases/dto/output/rule/ToggleRuleActiveOutputData';
+import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/rule/ToggleRuleActiveOutputData';
 
 export interface IToggleRuleActivePresenter {
   present(outputData: ToggleRuleActiveOutputData): void;
 }
 ```
 
-### 6. ToggleRuleActiveInteractor [usecases/interactors]
+### 6. ToggleRuleActiveInteractor [application-business-rules/interactors]
 
 ```typescript
-// src/usecases/interactors/rule/ToggleRuleActiveInteractor.ts
+// src/application-business-rules/interactors/rule/ToggleRuleActiveInteractor.ts
 
-import { IToggleRuleActiveUseCase } from 'src/usecases/ports/input/rule/IToggleRuleActiveUseCase';
-import { IToggleRuleActivePresenter } from 'src/usecases/ports/output/rule/IToggleRuleActivePresenter';
+import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/rule/IToggleRuleActiveUseCase';
+import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/rule/IToggleRuleActivePresenter';
 import { IRewriteRuleRepository } from 'src/interface-adapters/gateways/IRewriteRuleRepository';
-import { ToggleRuleActiveInputData } from 'src/usecases/dto/input/rule/ToggleRuleActiveInputData';
-import { ToggleRuleActiveOutputData } from 'src/usecases/dto/output/rule/ToggleRuleActiveOutputData';
+import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/rule/ToggleRuleActiveInputData';
+import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/rule/ToggleRuleActiveOutputData';
 
 export class ToggleRuleActiveInteractor implements IToggleRuleActiveUseCase {
   constructor(
@@ -158,8 +158,8 @@ export class ToggleRuleActiveInteractor implements IToggleRuleActiveUseCase {
 ```typescript
 // src/interface-adapters/controllers/rule/ToggleRuleActiveController.ts
 
-import { IToggleRuleActiveUseCase } from 'src/usecases/ports/input/rule/IToggleRuleActiveUseCase';
-import { ToggleRuleActiveInputData } from 'src/usecases/dto/input/rule/ToggleRuleActiveInputData';
+import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/rule/IToggleRuleActiveUseCase';
+import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/rule/ToggleRuleActiveInputData';
 
 export class ToggleRuleActiveController {
   constructor(
@@ -178,9 +178,9 @@ export class ToggleRuleActiveController {
 ```typescript
 // src/interface-adapters/presenters/rule/ToggleRuleActivePresenter.ts
 
-import { IToggleRuleActivePresenter } from 'src/usecases/ports/output/rule/IToggleRuleActivePresenter';
-import { ToggleRuleActiveOutputData } from 'src/usecases/dto/output/rule/ToggleRuleActiveOutputData';
-import { RewriteRule } from 'src/entities/RewriteRule/RewriteRule';
+import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/rule/IToggleRuleActivePresenter';
+import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/rule/ToggleRuleActiveOutputData';
+import { RewriteRule } from 'src/enterprise-business-rules/RewriteRule/RewriteRule';
 
 export class ToggleRuleActivePresenter implements IToggleRuleActivePresenter {
   constructor(
@@ -193,10 +193,10 @@ export class ToggleRuleActivePresenter implements IToggleRuleActivePresenter {
 }
 ```
 
-### 9. ToggleSwitch [frameworks/ui/components/atoms]
+### 9. ToggleSwitch [frameworks-and-drivers/ui/components/atoms]
 
 ```typescript
-// src/frameworks/ui/components/atoms/ToggleSwitch.tsx
+// src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.tsx
 
 import * as React from 'react';
 import styles from './ToggleSwitch.module.css';
@@ -227,10 +227,10 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
 };
 ```
 
-### 10. RulePreviewToggle [frameworks/ui/components/molecules]
+### 10. RulePreviewToggle [frameworks-and-drivers/ui/components/molecules]
 
 ```typescript
-// src/frameworks/ui/components/molecules/RulePreviewToggle.tsx
+// src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.tsx
 
 import * as React from 'react';
 import { useState } from 'react';
@@ -277,21 +277,21 @@ export const RulePreviewToggle: React.FC<RulePreviewToggleProps> = ({
 };
 ```
 
-### 11. RulesApp での組み立て [frameworks/ui/pages]
+### 11. RulesApp での組み立て [frameworks-and-drivers/ui/pages]
 
 ```typescript
-// src/frameworks/ui/pages/rules/RulesApp.tsx
+// src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx
 
 import * as React from 'react';
 import { useState, useCallback } from 'react';
-import { container } from 'src/frameworks/di/container';
+import { container } from 'src/frameworks-and-drivers/di/container';
 import { IRewriteRuleRepository } from 'src/interface-adapters/gateways/IRewriteRuleRepository';
-import { ToggleRuleActiveInteractor } from 'src/usecases/interactors/rule/ToggleRuleActiveInteractor';
+import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/rule/ToggleRuleActiveInteractor';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/rule/ToggleRuleActiveController';
 import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/rule/ToggleRuleActivePresenter';
-import { ToggleSwitch } from 'src/frameworks/ui/components/atoms/ToggleSwitch';
-import { RulePreviewToggle } from 'src/frameworks/ui/components/molecules/RulePreviewToggle';
-import { RewriteRule } from 'src/entities/RewriteRule/RewriteRule';
+import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
+import { RulePreviewToggle } from 'src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle';
+import { RewriteRule } from 'src/enterprise-business-rules/RewriteRule/RewriteRule';
 
 function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);
@@ -331,7 +331,7 @@ function RulesApp() {
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              entities/                                      │
+│                       enterprise-business-rules/                            │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
 │  │ RewriteRule                                                         │   │
 │  │ ─────────────────────────────────────────────────────────────────── │   │
@@ -347,7 +347,7 @@ function RulesApp() {
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              usecases/                                      │
+│                       application-business-rules/                           │
 │                                                                             │
 │  ┌─────────────────────┐    ┌──────────────────────┐                       │
 │  │ <<interface>>       │    │ <<interface>>        │                       │

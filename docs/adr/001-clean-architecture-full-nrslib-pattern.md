@@ -25,10 +25,10 @@
 
 ```
 src/
-├── entities/                    ← 第1層: Entities
-├── usecases/                    ← 第2層: Use Cases
+├── enterprise-business-rules/   ← 第1層: Enterprise Business Rules (Entities)
+├── application-business-rules/  ← 第2層: Application Business Rules (Use Cases)
 ├── interface-adapters/          ← 第3層: Interface Adapters
-└── frameworks/                  ← 第4層: Frameworks & Drivers
+└── frameworks-and-drivers/      ← 第4層: Frameworks & Drivers
 ```
 
 ### 2. フルnrslibパターンの採用
@@ -52,24 +52,24 @@ Controller → Input Port → Interactor → Output Port → Presenter → View
 
 | # | Clean Architecture要素 | ディレクトリ |
 |---|----------------------|-------------|
-| 1 | View | `frameworks/ui/` |
+| 1 | View | `frameworks-and-drivers/ui/` |
 | 2 | View Model | （Presenterが直接更新するため省略） |
 | 3 | Controller | `interface-adapters/controllers/` |
 | 4 | Presenter | `interface-adapters/presenters/` |
-| 5 | Input Boundary (Input Port) | `usecases/ports/input/` |
-| 6 | Output Boundary (Output Port) | `usecases/ports/output/` |
-| 7 | Use Case Interactor | `usecases/interactors/` |
+| 5 | Input Boundary (Input Port) | `application-business-rules/ports/input/` |
+| 6 | Output Boundary (Output Port) | `application-business-rules/ports/output/` |
+| 7 | Use Case Interactor | `application-business-rules/interactors/` |
 | 8 | Data Access Interface | `interface-adapters/gateways/` |
-| 9 | Data Access (Repository) | `frameworks/persistence/` |
+| 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` |
 | 10 | Database | IndexedDB (Dexie) |
-| 11 | Entities | `entities/` |
-| 12 | External Interfaces | `frameworks/browser/` |
+| 11 | Entities | `enterprise-business-rules/` |
+| 12 | External Interfaces | `frameworks-and-drivers/browser/` |
 
 ### 4. 詳細ディレクトリ構造
 
 ```
 src/
-├── entities/                                    ← 第1層: Entities
+├── enterprise-business-rules/                   ← 第1層: Enterprise Business Rules
 │   ├── RewriteRule/
 │   │   └── RewriteRule.ts
 │   ├── value-objects/
@@ -77,7 +77,7 @@ src/
 │   └── constants/
 │       └── RegexConstants.ts
 │
-├── usecases/                                    ← 第2層: Use Cases
+├── application-business-rules/                  ← 第2層: Application Business Rules
 │   ├── ports/
 │   │   ├── input/                              ← Input Port (Interface)
 │   │   │   └── rule/
@@ -106,7 +106,7 @@ src/
 │   └── gateways/                               ← Gateway (Interface)
 │       └── IRewriteRuleRepository.ts
 │
-└── frameworks/                                  ← 第4層: Frameworks & Drivers
+└── frameworks-and-drivers/                      ← 第4層: Frameworks & Drivers
     ├── ui/                                     ← View (React)
     │   ├── components/
     │   │   ├── atoms/
@@ -123,12 +123,13 @@ src/
 ### 5. 依存関係ルール
 
 ```
-内側（安定）                              外側（不安定）
-─────────────────────────────────────────────────────────→
+内側（安定）                                            外側（不安定）
+───────────────────────────────────────────────────────────────────────→
 
-┌────────────┐   ┌────────────┐   ┌────────────────┐   ┌────────────┐
-│  entities  │ ← │  usecases  │ ← │interface-adapters│ ← │ frameworks │
-└────────────┘   └────────────┘   └────────────────┘   └────────────┘
+┌────────────────────┐   ┌────────────────────┐   ┌──────────────────┐   ┌─────────────────────┐
+│ enterprise-business│ ← │application-business│ ← │interface-adapters│ ← │frameworks-and-drivers│
+│       -rules       │   │       -rules       │   │                  │   │                     │
+└────────────────────┘   └────────────────────┘   └──────────────────┘   └─────────────────────┘
 
 矢印の方向 = 依存の方向
 外側から内側への依存のみ許可
