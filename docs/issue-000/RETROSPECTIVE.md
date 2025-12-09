@@ -22,7 +22,6 @@
 <!-- 特に既存の.clinerulesの改善点、誤読を招きかねない指示等の問題点があれば指摘してください。 -->
 
 
-
 ---
 <!-- ユーザーが使うコマンド workflow-just-commit-daily-scrum -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-commit-daily-scrum-then-start-next-daily-scrum.md -->
