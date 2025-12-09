@@ -2,7 +2,6 @@ import 'src/entrypoints/rules/style.css';
 
 import { container } from 'src/infrastructure/di/container';
 
-import * as React from 'react';
 import { useEffect,useState } from 'react';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
