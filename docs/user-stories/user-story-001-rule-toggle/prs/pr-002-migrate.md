@@ -29,15 +29,12 @@ PR-001で作成したスケルトンに実装を埋める。テストとStoryboo
 | `src/interface-adapters/presenters/rule/ToggleRuleActivePresenter.ts` | 出力変換実装 | ⬜ |
 | `src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.tsx` | UI実装 | ⬜ |
 | `src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.module.css` | スタイル実装 | ⬜ |
-| `src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.tsx` | UI実装 | ⬜ |
-| `src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.module.css` | スタイル実装 | ⬜ |
 
 ### Storybook
 
 | ファイル | 変更種別 | 状態 |
 |---------|---------|------|
 | `src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.stories.tsx` | 新規 | ⬜ |
-| `src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.stories.tsx` | 新規 | ⬜ |
 
 ### テストファイル
 
@@ -70,12 +67,6 @@ async execute(inputData: ToggleRuleActiveInputData): Promise<void> {
 - `aria-checked` で状態を伝達
 - クリックで `onChange` を呼び出し
 - CSSでON/OFF状態を視覚的に表現
-
-### RulePreviewToggle.tsx
-
-- タブ形式のUI
-- ローカルstateで表示モード管理
-- 「置換前」「置換後」の切り替え
 
 ## 完了条件
 
