@@ -1,4 +1,5 @@
 # Git Worktree Commands
+# Note: When adding/removing commands, also update docs/GIT_WORKTREE.md
 .PHONY: wt-list wt-add wt-remove wt-prune wt-current wt-dev wt-down wt-up wt-disable
 
 # Common variables
