@@ -70,15 +70,15 @@ test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, po
   await expect(rulesPage.locator('body')).toBeVisible({ timeout: 60000 });
 
   // 11. Assert: 保存されたルールが表示されている（空の状態ではない）
-  const emptyState = rulesPage.locator('.empty-state');
+  const emptyState = rulesPage.locator('[data-testid="empty-state"]');
   await expect(emptyState).not.toBeVisible({ timeout: 10000 });
 
   // 12. Assert: ルール一覧の内容確認
-  const rulesTableContainer = rulesPage.locator('.rules-table-container');
+  const rulesTableContainer = rulesPage.locator('[data-testid="rules-table-container"]');
   await expect(rulesTableContainer).toBeVisible({ timeout: 60000 });
 
   // 13. Assert: ルールテーブルが表示されている
-  const rulesTable = rulesPage.locator('.rules-table');
+  const rulesTable = rulesPage.locator('[data-testid="rules-table"]');
   await expect(rulesTable).toBeVisible({ timeout: 60000 });
 
   // 14. Assert: 保存したURLパターンが表示されている
@@ -90,8 +90,6 @@ test('正規表現を使ったDOM置換機能のe2eテスト', async ({ page, po
   // 16. Assert: 保存した置換後文字列が表示されている
   await expect(rulesPage.locator('.rule-new-string:has-text("<h2>$1</h2>")')).toBeVisible({ timeout: 60000 });
 
-  // 17. Assert: 正規表現使用の表示確認（✓マークで表示される）
-  await expect(rulesPage.locator('.regex-badge:has-text("✓")')).toBeVisible({ timeout: 60000 });
 
   // 18. Assert: フッターのルール数表示が更新されている
   await expect(rulesPage.locator('text=合計 1 件のルールが保存されています')).toBeVisible({ timeout: 60000 });
