@@ -10,7 +10,7 @@ get_repository_top_absolute_paths() {
     local SCRIPT_DIR
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     # Go up 1 level: scripts/ -> frog-frame-front/
-    cd "$SCRIPT_DIR/.." && pwd
+    (cd "$SCRIPT_DIR/.." && pwd)
 }
 
 # Allow direct execution for use in Makefiles
