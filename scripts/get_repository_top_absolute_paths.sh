@@ -9,7 +9,7 @@ get_repository_top_absolute_paths() {
     # Get the directory of this script using BASH_SOURCE for correct resolution when sourced
     local SCRIPT_DIR
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    # Go up 1 level: scripts/ -> frog-frame-front/
+    # Go up 1 level from scripts/ to repository root
     (cd "$SCRIPT_DIR/.." && pwd)
 }
 
