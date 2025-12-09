@@ -67,9 +67,9 @@ _wt-init: _wt-check-branch _wt-check-exists
 	@echo "Starting Docker services for worktree..."
 	@$(MAKE) wt-up
 	@echo "Installing npm dependencies in worktree..."
-	@$(_wt-load-env-exec) docker compose exec frontend npm install
+	@$(_load-env-exec) docker compose exec frontend npm install
 	@echo "Preparing WXT (generating .wxt/tsconfig.json) in worktree..."
-	@$(_wt-load-env-exec) docker compose exec frontend npx wxt prepare
+	@$(_load-env-exec) docker compose exec frontend npx wxt prepare
 	@echo ""
 	@echo "Worktree $(BRANCH) initialization complete!"
 	@echo "The worktree is ready for development."

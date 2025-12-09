@@ -2,7 +2,7 @@ workflow-submit-pull-request
 
 ```cline-instructions
 - issue番号の取得
-  - nnn=(カレントブランチ名からissue番号を取得)
+  - nnn=$(scripts/.clinerules/get-issue-number.sh)
 - PRドキュメントのコミット
 - 対象
   - frog-frame-front/docs/issue-nnn/PULL_REQUEST.md

@@ -1,5 +1,7 @@
 # Git Worktree Guide
 
+<!-- Note: When updating this document, also sync relevant sections in CLAUDE.md -->
+
 Git worktreeは、同じリポジトリの複数のブランチを同時にチェックアウトできる機能です。これにより、ブランチの切り替えなしで複数の機能を並行開発できます。
 
 ## シェル関数の設定（推奨）
@@ -8,12 +10,47 @@ Git worktreeは、同じリポジトリの複数のブランチを同時にチ�
 
 ```bash
 # ~/.bashrcまたは~/.zshrcに追加
-source /path/to/frog-frame-front/scripts/wt-cd.sh
+source /path/to/frog-frame-front/scripts/main.sh
 ```
 
 これにより以下のコマンドが使用可能になります：
-- `wt-cd-current` - 現在のworktreeディレクトリに移動
-- `wtcd` - 上記のエイリアス（短縮形）
+
+### ナビゲーションコマンド
+- `wt-cd <branch>` - 指定したworktreeディレクトリに移動
+- `wt-cd-current` - 現在のworktreeディレクトリに移動（内部で`wt-cd`を使用）
+
+### シェルラッパーコマンド（Tab補完対応）
+
+`make`コマンドの短縮版として、以下のシェル関数が使用できます。**BashとZsh両方でTab補完が有効**です。
+
+| コマンド | 説明 | Tab補完対象 |
+|---------|------|-------------|
+| `wt-add <branch>` | worktree作成 | 全ブランチ（ローカル/リモート） |
+| `wt-remove <branch>` | worktree削除 | 既存worktree |
+| `wt-dev <branch>` | 開発サーバー起動 | 既存worktree |
+
+#### 使用例
+
+```bash
+# Tab補完でブランチを選択してworktree作成
+wt-add feat<TAB>  # → wt-add feature-branch
+
+# Tab補完で既存worktreeを選択して開発開始
+wt-dev feat<TAB>  # → wt-dev feature-branch
+
+# Tab補完で既存worktreeを選択して削除
+wt-remove feat<TAB>  # → wt-remove feature-branch
+```
+
+#### makeコマンドとの対応
+
+| シェルラッパー | 対応するmakeコマンド |
+|---------------|---------------------|
+| `wt-add feature-x` | `make wt-add BRANCH=feature-x` |
+| `wt-remove feature-x` | `make wt-remove BRANCH=feature-x` |
+| `wt-dev feature-x` | `make wt-dev BRANCH=feature-x` |
+
+Tab補完により、長いブランチ名を入力する手間が省けます。
 
 ## 利点
 
@@ -98,11 +135,14 @@ make wt-down
 
 # worktreeのDockerコンテナを起動
 make wt-up
+
+# Storybookを起動（メインリポジトリ・worktree両方で動作）
+make storybook
 ```
 
-注：これらのコマンドは`.env.worktree`の設定を使用します。
+注：`make storybook`は自動的に環境を検出し、worktreeモードでは`.env.worktree`の設定を使用します。
 
-### ナビゲーションコマンド
+### ナビゲーション・シェルラッパーコマンド
 
 #### 現在のworktree確認
 
@@ -111,14 +151,23 @@ make wt-up
 make wt-current
 ```
 
-#### worktreeディレクトリへ移動
+#### シェルラッパーコマンド（Tab補完対応）
+
+シェル関数の設定が必要です（「シェル関数の設定」セクション参照）。
 
 ```bash
-# 現在アクティブなworktreeディレクトリへ移動（sourceコマンドで実行）
-source <(make wt-cd-current)
+# Tab補完でブランチを選択してworktree作成
+wt-add feature-branch
 
-# シェル関数を設定済みの場合
-wt-cd-current  # または短縮形: wtcd
+# Tab補完で既存worktreeを選択して開発開始
+wt-dev feature-branch
+
+# Tab補完で既存worktreeを選択して削除
+wt-remove feature-branch
+
+# worktreeディレクトリへ移動
+wt-cd feature-branch  # 特定のworktreeへ移動
+wt-cd-current         # 現在のworktreeへ移動
 ```
 
 ## 使用例
@@ -217,6 +266,8 @@ make wt-remove BRANCH=your-branch
 
 ## コマンドリファレンス
 
+### Makeコマンド
+
 | コマンド | 説明 | 使用例 |
 |---------|------|--------|
 | `wt-list` | すべてのworktreeを一覧表示 | `make wt-list` |
@@ -224,11 +275,22 @@ make wt-remove BRANCH=your-branch
 | `wt-remove` | worktreeを削除 | `make wt-remove BRANCH=feature-x` |
 | `wt-prune` | 不要なworktree参照を削除 | `make wt-prune` |
 | `wt-current` | 現在アクティブなworktreeを表示 | `make wt-current` |
-| `wt-cd-current` | worktreeディレクトリへ移動 | `source <(make wt-cd-current)` |
 | `wt-dev` | worktreeで開発サーバーを起動 | `make wt-dev BRANCH=feature-x` |
 | `wt-disable` | worktreeモードを無効化、メインリポジトリに戻る | `make wt-disable` |
 | `wt-down` | worktreeのDockerコンテナを停止 | `make wt-down` |
 | `wt-up` | worktreeのDockerコンテナを起動 | `make wt-up` |
+
+### シェルラッパーコマンド（Tab補完対応）
+
+シェル関数設定後（`source scripts/main.sh`）に使用可能。
+
+| コマンド | 説明 | Tab補完対象 |
+|---------|------|-------------|
+| `wt-add <branch>` | worktree作成 | 全ブランチ（ローカル/リモート） |
+| `wt-remove <branch>` | worktree削除 | 既存worktree |
+| `wt-dev <branch>` | 開発サーバー起動 | 既存worktree |
+| `wt-cd <branch>` | worktreeディレクトリへ移動 | 既存worktree |
+| `wt-cd-current` | 現在のworktreeへ移動 | - |
 
 ## 直接gitコマンドを使用する場合
 
