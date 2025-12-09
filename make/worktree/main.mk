@@ -1,12 +1,10 @@
 # Git Worktree Commands
-.PHONY: wt-list wt-add wt-remove wt-prune wt-current wt-dev wt-down wt-up wt-disable wt-storybook
+# Note: When adding/removing commands, also update docs/GIT_WORKTREE.md
+.PHONY: wt-list wt-add wt-remove wt-prune wt-current wt-dev wt-down wt-up wt-disable
 
 # Common variables
 WORKTREE_DIR := worktrees
 WORKTREE_PATH = $(WORKTREE_DIR)/$(BRANCH)
-
-# Load worktree environment variables and execute command
-_wt-load-env-exec = set -a && [ -f .env ] && . ./.env; [ -f .env.worktree ] && . ./.env.worktree; set +a &&
 
 # Include internal helpers
 include make/worktree/helpers/main.mk
@@ -67,10 +65,10 @@ wt-current:
 	@echo "Path: $$(grep CURRENT_WORKTREE_PATH .env.worktree 2>/dev/null | cut -d'=' -f2 || echo 'unknown')"
 
 wt-down:
-	@$(_wt-load-env-exec) docker compose down || true
+	@$(_load-env-exec) docker compose down || true
 
 wt-up:
-	@$(_wt-load-env-exec) docker compose up -d
+	@$(_load-env-exec) docker compose up -d
 
 wt-dev: _wt-check-branch
 	@if [ ! -d "$(WORKTREE_PATH)" ]; then \
@@ -85,7 +83,3 @@ wt-disable:
 	@rm -f docker-compose.override.yml .env.worktree
 	@$(MAKE) dev
 	@echo "Switched back to main repository mode"
-
-wt-storybook:
-	@echo "Starting Storybook in worktree mode..."
-	@$(_wt-load-env-exec) docker compose exec frontend npm run storybook

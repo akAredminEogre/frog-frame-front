@@ -1,0 +1,33 @@
+.loadingMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-l);
+  gap: var(--spacing-s);
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--colors-border);
+  border-top: 2px solid var(--colors-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.message {
+  margin: 0;
+  font-size: var(--font-size-small);
+  color: var(--colors-muted);
+  text-align: center;
+}
+
+@keyframes spin {
+  0% { 
+    transform: rotate(0deg); 
+  }
+  100% { 
+    transform: rotate(360deg); 
+  }
+}
