@@ -4,7 +4,7 @@
 
 ```
 docs/user-stories/
-├── user-story-{番号}-{機能名}/
+├── user-story-{番号}/
 │   ├── README.md                 # 必須: ストーリー概要
 │   ├── acceptance-criteria.md    # 必須: 受け入れ条件
 │   └── prs/                      # 必須: PR計画
