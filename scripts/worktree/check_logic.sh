@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../get_repository_top_absolute_paths.sh"
 
 # Get repository top absolute path
-_REPOSITORY_TOP_ABSOLUTE_PATH=$(get_repository_top_absolute_paths)
+_REPOSITORY_TOP_ABSOLUTE_PATH=$(get_repository_top_absolute_path)
 
 # Check if .env.worktree file exists
 # Returns: 0 if exists, 1 if not exists (with message)
