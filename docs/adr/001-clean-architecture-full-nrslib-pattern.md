@@ -33,19 +33,41 @@ src/
 
 ### 2. フルnrslibパターンの採用
 
-Controller → Input Port → Interactor → Output Port → Presenter → View
+**制御の流れ**: View → Controller → Interactor → Presenter → View
+
+**依存関係**（依存性逆転の原則）:
+- Controller → Input Port ← Interactor (implements)
+- Interactor → Output Port ← Presenter (implements)
 
 ```
+【制御の流れ（実線矢印）】
+
 ┌──────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌───────────┐
 │   View   │───►│  Controller  │───►│  Interactor  │───►│  Presenter   │───►│   View    │
 │ (操作)   │    │              │    │              │    │              │    │ (表示更新) │
 └──────────┘    └──────────────┘    └──────────────┘    └───────────────┘    └───────────┘
-                      │                    │                    ▲
-                      ▼                    ▼                    │
-               ┌──────────────┐    ┌──────────────┐    ┌───────────────┐
-               │  Input Port  │    │ Output Port  │    │   Gateway     │
-               │ (Interface)  │    │ (Interface)  │    │  (Interface)  │
-               └──────────────┘    └──────────────┘    └───────────────┘
+
+
+【依存関係（破線矢印 = implements）】
+
+               ┌──────────────┐                        ┌───────────────┐
+               │  Input Port  │                        │  Output Port  │
+               │ <<interface>>│                        │ <<interface>> │
+               └──────▲───────┘                        └───────▲───────┘
+                      │                                        │
+                      │ implements                             │ implements
+                      │                                        │
+               ┌──────┴───────┐    uses             ┌──────────┴──────┐
+               │  Interactor  │───────────────────► │    Presenter    │
+               │              │  (Output Port経由)   │                 │
+               └──────────────┘                     └─────────────────┘
+                      │
+                      │ uses
+                      ▼
+               ┌──────────────┐
+               │   Gateway    │
+               │ <<interface>>│
+               └──────────────┘
 ```
 
 ### 3. 12要素とディレクトリの対応
