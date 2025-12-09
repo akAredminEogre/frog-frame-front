@@ -24,6 +24,7 @@ npminstall:
 	@echo "Installing npm dependencies..."
 	@docker compose exec frontend npm install
 
+# TODO: Display branch name for main repository, or worktree name for worktree mode
 storybook:
 	@echo "Starting Storybook development server..."
 	@$(_load-env-exec) docker compose exec frontend npm run storybook
