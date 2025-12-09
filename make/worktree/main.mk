@@ -1,5 +1,5 @@
 # Git Worktree Commands
-.PHONY: wt-list wt-add wt-remove wt-prune wt-current wt-dev wt-down wt-up wt-disable wt-storybook
+.PHONY: wt-list wt-add wt-remove wt-prune wt-current wt-dev wt-down wt-up wt-disable
 
 # Common variables
 WORKTREE_DIR := worktrees
@@ -77,7 +77,3 @@ wt-disable:
 	@rm -f docker-compose.override.yml .env.worktree
 	@$(MAKE) dev
 	@echo "Switched back to main repository mode"
-
-wt-storybook:
-	@echo "Starting Storybook in worktree mode..."
-	@$(_load-env-exec) docker compose exec frontend npm run storybook
