@@ -1,6 +1,7 @@
 # Rule Table UI 設計
 
 ## 概要
+<!-- TODO: このUI設計に沿ったフロントエンドコンポーネントテストの実装 -->
 
 ルール一覧を表示するテーブルコンポーネントのUI設計仕様書です。
 RulesTable（Organism層）とRuleTableRow（Molecule層）コンポーネントによって構成されています。
