@@ -1,6 +1,9 @@
 # Common Variables
 # Shared variables used across multiple Makefile modules
 
+# Use bash for shell commands (required for 'source' command and BASH_SOURCE in scripts)
+SHELL := /bin/bash
+
 # Get the absolute path of the repository top directory
 # Uses helper script to resolve path regardless of current working directory
 _REPOSITORY_TOP_ABSOLUTE_PATH = $(shell scripts/get_repository_top_absolute_path.sh get_repository_top_absolute_path)
