@@ -12,6 +12,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit }) => {
   return (
     <tr className={styles.ruleRow}>
       <td>
+        {/* TODO: <button>のatomsへの分離 */}
         <button
           className={styles.editButton}
           onClick={() => onEdit(rule.id)}
@@ -21,6 +22,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit }) => {
         </button>
       </td>
       <td title={rule.urlPattern || ''} className="rule-url-pattern">
+        {/* TODO: URLPattern moleculeへの分離、表示ビジネスロジックの分離 */}
         {rule.urlPattern 
           ? (rule.urlPattern.length > 30 
              ? rule.urlPattern.substring(0, 30) + '...'
