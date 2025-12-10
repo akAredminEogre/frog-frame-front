@@ -29,7 +29,7 @@ _WT_COMPLETION_DEFS=(
     "wt-add=_wt_get_all_branches"
     "wt-init=_wt_get_all_branches"
     "wt-remove=_wt_get_worktrees"
-    "wt-dev=_wt_get_worktrees"
+    "wt-dev=_wt_get_all_branches"
     "wt-cd=_wt_get_worktrees"
 )
 
