@@ -123,6 +123,7 @@ make wt-dev BRANCH=other-branch
 ```
 
 `wt-dev`コマンドは以下を自動実行します：
+- **worktreeが存在しない場合は自動的に`wt-add`を実行**
 - 他のworktreeのDockerコンテナを自動停止
 - ポート3000の競合回避
 - 指定されたworktreeディレクトリで独立した開発環境を起動
@@ -241,16 +242,16 @@ make wt-dev BRANCH=feature-review
 
 ## 簡単ワークフロー（まとめ）
 
-**初回セットアップ（1回のみ）**：
+**開発開始（これだけでOK）**：
 ```bash
-make wt-add BRANCH=your-branch
-# これだけで、worktree作成・ブランチ設定・環境初期化が全て完了
+make wt-dev BRANCH=your-branch
+# worktreeが存在しない場合は自動作成、他のworktreeを停止して開発サーバーを起動
 ```
 
 **worktree切り替え（日常使用）**：
 ```bash
-make wt-dev BRANCH=your-branch
-# これだけで他のworktreeを停止して、指定したworktreeの開発サーバーが起動
+make wt-dev BRANCH=other-branch
+# 自動的に他のworktreeを停止して、指定したworktreeの開発サーバーが起動
 ```
 
 **通常モードに戻る**：
@@ -275,7 +276,7 @@ make wt-remove BRANCH=your-branch
 | `wt-remove` | worktreeを削除 | `make wt-remove BRANCH=feature-x` |
 | `wt-prune` | 不要なworktree参照を削除 | `make wt-prune` |
 | `wt-current` | 現在アクティブなworktreeを表示 | `make wt-current` |
-| `wt-dev` | worktreeで開発サーバーを起動 | `make wt-dev BRANCH=feature-x` |
+| `wt-dev` | worktreeで開発サーバーを起動（存在しない場合は自動作成） | `make wt-dev BRANCH=feature-x` |
 | `wt-disable` | worktreeモードを無効化、メインリポジトリに戻る | `make wt-disable` |
 | `wt-down` | worktreeのDockerコンテナを停止 | `make wt-down` |
 | `wt-up` | worktreeのDockerコンテナを起動 | `make wt-up` |
