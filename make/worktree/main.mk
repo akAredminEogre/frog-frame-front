@@ -20,7 +20,7 @@ wt-list:
 
 wt-remove: _wt-check-branch
 	@echo "Removing worktree for branch: $(BRANCH)..."
-	@git worktree remove "$(WORKTREE_PATH)" --force 2>/dev/null || echo "Worktree not found: $(WORKTREE_PATH)"
+	@git worktree remove $(WORKTREE_PATH) --force 2>/dev/null || echo "Worktree not found: $(WORKTREE_PATH)"
 	@echo "Worktree removed"
 
 wt-prune:
@@ -46,7 +46,7 @@ wt-init: _wt-check-branch
 	@$(MAKE) _wt-check-exists BRANCH="$(BRANCH)" 2>/dev/null || $(MAKE) wt-add BRANCH="$(BRANCH)"
 	@echo "Initializing worktree for development: $(BRANCH)..."
 	@echo "Switching to worktree for initialization..."
-	@$(MAKE) _wt-create-override BRANCH="$(BRANCH)"
+	@$(MAKE) _wt-create-override BRANCH=$(BRANCH)
 	@echo "Stopping existing Docker services..."
 	@$(MAKE) wt-down
 	@echo "Starting Docker services for worktree..."
