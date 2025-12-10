@@ -17,7 +17,15 @@ wt-list:
 
 wt-add: _wt-check-branch
 	@echo "Creating worktree for branch: $(BRANCH)..."
-	@mkdir -p $(WORKTREE_DIR)
+	@mkdir -p $(dir $(WORKTREE_PATH))
+	@# Check write permissions on parent directory
+	@if ! touch "$(dir $(WORKTREE_PATH)).write_test" 2>/dev/null; then \
+		echo "Error: Cannot write to $(dir $(WORKTREE_PATH))"; \
+		echo "The directory may have been created by Docker with root permissions."; \
+		echo "Please fix permissions with: sudo chown -R $$(whoami) $(WORKTREE_DIR)/"; \
+		exit 1; \
+	fi
+	@rm -f "$(dir $(WORKTREE_PATH)).write_test"
 	@# Check if worktree already exists in git
 	@if git worktree list | awk '{print $$1}' | grep -q "^$(PWD)/$(WORKTREE_PATH)\$$"; then \
 		echo "Error: Worktree already exists at $(WORKTREE_PATH)"; \

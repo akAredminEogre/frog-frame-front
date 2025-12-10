@@ -16,6 +16,7 @@ services:
     volumes:
       - ${HOST_FRONTEND_ROOT_PATH}:${CONTAINER_APP_ROOT}/
       - ${FIX_PERMISSIONS_SCRIPT_PATH}:/fix-permissions.sh
+      - ./worktrees:/worktrees
     environment:
       - HOST=${HOST_ENV}
       - DOTENV_CONFIG_QUIET=true
