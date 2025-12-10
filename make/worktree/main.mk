@@ -71,8 +71,8 @@ wt-up:
 	@$(_load-env-exec) docker compose up -d
 
 wt-dev: _wt-check-branch
-	@$(MAKE) _wt-check-exists BRANCH=$(BRANCH) 2>/dev/null || $(MAKE) wt-add BRANCH=$(BRANCH)
-	@$(MAKE) _wt-dev-in-worktree BRANCH=$(BRANCH)
+	@$(MAKE) _wt-check-exists BRANCH="$(BRANCH)" 2>/dev/null || $(MAKE) wt-add BRANCH="$(BRANCH)"
+	@$(MAKE) _wt-dev-in-worktree BRANCH="$(BRANCH)"
 
 wt-disable:
 	@echo "Disabling worktree mode, returning to main repository..."
