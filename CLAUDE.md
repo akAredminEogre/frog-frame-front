@@ -117,7 +117,7 @@ make wt-current                 # Show currently active worktree
 
 **Development Commands:**
 ```bash
-make wt-dev BRANCH=feature-x    # Start dev server for worktree (RECOMMENDED)
+make wt-dev BRANCH=feature-x    # Start dev server for worktree (auto-creates if missing)
 make storybook                  # Start Storybook (works in both main repo and worktree mode)
 make wt-down                    # Stop worktree Docker containers
 make wt-up                      # Start worktree Docker containers
@@ -147,25 +147,23 @@ source /path/to/frog-frame-front/scripts/main.sh
 
 **Recommended Worktree Workflow:**
 ```bash
-# 1. Create new worktree (auto-initialization included)
-make wt-add BRANCH=new-feature
-
-# 2. Start development with one command (RECOMMENDED)
+# 1. Start development (auto-creates worktree if it doesn't exist)
 make wt-dev BRANCH=new-feature
 
-# 3. Switch between worktrees (auto-stops other containers)
+# 2. Switch between worktrees (auto-stops other containers)
 make wt-dev BRANCH=other-feature
 
-# 4. Return to main repository (when done with worktree development)
+# 3. Return to main repository (when done with worktree development)
 make wt-disable
 
-# 5. Clean up worktree when done
+# 4. Clean up worktree when done
 make wt-remove BRANCH=new-feature
 ```
 
 **Key Features:**
-- `make wt-add` automatically initializes the worktree (copies .env, matchUrl.ts, runs npm install, etc.)
+- `make wt-dev` automatically creates the worktree if it doesn't exist (calls `wt-add` internally)
 - `make wt-dev` automatically stops other worktree containers to avoid port conflicts
+- `make wt-add` automatically initializes the worktree (copies .env, matchUrl.ts, runs npm install, etc.)
 - Each worktree has its own node_modules and package.json (no cross-branch contamination)
 - Internal helper commands (starting with `_`) should not be used directly
 
