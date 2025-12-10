@@ -45,10 +45,6 @@ _wt-check-incomplete-setup:
 # Uses check_env_worktree_exists and get_and_check_active_branch from scripts/worktree/check_logic.sh
 _wt-check-initialized:
 	@source scripts/worktree/check_logic.sh && \
-	if check_env_worktree_exists >/dev/null 2>&1; then \
-		ACTIVE_BRANCH=$$(get_and_check_active_branch 2>/dev/null); \
-		if [ "$$ACTIVE_BRANCH" = "$(BRANCH)" ]; then \
-			exit 0; \
-		fi; \
-	fi; \
-	exit 1
+	check_env_worktree_exists >/dev/null 2>&1 || exit 1; \
+	ACTIVE_BRANCH=$$(get_and_check_active_branch 2>/dev/null) || exit 1; \
+	[ "$$ACTIVE_BRANCH" = "$(BRANCH)" ] || exit 1
