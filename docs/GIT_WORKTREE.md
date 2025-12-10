@@ -26,6 +26,7 @@ source /path/to/frog-frame-front/scripts/main.sh
 | コマンド | 説明 | Tab補完対象 |
 |---------|------|-------------|
 | `wt-add <branch>` | worktree作成 | 全ブランチ（ローカル/リモート） |
+| `wt-init <branch>` | worktree初期化 | 全ブランチ（ローカル/リモート） |
 | `wt-remove <branch>` | worktree削除 | 既存worktree |
 | `wt-dev <branch>` | 開発サーバー起動 | 既存worktree |
 
@@ -34,6 +35,9 @@ source /path/to/frog-frame-front/scripts/main.sh
 ```bash
 # Tab補完でブランチを選択してworktree作成
 wt-add feat<TAB>  # → wt-add feature-branch
+
+# Tab補完でブランチを選択してworktree初期化
+wt-init feat<TAB>  # → wt-init feature-branch
 
 # Tab補完で既存worktreeを選択して開発開始
 wt-dev feat<TAB>  # → wt-dev feature-branch
@@ -47,6 +51,7 @@ wt-remove feat<TAB>  # → wt-remove feature-branch
 | シェルラッパー | 対応するmakeコマンド |
 |---------------|---------------------|
 | `wt-add feature-x` | `make wt-add BRANCH=feature-x` |
+| `wt-init feature-x` | `make wt-init BRANCH=feature-x` |
 | `wt-remove feature-x` | `make wt-remove BRANCH=feature-x` |
 | `wt-dev feature-x` | `make wt-dev BRANCH=feature-x` |
 
@@ -288,6 +293,7 @@ make wt-remove BRANCH=your-branch
 | コマンド | 説明 | Tab補完対象 |
 |---------|------|-------------|
 | `wt-add <branch>` | worktree作成 | 全ブランチ（ローカル/リモート） |
+| `wt-init <branch>` | worktree初期化（Docker、npm install） | 全ブランチ（ローカル/リモート） |
 | `wt-remove <branch>` | worktree削除 | 既存worktree |
 | `wt-dev <branch>` | 開発サーバー起動 | 既存worktree |
 | `wt-cd <branch>` | worktreeディレクトリへ移動 | 既存worktree |
