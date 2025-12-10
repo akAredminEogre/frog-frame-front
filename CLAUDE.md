@@ -161,8 +161,7 @@ make wt-remove BRANCH=new-feature
 ```
 
 **Key Features:**
-- `make wt-dev` automatically creates the worktree if it doesn't exist (calls `wt-add` internally)
-- `make wt-dev` automatically stops other worktree containers to avoid port conflicts
+- `make wt-dev` automatically creates the worktree if it doesn't exist (calls `wt-add` internally) and stops other worktree containers to avoid port conflicts
 - `make wt-add` automatically initializes the worktree (copies .env, matchUrl.ts, runs npm install, etc.)
 - Each worktree has its own node_modules and package.json (no cross-branch contamination)
 - Internal helper commands (starting with `_`) should not be used directly
