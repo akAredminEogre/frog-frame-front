@@ -1,5 +1,5 @@
 # Git Worktree Commands
-# Note: When adding/removing commands, also update docs/GIT_WORKTREE.md
+# Note: When adding/removing/modifying commands, also update docs/GIT_WORKTREE.md
 .PHONY: wt-list wt-add wt-remove wt-prune wt-current wt-dev wt-down wt-up wt-disable
 
 # Common variables
@@ -78,7 +78,9 @@ wt-down:
 wt-up:
 	@$(_load-env-exec) docker compose up -d
 
-wt-dev: _wt-check-branch _wt-check-exists _wt-dev-in-worktree
+wt-dev: _wt-check-branch
+	@$(MAKE) _wt-check-exists BRANCH="$(BRANCH)" 2>/dev/null || $(MAKE) wt-add BRANCH="$(BRANCH)"
+	@$(MAKE) _wt-dev-in-worktree BRANCH="$(BRANCH)"
 
 wt-disable:
 	@echo "Disabling worktree mode, returning to main repository..."
