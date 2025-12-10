@@ -1,6 +1,6 @@
 # Git Worktree Check Logic
 # Validation and check helpers for worktree operations
-.PHONY: _wt-check-branch _wt-check-exists _wt-check-no-active _wt-check-custom-override _wt-check-incomplete-setup
+.PHONY: _wt-check-branch _wt-check-exists _wt-check-no-active _wt-check-custom-override _wt-check-incomplete-setup _wt-check-initialized
 
 # Check if BRANCH variable is defined
 _wt-check-branch:
@@ -39,3 +39,14 @@ _wt-check-incomplete-setup:
 		echo "Worktree environment configured but docker-compose.override.yml missing"; \
 		exit 0; \
 	fi
+
+# Check if worktree is initialized for the specified branch
+# Succeeds (exit 0) if initialized, fails (exit 1) if not initialized
+_wt-check-initialized:
+	@if [ -f .env.worktree ]; then \
+		ACTIVE_BRANCH=$$(grep WORKTREE_ACTIVE_BRANCH .env.worktree 2>/dev/null | cut -d'=' -f2); \
+		if [ "$$ACTIVE_BRANCH" = "$(BRANCH)" ]; then \
+			exit 0; \
+		fi; \
+	fi; \
+	exit 1

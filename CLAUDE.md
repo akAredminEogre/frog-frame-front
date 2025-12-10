@@ -109,7 +109,8 @@ For working on multiple branches simultaneously:
 **Basic Commands:**
 ```bash
 make wt-list                    # List all worktrees
-make wt-add BRANCH=feature-x    # Create worktree for branch (includes auto-initialization)
+make wt-add BRANCH=feature-x    # Create worktree for branch (file copy only, no Docker)
+make wt-init BRANCH=feature-x   # Initialize worktree for development (Docker, npm install)
 make wt-remove BRANCH=feature-x # Remove worktree
 make wt-prune                   # Clean up stale references
 make wt-current                 # Show currently active worktree
@@ -117,7 +118,7 @@ make wt-current                 # Show currently active worktree
 
 **Development Commands:**
 ```bash
-make wt-dev BRANCH=feature-x    # Start dev server for worktree (auto-creates if missing)
+make wt-dev BRANCH=feature-x    # Start dev server for worktree (auto-initializes if needed)
 make storybook                  # Start Storybook (works in both main repo and worktree mode)
 make wt-down                    # Stop worktree Docker containers
 make wt-up                      # Start worktree Docker containers
@@ -161,8 +162,9 @@ make wt-remove BRANCH=new-feature
 ```
 
 **Key Features:**
-- `make wt-dev` automatically creates the worktree if it doesn't exist (calls `wt-add` internally) and stops other worktree containers to avoid port conflicts
-- `make wt-add` automatically initializes the worktree (copies .env, matchUrl.ts, runs npm install, etc.)
+- `make wt-dev` automatically initializes the worktree if not initialized (calls `wt-init` internally, which calls `wt-add` if needed) and stops other worktree containers to avoid port conflicts
+- `make wt-add` creates the worktree and copies configuration files (.env, matchUrl.ts) but does not run Docker or npm install
+- `make wt-init` initializes the development environment (Docker setup, npm install, wxt prepare)
 - Each worktree has its own node_modules and package.json (no cross-branch contamination)
 - Internal helper commands (starting with `_`) should not be used directly
 
