@@ -2,20 +2,26 @@
 # Validation and check helpers for worktree operations
 .PHONY: _wt-check-branch _wt-check-exists _wt-check-no-active _wt-check-custom-override _wt-check-incomplete-setup _wt-check-initialized
 
-# Check if BRANCH variable is defined
+# Check if BRANCH variable is defined and safe
 _wt-check-branch:
 ifndef BRANCH
 	@echo "Error: BRANCH is required"
 	@echo "Usage: make $(MAKECMDGOALS) BRANCH=branch-name"
 	@exit 1
 endif
+	@# Validate branch name contains only safe characters (security measure)
+	@if ! echo "$(BRANCH)" | grep -qE '^[A-Za-z0-9._/-]+$$'; then \
+		echo "Error: Invalid branch name '$(BRANCH)'"; \
+		echo "Branch names may only contain: A-Z, a-z, 0-9, '.', '_', '/', '-'"; \
+		exit 1; \
+	fi
 
 # Check if worktree directory exists
 _wt-check-exists:
 	@if [ ! -d "$(WORKTREE_PATH)" ]; then \
 		echo "Error: Worktree not found at $(WORKTREE_PATH)"; \
 		echo "Available worktrees:"; \
-		ls -1 $(WORKTREE_DIR) 2>/dev/null || echo "No worktrees found"; \
+		ls -1 "$(WORKTREE_DIR)" 2>/dev/null || echo "No worktrees found"; \
 		exit 1; \
 	fi
 

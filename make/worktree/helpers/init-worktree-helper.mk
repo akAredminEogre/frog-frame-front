@@ -17,24 +17,24 @@ _wt-remove-orphaned:
 _wt-setup-env:
 	@echo "Setting up configuration files..."
 	@if [ -f .env ]; then \
-		cp .env $(WORKTREE_PATH)/.env; \
+		cp .env "$(WORKTREE_PATH)/.env"; \
 		echo "Copied .env to worktree"; \
 	else \
 		echo "Warning: .env not found in main repository"; \
 		if [ -f .env.example ]; then \
-			cp .env.example $(WORKTREE_PATH)/.env; \
+			cp .env.example "$(WORKTREE_PATH)/.env"; \
 			echo "Copied .env.example to worktree as .env"; \
 		fi \
 	fi
 	@if [ -f host-frontend-root/frontend-src-root/src/utils/matchUrl.ts ]; then \
-		mkdir -p $(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/; \
-		cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts $(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts; \
+		mkdir -p "$(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/"; \
+		cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts "$(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts"; \
 		echo "Copied matchUrl.ts to worktree"; \
 	else \
 		echo "Warning: matchUrl.ts not found, checking for example file"; \
 		if [ -f host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example ]; then \
-			mkdir -p $(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/; \
-			cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example $(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts; \
+			mkdir -p "$(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/"; \
+			cp host-frontend-root/frontend-src-root/src/utils/matchUrl.ts.example "$(WORKTREE_PATH)/host-frontend-root/frontend-src-root/src/utils/matchUrl.ts"; \
 			echo "Copied matchUrl.ts.example to worktree as matchUrl.ts"; \
 		fi \
 	fi
