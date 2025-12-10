@@ -72,20 +72,22 @@ src/
 
 ### 3. 12要素とディレクトリの対応
 
-| # | Clean Architecture要素 | ディレクトリ |
-|---|----------------------|-------------|
-| 1 | View | `frameworks-and-drivers/ui/` |
-| 2 | View Model | （Presenterが直接更新するため省略） |
-| 3 | Controller | `interface-adapters/controllers/` |
-| 4 | Presenter | `interface-adapters/presenters/` |
-| 5 | Input Boundary (Input Port) | `application-business-rules/ports/input/` |
-| 6 | Output Boundary (Output Port) | `application-business-rules/ports/output/` |
-| 7 | Use Case Interactor | `application-business-rules/interactors/` |
-| 8 | Data Access Interface | `interface-adapters/gateways/` |
-| 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` |
-| 10 | Database | IndexedDB (Dexie) |
-| 11 | Entities | `enterprise-business-rules/` |
-| 12 | External Interfaces | `frameworks-and-drivers/browser/` |
+| # | Clean Architecture要素 | ディレクトリ | 備考 |
+|---|----------------------|-------------|------|
+| 1 | View | `frameworks-and-drivers/ui/` | React コンポーネント |
+| 2 | View Model | （Presenterが直接更新するため省略） | |
+| 3 | Controller | `interface-adapters/controllers/` | |
+| 4 | Presenter | `interface-adapters/presenters/` | |
+| 5 | Input Boundary (Input Port) | `application-business-rules/ports/input/` | |
+| 6 | Output Boundary (Output Port) | `application-business-rules/ports/output/` | |
+| 7 | Use Case Interactor | `application-business-rules/interactors/` | |
+| 8 | Data Access Interface | `interface-adapters/gateways/` | |
+| 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` | |
+| 10 | Database | IndexedDB (Dexie) | |
+| 11 | Entities | `enterprise-business-rules/` | |
+| 12 | External Interfaces | `frameworks-and-drivers/browser/` | Chrome API ラッパー |
+| 12 | External Interfaces | `frameworks-and-drivers/entrypoints/background.ts` | Chrome runtime、tabs API、メッセージング |
+| 12 | External Interfaces | `frameworks-and-drivers/entrypoints/content.ts` | Webページ操作、DOM操作 | |
 
 ### 4. 詳細ディレクトリ構造
 
