@@ -76,6 +76,11 @@
 
 ### Chrome拡張機能のコンテキスト分離
 
+> **参照**: [ADR-002: DB アクセスを messaging 経由に統一](../../../../adr/002-unified-db-access-via-messaging.md)
+
+Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-002 の決定に従い、
+すべてのコンテキストから DB アクセスは messaging 経由で Background Script に集約する。
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ Rules Page (別タブ)                                              │
