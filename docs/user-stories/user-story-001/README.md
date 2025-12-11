@@ -61,12 +61,29 @@
 
 #### application-business-rules/ (第2層)
 
-変更不要 - `IRewriteRuleRepository.getById/update` は既に実装済み
-
 参考実装:
 - `src/application/usecases/rule/UpdateRewriteRuleUseCase.ts` - タブリロードロジックを参考にする
 
 #### interface-adapters/ (第3層)
+
+- `src/application/ports/IRewriteRuleRepository.ts`
+  - 変更内容
+    - `src/interface-adapters/gateways/IRewriteRuleRepository.ts` への移動（設計上Gateway Interface）
+  - 影響モジュール（14ファイル）
+    - application-business-rules/
+      - `src/application/usecases/rule/GetAllRewriteRulesUseCase.ts`
+      - `src/application/usecases/rule/LoadRewriteRuleForEditUseCase.ts`
+      - `src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts`
+      - `src/application/usecases/rule/UpdateRewriteRuleUseCase.ts`
+      - `src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase.ts`
+    - frameworks-and-drivers/
+      - `src/infrastructure/di/container.ts`
+      - `src/infrastructure/di/contentContainer.ts`
+      - `src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository.ts`
+      - `src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository.ts`
+      - `src/infrastructure/browser/handlers/background/getAllRewriteRulesHandler.ts`
+      - `src/entrypoints/rules/RulesApp.tsx`
+    - tests/ (3ファイル)
 
 - `src/components/molecules/RuleTableRow/RuleTableRow.tsx` - トグルUI追加
   - 現状: 編集ボタン、URLパターン、oldString、newString のみ表示
@@ -84,6 +101,9 @@
   - RewriteRule.ts + Strategy関連ファイルを移動
   - 他ファイル（Tab, DomDiffer等）は現行ディレクトリのまま、importパスのみ更新
   - ロジック変更なし
+- [ ] IRewriteRuleRepository を interface-adapters/gateways/ へ移行（14ファイル）
+  - Gateway Interfaceとして移動
+  - importパスのみ更新、ロジック変更なし
 
 ### ユーザーストーリー達成タスク
 
