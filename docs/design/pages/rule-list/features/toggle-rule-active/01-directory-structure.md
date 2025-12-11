@@ -6,12 +6,9 @@
 
 ```
 src/enterprise-business-rules/
-├── entities/                                    ← Entity
-│   └── RewriteRule/
-│       ├── RewriteRule.ts                       ← withActive() 追加
-│       └── PatternProcessingStrategyFactory.ts
-└── value-objects/                               ← Value Object
-    └── RewriteRules.ts
+└── entities/                                    ← Entity
+    └── RewriteRule/
+        └── RewriteRule.ts                       ← withActive() 追加
 ```
 
 ### 第2層: application-business-rules/
@@ -48,11 +45,8 @@ src/interface-adapters/
 │   └── rule/
 │       └── ToggleRuleActivePresenter.ts
 └── gateways/                                    ← Gateway (Interface)
-    ├── persistence/                             ← DB関連
-    │   └── IRewriteRuleRepository.ts
-    └── messaging/                               ← messaging関連
-        ├── ITabReloadGateway.ts
-        └── IDomOperationGateway.ts
+    └── persistence/                             ← DB関連
+        └── IRewriteRuleRepository.ts            ← 既存、移行対象
 ```
 
 ### 第4層: frameworks-and-drivers/
@@ -61,73 +55,48 @@ src/interface-adapters/
 src/frameworks-and-drivers/
 ├── ui/                                          ← View (React)
 │   ├── components/
-│   │   ├── atoms/
-│   │   │   ├── ToggleSwitch.tsx
-│   │   │   └── ToggleSwitch.module.css
-│   │   ├── molecules/
-│   │   └── organisms/
+│   │   └── atoms/
+│   │       ├── ToggleSwitch.tsx                 ← 新規
+│   │       └── ToggleSwitch.module.css          ← 新規
 │   └── pages/
 │       └── rules/
-│           └── RulesApp.tsx
+│           └── RulesApp.tsx                     ← 既存、変更対象
 ├── persistence/                                 ← DB Gateway 実装
 │   └── indexeddb/
-│       ├── DexieDatabase.ts
-│       └── DexieRewriteRuleRepository.ts
-├── messaging/                                   ← messaging Gateway 実装
-│   ├── ChromeTabReloadGateway.ts
-│   └── ChromeDomOperationGateway.ts
-├── browser/                                     ← Chrome API ラッパー
-│   └── ChromeTabsService.ts
-├── di/                                          ← DI Container
-│   └── container.ts
-└── entrypoints/                                 ← WXT Entry Points (CA外への橋)
-    ├── background.ts
-    ├── content.ts
-    ├── popup/
-    ├── rules/
-    │   ├── index.html
-    │   ├── main.tsx
-    │   └── style.css
-    └── edit/
+│       └── DexieRewriteRuleRepository.ts        ← 既存
+└── di/                                          ← DI Container
+    └── container.ts                             ← 既存、変更対象
 ```
 
-## 依存関係図
+## 導線と各層の役割
 
 ```
-        内側（安定）                                        外側（不安定）
-        ─────────────────────────────────────────────────────────────────→
-
-┌────────────────────┐   ┌────────────────────┐   ┌──────────────────┐   ┌─────────────────────┐
-│ enterprise-business│ ← │application-business│ ← │interface-adapters│ ← │frameworks-and-drivers│
-│       -rules       │   │       -rules       │   │                  │   │                     │
-│                    │   │                    │   │                  │   │                     │
-│ entities/          │   │ Interactor         │   │ Controller       │   │ UI (React)          │
-│ value-objects/     │   │ InputPort          │   │ Presenter        │   │ Persistence         │
-│ constants/         │   │ OutputPort         │   │ Gateway(IF)      │   │ Messaging           │
-│                    │   │ DTO                │   │                  │   │ Browser API         │
-│                    │   │                    │   │                  │   │ DI Container        │
-└────────────────────┘   └────────────────────┘   └──────────────────┘   └─────────────────────┘
-
-矢印の方向 = 依存の方向（外→内のみ許可）
+[ユーザー] トグルクリック
+     │
+     ▼
+[第4層] ToggleSwitch.tsx → RulesApp.tsx
+     │
+     ▼
+[第3層] ToggleRuleActiveController
+     │ InputData
+     ▼
+[第2層] ToggleRuleActiveInteractor
+     │ ├── RewriteRule.withActive()
+     │ └── IRewriteRuleRepository.update()
+     ▼
+[第3層] ToggleRuleActivePresenter → OutputData
+     │
+     ▼
+[第4層] RulesApp.tsx (状態更新)
 ```
 
-## Clean Architecture 12要素との対応
+## 変更対象サマリ
 
-| # | 要素 | ディレクトリ | 備考 |
-|---|------|-------------|------|
-| 1 | View | `frameworks-and-drivers/ui/` | React コンポーネント |
-| 2 | View Model | （省略: Presenterが直接更新） | |
-| 3 | Controller | `interface-adapters/controllers/` | |
-| 4 | Presenter | `interface-adapters/presenters/` | |
-| 5 | Input Boundary | `application-business-rules/ports/input/` | |
-| 6 | Output Boundary | `application-business-rules/ports/output/` | |
-| 7 | Use Case Interactor | `application-business-rules/interactors/` | |
-| 8 | Data Access Interface | `interface-adapters/gateways/persistence/` | DB関連 |
-| 8 | Data Access Interface | `interface-adapters/gateways/messaging/` | messaging関連 |
-| 9 | Data Access | `frameworks-and-drivers/persistence/` | DB Gateway 実装 |
-| 9 | Data Access | `frameworks-and-drivers/messaging/` | messaging Gateway 実装 |
-| 10 | Database | IndexedDB (Dexie) | |
-| 11 | Entities | `enterprise-business-rules/entities/` | |
-| 12 | External Interfaces | `frameworks-and-drivers/browser/` | Chrome API ラッパー |
-| 12 | External Interfaces | `frameworks-and-drivers/entrypoints/background.ts` | メッセージング |
-| 12 | External Interfaces | `frameworks-and-drivers/entrypoints/content.ts` | DOM操作 |
+| 種別 | ファイル | 変更内容 |
+|------|---------|---------|
+| 移行 | RewriteRule.ts | enterprise-business-rules/へ移動 |
+| 移行 | IRewriteRuleRepository.ts | interface-adapters/gateways/へ移動 |
+| 新規 | Toggle関連(UseCase, Controller, Presenter, DTO) | 新規作成 |
+| 新規 | ToggleSwitch.tsx | UIコンポーネント新規作成 |
+| 変更 | RulesApp.tsx | トグルハンドラー追加 |
+| 変更 | container.ts | DI登録追加 |
