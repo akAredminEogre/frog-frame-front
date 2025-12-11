@@ -162,6 +162,8 @@ Clean Architecture 4層に従った**理論的設計**を記載:
 **重要**: 01-class-design.md と整合性を保つこと
 - クラス設計で定義したクラス/メソッドがシーケンス図に反映されていること
 - 層の境界を明確に示すこと
+- **interface-adapters/gateways/messaging 以下のクラスも忘れずに設計に含めること**
+  - Chrome拡張機能では popup/rules ↔ background 間の通信が必要
 
 ### 03-directory-structure.md（機能単位）
 

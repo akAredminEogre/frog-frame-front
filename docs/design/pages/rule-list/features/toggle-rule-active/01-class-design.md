@@ -66,8 +66,40 @@
 | ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
 | IRewriteRuleRepository | interface-adapters | Gateway Interface。ルール永続化 |
 | ITabsGateway | interface-adapters | Gateway Interface。タブ操作（リロード） |
+| ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。messaging経由でbackgroundと通信 |
+| DexieRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。IndexedDB直接アクセス（background用） |
+| ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード |
 | ToggleSwitch | frameworks-and-drivers | UIコンポーネント。トグルスイッチ |
 | RulesApp | frameworks-and-drivers | View。ルール一覧画面 |
+
+## アーキテクチャ補足
+
+### Chrome拡張機能のコンテキスト分離
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Rules Page (別タブ)                                              │
+│  ┌─────────────────────────────────────────────────────────────┐│
+│  │ RulesApp → Controller → Interactor                          ││
+│  │                              ↓                              ││
+│  │              IRewriteRuleRepository                         ││
+│  │                              ↓                              ││
+│  │              ChromeRuntimeRewriteRuleRepository             ││
+│  │              (chrome.runtime.sendMessage)                   ││
+│  └──────────────────────────────┬──────────────────────────────┘│
+└─────────────────────────────────┼───────────────────────────────┘
+                                  │ messaging
+                                  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Background Script                                                │
+│  ┌─────────────────────────────────────────────────────────────┐│
+│  │ MessageHandler                                              ││
+│  │       ↓                                                     ││
+│  │ DexieRewriteRuleRepository (IndexedDB)                      ││
+│  │ ChromeTabsGateway (タブリロード)                             ││
+│  └─────────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────────┘
+```
 
 ## クラス図
 
