@@ -141,50 +141,6 @@ docs/design/
 | メソッドの目的 | メソッドの実装 |
 | クラス間の関係 | import文 |
 
-## アーキテクチャ
-
-Clean Architecture with Presenter パターンを採用:
-
-- **ADR**: `docs/adr/001-clean-architecture-with-presenter-pattern.md`
-
-### 4層構造
-
-| 層 | ディレクトリ | 役割 |
-|----|-------------|------|
-| 第1層 | `enterprise-business-rules/` | Entity, Value Object |
-| 第2層 | `application-business-rules/` | UseCase, Port, DTO |
-| 第3層 | `interface-adapters/` | Controller, Presenter, Gateway(IF) |
-| 第4層 | `frameworks-and-drivers/` | UI, DB, Messaging, DI |
-
-### 第1層の構成
-
-技術駆動パッケージングを採用:
-
-```
-enterprise-business-rules/
-├── entities/           # Entity
-├── value-objects/      # Value Object
-└── constants/          # 定数
-```
-
-### Gateway分割
-
-```
-interface-adapters/gateways/
-├── persistence/        # DB関連のGateway Interface
-└── messaging/          # Chrome messaging関連のGateway Interface
-
-frameworks-and-drivers/
-├── persistence/        # DB Gateway 実装
-└── messaging/          # messaging Gateway 実装
-```
-
-## コード例の記載
-
-- 設計ドキュメントではコード例を記載可能
-- import文はADR確定のパス構造に従う
-- スコープ外の機能は記載しない
-
 ## 図の記法
 
 - ASCII Art を使用
