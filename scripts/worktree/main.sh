@@ -89,5 +89,16 @@ wt-dev() {
     make -C "$REPO_ROOT" wt-dev BRANCH="$BRANCH"
 }
 
+# wt-init: Initialize worktree for development
+# Usage: wt-init <branch-name>
+wt-init() {
+    local BRANCH="$1"
+    if [ -z "$BRANCH" ]; then
+        echo "Usage: wt-init <branch-name>"
+        return 1
+    fi
+    make -C "$REPO_ROOT" wt-init BRANCH="$BRANCH"
+}
+
 # Source branch completion functions
 source "$SCRIPT_DIR/branch-completion/main.sh"

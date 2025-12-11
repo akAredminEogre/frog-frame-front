@@ -1,6 +1,6 @@
 # Git Worktree Initialization Helpers
 # Helpers used only during worktree add/initialization
-.PHONY: _wt-remove-orphaned _wt-setup-env _wt-copy-override-template _wt-create-override _wt-init
+.PHONY: _wt-remove-orphaned _wt-setup-env _wt-copy-override-template _wt-create-override
 
 # Remove orphaned worktree directory
 _wt-remove-orphaned:
@@ -57,24 +57,3 @@ _wt-create-override:
 	@echo "WORKTREE_ACTIVE_BRANCH=$(BRANCH)" >> .env.worktree
 	@echo "# Override HOST_FRONTEND_ROOT_PATH to mount worktree source directory" >> .env.worktree
 	@echo "HOST_FRONTEND_ROOT_PATH=./$(WORKTREE_PATH)/host-frontend-root" >> .env.worktree
-
-# Initialize worktree for development
-_wt-init: _wt-check-branch _wt-check-exists
-	@echo "Initializing worktree for development: $(BRANCH)..."
-	@$(MAKE) _wt-setup-env BRANCH=$(BRANCH)
-	@echo "Switching to worktree for initialization..."
-	@$(MAKE) _wt-create-override BRANCH=$(BRANCH)
-	@echo "Stopping existing Docker services..."
-	@$(MAKE) wt-down
-	@echo "Starting Docker services for worktree..."
-	@$(MAKE) wt-up
-	@echo "Installing npm dependencies in worktree..."
-	@$(_load-env-exec) docker compose exec frontend npm install
-	@echo "Preparing WXT (generating .wxt/tsconfig.json) in worktree..."
-	@$(_load-env-exec) docker compose exec frontend npx wxt prepare
-	@echo ""
-	@echo "Worktree $(BRANCH) initialization complete!"
-	@echo "The worktree is ready for development."
-	@echo ""
-	@echo "To start development:"
-	@echo "  make wt-dev BRANCH=$(BRANCH)"
