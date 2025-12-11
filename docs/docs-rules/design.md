@@ -173,17 +173,6 @@ frameworks-and-drivers/
 - import文はADR確定のパス構造に従う
 - スコープ外の機能は記載しない
 
-### importパスの例
-
-```typescript
-// Entity
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-
-// Gateway Interface
-import { IRewriteRuleRepository } from 'src/interface-adapters/gateways/persistence/IRewriteRuleRepository';
-import { ITabReloadGateway } from 'src/interface-adapters/gateways/messaging/ITabReloadGateway';
-```
-
 ## 図の記法
 
 - ASCII Art を使用
