@@ -1,15 +1,5 @@
 # ディレクトリ構造設計
 
-## Clean Architecture 4層構造
-
-```
-src/
-├── enterprise-business-rules/                   ← 第1層: Enterprise Business Rules
-├── application-business-rules/                  ← 第2層: Application Business Rules
-├── interface-adapters/                          ← 第3層: Interface Adapters
-└── frameworks-and-drivers/                      ← 第4層: Frameworks & Drivers
-```
-
 ## 詳細構造
 
 ### 第1層: enterprise-business-rules/
