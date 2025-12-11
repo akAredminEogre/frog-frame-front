@@ -78,13 +78,16 @@
 
 ## 開発戦略
 
-**Parallel Change（Expand-Contract）パターン** を採用
+### 前提タスク（現状分析より）
 
-| フェーズ | 説明 | リスク |
-|---------|------|--------|
-| Expand | スケルトン追加、既存コード変更なし | 極低 |
-| Migrate | 実装を埋める、テスト追加 | 低 |
-| Contract | 統合・有効化 | 中 |
+- [ ] ディレクトリ構造をClean Architectureに準拠させる移行（51ファイル影響）
+
+### ユーザーストーリー達成タスク
+
+- [ ] トグルスイッチUIコンポーネント（atoms）を追加
+- [ ] ToggleRuleActiveUseCaseを実装
+- [ ] RuleTableRowにトグルUIを統合
+- [ ] RulesAppにトグルハンドラーを追加
 
 ## 受け入れ条件
 
