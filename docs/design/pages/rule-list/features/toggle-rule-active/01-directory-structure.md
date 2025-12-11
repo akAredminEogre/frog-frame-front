@@ -45,8 +45,10 @@ src/interface-adapters/
 │   └── rule/
 │       └── ToggleRuleActivePresenter.ts
 └── gateways/                                    ← Gateway (Interface)
-    └── persistence/                             ← DB関連
-        └── IRewriteRuleRepository.ts            ← 既存、移行対象
+    ├── persistence/                             ← DB関連
+    │   └── IRewriteRuleRepository.ts            ← 既存、移行対象
+    └── browser/                                 ← ブラウザ操作関連
+        └── ITabsGateway.ts                      ← タブリロード用
 ```
 
 ### 第4層: frameworks-and-drivers/
@@ -64,6 +66,8 @@ src/frameworks-and-drivers/
 ├── persistence/                                 ← DB Gateway 実装
 │   └── indexeddb/
 │       └── DexieRewriteRuleRepository.ts        ← 既存
+├── browser/                                     ← ブラウザ操作 Gateway 実装
+│   └── ChromeTabsGateway.ts                     ← タブリロード実装
 └── di/                                          ← DI Container
     └── container.ts                             ← 既存、変更対象
 ```
@@ -82,7 +86,8 @@ src/frameworks-and-drivers/
      ▼
 [第2層] ToggleRuleActiveInteractor
      │ ├── RewriteRule.withActive()
-     │ └── IRewriteRuleRepository.update()
+     │ ├── IRewriteRuleRepository.update()
+     │ └── ITabsGateway.reloadMatchingTabs()
      ▼
 [第3層] ToggleRuleActivePresenter → OutputData
      │
@@ -97,6 +102,8 @@ src/frameworks-and-drivers/
 | 移行 | RewriteRule.ts | enterprise-business-rules/へ移動 |
 | 移行 | IRewriteRuleRepository.ts | interface-adapters/gateways/へ移動 |
 | 新規 | Toggle関連(UseCase, Controller, Presenter, DTO) | 新規作成 |
+| 新規 | ITabsGateway.ts | タブ操作インターフェース新規作成 |
+| 新規 | ChromeTabsGateway.ts | タブリロード実装 |
 | 新規 | ToggleSwitch.tsx | UIコンポーネント新規作成 |
 | 変更 | RulesApp.tsx | トグルハンドラー追加 |
 | 変更 | container.ts | DI登録追加 |
