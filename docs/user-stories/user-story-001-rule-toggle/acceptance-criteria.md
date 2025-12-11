@@ -41,7 +41,7 @@
 ### AC-7: アーキテクチャ
 
 - [ ] Clean Architecture 4層構造に準拠
-- [ ] フルnrslibパターン（Controller/Interactor/Presenter）を使用
+- [ ] Presenter付きパターン（Controller/Interactor/Presenter）を使用
 - [ ] 依存性逆転の原則に従っている
 
 ### AC-8: テスト

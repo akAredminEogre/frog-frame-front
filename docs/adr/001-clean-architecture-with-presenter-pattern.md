@@ -1,4 +1,4 @@
-# ADR-001: Clean Architecture フルnrslibパターン採用
+# ADR-001: Clean Architecture Presenter付きパターン採用
 
 ## ステータス
 
@@ -6,7 +6,7 @@
 
 ## コンテキスト
 
-本プロジェクトでは、Clean Architectureを採用しているが、現在のディレクトリ構造は独自の命名を使用している。今後の機能追加（ルールトグル機能など）に際し、Clean Architectureの正式なレイヤー名とnrslibパターン（Input Port / Output Port / Presenter）を採用することで、以下を実現したい：
+本プロジェクトでは、Clean Architectureを採用しているが、現在のディレクトリ構造は独自の命名を使用している。今後の機能追加（ルールトグル機能など）に際し、Clean Architectureの正式なレイヤー名とPresenter付きパターン（Input Port / Output Port / Presenter）を採用することで、以下を実現したい：
 
 1. アーキテクチャの意図が明確になる
 2. 新規参画者が理解しやすい
@@ -31,7 +31,7 @@ src/
 └── frameworks-and-drivers/      ← 第4層: Frameworks & Drivers
 ```
 
-### 2. フルnrslibパターンの採用
+### 2. Presenter付きパターンの採用
 
 **制御の流れ**: View → Controller → Interactor → Presenter → View
 

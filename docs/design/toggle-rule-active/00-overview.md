@@ -45,9 +45,9 @@ export class RewriteRule {
 
 ## アーキテクチャ
 
-フルnrslibパターン（Clean Architecture）を採用：
+Presenter付きパターン（Clean Architecture）を採用：
 
-- **ADR**: [001-clean-architecture-full-nrslib-pattern](../../adr/001-clean-architecture-full-nrslib-pattern.md)
+- **ADR**: [001-clean-architecture-with-presenter-pattern](../../adr/001-clean-architecture-with-presenter-pattern.md)
 - **ディレクトリ構造**: [01-directory-structure.md](./01-directory-structure.md)
 - **クラス設計**: [02-class-design.md](./02-class-design.md)
 
