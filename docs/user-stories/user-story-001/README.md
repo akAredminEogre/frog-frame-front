@@ -80,7 +80,13 @@
 
 ### 前提タスク（現状分析より）
 
-- [ ] ディレクトリ構造をClean Architectureに準拠させる移行（51ファイル影響）
+ディレクトリ構造をClean Architectureに準拠させる移行:
+
+- [ ] domain/ → enterprise-business-rules/ 移行（7ファイル）
+- [ ] application/ → application-business-rules/ importパス更新（5ファイル）
+- [ ] components/ → interface-adapters/ importパス更新（2ファイル）
+- [ ] infrastructure/ + entrypoints/ → frameworks-and-drivers/ importパス更新（3ファイル）
+- [ ] tests/ importパス更新（27ファイル）
 
 ### ユーザーストーリー達成タスク
 
