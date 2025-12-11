@@ -2,6 +2,8 @@
 
 title ルールトグル機能 シーケンス図
 
+note across : **参照**: ADR-002 - DBアクセスをmessaging経由に統一\nRules Pageは技術的にIndexedDB直接アクセス可能だが、\n一貫性のためmessaging経由でBackground Scriptに集約する
+
 skinparam sequenceArrowThickness 2
 skinparam sequenceParticipantBorderColor #666666
 skinparam sequenceLifeLineBorderColor #888888
