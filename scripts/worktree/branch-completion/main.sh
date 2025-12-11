@@ -21,11 +21,17 @@ _wt_get_all_branches() {
 }
 
 # Get list of existing worktrees
+# Uses git worktree list to find worktrees in the worktrees/ directory
 _wt_get_worktrees() {
     local worktree_dir="$REPO_ROOT/worktrees"
-    if [ -d "$worktree_dir" ]; then
-        ls -1 "$worktree_dir" 2>/dev/null
+    if [ ! -d "$worktree_dir" ]; then
+        return
     fi
+
+    # Use git worktree list and filter those in worktrees/ directory
+    git -C "$REPO_ROOT" worktree list --porcelain 2>/dev/null | \
+        grep "^worktree $worktree_dir/" | \
+        sed "s|^worktree $worktree_dir/||"
 }
 
 # Completion definitions: command=source_function
