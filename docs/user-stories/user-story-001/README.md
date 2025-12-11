@@ -8,6 +8,27 @@
 
 ルール一覧画面において、各ルールの有効/無効をトグルボタンで切り替えられる機能。
 
+## 設計ドキュメント
+
+- [toggle-rule-active 設計](../../design/pages/rule-list/features/toggle-rule-active/)
+
+## 現状分析
+
+### 設計目標との差分
+
+| 項目 | 設計目標 | 現状 | 対応 |
+|------|---------|------|------|
+| isActive プロパティ | RewriteRule に isActive を持つ | 未実装 | 追加が必要 |
+| トグルUI | 各行にトグルスイッチ | なし | 追加が必要 |
+| タブリロード | 変更時に該当タブをリロード | なし | 追加が必要 |
+
+### 影響を受けるファイル
+
+- `src/domain/entities/RewriteRule/` - isActive プロパティ追加
+- `src/components/organisms/RuleListItem/` - トグルUI追加
+- `src/application/usecases/` - トグル処理UseCase追加
+- `src/infrastructure/browser/tabs/` - タブリロード処理
+
 ## 開発戦略
 
 **Parallel Change（Expand-Contract）パターン** を採用
