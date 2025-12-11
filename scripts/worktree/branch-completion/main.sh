@@ -2,6 +2,11 @@
 
 # Branch completion main entry point
 # This file is sourced by scripts/worktree/main.sh
+#
+# TODO: Security - Filter/escape branch names before completion
+# - Filter branch names to safe character set [A-Za-z0-9._/-]
+# - Or escape metacharacters using printf '%q' or proper shell quoting
+# See: https://github.com/akAredminEogre/frog-frame-front/pull/241#discussion_r2608634992
 
 # Get the directory where this script is located
 COMPLETION_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -27,8 +32,9 @@ _wt_get_worktrees() {
 # Add new commands here to enable completion
 _WT_COMPLETION_DEFS=(
     "wt-add=_wt_get_all_branches"
+    "wt-init=_wt_get_all_branches"
     "wt-remove=_wt_get_worktrees"
-    "wt-dev=_wt_get_worktrees"
+    "wt-dev=_wt_get_all_branches"
     "wt-cd=_wt_get_worktrees"
 )
 

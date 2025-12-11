@@ -26,6 +26,7 @@ source /path/to/frog-frame-front/scripts/main.sh
 | コマンド | 説明 | Tab補完対象 |
 |---------|------|-------------|
 | `wt-add <branch>` | worktree作成 | 全ブランチ（ローカル/リモート） |
+| `wt-init <branch>` | worktree初期化 | 全ブランチ（ローカル/リモート） |
 | `wt-remove <branch>` | worktree削除 | 既存worktree |
 | `wt-dev <branch>` | 開発サーバー起動 | 既存worktree |
 
@@ -34,6 +35,9 @@ source /path/to/frog-frame-front/scripts/main.sh
 ```bash
 # Tab補完でブランチを選択してworktree作成
 wt-add feat<TAB>  # → wt-add feature-branch
+
+# Tab補完でブランチを選択してworktree初期化
+wt-init feat<TAB>  # → wt-init feature-branch
 
 # Tab補完で既存worktreeを選択して開発開始
 wt-dev feat<TAB>  # → wt-dev feature-branch
@@ -47,6 +51,7 @@ wt-remove feat<TAB>  # → wt-remove feature-branch
 | シェルラッパー | 対応するmakeコマンド |
 |---------------|---------------------|
 | `wt-add feature-x` | `make wt-add BRANCH=feature-x` |
+| `wt-init feature-x` | `make wt-init BRANCH=feature-x` |
 | `wt-remove feature-x` | `make wt-remove BRANCH=feature-x` |
 | `wt-dev feature-x` | `make wt-dev BRANCH=feature-x` |
 
@@ -83,20 +88,32 @@ make wt-list
 #### 新規worktree作成
 
 ```bash
-# 既存ブランチをworktreeとして追加（自動で初期化も実行）
+# 既存ブランチをworktreeとして追加
 make wt-add BRANCH=feature-branch
 
-# 新しいブランチを作成してworktreeとして追加（自動で初期化も実行）
+# 新しいブランチを作成してworktreeとして追加
 make wt-add BRANCH=new-feature-branch
 ```
 
-`wt-add`コマンドは以下の処理を自動実行します：
+`wt-add`コマンドは以下の処理を実行します：
 - worktreeディレクトリの作成
 - ブランチの作成/チェックアウト
-- **自動初期化**: 設定ファイル（.env、matchUrl.ts）の自動コピー
-- **自動初期化**: Docker環境の切り替え
-- **自動初期化**: npm install の実行
-- **自動初期化**: WXT準備（npx wxt prepare）の実行
+- 設定ファイル（.env、matchUrl.ts）のコピー
+
+**注**: Docker環境のセットアップやnpm installは行いません。開発を開始するには`wt-init`または`wt-dev`を実行してください。
+
+#### worktree初期化
+
+```bash
+# worktreeの開発環境を初期化（Docker、npm install、wxt prepare）
+make wt-init BRANCH=feature-branch
+```
+
+`wt-init`コマンドは以下の処理を実行します：
+- worktreeが存在しない場合は自動的に`wt-add`を実行
+- Docker環境の切り替え（docker-compose.override.yml、.env.worktreeの作成）
+- npm install の実行
+- WXT準備（npx wxt prepare）の実行
 
 #### worktree削除
 
@@ -123,7 +140,7 @@ make wt-dev BRANCH=other-branch
 ```
 
 `wt-dev`コマンドは以下を自動実行します：
-- **worktreeが存在しない場合は自動的に`wt-add`を実行**
+- **worktreeが初期化されていない場合は自動的に`wt-init`を実行**（worktreeが存在しない場合は`wt-add`も実行）
 - 他のworktreeのDockerコンテナを自動停止
 - ポート3000の競合回避
 - 指定されたworktreeディレクトリで独立した開発環境を起動
@@ -177,10 +194,7 @@ wt-cd-current         # 現在のworktreeへ移動
 
 ```bash
 # メインでfeature-Aを開発中
-# 緊急バグ修正のためhotfixブランチを作成（自動で初期化も実行）
-make wt-add BRANCH=hotfix-critical-bug
-
-# hotfixブランチに切り替えて開発開始
+# 緊急バグ修正のためhotfixブランチで開発開始（自動でwt-add、wt-initも実行）
 make wt-dev BRANCH=hotfix-critical-bug
 # ... バグ修正作業 ...
 
@@ -194,32 +208,22 @@ make wt-remove BRANCH=hotfix-critical-bug
 ### 例2: 複数機能の切り替え開発
 
 ```bash
-# feature-Aのworktreeを作成（自動で初期化も実行）
-make wt-add BRANCH=feature-A
-
-# feature-Bのworktreeを作成（自動で初期化も実行）
-make wt-add BRANCH=feature-B
-
-# feature-Aで開発開始
+# feature-Aで開発開始（自動でwt-add、wt-initも実行）
 make wt-dev BRANCH=feature-A
 # ... 機能A開発 ...
 
-# feature-Bに切り替え（自動的にfeature-Aの環境を停止）
+# feature-Bに切り替え（自動的にfeature-Aの環境を停止、feature-Bをwt-add、wt-init）
 make wt-dev BRANCH=feature-B
 # ... 機能B開発 ...
 
-# 再度feature-Aに戻る
+# 再度feature-Aに戻る（すでに初期化済みなのでそのまま起動）
 make wt-dev BRANCH=feature-A
 ```
 
 ### 例3: レビュー中の並行開発
 
 ```bash
-# 現在PR中のfeature-reviewと新機能feature-nextを並行作業
-make wt-add BRANCH=feature-review
-make wt-add BRANCH=feature-next
-
-# レビュー対応作業
+# 現在PR中のfeature-reviewでレビュー対応作業開始
 make wt-dev BRANCH=feature-review
 # ... レビュー修正 ...
 
@@ -233,12 +237,12 @@ make wt-dev BRANCH=feature-review
 
 ## 注意事項
 
-1. **自動初期化**: `wt-add`実行時に自動的に初期化されるため、手動での初期化は不要です
-2. **推奨コマンド**: 切り替えには`make wt-dev`を使用してください（自動でポート競合を回避）
+1. **推奨コマンド**: 開発には`make wt-dev`を使用してください（自動でwt-add、wt-initを実行し、ポート競合も回避）
+2. **段階的なセットアップ**: 必要に応じて`wt-add`（worktree作成のみ）と`wt-init`（Docker環境セットアップ）を個別に実行できます
 3. **ディスク容量**: 各worktreeはnode_modulesを持つため、ディスク容量に注意してください
 4. **worktreeディレクトリ**: `worktrees/`ディレクトリは`.gitignore`で除外されています
 5. **自動化された切り替え**: `wt-dev`コマンドにより他のコンテナ停止・環境切り替え・開発サーバー起動が自動化されています
-6. **内部ヘルパー関数**: `_`で始まるコマンド（例：`_wt-init`）は内部使用のみで、直接実行する必要はありません
+6. **内部ヘルパー関数**: `_`で始まるコマンド（例：`_wt-setup-env`）は内部使用のみで、直接実行しないでください
 
 ## 簡単ワークフロー（まとめ）
 
@@ -272,11 +276,12 @@ make wt-remove BRANCH=your-branch
 | コマンド | 説明 | 使用例 |
 |---------|------|--------|
 | `wt-list` | すべてのworktreeを一覧表示 | `make wt-list` |
-| `wt-add` | 新しいworktreeを作成（自動初期化） | `make wt-add BRANCH=feature-x` |
+| `wt-add` | 新しいworktreeを作成（ファイルコピーのみ） | `make wt-add BRANCH=feature-x` |
+| `wt-init` | worktreeの開発環境を初期化（Docker、npm install） | `make wt-init BRANCH=feature-x` |
 | `wt-remove` | worktreeを削除 | `make wt-remove BRANCH=feature-x` |
 | `wt-prune` | 不要なworktree参照を削除 | `make wt-prune` |
 | `wt-current` | 現在アクティブなworktreeを表示 | `make wt-current` |
-| `wt-dev` | worktreeで開発サーバーを起動（存在しない場合は自動作成） | `make wt-dev BRANCH=feature-x` |
+| `wt-dev` | worktreeで開発サーバーを起動（未初期化の場合は自動初期化） | `make wt-dev BRANCH=feature-x` |
 | `wt-disable` | worktreeモードを無効化、メインリポジトリに戻る | `make wt-disable` |
 | `wt-down` | worktreeのDockerコンテナを停止 | `make wt-down` |
 | `wt-up` | worktreeのDockerコンテナを起動 | `make wt-up` |
@@ -288,6 +293,7 @@ make wt-remove BRANCH=your-branch
 | コマンド | 説明 | Tab補完対象 |
 |---------|------|-------------|
 | `wt-add <branch>` | worktree作成 | 全ブランチ（ローカル/リモート） |
+| `wt-init <branch>` | worktree初期化（Docker、npm install） | 全ブランチ（ローカル/リモート） |
 | `wt-remove <branch>` | worktree削除 | 既存worktree |
 | `wt-dev <branch>` | 開発サーバー起動 | 既存worktree |
 | `wt-cd <branch>` | worktreeディレクトリへ移動 | 既存worktree |

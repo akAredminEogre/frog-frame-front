@@ -2,6 +2,11 @@
 
 # Worktree check logic functions
 # This file provides common validation functions for worktree operations
+#
+# TODO: Security - Add branch name validation
+# - Validate branch names against safe character set [A-Za-z0-9._/-]
+# - Apply proper quoting/escaping to prevent shell injection
+# See: https://github.com/akAredminEogre/frog-frame-front/pull/241#discussion_r2608585266
 
 # Get script directory and source repository path helper
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
