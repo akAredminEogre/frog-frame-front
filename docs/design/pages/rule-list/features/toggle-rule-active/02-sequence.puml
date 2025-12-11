@@ -29,10 +29,14 @@ box "Rules Page - frameworks-and-drivers/messaging" #LightCyan
   participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
 end box
 
-box "Background Script" #LightGray
+box "Background - frameworks-and-drivers (第4層)" #LightGray
   participant "MessageHandler" as Handler
   participant "DexieRewriteRule\nRepository" as DexieRepo
   participant "ChromeTabsGateway" as TabsGateway
+end box
+
+box "Background - interface-adapters (第3層)" #Silver
+  participant "<<interface>>\nITabsGateway" as ITabsGateway
 end box
 
 box "enterprise-business-rules (第1層)" #LightPink
@@ -102,10 +106,19 @@ activate DexieRepo
 DexieRepo --> Handler : void
 deactivate DexieRepo
 
-Handler -> TabsGateway : reloadMatchingTabs(updatedRule)
+note over Handler, ITabsGateway : MessageHandlerはITabsGatewayに依存\n（依存性逆転の原則）
+
+Handler -> ITabsGateway : reloadMatchingTabs(updatedRule)
+activate ITabsGateway
+
+note over ITabsGateway, TabsGateway : 実行時はDI経由で\nChromeTabsGatewayが注入
+
+ITabsGateway -> TabsGateway : reloadMatchingTabs(updatedRule)
 activate TabsGateway
-TabsGateway --> Handler : void
+TabsGateway --> ITabsGateway : void
 deactivate TabsGateway
+ITabsGateway --> Handler : void
+deactivate ITabsGateway
 
 Handler --> MessagingRepo : void
 deactivate Handler
