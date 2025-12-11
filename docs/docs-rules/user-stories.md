@@ -114,6 +114,6 @@ PRは以下のフェーズで分割する:
 
 ## 関連ドキュメント
 
-- 設計ドキュメント: `docs/design/{機能名}/`
+- 設計ドキュメント: `docs/design/pages/{画面名}/features/{機能名}/`
 - ADR: `docs/adr/`
 - 基本ルール: [docs-rules.md](../docs-rules.md)
