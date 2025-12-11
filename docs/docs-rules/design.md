@@ -167,8 +167,11 @@ Clean Architecture 4層に従った**理論的設計**を記載:
 - **Iで始まる抽象インターフェースもシーケンス図に含めること**
   - Input Port（例: IToggleRuleActiveUseCase）
   - Output Port（例: IToggleRuleActivePresenter）
-  - Gateway Interface（例: IRewriteRuleRepository）
+  - Gateway Interface（例: IRewriteRuleRepository, ITabsGateway）
   - 依存性逆転の原則を明示するため、具象クラスではなくインターフェースへの依存を示す
+  - **01-class-design.md のクラス一覧に記載した全ての Interface を漏れなく含めること**
+- **複数の実行コンテキスト（Rules Page, Background Script等）がある場合、各コンテキスト内のクラスも Clean Architecture 層で分類すること**
+  - 例: Background Script 内でも frameworks-and-drivers 層と interface-adapters 層を区別する
 
 ### 03-directory-structure.md（機能単位）
 
