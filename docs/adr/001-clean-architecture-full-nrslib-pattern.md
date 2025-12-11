@@ -86,7 +86,7 @@ src/
 | 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` | DB Gateway 実装 |
 | 9 | Data Access (Repository) | `frameworks-and-drivers/messaging/` | messaging Gateway 実装 |
 | 10 | Database | IndexedDB (Dexie) | |
-| 11 | Entities | `enterprise-business-rules/` | |
+| 11 | Entities | `enterprise-business-rules/entities/` | |
 | 12 | External Interfaces | `frameworks-and-drivers/browser/` | Chrome API ラッパー |
 | 12 | External Interfaces | `frameworks-and-drivers/entrypoints/background.ts` | Chrome runtime、tabs API、メッセージング |
 | 12 | External Interfaces | `frameworks-and-drivers/entrypoints/content.ts` | Webページ操作、DOM操作 |
@@ -96,11 +96,12 @@ src/
 ```
 src/
 ├── enterprise-business-rules/                   ← 第1層: Enterprise Business Rules
-│   ├── RewriteRule/
-│   │   └── RewriteRule.ts
-│   ├── value-objects/
+│   ├── entities/                               ← Entity
+│   │   └── RewriteRule/
+│   │       └── RewriteRule.ts
+│   ├── value-objects/                          ← Value Object
 │   │   └── RewriteRules.ts
-│   └── constants/
+│   └── constants/                              ← 定数
 │       └── RegexConstants.ts
 │
 ├── application-business-rules/                  ← 第2層: Application Business Rules
