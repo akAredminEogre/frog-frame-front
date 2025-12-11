@@ -164,9 +164,11 @@ Clean Architecture 4層に従った**理論的設計**を記載:
 - 層の境界を明確に示すこと
 - **interface-adapters/gateways/messaging 以下のクラスも忘れずに設計に含めること**
   - Chrome拡張機能では popup/rules ↔ background 間の通信が必要
-- **`IRewriteRuleRepository` のようなIで始まる抽象インターフェースもシーケンス図に含めること**
-  - 依存性逆転の原則を明示するため
-  - Interactorは具象クラスではなくインターフェースに依存する
+- **Iで始まる抽象インターフェースもシーケンス図に含めること**
+  - Input Port（例: IToggleRuleActiveUseCase）
+  - Output Port（例: IToggleRuleActivePresenter）
+  - Gateway Interface（例: IRewriteRuleRepository）
+  - 依存性逆転の原則を明示するため、具象クラスではなくインターフェースへの依存を示す
 
 ### 03-directory-structure.md（機能単位）
 
