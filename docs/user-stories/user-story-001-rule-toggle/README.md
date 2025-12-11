@@ -12,7 +12,7 @@
 
 | ドキュメント | リンク |
 |-------------|--------|
-| ADR | [001-clean-architecture-full-nrslib-pattern](../../adr/001-clean-architecture-full-nrslib-pattern.md) |
+| ADR | [001-clean-architecture-with-presenter-pattern](../../adr/001-clean-architecture-with-presenter-pattern.md) |
 | 設計概要 | [00-overview.md](../../design/toggle-rule-active/00-overview.md) |
 | ディレクトリ構造 | [01-directory-structure.md](../../design/toggle-rule-active/01-directory-structure.md) |
 | クラス設計 | [02-class-design.md](../../design/toggle-rule-active/02-class-design.md) |
