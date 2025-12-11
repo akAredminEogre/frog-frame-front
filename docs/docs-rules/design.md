@@ -4,9 +4,9 @@
 
 ```
 docs/design/
-├── pages/                              # 画面単位の設計
-│   └── {画面名}/                       # 例: rule-list, edit, popup
-│       ├── ui.md                       # 必須: UI設計
+├── pages/                              # 画面/トリガー単位の設計
+│   └── {画面名 or トリガー名}/         # 例: rule-list, edit, tab-reload
+│       ├── ui.md                       # 必須: UI設計（画面の場合）
 │       └── features/                   # 機能単位の設計
 │           └── {機能名}/               # 例: toggle-rule-active
 │               ├── 00-overview.md      # 必須: 概要
@@ -21,9 +21,11 @@ docs/design/
 
 ### ディレクトリ名
 
-- 画面名: kebab-case（小文字、ハイフン区切り）
-- 機能名: kebab-case
-- 例: `rule-list`, `toggle-rule-active`, `batch-delete`
+- `pages/` 配下のディレクトリ名（`features/` の親）: **画面名**または**トリガー名**
+  - 画面名: `rule-list`, `edit`, `popup` など
+  - トリガー名: `tab-reload`, `url-change` など（画面に紐づかない機能の場合）
+- 機能名: kebab-case（小文字、ハイフン区切り）
+- 例: `toggle-rule-active`, `batch-delete`
 
 ### ファイル名
 
@@ -35,7 +37,7 @@ docs/design/
 
 ### ui.md（画面単位）
 
-画面全体のUI設計を記載:
+画面全体のUI設計を記載（トリガー単位の場合は不要）:
 
 | セクション | 必須 | 説明 |
 |-----------|------|------|
