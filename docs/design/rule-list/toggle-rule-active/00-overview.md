@@ -47,7 +47,7 @@ export class RewriteRule {
 
 Presenter付きパターン（Clean Architecture）を採用：
 
-- **ADR**: [001-clean-architecture-with-presenter-pattern](../../adr/001-clean-architecture-with-presenter-pattern.md)
+- **ADR**: [001-clean-architecture-with-presenter-pattern](../../../adr/001-clean-architecture-with-presenter-pattern.md)
 - **ディレクトリ構造**: [01-directory-structure.md](./01-directory-structure.md)
 - **クラス設計**: [02-class-design.md](./02-class-design.md)
 
@@ -63,5 +63,5 @@ Parallel Change（Expand-Contract）パターンを採用：
 
 ## 関連ドキュメント
 
-- [ユーザーストーリー](../../user-stories/user-story-001-rule-toggle/)
-- [PR計画](../../user-stories/user-story-001-rule-toggle/prs/)
+- [ユーザーストーリー](../../../user-stories/user-story-001-rule-toggle/)
+- [PR計画](../../../user-stories/user-story-001-rule-toggle/prs/)
