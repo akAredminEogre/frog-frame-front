@@ -81,13 +81,15 @@ src/
 | 5 | Input Boundary (Input Port) | `application-business-rules/ports/input/` | |
 | 6 | Output Boundary (Output Port) | `application-business-rules/ports/output/` | |
 | 7 | Use Case Interactor | `application-business-rules/interactors/` | |
-| 8 | Data Access Interface | `interface-adapters/gateways/` | |
-| 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` | |
+| 8 | Data Access Interface | `interface-adapters/gateways/persistence/` | DB関連 Gateway Interface |
+| 8 | Data Access Interface | `interface-adapters/gateways/messaging/` | messaging関連 Gateway Interface |
+| 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` | DB Gateway 実装 |
+| 9 | Data Access (Repository) | `frameworks-and-drivers/messaging/` | messaging Gateway 実装 |
 | 10 | Database | IndexedDB (Dexie) | |
 | 11 | Entities | `enterprise-business-rules/` | |
 | 12 | External Interfaces | `frameworks-and-drivers/browser/` | Chrome API ラッパー |
 | 12 | External Interfaces | `frameworks-and-drivers/entrypoints/background.ts` | Chrome runtime、tabs API、メッセージング |
-| 12 | External Interfaces | `frameworks-and-drivers/entrypoints/content.ts` | Webページ操作、DOM操作 | |
+| 12 | External Interfaces | `frameworks-and-drivers/entrypoints/content.ts` | Webページ操作、DOM操作 |
 
 ### 4. 詳細ディレクトリ構造
 
@@ -128,7 +130,11 @@ src/
 │   │   └── rule/
 │   │       └── ToggleRuleActivePresenter.ts
 │   └── gateways/                               ← Gateway (Interface)
-│       └── IRewriteRuleRepository.ts
+│       ├── persistence/                        ← DB関連
+│       │   └── IRewriteRuleRepository.ts
+│       └── messaging/                          ← messaging関連
+│           ├── ITabReloadGateway.ts
+│           └── IDomOperationGateway.ts
 │
 └── frameworks-and-drivers/                      ← 第4層: Frameworks & Drivers
     ├── ui/                                     ← View (React)
@@ -137,11 +143,14 @@ src/
     │   │   ├── molecules/
     │   │   └── organisms/
     │   └── pages/
-    ├── persistence/                            ← Data Access
+    ├── persistence/                            ← DB Gateway 実装
     │   └── indexeddb/
-    ├── browser/                                ← External Interfaces
+    ├── messaging/                              ← messaging Gateway 実装
+    │   ├── ChromeTabReloadGateway.ts
+    │   └── ChromeDomOperationGateway.ts
+    ├── browser/                                ← Chrome API ラッパー
     ├── di/                                     ← DI Container
-    └── entrypoints/                            ← WXT Entry Points
+    └── entrypoints/                            ← WXT Entry Points (CA外への橋)
 ```
 
 ### 5. 依存関係ルール
