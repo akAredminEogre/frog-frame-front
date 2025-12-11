@@ -80,13 +80,8 @@
 
 ### 前提タスク（現状分析より）
 
-ディレクトリ構造をClean Architectureに準拠させる移行:
-
-- [ ] domain/ → enterprise-business-rules/ 移行（7ファイル）
-- [ ] application/ → application-business-rules/ importパス更新（5ファイル）
-- [ ] components/ → interface-adapters/ importパス更新（2ファイル）
-- [ ] infrastructure/ + entrypoints/ → frameworks-and-drivers/ importパス更新（3ファイル）
-- [ ] tests/ importパス更新（27ファイル）
+- [ ] RewriteRule.ts を enterprise-business-rules/ へ移行 + 全importパス更新（51ファイル）
+  - ファイル移動 + import変更のみ、ロジック変更なし
 
 ### ユーザーストーリー達成タスク
 
