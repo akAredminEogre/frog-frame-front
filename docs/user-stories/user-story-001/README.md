@@ -14,103 +14,94 @@
 
 ## 現状分析
 
-### 設計目標との差分
+### 差分分類
 
-| 項目 | 設計目標 | 現状 | 対応 |
-|------|---------|------|------|
-| isActive プロパティ | RewriteRule に isActive を持つ | ✅ 実装済み | 変更不要 |
-| Repository | getById/update メソッド | ✅ 実装済み | 変更不要 |
-| タブリロード | 変更時に該当タブをリロード | ✅ UpdateRewriteRuleUseCaseに実装済み | 参考にする |
-| トグルUI | 各行にトグルスイッチ | ❌ なし | 追加が必要 |
-| トグルUseCase | isActiveのみ変更するUseCase | ❌ なし | 新規作成 |
+設計ドキュメント（理論）と現在の実装の差分を分類：
 
-### 影響を受ける既存ファイル（層別）
+| ファイル | 現在位置 | 理論位置 | 修正 | 分類 |
+|---------|---------|---------|------|------|
+| RewriteRule.ts | src/domain/entities/ | src/enterprise-business-rules/entities/ | 必須（withActive追加） | B |
+| IRewriteRuleRepository.ts | src/application/ports/ | src/interface-adapters/gateways/ | 必須（設計上Gateway Interface） | B |
+| RulesApp.tsx | src/entrypoints/rules/ | src/frameworks-and-drivers/ui/pages/rules/ | 必須（トグルハンドラー追加） | B |
+| DexieRewriteRuleRepository.ts | src/infrastructure/persistence/ | src/frameworks-and-drivers/persistence/ | 不要 | C |
+| container.ts | src/infrastructure/di/ | src/frameworks-and-drivers/di/ | 必須（DI登録追加） | B |
 
-※ 新規作成ファイルは分析対象外
+### 分類B: 移行必須ファイルの影響分析
 
-#### enterprise-business-rules/ (第1層)
+#### RewriteRule.ts
 
-- `src/domain/entities/RewriteRule/RewriteRule.ts`
-  - 変更内容
-    - `src/enterprise-business-rules/entities/RewriteRule/RewriteRule.ts` への移動
-  - 影響モジュール（51ファイル）
-    - enterprise-business-rules/
-      - `src/domain/entities/DomDiffer.ts`
-      - `src/domain/entities/ElementMatchesFlexiblePattern.ts`
-      - `src/domain/entities/ReplaceElementPreservingState.ts`
-      - `src/domain/value-objects/RewriteRules.ts`
-      - `src/domain/value-objects/Tab.ts`
-      - `src/domain/value-objects/Tabs.ts`
-      - `src/domain/value-objects/MatchingElements.ts`
-    - application-business-rules/
-      - `src/application/ports/IRewriteRuleRepository.ts`
-      - `src/application/usecases/rule/GetAllRewriteRulesUseCase.ts`
-      - `src/application/usecases/rule/LoadRewriteRuleForEditUseCase.ts`
-      - `src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts`
-      - `src/application/usecases/rule/UpdateRewriteRuleUseCase.ts`
-    - interface-adapters/
-      - `src/components/molecules/RuleTableRow/RuleTableRow.tsx`
-      - `src/components/organisms/RulesTable/RulesTable.tsx`
-    - frameworks-and-drivers/
-      - `src/entrypoints/rules/RulesApp.tsx`
-      - `src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository.ts`
-      - `src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository.ts`
-    - tests/ (27ファイル)
+- **変更内容**:
+  - `src/enterprise-business-rules/entities/` への移動
+  - `withActive()` メソッド追加
+- **影響ファイル数**: 51ファイル
+- **影響モジュール**:
+  - enterprise-business-rules/ (7ファイル) - DomDiffer, RewriteRules, Tab等
+  - application-business-rules/ (5ファイル) - UseCases
+  - interface-adapters/ (2ファイル) - RuleTableRow, RulesTable
+  - frameworks-and-drivers/ (10ファイル) - Repository実装, handlers
+  - tests/ (27ファイル)
 
-⚠️ **前提変更**: このストーリー着手前にディレクトリ構造のClean Architecture準拠移行が必要
+#### IRewriteRuleRepository.ts
 
-#### application-business-rules/ (第2層)
+- **変更内容**:
+  - `src/interface-adapters/gateways/` への移動（Gateway Interface）
+- **影響ファイル数**: 14ファイル
+- **影響モジュール**:
+  - application-business-rules/ (5ファイル) - UseCases
+  - frameworks-and-drivers/ (6ファイル) - container, Repository実装
+  - tests/ (3ファイル)
 
-参考実装:
-- `src/application/usecases/rule/UpdateRewriteRuleUseCase.ts` - タブリロードロジックを参考にする
+#### RulesApp.tsx
 
-#### interface-adapters/ (第3層)
+- **変更内容**:
+  - `src/frameworks-and-drivers/ui/pages/rules/` への移動
+  - トグルハンドラー追加
+- **影響ファイル数**: 少数（entrypoint）
 
-- `src/application/ports/IRewriteRuleRepository.ts`
-  - 変更内容
-    - `src/interface-adapters/gateways/IRewriteRuleRepository.ts` への移動（設計上Gateway Interface）
-  - 影響モジュール（14ファイル）
-    - application-business-rules/
-      - `src/application/usecases/rule/GetAllRewriteRulesUseCase.ts`
-      - `src/application/usecases/rule/LoadRewriteRuleForEditUseCase.ts`
-      - `src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts`
-      - `src/application/usecases/rule/UpdateRewriteRuleUseCase.ts`
-      - `src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase.ts`
-    - frameworks-and-drivers/
-      - `src/infrastructure/di/container.ts`
-      - `src/infrastructure/di/contentContainer.ts`
-      - `src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository.ts`
-      - `src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository.ts`
-      - `src/infrastructure/browser/handlers/background/getAllRewriteRulesHandler.ts`
-      - `src/entrypoints/rules/RulesApp.tsx`
-    - tests/ (3ファイル)
+#### container.ts
 
-- `src/components/molecules/RuleTableRow/RuleTableRow.tsx` - トグルUI追加
-  - 現状: 編集ボタン、URLパターン、oldString、newString のみ表示
-  - 変更: トグルスイッチコンポーネントを追加
+- **変更内容**:
+  - `src/frameworks-and-drivers/di/` への移動
+  - Toggle関連クラスのDI登録追加
+- **影響ファイル数**: 多数（DI設定は全体に影響）
 
-#### frameworks-and-drivers/ (第4層)
+### 分類C: 対応しない
 
-- `src/entrypoints/rules/` - RulesApp にトグルハンドラー追加が必要になる可能性
+以下のファイルは修正不要のため、現行位置のまま：
+
+- `DexieRewriteRuleRepository.ts` - ロジック変更なし
+- `ChromeRuntimeRewriteRuleRepository.ts` - ロジック変更なし
+- その他、変更のない既存ファイル
 
 ## 開発戦略
 
-### 前提タスク（現状分析より）
+### 前提タスク（分類B: 移行必須）
 
-- [ ] RewriteRule/ を enterprise-business-rules/entities/ へ移行（51ファイル）
-  - RewriteRule.ts + Strategy関連ファイルを移動
-  - 他ファイル（Tab, DomDiffer等）は現行ディレクトリのまま、importパスのみ更新
-  - ロジック変更なし
-- [ ] IRewriteRuleRepository を interface-adapters/gateways/ へ移行（14ファイル）
-  - Gateway Interfaceとして移動
-  - importパスのみ更新、ロジック変更なし
+- [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移行（51ファイル）
+  - withActive() メソッド追加
+  - importパス更新
+- [ ] IRewriteRuleRepository.ts を interface-adapters/gateways/ へ移行（14ファイル）
+  - importパス更新のみ
 
 ### ユーザーストーリー達成タスク
 
-- [ ] トグルスイッチUIコンポーネント（atoms）を追加
-- [ ] ToggleRuleActiveUseCaseを実装
-- [ ] RuleTableRowにトグルUIを統合
-- [ ] RulesAppにトグルハンドラーを追加
+- [ ] ToggleSwitch UIコンポーネント（atoms）を追加
+- [ ] ITabsGateway / ChromeTabsGateway を追加
+- [ ] Toggle関連クラスを実装
+  - ToggleRuleActiveInputData
+  - ToggleRuleActiveOutputData
+  - IToggleRuleActiveUseCase
+  - IToggleRuleActivePresenter
+  - ToggleRuleActiveInteractor
+  - ToggleRuleActiveController
+  - ToggleRuleActivePresenter
+- [ ] RulesApp.tsx にトグルハンドラーを追加
+- [ ] container.ts にDI登録を追加
+
+### 対応しない（分類C）
+
+- DexieRewriteRuleRepository.ts - 修正不要のため現行位置のまま
+- ChromeRuntimeRewriteRuleRepository.ts - 修正不要のため現行位置のまま
 
 ## 受け入れ条件
 

@@ -1,0 +1,73 @@
+@startuml ToggleRuleActive
+
+title ルールトグル機能 シーケンス図
+
+skinparam sequenceArrowThickness 2
+skinparam sequenceParticipantBorderColor #666666
+skinparam sequenceLifeLineBorderColor #888888
+
+box "frameworks-and-drivers (第4層)" #LightBlue
+  participant "ToggleSwitch" as UI
+  participant "RulesApp" as View
+end box
+
+box "interface-adapters (第3層)" #LightGreen
+  participant "ToggleRuleActive\nController" as Controller
+  participant "ToggleRuleActive\nPresenter" as Presenter
+end box
+
+box "application-business-rules (第2層)" #LightYellow
+  participant "ToggleRuleActive\nInteractor" as Interactor
+  participant "IRewriteRule\nRepository" as IRepository
+  participant "ITabsGateway" as ITabsGateway
+end box
+
+box "enterprise-business-rules (第1層)" #LightPink
+  participant "RewriteRule" as Entity
+end box
+
+== トグル操作 ==
+
+UI -> View : onToggle(ruleId)
+activate View
+
+View -> Controller : toggleActive(ruleId)
+activate Controller
+
+Controller -> Controller : new ToggleRuleActiveInputData(ruleId)
+Controller -> Interactor : execute(inputData)
+activate Interactor
+
+Interactor -> IRepository : getById(ruleId)
+activate IRepository
+IRepository --> Interactor : rule
+deactivate IRepository
+
+Interactor -> Entity : withActive(!isActive)
+activate Entity
+Entity --> Interactor : updatedRule
+deactivate Entity
+
+Interactor -> IRepository : update(updatedRule)
+activate IRepository
+IRepository --> Interactor : void
+deactivate IRepository
+
+Interactor -> ITabsGateway : reloadMatchingTabs(updatedRule)
+activate ITabsGateway
+ITabsGateway --> Interactor : void
+deactivate ITabsGateway
+
+Interactor -> Interactor : new ToggleRuleActiveOutputData(updatedRule)
+Interactor -> Presenter : present(outputData)
+activate Presenter
+
+Presenter -> View : updateRuleInView(rule)
+View --> UI : 状態更新
+
+deactivate Presenter
+deactivate Interactor
+deactivate Controller
+deactivate View
+
+@enduml
