@@ -36,6 +36,7 @@
 │  │ - Repositoryからルール取得                                         │   │
 │  │ - 有効/無効を反転                                                  │   │
 │  │ - Repositoryで更新                                                │   │
+│  │ - 該当タブをリロード                                               │   │
 │  │ - OutputDataを作成してPresenterに渡す                              │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────────────┘
@@ -64,6 +65,7 @@
 | ToggleRuleActiveController | interface-adapters | ユーザー入力をInputDataに変換 |
 | ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
 | IRewriteRuleRepository | interface-adapters | Gateway Interface。ルール永続化 |
+| ITabsGateway | interface-adapters | Gateway Interface。タブ操作（リロード） |
 | ToggleSwitch | frameworks-and-drivers | UIコンポーネント。トグルスイッチ |
 | RulesApp | frameworks-and-drivers | View。ルール一覧画面 |
 
@@ -96,6 +98,7 @@
 │  │ ToggleRuleActiveInteractor                      │                       │
 │  │ ─────────────────────────────────────────────── │                       │
 │  │ - repository: IRewriteRuleRepository            │                       │
+│  │ - tabsGateway: ITabsGateway                     │                       │
 │  │ - presenter: IToggleRuleActivePresenter         │                       │
 │  │ ─────────────────────────────────────────────── │                       │
 │  │ + execute(inputData): Promise<void>             │                       │
@@ -120,12 +123,12 @@
 │  │ + toggleActive(ruleId)      │    │ + present(outputData)       │        │
 │  └─────────────────────────────┘    └─────────────────────────────┘        │
 │                                                                             │
-│  ┌─────────────────────────────┐                                           │
-│  │ <<interface>>               │                                           │
-│  │ IRewriteRuleRepository      │                                           │
-│  │ ─────────────────────────── │                                           │
-│  │ + getById(id): Promise<Rule>│                                           │
-│  │ + update(rule): Promise     │                                           │
-│  └─────────────────────────────┘                                           │
+│  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
+│  │ <<interface>>               │    │ <<interface>>               │        │
+│  │ IRewriteRuleRepository      │    │ ITabsGateway                │        │
+│  │ ─────────────────────────── │    │ ─────────────────────────── │        │
+│  │ + getById(id): Promise<Rule>│    │ + reloadMatchingTabs(rule)  │        │
+│  │ + update(rule): Promise     │    │                             │        │
+│  └─────────────────────────────┘    └─────────────────────────────┘        │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
