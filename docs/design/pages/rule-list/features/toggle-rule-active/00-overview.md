@@ -32,7 +32,7 @@
 `isActive` フラグは既に実装済み：
 
 ```typescript
-// src/domain/entities/RewriteRule/RewriteRule.ts
+// src/enterprise-business-rules/entities/RewriteRule/RewriteRule.ts
 export class RewriteRule {
   public readonly isActive: boolean;
   // デフォルト値: true
