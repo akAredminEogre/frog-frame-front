@@ -21,10 +21,18 @@ _wt_get_all_branches() {
 }
 
 # Get list of existing worktrees
+# Finds directories containing .git file (worktree marker) and returns relative paths
 _wt_get_worktrees() {
     local worktree_dir="$REPO_ROOT/worktrees"
     if [ -d "$worktree_dir" ]; then
-        ls -1 "$worktree_dir" 2>/dev/null
+        # Find directories with .git file (worktree marker) and extract branch names
+        find "$worktree_dir" -name ".git" -type f 2>/dev/null | while read -r git_file; do
+            # Get the directory containing .git file and make it relative to worktree_dir
+            local worktree_path
+            worktree_path="$(dirname "$git_file")"
+            # Remove the worktree_dir prefix to get the branch name
+            echo "${worktree_path#$worktree_dir/}"
+        done
     fi
 }
 
