@@ -27,5 +27,5 @@
 
 ## 関連ドキュメント
 
-- [ユーザーストーリー](../../../../../user-stories/user-story-001-rule-toggle/)
-- [PR計画](../../../../../user-stories/user-story-001-rule-toggle/prs/)
+- [ユーザーストーリー](../../../../../user-stories/user-story-001/)
+- [PR計画](../../../../../user-stories/user-story-001/prs/)

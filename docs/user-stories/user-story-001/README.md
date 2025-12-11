@@ -31,9 +31,9 @@
 
 | PR | ファイル | 状態 | 内容 |
 |----|----------|------|------|
-| [PR-001](./prs/pr-001-expand.md) | pr-001-expand.md | ⬜ 未着手 | Expand（スケルトン追加） |
-| [PR-002](./prs/pr-002-migrate.md) | pr-002-migrate.md | ⬜ 未着手 | Migrate（実装を埋める） |
-| [PR-003](./prs/pr-003-contract.md) | pr-003-contract.md | ⬜ 未着手 | Contract（統合・有効化） |
+| [PR-001](./prs/pr-001.md) | pr-001.md | ⬜ 未着手 | Expand（スケルトン追加） |
+| [PR-002](./prs/pr-002.md) | pr-002.md | ⬜ 未着手 | Migrate（実装を埋める） |
+| [PR-003](./prs/pr-003.md) | pr-003.md | ⬜ 未着手 | Contract（統合・有効化） |
 
 ## 進捗
 
