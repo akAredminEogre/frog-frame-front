@@ -168,31 +168,3 @@ src/
 矢印の方向 = 依存の方向
 外側から内側への依存のみ許可
 ```
-
-## 結果
-
-### メリット
-
-1. **意図の明確化**: ディレクトリ名からClean Architectureの層が明確
-2. **テスト容易性**: Input Port / Output Portによりモック差し替えが容易
-3. **変更容易性**: UI変更がビジネスロジックに影響しない
-4. **学習コスト低減**: Clean Architectureの標準的な命名に準拠
-
-### デメリット
-
-1. **ファイル数増加**: DTO、Port、Presenterなどのファイルが増える
-2. **初期学習コスト**: フルパターンの理解が必要
-3. **既存コードとの不整合**: 段階的な移行が必要
-
-### 移行戦略
-
-Parallel Change（Expand-Contract）パターンを採用：
-
-1. **PR1 (Expand)**: 新構造でスケルトンを追加（既存コード変更なし）
-2. **PR2 (Migrate)**: スケルトンに実装を埋める
-3. **PR3 (Contract)**: 新実装を有効化、旧実装を削除
-
-## 関連ドキュメント
-
-- [設計書: toggle-rule-active](../design/toggle-rule-active/)
-- [ユーザーストーリー: user-story-001-rule-toggle](../user-stories/user-story-001-rule-toggle/)
