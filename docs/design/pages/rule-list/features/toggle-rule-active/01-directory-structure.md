@@ -10,10 +10,8 @@ src/enterprise-business-rules/
 │   └── RewriteRule/
 │       ├── RewriteRule.ts                       ← withActive() 追加
 │       └── PatternProcessingStrategyFactory.ts
-├── value-objects/                               ← Value Object
-│   └── RewriteRules.ts
-└── constants/                                   ← 定数
-    └── RegexConstants.ts
+└── value-objects/                               ← Value Object
+    └── RewriteRules.ts
 ```
 
 ### 第2層: application-business-rules/
