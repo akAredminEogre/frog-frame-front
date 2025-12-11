@@ -13,12 +13,14 @@ end box
 
 box "Rules Page - interface-adapters (第3層)" #LightGreen
   participant "ToggleRuleActive\nController" as Controller
-  participant "ToggleRuleActive\nPresenter" as Presenter
   participant "<<interface>>\nIRewriteRuleRepository" as IRepository
+  participant "ToggleRuleActive\nPresenter" as PresenterImpl
 end box
 
 box "Rules Page - application-business-rules (第2層)" #LightYellow
+  participant "<<interface>>\nIToggleRuleActiveUseCase" as IUseCase
   participant "ToggleRuleActive\nInteractor" as Interactor
+  participant "<<interface>>\nIToggleRuleActivePresenter" as IPresenter
 end box
 
 box "Rules Page - frameworks-and-drivers/messaging" #LightCyan
@@ -44,10 +46,18 @@ View -> Controller : toggleActive(ruleId)
 activate Controller
 
 Controller -> Controller : new ToggleRuleActiveInputData(ruleId)
-Controller -> Interactor : execute(inputData)
+
+note over Controller, IUseCase : ControllerはInput Port（IUseCase）に依存\n（依存性逆転の原則）
+
+Controller -> IUseCase : execute(inputData)
+activate IUseCase
+
+note over IUseCase, Interactor : 実行時はDI経由で\nInteractorが注入
+
+IUseCase -> Interactor : execute(inputData)
 activate Interactor
 
-note over Interactor, IRepository : Interactorはインターフェースに依存\n（依存性逆転の原則）
+note over Interactor, IRepository : InteractorはGateway Interfaceに依存
 
 Interactor -> IRepository : getById(ruleId)
 activate IRepository
@@ -104,14 +114,24 @@ IRepository --> Interactor : void
 deactivate IRepository
 
 Interactor -> Interactor : new ToggleRuleActiveOutputData(updatedRule)
-Interactor -> Presenter : present(outputData)
-activate Presenter
 
-Presenter -> View : updateRuleInView(rule)
+note over Interactor, IPresenter : InteractorはOutput Port（IPresenter）に依存
+
+Interactor -> IPresenter : present(outputData)
+activate IPresenter
+
+note over IPresenter, PresenterImpl : 実行時はDI経由で\nPresenter実装が注入
+
+IPresenter -> PresenterImpl : present(outputData)
+activate PresenterImpl
+
+PresenterImpl -> View : updateRuleInView(rule)
 View --> UI : 状態更新
 
-deactivate Presenter
+deactivate PresenterImpl
+deactivate IPresenter
 deactivate Interactor
+deactivate IUseCase
 deactivate Controller
 deactivate View
 
