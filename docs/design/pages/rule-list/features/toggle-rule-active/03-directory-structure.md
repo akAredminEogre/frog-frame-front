@@ -65,7 +65,9 @@ src/frameworks-and-drivers/
 │           └── RulesApp.tsx                     ← 既存、変更対象
 ├── persistence/                                 ← DB Gateway 実装
 │   └── indexeddb/
-│       └── DexieRewriteRuleRepository.ts        ← 既存
+│       └── DexieRewriteRuleRepository.ts        ← 既存（background用）
+├── messaging/                                   ← Messaging Gateway 実装
+│   └── ChromeRuntimeRewriteRuleRepository.ts    ← 既存（rules page用）
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
 │   └── ChromeTabsGateway.ts                     ← タブリロード実装
 └── di/                                          ← DI Container
@@ -75,24 +77,45 @@ src/frameworks-and-drivers/
 ## 導線と各層の役割
 
 ```
-[ユーザー] トグルクリック
-     │
-     ▼
-[第4層] ToggleSwitch.tsx → RulesApp.tsx
-     │
-     ▼
-[第3層] ToggleRuleActiveController
-     │ InputData
-     ▼
-[第2層] ToggleRuleActiveInteractor
-     │ ├── RewriteRule.withActive()
-     │ ├── IRewriteRuleRepository.update()
-     │ └── ITabsGateway.reloadMatchingTabs()
-     ▼
-[第3層] ToggleRuleActivePresenter → OutputData
-     │
-     ▼
-[第4層] RulesApp.tsx (状態更新)
+┌─────────────────────────────────────────────────────────────────┐
+│ Rules Page                                                       │
+│                                                                  │
+│ [ユーザー] トグルクリック                                          │
+│      │                                                          │
+│      ▼                                                          │
+│ [第4層] ToggleSwitch.tsx → RulesApp.tsx                          │
+│      │                                                          │
+│      ▼                                                          │
+│ [第3層] ToggleRuleActiveController                               │
+│      │ InputData                                                │
+│      ▼                                                          │
+│ [第2層] ToggleRuleActiveInteractor                               │
+│      │ └── IRewriteRuleRepository (ChromeRuntimeRewriteRule...)  │
+│      │                                                          │
+└──────┼──────────────────────────────────────────────────────────┘
+       │ chrome.runtime.sendMessage
+       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Background Script                                                │
+│      │                                                          │
+│      ▼                                                          │
+│ MessageHandler                                                   │
+│      ├── DexieRewriteRuleRepository.update()                    │
+│      ├── RewriteRule.withActive()                               │
+│      └── ChromeTabsGateway.reloadMatchingTabs()                 │
+│      │                                                          │
+└──────┼──────────────────────────────────────────────────────────┘
+       │ response
+       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Rules Page (続き)                                                │
+│      │                                                          │
+│      ▼                                                          │
+│ [第3層] ToggleRuleActivePresenter → OutputData                   │
+│      │                                                          │
+│      ▼                                                          │
+│ [第4層] RulesApp.tsx (状態更新)                                   │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ## 変更対象サマリ
@@ -107,3 +130,5 @@ src/frameworks-and-drivers/
 | 新規 | ToggleSwitch.tsx | UIコンポーネント新規作成 |
 | 変更 | RulesApp.tsx | トグルハンドラー追加 |
 | 変更 | container.ts | DI登録追加 |
+| 既存 | ChromeRuntimeRewriteRuleRepository.ts | messaging経由でbackgroundと通信（変更不要） |
+| 既存 | DexieRewriteRuleRepository.ts | IndexedDB直接アクセス・background用（変更不要） |

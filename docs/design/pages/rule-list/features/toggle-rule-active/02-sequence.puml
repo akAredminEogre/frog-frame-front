@@ -6,20 +6,28 @@ skinparam sequenceArrowThickness 2
 skinparam sequenceParticipantBorderColor #666666
 skinparam sequenceLifeLineBorderColor #888888
 
-box "frameworks-and-drivers (第4層)" #LightBlue
+box "Rules Page - frameworks-and-drivers (第4層)" #LightBlue
   participant "ToggleSwitch" as UI
   participant "RulesApp" as View
 end box
 
-box "interface-adapters (第3層)" #LightGreen
+box "Rules Page - interface-adapters (第3層)" #LightGreen
   participant "ToggleRuleActive\nController" as Controller
   participant "ToggleRuleActive\nPresenter" as Presenter
 end box
 
-box "application-business-rules (第2層)" #LightYellow
+box "Rules Page - application-business-rules (第2層)" #LightYellow
   participant "ToggleRuleActive\nInteractor" as Interactor
-  participant "IRewriteRule\nRepository" as IRepository
-  participant "ITabsGateway" as ITabsGateway
+end box
+
+box "Rules Page - frameworks-and-drivers/messaging" #LightCyan
+  participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
+end box
+
+box "Background Script" #LightGray
+  participant "MessageHandler" as Handler
+  participant "DexieRewriteRule\nRepository" as DexieRepo
+  participant "ChromeTabsGateway" as TabsGateway
 end box
 
 box "enterprise-business-rules (第1層)" #LightPink
@@ -38,25 +46,48 @@ Controller -> Controller : new ToggleRuleActiveInputData(ruleId)
 Controller -> Interactor : execute(inputData)
 activate Interactor
 
-Interactor -> IRepository : getById(ruleId)
-activate IRepository
-IRepository --> Interactor : rule
-deactivate IRepository
+Interactor -> MessagingRepo : getById(ruleId)
+activate MessagingRepo
+
+note over MessagingRepo, Handler : chrome.runtime.sendMessage
+
+MessagingRepo -> Handler : { type: "getById", ruleId }
+activate Handler
+Handler -> DexieRepo : getById(ruleId)
+activate DexieRepo
+DexieRepo --> Handler : rule
+deactivate DexieRepo
+Handler --> MessagingRepo : rule
+deactivate Handler
+
+MessagingRepo --> Interactor : rule
+deactivate MessagingRepo
 
 Interactor -> Entity : withActive(!isActive)
 activate Entity
 Entity --> Interactor : updatedRule
 deactivate Entity
 
-Interactor -> IRepository : update(updatedRule)
-activate IRepository
-IRepository --> Interactor : void
-deactivate IRepository
+Interactor -> MessagingRepo : update(updatedRule)
+activate MessagingRepo
 
-Interactor -> ITabsGateway : reloadMatchingTabs(updatedRule)
-activate ITabsGateway
-ITabsGateway --> Interactor : void
-deactivate ITabsGateway
+MessagingRepo -> Handler : { type: "update", rule }
+activate Handler
+Handler -> DexieRepo : update(updatedRule)
+activate DexieRepo
+DexieRepo --> Handler : void
+deactivate DexieRepo
+
+Handler -> TabsGateway : reloadMatchingTabs(updatedRule)
+activate TabsGateway
+TabsGateway --> Handler : void
+deactivate TabsGateway
+
+Handler --> MessagingRepo : void
+deactivate Handler
+
+MessagingRepo --> Interactor : void
+deactivate MessagingRepo
 
 Interactor -> Interactor : new ToggleRuleActiveOutputData(updatedRule)
 Interactor -> Presenter : present(outputData)
