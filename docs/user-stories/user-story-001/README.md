@@ -57,6 +57,25 @@
       - `src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository.ts`
     - tests/ (27ファイル)
 
+- `src/domain/value-objects/RewriteRules.ts`
+  - 変更内容
+    - `src/enterprise-business-rules/value-objects/RewriteRules.ts` への移動
+  - 影響モジュール（10ファイル）
+    - application-business-rules/
+      - `src/application/ports/IRewriteRuleRepository.ts`
+    - frameworks-and-drivers/
+      - `src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository.ts`
+      - `src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository.ts`
+    - tests/ (7ファイル)
+
+- `src/domain/constants/RegexConstants.ts`
+  - 変更内容
+    - `src/enterprise-business-rules/constants/RegexConstants.ts` への移動
+  - 影響モジュール（2ファイル）
+    - enterprise-business-rules/
+      - `src/domain/entities/ElementMatchesFlexiblePattern.ts`
+      - `src/domain/entities/ReplaceElementPreservingState.ts`
+
 ⚠️ **前提変更**: このストーリー着手前にディレクトリ構造のClean Architecture準拠移行が必要
 
 #### application-business-rules/ (第2層)
@@ -97,10 +116,14 @@
 
 ### 前提タスク（現状分析より）
 
-- [ ] RewriteRule/ を enterprise-business-rules/ へ移行（51ファイル）
+- [ ] RewriteRule/ を enterprise-business-rules/entities/ へ移行（51ファイル）
   - RewriteRule.ts + Strategy関連ファイルを移動
   - 他ファイル（Tab, DomDiffer等）は現行ディレクトリのまま、importパスのみ更新
   - ロジック変更なし
+- [ ] RewriteRules.ts を enterprise-business-rules/value-objects/ へ移行（10ファイル）
+  - importパスのみ更新、ロジック変更なし
+- [ ] RegexConstants.ts を enterprise-business-rules/constants/ へ移行（2ファイル）
+  - importパスのみ更新、ロジック変更なし
 - [ ] IRewriteRuleRepository を interface-adapters/gateways/ へ移行（14ファイル）
   - Gateway Interfaceとして移動
   - importパスのみ更新、ロジック変更なし
