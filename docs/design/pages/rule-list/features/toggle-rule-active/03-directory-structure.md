@@ -76,6 +76,8 @@ src/frameworks-and-drivers/
 
 ## 導線と各層の役割
 
+> **参照**: [ADR-002: DB アクセスを messaging 経由に統一](../../../../adr/002-unified-db-access-via-messaging.md)
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ Rules Page                                                       │

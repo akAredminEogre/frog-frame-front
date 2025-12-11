@@ -29,3 +29,5 @@
 
 - [ユーザーストーリー](../../../../../user-stories/user-story-001/)
 - [PR計画](../../../../../user-stories/user-story-001/prs/)
+- [ADR-001: Clean Architecture with Presenter Pattern](../../../../adr/001-clean-architecture-with-presenter-pattern.md)
+- [ADR-002: DB アクセスを messaging 経由に統一](../../../../adr/002-unified-db-access-via-messaging.md)
