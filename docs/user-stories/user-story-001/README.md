@@ -8,15 +8,6 @@
 
 ルール一覧画面において、各ルールの有効/無効をトグルボタンで切り替えられる機能。
 
-## 関連ドキュメント
-
-| ドキュメント | リンク |
-|-------------|--------|
-| ADR | [001-clean-architecture-with-presenter-pattern](../../adr/001-clean-architecture-with-presenter-pattern.md) |
-| 設計概要 | [00-overview.md](../../design/pages/rule-list/features/toggle-rule-active/00-overview.md) |
-| ディレクトリ構造 | [01-directory-structure.md](../../design/pages/rule-list/features/toggle-rule-active/01-directory-structure.md) |
-| クラス設計 | [02-class-design.md](../../design/pages/rule-list/features/toggle-rule-active/02-class-design.md) |
-
 ## 開発戦略
 
 **Parallel Change（Expand-Contract）パターン** を採用
