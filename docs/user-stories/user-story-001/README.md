@@ -80,15 +80,10 @@
 
 ### 前提タスク（現状分析より）
 
-domain/ → enterprise-business-rules/ 移行（1ファイル完結型）:
-
-- [ ] RewriteRule/ 移行（51ファイル）- エンティティ + Strategy
-- [ ] Tab関連 移行（~25ファイル）- Tab, TabId, TabUrl, Tabs
-- [ ] DomDiffer関連 移行（~15ファイル）- DomDiffer, ElementMatchesFlexiblePattern, ReplaceElementPreservingState, MatchingElements, ParserContextStrategy
-- [ ] RewriteRules 移行（~10ファイル）- value object
-- [ ] その他 移行（~10ファイル）- ElementSelector, SelectedPageText, RegexConstants, Elements, AddedNodes, MutationRecords, ports, errors
-
-※ 各PR: ファイル移動 + import変更のみ、ロジック変更なし
+- [ ] RewriteRule/ を enterprise-business-rules/ へ移行（51ファイル）
+  - RewriteRule.ts + Strategy関連ファイルを移動
+  - 他ファイル（Tab, DomDiffer等）は現行ディレクトリのまま、importパスのみ更新
+  - ロジック変更なし
 
 ### ユーザーストーリー達成タスク
 
