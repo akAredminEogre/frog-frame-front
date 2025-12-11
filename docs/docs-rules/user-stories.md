@@ -29,7 +29,7 @@ docs/user-stories/
 | 概要 | ○ | 機能の説明 |
 | 設計ドキュメント | ○ | 関連する設計ドキュメントへのリンク |
 | 現状分析 | ○ | 設計目標と現在の実装の差分分析 |
-| 開発戦略 | ○ | 採用するパターン（Parallel Changeなど） |
+| 開発戦略 | ○ | 1PR単位のタスクチェックリスト |
 | 受け入れ条件 | ○ | acceptance-criteria.mdへのリンク |
 
 #### 現状分析
@@ -64,6 +64,30 @@ docs/user-stories/
     - frameworks-and-drivers/
       - `src/frameworks-and-drivers/database/RewriteRuleModel/RewriteRuleModel.ts
       - .....
+```
+
+#### 開発戦略
+
+現状分析の結果とユーザーストーリー達成に必要なタスクを、1PR単位でチェックリスト形式で記載:
+
+- 各タスク = 1PR = 1チェックボックス（`- [ ]`）
+- 現状分析で判明した前提変更タスクを先に記載
+- ユーザーストーリー達成に必要なタスクを後に記載
+- タスクは依存関係順に並べる
+
+記述例
+```markdown
+## 開発戦略
+
+### 前提タスク（現状分析より）
+
+- [ ] ディレクトリ構造をClean Architectureに準拠させる移行
+
+### ユーザーストーリー達成タスク
+
+- [ ] トグルスイッチUIコンポーネントを追加
+- [ ] トグル処理UseCaseを実装
+- [ ] RuleTableRowにトグルUIを統合
 ```
 
 ### acceptance-criteria.md
