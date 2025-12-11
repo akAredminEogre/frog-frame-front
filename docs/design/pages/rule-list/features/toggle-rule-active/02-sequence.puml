@@ -14,6 +14,7 @@ end box
 box "Rules Page - interface-adapters (第3層)" #LightGreen
   participant "ToggleRuleActive\nController" as Controller
   participant "ToggleRuleActive\nPresenter" as Presenter
+  participant "<<interface>>\nIRewriteRuleRepository" as IRepository
 end box
 
 box "Rules Page - application-business-rules (第2層)" #LightYellow
@@ -46,7 +47,14 @@ Controller -> Controller : new ToggleRuleActiveInputData(ruleId)
 Controller -> Interactor : execute(inputData)
 activate Interactor
 
-Interactor -> MessagingRepo : getById(ruleId)
+note over Interactor, IRepository : Interactorはインターフェースに依存\n（依存性逆転の原則）
+
+Interactor -> IRepository : getById(ruleId)
+activate IRepository
+
+note over IRepository, MessagingRepo : 実行時はDI経由で\nChromeRuntimeRewriteRuleRepositoryが注入
+
+IRepository -> MessagingRepo : getById(ruleId)
 activate MessagingRepo
 
 note over MessagingRepo, Handler : chrome.runtime.sendMessage
@@ -60,15 +68,19 @@ deactivate DexieRepo
 Handler --> MessagingRepo : rule
 deactivate Handler
 
-MessagingRepo --> Interactor : rule
+MessagingRepo --> IRepository : rule
 deactivate MessagingRepo
+IRepository --> Interactor : rule
+deactivate IRepository
 
 Interactor -> Entity : withActive(!isActive)
 activate Entity
 Entity --> Interactor : updatedRule
 deactivate Entity
 
-Interactor -> MessagingRepo : update(updatedRule)
+Interactor -> IRepository : update(updatedRule)
+activate IRepository
+IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
 
 MessagingRepo -> Handler : { type: "update", rule }
@@ -86,8 +98,10 @@ deactivate TabsGateway
 Handler --> MessagingRepo : void
 deactivate Handler
 
-MessagingRepo --> Interactor : void
+MessagingRepo --> IRepository : void
 deactivate MessagingRepo
+IRepository --> Interactor : void
+deactivate IRepository
 
 Interactor -> Interactor : new ToggleRuleActiveOutputData(updatedRule)
 Interactor -> Presenter : present(outputData)
