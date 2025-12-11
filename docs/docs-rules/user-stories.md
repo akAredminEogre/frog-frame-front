@@ -8,8 +8,8 @@ docs/user-stories/
 │   ├── README.md                 # 必須: ストーリー概要
 │   ├── acceptance-criteria.md    # 必須: 受け入れ条件
 │   └── prs/                      # 必須: PR計画
-│       ├── pr-001-{フェーズ名}.md
-│       ├── pr-002-{フェーズ名}.md
+│       ├── pr-001.md
+│       ├── pr-002.md
 │       └── ...
 ```
 
@@ -17,17 +17,17 @@ docs/user-stories/
 
 ### ディレクトリ名
 
-- 形式: `user-story-{3桁番号}-{機能名}`
+- 形式: `user-story-{3桁番号}`
 - 番号: 001から連番
 - 機能名: kebab-case（小文字、ハイフン区切り）
-- 例: `user-story-001-rule-toggle`, `user-story-002-batch-delete`
+- 例: `user-story-001`, `user-story-002`
 
 ### PRファイル名
 
-- 形式: `pr-{3桁番号}-{フェーズ名}.md`
+- 形式: `pr-{3桁番号}.md`
 - 番号: 001から連番（ユーザーストーリー内で連番）
 - フェーズ名: kebab-case
-- 例: `pr-001-expand.md`, `pr-002-migrate.md`, `pr-003-contract.md`
+- 例: `pr-001.md`
 
 ## 必須ファイル
 
