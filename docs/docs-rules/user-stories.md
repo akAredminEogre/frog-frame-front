@@ -34,39 +34,49 @@ docs/user-stories/
 
 #### 現状分析
 
-設計目標と現在の実装の差分を分析し、開発戦略の判断材料とする:
+設計ドキュメント（理論的設計）と現在の実装の差分を分析し、開発戦略の判断材料とする。
 
-- 設計ドキュメントの目標と現在の実装を比較
-- **設計ドキュメントのディレクトリ構造と現在の構造を比較**
-  - 異なる場合、ディレクトリ移動自体を変更内容として記載
-- **01-directory-structure.mdに記載された全ての既存ファイルを分析対象とする**
-  - 各ファイルの移行先と影響ファイル数を調査
-  - 新規作成ファイルは分析対象外
-- 変更が必要な箇所を特定
+##### 差分の分類
+
+設計と実装の差分を以下の3分類で整理する:
+
+| 分類 | 条件 | 対応方針 |
+|------|------|----------|
+| A | 修正不要 & 配置適切 | そのまま利用 |
+| B | **修正必須** | 先に理論的配置へ移行 → 修正 |
+| C | 修正不要 & 配置不適切 | 機能開発後にリファクタリング（または対応しない） |
+
+**ポイント**: 分類Bのファイルのみ前提タスクとして移行を行う
+
+##### 分析手順
+
+- **03-directory-structure.md（理論）と現在のディレクトリ構造を比較**
+- 各ファイルを上記3分類に振り分ける
+- 分類Bのファイルについて、影響ファイル数を調査
 - 影響を受けるファイル・モジュールをClean Architectureの層ごとに列挙
-- 各層内で変更の影響を受けるモジュールを再帰的に列挙
-- ストーリー着手前に必要な前提変更があればフラグを立てる
 - 新規作成ファイルは分析対象外（既存ファイルの変更のみ分析）
 
 **注意**: Clean Architecture遵守のためのディレクトリ移動は影響範囲が広くなるため、特に注意して分析する
 
 記述例
 ```markdown
+### 差分分類
 
-### enterprise-business-rules/ (第1層)
-- `src/domain/entities/RewriteRule/RewriteRule.ts`
-  - 変更内容
-    - isActive プロパティ追加
-    - src/enterprise-business-rules/entities/RewriteRule/RewriteRule.tsへの移動
-  - 影響モジュール
-    - application-business-rules/
-      - `src/application-business-rules/services/RewriteRuleService/RewriteRuleService.ts`
-    - interface-adapters/
-      - `src/interface-adapters/controllers/RewriteRuleController/RewriteRuleController.ts`
-      - `src/interface-adapters/gateways/RewriteRuleRepository/RewriteRuleRepository.ts
-    - frameworks-and-drivers/
-      - `src/frameworks-and-drivers/database/RewriteRuleModel/RewriteRuleModel.ts
-      - .....
+| ファイル | 現在位置 | 理論位置 | 修正 | 分類 |
+|---------|---------|---------|------|------|
+| RewriteRule.ts | domain/entities/ | enterprise-business-rules/entities/ | 必須 | B |
+| IRewriteRuleRepository.ts | application/ports/ | interface-adapters/gateways/ | 必須 | B |
+| DexieDatabase.ts | infrastructure/persistence/ | frameworks-and-drivers/persistence/ | 不要 | C |
+
+### 分類B: 移行必須ファイルの影響分析
+
+#### RewriteRule.ts（51ファイル影響）
+- 変更内容: enterprise-business-rules/entities/へ移動 + withActive()追加
+- 影響モジュール:
+  - application-business-rules/ (5ファイル)
+  - interface-adapters/ (8ファイル)
+  - frameworks-and-drivers/ (11ファイル)
+  - tests/ (27ファイル)
 ```
 
 #### 開発戦略
@@ -74,29 +84,32 @@ docs/user-stories/
 現状分析の結果とユーザーストーリー達成に必要なタスクを、1PR単位でチェックリスト形式で記載:
 
 - 各タスク = 1PR = 1チェックボックス（`- [ ]`）
-- 現状分析で判明した前提変更タスクを先に記載
+- **分類Bのファイル移行**を前提タスクとして先に記載
 - ユーザーストーリー達成に必要なタスクを後に記載
 - タスクは依存関係順に並べる
-- **前提タスクもユーザーストーリーのスコープ内に限定する**
-  - 設計ドキュメントで定義されたクラス/ファイルのみ移行対象
-  - 関係ないファイルはimport更新のみ（ディレクトリ移動しない）
+- **分類Cのファイルは移行しない**（機能開発後のリファクタリング or 対応しない）
 
-**完了条件**: ユーザーストーリー完了時に、関連するファイルはClean Architectureを遵守していること
-- ユーザーストーリーに関係のない（変更のない）ファイルは問わない
+**完了条件**: ユーザーストーリー完了時に、関連するファイル（分類A, B）はClean Architectureを遵守していること
+- 分類Cのファイルは問わない
 
 記述例
 ```markdown
 ## 開発戦略
 
-### 前提タスク（現状分析より）
+### 前提タスク（分類B: 移行必須）
 
-- [ ] ディレクトリ構造をClean Architectureに準拠させる移行
+- [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移行（51ファイル）
+- [ ] IRewriteRuleRepository.ts を interface-adapters/gateways/ へ移行（14ファイル）
 
 ### ユーザーストーリー達成タスク
 
 - [ ] トグルスイッチUIコンポーネントを追加
 - [ ] トグル処理UseCaseを実装
 - [ ] RuleTableRowにトグルUIを統合
+
+### 対応しない（分類C）
+
+- DexieDatabase.ts - 修正不要のため現行位置のまま
 ```
 
 ### acceptance-criteria.md
