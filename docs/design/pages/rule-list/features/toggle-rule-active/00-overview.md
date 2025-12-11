@@ -25,24 +25,6 @@
 - 変更は即座にDBに永続化
 - 該当するタブを自動リロード
 
-## 既存実装の確認
-
-### RewriteRule エンティティ
-
-`isActive` フラグは既に実装済み：
-
-```typescript
-// src/enterprise-business-rules/entities/RewriteRule/RewriteRule.ts
-export class RewriteRule {
-  public readonly isActive: boolean;
-  // デフォルト値: true
-}
-```
-
-### データベース
-
-`isActive` カラムは既に追加済み（DatabaseMigrationV2）
-
 ## アーキテクチャ
 
 Presenter付きパターン（Clean Architecture）を採用：
