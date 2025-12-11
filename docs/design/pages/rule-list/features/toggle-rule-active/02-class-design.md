@@ -44,7 +44,7 @@
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                    enterprise-business-rules/ (第1層)                    │
 │  ┌──────────────────────────────────────────────────────────────────┐   │
-│  │ RewriteRule/RewriteRule.ts                                       │   │
+│  │ entities/RewriteRule/RewriteRule.ts                               │   │
 │  │                                                                  │   │
 │  │ - withActive(isActive): 新しいインスタンスを返す                    │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
@@ -56,7 +56,7 @@
 ### 1. RewriteRule.withActive() [enterprise-business-rules]
 
 ```typescript
-// src/enterprise-business-rules/RewriteRule/RewriteRule.ts
+// src/enterprise-business-rules/entities/RewriteRule/RewriteRule.ts
 
 /**
  * isActiveを変更した新しいインスタンスを返す（イミュータブル）
@@ -92,7 +92,7 @@ export class ToggleRuleActiveInputData {
 ```typescript
 // src/application-business-rules/dto/output/rule/ToggleRuleActiveOutputData.ts
 
-import { RewriteRule } from 'src/enterprise-business-rules/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 export class ToggleRuleActiveOutputData {
   constructor(
@@ -132,7 +132,7 @@ export interface IToggleRuleActivePresenter {
 
 import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/rule/IToggleRuleActiveUseCase';
 import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/rule/IToggleRuleActivePresenter';
-import { IRewriteRuleRepository } from 'src/interface-adapters/gateways/IRewriteRuleRepository';
+import { IRewriteRuleRepository } from 'src/interface-adapters/gateways/persistence/IRewriteRuleRepository';
 import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/rule/ToggleRuleActiveInputData';
 import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/rule/ToggleRuleActiveOutputData';
 
@@ -180,7 +180,7 @@ export class ToggleRuleActiveController {
 
 import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/rule/IToggleRuleActivePresenter';
 import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/rule/ToggleRuleActiveOutputData';
-import { RewriteRule } from 'src/enterprise-business-rules/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 export class ToggleRuleActivePresenter implements IToggleRuleActivePresenter {
   constructor(
@@ -227,57 +227,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
 };
 ```
 
-### 10. RulePreviewToggle [frameworks-and-drivers/ui/components/molecules]
-
-```typescript
-// src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle.tsx
-
-import * as React from 'react';
-import { useState } from 'react';
-import styles from './RulePreviewToggle.module.css';
-
-type PreviewMode = 'before' | 'after';
-
-interface RulePreviewToggleProps {
-  beforeText: string;
-  afterText: string;
-  initialMode?: PreviewMode;
-}
-
-export const RulePreviewToggle: React.FC<RulePreviewToggleProps> = ({
-  beforeText,
-  afterText,
-  initialMode = 'before'
-}) => {
-  const [mode, setMode] = useState<PreviewMode>(initialMode);
-
-  return (
-    <div className={styles.container}>
-      <div className={styles.tabs}>
-        <button
-          type="button"
-          className={`${styles.tab} ${mode === 'before' ? styles.active : ''}`}
-          onClick={() => setMode('before')}
-        >
-          置換前
-        </button>
-        <button
-          type="button"
-          className={`${styles.tab} ${mode === 'after' ? styles.active : ''}`}
-          onClick={() => setMode('after')}
-        >
-          置換後
-        </button>
-      </div>
-      <div className={styles.content}>
-        {mode === 'before' ? beforeText : afterText}
-      </div>
-    </div>
-  );
-};
-```
-
-### 11. RulesApp での組み立て [frameworks-and-drivers/ui/pages]
+### 10. RulesApp での組み立て [frameworks-and-drivers/ui/pages]
 
 ```typescript
 // src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx
@@ -285,13 +235,12 @@ export const RulePreviewToggle: React.FC<RulePreviewToggleProps> = ({
 import * as React from 'react';
 import { useState, useCallback } from 'react';
 import { container } from 'src/frameworks-and-drivers/di/container';
-import { IRewriteRuleRepository } from 'src/interface-adapters/gateways/IRewriteRuleRepository';
+import { IRewriteRuleRepository } from 'src/interface-adapters/gateways/persistence/IRewriteRuleRepository';
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/rule/ToggleRuleActiveInteractor';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/rule/ToggleRuleActiveController';
 import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/rule/ToggleRuleActivePresenter';
 import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
-import { RulePreviewToggle } from 'src/frameworks-and-drivers/ui/components/molecules/RulePreviewToggle';
-import { RewriteRule } from 'src/enterprise-business-rules/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);
@@ -318,10 +267,6 @@ function RulesApp() {
     <ToggleSwitch
       checked={rule.isActive}
       onChange={() => handleToggleActive(rule.id)}
-    />
-    <RulePreviewToggle
-      beforeText={rule.oldString}
-      afterText={rule.newString}
     />
   );
 }
