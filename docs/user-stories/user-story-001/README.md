@@ -22,12 +22,16 @@
 | トグルUI | 各行にトグルスイッチ | なし | 追加が必要 |
 | タブリロード | 変更時に該当タブをリロード | なし | 追加が必要 |
 
-### 影響を受けるファイル
+### 影響を受ける既存ファイル（層別）
 
-- `src/domain/entities/RewriteRule/` - isActive プロパティ追加
+※ 新規作成ファイルは分析対象外
+
+#### Domain層
+- `src/domain/entities/RewriteRule/RewriteRule.ts` - isActive プロパティ追加
+
+#### Interface Adapters層
 - `src/components/organisms/RuleListItem/` - トグルUI追加
-- `src/application/usecases/` - トグル処理UseCase追加
-- `src/infrastructure/browser/tabs/` - タブリロード処理
+  - `RuleListItem.tsx` - トグルコンポーネント配置
 
 ## 開発戦略
 
