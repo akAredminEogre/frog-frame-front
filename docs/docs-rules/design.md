@@ -102,14 +102,10 @@ docs/design/
 ## 良い例（ドメイン用語）
 
 - ルールの有効/無効を切り替える
-- 変更をDBに保存する
-- 該当するタブをリロードする
 
 ## 悪い例（実装詳細）
 
 - isActiveフラグを反転する
-- IndexedDBに永続化する
-- chrome.tabs.reload()を呼び出す
 ```
 
 ### 01-directory-structure.md（機能単位）
