@@ -59,6 +59,25 @@ docs/user-stories/
 
 **注意**: Clean Architecture遵守のためのディレクトリ移動は影響範囲が広くなるため、特に注意して分析する
 
+記述例
+```markdown
+
+### enterprise-business-rules/ (第1層)
+- `src/domain/entities/RewriteRule/RewriteRule.ts`
+  - 変更内容
+    - isActive プロパティ追加
+    - src/enterprise-business-rules/entities/RewriteRule/RewriteRule.tsへの移動
+  - 影響モジュール
+    - application-business-rules/
+      - `src/application-business-rules/services/RewriteRuleService/RewriteRuleService.ts`
+    - interface-adapters/
+      - `src/interface-adapters/controllers/RewriteRuleController/RewriteRuleController.ts`
+      - `src/interface-adapters/gateways/RewriteRuleRepository/RewriteRuleRepository.ts
+    - frameworks-and-drivers/
+      - `src/frameworks-and-drivers/database/RewriteRuleModel/RewriteRuleModel.ts
+      - .....
+```
+
 ### acceptance-criteria.md
 
 ユーザーストーリーを満たすかどうかを検証する条件を記載:
