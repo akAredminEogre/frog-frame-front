@@ -28,24 +28,51 @@
 
 ※ 新規作成ファイルは分析対象外
 
-#### Domain層（enterprise-business-rules）
+#### enterprise-business-rules/ (第1層)
 
-変更不要 - `RewriteRule.isActive` は既に実装済み
+- `src/domain/entities/RewriteRule/RewriteRule.ts`
+  - 変更内容
+    - `src/enterprise-business-rules/entities/RewriteRule/RewriteRule.ts` への移動
+  - 影響モジュール（51ファイル）
+    - enterprise-business-rules/
+      - `src/domain/entities/DomDiffer.ts`
+      - `src/domain/entities/ElementMatchesFlexiblePattern.ts`
+      - `src/domain/entities/ReplaceElementPreservingState.ts`
+      - `src/domain/value-objects/RewriteRules.ts`
+      - `src/domain/value-objects/Tab.ts`
+      - `src/domain/value-objects/Tabs.ts`
+      - `src/domain/value-objects/MatchingElements.ts`
+    - application-business-rules/
+      - `src/application/ports/IRewriteRuleRepository.ts`
+      - `src/application/usecases/rule/GetAllRewriteRulesUseCase.ts`
+      - `src/application/usecases/rule/LoadRewriteRuleForEditUseCase.ts`
+      - `src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase.ts`
+      - `src/application/usecases/rule/UpdateRewriteRuleUseCase.ts`
+    - interface-adapters/
+      - `src/components/molecules/RuleTableRow/RuleTableRow.tsx`
+      - `src/components/organisms/RulesTable/RulesTable.tsx`
+    - frameworks-and-drivers/
+      - `src/entrypoints/rules/RulesApp.tsx`
+      - `src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository.ts`
+      - `src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository.ts`
+    - tests/ (27ファイル)
 
-#### Application層（application-business-rules）
+⚠️ **前提変更**: このストーリー着手前にディレクトリ構造のClean Architecture準拠移行が必要
+
+#### application-business-rules/ (第2層)
 
 変更不要 - `IRewriteRuleRepository.getById/update` は既に実装済み
 
 参考実装:
 - `src/application/usecases/rule/UpdateRewriteRuleUseCase.ts` - タブリロードロジックを参考にする
 
-#### Interface Adapters層
+#### interface-adapters/ (第3層)
 
 - `src/components/molecules/RuleTableRow/RuleTableRow.tsx` - トグルUI追加
   - 現状: 編集ボタン、URLパターン、oldString、newString のみ表示
   - 変更: トグルスイッチコンポーネントを追加
 
-#### Frameworks & Drivers層
+#### frameworks-and-drivers/ (第4層)
 
 - `src/entrypoints/rules/` - RulesApp にトグルハンドラー追加が必要になる可能性
 
