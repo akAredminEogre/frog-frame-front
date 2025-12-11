@@ -18,20 +18,36 @@
 
 | 項目 | 設計目標 | 現状 | 対応 |
 |------|---------|------|------|
-| isActive プロパティ | RewriteRule に isActive を持つ | 未実装 | 追加が必要 |
-| トグルUI | 各行にトグルスイッチ | なし | 追加が必要 |
-| タブリロード | 変更時に該当タブをリロード | なし | 追加が必要 |
+| isActive プロパティ | RewriteRule に isActive を持つ | ✅ 実装済み | 変更不要 |
+| Repository | getById/update メソッド | ✅ 実装済み | 変更不要 |
+| タブリロード | 変更時に該当タブをリロード | ✅ UpdateRewriteRuleUseCaseに実装済み | 参考にする |
+| トグルUI | 各行にトグルスイッチ | ❌ なし | 追加が必要 |
+| トグルUseCase | isActiveのみ変更するUseCase | ❌ なし | 新規作成 |
 
 ### 影響を受ける既存ファイル（層別）
 
 ※ 新規作成ファイルは分析対象外
 
-#### Domain層
-- `src/domain/entities/RewriteRule/RewriteRule.ts` - isActive プロパティ追加
+#### Domain層（enterprise-business-rules）
+
+変更不要 - `RewriteRule.isActive` は既に実装済み
+
+#### Application層（application-business-rules）
+
+変更不要 - `IRewriteRuleRepository.getById/update` は既に実装済み
+
+参考実装:
+- `src/application/usecases/rule/UpdateRewriteRuleUseCase.ts` - タブリロードロジックを参考にする
 
 #### Interface Adapters層
-- `src/components/organisms/RuleListItem/` - トグルUI追加
-  - `RuleListItem.tsx` - トグルコンポーネント配置
+
+- `src/components/molecules/RuleTableRow/RuleTableRow.tsx` - トグルUI追加
+  - 現状: 編集ボタン、URLパターン、oldString、newString のみ表示
+  - 変更: トグルスイッチコンポーネントを追加
+
+#### Frameworks & Drivers層
+
+- `src/entrypoints/rules/` - RulesApp にトグルハンドラー追加が必要になる可能性
 
 ## 開発戦略
 
