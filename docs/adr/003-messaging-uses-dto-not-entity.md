@@ -93,6 +93,42 @@ type UpdateRuleActiveDTO = {
 };
 ```
 
+### Message 型定義
+
+**Message と DTO を分離する。**
+
+- **Message**: `type`（ルーティング用）と `payload`（データ）を持つ
+- **DTO**: 純粋なデータのみを持つ
+
+この分離により：
+- `type` によるルーティングロジックと、データ構造を独立して管理できる
+- DTO を他の用途（ログ、キャッシュ等）で再利用できる
+
+```typescript
+// Message 型（type + payload）
+type GetByIdMessage = {
+  type: "getById";
+  payload: GetByIdRequestDTO;
+};
+
+type UpdateRuleActiveMessage = {
+  type: "update";
+  payload: UpdateRuleActiveDTO;
+};
+
+// Response Message
+type GetByIdResponseMessage = {
+  type: "getById:response";
+  payload: RewriteRuleDTO;
+};
+```
+
+| Message 型 | type | payload |
+|------------|------|---------|
+| `GetByIdMessage` | `"getById"` | `GetByIdRequestDTO` |
+| `UpdateRuleActiveMessage` | `"update"` | `UpdateRuleActiveDTO` |
+| `GetByIdResponseMessage` | `"getById:response"` | `RewriteRuleDTO` |
+
 ### 変換責務
 
 | コンポーネント | 責務 |
@@ -128,10 +164,12 @@ type UpdateRuleActiveDTO = {
 ### シーケンス図での表現
 
 ```
-MessagingRepo -> Handler : message(type=update, id, isActive)
+MessagingRepo -> GetByIdMessage : new(GetByIdRequestDTO)
+MessagingRepo -> Handler : GetByIdMessage
+Handler --> MessagingRepo : GetByIdResponseMessage
 ```
 
-※ `rule` オブジェクトではなく、プリミティブまたは DTO を送信
+Message は `type` と `payload` を持ち、MessageHandler でルーティングされる。
 
 ## 関連ドキュメント
 
