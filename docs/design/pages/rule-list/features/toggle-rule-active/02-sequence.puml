@@ -78,10 +78,10 @@ Handler -> DexieRepo : getById(ruleId)
 activate DexieRepo
 DexieRepo --> Handler : rule
 deactivate DexieRepo
-Handler --> MessagingRepo : ruleData (DTO)
+Handler --> MessagingRepo : RewriteRuleDTO
 deactivate Handler
 
-note over MessagingRepo : DTOからRewriteRuleを再構築
+note over MessagingRepo : RewriteRuleDTO → RewriteRule再構築
 
 MessagingRepo --> IRepository : rule
 deactivate MessagingRepo
@@ -98,7 +98,9 @@ activate IRepository
 IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
 
-MessagingRepo -> Handler : message(type=update, id, isActive)
+note over MessagingRepo : RewriteRule → UpdateRuleActiveDTO変換
+
+MessagingRepo -> Handler : UpdateRuleActiveDTO(id, isActive)
 activate Handler
 Handler -> DexieRepo : update(updatedRule)
 activate DexieRepo
