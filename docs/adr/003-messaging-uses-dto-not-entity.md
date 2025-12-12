@@ -27,28 +27,26 @@ chrome.runtime.sendMessage({ type: "update", rule });
 
 ## 決定
 
-**メッセージングではプリミティブまたは DTO（Plain Object）を使用し、ドメインエンティティを直接送信しない。**
+**メッセージングでは DTO（Plain Object）を使用し、ドメインエンティティを直接送信しない。**
 
 受信側で必要に応じてエンティティを再構築する。
 
 ## 適用パターン
 
-### パターン1: プリミティブのみ送信（推奨）
+### 操作に応じた DTO を使用
 
-必要最小限のデータのみ送信：
-
-```
-送信: { type: "update", id: 123, isActive: true }
-受信: Background が id で既存データを取得し、isActive を更新
-```
-
-### パターン2: DTO として送信
-
-エンティティのプロパティを plain object として送信：
+操作に必要な最小限のデータを DTO として定義し、Message の payload として送信する。
 
 ```
-送信: { type: "update", ruleData: { id, name, pattern, isActive } }
-受信: Background が ruleData からエンティティを再構築
+送信: UpdateRuleActiveMessage = { type: "update", payload: { id: 123, isActive: true } }
+受信: Background が payload.id で既存データを取得し、isActive を更新
+```
+
+エンティティ全体を送信する場合も DTO を使用：
+
+```
+送信: GetByIdResponseMessage = { type: "getById:response", payload: { id, name, pattern, ... } }
+受信: Rules Page が payload からエンティティを再構築
 ```
 
 ## DTO 型定義
