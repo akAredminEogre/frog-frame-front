@@ -44,29 +44,6 @@ Content.ts  ─┘
 - Rules Page / Popup は直接アクセスより若干のオーバーヘッドが発生
 - messaging のシリアライズ/デシリアライズコスト
 
-## 影響
-
-### IRewriteRuleRepository の実装
-
-- `ChromeRuntimeRewriteRuleRepository`: Rules Page / Popup / Content Script 用（messaging 経由）
-- `DexieRewriteRuleRepository`: Background Script 用（IndexedDB 直接アクセス）
-
-### DI 設定
-
-```typescript
-// Rules Page / Popup の container.ts
-container.register<IRewriteRuleRepository>(
-  "IRewriteRuleRepository",
-  { useClass: ChromeRuntimeRewriteRuleRepository }
-);
-
-// Background の container.ts
-container.register<IRewriteRuleRepository>(
-  "IRewriteRuleRepository",
-  { useClass: DexieRewriteRuleRepository }
-);
-```
-
 ## 関連ドキュメント
 
 - [ADR-001: Clean Architecture with Presenter Pattern](./001-clean-architecture-with-presenter-pattern.md)
