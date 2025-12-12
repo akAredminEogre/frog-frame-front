@@ -75,7 +75,7 @@ activate MessagingRepo
 
 note over MessagingRepo, Handler : chrome.runtime.sendMessage
 
-MessagingRepo -> Handler : { type: "getById", ruleId }
+MessagingRepo -> Handler : message(type=getById, ruleId)
 activate Handler
 Handler -> DexieRepo : getById(ruleId)
 activate DexieRepo
@@ -99,7 +99,7 @@ activate IRepository
 IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
 
-MessagingRepo -> Handler : { type: "update", rule }
+MessagingRepo -> Handler : message(type=update, rule)
 activate Handler
 Handler -> DexieRepo : update(updatedRule)
 activate DexieRepo
