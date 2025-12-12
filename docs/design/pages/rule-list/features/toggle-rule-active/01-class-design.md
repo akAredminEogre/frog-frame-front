@@ -90,9 +90,13 @@
 ### Chrome拡張機能のコンテキスト分離
 
 > **参照**: [ADR-002: DB アクセスを messaging 経由に統一](../../../../adr/002-unified-db-access-via-messaging.md)
+> **参照**: [ADR-003: メッセージングでは DTO を使用](../../../../adr/003-messaging-uses-dto-not-entity.md)
 
 Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-002 の決定に従い、
 すべてのコンテキストから DB アクセスは messaging 経由で Background Script に集約する。
+
+また、ADR-003 に従い、メッセージングではドメインエンティティではなくプリミティブ/DTO を送信し、
+受信側（ChromeRuntimeRewriteRuleRepository）で RewriteRule エンティティを再構築する。
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -103,13 +107,13 @@ Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-
 │  │              IRewriteRuleRepository                         ││
 │  │                              ↓                              ││
 │  │              ChromeRuntimeRewriteRuleRepository             ││
-│  │              (chrome.runtime.sendMessage)                   ││
+│  │              (sendMessage: DTO送信 / 受信: DTO→Entity再構築) ││
 │  │                                                             ││
 │  │ Interactor → ITabsGateway → ChromeTabsGateway              ││
 │  │              (chrome.tabs.reload)                           ││
 │  └──────────────────────────────┬──────────────────────────────┘│
 └─────────────────────────────────┼───────────────────────────────┘
-                                  │ messaging (DB操作のみ)
+                                  │ messaging (DTO/プリミティブのみ)
                                   ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │ Background Script                                                │

@@ -2,7 +2,7 @@
 
 title ルールトグル機能 シーケンス図
 
-note across : **参照**: ADR-002 - DBアクセスをmessaging経由に統一\nRules Pageは技術的にIndexedDB直接アクセス可能だが、\n一貫性のためmessaging経由でBackground Scriptに集約する
+note across : **参照**: ADR-002 - DBアクセスをmessaging経由に統一\n**参照**: ADR-003 - メッセージングではDTOを使用（エンティティ不可）\nRules Pageは技術的にIndexedDB直接アクセス可能だが、\n一貫性のためmessaging経由でBackground Scriptに集約する
 
 skinparam sequenceArrowThickness 2
 skinparam sequenceParticipantBorderColor #666666
@@ -70,16 +70,18 @@ note over IRepository, MessagingRepo : 実行時はDI経由で\nChromeRuntimeRew
 IRepository -> MessagingRepo : getById(ruleId)
 activate MessagingRepo
 
-note over MessagingRepo, Handler : chrome.runtime.sendMessage
+note over MessagingRepo, Handler : chrome.runtime.sendMessage\n（ADR-003: プリミティブ/DTOのみ送信）
 
-MessagingRepo -> Handler : message(type=getById, ruleId)
+MessagingRepo -> Handler : message(type=getById, id=ruleId)
 activate Handler
 Handler -> DexieRepo : getById(ruleId)
 activate DexieRepo
 DexieRepo --> Handler : rule
 deactivate DexieRepo
-Handler --> MessagingRepo : rule
+Handler --> MessagingRepo : ruleData (DTO)
 deactivate Handler
+
+note over MessagingRepo : DTOからRewriteRuleを再構築
 
 MessagingRepo --> IRepository : rule
 deactivate MessagingRepo
@@ -96,7 +98,7 @@ activate IRepository
 IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
 
-MessagingRepo -> Handler : message(type=update, rule)
+MessagingRepo -> Handler : message(type=update, id, isActive)
 activate Handler
 Handler -> DexieRepo : update(updatedRule)
 activate DexieRepo
