@@ -297,57 +297,60 @@ package "frameworks-and-drivers (第4層)" #LightBlue {
     + onToggle(ruleId: number): void
   }
 
-  class ChromeRuntimeRewriteRuleRepository <<Repository>> {
-    - messagingService: RewriteRuleMessagingService
-    + getById(id: number): Promise<RewriteRule>
-    + update(rule: RewriteRule): Promise<void>
-  }
-
   class ChromeTabsGateway <<Gateway>> {
     + reloadMatchingTabs(rule: RewriteRule): Promise<void>
   }
 
-  class RewriteRuleMessagingService <<Messaging Service>> {
-    + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
-    + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
-  }
+  rectangle "RewriteRule データアクセス（ADR-002, ADR-003）" #LightCyan {
+    class ChromeRuntimeRewriteRuleRepository <<Repository>> {
+      - messagingService: RewriteRuleMessagingService
+      + getById(id: number): Promise<RewriteRule>
+      + update(rule: RewriteRule): Promise<void>
+    }
 
-  class DexieRewriteRuleRepository <<Repository>> {
-    + getById(id: number): Promise<RewriteRuleDTO>
-    + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
-  }
+    class RewriteRuleMessagingService <<Messaging Service>> {
+      + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+      + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+    }
 
-  class RewriteRuleDTO <<DTO>> {
-    + id: number
-    + urlPattern: string
-    + isActive: boolean
-  }
+    class DexieRewriteRuleRepository <<Repository>> {
+      + getById(id: number): Promise<RewriteRuleDTO>
+      + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+    }
 
-  class GetByIdRequestDTO <<DTO>> {
-    + id: number
-  }
+    class RewriteRuleDTO <<DTO>> {
+      + id: number
+      + urlPattern: string
+      + isActive: boolean
+    }
 
-  class UpdateRuleActiveRequestDTO <<DTO>> {
-    + id: number
-    + isActive: boolean
+    class GetByIdRequestDTO <<DTO>> {
+      + id: number
+    }
+
+    class UpdateRuleActiveRequestDTO <<DTO>> {
+      + id: number
+      + isActive: boolean
+    }
+
+    ChromeRuntimeRewriteRuleRepository ..> RewriteRuleMessagingService : uses
+    ChromeRuntimeRewriteRuleRepository ..> GetByIdRequestDTO : creates
+    ChromeRuntimeRewriteRuleRepository ..> RewriteRuleDTO : receives
+
+    RewriteRuleMessagingService ..> DexieRewriteRuleRepository : delegates
+    RewriteRuleMessagingService ..> GetByIdRequestDTO : receives
+    RewriteRuleMessagingService ..> UpdateRuleActiveRequestDTO : receives
+    RewriteRuleMessagingService ..> RewriteRuleDTO : returns
   }
 
   RulesApp ..> ToggleRuleActiveController : uses
   RulesApp <.. ToggleRuleActivePresenter : updates
 
   ChromeRuntimeRewriteRuleRepository .up.|> IRewriteRuleRepository : implements
-  ChromeRuntimeRewriteRuleRepository ..> RewriteRuleMessagingService : uses
-  ChromeRuntimeRewriteRuleRepository ..> GetByIdRequestDTO : creates
-  ChromeRuntimeRewriteRuleRepository ..> RewriteRuleDTO : receives
   ChromeRuntimeRewriteRuleRepository ..> RewriteRule : creates via fromDTO
 
   ChromeTabsGateway .up.|> ITabsGateway : implements
   ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
-
-  RewriteRuleMessagingService ..> DexieRewriteRuleRepository : delegates
-  RewriteRuleMessagingService ..> GetByIdRequestDTO : receives
-  RewriteRuleMessagingService ..> UpdateRuleActiveRequestDTO : receives
-  RewriteRuleMessagingService ..> RewriteRuleDTO : returns
 }
 
 ' ===== Layer Dependencies =====
@@ -360,14 +363,9 @@ note bottom of ChromeTabsGateway
   マッチング判定を行う
 end note
 
-note bottom of ChromeRuntimeRewriteRuleRepository
-  ADR-002: proxy-service経由で
-  Background Scriptと通信
-end note
-
-note right of RewriteRuleMessagingService
-  Background Script で実行
-  (proxy-service)
+note bottom of "RewriteRule データアクセス（ADR-002, ADR-003）"
+  Rules Page ↔ Background Script 間の
+  proxy-service 経由データアクセス
 end note
 
 @enduml
