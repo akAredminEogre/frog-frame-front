@@ -101,7 +101,7 @@ src/frameworks-and-drivers/
 │      │                                                          │
 │      ▼                                                          │
 │ [第4層] ChromeRuntimeRewriteRuleRepository                       │
-│      │ └── RewriteRuleMessagingService.getById() (proxy-service経由) │
+│      │ └── GetByIdRequestDTO作成、RewriteRuleMessagingService.getById()呼出 │
 │      │                                                          │
 │      ├─────── proxy-service (透過的メッセージング) ──────────────│
 │      │                                                          │
