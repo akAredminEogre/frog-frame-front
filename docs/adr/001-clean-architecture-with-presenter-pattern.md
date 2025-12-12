@@ -168,3 +168,48 @@ src/
 矢印の方向 = 依存の方向
 外側から内側への依存のみ許可
 ```
+
+### 6. ドメインロジックの配置原則
+
+**ドメインエンティティの値を用いた判定・計算・変換は、その結果がビジネス上の意味を持つ場合、`enterprise-business-rules` 層で実装する。**
+
+`frameworks-and-drivers` 層は、ドメインロジックの **呼び出し** と **技術的な入出力** のみを担当する。
+
+#### 適用例
+
+| ロジック | 配置先 | 理由 |
+|---------|--------|------|
+| URLパターンマッチング判定 | `enterprise-business-rules` | 「ルールがどのURLに適用されるか」はドメイン知識 |
+| 有効/無効状態の反転 | `enterprise-business-rules` | エンティティの状態変更 |
+| タブ一覧の取得 | `frameworks-and-drivers` | Chrome API（技術的入出力） |
+| タブのリロード実行 | `frameworks-and-drivers` | Chrome API（技術的入出力） |
+
+#### 実装パターン
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ enterprise-business-rules (第1層)                                │
+│                                                                 │
+│  RewriteRule                                                    │
+│  + matchesUrl(url: string): boolean  ← 判定ロジック             │
+│  + withActive(isActive): RewriteRule ← 状態変更ロジック          │
+└─────────────────────────────────────────────────────────────────┘
+                              ▲
+                              │ 呼び出し
+┌─────────────────────────────────────────────────────────────────┐
+│ frameworks-and-drivers (第4層)                                   │
+│                                                                 │
+│  ChromeTabsGateway                                              │
+│  + reloadMatchingTabs(rule):                                    │
+│      tabs = chrome.tabs.query()        ← 技術的入力             │
+│      for tab in tabs:                                           │
+│        if rule.matchesUrl(tab.url):    ← ドメインロジック呼出   │
+│          chrome.tabs.reload(tab.id)    ← 技術的出力             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### メリット
+
+- **テスト容易性**: ドメインロジックを Chrome API モックなしで単体テスト可能
+- **再利用性**: 同じ判定ロジックを複数の Gateway で使用可能
+- **移植性**: ブラウザ変更時（Firefox対応等）もドメインロジックは変更不要
