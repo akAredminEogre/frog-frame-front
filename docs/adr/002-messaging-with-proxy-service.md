@@ -6,10 +6,9 @@
 
 ## コンテキスト
 
-Chrome 拡張機能では、複数のコンテキスト（Background Script、Rules Page、Content Script）が存在する。
-Content Script は IndexedDB に直接アクセスできないため、messaging 経由で Background Script に DB アクセスを集約する必要がある。
+Chrome 拡張機能では、複数のコンテキスト（Background Script、Rules Page、Popup、Content Script）が存在し、コンテキスト間の通信にはメッセージングが必要となる。
 
-しかし、標準の `chrome.runtime.sendMessage` API を使用した場合、以下の課題がある：
+標準の `chrome.runtime.sendMessage` API を使用した場合、以下の課題がある：
 
 1. **MessageHandler の肥大化**: メッセージタイプごとに switch/case が増加
 2. **型安全性の欠如**: メッセージの型チェックが手動
@@ -18,15 +17,9 @@ Content Script は IndexedDB に直接アクセスできないため、messaging
 
 ## 決定
 
-**メッセージングに `@webext-core/proxy-service` を採用し、すべてのコンテキストから DB アクセスは Background Script に集約する。**
+**メッセージングに `@webext-core/proxy-service` を採用する。**
 
 このライブラリは WXT が公式に推奨するメッセージングソリューションであり、Background Script で実行するサービスを他のコンテキストから透過的に呼び出せる。
-
-```
-Rules Page  ─┐
-Popup       ─┼─→ proxy-service ─→ Background (RewriteRuleService) ─→ DexieRewriteRuleRepository
-Content.ts  ─┘
-```
 
 ### 方式
 
@@ -43,14 +36,12 @@ Content.ts  ─┘
 3. **コード規約準拠**: switch 文が不要
 4. **シンプル**: 通常のメソッド呼び出しと同じ感覚で使用可能
 5. **一貫性**: すべてのコンテキストで同じパターンを使用
-6. **データ整合性**: 単一の DB アクセスポイントにより競合を回避
 
 ### トレードオフ
 
 - 外部ライブラリへの依存が増加
 - ライブラリの学習コスト
 - Background Script での同期的な登録が必須
-- Rules Page / Popup は直接アクセスより若干のオーバーヘッドが発生
 
 ## 関連ドキュメント
 
