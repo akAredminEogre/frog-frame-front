@@ -15,15 +15,7 @@ Chrome 拡張機能の messaging（chrome.runtime.sendMessage）では、デー�
 | クラスインスタンス | ⚠️ プロパティのみ保持（メソッド消失） |
 | 関数 | ❌ 送信不可 |
 
-```typescript
-// 送信側
-const rule = new RewriteRule(id, name, pattern, true);
-chrome.runtime.sendMessage({ type: "update", rule });
-
-// 受信側
-// rule は { id, name, pattern, isActive } の plain object
-// rule.withActive() → TypeError: not a function
-```
+クラスインスタンスを送信すると、受信側ではメソッドが消失した plain object となり、メソッド呼び出しがエラーになる。
 
 ## 決定
 
@@ -47,18 +39,7 @@ proxy-service のメソッド引数・戻り値として DTO を使用する。
 
 ### RewriteRuleDTO（エンティティ全体）
 
-エンティティの全プロパティを含む DTO。`getById` の応答などで使用：
-
-```typescript
-type RewriteRuleDTO = {
-  id: number;
-  name: string;
-  pattern: string;
-  replacement: string;
-  isActive: boolean;
-  // ... その他のプロパティ
-};
-```
+エンティティの全プロパティを含む DTO。`getById` の応答などで使用。
 
 ### 操作別 DTO
 
@@ -67,14 +48,6 @@ type RewriteRuleDTO = {
 | DTO名 | 用途 | 構造 |
 |-------|------|------|
 | `UpdateRuleActiveDTO` | 有効/無効トグル | `{ id: number, isActive: boolean }` |
-
-```typescript
-// トグル更新
-type UpdateRuleActiveDTO = {
-  id: number;
-  isActive: boolean;
-};
-```
 
 **補足**: 単一のプリミティブ値（例: `id: number`）は DTO にラップせず直接引数として渡す。
 
@@ -101,16 +74,6 @@ type UpdateRuleActiveDTO = {
 
 - 送信側でエンティティから DTO への変換が必要
 - 受信側で DTO からエンティティへの再構築が必要
-
-## 影響
-
-### Repository 実装
-
-`ChromeRuntimeRewriteRuleRepository` は以下の責務を持つ：
-
-1. エンティティを DTO に変換
-2. proxy-service 経由で Background Script に送信
-3. 受信した DTO をエンティティに再構築
 
 ## 関連ドキュメント
 
