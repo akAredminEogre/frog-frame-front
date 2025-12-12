@@ -7,13 +7,9 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 
 ```cline-instructions
 - 下記の内容で採番を行う
-  - nnn=(カレントブランチ名からissue番号を取得)
+  - nnn=$(scripts/.clinerules/get-issue-number.sh)
   - kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
   - ii=(docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-ii.mdの進捗の最大の番号。01から始まる連番。ない場合はii=01)
-
-- 進捗ドキュメントをインプットとした、他ドキュメントの反映
-  - `### 次回以降のスクラムに先送りする課題` があれば、frog-frame-front/docs/issue-nnn/PLAN.md の`# DAILY-SCRUM単位のタスク` に追加
-  - `### 本issueの対象外とする課題` があれば、frog-frame-front/docs/issue-nnn/PLAN.md の `# 本issueの対象外とする課題` に追加
 
 - 進捗ドキュメントのコミット
   - 対象：frog-frame-front/docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-ii.md

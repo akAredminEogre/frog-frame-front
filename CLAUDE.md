@@ -109,7 +109,8 @@ For working on multiple branches simultaneously:
 **Basic Commands:**
 ```bash
 make wt-list                    # List all worktrees
-make wt-add BRANCH=feature-x    # Create worktree for branch (includes auto-initialization)
+make wt-add BRANCH=feature-x    # Create worktree for branch (file copy only, no Docker)
+make wt-init BRANCH=feature-x   # Initialize worktree for development (Docker, npm install)
 make wt-remove BRANCH=feature-x # Remove worktree
 make wt-prune                   # Clean up stale references
 make wt-current                 # Show currently active worktree
@@ -117,47 +118,53 @@ make wt-current                 # Show currently active worktree
 
 **Development Commands:**
 ```bash
-make wt-dev BRANCH=feature-x    # Start dev server for worktree (RECOMMENDED)
+make wt-dev BRANCH=feature-x    # Start dev server for worktree (auto-initializes if needed)
+make storybook                  # Start Storybook (works in both main repo and worktree mode)
 make wt-down                    # Stop worktree Docker containers
 make wt-up                      # Start worktree Docker containers
 make wt-disable                 # Disable worktree mode, return to main repository
 ```
 
-**Navigation Commands:**
+**Navigation Commands (requires shell function setup):**
 ```bash
-source <(make wt-cd-current)    # Navigate to current worktree directory
-# Or if shell function is set up:
+wt-cd feature-x                 # Navigate to specific worktree
 wt-cd-current                   # Navigate to current worktree
-wtcd                           # Short alias for wt-cd-current
 ```
 
-**Shell Function Setup (Optional but Recommended):**
+**Shell Wrapper Commands with Tab Completion (requires shell function setup):**
+```bash
+wt-add feature-x                # Create worktree (Tab completes all branches)
+wt-remove feature-x             # Remove worktree (Tab completes existing worktrees)
+wt-dev feature-x                # Start dev server (Tab completes existing worktrees)
+```
+
+These wrapper functions provide shorter alternatives to `make wt-add BRANCH=...` commands with Tab completion support for both Bash and Zsh.
+
+**Shell Function Setup (Required for navigation and wrapper commands):**
 Add to your `~/.bashrc` or `~/.zshrc`:
 ```bash
-source /path/to/frog-frame-front/scripts/wt-cd.sh
+source /path/to/frog-frame-front/scripts/main.sh
 ```
 
 **Recommended Worktree Workflow:**
 ```bash
-# 1. Create new worktree (auto-initialization included)
-make wt-add BRANCH=new-feature
-
-# 2. Start development with one command (RECOMMENDED)
+# 1. Start development (auto-creates worktree if it doesn't exist)
 make wt-dev BRANCH=new-feature
 
-# 3. Switch between worktrees (auto-stops other containers)
+# 2. Switch between worktrees (auto-stops other containers)
 make wt-dev BRANCH=other-feature
 
-# 4. Return to main repository (when done with worktree development)
+# 3. Return to main repository (when done with worktree development)
 make wt-disable
 
-# 5. Clean up worktree when done
+# 4. Clean up worktree when done
 make wt-remove BRANCH=new-feature
 ```
 
 **Key Features:**
-- `make wt-add` automatically initializes the worktree (copies .env, matchUrl.ts, runs npm install, etc.)
-- `make wt-dev` automatically stops other worktree containers to avoid port conflicts
+- `make wt-dev` automatically initializes the worktree if not initialized (calls `wt-init` internally, which calls `wt-add` if needed) and stops other worktree containers to avoid port conflicts
+- `make wt-add` creates the worktree and copies configuration files (.env, matchUrl.ts) but does not run Docker or npm install
+- `make wt-init` initializes the development environment (Docker setup, npm install, wxt prepare)
 - Each worktree has its own node_modules and package.json (no cross-branch contamination)
 - Internal helper commands (starting with `_`) should not be used directly
 
@@ -330,6 +337,7 @@ All entry points in `src/entrypoints/`:
 - **Base branch**: `develop`
 - **Branch naming**: Issue-based branches (e.g., `issue-086-docs-how-to-set-up`)
 - See `.clinerules/02-workflow-automation/01-issue-launches/workflow-create-branch.md` for branch creation workflow
+- See `.clinerules/02-workflow-automation/01-issue-launches/workflow-create-worktree.md` for branch creation with worktree setup workflow
 
 ### Documentation Structure
 ```

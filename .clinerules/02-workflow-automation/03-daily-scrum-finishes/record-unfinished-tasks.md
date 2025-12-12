@@ -1,7 +1,7 @@
 workflow-record-unfinished-tasks
 
 ```cline-instructions
-nnn=(カレントブランチ名からissue番号を取得)
+nnn=$(scripts/.clinerules/get-issue-number.sh)
 kk=(docs/issue-nnn/daily-scrum-ディレクトリの最大の番号)
 ii=(docs/issue-nnn/daily-scrum-kk/PROGRESS-kk.mdの進捗の最大の番号)
 スクラムkk回目の作業で完了しなかった課題を記録します。
