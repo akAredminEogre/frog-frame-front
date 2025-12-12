@@ -183,6 +183,10 @@ Clean Architecture 4層に従った**理論的設計**を記載:
   - Entity（RewriteRule）
 - クラス設計で定義したメソッドがシーケンス図に反映されていること
 - 層の境界を明確に示すこと
+- **インスタンス生成やメソッド呼び出しは、note（注釈）ではなくシーケンス図の記法で表現すること**
+  - ✅ `MessagingRepo -> Entity : fromDTO(dto)` （メソッド呼び出しとして表現）
+  - ❌ `note over MessagingRepo : DTOからEntity再構築` （処理内容を注釈で説明）
+  - 注釈は「なぜそうするか」の補足説明に限定し、「何をするか」はシーケンス図で表現する
 - **interface-adapters/gateways/messaging 以下のクラスも忘れずに設計に含めること**
   - Chrome拡張機能では popup/rules ↔ background 間の通信が必要
 - **Iで始まる抽象インターフェースもシーケンス図に含めること**
