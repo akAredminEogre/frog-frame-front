@@ -31,6 +31,7 @@ end box
 box "Rules Page - frameworks-and-drivers/messaging" #LightCyan
   participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
   participant "ChromeTabsGateway" as TabsGateway
+  participant "GetByIdRequestDTO" as GetByIdDTO
   participant "RewriteRuleDTO" as RuleDTO
   participant "UpdateRuleActiveDTO" as UpdateDTO
 end box
@@ -77,9 +78,14 @@ note over IRepository, MessagingRepo : 実行時はDI経由で\nChromeRuntimeRew
 IRepository -> MessagingRepo : getById(ruleId)
 activate MessagingRepo
 
-note over MessagingRepo, Handler : chrome.runtime.sendMessage\n（ADR-003: プリミティブ/DTOのみ送信）
+MessagingRepo -> GetByIdDTO : new(ruleId)
+activate GetByIdDTO
+GetByIdDTO --> MessagingRepo : GetByIdRequestDTO
+deactivate GetByIdDTO
 
-MessagingRepo -> Handler : message(type=getById, id=ruleId)
+note over MessagingRepo, Handler : chrome.runtime.sendMessage\n（ADR-003: DTOのみ送信）
+
+MessagingRepo -> Handler : GetByIdRequestDTO
 activate Handler
 Handler -> DexieRepo : getById(ruleId)
 activate DexieRepo
