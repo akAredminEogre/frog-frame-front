@@ -71,9 +71,9 @@
 | RewriteRuleMessagingService | frameworks-and-drivers | proxy-serviceで定義。Background Scriptで実行されるサービス（ADR-002参照） |
 | DexieRewriteRuleRepository | frameworks-and-drivers | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード（Rules Page用、chrome.tabs API使用） |
-| RewriteRuleDTO | frameworks-and-drivers | メッセージング用DTO。エンティティ全体を表現（ADR-003参照） |
-| GetByIdRequestDTO | frameworks-and-drivers | メッセージング用DTO。ルール取得要求 `{ id }` |
-| UpdateRuleActiveDTO | frameworks-and-drivers | メッセージング用DTO。トグル更新時の最小データ `{ id, isActive }` |
+| RewriteRuleDTO | frameworks-and-drivers | メッセージング用DTO。エンティティ全体を表現（ADR-002、ADR-003参照） |
+| GetByIdRequestDTO | frameworks-and-drivers | メッセージング用DTO。ルール取得要求 `{ id }`（ADR-002、ADR-003参照） |
+| UpdateRuleActiveDTO | frameworks-and-drivers | メッセージング用DTO。トグル更新時の最小データ `{ id, isActive }`（ADR-002、ADR-003参照） |
 | ToggleSwitch | frameworks-and-drivers | UIコンポーネント。トグルスイッチ |
 | RulesApp | frameworks-and-drivers | View。ルール一覧画面 |
 
@@ -100,7 +100,7 @@
 Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-003 の決定に従い、
 すべてのコンテキストから DB アクセスは messaging 経由で Background Script に集約する。
 
-また、ADR-003 に従い、メッセージングではドメインエンティティではなくDTOを送信し、
+また、ADR-002 に従い、メッセージングではドメインエンティティではなくDTOを送信し、
 受信側（ChromeRuntimeRewriteRuleRepository）で RewriteRule エンティティを再構築する。
 
 ADR-002 に従い、メッセージングには @webext-core/proxy-service を使用する。
