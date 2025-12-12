@@ -15,7 +15,6 @@ end box
 
 box "Rules Page - interface-adapters (第3層)" #LightGreen
   participant "ToggleRuleActive\nController" as Controller
-  participant "<<interface>>\nIRewriteRuleRepository" as IRepository
   participant "ToggleRuleActive\nPresenter" as PresenterImpl
 end box
 
@@ -23,9 +22,7 @@ box "Rules Page - application-business-rules (第2層)" #LightYellow
   participant "<<interface>>\nIToggleRuleActiveUseCase" as IUseCase
   participant "ToggleRuleActive\nInteractor" as Interactor
   participant "<<interface>>\nIToggleRuleActivePresenter" as IPresenter
-end box
-
-box "Rules Page - interface-adapters (第3層) - Gateway" #LightGreen
+  participant "<<interface>>\nIRewriteRuleRepository" as IRepository
   participant "<<interface>>\nITabsGateway" as ITabsGateway
 end box
 
@@ -63,7 +60,7 @@ note over IUseCase, Interactor : 実行時はDI経由で\nInteractorが注入
 IUseCase -> Interactor : execute(inputData)
 activate Interactor
 
-note over Interactor, IRepository : InteractorはGateway Interfaceに依存
+note over Interactor, IRepository : InteractorはGateway Interfaceに依存\n（同じ第2層内で定義）
 
 Interactor -> IRepository : getById(ruleId)
 activate IRepository
@@ -114,7 +111,7 @@ deactivate MessagingRepo
 IRepository --> Interactor : void
 deactivate IRepository
 
-note over Interactor, ITabsGateway : InteractorはITabsGatewayに依存\n（責務分離: Repository=永続化, TabsGateway=タブ操作）
+note over Interactor, ITabsGateway : InteractorはITabsGatewayに依存（同じ第2層内で定義）\n（責務分離: Repository=永続化, TabsGateway=タブ操作）
 
 Interactor -> ITabsGateway : reloadMatchingTabs(updatedRule)
 activate ITabsGateway

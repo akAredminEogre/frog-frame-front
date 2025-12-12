@@ -62,10 +62,10 @@
 | IToggleRuleActiveUseCase | application-business-rules | Input Port。トグル処理のインターフェース |
 | IToggleRuleActivePresenter | application-business-rules | Output Port。結果通知のインターフェース |
 | ToggleRuleActiveInteractor | application-business-rules | UseCase実装。トグル処理を実行 |
+| IRewriteRuleRepository | application-business-rules | Gateway Interface。ルール永続化（Interactorが依存） |
+| ITabsGateway | application-business-rules | Gateway Interface。タブ操作（Interactorが依存） |
 | ToggleRuleActiveController | interface-adapters | ユーザー入力をInputDataに変換 |
 | ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
-| IRewriteRuleRepository | interface-adapters | Gateway Interface。ルール永続化 |
-| ITabsGateway | interface-adapters | Gateway Interface。タブ操作（リロード） |
 | ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。messaging経由でbackgroundと通信（Rules Page用） |
 | DexieRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。IndexedDB直接アクセス（Background Script用） |
 | ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード（Rules Page用、chrome.tabs API使用） |
@@ -162,6 +162,14 @@ Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-
 │  │ ─────────────────── │    │ ────────────────────  │                       │
 │  │ + ruleId: number    │    │ + toggledRule: Rule  │                       │
 │  └─────────────────────┘    └──────────────────────┘                       │
+│                                                                             │
+│  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
+│  │ <<interface>>               │    │ <<interface>>               │        │
+│  │ IRewriteRuleRepository      │    │ ITabsGateway                │        │
+│  │ ─────────────────────────── │    │ ─────────────────────────── │        │
+│  │ + getById(id): Promise<Rule>│    │ + reloadMatchingTabs(rule)  │        │
+│  │ + update(rule): Promise     │    │                             │        │
+│  └─────────────────────────────┘    └─────────────────────────────┘        │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -173,14 +181,6 @@ Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-
 │  │ - useCase: IToggleRule...   │    │ - updateRuleInView: Func    │        │
 │  │ ─────────────────────────── │    │ ─────────────────────────── │        │
 │  │ + toggleActive(ruleId)      │    │ + present(outputData)       │        │
-│  └─────────────────────────────┘    └─────────────────────────────┘        │
-│                                                                             │
-│  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
-│  │ <<interface>>               │    │ <<interface>>               │        │
-│  │ IRewriteRuleRepository      │    │ ITabsGateway                │        │
-│  │ ─────────────────────────── │    │ ─────────────────────────── │        │
-│  │ + getById(id): Promise<Rule>│    │ + reloadMatchingTabs(rule)  │        │
-│  │ + update(rule): Promise     │    │                             │        │
 │  └─────────────────────────────┘    └─────────────────────────────┘        │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
