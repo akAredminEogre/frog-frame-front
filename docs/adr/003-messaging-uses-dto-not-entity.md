@@ -37,16 +37,24 @@ chrome.runtime.sendMessage({ type: "update", rule });
 
 操作に必要な最小限のデータを DTO として定義し、Message の payload として送信する。
 
-```
-送信: UpdateRuleActiveMessage = { type: "update", payload: { id: 123, isActive: true } }
-受信: Background が payload.id で既存データを取得し、isActive を更新
+```typescript
+// UpdateRuleActiveDTO を payload として送信
+const dto: UpdateRuleActiveDTO = { id: 123, isActive: true };
+const message: UpdateRuleActiveMessage = { type: "update", payload: dto };
+chrome.runtime.sendMessage(message);
+
+// 受信側: Background が payload.id で既存データを取得し、isActive を更新
 ```
 
 エンティティ全体を送信する場合も DTO を使用：
 
-```
-送信: GetByIdResponseMessage = { type: "getById:response", payload: { id, name, pattern, ... } }
-受信: Rules Page が payload からエンティティを再構築
+```typescript
+// RewriteRuleDTO を payload として送信
+const dto: RewriteRuleDTO = { id, name, pattern, replacement, isActive, ... };
+const message: GetByIdResponseMessage = { type: "getById:response", payload: dto };
+sendResponse(message);
+
+// 受信側: Rules Page が payload からエンティティを再構築
 ```
 
 ## DTO 型定義
