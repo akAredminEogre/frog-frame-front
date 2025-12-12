@@ -75,9 +75,11 @@ note over IRepository, MessagingRepo : 実行時はDI経由で\nChromeRuntimeRew
 IRepository -> MessagingRepo : getById(ruleId)
 activate MessagingRepo
 
+note over MessagingRepo : GetByIdRequestDTOを作成\n{ id }
+
 note over MessagingRepo, ProxyService : proxy-serviceが透過的にメッセージングを処理\n（ADR-002参照）
 
-MessagingRepo -> ProxyService : getById(ruleId)
+MessagingRepo -> ProxyService : getById(GetByIdRequestDTO)
 activate ProxyService
 
 ProxyService -> DexieRepo : getById(ruleId)

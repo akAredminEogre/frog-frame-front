@@ -72,6 +72,7 @@
 | DexieRewriteRuleRepository | frameworks-and-drivers | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード（Rules Page用、chrome.tabs API使用） |
 | RewriteRuleDTO | frameworks-and-drivers | メッセージング用DTO。エンティティ全体を表現（ADR-003参照） |
+| GetByIdRequestDTO | frameworks-and-drivers | メッセージング用DTO。ルール取得要求 `{ id }` |
 | UpdateRuleActiveDTO | frameworks-and-drivers | メッセージング用DTO。トグル更新時の最小データ `{ id, isActive }` |
 | ToggleSwitch | frameworks-and-drivers | UIコンポーネント。トグルスイッチ |
 | RulesApp | frameworks-and-drivers | View。ルール一覧画面 |
