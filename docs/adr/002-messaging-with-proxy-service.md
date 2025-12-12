@@ -36,14 +36,14 @@ Chrome 拡張機能では、複数のコンテキスト（Background Script、Ru
 | 1サービス = 1エンティティ | 各サービスは1つのドメインエンティティに対応する |
 | Gateway Interface との対応 | ADR-001 の Gateway Interface と 1:1 で対応させる |
 
-**例**: `IRewriteRuleRepository` → `RewriteRuleMessagingService`
-
 この基準により以下を防止する：
 
 - **肥大化の防止**: 全操作を1サービスに集約しない（エンティティごとに分離）
 - **乱立の防止**: 操作ごとにサービスを分割しない（エンティティ単位でまとめる）
 
 **ADR-001 との整合性**: Clean Architecture の Gateway Interface 層と同じ粒度でサービスを定義することで、アーキテクチャの一貫性を保つ。
+
+**命名規約**: [メッセージング層 コーディング規約](../coding-standards/src/frameworks-and-drivers/messaging.md) 参照
 
 ## 理由
 
