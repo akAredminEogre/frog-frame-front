@@ -55,7 +55,7 @@ DB アクセスに使用する RewriteRule 固有の DTO を定義する。
 | DTO名 | 用途 | 構造 |
 |-------|------|------|
 | `GetByIdRequestDTO` | ルール取得要求 | `{ id: number }` |
-| `UpdateRuleActiveDTO` | 有効/無効トグル | `{ id: number, isActive: boolean }` |
+| `UpdateRuleActiveRequestDTO` | 有効/無効トグル | `{ id: number, isActive: boolean }` |
 
 ### 変換責務
 

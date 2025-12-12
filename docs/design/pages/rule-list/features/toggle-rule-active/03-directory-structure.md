@@ -69,7 +69,7 @@ src/frameworks-and-drivers/
 │   └── dto/                                     ← メッセージング用DTO（ADR-002、ADR-003参照）
 │       ├── RewriteRuleDTO.ts                    ← エンティティ全体を表現
 │       ├── GetByIdRequestDTO.ts                 ← ルール取得要求 { id }
-│       └── UpdateRuleActiveDTO.ts               ← トグル更新 { id, isActive }
+│       └── UpdateRuleActiveRequestDTO.ts               ← トグル更新 { id, isActive }
 ├── proxy-service/                               ← proxy-service定義（ADR-002参照）
 │   └── RewriteRuleMessagingService.ts           ← Background Scriptで実行されるサービス
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
