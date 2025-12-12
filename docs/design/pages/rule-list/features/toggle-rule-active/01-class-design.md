@@ -212,3 +212,163 @@ ADR-001 に従い、ドメインエンティティの値を用いた判定・計
 │  └─────────────────────────────┘    └─────────────────────────────┘        │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+## クラス図（PlantUML）
+
+```plantuml
+@startuml ToggleRuleActiveClassDiagram
+
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+' ===== Layer 1: Enterprise Business Rules =====
+package "enterprise-business-rules (第1層)" #LightPink {
+  class RewriteRule <<Entity>> {
+    - id: RuleId
+    - urlPattern: UrlPattern
+    - isActive: boolean
+    + withActive(isActive: boolean): RewriteRule
+    + matchesUrl(url: string): boolean
+    + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
+  }
+}
+
+' ===== Layer 2: Application Business Rules =====
+package "application-business-rules (第2層)" #LightYellow {
+  interface IToggleRuleActiveUseCase <<Input Port>> {
+    + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+  }
+
+  interface IToggleRuleActivePresenter <<Output Port>> {
+    + present(outputData: ToggleRuleActiveOutputData): void
+  }
+
+  interface IRewriteRuleRepository <<Gateway Interface>> {
+    + getById(id: number): Promise<RewriteRule>
+    + update(rule: RewriteRule): Promise<void>
+  }
+
+  interface ITabsGateway <<Gateway Interface>> {
+    + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+  }
+
+  class ToggleRuleActiveInteractor <<Use Case>> {
+    - repository: IRewriteRuleRepository
+    - tabsGateway: ITabsGateway
+    - presenter: IToggleRuleActivePresenter
+    + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+  }
+
+  class ToggleRuleActiveInputData <<Input Data>> {
+    + ruleId: number
+  }
+
+  class ToggleRuleActiveOutputData <<Output Data>> {
+    + toggledRule: RewriteRule
+  }
+
+  ToggleRuleActiveInteractor .up.|> IToggleRuleActiveUseCase : implements
+  ToggleRuleActiveInteractor ..> IToggleRuleActivePresenter : uses
+  ToggleRuleActiveInteractor ..> IRewriteRuleRepository : uses
+  ToggleRuleActiveInteractor ..> ITabsGateway : uses
+  ToggleRuleActiveInteractor ..> ToggleRuleActiveInputData : uses
+  ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
+}
+
+' ===== Layer 3: Interface Adapters =====
+package "interface-adapters (第3層)" #LightGreen {
+  class ToggleRuleActiveController <<Controller>> {
+    - useCase: IToggleRuleActiveUseCase
+    + toggleActive(ruleId: number): Promise<void>
+  }
+
+  class ToggleRuleActivePresenter <<Presenter>> {
+    - updateRuleInView: (rule: RewriteRule) => void
+    + present(outputData: ToggleRuleActiveOutputData): void
+  }
+
+  ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
+  ToggleRuleActivePresenter .up.|> IToggleRuleActivePresenter : implements
+}
+
+' ===== Layer 4: Frameworks & Drivers =====
+package "frameworks-and-drivers (第4層)" #LightBlue {
+  class RulesApp <<View>> {
+    + onToggle(ruleId: number): void
+  }
+
+  class ChromeRuntimeRewriteRuleRepository <<Repository>> {
+    - messagingService: RewriteRuleMessagingService
+    + getById(id: number): Promise<RewriteRule>
+    + update(rule: RewriteRule): Promise<void>
+  }
+
+  class ChromeTabsGateway <<Gateway>> {
+    + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+  }
+
+  class RewriteRuleMessagingService <<Messaging Service>> {
+    + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+    + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+  }
+
+  class DexieRewriteRuleRepository <<Repository>> {
+    + getById(id: number): Promise<RewriteRuleDTO>
+    + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+  }
+
+  class RewriteRuleDTO <<DTO>> {
+    + id: number
+    + urlPattern: string
+    + isActive: boolean
+  }
+
+  class GetByIdRequestDTO <<DTO>> {
+    + id: number
+  }
+
+  class UpdateRuleActiveRequestDTO <<DTO>> {
+    + id: number
+    + isActive: boolean
+  }
+
+  RulesApp ..> ToggleRuleActiveController : uses
+  RulesApp <.. ToggleRuleActivePresenter : updates
+
+  ChromeRuntimeRewriteRuleRepository .up.|> IRewriteRuleRepository : implements
+  ChromeRuntimeRewriteRuleRepository ..> RewriteRuleMessagingService : uses
+  ChromeRuntimeRewriteRuleRepository ..> GetByIdRequestDTO : creates
+  ChromeRuntimeRewriteRuleRepository ..> RewriteRuleDTO : receives
+  ChromeRuntimeRewriteRuleRepository ..> RewriteRule : creates via fromDTO
+
+  ChromeTabsGateway .up.|> ITabsGateway : implements
+  ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
+
+  RewriteRuleMessagingService ..> DexieRewriteRuleRepository : delegates
+  RewriteRuleMessagingService ..> GetByIdRequestDTO : receives
+  RewriteRuleMessagingService ..> UpdateRuleActiveRequestDTO : receives
+  RewriteRuleMessagingService ..> RewriteRuleDTO : returns
+}
+
+' ===== Layer Dependencies =====
+ToggleRuleActiveInteractor ..> RewriteRule : uses
+
+' ===== Notes =====
+note bottom of ChromeTabsGateway
+  ADR-001: ドメインロジックの配置原則
+  rule.matchesUrl() を呼び出して
+  マッチング判定を行う
+end note
+
+note bottom of ChromeRuntimeRewriteRuleRepository
+  ADR-002: proxy-service経由で
+  Background Scriptと通信
+end note
+
+note right of RewriteRuleMessagingService
+  Background Script で実行
+  (proxy-service)
+end note
+
+@enduml
+```
