@@ -2,7 +2,7 @@
 
 title ルールトグル機能 シーケンス図
 
-note across : **参照**: ADR-002 - DBアクセスをmessaging経由に統一\n**参照**: ADR-003 - メッセージングではDTOを使用（エンティティ不可）\nRules Pageは技術的にIndexedDB直接アクセス可能だが、\n一貫性のためmessaging経由でBackground Scriptに集約する
+note across : **参照**: ADR-002 - DBアクセスをmessaging経由に統一\n**参照**: ADR-003 - メッセージングではDTOを使用（エンティティ不可）\n**参照**: ADR-004 - メッセージングに@webext-core/proxy-serviceを採用\nRules Pageは技術的にIndexedDB直接アクセス可能だが、\n一貫性のためmessaging経由でBackground Scriptに集約する
 
 skinparam sequenceArrowThickness 2
 skinparam sequenceParticipantBorderColor #666666
@@ -28,19 +28,13 @@ box "Rules Page - application-business-rules (第2層)" #LightYellow
   participant "ToggleRuleActive\nOutputData" as OutputData
 end box
 
-box "Rules Page - frameworks-and-drivers/messaging" #LightCyan
+box "Rules Page - frameworks-and-drivers" #LightCyan
   participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
   participant "ChromeTabsGateway" as TabsGateway
-  participant "GetByIdRequestDTO" as GetByIdDTO
-  participant "GetByIdMessage" as GetByIdMsg
-  participant "RewriteRuleDTO" as RuleDTO
-  participant "GetByIdResponse\nMessage" as GetByIdRespMsg
-  participant "UpdateRuleActiveDTO" as UpdateDTO
-  participant "UpdateRuleActive\nMessage" as UpdateMsg
 end box
 
 box "Background - frameworks-and-drivers (第4層)" #LightGray
-  participant "MessageHandler" as Handler
+  participant "RewriteRuleService\n(proxy-service)" as ProxyService
   participant "DexieRewriteRule\nRepository" as DexieRepo
 end box
 
@@ -81,38 +75,20 @@ note over IRepository, MessagingRepo : 実行時はDI経由で\nChromeRuntimeRew
 IRepository -> MessagingRepo : getById(ruleId)
 activate MessagingRepo
 
-MessagingRepo -> GetByIdDTO : new(ruleId)
-activate GetByIdDTO
-GetByIdDTO --> MessagingRepo : GetByIdRequestDTO
-deactivate GetByIdDTO
+note over MessagingRepo, ProxyService : proxy-serviceが透過的にメッセージングを処理\n（ADR-004参照）
 
-MessagingRepo -> GetByIdMsg : new(GetByIdRequestDTO)
-activate GetByIdMsg
-GetByIdMsg --> MessagingRepo : GetByIdMessage
-deactivate GetByIdMsg
+MessagingRepo -> ProxyService : getById(ruleId)
+activate ProxyService
 
-note over MessagingRepo, Handler : chrome.runtime.sendMessage\n（ADR-003: Message = type + payload）
-
-MessagingRepo -> Handler : GetByIdMessage
-activate Handler
-
-note over Handler, DexieRepo : MessageHandler は IRewriteRuleRepository を経由せず\nDexieRewriteRuleRepository を直接呼び出す
-
-Handler -> DexieRepo : getById(ruleId)
+ProxyService -> DexieRepo : getById(ruleId)
 activate DexieRepo
-DexieRepo --> Handler : RewriteRuleDTO
+DexieRepo --> ProxyService : RewriteRuleDTO
 deactivate DexieRepo
 
-note over Handler : MessageHandler は DTO をそのまま受け渡す（変換しない）
+ProxyService --> MessagingRepo : RewriteRuleDTO
+deactivate ProxyService
 
-Handler -> GetByIdRespMsg : new(RewriteRuleDTO)
-activate GetByIdRespMsg
-GetByIdRespMsg --> Handler : GetByIdResponseMessage
-deactivate GetByIdRespMsg
-Handler --> MessagingRepo : GetByIdResponseMessage
-deactivate Handler
-
-MessagingRepo -> Entity : fromDTO(GetByIdResponseMessage.payload)
+MessagingRepo -> Entity : fromDTO(RewriteRuleDTO)
 activate Entity
 Entity --> MessagingRepo : rule
 deactivate Entity
@@ -132,26 +108,18 @@ activate IRepository
 IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
 
-MessagingRepo -> UpdateDTO : new(id, isActive)
-activate UpdateDTO
-UpdateDTO --> MessagingRepo : UpdateRuleActiveDTO
-deactivate UpdateDTO
+note over MessagingRepo : UpdateRuleActiveDTOを作成\n{ id, isActive }
 
-MessagingRepo -> UpdateMsg : new(UpdateRuleActiveDTO)
-activate UpdateMsg
-UpdateMsg --> MessagingRepo : UpdateRuleActiveMessage
-deactivate UpdateMsg
+MessagingRepo -> ProxyService : updateActive(UpdateRuleActiveDTO)
+activate ProxyService
 
-MessagingRepo -> Handler : UpdateRuleActiveMessage
-activate Handler
-
-Handler -> DexieRepo : updateActive(UpdateRuleActiveDTO)
+ProxyService -> DexieRepo : updateActive(UpdateRuleActiveDTO)
 activate DexieRepo
-DexieRepo --> Handler : void
+DexieRepo --> ProxyService : void
 deactivate DexieRepo
 
-Handler --> MessagingRepo : void
-deactivate Handler
+ProxyService --> MessagingRepo : void
+deactivate ProxyService
 
 MessagingRepo --> IRepository : void
 deactivate MessagingRepo
