@@ -139,8 +139,8 @@ type GetByIdResponseMessage = {
 
 | コンポーネント | 責務 |
 |---------------|------|
-| `ChromeRuntimeRewriteRuleRepository` | Entity → DTO 変換（送信時）、DTO → Entity 再構築（受信時） |
-| `MessageHandler` | DTO の受け渡しのみ（変換しない） |
+| `ChromeRuntimeRewriteRuleRepository` | DTO → Message 作成（送信時）、DTO → Entity 再構築（受信時） |
+| `MessageHandler` | Entity → DTO 変換（応答時）、DTO → Repository 呼び出し（要求時） |
 | `DexieRewriteRuleRepository` | Entity ↔ DB レコード 変換 |
 
 ## 理由
