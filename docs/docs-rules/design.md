@@ -176,7 +176,12 @@ Clean Architecture 4層に従った**理論的設計**を記載:
 | 注釈 | △ | 必要に応じて補足説明 |
 
 **重要**: 01-class-design.md と整合性を保つこと
-- クラス設計で定義したクラス/メソッドがシーケンス図に反映されていること
+- **01-class-design.md のクラス一覧に記載した全てのクラス/型を participant として含めること**
+  - Interface（IToggleRuleActiveUseCase 等）
+  - 具象クラス（ToggleRuleActiveInteractor 等）
+  - DTO（ToggleRuleActiveInputData, ToggleRuleActiveOutputData, RewriteRuleDTO 等）
+  - Entity（RewriteRule）
+- クラス設計で定義したメソッドがシーケンス図に反映されていること
 - 層の境界を明確に示すこと
 - **interface-adapters/gateways/messaging 以下のクラスも忘れずに設計に含めること**
   - Chrome拡張機能では popup/rules ↔ background 間の通信が必要
