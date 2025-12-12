@@ -16,59 +16,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Function to encode PlantUML source for URL
-encode_plantuml() {
-    local input="$1"
-    # Use deflate compression and base64 encoding
-    # PlantUML uses a custom encoding scheme
-    echo -n "$input" | python3 -c "
-import sys
-import zlib
-import base64
-
-def encode6bit(b):
-    if b < 10:
-        return chr(48 + b)
-    b -= 10
-    if b < 26:
-        return chr(65 + b)
-    b -= 26
-    if b < 26:
-        return chr(97 + b)
-    b -= 26
-    if b == 0:
-        return '-'
-    if b == 1:
-        return '_'
-    return '?'
-
-def append3bytes(b1, b2, b3):
-    c1 = b1 >> 2
-    c2 = ((b1 & 0x3) << 4) | (b2 >> 4)
-    c3 = ((b2 & 0xF) << 2) | (b3 >> 6)
-    c4 = b3 & 0x3F
-    return encode6bit(c1 & 0x3F) + encode6bit(c2 & 0x3F) + encode6bit(c3 & 0x3F) + encode6bit(c4 & 0x3F)
-
-def encode(data):
-    compressed = zlib.compress(data.encode('utf-8'), 9)[2:-4]
-    result = ''
-    i = 0
-    while i < len(compressed):
-        if i + 2 < len(compressed):
-            result += append3bytes(compressed[i], compressed[i+1], compressed[i+2])
-        elif i + 1 < len(compressed):
-            result += append3bytes(compressed[i], compressed[i+1], 0)
-        else:
-            result += append3bytes(compressed[i], 0, 0)
-        i += 3
-    return result
-
-data = sys.stdin.read()
-print(encode(data))
-"
-}
-
-# Function to render a single file
+# Function to render a single file using POST request
 render_file() {
     local puml_file="$1"
     local format="$2"
@@ -79,16 +27,12 @@ render_file() {
 
     echo -e "${YELLOW}Rendering:${NC} $puml_file -> $output_file"
 
-    # Read the PlantUML source
-    local puml_content=$(cat "$puml_file")
-
-    # Encode for URL
-    local encoded=$(encode_plantuml "$puml_content")
-
-    # Make request to PlantUML server
-    local url="$PLANTUML_SERVER_URL/$format/$encoded"
-
-    if curl -sf -o "$output_file" "$url"; then
+    # POST the PlantUML source directly to the server
+    # The server accepts source code via POST and returns the rendered image
+    if curl -sf -X POST \
+        --data-urlencode "text@$puml_file" \
+        "$PLANTUML_SERVER_URL/$format/" \
+        -o "$output_file"; then
         echo -e "${GREEN}Success:${NC} $output_file"
         return 0
     else
