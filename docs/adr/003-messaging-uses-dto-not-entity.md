@@ -35,27 +35,10 @@ chrome.runtime.sendMessage({ type: "update", rule });
 
 ### 操作に応じた DTO を使用
 
-操作に必要な最小限のデータを DTO として定義し、Message の payload として送信する。
+操作に必要な最小限のデータを DTO として定義する。
 
-```typescript
-// UpdateRuleActiveDTO を payload として送信
-const dto: UpdateRuleActiveDTO = { id: 123, isActive: true };
-const message: UpdateRuleActiveMessage = { type: "update", payload: dto };
-chrome.runtime.sendMessage(message);
-
-// 受信側: Background が payload.id で既存データを取得し、isActive を更新
-```
-
-エンティティ全体を送信する場合も DTO を使用：
-
-```typescript
-// RewriteRuleDTO を payload として送信
-const dto: RewriteRuleDTO = { id, name, pattern, replacement, isActive, ... };
-const message: GetByIdResponseMessage = { type: "getById:response", payload: dto };
-sendResponse(message);
-
-// 受信側: Rules Page が payload からエンティティを再構築
-```
+ADR-004 により、メッセージングには @webext-core/proxy-service を使用する。
+proxy-service のメソッド引数・戻り値として DTO を使用する。
 
 ## DTO 型定義
 
@@ -83,15 +66,9 @@ type RewriteRuleDTO = {
 
 | DTO名 | 用途 | 構造 |
 |-------|------|------|
-| `GetByIdRequestDTO` | ルール取得要求 | `{ id: number }` |
 | `UpdateRuleActiveDTO` | 有効/無効トグル | `{ id: number, isActive: boolean }` |
 
 ```typescript
-// 取得要求
-type GetByIdRequestDTO = {
-  id: number;
-};
-
 // トグル更新
 type UpdateRuleActiveDTO = {
   id: number;
@@ -99,51 +76,17 @@ type UpdateRuleActiveDTO = {
 };
 ```
 
-### Message 型定義
-
-**Message と DTO を分離する。**
-
-- **Message**: `type`（ルーティング用）と `payload`（データ）を持つ
-- **DTO**: 純粋なデータのみを持つ
-
-この分離により：
-- `type` によるルーティングロジックと、データ構造を独立して管理できる
-- DTO を他の用途（ログ、キャッシュ等）で再利用できる
-
-```typescript
-// Message 型（type + payload）
-type GetByIdMessage = {
-  type: "getById";
-  payload: GetByIdRequestDTO;
-};
-
-type UpdateRuleActiveMessage = {
-  type: "update";
-  payload: UpdateRuleActiveDTO;
-};
-
-// Response Message
-type GetByIdResponseMessage = {
-  type: "getById:response";
-  payload: RewriteRuleDTO;
-};
-```
-
-| Message 型 | type | payload |
-|------------|------|---------|
-| `GetByIdMessage` | `"getById"` | `GetByIdRequestDTO` |
-| `UpdateRuleActiveMessage` | `"update"` | `UpdateRuleActiveDTO` |
-| `GetByIdResponseMessage` | `"getById:response"` | `RewriteRuleDTO` |
+**補足**: 単一のプリミティブ値（例: `id: number`）は DTO にラップせず直接引数として渡す。
 
 ### 変換責務
 
 | コンポーネント | 責務 |
 |---------------|------|
-| `ChromeRuntimeRewriteRuleRepository` | DTO → Message 作成（送信時）、DTO → Entity 再構築（受信時） |
-| `MessageHandler` | DTO の受け渡しのみ（変換しない） |
+| `ChromeRuntimeRewriteRuleRepository` | DTO → Entity 再構築（受信時）、Entity → DTO 変換（送信時） |
+| `RewriteRuleService` | proxy-service として DTO を受け渡し（ADR-004 参照） |
 | `DexieRewriteRuleRepository` | DTO ↔ DB レコード 変換 |
 
-**補足**: ADR-002 により、Rules Page 側の Interactor は `IRewriteRuleRepository`（実装: `ChromeRuntimeRewriteRuleRepository`）を使用する。Background Script 側の `MessageHandler` は `IRewriteRuleRepository` を経由せず、`DexieRewriteRuleRepository` を直接呼び出す。そのため `DexieRewriteRuleRepository` は DTO を直接扱い、Entity への変換は行わない。
+**補足**: ADR-002 により、Rules Page 側の Interactor は `IRewriteRuleRepository`（実装: `ChromeRuntimeRewriteRuleRepository`）を使用する。Background Script 側の `RewriteRuleService` は `DexieRewriteRuleRepository` を呼び出す。`DexieRewriteRuleRepository` は DTO を直接扱い、Entity への変換は行わない。
 
 ## 理由
 
@@ -165,21 +108,12 @@ type GetByIdResponseMessage = {
 
 `ChromeRuntimeRewriteRuleRepository` は以下の責務を持つ：
 
-1. エンティティをシリアライズ可能な形式に変換
-2. messaging で送信
-3. 受信したデータをエンティティに再構築
-
-### シーケンス図での表現
-
-```
-MessagingRepo -> GetByIdMessage : new(GetByIdRequestDTO)
-MessagingRepo -> Handler : GetByIdMessage
-Handler --> MessagingRepo : GetByIdResponseMessage
-```
-
-Message は `type` と `payload` を持ち、MessageHandler でルーティングされる。
+1. エンティティを DTO に変換
+2. proxy-service 経由で Background Script に送信
+3. 受信した DTO をエンティティに再構築
 
 ## 関連ドキュメント
 
 - [ADR-002: DB アクセスを messaging 経由に統一](./002-unified-db-access-via-messaging.md)
+- [ADR-004: メッセージングに @webext-core/proxy-service を採用](./004-messaging-with-proxy-service.md)
 - [Toggle Rule Active 設計](../design/pages/rule-list/features/toggle-rule-active/)

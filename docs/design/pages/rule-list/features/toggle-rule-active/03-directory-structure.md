@@ -66,14 +66,11 @@ src/frameworks-and-drivers/
 │       └── DexieRewriteRuleRepository.ts        ← DTO ↔ DBレコード変換（Background Script用）
 ├── messaging/                                   ← Messaging Gateway 実装
 │   ├── ChromeRuntimeRewriteRuleRepository.ts    ← 既存（Rules Page用）
-│   ├── MessageHandler.ts                        ← Background Script側、メッセージ受信
-│   └── dto/                                     ← メッセージング用DTO/Message（ADR-003参照）
+│   └── dto/                                     ← メッセージング用DTO（ADR-003参照）
 │       ├── RewriteRuleDTO.ts                    ← エンティティ全体を表現
-│       ├── GetByIdRequestDTO.ts                 ← ルール取得要求 { id }
-│       ├── UpdateRuleActiveDTO.ts               ← トグル更新 { id, isActive }
-│       ├── GetByIdMessage.ts                    ← { type: "getById", payload }
-│       ├── UpdateRuleActiveMessage.ts           ← { type: "update", payload }
-│       └── GetByIdResponseMessage.ts            ← { type: "getById:response", payload }
+│       └── UpdateRuleActiveDTO.ts               ← トグル更新 { id, isActive }
+├── proxy-service/                               ← proxy-service定義（ADR-004参照）
+│   └── RewriteRuleService.ts                    ← Background Scriptで実行されるサービス
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
 │   └── ChromeTabsGateway.ts                     ← タブリロード実装（Rules Page用）
 └── di/                                          ← DI Container
@@ -84,6 +81,7 @@ src/frameworks-and-drivers/
 
 > **参照**: [ADR-002: DB アクセスを messaging 経由に統一](../../../../adr/002-unified-db-access-via-messaging.md)
 > **参照**: [ADR-003: メッセージングでは DTO を使用](../../../../adr/003-messaging-uses-dto-not-entity.md)
+> **参照**: [ADR-004: メッセージングに @webext-core/proxy-service を採用](../../../../adr/004-messaging-with-proxy-service.md)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -103,34 +101,30 @@ src/frameworks-and-drivers/
 │      │                                                          │
 │      ▼                                                          │
 │ [第4層] ChromeRuntimeRewriteRuleRepository                       │
-│      │ └── GetByIdMessage を作成して送信                          │
+│      │ └── RewriteRuleService.getById() (proxy-service経由)      │
 │      │                                                          │
-└──────┼──────────────────────────────────────────────────────────┘
-       │ chrome.runtime.sendMessage (ADR-003: DTO のみ)
-       ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ Background Script                                                │
+│      ├─────── proxy-service (透過的メッセージング) ──────────────│
 │      │                                                          │
-│      ▼                                                          │
-│ [第4層] MessageHandler                                           │
-│      │ └── DexieRewriteRuleRepository.getById()                 │
-│      │ └── GetByIdResponseMessage を作成して返却                  │
+│      │        ┌───────────────────────────────────────┐         │
+│      │        │ Background Script                     │         │
+│      │        │ [第4層] RewriteRuleService            │         │
+│      │        │      │                                │         │
+│      │        │      ▼                                │         │
+│      │        │ DexieRewriteRuleRepository            │         │
+│      │        │      │                                │         │
+│      │        │      ▼                                │         │
+│      │        │ RewriteRuleDTO                        │         │
+│      │        └───────────────────────────────────────┘         │
 │      │                                                          │
-└──────┼──────────────────────────────────────────────────────────┘
-       │ response (RewriteRuleDTO)
-       ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ Rules Page (続き)                                                │
+│      ◀─────── RewriteRuleDTO ────────────────────────────────────│
 │      │                                                          │
-│      ▼                                                          │
-│ [第4層] ChromeRuntimeRewriteRuleRepository                       │
 │      │ └── RewriteRule.fromDTO() でエンティティ再構築             │
 │      │                                                          │
 │      ▼                                                          │
 │ [第2層] ToggleRuleActiveInteractor                               │
 │      │ └── RewriteRule.withActive() で状態反転                   │
 │      │ └── IRewriteRuleRepository.update()                      │
-│      │     （messaging経由でBackground Scriptに送信）             │
+│      │     （proxy-service経由でBackground Scriptに送信）         │
 │      │                                                          │
 │      │ └── ITabsGateway.reloadMatchingTabs()                    │
 │      │     ↓                                                    │
@@ -160,10 +154,10 @@ src/frameworks-and-drivers/
 | 新規 | ToggleRuleActivePresenter.ts | Presenter 新規作成 |
 | 新規 | ITabsGateway.ts | タブ操作Gateway Interface 新規作成 |
 | 新規 | ChromeTabsGateway.ts | タブリロード実装 新規作成 |
-| 新規 | messaging/dto/*.ts | メッセージングDTO/Message 新規作成（ADR-003） |
+| 新規 | messaging/dto/*.ts | メッセージングDTO 新規作成（ADR-003） |
+| 新規 | RewriteRuleService.ts | proxy-service定義 新規作成（ADR-004） |
 | 新規 | ToggleSwitch.tsx | UIコンポーネント 新規作成 |
 | 変更 | RulesApp.tsx | トグルハンドラー追加 |
 | 変更 | container.ts | DI登録追加 |
-| 既存 | ChromeRuntimeRewriteRuleRepository.ts | messaging経由でbackgroundと通信 |
+| 既存 | ChromeRuntimeRewriteRuleRepository.ts | proxy-service経由でbackgroundと通信（ADR-004参照） |
 | 既存 | DexieRewriteRuleRepository.ts | DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
-| 既存 | MessageHandler.ts | メッセージ受信・ルーティング |
