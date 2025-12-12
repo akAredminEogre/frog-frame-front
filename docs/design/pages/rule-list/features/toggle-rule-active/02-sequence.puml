@@ -95,14 +95,16 @@ note over MessagingRepo, Handler : chrome.runtime.sendMessage\n（ADR-003: Messa
 
 MessagingRepo -> Handler : GetByIdMessage
 activate Handler
+
+note over Handler, DexieRepo : MessageHandler は IRewriteRuleRepository を経由せず\nDexieRewriteRuleRepository を直接呼び出す
+
 Handler -> DexieRepo : getById(ruleId)
 activate DexieRepo
-DexieRepo --> Handler : rule
+DexieRepo --> Handler : RewriteRuleDTO
 deactivate DexieRepo
-Handler -> RuleDTO : new(rule)
-activate RuleDTO
-RuleDTO --> Handler : RewriteRuleDTO
-deactivate RuleDTO
+
+note over Handler : MessageHandler は DTO をそのまま受け渡す（変換しない）
+
 Handler -> GetByIdRespMsg : new(RewriteRuleDTO)
 activate GetByIdRespMsg
 GetByIdRespMsg --> Handler : GetByIdResponseMessage
@@ -142,7 +144,8 @@ deactivate UpdateMsg
 
 MessagingRepo -> Handler : UpdateRuleActiveMessage
 activate Handler
-Handler -> DexieRepo : update(updatedRule)
+
+Handler -> DexieRepo : updateActive(UpdateRuleActiveDTO)
 activate DexieRepo
 DexieRepo --> Handler : void
 deactivate DexieRepo

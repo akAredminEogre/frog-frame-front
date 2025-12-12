@@ -68,7 +68,7 @@
 | ToggleRuleActiveController | interface-adapters | ユーザー入力をInputDataに変換 |
 | ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
 | ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。messaging経由でbackgroundと通信（Rules Page用） |
-| DexieRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。IndexedDB直接アクセス（Background Script用） |
+| DexieRewriteRuleRepository | frameworks-and-drivers | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード（Rules Page用、chrome.tabs API使用） |
 | MessageHandler | frameworks-and-drivers | Background Script側。メッセージを受信しDexieRewriteRuleRepositoryに委譲 |
 | RewriteRuleDTO | frameworks-and-drivers | メッセージング用DTO。エンティティ全体を表現（ADR-003参照） |
