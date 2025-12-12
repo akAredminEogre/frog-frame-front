@@ -110,7 +110,10 @@ deactivate GetByIdRespMsg
 Handler --> MessagingRepo : GetByIdResponseMessage
 deactivate Handler
 
-note over MessagingRepo, RuleDTO : GetByIdResponseMessage.payload → RewriteRule再構築
+MessagingRepo -> Entity : fromDTO(GetByIdResponseMessage.payload)
+activate Entity
+Entity --> MessagingRepo : rule
+deactivate Entity
 
 MessagingRepo --> IRepository : rule
 deactivate MessagingRepo
