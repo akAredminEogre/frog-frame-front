@@ -103,6 +103,22 @@ make testlint
 ```
 This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
 
+### PlantUML Diagram Rendering
+For rendering PlantUML diagrams (`.puml` files) to images:
+
+```bash
+make plantuml-server       # Start PlantUML server (runs on port 8180)
+make plantuml              # Render all .puml files to PNG
+make plantuml-svg          # Render all .puml files to SVG
+make plantuml-server-stop  # Stop PlantUML server
+make plantuml-check        # Check if PlantUML server is running
+```
+
+**Usage:**
+1. Start the PlantUML server: `make plantuml-server`
+2. Render diagrams: `make plantuml` or `make plantuml-svg`
+3. Output files are saved in `docs/diagrams/` alongside the source `.puml` files
+
 ### Git Worktree (Parallel Development)
 For working on multiple branches simultaneously:
 
