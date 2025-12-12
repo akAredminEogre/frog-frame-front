@@ -66,13 +66,26 @@
 | ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
 | IRewriteRuleRepository | interface-adapters | Gateway Interface。ルール永続化 |
 | ITabsGateway | interface-adapters | Gateway Interface。タブ操作（リロード） |
-| ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。messaging経由でbackgroundと通信 |
-| DexieRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。IndexedDB直接アクセス（background用） |
-| ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード |
+| ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。messaging経由でbackgroundと通信（Rules Page用） |
+| DexieRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。IndexedDB直接アクセス（Background Script用） |
+| ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード（Rules Page用、chrome.tabs API使用） |
 | ToggleSwitch | frameworks-and-drivers | UIコンポーネント。トグルスイッチ |
 | RulesApp | frameworks-and-drivers | View。ルール一覧画面 |
 
 ## アーキテクチャ補足
+
+### 責務分離の原則
+
+本設計では以下の責務分離を徹底する：
+
+| コンポーネント | 責務 | 備考 |
+|---------------|------|------|
+| IRewriteRuleRepository | データ永続化のみ | タブリロード等の副作用を含まない |
+| ITabsGateway | タブ操作のみ | 永続化ロジックを含まない |
+| Interactor | ワークフロー調整 | Repository更新後にTabsGatewayを呼び出す |
+
+これにより、Repository の update メッセージは純粋なDB操作のみを行い、
+タブリロードは Interactor が ITabsGateway を通じて明示的に制御する。
 
 ### Chrome拡張機能のコンテキスト分離
 
@@ -91,9 +104,12 @@ Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-
 │  │                              ↓                              ││
 │  │              ChromeRuntimeRewriteRuleRepository             ││
 │  │              (chrome.runtime.sendMessage)                   ││
+│  │                                                             ││
+│  │ Interactor → ITabsGateway → ChromeTabsGateway              ││
+│  │              (chrome.tabs.reload)                           ││
 │  └──────────────────────────────┬──────────────────────────────┘│
 └─────────────────────────────────┼───────────────────────────────┘
-                                  │ messaging
+                                  │ messaging (DB操作のみ)
                                   ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │ Background Script                                                │
@@ -101,7 +117,6 @@ Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-
 │  │ MessageHandler                                              ││
 │  │       ↓                                                     ││
 │  │ DexieRewriteRuleRepository (IndexedDB)                      ││
-│  │ ChromeTabsGateway (タブリロード)                             ││
 │  └─────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────┘
 ```

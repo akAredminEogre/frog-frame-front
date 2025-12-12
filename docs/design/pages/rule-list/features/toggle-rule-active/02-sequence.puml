@@ -25,18 +25,18 @@ box "Rules Page - application-business-rules (第2層)" #LightYellow
   participant "<<interface>>\nIToggleRuleActivePresenter" as IPresenter
 end box
 
+box "Rules Page - interface-adapters (第3層) - Gateway" #LightGreen
+  participant "<<interface>>\nITabsGateway" as ITabsGateway
+end box
+
 box "Rules Page - frameworks-and-drivers/messaging" #LightCyan
   participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
+  participant "ChromeTabsGateway" as TabsGateway
 end box
 
 box "Background - frameworks-and-drivers (第4層)" #LightGray
   participant "MessageHandler" as Handler
   participant "DexieRewriteRule\nRepository" as DexieRepo
-  participant "ChromeTabsGateway" as TabsGateway
-end box
-
-box "Background - interface-adapters (第3層)" #Silver
-  participant "<<interface>>\nITabsGateway" as ITabsGateway
 end box
 
 box "enterprise-business-rules (第1層)" #LightPink
@@ -106,9 +106,17 @@ activate DexieRepo
 DexieRepo --> Handler : void
 deactivate DexieRepo
 
-note over Handler, ITabsGateway : MessageHandlerはITabsGatewayに依存\n（依存性逆転の原則）
+Handler --> MessagingRepo : void
+deactivate Handler
 
-Handler -> ITabsGateway : reloadMatchingTabs(updatedRule)
+MessagingRepo --> IRepository : void
+deactivate MessagingRepo
+IRepository --> Interactor : void
+deactivate IRepository
+
+note over Interactor, ITabsGateway : InteractorはITabsGatewayに依存\n（責務分離: Repository=永続化, TabsGateway=タブ操作）
+
+Interactor -> ITabsGateway : reloadMatchingTabs(updatedRule)
 activate ITabsGateway
 
 note over ITabsGateway, TabsGateway : 実行時はDI経由で\nChromeTabsGatewayが注入
@@ -117,16 +125,8 @@ ITabsGateway -> TabsGateway : reloadMatchingTabs(updatedRule)
 activate TabsGateway
 TabsGateway --> ITabsGateway : void
 deactivate TabsGateway
-ITabsGateway --> Handler : void
+ITabsGateway --> Interactor : void
 deactivate ITabsGateway
-
-Handler --> MessagingRepo : void
-deactivate Handler
-
-MessagingRepo --> IRepository : void
-deactivate MessagingRepo
-IRepository --> Interactor : void
-deactivate IRepository
 
 Interactor -> Interactor : new ToggleRuleActiveOutputData(updatedRule)
 
