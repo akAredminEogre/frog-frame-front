@@ -70,7 +70,7 @@ src/frameworks-and-drivers/
 │       ├── RewriteRuleDTO.ts                    ← エンティティ全体を表現
 │       └── UpdateRuleActiveDTO.ts               ← トグル更新 { id, isActive }
 ├── proxy-service/                               ← proxy-service定義（ADR-002参照）
-│   └── RewriteRuleService.ts                    ← Background Scriptで実行されるサービス
+│   └── RewriteRuleMessagingService.ts           ← Background Scriptで実行されるサービス
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
 │   └── ChromeTabsGateway.ts                     ← タブリロード実装（Rules Page用）
 └── di/                                          ← DI Container
@@ -100,13 +100,13 @@ src/frameworks-and-drivers/
 │      │                                                          │
 │      ▼                                                          │
 │ [第4層] ChromeRuntimeRewriteRuleRepository                       │
-│      │ └── RewriteRuleService.getById() (proxy-service経由)      │
+│      │ └── RewriteRuleMessagingService.getById() (proxy-service経由) │
 │      │                                                          │
 │      ├─────── proxy-service (透過的メッセージング) ──────────────│
 │      │                                                          │
 │      │        ┌───────────────────────────────────────┐         │
 │      │        │ Background Script                     │         │
-│      │        │ [第4層] RewriteRuleService            │         │
+│      │        │ [第4層] RewriteRuleMessagingService   │         │
 │      │        │      │                                │         │
 │      │        │      ▼                                │         │
 │      │        │ DexieRewriteRuleRepository            │         │
@@ -154,7 +154,7 @@ src/frameworks-and-drivers/
 | 新規 | ITabsGateway.ts | タブ操作Gateway Interface 新規作成 |
 | 新規 | ChromeTabsGateway.ts | タブリロード実装 新規作成 |
 | 新規 | messaging/dto/*.ts | メッセージングDTO 新規作成（ADR-003） |
-| 新規 | RewriteRuleService.ts | proxy-service定義 新規作成（ADR-002） |
+| 新規 | RewriteRuleMessagingService.ts | proxy-service定義 新規作成（ADR-002） |
 | 新規 | ToggleSwitch.tsx | UIコンポーネント 新規作成 |
 | 変更 | RulesApp.tsx | トグルハンドラー追加 |
 | 変更 | container.ts | DI登録追加 |
