@@ -76,9 +76,8 @@ DTO の粒度は以下の基準に従う：
 
 | DTO名 | 用途 | 構造 |
 |-------|------|------|
+| `GetByIdRequestDTO` | ルール取得要求 | `{ id: number }` |
 | `UpdateRuleActiveDTO` | 有効/無効トグル | `{ id: number, isActive: boolean }` |
-
-**補足**: 単一のプリミティブ値（例: `id: number`）は DTO にラップせず直接引数として渡す。
 
 ### 変換責務
 
