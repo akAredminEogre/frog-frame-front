@@ -2,7 +2,7 @@
 
 title ルールトグル機能 シーケンス図
 
-note across : **参照**: ADR-002 - DBアクセスをmessaging経由に統一\n**参照**: ADR-003 - メッセージングではDTOを使用（エンティティ不可）\n**参照**: ADR-004 - メッセージングに@webext-core/proxy-serviceを採用\nRules Pageは技術的にIndexedDB直接アクセス可能だが、\n一貫性のためmessaging経由でBackground Scriptに集約する
+note across : **参照**: ADR-002 - メッセージングに@webext-core/proxy-serviceを採用\n**参照**: ADR-003 - DBアクセスをmessaging経由に統一しDTOを使用\nRules Pageは技術的にIndexedDB直接アクセス可能だが、\n一貫性のためmessaging経由でBackground Scriptに集約する
 
 skinparam sequenceArrowThickness 2
 skinparam sequenceParticipantBorderColor #666666
@@ -75,7 +75,7 @@ note over IRepository, MessagingRepo : 実行時はDI経由で\nChromeRuntimeRew
 IRepository -> MessagingRepo : getById(ruleId)
 activate MessagingRepo
 
-note over MessagingRepo, ProxyService : proxy-serviceが透過的にメッセージングを処理\n（ADR-004参照）
+note over MessagingRepo, ProxyService : proxy-serviceが透過的にメッセージングを処理\n（ADR-002参照）
 
 MessagingRepo -> ProxyService : getById(ruleId)
 activate ProxyService
