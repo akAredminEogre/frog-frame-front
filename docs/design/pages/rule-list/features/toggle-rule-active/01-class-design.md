@@ -221,16 +221,20 @@ ADR-001 に従い、ドメインエンティティの値を用いた判定・計
 skinparam packageStyle rectangle
 skinparam linetype ortho
 
-' ===== Layer 1: Enterprise Business Rules =====
-package "enterprise-business-rules (第1層)" #LightPink {
-  class RewriteRule <<Entity>> {
-    - id: RuleId
-    - urlPattern: UrlPattern
-    - isActive: boolean
-    + withActive(isActive: boolean): RewriteRule
-    + matchesUrl(url: string): boolean
-    + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
+' ===== Layer 3: Interface Adapters =====
+package "interface-adapters (第3層)" #LightGreen {
+  class ToggleRuleActiveController <<Controller>> {
+    - useCase: IToggleRuleActiveUseCase
+    + toggleActive(ruleId: number): Promise<void>
   }
+
+  class ToggleRuleActivePresenter <<Presenter>> {
+    - updateRuleInView: (rule: RewriteRule) => void
+    + present(outputData: ToggleRuleActiveOutputData): void
+  }
+
+  ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
+  ToggleRuleActivePresenter .down.|> IToggleRuleActivePresenter : implements
 }
 
 ' ===== Layer 2: Application Business Rules =====
@@ -275,20 +279,16 @@ package "application-business-rules (第2層)" #LightYellow {
   ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
 }
 
-' ===== Layer 3: Interface Adapters =====
-package "interface-adapters (第3層)" #LightGreen {
-  class ToggleRuleActiveController <<Controller>> {
-    - useCase: IToggleRuleActiveUseCase
-    + toggleActive(ruleId: number): Promise<void>
+' ===== Layer 1: Enterprise Business Rules =====
+package "enterprise-business-rules (第1層)" #LightPink {
+  class RewriteRule <<Entity>> {
+    - id: RuleId
+    - urlPattern: UrlPattern
+    - isActive: boolean
+    + withActive(isActive: boolean): RewriteRule
+    + matchesUrl(url: string): boolean
+    + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
   }
-
-  class ToggleRuleActivePresenter <<Presenter>> {
-    - updateRuleInView: (rule: RewriteRule) => void
-    + present(outputData: ToggleRuleActiveOutputData): void
-  }
-
-  ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
-  ToggleRuleActivePresenter .up.|> IToggleRuleActivePresenter : implements
 }
 
 ' ===== Layer 4: Frameworks & Drivers =====
