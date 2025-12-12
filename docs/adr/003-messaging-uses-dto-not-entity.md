@@ -51,6 +51,56 @@ chrome.runtime.sendMessage({ type: "update", rule });
 受信: Background が ruleData からエンティティを再構築
 ```
 
+## DTO 型定義
+
+メッセージングで使用する DTO の型を以下のように定義する。
+これにより、シリアライズ/デシリアライズ処理の再利用性が向上する。
+
+### RewriteRuleDTO（エンティティ全体）
+
+エンティティの全プロパティを含む DTO。`getById` の応答などで使用：
+
+```typescript
+type RewriteRuleDTO = {
+  id: number;
+  name: string;
+  pattern: string;
+  replacement: string;
+  isActive: boolean;
+  // ... その他のプロパティ
+};
+```
+
+### 操作別 DTO
+
+操作に必要な最小限のデータのみを含む DTO：
+
+| DTO名 | 用途 | 構造 |
+|-------|------|------|
+| `GetByIdRequestDTO` | ルール取得要求 | `{ id: number }` |
+| `UpdateRuleActiveDTO` | 有効/無効トグル | `{ id: number, isActive: boolean }` |
+
+```typescript
+// 取得要求
+type GetByIdRequestDTO = {
+  id: number;
+};
+
+// トグル更新
+type UpdateRuleActiveDTO = {
+  id: number;
+  isActive: boolean;
+};
+```
+
+### 変換責務
+
+| コンポーネント | 責務 |
+|---------------|------|
+| `ChromeRuntimeRewriteRuleRepository` | Entity → DTO 変換（送信時）、DTO → Entity 再構築（受信時） |
+| `MessageHandler` | DTO の受け渡しのみ（変換しない） |
+| `DexieRewriteRuleRepository` | Entity ↔ DB レコード 変換 |
+
 ## 理由
 
 ### 採用理由
