@@ -8,7 +8,7 @@
 src/enterprise-business-rules/
 └── entities/                                    ← Entity
     └── RewriteRule/
-        └── RewriteRule.ts                       ← withActive(), fromDTO() 追加
+        └── RewriteRule.ts                       ← withActive(), matchesUrl(), fromDTO() 追加
 ```
 
 ### 第2層: application-business-rules/
@@ -73,13 +73,14 @@ src/frameworks-and-drivers/
 ├── proxy-service/                               ← proxy-service定義（ADR-002参照）
 │   └── RewriteRuleMessagingService.ts           ← Background Scriptで実行されるサービス
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
-│   └── ChromeTabsGateway.ts                     ← タブリロード実装（Rules Page用）
+│   └── ChromeTabsGateway.ts                     ← rule.matchesUrl()判定後リロード（ADR-001参照）
 └── di/                                          ← DI Container
     └── container.ts                             ← 既存、変更対象
 ```
 
 ## 導線と各層の役割
 
+> **参照**: [ADR-001: Clean Architecture - ドメインロジックの配置原則](../../../../adr/001-clean-architecture-with-presenter-pattern.md)
 > **参照**: [ADR-002: メッセージングに @webext-core/proxy-service を採用](../../../../adr/002-messaging-with-proxy-service.md)
 > **参照**: [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../adr/003-unified-db-access-via-messaging.md)
 
@@ -128,7 +129,9 @@ src/frameworks-and-drivers/
 │      │                                                          │
 │      │ └── ITabsGateway.reloadMatchingTabs()                    │
 │      │     ↓                                                    │
-│      │ [第4層] ChromeTabsGateway (chrome.tabs.reload)            │
+│      │ [第4層] ChromeTabsGateway                                 │
+│      │     └── rule.matchesUrl()判定 → chrome.tabs.reload()     │
+│      │         （ADR-001: ドメインロジックは第1層で実行）          │
 │      │                                                          │
 │      │ └── IToggleRuleActivePresenter.present()                 │
 │      ▼                                                          │
@@ -143,7 +146,7 @@ src/frameworks-and-drivers/
 
 | 種別 | ファイル | 変更内容 |
 |------|---------|---------|
-| 移行 | RewriteRule.ts | enterprise-business-rules/へ移動、fromDTO()追加 |
+| 移行 | RewriteRule.ts | enterprise-business-rules/へ移動、matchesUrl(), fromDTO()追加（ADR-001参照） |
 | 移行 | IRewriteRuleRepository.ts | application-business-rules/ports/gateway/へ移動 |
 | 新規 | IToggleRuleActiveUseCase.ts | Input Port 新規作成 |
 | 新規 | IToggleRuleActivePresenter.ts | Output Port 新規作成 |
@@ -153,7 +156,7 @@ src/frameworks-and-drivers/
 | 新規 | ToggleRuleActiveController.ts | Controller 新規作成 |
 | 新規 | ToggleRuleActivePresenter.ts | Presenter 新規作成 |
 | 新規 | ITabsGateway.ts | タブ操作Gateway Interface 新規作成 |
-| 新規 | ChromeTabsGateway.ts | タブリロード実装 新規作成 |
+| 新規 | ChromeTabsGateway.ts | タブリロード実装 新規作成（rule.matchesUrl()判定後リロード、ADR-001参照） |
 | 新規 | messaging/dto/*.ts | メッセージングDTO 新規作成（ADR-002、ADR-003） |
 | 新規 | RewriteRuleMessagingService.ts | proxy-service定義 新規作成（ADR-002） |
 | 新規 | ToggleSwitch.tsx | UIコンポーネント 新規作成 |

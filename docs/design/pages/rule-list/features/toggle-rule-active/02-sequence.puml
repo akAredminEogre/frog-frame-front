@@ -2,7 +2,7 @@
 
 title ルールトグル機能 シーケンス図
 
-note across : **参照**: ADR-002 - メッセージングに@webext-core/proxy-serviceを採用\n**参照**: ADR-003 - DBアクセスをmessaging経由に統一しDTOを使用\nRules Pageは技術的にIndexedDB直接アクセス可能だが、\n一貫性のためmessaging経由でBackground Scriptに集約する
+note across : **参照**: ADR-001 - ドメインロジックの配置原則（URLマッチングはenterprise-business-rulesで実行）\n**参照**: ADR-002 - メッセージングに@webext-core/proxy-serviceを採用\n**参照**: ADR-003 - DBアクセスをmessaging経由に統一しDTOを使用\nRules Pageは技術的にIndexedDB直接アクセス可能だが、\n一貫性のためmessaging経由でBackground Scriptに集約する
 
 skinparam sequenceArrowThickness 2
 skinparam sequenceParticipantBorderColor #666666
@@ -137,6 +137,17 @@ note over ITabsGateway, TabsGateway : 実行時はDI経由で\nChromeTabsGateway
 
 ITabsGateway -> TabsGateway : reloadMatchingTabs(updatedRule)
 activate TabsGateway
+
+note over TabsGateway : chrome.tabs.query()でタブ一覧取得
+
+loop 各タブに対して
+  TabsGateway -> Entity : matchesUrl(tab.url)
+  activate Entity
+  Entity --> TabsGateway : boolean
+  deactivate Entity
+  note over TabsGateway : trueの場合chrome.tabs.reload()\n（ADR-001: ドメインロジックは第1層で実行）
+end
+
 TabsGateway --> ITabsGateway : void
 deactivate TabsGateway
 ITabsGateway --> Interactor : void
