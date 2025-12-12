@@ -24,11 +24,15 @@ box "Rules Page - application-business-rules (第2層)" #LightYellow
   participant "<<interface>>\nIToggleRuleActivePresenter" as IPresenter
   participant "<<interface>>\nIRewriteRuleRepository" as IRepository
   participant "<<interface>>\nITabsGateway" as ITabsGateway
+  participant "ToggleRuleActive\nInputData" as InputData
+  participant "ToggleRuleActive\nOutputData" as OutputData
 end box
 
 box "Rules Page - frameworks-and-drivers/messaging" #LightCyan
   participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
   participant "ChromeTabsGateway" as TabsGateway
+  participant "RewriteRuleDTO" as RuleDTO
+  participant "UpdateRuleActiveDTO" as UpdateDTO
 end box
 
 box "Background - frameworks-and-drivers (第4層)" #LightGray
@@ -48,16 +52,19 @@ activate View
 View -> Controller : toggleActive(ruleId)
 activate Controller
 
-Controller -> Controller : new ToggleRuleActiveInputData(ruleId)
+Controller -> InputData : new(ruleId)
+activate InputData
+InputData --> Controller : inputData
+deactivate InputData
 
 note over Controller, IUseCase : ControllerはInput Port（IUseCase）に依存\n（依存性逆転の原則）
 
-Controller -> IUseCase : execute(inputData)
+Controller -> IUseCase : execute(ToggleRuleActiveInputData)
 activate IUseCase
 
 note over IUseCase, Interactor : 実行時はDI経由で\nInteractorが注入
 
-IUseCase -> Interactor : execute(inputData)
+IUseCase -> Interactor : execute(ToggleRuleActiveInputData)
 activate Interactor
 
 note over Interactor, IRepository : InteractorはGateway Interfaceに依存\n（同じ第2層内で定義）
@@ -78,10 +85,14 @@ Handler -> DexieRepo : getById(ruleId)
 activate DexieRepo
 DexieRepo --> Handler : rule
 deactivate DexieRepo
+Handler -> RuleDTO : new(rule)
+activate RuleDTO
+RuleDTO --> Handler : RewriteRuleDTO
+deactivate RuleDTO
 Handler --> MessagingRepo : RewriteRuleDTO
 deactivate Handler
 
-note over MessagingRepo : RewriteRuleDTO → RewriteRule再構築
+note over MessagingRepo, RuleDTO : RewriteRuleDTO → RewriteRule再構築
 
 MessagingRepo --> IRepository : rule
 deactivate MessagingRepo
@@ -98,9 +109,12 @@ activate IRepository
 IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
 
-note over MessagingRepo : RewriteRule → UpdateRuleActiveDTO変換
+MessagingRepo -> UpdateDTO : new(id, isActive)
+activate UpdateDTO
+UpdateDTO --> MessagingRepo : UpdateRuleActiveDTO
+deactivate UpdateDTO
 
-MessagingRepo -> Handler : UpdateRuleActiveDTO(id, isActive)
+MessagingRepo -> Handler : UpdateRuleActiveDTO
 activate Handler
 Handler -> DexieRepo : update(updatedRule)
 activate DexieRepo
@@ -129,16 +143,19 @@ deactivate TabsGateway
 ITabsGateway --> Interactor : void
 deactivate ITabsGateway
 
-Interactor -> Interactor : new ToggleRuleActiveOutputData(updatedRule)
+Interactor -> OutputData : new(updatedRule)
+activate OutputData
+OutputData --> Interactor : outputData
+deactivate OutputData
 
 note over Interactor, IPresenter : InteractorはOutput Port（IPresenter）に依存
 
-Interactor -> IPresenter : present(outputData)
+Interactor -> IPresenter : present(ToggleRuleActiveOutputData)
 activate IPresenter
 
 note over IPresenter, PresenterImpl : 実行時はDI経由で\nPresenter実装が注入
 
-IPresenter -> PresenterImpl : present(outputData)
+IPresenter -> PresenterImpl : present(ToggleRuleActiveOutputData)
 activate PresenterImpl
 
 PresenterImpl -> View : updateRuleInView(rule)
