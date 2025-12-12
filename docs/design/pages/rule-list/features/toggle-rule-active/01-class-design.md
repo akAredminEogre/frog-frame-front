@@ -48,6 +48,7 @@
 │  │ entities/RewriteRule/RewriteRule.ts                               │   │
 │  │                                                                  │   │
 │  │ - withActive(): 有効/無効を変更した新しいインスタンスを返す          │   │
+│  │ - matchesUrl(): URLがルールのパターンに一致するか判定              │   │
 │  │ - fromDTO(): DTOからエンティティを再構築（静的メソッド）             │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────────────┘
@@ -57,7 +58,7 @@
 
 | クラス | 層 | 責務 |
 |--------|-----|------|
-| RewriteRule | enterprise-business-rules | ルールエンティティ。有効/無効状態を持つ。`fromDTO()`で再構築可能 |
+| RewriteRule | enterprise-business-rules | ルールエンティティ。有効/無効状態を持つ。`matchesUrl()`でURLマッチング判定、`fromDTO()`で再構築可能（ADR-001参照） |
 | ToggleRuleActiveInputData | application-business-rules | 入力DTO。対象ルールIDを保持 |
 | ToggleRuleActiveOutputData | application-business-rules | 出力DTO。更新後のルールを保持 |
 | IToggleRuleActiveUseCase | application-business-rules | Input Port。トグル処理のインターフェース |
@@ -70,7 +71,7 @@
 | ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。proxy-service経由でbackgroundと通信（Rules Page用、ADR-002参照） |
 | RewriteRuleMessagingService | frameworks-and-drivers | proxy-serviceで定義。Background Scriptで実行されるサービス（ADR-002参照） |
 | DexieRewriteRuleRepository | frameworks-and-drivers | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
-| ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード（Rules Page用、chrome.tabs API使用） |
+| ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（ADR-001参照） |
 | RewriteRuleDTO | frameworks-and-drivers | メッセージング用DTO。エンティティ全体を表現（ADR-002、ADR-003参照） |
 | GetByIdRequestDTO | frameworks-and-drivers | メッセージング用DTO。ルール取得要求 `{ id }`（ADR-002、ADR-003参照） |
 | UpdateRuleActiveRequestDTO | frameworks-and-drivers | メッセージング用DTO。トグル更新時の最小データ `{ id, isActive }`（ADR-002、ADR-003参照） |
@@ -117,7 +118,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │  │              (GetByIdRequestDTO作成 / proxy-service経由 / DTO→Entity再構築) ││
 │  │                                                             ││
 │  │ Interactor → ITabsGateway → ChromeTabsGateway              ││
-│  │              (chrome.tabs.reload)                           ││
+│  │              (rule.matchesUrl()判定 → chrome.tabs.reload)   ││
 │  └──────────────────────────────┬──────────────────────────────┘│
 └─────────────────────────────────┼───────────────────────────────┘
                                   │ proxy-service (DTO)
@@ -132,6 +133,20 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+### ドメインロジックの配置原則
+
+> **参照**: [ADR-001: Clean Architecture Presenter付きパターン採用 - 6. ドメインロジックの配置原則](../../../../adr/001-clean-architecture-with-presenter-pattern.md)
+
+ADR-001 に従い、ドメインエンティティの値を用いた判定・計算は `enterprise-business-rules` 層で実装する。
+
+| ロジック | 配置先 | 実装 |
+|---------|--------|------|
+| URLパターンマッチング判定 | `enterprise-business-rules` | `RewriteRule.matchesUrl()` |
+| 有効/無効状態の反転 | `enterprise-business-rules` | `RewriteRule.withActive()` |
+| タブ一覧取得・リロード | `frameworks-and-drivers` | `ChromeTabsGateway`（chrome.tabs API） |
+
+`ChromeTabsGateway.reloadMatchingTabs()` は、タブ一覧を取得後 `rule.matchesUrl()` を呼び出してマッチング判定を行う。
+
 ## クラス図
 
 ```
@@ -141,6 +156,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │  │ RewriteRule                                                         │   │
 │  │ ─────────────────────────────────────────────────────────────────── │   │
 │  │ + withActive(): RewriteRule                                         │   │
+│  │ + matchesUrl(url: string): boolean                                  │   │
 │  │ + static fromDTO(dto): RewriteRule                                  │   │
 │  └─────────────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────────┘
