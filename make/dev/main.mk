@@ -4,6 +4,9 @@
 # Include initialization commands
 include make/dev/init-develop-environment.mk
 
+# Include PlantUML commands
+include make/dev/plantuml.mk
+
 dev:
 	@echo "Starting development server..."
 	@docker compose down
