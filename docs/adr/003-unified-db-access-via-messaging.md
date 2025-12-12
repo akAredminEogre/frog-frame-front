@@ -85,7 +85,7 @@ DTO の粒度は以下の基準に従う：
 | コンポーネント | 責務 |
 |---------------|------|
 | `ChromeRuntimeRewriteRuleRepository` | DTO → Entity 再構築（受信時）、Entity → DTO 変換（送信時） |
-| `RewriteRuleService` | proxy-service として DTO を受け渡し（ADR-002 参照） |
+| `RewriteRuleMessagingService` | proxy-service として DTO を受け渡し（ADR-002 参照） |
 | `DexieRewriteRuleRepository` | DTO ↔ DB レコード 変換 |
 
 ## 理由

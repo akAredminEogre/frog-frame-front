@@ -36,7 +36,7 @@ Chrome 拡張機能では、複数のコンテキスト（Background Script、Ru
 | 1サービス = 1エンティティ | 各サービスは1つのドメインエンティティに対応する |
 | Gateway Interface との対応 | ADR-001 の Gateway Interface と 1:1 で対応させる |
 
-**例**: `IRewriteRuleRepository` → `RewriteRuleService`
+**例**: `IRewriteRuleRepository` → `RewriteRuleMessagingService`
 
 この基準により以下を防止する：
 

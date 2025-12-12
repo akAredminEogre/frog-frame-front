@@ -68,7 +68,7 @@
 | ToggleRuleActiveController | interface-adapters | ユーザー入力をInputDataに変換 |
 | ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
 | ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。proxy-service経由でbackgroundと通信（Rules Page用、ADR-002参照） |
-| RewriteRuleService | frameworks-and-drivers | proxy-serviceで定義。Background Scriptで実行されるサービス（ADR-002参照） |
+| RewriteRuleMessagingService | frameworks-and-drivers | proxy-serviceで定義。Background Scriptで実行されるサービス（ADR-002参照） |
 | DexieRewriteRuleRepository | frameworks-and-drivers | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード（Rules Page用、chrome.tabs API使用） |
 | RewriteRuleDTO | frameworks-and-drivers | メッセージング用DTO。エンティティ全体を表現（ADR-003参照） |
@@ -124,7 +124,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 ┌─────────────────────────────────────────────────────────────────┐
 │ Background Script                                                │
 │  ┌─────────────────────────────────────────────────────────────┐│
-│  │ RewriteRuleService (proxy-service)                          ││
+│  │ RewriteRuleMessagingService (proxy-service)                  ││
 │  │       ↓                                                     ││
 │  │ DexieRewriteRuleRepository (IndexedDB)                      ││
 │  └─────────────────────────────────────────────────────────────┘│
