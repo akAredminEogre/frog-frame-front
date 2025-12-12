@@ -114,7 +114,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │  │              IRewriteRuleRepository                         ││
 │  │                              ↓                              ││
 │  │              ChromeRuntimeRewriteRuleRepository             ││
-│  │              (proxy-service経由 / DTO→Entity再構築)          ││
+│  │              (GetByIdRequestDTO作成 / proxy-service経由 / DTO→Entity再構築) ││
 │  │                                                             ││
 │  │ Interactor → ITabsGateway → ChromeTabsGateway              ││
 │  │              (chrome.tabs.reload)                           ││
