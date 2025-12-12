@@ -66,7 +66,7 @@ src/frameworks-and-drivers/
 │       └── DexieRewriteRuleRepository.ts        ← DTO ↔ DBレコード変換（Background Script用）
 ├── messaging/                                   ← Messaging Gateway 実装
 │   ├── ChromeRuntimeRewriteRuleRepository.ts    ← 既存（Rules Page用）
-│   └── dto/                                     ← メッセージング用DTO（ADR-003参照）
+│   └── dto/                                     ← メッセージング用DTO（ADR-002、ADR-003参照）
 │       ├── RewriteRuleDTO.ts                    ← エンティティ全体を表現
 │       ├── GetByIdRequestDTO.ts                 ← ルール取得要求 { id }
 │       └── UpdateRuleActiveDTO.ts               ← トグル更新 { id, isActive }
@@ -154,7 +154,7 @@ src/frameworks-and-drivers/
 | 新規 | ToggleRuleActivePresenter.ts | Presenter 新規作成 |
 | 新規 | ITabsGateway.ts | タブ操作Gateway Interface 新規作成 |
 | 新規 | ChromeTabsGateway.ts | タブリロード実装 新規作成 |
-| 新規 | messaging/dto/*.ts | メッセージングDTO 新規作成（ADR-003） |
+| 新規 | messaging/dto/*.ts | メッセージングDTO 新規作成（ADR-002、ADR-003） |
 | 新規 | RewriteRuleMessagingService.ts | proxy-service定義 新規作成（ADR-002） |
 | 新規 | ToggleSwitch.tsx | UIコンポーネント 新規作成 |
 | 変更 | RulesApp.tsx | トグルハンドラー追加 |
