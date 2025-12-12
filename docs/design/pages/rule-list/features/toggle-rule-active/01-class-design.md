@@ -221,8 +221,8 @@ ADR-001 に従い、ドメインエンティティの値を用いた判定・計
 skinparam packageStyle rectangle
 skinparam linetype ortho
 
-' ===== Layer 3: Interface Adapters =====
-package "interface-adapters (第3層)" #LightGreen {
+' ===== Layer 3: Interface Adapters (左上) =====
+package "interface-adapters (第3層)" as L3 #LightGreen {
   class ToggleRuleActiveController <<Controller>> {
     - useCase: IToggleRuleActiveUseCase
     + toggleActive(ruleId: number): Promise<void>
@@ -232,13 +232,10 @@ package "interface-adapters (第3層)" #LightGreen {
     - updateRuleInView: (rule: RewriteRule) => void
     + present(outputData: ToggleRuleActiveOutputData): void
   }
-
-  ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
-  ToggleRuleActivePresenter .down.|> IToggleRuleActivePresenter : implements
 }
 
-' ===== Layer 2: Application Business Rules =====
-package "application-business-rules (第2層)" #LightYellow {
+' ===== Layer 2: Application Business Rules (右上) =====
+package "application-business-rules (第2層)" as L2 #LightYellow {
   interface IToggleRuleActiveUseCase <<Input Port>> {
     + execute(inputData: ToggleRuleActiveInputData): Promise<void>
   }
@@ -279,8 +276,8 @@ package "application-business-rules (第2層)" #LightYellow {
   ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
 }
 
-' ===== Layer 1: Enterprise Business Rules =====
-package "enterprise-business-rules (第1層)" #LightPink {
+' ===== Layer 1: Enterprise Business Rules (中央) =====
+package "enterprise-business-rules (第1層)" as L1 #LightPink {
   class RewriteRule <<Entity>> {
     - id: RuleId
     - urlPattern: UrlPattern
@@ -291,17 +288,19 @@ package "enterprise-business-rules (第1層)" #LightPink {
   }
 }
 
-' ===== Layer 4: Frameworks & Drivers =====
-package "frameworks-and-drivers (第4層)" #LightBlue {
-  class RulesApp <<View>> {
-    + onToggle(ruleId: number): void
+' ===== Layer 4: Frameworks & Drivers (下) =====
+package "frameworks-and-drivers (第4層)" as L4 #LightBlue {
+  together {
+    class RulesApp <<View>> {
+      + onToggle(ruleId: number): void
+    }
+
+    class ChromeTabsGateway <<Gateway>> {
+      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    }
   }
 
-  class ChromeTabsGateway <<Gateway>> {
-    + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-  }
-
-  rectangle "RewriteRule データアクセス（ADR-002, ADR-003）" #LightCyan {
+  rectangle "RewriteRule データアクセス（ADR-002, ADR-003）" as DataAccess #LightCyan {
     class ChromeRuntimeRewriteRuleRepository <<Repository>> {
       - messagingService: RewriteRuleMessagingService
       + getById(id: number): Promise<RewriteRule>
@@ -343,17 +342,29 @@ package "frameworks-and-drivers (第4層)" #LightBlue {
     RewriteRuleMessagingService ..> RewriteRuleDTO : returns
   }
 
-  RulesApp ..> ToggleRuleActiveController : uses
-  RulesApp <.. ToggleRuleActivePresenter : updates
-
-  ChromeRuntimeRewriteRuleRepository .up.|> IRewriteRuleRepository : implements
-  ChromeRuntimeRewriteRuleRepository ..> RewriteRule : creates via fromDTO
-
-  ChromeTabsGateway .up.|> ITabsGateway : implements
-  ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
+  ' 左側に RulesApp と ChromeTabsGateway を縦に配置
+  RulesApp -[hidden]down- ChromeTabsGateway
+  ChromeTabsGateway -[hidden]right- DataAccess
 }
 
-' ===== Layer Dependencies =====
+' ===== Layout Control =====
+L3 -[hidden]right- L2
+L3 -[hidden]down- L4
+L2 -[hidden]down- L1
+
+' ===== Cross-package relationships =====
+ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
+ToggleRuleActivePresenter .down.|> IToggleRuleActivePresenter : implements
+
+RulesApp ..> ToggleRuleActiveController : uses
+RulesApp <.. ToggleRuleActivePresenter : updates
+
+ChromeRuntimeRewriteRuleRepository .up.|> IRewriteRuleRepository : implements
+ChromeRuntimeRewriteRuleRepository ..> RewriteRule : creates via fromDTO
+
+ChromeTabsGateway .up.|> ITabsGateway : implements
+ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
+
 ToggleRuleActiveInteractor ..> RewriteRule : uses
 
 ' ===== Notes =====
@@ -363,7 +374,7 @@ note bottom of ChromeTabsGateway
   マッチング判定を行う
 end note
 
-note bottom of "RewriteRule データアクセス（ADR-002, ADR-003）"
+note bottom of DataAccess
   Rules Page ↔ Background Script 間の
   proxy-service 経由データアクセス
 end note
