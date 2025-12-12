@@ -48,6 +48,7 @@
 │  │ entities/RewriteRule/RewriteRule.ts                               │   │
 │  │                                                                  │   │
 │  │ - withActive(): 有効/無効を変更した新しいインスタンスを返す          │   │
+│  │ - fromDTO(): DTOからエンティティを再構築（静的メソッド）             │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
@@ -56,7 +57,7 @@
 
 | クラス | 層 | 責務 |
 |--------|-----|------|
-| RewriteRule | enterprise-business-rules | ルールエンティティ。有効/無効状態を持つ |
+| RewriteRule | enterprise-business-rules | ルールエンティティ。有効/無効状態を持つ。`fromDTO()`で再構築可能 |
 | ToggleRuleActiveInputData | application-business-rules | 入力DTO。対象ルールIDを保持 |
 | ToggleRuleActiveOutputData | application-business-rules | 出力DTO。更新後のルールを保持 |
 | IToggleRuleActiveUseCase | application-business-rules | Input Port。トグル処理のインターフェース |
@@ -140,6 +141,7 @@ Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-
 │  │ RewriteRule                                                         │   │
 │  │ ─────────────────────────────────────────────────────────────────── │   │
 │  │ + withActive(): RewriteRule                                         │   │
+│  │ + static fromDTO(dto): RewriteRule                                  │   │
 │  └─────────────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────────┘
 
