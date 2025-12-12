@@ -110,12 +110,12 @@ activate IRepository
 IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
 
-note over MessagingRepo : UpdateRuleActiveDTOを作成\n{ id, isActive }
+note over MessagingRepo : UpdateRuleActiveRequestDTOを作成\n{ id, isActive }
 
-MessagingRepo -> ProxyService : updateActive(UpdateRuleActiveDTO)
+MessagingRepo -> ProxyService : updateActive(UpdateRuleActiveRequestDTO)
 activate ProxyService
 
-ProxyService -> DexieRepo : updateActive(UpdateRuleActiveDTO)
+ProxyService -> DexieRepo : updateActive(UpdateRuleActiveRequestDTO)
 activate DexieRepo
 DexieRepo --> ProxyService : void
 deactivate DexieRepo
