@@ -140,8 +140,10 @@ type GetByIdResponseMessage = {
 | コンポーネント | 責務 |
 |---------------|------|
 | `ChromeRuntimeRewriteRuleRepository` | DTO → Message 作成（送信時）、DTO → Entity 再構築（受信時） |
-| `MessageHandler` | Entity → DTO 変換（応答時）、DTO → Repository 呼び出し（要求時） |
-| `DexieRewriteRuleRepository` | Entity ↔ DB レコード 変換 |
+| `MessageHandler` | DTO の受け渡しのみ（変換しない） |
+| `DexieRewriteRuleRepository` | DTO ↔ DB レコード 変換 |
+
+**補足**: ADR-002 により、Rules Page 側の Interactor は `IRewriteRuleRepository`（実装: `ChromeRuntimeRewriteRuleRepository`）を使用する。Background Script 側の `MessageHandler` は `IRewriteRuleRepository` を経由せず、`DexieRewriteRuleRepository` を直接呼び出す。そのため `DexieRewriteRuleRepository` は DTO を直接扱い、Entity への変換は行わない。
 
 ## 理由
 

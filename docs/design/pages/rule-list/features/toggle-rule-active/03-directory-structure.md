@@ -61,9 +61,9 @@ src/frameworks-and-drivers/
 │   └── pages/
 │       └── rules/
 │           └── RulesApp.tsx                     ← 既存、変更対象
-├── persistence/                                 ← DB Gateway 実装
+├── persistence/                                 ← DB データアクセス
 │   └── indexeddb/
-│       └── DexieRewriteRuleRepository.ts        ← 既存（Background Script用）
+│       └── DexieRewriteRuleRepository.ts        ← DTO ↔ DBレコード変換（Background Script用）
 ├── messaging/                                   ← Messaging Gateway 実装
 │   ├── ChromeRuntimeRewriteRuleRepository.ts    ← 既存（Rules Page用）
 │   ├── MessageHandler.ts                        ← Background Script側、メッセージ受信
@@ -165,5 +165,5 @@ src/frameworks-and-drivers/
 | 変更 | RulesApp.tsx | トグルハンドラー追加 |
 | 変更 | container.ts | DI登録追加 |
 | 既存 | ChromeRuntimeRewriteRuleRepository.ts | messaging経由でbackgroundと通信 |
-| 既存 | DexieRewriteRuleRepository.ts | IndexedDB直接アクセス（Background Script用） |
+| 既存 | DexieRewriteRuleRepository.ts | DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | 既存 | MessageHandler.ts | メッセージ受信・ルーティング |
