@@ -67,8 +67,8 @@
 | ITabsGateway | application-business-rules | Gateway Interface。タブ操作（Interactorが依存） |
 | ToggleRuleActiveController | interface-adapters | ユーザー入力をInputDataに変換 |
 | ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
-| ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。proxy-service経由でbackgroundと通信（Rules Page用、ADR-004参照） |
-| RewriteRuleService | frameworks-and-drivers | proxy-serviceで定義。Background Scriptで実行されるサービス（ADR-004参照） |
+| ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。proxy-service経由でbackgroundと通信（Rules Page用、ADR-002参照） |
+| RewriteRuleService | frameworks-and-drivers | proxy-serviceで定義。Background Scriptで実行されるサービス（ADR-002参照） |
 | DexieRewriteRuleRepository | frameworks-and-drivers | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。タブリロード（Rules Page用、chrome.tabs API使用） |
 | RewriteRuleDTO | frameworks-and-drivers | メッセージング用DTO。エンティティ全体を表現（ADR-003参照） |
@@ -93,17 +93,16 @@
 
 ### Chrome拡張機能のコンテキスト分離
 
-> **参照**: [ADR-002: DB アクセスを messaging 経由に統一](../../../../adr/002-unified-db-access-via-messaging.md)
-> **参照**: [ADR-003: メッセージングでは DTO を使用](../../../../adr/003-messaging-uses-dto-not-entity.md)
-> **参照**: [ADR-004: メッセージングに @webext-core/proxy-service を採用](../../../../adr/004-messaging-with-proxy-service.md)
+> **参照**: [ADR-002: メッセージングに @webext-core/proxy-service を採用](../../../../adr/002-messaging-with-proxy-service.md)
+> **参照**: [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../adr/003-unified-db-access-via-messaging.md)
 
-Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-002 の決定に従い、
+Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-003 の決定に従い、
 すべてのコンテキストから DB アクセスは messaging 経由で Background Script に集約する。
 
 また、ADR-003 に従い、メッセージングではドメインエンティティではなくDTOを送信し、
 受信側（ChromeRuntimeRewriteRuleRepository）で RewriteRule エンティティを再構築する。
 
-ADR-004 に従い、メッセージングには @webext-core/proxy-service を使用する。
+ADR-002 に従い、メッセージングには @webext-core/proxy-service を使用する。
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

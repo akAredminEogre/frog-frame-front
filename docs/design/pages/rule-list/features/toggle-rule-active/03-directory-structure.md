@@ -69,7 +69,7 @@ src/frameworks-and-drivers/
 │   └── dto/                                     ← メッセージング用DTO（ADR-003参照）
 │       ├── RewriteRuleDTO.ts                    ← エンティティ全体を表現
 │       └── UpdateRuleActiveDTO.ts               ← トグル更新 { id, isActive }
-├── proxy-service/                               ← proxy-service定義（ADR-004参照）
+├── proxy-service/                               ← proxy-service定義（ADR-002参照）
 │   └── RewriteRuleService.ts                    ← Background Scriptで実行されるサービス
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
 │   └── ChromeTabsGateway.ts                     ← タブリロード実装（Rules Page用）
@@ -79,9 +79,8 @@ src/frameworks-and-drivers/
 
 ## 導線と各層の役割
 
-> **参照**: [ADR-002: DB アクセスを messaging 経由に統一](../../../../adr/002-unified-db-access-via-messaging.md)
-> **参照**: [ADR-003: メッセージングでは DTO を使用](../../../../adr/003-messaging-uses-dto-not-entity.md)
-> **参照**: [ADR-004: メッセージングに @webext-core/proxy-service を採用](../../../../adr/004-messaging-with-proxy-service.md)
+> **参照**: [ADR-002: メッセージングに @webext-core/proxy-service を採用](../../../../adr/002-messaging-with-proxy-service.md)
+> **参照**: [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../adr/003-unified-db-access-via-messaging.md)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -155,9 +154,9 @@ src/frameworks-and-drivers/
 | 新規 | ITabsGateway.ts | タブ操作Gateway Interface 新規作成 |
 | 新規 | ChromeTabsGateway.ts | タブリロード実装 新規作成 |
 | 新規 | messaging/dto/*.ts | メッセージングDTO 新規作成（ADR-003） |
-| 新規 | RewriteRuleService.ts | proxy-service定義 新規作成（ADR-004） |
+| 新規 | RewriteRuleService.ts | proxy-service定義 新規作成（ADR-002） |
 | 新規 | ToggleSwitch.tsx | UIコンポーネント 新規作成 |
 | 変更 | RulesApp.tsx | トグルハンドラー追加 |
 | 変更 | container.ts | DI登録追加 |
-| 既存 | ChromeRuntimeRewriteRuleRepository.ts | proxy-service経由でbackgroundと通信（ADR-004参照） |
+| 既存 | ChromeRuntimeRewriteRuleRepository.ts | proxy-service経由でbackgroundと通信（ADR-002参照） |
 | 既存 | DexieRewriteRuleRepository.ts | DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
