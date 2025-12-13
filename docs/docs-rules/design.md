@@ -231,7 +231,6 @@ Clean Architecture 4層に従った**理論的設計**を記載:
 plantuml.comで画像としてレンダリングしたときに、下記が達成されていること
 
 - まず下記のクラスを、データアクセスpackageとして1つにまとめる
-  - DataAccess(DataAccessInterfaceの具象クラス)
   - DB用メッセージングサービスクラス
   - DB用メッセージングサービスクラス用DTO
   - DB用リポジトリクラス
@@ -244,9 +243,9 @@ plantuml.comで画像としてレンダリングしたときに、下記が達�
       - 2列目：`upper second column` package
         - 上から、InputData、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
       - 3列目：`upper third column` package
-        - 上から、Interactor、Gatewayの抽象クラス(RepositoryやGatewayインターフェース)
+        - 上から、Interactor、Repositoryの抽象クラス、Repositoryの具象クラス
       - 4列目：`upper fourth column` package
-        - 上から、Entity
+        - 上から、Entity、Repository以外のGatewayの抽象クラス、Gatewayの具象クラス
   - 下半分
     - データアクセスpackage(概念的にRepositoryの具象クラス)
 
