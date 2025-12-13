@@ -348,9 +348,13 @@ package "frameworks-and-drivers (第4層)" as L4 #LightBlue {
 }
 
 ' ===== Layout Control =====
+' 上半分: 左から第3層、第2層、第1層を横に配置
 L3 -[hidden]right- L2
+L2 -[hidden]right- L1
+' 下半分: 第4層を上の3層の下に配置
 L3 -[hidden]down- L4
-L2 -[hidden]down- L1
+L2 -[hidden]down- L4
+L1 -[hidden]down- L4
 
 ' ===== Cross-package relationships =====
 ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
