@@ -234,7 +234,7 @@ package "interface-adapters (第3層)" as L3 #LightGreen {
   }
 }
 
-' ===== Layer 2: Application Business Rules (右上) =====
+' ===== Layer 2: Application Business Rules (中央上) =====
 package "application-business-rules (第2層)" as L2 #LightYellow {
   interface IToggleRuleActiveUseCase <<Input Port>> {
     + execute(inputData: ToggleRuleActiveInputData): Promise<void>
@@ -276,7 +276,7 @@ package "application-business-rules (第2層)" as L2 #LightYellow {
   ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
 }
 
-' ===== Layer 1: Enterprise Business Rules (中央) =====
+' ===== Layer 1: Enterprise Business Rules (右上) =====
 package "enterprise-business-rules (第1層)" as L1 #LightPink {
   class RewriteRule <<Entity>> {
     - id: RuleId
