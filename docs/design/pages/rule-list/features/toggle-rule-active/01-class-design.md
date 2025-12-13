@@ -221,7 +221,8 @@ ADR-001 に従い、ドメインエンティティの値を用いた判定・計
 skinparam packageStyle rectangle
 skinparam linetype ortho
 
-' ===== Layer 3: Interface Adapters (左上) =====
+' ===== 上段: 左から第3層、第2層、第1層 =====
+
 package "interface-adapters (第3層)" as L3 #LightGreen {
   class ToggleRuleActiveController <<Controller>> {
     - useCase: IToggleRuleActiveUseCase
@@ -234,7 +235,6 @@ package "interface-adapters (第3層)" as L3 #LightGreen {
   }
 }
 
-' ===== Layer 2: Application Business Rules (中央上) =====
 package "application-business-rules (第2層)" as L2 #LightYellow {
   interface IToggleRuleActiveUseCase <<Input Port>> {
     + execute(inputData: ToggleRuleActiveInputData): Promise<void>
@@ -276,7 +276,6 @@ package "application-business-rules (第2層)" as L2 #LightYellow {
   ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
 }
 
-' ===== Layer 1: Enterprise Business Rules (右上) =====
 package "enterprise-business-rules (第1層)" as L1 #LightPink {
   class RewriteRule <<Entity>> {
     - id: RuleId
@@ -288,7 +287,8 @@ package "enterprise-business-rules (第1層)" as L1 #LightPink {
   }
 }
 
-' ===== Layer 4: Frameworks & Drivers (下) =====
+' ===== 下段: 第4層 =====
+
 package "frameworks-and-drivers (第4層)" as L4 #LightBlue {
   together {
     class RulesApp <<View>> {
@@ -342,36 +342,40 @@ package "frameworks-and-drivers (第4層)" as L4 #LightBlue {
     RewriteRuleMessagingService ..> RewriteRuleDTO : returns
   }
 
-  ' 左側に RulesApp と ChromeTabsGateway を縦に配置
   RulesApp -[hidden]down- ChromeTabsGateway
   ChromeTabsGateway -[hidden]right- DataAccess
 }
 
-' ===== Layout Control =====
-' 上半分: 左から第3層、第2層、第1層を横に配置
-L3 -[hidden]right- L2
-L2 -[hidden]right- L1
-' 下半分: 第4層を上の3層の下に配置
-L3 -[hidden]down- L4
-L2 -[hidden]down- L4
-L1 -[hidden]down- L4
+' ===== レイアウト制御 =====
+' 上段を横に並べる（左→右: L3→L2→L1）
+L3 -[hidden]r- L2
+L2 -[hidden]r- L1
 
-' ===== Cross-package relationships =====
-ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
-ToggleRuleActivePresenter .down.|> IToggleRuleActivePresenter : implements
+' 下段（L4）を上段の下に配置
+L3 -[hidden]d- L4
 
-RulesApp ..> ToggleRuleActiveController : uses
-RulesApp <.. ToggleRuleActivePresenter : updates
+' ===== パッケージ間の関連（方向指定付き） =====
 
-ChromeRuntimeRewriteRuleRepository .up.|> IRewriteRuleRepository : implements
-ChromeRuntimeRewriteRuleRepository ..> RewriteRule : creates via fromDTO
+' L3 → L2（右方向）
+ToggleRuleActiveController .r.> IToggleRuleActiveUseCase : uses
+ToggleRuleActivePresenter .r.|> IToggleRuleActivePresenter : implements
 
-ChromeTabsGateway .up.|> ITabsGateway : implements
-ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
+' L2 → L1（右方向）
+ToggleRuleActiveInteractor .r.> RewriteRule : uses
 
-ToggleRuleActiveInteractor ..> RewriteRule : uses
+' L4 → L3（上方向）
+RulesApp .u.> ToggleRuleActiveController : uses
+RulesApp <.u. ToggleRuleActivePresenter : updates
 
-' ===== Notes =====
+' L4 → L2（上方向）
+ChromeRuntimeRewriteRuleRepository .u.|> IRewriteRuleRepository : implements
+ChromeTabsGateway .u.|> ITabsGateway : implements
+
+' L4 → L1（上方向）
+ChromeRuntimeRewriteRuleRepository .u.> RewriteRule : creates via fromDTO
+ChromeTabsGateway .u.> RewriteRule : calls matchesUrl()
+
+' ===== ノート =====
 note bottom of ChromeTabsGateway
   ADR-001: ドメインロジックの配置原則
   rule.matchesUrl() を呼び出して
