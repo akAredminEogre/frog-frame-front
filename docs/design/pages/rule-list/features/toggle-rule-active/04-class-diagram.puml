@@ -1,5 +1,6 @@
 @startuml ToggleRuleActiveClassDiagram
 
+!pragma layout elk
 skinparam packageStyle rectangle
 skinparam linetype ortho
 
