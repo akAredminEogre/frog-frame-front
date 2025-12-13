@@ -224,6 +224,46 @@ Clean Architecture 4層に従った**理論的設計**を記載:
 矢印の方向 = 依存の方向（外→内のみ許可）
 ```
 
+### 04-class-diagram.puml
+
+機能単位のクラス図をPlantUML形式で記載
+
+plantuml.comで画像としてレンダリングしたときに、下記が達成されていること
+
+- Clean Architecture4層のpackageの位置関係
+  - 画像を上半分と下半分に分けたとき
+  - 上半分：左からinterface-adapters (第3層)、application-business-rules (第2層)、enterprise-business-rules (第1層)
+  - 下半分：frameworks-and-drivers (第4層)
+- 各層のpackage内での位置関係
+  - interface-adapters (第3層)
+    - 縦1列に上からControllers、Presenters、ViewModels(存在する場合)
+  - application-business-rules (第2層)
+    - packageを縦2列にわけて
+    - 左から1列目
+      - 上からInputData、IUseCases(抽象クラス)、IPresenters(抽象クラス)、OutputData
+    - 左から2列目
+      - 上から Interactors、DataAccessInterface(抽象クラス)
+  - enterprise-business-rules (第1層)
+    - Entitiesを配置するが、このpackage内での位置関係は問わない
+  - frameworks-and-drivers (第4層)
+    - まず下記のクラスを、データアクセスpackageとして1つにまとめる
+      - DataAccess(DataAccessInterfaceの具象クラス)
+      - DB用メッセージングサービスクラス
+      - DB用メッセージングサービスクラス用DTO
+      - DB用リポジトリクラス
+    - 続いて、frameworks-and-driversを縦2列にわけて
+    - 左から1列目
+      - 上からUI関連クラス(存在する場合)、その他External Interfaceクラス
+    - 左から2列目
+      - 上からデータアクセスpackage
+
+
+
+
+
+
+
+
 ## 関連ドキュメント
 
 - ユーザーストーリー: `docs/user-stories/`
