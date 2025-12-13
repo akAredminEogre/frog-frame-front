@@ -1,7 +1,6 @@
 @startuml ToggleRuleActiveClassDiagram
 
 skinparam packageStyle rectangle
-skinparam linetype ortho
 
 ' ===================================================
 ' レイアウト方針（docs/docs-rules/design.md に準拠）:
