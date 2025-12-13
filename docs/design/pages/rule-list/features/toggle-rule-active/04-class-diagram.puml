@@ -139,36 +139,36 @@ UpperHalf -[hidden]down- DataAccess
 ' ===== 関連 =====
 
 ' 1列目 → 2列目
-ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
-ToggleRuleActivePresenter ..|> IToggleRuleActivePresenter : implements
+ToggleRuleActiveController ....> IToggleRuleActiveUseCase : uses
+ToggleRuleActivePresenter ....|> IToggleRuleActivePresenter : implements
 
 ' View → Controller
-RulesApp ..> ToggleRuleActiveController : uses
-ToggleRuleActivePresenter ..> RulesApp : updates
+RulesApp ....> ToggleRuleActiveController : uses
+ToggleRuleActivePresenter ....> RulesApp : updates
 
 ' 2列目 → 3列目
-ToggleRuleActiveInteractor ..|> IToggleRuleActiveUseCase : implements
-ToggleRuleActiveInteractor ..> IToggleRuleActivePresenter : uses
-ToggleRuleActiveInteractor ..> IRewriteRuleRepository : uses
-ToggleRuleActiveInteractor ..> ITabsGateway : uses
-ToggleRuleActiveInteractor ..> ToggleRuleActiveInputData : uses
-ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
+ToggleRuleActiveInteractor ....|> IToggleRuleActiveUseCase : implements
+ToggleRuleActiveInteractor ....> IToggleRuleActivePresenter : uses
+ToggleRuleActiveInteractor ....> IRewriteRuleRepository : uses
+ToggleRuleActiveInteractor ....> ITabsGateway : uses
+ToggleRuleActiveInteractor ....> ToggleRuleActiveInputData : uses
+ToggleRuleActiveInteractor ....> ToggleRuleActiveOutputData : creates
 
 ' DataAccessパッケージ内部
-ChromeRuntimeRewriteRuleRepository ..|> IRewriteRuleRepository : implements
-ChromeRuntimeRewriteRuleRepository ..> RewriteRuleMessagingService : uses
-ChromeRuntimeRewriteRuleRepository ..> GetByIdRequestDTO : creates
-ChromeRuntimeRewriteRuleRepository ..> RewriteRuleDTO : receives
-RewriteRuleMessagingService ..> DexieRewriteRuleRepository : delegates
-RewriteRuleMessagingService ..> GetByIdRequestDTO : receives
-RewriteRuleMessagingService ..> UpdateRuleActiveRequestDTO : receives
-RewriteRuleMessagingService ..> RewriteRuleDTO : returns
+ChromeRuntimeRewriteRuleRepository ....|> IRewriteRuleRepository : implements
+ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMessagingService : uses
+ChromeRuntimeRewriteRuleRepository ....> GetByIdRequestDTO : creates
+ChromeRuntimeRewriteRuleRepository ....> RewriteRuleDTO : receives
+RewriteRuleMessagingService ....> DexieRewriteRuleRepository : delegates
+RewriteRuleMessagingService ....> GetByIdRequestDTO : receives
+RewriteRuleMessagingService ....> UpdateRuleActiveRequestDTO : receives
+RewriteRuleMessagingService ....> RewriteRuleDTO : returns
 
-ChromeTabsGateway ..|> ITabsGateway : implements
+ChromeTabsGateway ....|> ITabsGateway : implements
 
 ' 3列目 → 4列目
-ToggleRuleActiveInteractor ..> RewriteRule : uses
-ChromeRuntimeRewriteRuleRepository ..> RewriteRule : creates via fromDTO
-ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
+ToggleRuleActiveInteractor ....> RewriteRule : uses
+ChromeRuntimeRewriteRuleRepository ....> RewriteRule : creates via fromDTO
+ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
 
 @enduml
