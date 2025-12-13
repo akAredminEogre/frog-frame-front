@@ -1,0 +1,194 @@
+@startuml ToggleRuleActiveClassDiagram
+
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+' ===== 上段: 左から第3層、第2層、第1層 =====
+
+package "interface-adapters (第3層)" as L3 #LightGreen {
+  class ToggleRuleActiveController <<Controller>> {
+    - useCase: IToggleRuleActiveUseCase
+    + toggleActive(ruleId: number): Promise<void>
+  }
+
+  class ToggleRuleActivePresenter <<Presenter>> {
+    - updateRuleInView: (rule: RewriteRule) => void
+    + present(outputData: ToggleRuleActiveOutputData): void
+  }
+
+  ' 縦配置: Controller → Presenter
+  ToggleRuleActiveController -[hidden]down- ToggleRuleActivePresenter
+}
+
+package "application-business-rules (第2層)" as L2 #LightYellow {
+  ' === 左列: InputData → UseCase → Presenter → OutputData ===
+  together {
+    class ToggleRuleActiveInputData <<Input Data>> {
+      + ruleId: number
+    }
+
+    interface IToggleRuleActiveUseCase <<Input Port>> {
+      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+    }
+
+    interface IToggleRuleActivePresenter <<Output Port>> {
+      + present(outputData: ToggleRuleActiveOutputData): void
+    }
+
+    class ToggleRuleActiveOutputData <<Output Data>> {
+      + toggledRule: RewriteRule
+    }
+  }
+
+  ' === 右列: Interactor → Repository → TabsGateway ===
+  together {
+    class ToggleRuleActiveInteractor <<Use Case>> {
+      - repository: IRewriteRuleRepository
+      - tabsGateway: ITabsGateway
+      - presenter: IToggleRuleActivePresenter
+      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+    }
+
+    interface IRewriteRuleRepository <<Gateway Interface>> {
+      + getById(id: number): Promise<RewriteRule>
+      + update(rule: RewriteRule): Promise<void>
+    }
+
+    interface ITabsGateway <<Gateway Interface>> {
+      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    }
+  }
+
+  ' 左列の縦配置
+  ToggleRuleActiveInputData -[hidden]down- IToggleRuleActiveUseCase
+  IToggleRuleActiveUseCase -[hidden]down- IToggleRuleActivePresenter
+  IToggleRuleActivePresenter -[hidden]down- ToggleRuleActiveOutputData
+
+  ' 右列の縦配置
+  ToggleRuleActiveInteractor -[hidden]down- IRewriteRuleRepository
+  IRewriteRuleRepository -[hidden]down- ITabsGateway
+
+  ' 左列と右列の横配置（InputDataの右にInteractor）
+  ToggleRuleActiveInputData -[hidden]right- ToggleRuleActiveInteractor
+
+  ' 層内の関連
+  ToggleRuleActiveInteractor .left.|> IToggleRuleActiveUseCase : implements
+  ToggleRuleActiveInteractor .left.> IToggleRuleActivePresenter : uses
+  ToggleRuleActiveInteractor ..> IRewriteRuleRepository : uses
+  ToggleRuleActiveInteractor ..> ITabsGateway : uses
+  ToggleRuleActiveInteractor .left.> ToggleRuleActiveInputData : uses
+  ToggleRuleActiveInteractor .left.> ToggleRuleActiveOutputData : creates
+}
+
+package "enterprise-business-rules (第1層)" as L1 #LightPink {
+  class RewriteRule <<Entity>> {
+    - id: RuleId
+    - urlPattern: UrlPattern
+    - isActive: boolean
+    + withActive(isActive: boolean): RewriteRule
+    + matchesUrl(url: string): boolean
+    + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
+  }
+}
+
+' ===== 下段: 第4層 =====
+
+package "frameworks-and-drivers (第4層)" as L4 #LightBlue {
+  together {
+    class RulesApp <<View>> {
+      + onToggle(ruleId: number): void
+    }
+
+    class ChromeTabsGateway <<Gateway>> {
+      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    }
+  }
+
+  rectangle "RewriteRule データアクセス（ADR-002, ADR-003）" as DataAccess #LightCyan {
+    class ChromeRuntimeRewriteRuleRepository <<Repository>> {
+      - messagingService: RewriteRuleMessagingService
+      + getById(id: number): Promise<RewriteRule>
+      + update(rule: RewriteRule): Promise<void>
+    }
+
+    class RewriteRuleMessagingService <<Messaging Service>> {
+      + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+      + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+    }
+
+    class DexieRewriteRuleRepository <<Repository>> {
+      + getById(id: number): Promise<RewriteRuleDTO>
+      + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+    }
+
+    class RewriteRuleDTO <<DTO>> {
+      + id: number
+      + urlPattern: string
+      + isActive: boolean
+    }
+
+    class GetByIdRequestDTO <<DTO>> {
+      + id: number
+    }
+
+    class UpdateRuleActiveRequestDTO <<DTO>> {
+      + id: number
+      + isActive: boolean
+    }
+
+    ChromeRuntimeRewriteRuleRepository ..> RewriteRuleMessagingService : uses
+    ChromeRuntimeRewriteRuleRepository ..> GetByIdRequestDTO : creates
+    ChromeRuntimeRewriteRuleRepository ..> RewriteRuleDTO : receives
+
+    RewriteRuleMessagingService ..> DexieRewriteRuleRepository : delegates
+    RewriteRuleMessagingService ..> GetByIdRequestDTO : receives
+    RewriteRuleMessagingService ..> UpdateRuleActiveRequestDTO : receives
+    RewriteRuleMessagingService ..> RewriteRuleDTO : returns
+  }
+
+  RulesApp -[hidden]down- ChromeTabsGateway
+  ChromeTabsGateway -[hidden]right- DataAccess
+}
+
+' ===== レイアウト制御 =====
+' 上段を横に並べる（左→右: L3→L2→L1）
+L3 -[hidden]r- L2
+L2 -[hidden]r- L1
+
+' 下段（L4）を上段の下に配置
+L3 -[hidden]d- L4
+
+' ===== パッケージ間の関連（方向指定付き） =====
+
+' L3 → L2（右方向）
+ToggleRuleActiveController .r.> IToggleRuleActiveUseCase : uses
+ToggleRuleActivePresenter .r.|> IToggleRuleActivePresenter : implements
+
+' L2 → L1（右方向）
+ToggleRuleActiveInteractor .r.> RewriteRule : uses
+
+' L4 → L3（上方向）
+RulesApp .u.> ToggleRuleActiveController : uses
+RulesApp <.u. ToggleRuleActivePresenter : updates
+
+' L4 → L2（上方向）
+ChromeRuntimeRewriteRuleRepository .u.|> IRewriteRuleRepository : implements
+ChromeTabsGateway .u.|> ITabsGateway : implements
+
+' L4 → L1（上方向）
+ChromeRuntimeRewriteRuleRepository .u.> RewriteRule : creates via fromDTO
+ChromeTabsGateway .u.> RewriteRule : calls matchesUrl()
+
+' ===== ノート =====
+note bottom of ChromeTabsGateway
+  ADR-001: ドメインロジックの配置原則
+  rule.matchesUrl() を呼び出して
+  マッチング判定を行う
+end note
+
+note bottom of DataAccess
+  Rules Page ↔ Background Script 間の
+  proxy-service 経由データアクセス
+end note
+
+@enduml
