@@ -1,6 +1,7 @@
 @startuml ToggleRuleActiveClassDiagram
 
 skinparam packageStyle rectangle
+skinparam linetype ortho
 left to right direction
 
 ' ===================================================
