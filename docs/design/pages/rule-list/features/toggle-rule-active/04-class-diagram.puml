@@ -64,10 +64,10 @@ package "application-business-rules (第2層)" as L2 #LightYellow {
   ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
   IRewriteRuleRepository -[hidden]d- ITabsGateway
 
-  ' 左列と右列の横配置（グリッド状に複数のhidden linkで強制）
-  ToggleRuleActiveInputData -[hidden]r- ToggleRuleActiveInteractor
-  IToggleRuleActiveUseCase -[hidden]r- IRewriteRuleRepository
-  IToggleRuleActivePresenter -[hidden]r- ITabsGateway
+  ' 左列と右列の横配置（逆方向で指定：Interactorの左にInputData）
+  ToggleRuleActiveInteractor -[hidden]l- ToggleRuleActiveInputData
+  IRewriteRuleRepository -[hidden]l- IToggleRuleActiveUseCase
+  ITabsGateway -[hidden]l- IToggleRuleActivePresenter
 
   ' 層内の関連（方向指定なし）
   ToggleRuleActiveInteractor ..|> IToggleRuleActiveUseCase : implements
@@ -92,16 +92,16 @@ package "enterprise-business-rules (第1層)" as L1 #LightPink {
 ' ===== 下段: 第4層 =====
 
 package "frameworks-and-drivers (第4層)" as L4 #LightBlue {
-  together {
-    class RulesApp <<View>> {
-      + onToggle(ruleId: number): void
-    }
-
-    class ChromeTabsGateway <<Gateway>> {
-      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-    }
+  ' === 左列: UI/External Interface ===
+  class RulesApp <<View>> {
+    + onToggle(ruleId: number): void
   }
 
+  class ChromeTabsGateway <<Gateway>> {
+    + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+  }
+
+  ' === 右列: データアクセス ===
   rectangle "RewriteRule データアクセス（ADR-002, ADR-003）" as DataAccess #LightCyan {
     class ChromeRuntimeRewriteRuleRepository <<Repository>> {
       - messagingService: RewriteRuleMessagingService
@@ -144,14 +144,17 @@ package "frameworks-and-drivers (第4層)" as L4 #LightBlue {
     RewriteRuleMessagingService ..> RewriteRuleDTO : returns
   }
 
+  ' 左列の縦配置
   RulesApp -[hidden]d- ChromeTabsGateway
-  ChromeTabsGateway -[hidden]r- DataAccess
+
+  ' 左列と右列の横配置（DataAccessの左にRulesApp）
+  DataAccess -[hidden]l- RulesApp
 }
 
 ' ===== レイアウト制御 =====
-' 上段を横に並べる（左→右: L3→L2→L1）
-L3 -[hidden]r- L2
-L2 -[hidden]r- L1
+' 上段を横に並べる（左→右: L3→L2→L1）逆方向で指定
+L2 -[hidden]l- L3
+L1 -[hidden]l- L2
 
 ' 下段（L4）を上段の下に配置
 L3 -[hidden]d- L4
