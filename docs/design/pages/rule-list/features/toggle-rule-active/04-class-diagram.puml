@@ -5,15 +5,17 @@ skinparam linetype ortho
 
 ' ===================================================
 ' レイアウト方針（docs/docs-rules/design.md に準拠）:
-' 図を縦4列に分割:
-'   1列目: Controller, Presenter, View
-'   2列目: InputData, IUseCase, IPresenter, OutputData
-'   3列目: Interactor, IRepository, DataAccessパッケージ
-'   4列目: Entity
+' 図を横に2分割:
+'   上半分: 4列構成
+'     1列目: Controller, Presenter, View
+'     2列目: InputData, IUseCase, IPresenter, OutputData
+'     3列目: Interactor, IRepository
+'     4列目: Entity
+'   下半分: DataAccessパッケージ
 ' hidden link で明示的にレイアウトを制御
 ' ===================================================
 
-' ===== 1列目: Controller, Presenter, View =====
+' ===== 上半分 1列目: Controller, Presenter, View =====
 class ToggleRuleActiveController <<Controller>> {
   - useCase: IToggleRuleActiveUseCase
   + toggleActive(ruleId: number): Promise<void>
@@ -28,7 +30,7 @@ class RulesApp <<View>> {
   + onToggle(ruleId: number): void
 }
 
-' ===== 2列目: InputData, IUseCase, IPresenter, OutputData =====
+' ===== 上半分 2列目: InputData, IUseCase, IPresenter, OutputData =====
 class ToggleRuleActiveInputData <<Input Data>> {
   + ruleId: number
 }
@@ -45,7 +47,7 @@ class ToggleRuleActiveOutputData <<Output Data>> {
   + toggledRule: RewriteRule
 }
 
-' ===== 3列目: Interactor, IRepository, DataAccessパッケージ =====
+' ===== 上半分 3列目: Interactor, IRepository =====
 class ToggleRuleActiveInteractor <<Use Case>> {
   - repository: IRewriteRuleRepository
   - tabsGateway: ITabsGateway
@@ -62,6 +64,17 @@ interface ITabsGateway <<Gateway Interface>> {
   + reloadMatchingTabs(rule: RewriteRule): Promise<void>
 }
 
+' ===== 上半分 4列目: Entity =====
+class RewriteRule <<Entity>> {
+  - id: RuleId
+  - urlPattern: UrlPattern
+  - isActive: boolean
+  + withActive(isActive: boolean): RewriteRule
+  + matchesUrl(url: string): boolean
+  + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
+}
+
+' ===== 下半分: DataAccessパッケージ =====
 rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
   class ChromeRuntimeRewriteRuleRepository <<Repository>> {
     - messagingService: RewriteRuleMessagingService
@@ -93,51 +106,43 @@ rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
     + id: number
     + isActive: boolean
   }
-}
 
-class ChromeTabsGateway <<Gateway>> {
-  + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-}
-
-' ===== 4列目: Entity =====
-class RewriteRule <<Entity>> {
-  - id: RuleId
-  - urlPattern: UrlPattern
-  - isActive: boolean
-  + withActive(isActive: boolean): RewriteRule
-  + matchesUrl(url: string): boolean
-  + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
+  class ChromeTabsGateway <<Gateway>> {
+    + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+  }
 }
 
 ' ===== レイアウト制御（hidden link） =====
 
-' 1列目の縦配置
+' 上半分 1列目の縦配置
 ToggleRuleActiveController -[hidden]d- ToggleRuleActivePresenter
 ToggleRuleActivePresenter -[hidden]d- RulesApp
 
-' 2列目の縦配置
+' 上半分 2列目の縦配置
 ToggleRuleActiveInputData -[hidden]d- IToggleRuleActiveUseCase
 IToggleRuleActiveUseCase -[hidden]d- IToggleRuleActivePresenter
 IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
 
-' 3列目の縦配置
+' 上半分 3列目の縦配置
 ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
 IRewriteRuleRepository -[hidden]d- ITabsGateway
-ITabsGateway -[hidden]d- DataAccess
-DataAccess -[hidden]d- ChromeTabsGateway
 
-' 列間の横配置（1列目→2列目）
+' 上半分の列間の横配置（1列目→2列目）
 ToggleRuleActiveController -[hidden]r- ToggleRuleActiveInputData
 ToggleRuleActivePresenter -[hidden]r- IToggleRuleActivePresenter
 RulesApp -[hidden]r- ToggleRuleActiveOutputData
 
-' 列間の横配置（2列目→3列目）
+' 上半分の列間の横配置（2列目→3列目）
 ToggleRuleActiveInputData -[hidden]r- ToggleRuleActiveInteractor
 IToggleRuleActiveUseCase -[hidden]r- IRewriteRuleRepository
-ToggleRuleActiveOutputData -[hidden]r- DataAccess
 
-' 列間の横配置（3列目→4列目）
+' 上半分の列間の横配置（3列目→4列目）
 ToggleRuleActiveInteractor -[hidden]r- RewriteRule
+
+' 上半分→下半分の配置
+RulesApp -[hidden]d- DataAccess
+ToggleRuleActiveOutputData -[hidden]d- DataAccess
+ITabsGateway -[hidden]d- DataAccess
 
 ' ===== 関連 =====
 
@@ -157,7 +162,7 @@ ToggleRuleActiveInteractor ..> ITabsGateway : uses
 ToggleRuleActiveInteractor ..> ToggleRuleActiveInputData : uses
 ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
 
-' 3列目内部（DataAccessパッケージ）
+' DataAccessパッケージ内部
 ChromeRuntimeRewriteRuleRepository ..|> IRewriteRuleRepository : implements
 ChromeRuntimeRewriteRuleRepository ..> RewriteRuleMessagingService : uses
 ChromeRuntimeRewriteRuleRepository ..> GetByIdRequestDTO : creates
