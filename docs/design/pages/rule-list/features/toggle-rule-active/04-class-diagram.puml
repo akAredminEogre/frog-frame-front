@@ -1,6 +1,5 @@
 @startuml ToggleRuleActiveClassDiagram
 
-!pragma layout elk
 skinparam packageStyle rectangle
 skinparam linetype ortho
 
@@ -139,8 +138,11 @@ IToggleRuleActiveUseCase -[hidden]r- IRewriteRuleRepository
 
 ' 上半分の列間の横配置（3列目→4列目）
 ToggleRuleActiveInteractor -[hidden]r- RewriteRule
+IRewriteRuleRepository -[hidden]r- RewriteRule
+ITabsGateway -[hidden]r- RewriteRule
 
 ' 上半分→下半分の配置
+RewriteRule -[hidden]d- DataAccess
 RulesApp -[hidden]d- DataAccess
 ToggleRuleActiveOutputData -[hidden]d- DataAccess
 ITabsGateway -[hidden]d- DataAccess
