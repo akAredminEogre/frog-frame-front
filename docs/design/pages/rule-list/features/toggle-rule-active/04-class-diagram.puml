@@ -17,67 +17,65 @@ package "interface-adapters (第3層)" as L3 #LightGreen {
   }
 
   ' 縦配置: Controller → Presenter
-  ToggleRuleActiveController -[hidden]down- ToggleRuleActivePresenter
+  ToggleRuleActiveController -[hidden]d- ToggleRuleActivePresenter
 }
 
 package "application-business-rules (第2層)" as L2 #LightYellow {
   ' === 左列: InputData → UseCase → Presenter → OutputData ===
-  together {
-    class ToggleRuleActiveInputData <<Input Data>> {
-      + ruleId: number
-    }
+  class ToggleRuleActiveInputData <<Input Data>> {
+    + ruleId: number
+  }
 
-    interface IToggleRuleActiveUseCase <<Input Port>> {
-      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
-    }
+  interface IToggleRuleActiveUseCase <<Input Port>> {
+    + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+  }
 
-    interface IToggleRuleActivePresenter <<Output Port>> {
-      + present(outputData: ToggleRuleActiveOutputData): void
-    }
+  interface IToggleRuleActivePresenter <<Output Port>> {
+    + present(outputData: ToggleRuleActiveOutputData): void
+  }
 
-    class ToggleRuleActiveOutputData <<Output Data>> {
-      + toggledRule: RewriteRule
-    }
+  class ToggleRuleActiveOutputData <<Output Data>> {
+    + toggledRule: RewriteRule
   }
 
   ' === 右列: Interactor → Repository → TabsGateway ===
-  together {
-    class ToggleRuleActiveInteractor <<Use Case>> {
-      - repository: IRewriteRuleRepository
-      - tabsGateway: ITabsGateway
-      - presenter: IToggleRuleActivePresenter
-      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
-    }
+  class ToggleRuleActiveInteractor <<Use Case>> {
+    - repository: IRewriteRuleRepository
+    - tabsGateway: ITabsGateway
+    - presenter: IToggleRuleActivePresenter
+    + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+  }
 
-    interface IRewriteRuleRepository <<Gateway Interface>> {
-      + getById(id: number): Promise<RewriteRule>
-      + update(rule: RewriteRule): Promise<void>
-    }
+  interface IRewriteRuleRepository <<Gateway Interface>> {
+    + getById(id: number): Promise<RewriteRule>
+    + update(rule: RewriteRule): Promise<void>
+  }
 
-    interface ITabsGateway <<Gateway Interface>> {
-      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-    }
+  interface ITabsGateway <<Gateway Interface>> {
+    + reloadMatchingTabs(rule: RewriteRule): Promise<void>
   }
 
   ' 左列の縦配置
-  ToggleRuleActiveInputData -[hidden]down- IToggleRuleActiveUseCase
-  IToggleRuleActiveUseCase -[hidden]down- IToggleRuleActivePresenter
-  IToggleRuleActivePresenter -[hidden]down- ToggleRuleActiveOutputData
+  ToggleRuleActiveInputData -[hidden]d- IToggleRuleActiveUseCase
+  IToggleRuleActiveUseCase -[hidden]d- IToggleRuleActivePresenter
+  IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
 
   ' 右列の縦配置
-  ToggleRuleActiveInteractor -[hidden]down- IRewriteRuleRepository
-  IRewriteRuleRepository -[hidden]down- ITabsGateway
+  ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
+  IRewriteRuleRepository -[hidden]d- ITabsGateway
 
-  ' 左列と右列の横配置（InputDataの右にInteractor）
-  ToggleRuleActiveInputData -[hidden]right- ToggleRuleActiveInteractor
+  ' 左列と右列の横配置（グリッド状に複数のhidden linkで強制）
+  ToggleRuleActiveInputData -[hidden]r- ToggleRuleActiveInteractor
+  IToggleRuleActiveUseCase -[hidden]r- IRewriteRuleRepository
+  IToggleRuleActivePresenter -[hidden]r- ITabsGateway
 
-  ' 層内の関連
-  ToggleRuleActiveInteractor .left.|> IToggleRuleActiveUseCase : implements
-  ToggleRuleActiveInteractor .left.> IToggleRuleActivePresenter : uses
+  ' 層内の関連（方向指定なし）
+  ToggleRuleActiveInteractor ..|> IToggleRuleActiveUseCase : implements
+  ToggleRuleActiveInteractor ..> IToggleRuleActivePresenter : uses
   ToggleRuleActiveInteractor ..> IRewriteRuleRepository : uses
   ToggleRuleActiveInteractor ..> ITabsGateway : uses
-  ToggleRuleActiveInteractor .left.> ToggleRuleActiveInputData : uses
-  ToggleRuleActiveInteractor .left.> ToggleRuleActiveOutputData : creates
+  ToggleRuleActiveInteractor ..> ToggleRuleActiveInputData : uses
+  ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
 }
 
 package "enterprise-business-rules (第1層)" as L1 #LightPink {
@@ -146,8 +144,8 @@ package "frameworks-and-drivers (第4層)" as L4 #LightBlue {
     RewriteRuleMessagingService ..> RewriteRuleDTO : returns
   }
 
-  RulesApp -[hidden]down- ChromeTabsGateway
-  ChromeTabsGateway -[hidden]right- DataAccess
+  RulesApp -[hidden]d- ChromeTabsGateway
+  ChromeTabsGateway -[hidden]r- DataAccess
 }
 
 ' ===== レイアウト制御 =====
