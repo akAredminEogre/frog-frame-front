@@ -235,22 +235,19 @@ plantuml.comで画像としてレンダリングしたときに、下記が達�
   - DB用メッセージングサービスクラス
   - DB用メッセージングサービスクラス用DTO
   - DB用リポジトリクラス
-- 図を縦に4分割にしたときに、左から順に
-  - 1列目
-    - 上から、Controller、 Presenter、ViewModel(あれば)、View
-  - 2列目
-    - 上から、InputData、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
-  - 3列目
-    - 上から、Interactor、Repositoryの抽象クラス、データアクセスpackage(概念的にRepositoryの具象クラス)
-  - 4列目
-    - 上から、Entity
-
-
-
-
-
-
-
+- 図を横に2分割したときに、
+  - 上半分
+    - さらにその半分を縦に4分割にしたときに、左から順に
+      - 1列目
+        - 上から、Controller、 Presenter、ViewModel(あれば)、View
+      - 2列目
+        - 上から、InputData、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
+      - 3列目
+        - 上から、Interactor、Repositoryの抽象クラス、
+      - 4列目
+        - 上から、Entity
+  - 下半分
+    - データアクセスpackage(概念的にRepositoryの具象クラス)
 
 ## 関連ドキュメント
 
