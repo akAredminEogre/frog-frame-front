@@ -232,17 +232,20 @@ plantuml.comで画像としてレンダリングしたときに、下記が達�
 
 - Clean Architecture4層のpackageの位置関係
   - 画像を上半分と下半分に分けたとき
-  - 上半分：左からinterface-adapters (第3層)、application-business-rules (第2層)、enterprise-business-rules (第1層)
+  - 上半分：左からinterface-adapters (第3層)、application-business-rules (第2層)
   - 下半分：frameworks-and-drivers (第4層)
 - 各層のpackage内での位置関係
   - interface-adapters (第3層)
     - 縦1列に上からControllers、Presenters、ViewModels(存在する場合)
   - application-business-rules (第2層)
-    - packageを縦2列にわけて
+    - packageを縦3列にわけて
     - 左から1列目
       - 上からInputData、IUseCases(抽象クラス)、IPresenters(抽象クラス)、OutputData
     - 左から2列目
       - 上から Interactors、DataAccessInterface(抽象クラス)
+    - 左から3列目
+      - enterprise-business-rules (第1層) の packages
+        - この層は最も内側に位置するため、application-business-rules (第2層) のpackage内に配置しても問題ない
   - enterprise-business-rules (第1層)
     - Entitiesを配置するが、このpackage内での位置関係は問わない
   - frameworks-and-drivers (第4層)
