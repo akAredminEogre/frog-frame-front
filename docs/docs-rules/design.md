@@ -237,14 +237,15 @@ plantuml.comで画像としてレンダリングしたときに、下記が達�
   - DB用リポジトリクラス
 - 図を横に2分割したときに、
   - 上半分
-    - さらにその半分を縦に4分割にしたときに、左から順に
-      - 1列目
+    - `upper half` packageとしてまとめる
+    - `upper half` をさらに縦に4分割にするpackageにまとめる。左から順に
+      - 1列目：`upper first column` package
         - 上から、Controller、 Presenter、ViewModel(あれば)、View
-      - 2列目
+      - 2列目：`upper second column` package
         - 上から、InputData、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
-      - 3列目
-        - 上から、Interactor、Repositoryの抽象クラス、
-      - 4列目
+      - 3列目：`upper third column` package
+        - 上から、Interactor、Gatewayの抽象クラス(RepositoryやGatewayインターフェース)
+      - 4列目：`upper fourth column` package
         - 上から、Entity
   - 下半分
     - データアクセスpackage(概念的にRepositoryの具象クラス)
