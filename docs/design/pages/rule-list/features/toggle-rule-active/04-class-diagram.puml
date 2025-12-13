@@ -64,7 +64,7 @@ package "application-business-rules (第2層)" as L2 #LightYellow {
   ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
   IRewriteRuleRepository -[hidden]d- ITabsGateway
 
-  ' 左列と右列の横配置（逆方向で指定：Interactorの左にInputData）
+  ' 左列と右列の横配置（Interactorの左にInputData）
   ToggleRuleActiveInteractor -[hidden]l- ToggleRuleActiveInputData
   IRewriteRuleRepository -[hidden]l- IToggleRuleActiveUseCase
   ITabsGateway -[hidden]l- IToggleRuleActivePresenter
@@ -147,14 +147,14 @@ package "frameworks-and-drivers (第4層)" as L4 #LightBlue {
   ' 左列の縦配置
   RulesApp -[hidden]d- ChromeTabsGateway
 
-  ' 左列と右列の横配置（DataAccessの左にRulesApp）
-  DataAccess -[hidden]l- RulesApp
+  ' 左列と右列の横配置（RulesAppの右にDataAccess）
+  RulesApp -[hidden]r- DataAccess
 }
 
 ' ===== レイアウト制御 =====
-' 上段を横に並べる（左→右: L3→L2→L1）逆方向で指定
-L2 -[hidden]l- L3
-L1 -[hidden]l- L2
+' 上段を横に並べる（左→右: L3→L2→L1）
+L3 -[hidden]r- L2
+L2 -[hidden]r- L1
 
 ' 下段（L4）を上段の下に配置
 L3 -[hidden]d- L4
@@ -179,17 +179,5 @@ ChromeTabsGateway .u.|> ITabsGateway : implements
 ' L4 → L1（上方向）
 ChromeRuntimeRewriteRuleRepository .u.> RewriteRule : creates via fromDTO
 ChromeTabsGateway .u.> RewriteRule : calls matchesUrl()
-
-' ===== ノート =====
-note bottom of ChromeTabsGateway
-  ADR-001: ドメインロジックの配置原則
-  rule.matchesUrl() を呼び出して
-  マッチング判定を行う
-end note
-
-note bottom of DataAccess
-  Rules Page ↔ Background Script 間の
-  proxy-service 経由データアクセス
-end note
 
 @enduml
