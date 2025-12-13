@@ -6,7 +6,7 @@ skinparam packageStyle rectangle
 ' レイアウト方針（docs/docs-rules/design.md に準拠）:
 ' 図を横に2分割:
 '   上半分: upper half package（4列のpackageを含む）
-'   下半分: DataAccessパッケージ
+'   下半分: DataAccessパッケージ（MessagingService関連）
 ' ===================================================
 
 ' ===== 上半分 =====
@@ -55,7 +55,7 @@ package "upper half" as UpperHalf {
     IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
   }
 
-  ' --- 3列目: Interactor, Gateway抽象クラス ---
+  ' --- 3列目: Interactor, Repository抽象/具象 ---
   package "upper third column" as Col3 {
     class ToggleRuleActiveInteractor <<Use Case>> {
       - repository: IRewriteRuleRepository
@@ -69,15 +69,17 @@ package "upper half" as UpperHalf {
       + update(rule: RewriteRule): Promise<void>
     }
 
-    interface ITabsGateway <<Gateway Interface>> {
-      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    class ChromeRuntimeRewriteRuleRepository <<Repository>> {
+      - messagingService: RewriteRuleMessagingService
+      + getById(id: number): Promise<RewriteRule>
+      + update(rule: RewriteRule): Promise<void>
     }
 
     ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
-    IRewriteRuleRepository -[hidden]d- ITabsGateway
+    IRewriteRuleRepository -[hidden]d- ChromeRuntimeRewriteRuleRepository
   }
 
-  ' --- 4列目: Entity ---
+  ' --- 4列目: Entity, Gateway抽象/具象 ---
   package "upper fourth column" as Col4 {
     class RewriteRule <<Entity>> {
       - id: RuleId
@@ -87,6 +89,17 @@ package "upper half" as UpperHalf {
       + matchesUrl(url: string): boolean
       + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
     }
+
+    interface ITabsGateway <<Gateway Interface>> {
+      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    }
+
+    class ChromeTabsGateway <<Gateway>> {
+      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    }
+
+    RewriteRule -[hidden]d- ITabsGateway
+    ITabsGateway -[hidden]d- ChromeTabsGateway
   }
 
   ' 列間の横配置
@@ -97,12 +110,6 @@ package "upper half" as UpperHalf {
 
 ' ===== 下半分: DataAccessパッケージ =====
 rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
-  class ChromeRuntimeRewriteRuleRepository <<Repository>> {
-    - messagingService: RewriteRuleMessagingService
-    + getById(id: number): Promise<RewriteRule>
-    + update(rule: RewriteRule): Promise<void>
-  }
-
   class RewriteRuleMessagingService <<Messaging Service>> {
     + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
     + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
@@ -127,10 +134,6 @@ rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
     + id: number
     + isActive: boolean
   }
-
-  class ChromeTabsGateway <<Gateway>> {
-    + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-  }
 }
 
 ' 上半分→下半分の配置
@@ -154,17 +157,20 @@ ToggleRuleActiveInteractor ....> ITabsGateway : uses
 ToggleRuleActiveInteractor ....> ToggleRuleActiveInputData : uses
 ToggleRuleActiveInteractor ....> ToggleRuleActiveOutputData : creates
 
-' DataAccessパッケージ内部
+' 3列目内部
 ChromeRuntimeRewriteRuleRepository ....|> IRewriteRuleRepository : implements
 ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMessagingService : uses
 ChromeRuntimeRewriteRuleRepository ....> GetByIdRequestDTO : creates
 ChromeRuntimeRewriteRuleRepository ....> RewriteRuleDTO : receives
+
+' 4列目内部
+ChromeTabsGateway ....|> ITabsGateway : implements
+
+' DataAccessパッケージ内部
 RewriteRuleMessagingService ....> DexieRewriteRuleRepository : delegates
 RewriteRuleMessagingService ....> GetByIdRequestDTO : receives
 RewriteRuleMessagingService ....> UpdateRuleActiveRequestDTO : receives
 RewriteRuleMessagingService ....> RewriteRuleDTO : returns
-
-ChromeTabsGateway ....|> ITabsGateway : implements
 
 ' 3列目 → 4列目
 ToggleRuleActiveInteractor ....> RewriteRule : uses
