@@ -5,72 +5,94 @@ skinparam packageStyle rectangle
 ' ===================================================
 ' レイアウト方針（docs/docs-rules/design.md に準拠）:
 ' 図を横に2分割:
-'   上半分: 4列構成
-'     1列目: Controller, Presenter, View
-'     2列目: InputData, IUseCase, IPresenter, OutputData
-'     3列目: Interactor, IRepository
-'     4列目: Entity
+'   上半分: upper half package（4列のpackageを含む）
 '   下半分: DataAccessパッケージ
-' hidden link で明示的にレイアウトを制御
 ' ===================================================
 
-' ===== 上半分 1列目: Controller, Presenter, View =====
-class ToggleRuleActiveController <<Controller>> {
-  - useCase: IToggleRuleActiveUseCase
-  + toggleActive(ruleId: number): Promise<void>
-}
+' ===== 上半分 =====
+package "upper half" as UpperHalf {
 
-class ToggleRuleActivePresenter <<Presenter>> {
-  - updateRuleInView: (rule: RewriteRule) => void
-  + present(outputData: ToggleRuleActiveOutputData): void
-}
+  ' --- 1列目: Controller, Presenter, View ---
+  package "upper first column" as Col1 {
+    class ToggleRuleActiveController <<Controller>> {
+      - useCase: IToggleRuleActiveUseCase
+      + toggleActive(ruleId: number): Promise<void>
+    }
 
-class RulesApp <<View>> {
-  + onToggle(ruleId: number): void
-}
+    class ToggleRuleActivePresenter <<Presenter>> {
+      - updateRuleInView: (rule: RewriteRule) => void
+      + present(outputData: ToggleRuleActiveOutputData): void
+    }
 
-' ===== 上半分 2列目: InputData, IUseCase, IPresenter, OutputData =====
-class ToggleRuleActiveInputData <<Input Data>> {
-  + ruleId: number
-}
+    class RulesApp <<View>> {
+      + onToggle(ruleId: number): void
+    }
 
-interface IToggleRuleActiveUseCase <<Input Port>> {
-  + execute(inputData: ToggleRuleActiveInputData): Promise<void>
-}
+    ToggleRuleActiveController -[hidden]d- ToggleRuleActivePresenter
+    ToggleRuleActivePresenter -[hidden]d- RulesApp
+  }
 
-interface IToggleRuleActivePresenter <<Output Port>> {
-  + present(outputData: ToggleRuleActiveOutputData): void
-}
+  ' --- 2列目: InputData, IUseCase, IPresenter, OutputData ---
+  package "upper second column" as Col2 {
+    class ToggleRuleActiveInputData <<Input Data>> {
+      + ruleId: number
+    }
 
-class ToggleRuleActiveOutputData <<Output Data>> {
-  + toggledRule: RewriteRule
-}
+    interface IToggleRuleActiveUseCase <<Input Port>> {
+      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+    }
 
-' ===== 上半分 3列目: Interactor, IRepository =====
-class ToggleRuleActiveInteractor <<Use Case>> {
-  - repository: IRewriteRuleRepository
-  - tabsGateway: ITabsGateway
-  - presenter: IToggleRuleActivePresenter
-  + execute(inputData: ToggleRuleActiveInputData): Promise<void>
-}
+    interface IToggleRuleActivePresenter <<Output Port>> {
+      + present(outputData: ToggleRuleActiveOutputData): void
+    }
 
-interface IRewriteRuleRepository <<Gateway Interface>> {
-  + getById(id: number): Promise<RewriteRule>
-  + update(rule: RewriteRule): Promise<void>
-}
+    class ToggleRuleActiveOutputData <<Output Data>> {
+      + toggledRule: RewriteRule
+    }
 
-interface ITabsGateway <<Gateway Interface>> {
-  + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-}
+    ToggleRuleActiveInputData -[hidden]d- IToggleRuleActiveUseCase
+    IToggleRuleActiveUseCase -[hidden]d- IToggleRuleActivePresenter
+    IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
+  }
 
-' ===== 上半分 4列目: Entity =====
-class RewriteRule <<Entity>> {
-  - id: RuleId
-  - urlPattern: UrlPattern
-  - isActive: boolean
-  + withActive(isActive: boolean): RewriteRule
-  + matchesUrl(url: string): boolean
-  + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
+  ' --- 3列目: Interactor, Gateway抽象クラス ---
+  package "upper third column" as Col3 {
+    class ToggleRuleActiveInteractor <<Use Case>> {
+      - repository: IRewriteRuleRepository
+      - tabsGateway: ITabsGateway
+      - presenter: IToggleRuleActivePresenter
+      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+    }
+
+    interface IRewriteRuleRepository <<Gateway Interface>> {
+      + getById(id: number): Promise<RewriteRule>
+      + update(rule: RewriteRule): Promise<void>
+    }
+
+    interface ITabsGateway <<Gateway Interface>> {
+      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    }
+
+    ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
+    IRewriteRuleRepository -[hidden]d- ITabsGateway
+  }
+
+  ' --- 4列目: Entity ---
+  package "upper fourth column" as Col4 {
+    class RewriteRule <<Entity>> {
+      - id: RuleId
+      - urlPattern: UrlPattern
+      - isActive: boolean
+      + withActive(isActive: boolean): RewriteRule
+      + matchesUrl(url: string): boolean
+      + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
+    }
+  }
+
+  ' 列間の横配置
+  Col1 -[hidden]r- Col2
+  Col2 -[hidden]r- Col3
+  Col3 -[hidden]r- Col4
 }
 
 ' ===== 下半分: DataAccessパッケージ =====
@@ -111,40 +133,8 @@ rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
   }
 }
 
-' ===== レイアウト制御（hidden link） =====
-
-' 上半分 1列目の縦配置
-ToggleRuleActiveController -[hidden]d- ToggleRuleActivePresenter
-ToggleRuleActivePresenter -[hidden]d- RulesApp
-
-' 上半分 2列目の縦配置
-ToggleRuleActiveInputData -[hidden]d- IToggleRuleActiveUseCase
-IToggleRuleActiveUseCase -[hidden]d- IToggleRuleActivePresenter
-IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
-
-' 上半分 3列目の縦配置
-ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
-IRewriteRuleRepository -[hidden]d- ITabsGateway
-
-' 上半分の列間の横配置（1列目→2列目）
-ToggleRuleActiveController -[hidden]r- ToggleRuleActiveInputData
-ToggleRuleActivePresenter -[hidden]r- IToggleRuleActivePresenter
-RulesApp -[hidden]r- ToggleRuleActiveOutputData
-
-' 上半分の列間の横配置（2列目→3列目）
-ToggleRuleActiveInputData -[hidden]r- ToggleRuleActiveInteractor
-IToggleRuleActiveUseCase -[hidden]r- IRewriteRuleRepository
-
-' 上半分の列間の横配置（3列目→4列目）
-ToggleRuleActiveInteractor -[hidden]r- RewriteRule
-IRewriteRuleRepository -[hidden]r- RewriteRule
-ITabsGateway -[hidden]r- RewriteRule
-
 ' 上半分→下半分の配置
-RewriteRule -[hidden]d- DataAccess
-RulesApp -[hidden]d- DataAccess
-ToggleRuleActiveOutputData -[hidden]d- DataAccess
-ITabsGateway -[hidden]d- DataAccess
+UpperHalf -[hidden]d- DataAccess
 
 ' ===== 関連 =====
 
