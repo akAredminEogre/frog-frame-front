@@ -239,26 +239,6 @@ package "interface-adapters (第3層)" as L3 #LightGreen {
 }
 
 package "application-business-rules (第2層)" as L2 #LightYellow {
-  ' === 右列: Interactor → Repository → TabsGateway ===
-  ' (PlantUMLでは先に定義したものが右に配置される傾向があるため、右列を先に定義)
-  together {
-    class ToggleRuleActiveInteractor <<Use Case>> {
-      - repository: IRewriteRuleRepository
-      - tabsGateway: ITabsGateway
-      - presenter: IToggleRuleActivePresenter
-      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
-    }
-
-    interface IRewriteRuleRepository <<Gateway Interface>> {
-      + getById(id: number): Promise<RewriteRule>
-      + update(rule: RewriteRule): Promise<void>
-    }
-
-    interface ITabsGateway <<Gateway Interface>> {
-      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-    }
-  }
-
   ' === 左列: InputData → UseCase → Presenter → OutputData ===
   together {
     class ToggleRuleActiveInputData <<Input Data>> {
@@ -278,25 +258,44 @@ package "application-business-rules (第2層)" as L2 #LightYellow {
     }
   }
 
-  ' 右列の縦配置
-  ToggleRuleActiveInteractor -[hidden]down- IRewriteRuleRepository
-  IRewriteRuleRepository -[hidden]down- ITabsGateway
+  ' === 右列: Interactor → Repository → TabsGateway ===
+  together {
+    class ToggleRuleActiveInteractor <<Use Case>> {
+      - repository: IRewriteRuleRepository
+      - tabsGateway: ITabsGateway
+      - presenter: IToggleRuleActivePresenter
+      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+    }
+
+    interface IRewriteRuleRepository <<Gateway Interface>> {
+      + getById(id: number): Promise<RewriteRule>
+      + update(rule: RewriteRule): Promise<void>
+    }
+
+    interface ITabsGateway <<Gateway Interface>> {
+      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    }
+  }
 
   ' 左列の縦配置
   ToggleRuleActiveInputData -[hidden]down- IToggleRuleActiveUseCase
   IToggleRuleActiveUseCase -[hidden]down- IToggleRuleActivePresenter
   IToggleRuleActivePresenter -[hidden]down- ToggleRuleActiveOutputData
 
-  ' 左列と右列の横配置（InputDataの左にInteractor）
-  ToggleRuleActiveInputData -[hidden]left- ToggleRuleActiveInteractor
+  ' 右列の縦配置
+  ToggleRuleActiveInteractor -[hidden]down- IRewriteRuleRepository
+  IRewriteRuleRepository -[hidden]down- ITabsGateway
+
+  ' 左列と右列の横配置（InputDataの右にInteractor）
+  ToggleRuleActiveInputData -[hidden]right- ToggleRuleActiveInteractor
 
   ' 層内の関連
-  ToggleRuleActiveInteractor .right.|> IToggleRuleActiveUseCase : implements
-  ToggleRuleActiveInteractor .right.> IToggleRuleActivePresenter : uses
+  ToggleRuleActiveInteractor .left.|> IToggleRuleActiveUseCase : implements
+  ToggleRuleActiveInteractor .left.> IToggleRuleActivePresenter : uses
   ToggleRuleActiveInteractor ..> IRewriteRuleRepository : uses
   ToggleRuleActiveInteractor ..> ITabsGateway : uses
-  ToggleRuleActiveInteractor .right.> ToggleRuleActiveInputData : uses
-  ToggleRuleActiveInteractor .right.> ToggleRuleActiveOutputData : creates
+  ToggleRuleActiveInteractor .left.> ToggleRuleActiveInputData : uses
+  ToggleRuleActiveInteractor .left.> ToggleRuleActiveOutputData : creates
 }
 
 package "enterprise-business-rules (第1層)" as L1 #LightPink {
