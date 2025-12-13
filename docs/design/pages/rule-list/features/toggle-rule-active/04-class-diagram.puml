@@ -134,11 +134,7 @@ rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
 }
 
 ' 上半分→下半分の配置
-UpperHalf -[hidden]d- DataAccess
-Col1 -[hidden]d- DataAccess
-Col2 -[hidden]d- DataAccess
-Col3 -[hidden]d- DataAccess
-Col4 -[hidden]d- DataAccess
+UpperHalf -[hidden]down- DataAccess
 
 ' ===== 関連 =====
 
