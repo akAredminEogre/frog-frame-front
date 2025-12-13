@@ -62,7 +62,7 @@ interface ITabsGateway <<Gateway Interface>> {
   + reloadMatchingTabs(rule: RewriteRule): Promise<void>
 }
 
-rectangle "RewriteRule データアクセス" as DataAccess #LightCyan {
+rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
   class ChromeRuntimeRewriteRuleRepository <<Repository>> {
     - messagingService: RewriteRuleMessagingService
     + getById(id: number): Promise<RewriteRule>
