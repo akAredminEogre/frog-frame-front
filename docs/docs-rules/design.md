@@ -236,35 +236,31 @@ Clean Architecture 4層に従った**理論的設計**を記載:
 
 plantuml.comで画像としてレンダリングしたときに、下記が達成されていること
 
-- まず下記のクラスを、データアクセスpackageとして1つにまとめる
-  - DB用メッセージングサービスクラス
-  - DB用メッセージングサービスクラス用DTO
-  - DB用リポジトリクラス
-- 図を横に2分割したときに、
-  - 上半分
-    - `upper half` packageとしてまとめる
-    - `upper half` をさらに縦に4分割にするpackageにまとめる。左から順に
-      - 1列目：`upper first column` package
-        - 上から、Controller、 Presenter、ViewModel(あれば)
-      - 2列目：`upper second column` package
-        - 上から、InputData、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
-      - 3列目：`upper third column` package
-        - 上から、Interactor、Repositoryの抽象クラス、Repositoryの具象クラス
-      - 4列目：`upper fourth column` package
-        - 上から、Repository以外のGatewayの具象クラス、Repository以外のGatewayの抽象クラス、Entity
-  - 下半分
-    - `lower half` packageとしてまとめる
-    - `lower half` をさらに縦に2分割にするpackageにまとめる。左から順に
-      - 1列目：`lower first column` package
-        - 上から、View(UIコンポーネント)
-      - 2列目：`lower second column` package
-        - データアクセスpackage(概念的にRepositoryの具象クラス)
-        - データアクセスpackageをさらに縦に2分割にするpackageにまとめる。左から順に
-          - 1列目：`data access first column` package
-            - 上から、DTOのMapperクラス、DB用メッセージング抽象クラス、DB用メッセージング具象クラス、DB用リポジトリクラス
-          - 2列目：`data access second column` package
-            - 上から、DB用メッセージングサービスクラス用DTO
-
+- 図を縦に2分割したときに、
+  - 左1列目
+    - `left first column` packageとしてまとめる
+    - 上から、Controller、 Presenter、ViewModel(あれば)、View(UIコンポーネント)
+  - 左2列目
+    - `left second column` packageとしてまとめる
+    - これを更に横に2分割したとき
+    - 上1行目
+      - `left second column upper row` packageとしてまとめる
+      - さらに縦に3分割にするpackageにまとめる。左から順に
+        - 1列目：`left second column upper row first column` package
+          - 上から、InputData、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
+        - 2列目：`left second column upper row second column` package
+          - 上から、Interactor、Repositoryの抽象クラス、Repositoryの具象クラス
+        - 3列目：`left second column upper row third column` package
+          - 上から、Repository以外のGatewayの具象クラス、Repository以外のGatewayの抽象クラス、Entity
+    - 上2行目
+      - `left second column lower row` packageとしてまとめる
+      - これをさらに横に2分割したとき
+        - 上1行目
+          - `data access upper row` packageとしてまとめる
+          - 左からDTOのMapperクラス、DB用メッセージング抽象クラス、DB用メッセージング具象クラス、DB用リポジトリクラス
+        - 上2行目
+          - `data access lower row` packageとしてまとめる
+          - DB用メッセージングサービスクラス用DTOクラス
 ## 関連ドキュメント
 
 - ユーザーストーリー: `docs/user-stories/`
