@@ -122,7 +122,7 @@ DTO の粒度は以下の基準に従う：
 このADRが変更された場合、以下のドキュメントも更新が必要：
 
 - [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](./003-unified-db-access-via-messaging.md) - DTO 定義、変換責務
-- [Toggle Rule Active 設計](../design/pages/rule-list/features/toggle-rule-active/) - クラス設計、シーケンス図、ディレクトリ構造、クラス図
+- 各機能の設計ドキュメントのうち、`01-class-design.md`、`02-sequence.puml`
 
 ## 関連ドキュメント
 
