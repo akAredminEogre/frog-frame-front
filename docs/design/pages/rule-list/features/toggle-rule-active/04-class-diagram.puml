@@ -12,18 +12,20 @@ skinparam packageStyle rectangle
 
 ' ===== Left 1st Column: Controller, View, Presenter =====
 package "left first column" as LeftCol1 {
-  class ToggleRuleActiveController <<Controller>> {
-    - useCase: IToggleRuleActiveUseCase
-    + toggleActive(ruleId: number): Promise<void>
-  }
+  together {
+    class ToggleRuleActiveController <<Controller>> {
+      - useCase: IToggleRuleActiveUseCase
+      + toggleActive(ruleId: number): Promise<void>
+    }
 
-  class RulesApp <<View>> {
-    + onToggle(ruleId: number): void
-  }
+    class RulesApp <<View>> {
+      + onToggle(ruleId: number): void
+    }
 
-  class ToggleRuleActivePresenter <<Presenter>> {
-    - updateRuleInView: (rule: RewriteRule) => void
-    + present(outputData: ToggleRuleActiveOutputData): void
+    class ToggleRuleActivePresenter <<Presenter>> {
+      - updateRuleInView: (rule: RewriteRule) => void
+      + present(outputData: ToggleRuleActiveOutputData): void
+    }
   }
 
   ToggleRuleActiveController -[hidden]down- RulesApp
@@ -38,16 +40,18 @@ package "left second column" as LeftCol2 {
 
     ' Column 1: UseCase abstract, Presenter abstract, OutputData
     package "left second column upper row first column" as URCol1 {
-      interface IToggleRuleActiveUseCase <<Input Port>> {
-        + execute(inputData: ToggleRuleActiveInputData): Promise<void>
-      }
+      together {
+        interface IToggleRuleActiveUseCase <<Input Port>> {
+          + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+        }
 
-      interface IToggleRuleActivePresenter <<Output Port>> {
-        + present(outputData: ToggleRuleActiveOutputData): void
-      }
+        interface IToggleRuleActivePresenter <<Output Port>> {
+          + present(outputData: ToggleRuleActiveOutputData): void
+        }
 
-      class ToggleRuleActiveOutputData <<Output Data>> {
-        + toggledRule: RewriteRule
+        class ToggleRuleActiveOutputData <<Output Data>> {
+          + toggledRule: RewriteRule
+        }
       }
 
       IToggleRuleActiveUseCase -[hidden]down- IToggleRuleActivePresenter
@@ -56,26 +60,28 @@ package "left second column" as LeftCol2 {
 
     ' Column 2: InputData, Interactor, Repository abstract, Repository concrete
     package "left second column upper row second column" as URCol2 {
-      class ToggleRuleActiveInputData <<Input Data>> {
-        + ruleId: number
-      }
+      together {
+        class ToggleRuleActiveInputData <<Input Data>> {
+          + ruleId: number
+        }
 
-      class ToggleRuleActiveInteractor <<Use Case>> {
-        - repository: IRewriteRuleRepository
-        - tabsGateway: ITabsGateway
-        - presenter: IToggleRuleActivePresenter
-        + execute(inputData: ToggleRuleActiveInputData): Promise<void>
-      }
+        class ToggleRuleActiveInteractor <<Use Case>> {
+          - repository: IRewriteRuleRepository
+          - tabsGateway: ITabsGateway
+          - presenter: IToggleRuleActivePresenter
+          + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+        }
 
-      interface IRewriteRuleRepository <<Gateway Interface>> {
-        + getById(id: number): Promise<RewriteRule>
-        + update(rule: RewriteRule): Promise<void>
-      }
+        interface IRewriteRuleRepository <<Gateway Interface>> {
+          + getById(id: number): Promise<RewriteRule>
+          + update(rule: RewriteRule): Promise<void>
+        }
 
-      class ChromeRuntimeRewriteRuleRepository <<Repository>> {
-        - mapper: RewriteRuleMapper
-        + getById(id: number): Promise<RewriteRule>
-        + update(rule: RewriteRule): Promise<void>
+        class ChromeRuntimeRewriteRuleRepository <<Repository>> {
+          - mapper: RewriteRuleMapper
+          + getById(id: number): Promise<RewriteRule>
+          + update(rule: RewriteRule): Promise<void>
+        }
       }
 
       ToggleRuleActiveInputData -[hidden]down- ToggleRuleActiveInteractor
@@ -85,20 +91,22 @@ package "left second column" as LeftCol2 {
 
     ' Column 3: Gateway abstract, Gateway concrete, Entity
     package "left second column upper row third column" as URCol3 {
-      interface ITabsGateway <<Gateway Interface>> {
-        + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-      }
+      together {
+        interface ITabsGateway <<Gateway Interface>> {
+          + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+        }
 
-      class ChromeTabsGateway <<Gateway>> {
-        + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-      }
+        class ChromeTabsGateway <<Gateway>> {
+          + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+        }
 
-      class RewriteRule <<Entity>> {
-        - id: RuleId
-        - urlPattern: UrlPattern
-        - isActive: boolean
-        + withActive(isActive: boolean): RewriteRule
-        + matchesUrl(url: string): boolean
+        class RewriteRule <<Entity>> {
+          - id: RuleId
+          - urlPattern: UrlPattern
+          - isActive: boolean
+          + withActive(isActive: boolean): RewriteRule
+          + matchesUrl(url: string): boolean
+        }
       }
 
       ITabsGateway -[hidden]down- ChromeTabsGateway
@@ -115,20 +123,22 @@ package "left second column" as LeftCol2 {
 
       ' DataAccess Upper Row: MessagingService, MessagingPort, Mapper
       package "data access upper row" as DAUpperRow {
-        class RewriteRuleMessagingService <<Messaging Service>> {
-          + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
-          + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
-        }
+        together {
+          class RewriteRuleMessagingService <<Messaging Service>> {
+            + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+            + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+          }
 
-        interface IRewriteRuleMessagingPort <<Port>> {
-          + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
-          + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
-        }
+          interface IRewriteRuleMessagingPort <<Port>> {
+            + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+            + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+          }
 
-        class RewriteRuleMapper <<Mapper>> {
-          - messagingPort: IRewriteRuleMessagingPort
-          + getById(id: number): Promise<RewriteRule>
-          + update(rule: RewriteRule): Promise<void>
+          class RewriteRuleMapper <<Mapper>> {
+            - messagingPort: IRewriteRuleMessagingPort
+            + getById(id: number): Promise<RewriteRule>
+            + update(rule: RewriteRule): Promise<void>
+          }
         }
 
         RewriteRuleMessagingService -[hidden]right- IRewriteRuleMessagingPort
@@ -137,24 +147,26 @@ package "left second column" as LeftCol2 {
 
       ' DataAccess Lower Row: DTO, DB Repository
       package "data access lower row" as DALowerRow {
-        class RewriteRuleDTO <<DTO>> {
-          + id: number
-          + urlPattern: string
-          + isActive: boolean
-        }
+        together {
+          class RewriteRuleDTO <<DTO>> {
+            + id: number
+            + urlPattern: string
+            + isActive: boolean
+          }
 
-        class GetByIdRequestDTO <<DTO>> {
-          + id: number
-        }
+          class GetByIdRequestDTO <<DTO>> {
+            + id: number
+          }
 
-        class UpdateRuleActiveRequestDTO <<DTO>> {
-          + id: number
-          + isActive: boolean
-        }
+          class UpdateRuleActiveRequestDTO <<DTO>> {
+            + id: number
+            + isActive: boolean
+          }
 
-        class DexieRewriteRuleRepository <<Repository>> {
-          + getById(id: number): Promise<RewriteRuleDTO>
-          + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+          class DexieRewriteRuleRepository <<Repository>> {
+            + getById(id: number): Promise<RewriteRuleDTO>
+            + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+          }
         }
 
         RewriteRuleDTO -[hidden]right- GetByIdRequestDTO
@@ -172,7 +184,7 @@ package "left second column" as LeftCol2 {
 ' Left 1st column to Left 2nd column layout
 LeftCol1 -[hidden]right- LeftCol2
 
-' ===== Relations (reverse direction for URCol2->URCol1 to fix layout) =====
+' ===== Relations =====
 
 ' LeftCol1 internal
 RulesApp ..> ToggleRuleActiveController : uses
@@ -182,7 +194,7 @@ ToggleRuleActivePresenter ..> RulesApp : updates
 ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
 ToggleRuleActivePresenter ..|> IToggleRuleActivePresenter : implements
 
-' URCol1 to URCol2 (REVERSED: URCol1 classes as source to place URCol1 left of URCol2)
+' URCol1 to URCol2 (REVERSED direction to keep URCol1 left of URCol2)
 IToggleRuleActiveUseCase <|.. ToggleRuleActiveInteractor : implements
 IToggleRuleActivePresenter <.. ToggleRuleActiveInteractor : uses
 ToggleRuleActiveOutputData <.. ToggleRuleActiveInteractor : creates
@@ -191,9 +203,9 @@ ToggleRuleActiveInteractor ..> ToggleRuleActiveInputData : uses
 ' URCol2 internal
 ChromeRuntimeRewriteRuleRepository ..|> IRewriteRuleRepository : implements
 
-' URCol2 to URCol3
-ToggleRuleActiveInteractor ..> ITabsGateway : uses
-ToggleRuleActiveInteractor ..> RewriteRule : uses
+' URCol2 to URCol3 (REVERSED direction to keep URCol2 left of URCol3)
+ITabsGateway <.. ToggleRuleActiveInteractor : uses
+RewriteRule <.. ToggleRuleActiveInteractor : uses
 
 ' URCol3 internal
 ChromeTabsGateway ..|> ITabsGateway : implements
@@ -202,7 +214,7 @@ ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
 ' URCol2 to DataAccess (down direction)
 ChromeRuntimeRewriteRuleRepository .down.> RewriteRuleMapper : delegates
 
-' DAUpperRow internal (REVERSED: place MessagingService left, Mapper right)
+' DAUpperRow internal (REVERSED direction to keep left-to-right order)
 IRewriteRuleMessagingPort <|.. RewriteRuleMessagingService : implements
 IRewriteRuleMessagingPort <.. RewriteRuleMapper : uses
 
