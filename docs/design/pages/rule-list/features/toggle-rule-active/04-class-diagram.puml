@@ -5,120 +5,116 @@ skinparam packageStyle rectangle
 
 ' ===================================================
 ' レイアウト方針（docs/docs-rules/design.md に準拠）:
-' 図を横に2分割:
-'   上半分: upper half package（4列のpackageを含む）
-'   下半分: lower half package（View + DataAccess）
+' 図を縦に2分割:
+'   左1列目: Controller, Presenter, View
+'   左2列目: upper row（3列）+ lower row（DataAccess）
 ' ===================================================
 
-' ===== 上半分 =====
-package "upper half" as UpperHalf {
-
-  ' --- 1列目: Controller, Presenter ---
-  package "upper first column" as Col1 {
-    class ToggleRuleActiveController <<Controller>> {
-      - useCase: IToggleRuleActiveUseCase
-      + toggleActive(ruleId: number): Promise<void>
-    }
-
-    class ToggleRuleActivePresenter <<Presenter>> {
-      - updateRuleInView: (rule: RewriteRule) => void
-      + present(outputData: ToggleRuleActiveOutputData): void
-    }
-
-    ToggleRuleActiveController -[hidden]d- ToggleRuleActivePresenter
+' ===== 左1列目: Controller, Presenter, View =====
+package "left first column" as LeftCol1 {
+  class ToggleRuleActiveController <<Controller>> {
+    - useCase: IToggleRuleActiveUseCase
+    + toggleActive(ruleId: number): Promise<void>
   }
 
-  ' --- 2列目: InputData, IUseCase, IPresenter, OutputData ---
-  package "upper second column" as Col2 {
-    class ToggleRuleActiveInputData <<Input Data>> {
-      + ruleId: number
-    }
-
-    interface IToggleRuleActiveUseCase <<Input Port>> {
-      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
-    }
-
-    interface IToggleRuleActivePresenter <<Output Port>> {
-      + present(outputData: ToggleRuleActiveOutputData): void
-    }
-
-    class ToggleRuleActiveOutputData <<Output Data>> {
-      + toggledRule: RewriteRule
-    }
-
-    ToggleRuleActiveInputData -[hidden]d- IToggleRuleActiveUseCase
-    IToggleRuleActiveUseCase -[hidden]d- IToggleRuleActivePresenter
-    IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
+  class ToggleRuleActivePresenter <<Presenter>> {
+    - updateRuleInView: (rule: RewriteRule) => void
+    + present(outputData: ToggleRuleActiveOutputData): void
   }
 
-  ' --- 3列目: Interactor, Repository抽象/具象 ---
-  package "upper third column" as Col3 {
-    class ToggleRuleActiveInteractor <<Use Case>> {
-      - repository: IRewriteRuleRepository
-      - tabsGateway: ITabsGateway
-      - presenter: IToggleRuleActivePresenter
-      + execute(inputData: ToggleRuleActiveInputData): Promise<void>
-    }
-
-    interface IRewriteRuleRepository <<Gateway Interface>> {
-      + getById(id: number): Promise<RewriteRule>
-      + update(rule: RewriteRule): Promise<void>
-    }
-
-    class ChromeRuntimeRewriteRuleRepository <<Repository>> {
-      - mapper: RewriteRuleMapper
-      + getById(id: number): Promise<RewriteRule>
-      + update(rule: RewriteRule): Promise<void>
-    }
-
-    ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
-    IRewriteRuleRepository -[hidden]d- ChromeRuntimeRewriteRuleRepository
+  class RulesApp <<View>> {
+    + onToggle(ruleId: number): void
   }
 
-  ' --- 4列目: Gateway具象/抽象, Entity ---
-  package "upper fourth column" as Col4 {
-    class ChromeTabsGateway <<Gateway>> {
-      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-    }
-
-    interface ITabsGateway <<Gateway Interface>> {
-      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-    }
-
-    class RewriteRule <<Entity>> {
-      - id: RuleId
-      - urlPattern: UrlPattern
-      - isActive: boolean
-      + withActive(isActive: boolean): RewriteRule
-      + matchesUrl(url: string): boolean
-    }
-
-    ChromeTabsGateway -[hidden]d- ITabsGateway
-    ITabsGateway -[hidden]d- RewriteRule
-  }
-
-  ' 列間の横配置
-  Col1 -[hidden]r- Col2
-  Col2 -[hidden]r- Col3
-  Col3 -[hidden]r- Col4
+  ToggleRuleActiveController -[hidden]d- ToggleRuleActivePresenter
+  ToggleRuleActivePresenter -[hidden]d- RulesApp
 }
 
-' ===== 下半分 =====
-package "lower half" as LowerHalf {
+' ===== 左2列目 =====
+package "left second column" as LeftCol2 {
 
-  ' --- 下1列目: View ---
-  package "lower first column" as LowerCol1 {
-    class RulesApp <<View>> {
-      + onToggle(ruleId: number): void
+  ' --- 上1行目: 3列構成 ---
+  package "left second column upper row" as UpperRow {
+
+    ' 1列目: InputData, UseCase抽象, Presenter抽象, OutputData
+    package "left second column upper row first column" as URCol1 {
+      class ToggleRuleActiveInputData <<Input Data>> {
+        + ruleId: number
+      }
+
+      interface IToggleRuleActiveUseCase <<Input Port>> {
+        + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+      }
+
+      interface IToggleRuleActivePresenter <<Output Port>> {
+        + present(outputData: ToggleRuleActiveOutputData): void
+      }
+
+      class ToggleRuleActiveOutputData <<Output Data>> {
+        + toggledRule: RewriteRule
+      }
+
+      ToggleRuleActiveInputData -[hidden]d- IToggleRuleActiveUseCase
+      IToggleRuleActiveUseCase -[hidden]d- IToggleRuleActivePresenter
+      IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
     }
+
+    ' 2列目: Interactor, Repository抽象, Repository具象
+    package "left second column upper row second column" as URCol2 {
+      class ToggleRuleActiveInteractor <<Use Case>> {
+        - repository: IRewriteRuleRepository
+        - tabsGateway: ITabsGateway
+        - presenter: IToggleRuleActivePresenter
+        + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+      }
+
+      interface IRewriteRuleRepository <<Gateway Interface>> {
+        + getById(id: number): Promise<RewriteRule>
+        + update(rule: RewriteRule): Promise<void>
+      }
+
+      class ChromeRuntimeRewriteRuleRepository <<Repository>> {
+        - mapper: RewriteRuleMapper
+        + getById(id: number): Promise<RewriteRule>
+        + update(rule: RewriteRule): Promise<void>
+      }
+
+      ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
+      IRewriteRuleRepository -[hidden]d- ChromeRuntimeRewriteRuleRepository
+    }
+
+    ' 3列目: Gateway具象, Gateway抽象, Entity
+    package "left second column upper row third column" as URCol3 {
+      class ChromeTabsGateway <<Gateway>> {
+        + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+      }
+
+      interface ITabsGateway <<Gateway Interface>> {
+        + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+      }
+
+      class RewriteRule <<Entity>> {
+        - id: RuleId
+        - urlPattern: UrlPattern
+        - isActive: boolean
+        + withActive(isActive: boolean): RewriteRule
+        + matchesUrl(url: string): boolean
+      }
+
+      ChromeTabsGateway -[hidden]d- ITabsGateway
+      ITabsGateway -[hidden]d- RewriteRule
+    }
+
+    URCol1 -[hidden]r- URCol2
+    URCol2 -[hidden]r- URCol3
   }
 
-  ' --- 下2列目: DataAccess ---
-  package "lower second column" as LowerCol2 {
+  ' --- 下2行目: DataAccess ---
+  package "left second column lower row" as LowerRow {
     rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
 
-      ' データアクセス1列目: Mapper, MessagingPort, MessagingService, Repository
-      package "data access first column" as DACol1 {
+      ' データアクセス上1行目: Mapper, Messaging抽象, Messaging具象, DB Repository
+      package "data access upper row" as DAUpperRow {
         class RewriteRuleMapper <<Mapper>> {
           - messagingPort: IRewriteRuleMessagingPort
           + getById(id: number): Promise<RewriteRule>
@@ -140,13 +136,13 @@ package "lower half" as LowerHalf {
           + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
         }
 
-        RewriteRuleMapper -[hidden]d- IRewriteRuleMessagingPort
-        IRewriteRuleMessagingPort -[hidden]d- RewriteRuleMessagingService
-        RewriteRuleMessagingService -[hidden]d- DexieRewriteRuleRepository
+        RewriteRuleMapper -[hidden]r- IRewriteRuleMessagingPort
+        IRewriteRuleMessagingPort -[hidden]r- RewriteRuleMessagingService
+        RewriteRuleMessagingService -[hidden]r- DexieRewriteRuleRepository
       }
 
-      ' データアクセス2列目: DTO
-      package "data access second column" as DACol2 {
+      ' データアクセス下2行目: DTO
+      package "data access lower row" as DALowerRow {
         class RewriteRuleDTO <<DTO>> {
           + id: number
           + urlPattern: string
@@ -162,63 +158,65 @@ package "lower half" as LowerHalf {
           + isActive: boolean
         }
 
-        RewriteRuleDTO -[hidden]d- GetByIdRequestDTO
-        GetByIdRequestDTO -[hidden]d- UpdateRuleActiveRequestDTO
+        RewriteRuleDTO -[hidden]r- GetByIdRequestDTO
+        GetByIdRequestDTO -[hidden]r- UpdateRuleActiveRequestDTO
       }
 
-      DACol1 -[hidden]r- DACol2
+      DAUpperRow -[hidden]d- DALowerRow
     }
   }
 
-  LowerCol1 -[hidden]r- LowerCol2
+  UpperRow -[hidden]d- LowerRow
 }
 
-' 上半分→下半分の配置
-UpperHalf -[hidden]down- LowerHalf
+' 左1列目 → 左2列目の配置
+LeftCol1 -[hidden]r- LeftCol2
 
 ' ===== 関連 =====
 
-' 1列目 → 2列目
-ToggleRuleActiveController ....> IToggleRuleActiveUseCase : uses
-ToggleRuleActivePresenter ....|> IToggleRuleActivePresenter : implements
-
-' View → Controller
+' 左1列目内部
 RulesApp ....> ToggleRuleActiveController : uses
 ToggleRuleActivePresenter ....> RulesApp : updates
 
-' 2列目 → 3列目
+' 左1列目 → 上1行目1列目
+ToggleRuleActiveController ....> IToggleRuleActiveUseCase : uses
+ToggleRuleActivePresenter ....|> IToggleRuleActivePresenter : implements
+
+' 上1行目1列目 → 上1行目2列目
 ToggleRuleActiveInteractor ....|> IToggleRuleActiveUseCase : implements
 ToggleRuleActiveInteractor ....> IToggleRuleActivePresenter : uses
 ToggleRuleActiveInteractor ....> IRewriteRuleRepository : uses
-ToggleRuleActiveInteractor ....> ITabsGateway : uses
 ToggleRuleActiveInteractor ....> ToggleRuleActiveInputData : uses
 ToggleRuleActiveInteractor ....> ToggleRuleActiveOutputData : creates
 
-' 3列目内部
+' 上1行目2列目内部
 ChromeRuntimeRewriteRuleRepository ....|> IRewriteRuleRepository : implements
 
-' 4列目内部
-ChromeTabsGateway ....|> ITabsGateway : implements
+' 上1行目2列目 → 上1行目3列目
+ToggleRuleActiveInteractor ....> ITabsGateway : uses
+ToggleRuleActiveInteractor ....> RewriteRule : uses
 
-' 3列目 → DataAccess
+' 上1行目3列目内部
+ChromeTabsGateway ....|> ITabsGateway : implements
+ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
+
+' 上1行目2列目 → DataAccess
 ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMapper : delegates
 
-' DataAccessパッケージ内部
+' DataAccess上1行目内部
 RewriteRuleMapper ....> IRewriteRuleMessagingPort : uses
+RewriteRuleMessagingService ....|> IRewriteRuleMessagingPort : implements
+RewriteRuleMessagingService ....> DexieRewriteRuleRepository : delegates
+
+' DataAccess上1行目 → DataAccess下2行目
 RewriteRuleMapper ....> GetByIdRequestDTO : creates
 RewriteRuleMapper ....> UpdateRuleActiveRequestDTO : creates
 RewriteRuleMapper ....> RewriteRuleDTO : converts
-RewriteRuleMessagingService ....|> IRewriteRuleMessagingPort : implements
-RewriteRuleMessagingService ....> DexieRewriteRuleRepository : delegates
 RewriteRuleMessagingService ....> GetByIdRequestDTO : receives
 RewriteRuleMessagingService ....> UpdateRuleActiveRequestDTO : receives
 RewriteRuleMessagingService ....> RewriteRuleDTO : returns
 
-' 3列目 → 4列目
-ToggleRuleActiveInteractor ....> RewriteRule : uses
-ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
-
-' DataAccess → 4列目
+' DataAccess → 上1行目3列目
 RewriteRuleMapper ....> RewriteRule : creates
 
 @enduml
