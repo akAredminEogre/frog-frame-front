@@ -26,8 +26,8 @@ package "left first column" as LeftCol1 {
     + onToggle(ruleId: number): void
   }
 
-  ToggleRuleActiveController -[hidden]d- ToggleRuleActivePresenter
-  ToggleRuleActivePresenter -[hidden]d- RulesApp
+  ToggleRuleActiveController -[hidden]down- ToggleRuleActivePresenter
+  ToggleRuleActivePresenter -[hidden]down- RulesApp
 }
 
 ' ===== 左2列目 =====
@@ -50,8 +50,8 @@ package "left second column" as LeftCol2 {
         + toggledRule: RewriteRule
       }
 
-      IToggleRuleActiveUseCase -[hidden]d- IToggleRuleActivePresenter
-      IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
+      IToggleRuleActiveUseCase -[hidden]down- IToggleRuleActivePresenter
+      IToggleRuleActivePresenter -[hidden]down- ToggleRuleActiveOutputData
     }
 
     ' 2列目: InputData, Interactor, Repository抽象, Repository具象
@@ -78,9 +78,9 @@ package "left second column" as LeftCol2 {
         + update(rule: RewriteRule): Promise<void>
       }
 
-      ToggleRuleActiveInputData -[hidden]d- ToggleRuleActiveInteractor
-      ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
-      IRewriteRuleRepository -[hidden]d- ChromeRuntimeRewriteRuleRepository
+      ToggleRuleActiveInputData -[hidden]down- ToggleRuleActiveInteractor
+      ToggleRuleActiveInteractor -[hidden]down- IRewriteRuleRepository
+      IRewriteRuleRepository -[hidden]down- ChromeRuntimeRewriteRuleRepository
     }
 
     ' 3列目: Gateway抽象, Gateway具象, Entity
@@ -101,12 +101,12 @@ package "left second column" as LeftCol2 {
         + matchesUrl(url: string): boolean
       }
 
-      ITabsGateway -[hidden]d- ChromeTabsGateway
-      ChromeTabsGateway -[hidden]d- RewriteRule
+      ITabsGateway -[hidden]down- ChromeTabsGateway
+      ChromeTabsGateway -[hidden]down- RewriteRule
     }
 
-    URCol1 -[hidden]r- URCol2
-    URCol2 -[hidden]r- URCol3
+    URCol1 -[hidden]right- URCol2
+    URCol2 -[hidden]right- URCol3
   }
 
   ' --- 下2行目: DataAccess ---
@@ -131,8 +131,8 @@ package "left second column" as LeftCol2 {
           + update(rule: RewriteRule): Promise<void>
         }
 
-        RewriteRuleMessagingService -[hidden]r- IRewriteRuleMessagingPort
-        IRewriteRuleMessagingPort -[hidden]r- RewriteRuleMapper
+        RewriteRuleMessagingService -[hidden]right- IRewriteRuleMessagingPort
+        IRewriteRuleMessagingPort -[hidden]right- RewriteRuleMapper
       }
 
       ' データアクセス下2行目: DTO, DB Repository
@@ -157,20 +157,20 @@ package "left second column" as LeftCol2 {
           + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
         }
 
-        RewriteRuleDTO -[hidden]r- GetByIdRequestDTO
-        GetByIdRequestDTO -[hidden]r- UpdateRuleActiveRequestDTO
-        UpdateRuleActiveRequestDTO -[hidden]r- DexieRewriteRuleRepository
+        RewriteRuleDTO -[hidden]right- GetByIdRequestDTO
+        GetByIdRequestDTO -[hidden]right- UpdateRuleActiveRequestDTO
+        UpdateRuleActiveRequestDTO -[hidden]right- DexieRewriteRuleRepository
       }
 
-      DAUpperRow -[hidden]d- DALowerRow
+      DAUpperRow -[hidden]down- DALowerRow
     }
   }
 
-  UpperRow -[hidden]d- LowerRow
+  UpperRow -[hidden]down- LowerRow
 }
 
 ' 左1列目 → 左2列目の配置
-LeftCol1 -[hidden]r- LeftCol2
+LeftCol1 -[hidden]right- LeftCol2
 
 ' ===== 関連 =====
 
@@ -201,18 +201,20 @@ ChromeTabsGateway ....|> ITabsGateway : implements
 ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
 
 ' 上1行目2列目 → DataAccess（下方向を明示）
-ChromeRuntimeRewriteRuleRepository ....d> RewriteRuleMapper : delegates
+ChromeRuntimeRewriteRuleRepository ..down.> RewriteRuleMapper : delegates
 
 ' DataAccess上1行目内部
 RewriteRuleMessagingService ....|> IRewriteRuleMessagingPort : implements
 RewriteRuleMapper ....> IRewriteRuleMessagingPort : uses
-RewriteRuleMapper ....> RewriteRule : creates
+
+' DataAccess → 上1行目3列目（上方向を明示）
+RewriteRuleMapper ..up.> RewriteRule : creates
 
 ' DataAccess上1行目 → DataAccess下2行目（下方向を明示）
-RewriteRuleMessagingService ....d> DexieRewriteRuleRepository : delegates
-RewriteRuleMapper ....d> GetByIdRequestDTO : creates
-RewriteRuleMapper ....d> UpdateRuleActiveRequestDTO : creates
-RewriteRuleMapper ....d> RewriteRuleDTO : converts
+RewriteRuleMessagingService ..down.> DexieRewriteRuleRepository : delegates
+RewriteRuleMapper ..down.> GetByIdRequestDTO : creates
+RewriteRuleMapper ..down.> UpdateRuleActiveRequestDTO : creates
+RewriteRuleMapper ..down.> RewriteRuleDTO : converts
 RewriteRuleMessagingService ....> GetByIdRequestDTO : receives
 RewriteRuleMessagingService ....> UpdateRuleActiveRequestDTO : receives
 RewriteRuleMessagingService ....> RewriteRuleDTO : returns
