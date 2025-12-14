@@ -47,9 +47,12 @@ src/interface-adapters/
 ├── presenters/                                  ← Presenter
 │   └── rule/
 │       └── ToggleRuleActivePresenter.ts
+├── ports/                                       ← Port（依存性逆転のため、ADR-002参照）
+│   └── messaging/
+│       └── IRewriteRuleMessagingPort.ts         ← MessagingService の抽象化
 └── mappers/                                     ← Mapper（ADR-002、ADR-003参照）
     └── rule/
-        └── RewriteRuleMapper.ts                 ← Entity ↔ DTO 相互変換
+        └── RewriteRuleMapper.ts                 ← Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信
 ```
 
 ### 第4層: frameworks-and-drivers/
@@ -68,13 +71,13 @@ src/frameworks-and-drivers/
 │   └── indexeddb/
 │       └── DexieRewriteRuleRepository.ts        ← DTO ↔ DBレコード変換（Background Script用）
 ├── messaging/                                   ← Messaging Gateway 実装
-│   ├── ChromeRuntimeRewriteRuleRepository.ts    ← 既存（Rules Page用）
+│   ├── ChromeRuntimeRewriteRuleRepository.ts    ← Mapperへの委譲のみ（DTOを意識しない、Rules Page用）
 │   └── dto/                                     ← メッセージング用DTO（ADR-002、ADR-003参照）
 │       ├── RewriteRuleDTO.ts                    ← エンティティ全体を表現
 │       ├── GetByIdRequestDTO.ts                 ← ルール取得要求 { id }
-│       └── UpdateRuleActiveRequestDTO.ts               ← トグル更新 { id, isActive }
+│       └── UpdateRuleActiveRequestDTO.ts        ← トグル更新 { id, isActive }
 ├── proxy-service/                               ← proxy-service定義（ADR-002参照）
-│   └── RewriteRuleMessagingService.ts           ← Background Scriptで実行されるサービス
+│   └── RewriteRuleMessagingService.ts           ← IRewriteRuleMessagingPort を実装、Background Scriptで実行
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
 │   └── ChromeTabsGateway.ts                     ← rule.matchesUrl()判定後リロード（ADR-001参照）
 └── di/                                          ← DI Container
@@ -105,13 +108,18 @@ src/frameworks-and-drivers/
 │      │                                                          │
 │      ▼                                                          │
 │ [第4層] ChromeRuntimeRewriteRuleRepository                       │
-│      │ └── GetByIdRequestDTO作成、RewriteRuleMessagingService.getById()呼出 │
+│      │ └── Mapperに委譲（DTOを意識しない）                        │
 │      │                                                          │
-│      ├─────── proxy-service (透過的メッセージング) ──────────────│
+│      ▼                                                          │
+│ [第3層] RewriteRuleMapper                                        │
+│      │ └── GetByIdRequestDTO作成、IRewriteRuleMessagingPort経由で通信 │
+│      │                                                          │
+│      ├─────── IRewriteRuleMessagingPort ────────────────────────│
 │      │                                                          │
 │      │        ┌───────────────────────────────────────┐         │
 │      │        │ Background Script                     │         │
 │      │        │ [第4層] RewriteRuleMessagingService   │         │
+│      │        │ (implements IRewriteRuleMessagingPort)│         │
 │      │        │      │                                │         │
 │      │        │      ▼                                │         │
 │      │        │ DexieRewriteRuleRepository            │         │
@@ -122,7 +130,7 @@ src/frameworks-and-drivers/
 │      │                                                          │
 │      ◀─────── RewriteRuleDTO ────────────────────────────────────│
 │      │                                                          │
-│      │ └── RewriteRuleMapper.toEntity() でエンティティ再構築       │
+│      │ └── Mapper内でDTO → Entity変換                            │
 │      │     （ADR-002、ADR-003参照）                              │
 │      │                                                          │
 │      ▼                                                          │
@@ -159,13 +167,14 @@ src/frameworks-and-drivers/
 | 新規 | ToggleRuleActiveOutputData.ts | 出力DTO 新規作成 |
 | 新規 | ToggleRuleActiveController.ts | Controller 新規作成 |
 | 新規 | ToggleRuleActivePresenter.ts | Presenter 新規作成 |
-| 新規 | RewriteRuleMapper.ts | Entity ↔ DTO 相互変換 Mapper 新規作成（ADR-002、ADR-003参照） |
+| 新規 | RewriteRuleMapper.ts | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信（ADR-002、ADR-003参照） |
+| 新規 | IRewriteRuleMessagingPort.ts | MessagingService の抽象化（Port）、依存性逆転のため（ADR-002参照） |
 | 新規 | ITabsGateway.ts | タブ操作Gateway Interface 新規作成 |
 | 新規 | ChromeTabsGateway.ts | タブリロード実装 新規作成（rule.matchesUrl()判定後リロード、ADR-001参照） |
 | 新規 | messaging/dto/*.ts | メッセージングDTO 新規作成（ADR-002、ADR-003） |
-| 新規 | RewriteRuleMessagingService.ts | proxy-service定義 新規作成（ADR-002） |
+| 新規 | RewriteRuleMessagingService.ts | IRewriteRuleMessagingPort を実装、proxy-service定義 新規作成（ADR-002） |
 | 新規 | ToggleSwitch.tsx | UIコンポーネント 新規作成 |
 | 変更 | RulesApp.tsx | トグルハンドラー追加 |
 | 変更 | container.ts | DI登録追加 |
-| 既存 | ChromeRuntimeRewriteRuleRepository.ts | proxy-service経由でbackgroundと通信（ADR-002参照） |
+| 既存 | ChromeRuntimeRewriteRuleRepository.ts | Mapperへの委譲のみ（DTOを意識しない）（ADR-002参照） |
 | 既存 | DexieRewriteRuleRepository.ts | DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |

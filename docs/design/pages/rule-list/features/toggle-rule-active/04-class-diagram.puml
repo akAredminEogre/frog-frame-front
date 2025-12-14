@@ -66,19 +66,26 @@ package "upper half" as UpperHalf {
     }
 
     class ChromeRuntimeRewriteRuleRepository <<Repository>> {
-      - messagingService: RewriteRuleMessagingService
+      - mapper: RewriteRuleMapper
       + getById(id: number): Promise<RewriteRule>
       + update(rule: RewriteRule): Promise<void>
     }
 
     class RewriteRuleMapper <<Mapper>> {
-      + toEntity(dto: RewriteRuleDTO): RewriteRule
-      + toDTO(entity: RewriteRule): RewriteRuleDTO
+      - messagingPort: IRewriteRuleMessagingPort
+      + getById(id: number): Promise<RewriteRule>
+      + update(rule: RewriteRule): Promise<void>
+    }
+
+    interface IRewriteRuleMessagingPort <<Port>> {
+      + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+      + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
     }
 
     ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
     IRewriteRuleRepository -[hidden]d- ChromeRuntimeRewriteRuleRepository
     ChromeRuntimeRewriteRuleRepository -[hidden]d- RewriteRuleMapper
+    RewriteRuleMapper -[hidden]d- IRewriteRuleMessagingPort
   }
 
   ' --- 4列目: Gateway具象/抽象, Entity ---
@@ -189,16 +196,17 @@ ToggleRuleActiveInteractor ....> ToggleRuleActiveOutputData : creates
 
 ' 3列目内部
 ChromeRuntimeRewriteRuleRepository ....|> IRewriteRuleRepository : implements
-ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMessagingService : uses
-ChromeRuntimeRewriteRuleRepository ....> GetByIdRequestDTO : creates
-ChromeRuntimeRewriteRuleRepository ....> RewriteRuleDTO : receives
 ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMapper : uses
+RewriteRuleMapper ....> IRewriteRuleMessagingPort : uses
+RewriteRuleMapper ....> GetByIdRequestDTO : creates
+RewriteRuleMapper ....> UpdateRuleActiveRequestDTO : creates
 RewriteRuleMapper ....> RewriteRuleDTO : converts
 
 ' 4列目内部
 ChromeTabsGateway ....|> ITabsGateway : implements
 
 ' DataAccessパッケージ内部
+RewriteRuleMessagingService ....|> IRewriteRuleMessagingPort : implements
 RewriteRuleMessagingService ....> DexieRewriteRuleRepository : delegates
 RewriteRuleMessagingService ....> GetByIdRequestDTO : receives
 RewriteRuleMessagingService ....> UpdateRuleActiveRequestDTO : receives
