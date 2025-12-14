@@ -59,21 +59,28 @@ DB アクセスに使用する RewriteRule 固有の DTO を定義する。
 
 ### 変換責務
 
-Entity と DTO の変換は専用の Mapper クラスで行い、Repository の責務を明確に分離する。
+Entity と DTO の変換は専用の Mapper クラスで行う。Mapper は変換に加え、MessagingService への通信も担当する。これにより Repository は DTO を意識せずに済む。
 
-| コンポーネント | 責務 |
-|---------------|------|
-| `ChromeRuntimeRewriteRuleRepository` | データアクセスの調整、Mapper を使用した変換の委譲 |
-| `RewriteRuleMapper` | Entity ↔ DTO 相互変換（`toEntity(dto)`, `toDTO(entity)`） |
-| `RewriteRuleMessagingService` | proxy-service として DTO を受け渡し（ADR-002 参照） |
-| `DexieRewriteRuleRepository` | DTO ↔ DB レコード 変換 |
+#### 依存性逆転の適用
 
-#### Mapper 導入の理由
+Mapper（interface-adapters 層）が MessagingService（frameworks-and-drivers 層）を直接参照することを避けるため、Port インターフェースを導入する（ADR-002 参照）。
 
-1. **単一責任の原則**: Repository はデータアクセスの調整のみ、変換ロジックは Mapper が担当
-2. **テスタビリティ**: 変換ロジックを独立してユニットテスト可能
-3. **Clean Architecture との整合性**: Entity が DTO を知らない設計（`fromDTO` を Entity から除去可能）
-4. **再利用性**: 同じ変換が複数箇所で必要な場合に再利用可能
+| コンポーネント | 層 | 責務 |
+|---------------|-----|------|
+| `ChromeRuntimeRewriteRuleRepository` | frameworks-and-drivers | Mapper への委譲のみ（DTO を意識しない） |
+| `RewriteRuleMapper` | interface-adapters | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信 |
+| `IRewriteRuleMessagingPort` | interface-adapters | MessagingService の抽象化（Port） |
+| `RewriteRuleMessagingService` | frameworks-and-drivers | IRewriteRuleMessagingPort を実装、proxy-service として DTO を受け渡し |
+| `DexieRewriteRuleRepository` | frameworks-and-drivers | DTO ↔ DB レコード 変換 |
+
+#### Mapper + Port 導入の理由
+
+1. **依存性逆転の原則**: interface-adapters → frameworks-and-drivers の直接依存を回避
+2. **Repository の単純化**: Repository は Entity のみを扱い、DTO 変換を知らない
+3. **単一責任の原則**: Repository はデータアクセスの調整のみ
+4. **テスタビリティ**: Mapper のテストで IRewriteRuleMessagingPort をモック可能
+5. **Clean Architecture との整合性**: Entity が DTO を知らない設計、依存は内向きに保たれる
+6. **再利用性**: 同じ変換が複数箇所で必要な場合に再利用可能
 
 ## 理由
 
