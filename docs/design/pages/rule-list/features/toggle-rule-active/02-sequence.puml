@@ -1,3 +1,4 @@
+' docs/docs-rules/design.mdの記述に従うこと
 @startuml ToggleRuleActive
 
 title ルールトグル機能 シーケンス図
@@ -98,6 +99,10 @@ note over MessagingRepo, Mapper : RepositoryはMapperに変換を委譲\n（ADR-
 
 MessagingRepo -> Mapper : toEntity(RewriteRuleDTO)
 activate Mapper
+Mapper -> Entity : new(id, pattern, replacement, isActive)
+activate Entity
+Entity --> Mapper : rule
+deactivate Entity
 Mapper --> MessagingRepo : rule
 deactivate Mapper
 
