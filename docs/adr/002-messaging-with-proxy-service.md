@@ -55,16 +55,33 @@ messaging ではデータは JSON シリアライズされて送信されるた�
 
 **Entity と DTO の相互変換は専用の Mapper クラスで行う。**
 
-| コンポーネント | 責務 |
-|---------------|------|
-| Repository | データアクセスの調整、Mapper への変換委譲 |
-| Mapper | Entity ↔ DTO 相互変換 |
-| MessagingService | DTO の受け渡し |
+Mapper は変換だけでなく、MessagingService への呼び出しも担当する。これにより Repository は DTO を意識せずに済む。
+
+#### 依存性逆転の適用
+
+Clean Architecture の依存ルールを守るため、Mapper（interface-adapters 層）が MessagingService（frameworks-and-drivers 層）を直接参照することを避ける。
+
+```
+[interface-adapters]
+  IRewriteRuleMessagingPort (interface)
+  RewriteRuleMapper → uses → IRewriteRuleMessagingPort
+
+[frameworks-and-drivers]
+  RewriteRuleMessagingService implements IRewriteRuleMessagingPort
+```
+
+| コンポーネント | 層 | 責務 |
+|---------------|-----|------|
+| Repository | frameworks-and-drivers | Mapper への委譲のみ（DTO を意識しない） |
+| Mapper | interface-adapters | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信 |
+| IRewriteRuleMessagingPort | interface-adapters | MessagingService の抽象化（Port） |
+| MessagingService | frameworks-and-drivers | IRewriteRuleMessagingPort を実装、DTO の実際の送受信 |
 
 この分離により以下を実現する：
-- **単一責任**: Repository は変換ロジックを持たない
-- **テスタビリティ**: 変換ロジックを独立してテスト可能
-- **Clean Architecture 準拠**: Entity が DTO を知らない設計
+- **依存性逆転**: interface-adapters → frameworks-and-drivers の直接依存を回避
+- **Repository の単純化**: Repository は Entity のみを扱い、DTO 変換を知らない
+- **テスタビリティ**: Mapper のテストで IRewriteRuleMessagingPort をモック可能
+- **Clean Architecture 準拠**: 依存は内向き（outer → inner）に保たれる
 
 ### DTO 定義の基準
 
