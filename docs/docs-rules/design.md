@@ -245,7 +245,7 @@ plantuml.comで画像としてレンダリングしたときに、下記が達�
       - 3列目：`upper third column` package
         - 上から、Interactor、Repositoryの抽象クラス、Repositoryの具象クラス
       - 4列目：`upper fourth column` package
-        - 上から、Entity、Repository以外のGatewayの抽象クラス、Gatewayの具象クラス
+        - 上から、Repository以外のGatewayの具象クラス、Repository以外のGatewayの抽象クラス、Entity
   - 下半分
     - データアクセスpackage(概念的にRepositoryの具象クラス)
 
