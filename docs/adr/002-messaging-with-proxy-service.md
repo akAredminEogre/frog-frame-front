@@ -51,6 +51,21 @@ Chrome 拡張機能では、複数のコンテキスト（Background Script、Ru
 
 messaging ではデータは JSON シリアライズされて送信されるため、クラスインスタンスを送信すると受信側ではメソッドが消失した plain object となる。この技術的制約に対応するため、DTO を使用する。
 
+### Entity-DTO 変換
+
+**Entity と DTO の相互変換は専用の Mapper クラスで行う。**
+
+| コンポーネント | 責務 |
+|---------------|------|
+| Repository | データアクセスの調整、Mapper への変換委譲 |
+| Mapper | Entity ↔ DTO 相互変換 |
+| MessagingService | DTO の受け渡し |
+
+この分離により以下を実現する：
+- **単一責任**: Repository は変換ロジックを持たない
+- **テスタビリティ**: 変換ロジックを独立してテスト可能
+- **Clean Architecture 準拠**: Entity が DTO を知らない設計
+
 ### DTO 定義の基準
 
 DTO の粒度は以下の基準に従う：
