@@ -6,13 +6,13 @@ skinparam packageStyle rectangle
 ' レイアウト方針（docs/docs-rules/design.md に準拠）:
 ' 図を横に2分割:
 '   上半分: upper half package（4列のpackageを含む）
-'   下半分: DataAccessパッケージ（MessagingService関連）
+'   下半分: lower half package（View + DataAccess）
 ' ===================================================
 
 ' ===== 上半分 =====
 package "upper half" as UpperHalf {
 
-  ' --- 1列目: Controller, Presenter, View ---
+  ' --- 1列目: Controller, Presenter ---
   package "upper first column" as Col1 {
     class ToggleRuleActiveController <<Controller>> {
       - useCase: IToggleRuleActiveUseCase
@@ -24,12 +24,7 @@ package "upper half" as UpperHalf {
       + present(outputData: ToggleRuleActiveOutputData): void
     }
 
-    class RulesApp <<View>> {
-      + onToggle(ruleId: number): void
-    }
-
     ToggleRuleActiveController -[hidden]d- ToggleRuleActivePresenter
-    ToggleRuleActivePresenter -[hidden]d- RulesApp
   }
 
   ' --- 2列目: InputData, IUseCase, IPresenter, OutputData ---
@@ -108,36 +103,65 @@ package "upper half" as UpperHalf {
   Col3 -[hidden]r- Col4
 }
 
-' ===== 下半分: DataAccessパッケージ =====
-rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
-  class RewriteRuleMessagingService <<Messaging Service>> {
-    + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
-    + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+' ===== 下半分 =====
+package "lower half" as LowerHalf {
+
+  ' --- 下1列目: View ---
+  package "lower first column" as LowerCol1 {
+    class RulesApp <<View>> {
+      + onToggle(ruleId: number): void
+    }
   }
 
-  class DexieRewriteRuleRepository <<Repository>> {
-    + getById(id: number): Promise<RewriteRuleDTO>
-    + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+  ' --- 下2列目: DataAccess ---
+  package "lower second column" as LowerCol2 {
+    rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
+
+      ' データアクセス1列目: MessagingService, Repository
+      package "data access first column" as DACol1 {
+        class RewriteRuleMessagingService <<Messaging Service>> {
+          + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+          + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+        }
+
+        class DexieRewriteRuleRepository <<Repository>> {
+          + getById(id: number): Promise<RewriteRuleDTO>
+          + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+        }
+
+        RewriteRuleMessagingService -[hidden]d- DexieRewriteRuleRepository
+      }
+
+      ' データアクセス2列目: DTO
+      package "data access second column" as DACol2 {
+        class RewriteRuleDTO <<DTO>> {
+          + id: number
+          + urlPattern: string
+          + isActive: boolean
+        }
+
+        class GetByIdRequestDTO <<DTO>> {
+          + id: number
+        }
+
+        class UpdateRuleActiveRequestDTO <<DTO>> {
+          + id: number
+          + isActive: boolean
+        }
+
+        RewriteRuleDTO -[hidden]d- GetByIdRequestDTO
+        GetByIdRequestDTO -[hidden]d- UpdateRuleActiveRequestDTO
+      }
+
+      DACol1 -[hidden]r- DACol2
+    }
   }
 
-  class RewriteRuleDTO <<DTO>> {
-    + id: number
-    + urlPattern: string
-    + isActive: boolean
-  }
-
-  class GetByIdRequestDTO <<DTO>> {
-    + id: number
-  }
-
-  class UpdateRuleActiveRequestDTO <<DTO>> {
-    + id: number
-    + isActive: boolean
-  }
+  LowerCol1 -[hidden]r- LowerCol2
 }
 
 ' 上半分→下半分の配置
-UpperHalf -[hidden]down- DataAccess
+UpperHalf -[hidden]down- LowerHalf
 
 ' ===== 関連 =====
 
