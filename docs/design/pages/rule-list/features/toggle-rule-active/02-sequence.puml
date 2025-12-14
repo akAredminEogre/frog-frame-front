@@ -28,6 +28,10 @@ box "Rules Page - application-business-rules (第2層)" #LightYellow
   participant "ToggleRuleActive\nOutputData" as OutputData
 end box
 
+box "Rules Page - interface-adapters" #LightCyan
+  participant "RewriteRuleMapper" as Mapper
+end box
+
 box "Rules Page - frameworks-and-drivers" #LightCyan
   participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
   participant "ChromeTabsGateway" as TabsGateway
@@ -90,10 +94,12 @@ deactivate DexieRepo
 ProxyService --> MessagingRepo : RewriteRuleDTO
 deactivate ProxyService
 
-MessagingRepo -> Entity : fromDTO(RewriteRuleDTO)
-activate Entity
-Entity --> MessagingRepo : rule
-deactivate Entity
+note over MessagingRepo, Mapper : RepositoryはMapperに変換を委譲\n（ADR-002、ADR-003参照）
+
+MessagingRepo -> Mapper : toEntity(RewriteRuleDTO)
+activate Mapper
+Mapper --> MessagingRepo : rule
+deactivate Mapper
 
 MessagingRepo --> IRepository : rule
 deactivate MessagingRepo
