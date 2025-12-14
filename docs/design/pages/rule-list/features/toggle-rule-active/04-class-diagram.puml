@@ -1,3 +1,4 @@
+' docs/docs-rules/design.mdの記述に従うこと
 @startuml ToggleRuleActiveClassDiagram
 
 skinparam packageStyle rectangle
@@ -90,11 +91,16 @@ package "upper half" as UpperHalf {
       - isActive: boolean
       + withActive(isActive: boolean): RewriteRule
       + matchesUrl(url: string): boolean
-      + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
+    }
+
+    class RewriteRuleMapper <<Mapper>> {
+      + toEntity(dto: RewriteRuleDTO): RewriteRule
+      + toDTO(entity: RewriteRule): RewriteRuleDTO
     }
 
     ChromeTabsGateway -[hidden]d- ITabsGateway
     ITabsGateway -[hidden]d- RewriteRule
+    RewriteRule -[hidden]d- RewriteRuleMapper
   }
 
   ' 列間の横配置
@@ -198,7 +204,9 @@ RewriteRuleMessagingService ....> RewriteRuleDTO : returns
 
 ' 3列目 → 4列目
 ToggleRuleActiveInteractor ....> RewriteRule : uses
-ChromeRuntimeRewriteRuleRepository ....> RewriteRule : creates via fromDTO
+ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMapper : uses
+RewriteRuleMapper ....> RewriteRule : creates
+RewriteRuleMapper ....> RewriteRuleDTO : converts
 ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
 
 @enduml

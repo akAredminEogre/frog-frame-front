@@ -8,7 +8,7 @@
 src/enterprise-business-rules/
 └── entities/                                    ← Entity
     └── RewriteRule/
-        └── RewriteRule.ts                       ← withActive(), matchesUrl(), fromDTO() 追加
+        └── RewriteRule.ts                       ← withActive(), matchesUrl() 追加
 ```
 
 ### 第2層: application-business-rules/
@@ -44,9 +44,12 @@ src/interface-adapters/
 ├── controllers/                                 ← Controller
 │   └── rule/
 │       └── ToggleRuleActiveController.ts
-└── presenters/                                  ← Presenter
+├── presenters/                                  ← Presenter
+│   └── rule/
+│       └── ToggleRuleActivePresenter.ts
+└── mappers/                                     ← Mapper（ADR-002、ADR-003参照）
     └── rule/
-        └── ToggleRuleActivePresenter.ts
+        └── RewriteRuleMapper.ts                 ← Entity ↔ DTO 相互変換
 ```
 
 ### 第4層: frameworks-and-drivers/
@@ -119,7 +122,8 @@ src/frameworks-and-drivers/
 │      │                                                          │
 │      ◀─────── RewriteRuleDTO ────────────────────────────────────│
 │      │                                                          │
-│      │ └── RewriteRule.fromDTO() でエンティティ再構築             │
+│      │ └── RewriteRuleMapper.toEntity() でエンティティ再構築       │
+│      │     （ADR-002、ADR-003参照）                              │
 │      │                                                          │
 │      ▼                                                          │
 │ [第2層] ToggleRuleActiveInteractor                               │
@@ -146,7 +150,7 @@ src/frameworks-and-drivers/
 
 | 種別 | ファイル | 変更内容 |
 |------|---------|---------|
-| 移行 | RewriteRule.ts | enterprise-business-rules/へ移動、matchesUrl(), fromDTO()追加（ADR-001参照） |
+| 移行 | RewriteRule.ts | enterprise-business-rules/へ移動、matchesUrl()追加（ADR-001参照） |
 | 移行 | IRewriteRuleRepository.ts | application-business-rules/ports/gateway/へ移動 |
 | 新規 | IToggleRuleActiveUseCase.ts | Input Port 新規作成 |
 | 新規 | IToggleRuleActivePresenter.ts | Output Port 新規作成 |
@@ -155,6 +159,7 @@ src/frameworks-and-drivers/
 | 新規 | ToggleRuleActiveOutputData.ts | 出力DTO 新規作成 |
 | 新規 | ToggleRuleActiveController.ts | Controller 新規作成 |
 | 新規 | ToggleRuleActivePresenter.ts | Presenter 新規作成 |
+| 新規 | RewriteRuleMapper.ts | Entity ↔ DTO 相互変換 Mapper 新規作成（ADR-002、ADR-003参照） |
 | 新規 | ITabsGateway.ts | タブ操作Gateway Interface 新規作成 |
 | 新規 | ChromeTabsGateway.ts | タブリロード実装 新規作成（rule.matchesUrl()判定後リロード、ADR-001参照） |
 | 新規 | messaging/dto/*.ts | メッセージングDTO 新規作成（ADR-002、ADR-003） |
