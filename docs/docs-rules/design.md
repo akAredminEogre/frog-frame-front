@@ -247,20 +247,20 @@ plantuml.comで画像としてレンダリングしたときに、下記が達�
       - `left second column upper row` packageとしてまとめる
       - さらに縦に3分割にするpackageにまとめる。左から順に
         - 1列目：`left second column upper row first column` package
-          - 上から、InputData、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
+          - 上から、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
         - 2列目：`left second column upper row second column` package
-          - 上から、Interactor、Repositoryの抽象クラス、Repositoryの具象クラス
+          - 上から、InputData、Interactor、Repositoryの抽象クラス、Repositoryの具象クラス
         - 3列目：`left second column upper row third column` package
-          - 上から、Repository以外のGatewayの具象クラス、Repository以外のGatewayの抽象クラス、Entity
+          - 上から、Repository以外のGatewayの抽象クラス、Repository以外のGatewayの具象クラス、Entity、DTOのMapperクラス
     - 上2行目
       - `left second column lower row` packageとしてまとめる
       - これをさらに横に2分割したとき
         - 上1行目
           - `data access upper row` packageとしてまとめる
-          - 左からDTOのMapperクラス、DB用メッセージング抽象クラス、DB用メッセージング具象クラス、DB用リポジトリクラス
+          - 左からDB用メッセージング具象クラス、DB用メッセージング抽象クラス
         - 上2行目
           - `data access lower row` packageとしてまとめる
-          - DB用メッセージングサービスクラス用DTOクラス
+          - DB用リポジトリクラス、DB用メッセージングサービスクラス用DTOクラス
 ## 関連ドキュメント
 
 - ユーザーストーリー: `docs/user-stories/`
