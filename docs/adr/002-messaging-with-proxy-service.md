@@ -117,6 +117,13 @@ DTO の粒度は以下の基準に従う：
 - ライブラリの学習コスト
 - Background Script での同期的な登録が必須
 
+## 影響ドキュメント
+
+このADRが変更された場合、以下のドキュメントも更新が必要：
+
+- [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](./003-unified-db-access-via-messaging.md) - DTO 定義、変換責務
+- [Toggle Rule Active 設計](../design/pages/rule-list/features/toggle-rule-active/) - クラス設計、シーケンス図、ディレクトリ構造、クラス図
+
 ## 関連ドキュメント
 
 - [ADR-001: Clean Architecture with Presenter Pattern](./001-clean-architecture-with-presenter-pattern.md)
