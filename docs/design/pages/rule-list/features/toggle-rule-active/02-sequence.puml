@@ -31,6 +31,7 @@ end box
 
 box "Rules Page - interface-adapters" #LightCyan
   participant "RewriteRuleMapper" as Mapper
+  participant "<<interface>>\nIRewriteRuleMessagingPort" as IMessagingPort
 end box
 
 box "Rules Page - frameworks-and-drivers" #LightCyan
@@ -39,7 +40,7 @@ box "Rules Page - frameworks-and-drivers" #LightCyan
 end box
 
 box "Background - frameworks-and-drivers (第4層)" #LightGray
-  participant "RewriteRuleMessagingService\n(proxy-service)" as ProxyService
+  participant "RewriteRuleMessagingService\n(implements IRewriteRuleMessagingPort)" as ProxyService
   participant "DexieRewriteRule\nRepository" as DexieRepo
 end box
 

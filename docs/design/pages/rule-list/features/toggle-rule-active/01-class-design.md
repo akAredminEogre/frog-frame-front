@@ -67,9 +67,10 @@
 | ITabsGateway | application-business-rules | Gateway Interface。タブ操作（Interactorが依存） |
 | ToggleRuleActiveController | interface-adapters | ユーザー入力をInputDataに変換 |
 | ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
-| RewriteRuleMapper | interface-adapters | Entity ↔ DTO 相互変換。`toEntity(dto)`, `toDTO(entity)`（ADR-002、ADR-003参照） |
-| ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。Mapperを使用した変換の委譲、proxy-service経由でbackgroundと通信（Rules Page用、ADR-002参照） |
-| RewriteRuleMessagingService | frameworks-and-drivers | proxy-serviceで定義。Background Scriptで実行されるサービス（ADR-002参照） |
+| RewriteRuleMapper | interface-adapters | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信（ADR-002、ADR-003参照） |
+| IRewriteRuleMessagingPort | interface-adapters | MessagingService の抽象化（Port）。依存性逆転のため導入（ADR-002参照） |
+| ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。Mapperへの委譲のみ（DTOを意識しない）（Rules Page用、ADR-002参照） |
+| RewriteRuleMessagingService | frameworks-and-drivers | IRewriteRuleMessagingPort を実装。proxy-serviceで定義、Background Scriptで実行（ADR-002参照） |
 | DexieRewriteRuleRepository | frameworks-and-drivers | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（ADR-001参照） |
 | RewriteRuleDTO | frameworks-and-drivers | メッセージング用DTO。エンティティ全体を表現（ADR-002、ADR-003参照） |
@@ -102,8 +103,11 @@ Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-
 すべてのコンテキストから DB アクセスは messaging 経由で Background Script に集約する。
 
 また、ADR-002 に従い、メッセージングではドメインエンティティではなくDTOを送信する。
-Entity ↔ DTO の変換は専用の RewriteRuleMapper クラスが担当し、
-ChromeRuntimeRewriteRuleRepository は Mapper に変換を委譲する（ADR-002、ADR-003参照）。
+Entity ↔ DTO の変換と MessagingService への通信は RewriteRuleMapper クラスが担当する。
+ChromeRuntimeRewriteRuleRepository は Mapper への委譲のみを行い、DTO を意識しない（ADR-002、ADR-003参照）。
+
+依存性逆転のため、Mapper は IRewriteRuleMessagingPort インターフェースに依存し、
+RewriteRuleMessagingService がこれを実装する（ADR-002参照）。
 
 ADR-002 に従い、メッセージングには @webext-core/proxy-service を使用する。
 
@@ -116,20 +120,23 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │  │              IRewriteRuleRepository                         ││
 │  │                              ↓                              ││
 │  │              ChromeRuntimeRewriteRuleRepository             ││
-│  │              (GetByIdRequestDTO作成 / proxy-service経由)    ││
+│  │              (Mapperへの委譲のみ、DTOを意識しない)           ││
 │  │                              ↓                              ││
-│  │              RewriteRuleMapper (DTO ↔ Entity変換)           ││
-│  │                                                             ││
-│  │ Interactor → ITabsGateway → ChromeTabsGateway              ││
-│  │              (rule.matchesUrl()判定 → chrome.tabs.reload)   ││
-│  └──────────────────────────────┬──────────────────────────────┘│
+│  │              RewriteRuleMapper                              ││
+│  │              (Entity ↔ DTO変換 + IRewriteRuleMessagingPort) ││
+│  │                              ↓                              ││
+│  │              IRewriteRuleMessagingPort ←─────────────────┐  ││
+│  │                                                          │  ││
+│  │ Interactor → ITabsGateway → ChromeTabsGateway           │  ││
+│  │              (rule.matchesUrl()判定 → chrome.tabs.reload)│  ││
+│  └──────────────────────────────┬───────────────────────────┘──┘│
 └─────────────────────────────────┼───────────────────────────────┘
                                   │ proxy-service (DTO)
                                   ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │ Background Script                                                │
 │  ┌─────────────────────────────────────────────────────────────┐│
-│  │ RewriteRuleMessagingService (proxy-service)                  ││
+│  │ RewriteRuleMessagingService (implements IRewriteRuleMessagingPort) ││
 │  │       ↓                                                     ││
 │  │ DexieRewriteRuleRepository (IndexedDB)                      ││
 │  └─────────────────────────────────────────────────────────────┘│
