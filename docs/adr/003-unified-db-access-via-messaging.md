@@ -105,6 +105,13 @@ Mapper（interface-adapters 層）が MessagingService（frameworks-and-drivers 
 - 送信側でエンティティから DTO への変換が必要
 - 受信側で DTO からエンティティへの再構築が必要
 
+## 影響ドキュメント
+
+このADRが変更された場合、以下のドキュメントも更新が必要：
+
+- [ADR-002: メッセージングに @webext-core/proxy-service を採用](./002-messaging-with-proxy-service.md) - Entity-DTO 変換、依存性逆転
+- [Toggle Rule Active 設計](../design/pages/rule-list/features/toggle-rule-active/) - クラス設計、シーケンス図、ディレクトリ構造、クラス図
+
 ## 関連ドキュメント
 
 - [ADR-001: Clean Architecture with Presenter Pattern](./001-clean-architecture-with-presenter-pattern.md)

@@ -213,3 +213,9 @@ src/
 - **テスト容易性**: ドメインロジックを Chrome API モックなしで単体テスト可能
 - **再利用性**: 同じ判定ロジックを複数の Gateway で使用可能
 - **移植性**: ブラウザ変更時（Firefox対応等）もドメインロジックは変更不要
+
+## 影響ドキュメント
+
+このADRが変更された場合、以下のドキュメントも更新が必要：
+
+- [Toggle Rule Active 設計](../design/pages/rule-list/features/toggle-rule-active/) - クラス設計、シーケンス図、ディレクトリ構造
