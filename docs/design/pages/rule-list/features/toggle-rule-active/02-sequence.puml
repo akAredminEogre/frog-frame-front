@@ -81,11 +81,21 @@ note over IRepository, MessagingRepo : 実行時はDI経由で\nChromeRuntimeRew
 IRepository -> MessagingRepo : getById(ruleId)
 activate MessagingRepo
 
-note over MessagingRepo : GetByIdRequestDTOを作成\n{ id }
+note over MessagingRepo, Mapper : RepositoryはMapperに委譲（DTOを意識しない）\n（ADR-002、ADR-003参照）
 
-note over MessagingRepo, ProxyService : proxy-serviceが透過的にメッセージングを処理\n（ADR-002参照）
+MessagingRepo -> Mapper : getById(ruleId)
+activate Mapper
 
-MessagingRepo -> ProxyService : getById(GetByIdRequestDTO)
+note over Mapper : GetByIdRequestDTOを作成\n{ id }
+
+note over Mapper, IMessagingPort : MapperはIRewriteRuleMessagingPortに依存\n（依存性逆転の原則）
+
+Mapper -> IMessagingPort : getById(GetByIdRequestDTO)
+activate IMessagingPort
+
+note over IMessagingPort, ProxyService : 実行時はDI経由で\nRewriteRuleMessagingServiceが注入
+
+IMessagingPort -> ProxyService : getById(GetByIdRequestDTO)
 activate ProxyService
 
 ProxyService -> DexieRepo : getById(ruleId)
@@ -93,17 +103,19 @@ activate DexieRepo
 DexieRepo --> ProxyService : RewriteRuleDTO
 deactivate DexieRepo
 
-ProxyService --> MessagingRepo : RewriteRuleDTO
+ProxyService --> IMessagingPort : RewriteRuleDTO
 deactivate ProxyService
 
-note over MessagingRepo, Mapper : RepositoryはMapperに変換を委譲\n（ADR-002、ADR-003参照）
+IMessagingPort --> Mapper : RewriteRuleDTO
+deactivate IMessagingPort
 
-MessagingRepo -> Mapper : toEntity(RewriteRuleDTO)
-activate Mapper
+note over Mapper : DTO → Entity 変換
+
 Mapper -> Entity : new(id, pattern, replacement, isActive)
 activate Entity
 Entity --> Mapper : rule
 deactivate Entity
+
 Mapper --> MessagingRepo : rule
 deactivate Mapper
 
@@ -122,9 +134,17 @@ activate IRepository
 IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
 
-note over MessagingRepo : UpdateRuleActiveRequestDTOを作成\n{ id, isActive }
+note over MessagingRepo, Mapper : RepositoryはMapperに委譲（DTOを意識しない）
 
-MessagingRepo -> ProxyService : updateActive(UpdateRuleActiveRequestDTO)
+MessagingRepo -> Mapper : update(updatedRule)
+activate Mapper
+
+note over Mapper : Entity → UpdateRuleActiveRequestDTO 変換\n{ id, isActive }
+
+Mapper -> IMessagingPort : updateActive(UpdateRuleActiveRequestDTO)
+activate IMessagingPort
+
+IMessagingPort -> ProxyService : updateActive(UpdateRuleActiveRequestDTO)
 activate ProxyService
 
 ProxyService -> DexieRepo : updateActive(UpdateRuleActiveRequestDTO)
@@ -132,8 +152,14 @@ activate DexieRepo
 DexieRepo --> ProxyService : void
 deactivate DexieRepo
 
-ProxyService --> MessagingRepo : void
+ProxyService --> IMessagingPort : void
 deactivate ProxyService
+
+IMessagingPort --> Mapper : void
+deactivate IMessagingPort
+
+Mapper --> MessagingRepo : void
+deactivate Mapper
 
 MessagingRepo --> IRepository : void
 deactivate MessagingRepo
