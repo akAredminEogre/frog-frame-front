@@ -83,7 +83,7 @@ package "left second column" as LeftCol2 {
       IRewriteRuleRepository -[hidden]d- ChromeRuntimeRewriteRuleRepository
     }
 
-    ' 3列目: Gateway抽象, Gateway具象, Entity, Mapper
+    ' 3列目: Gateway抽象, Gateway具象, Entity
     package "left second column upper row third column" as URCol3 {
       interface ITabsGateway <<Gateway Interface>> {
         + reloadMatchingTabs(rule: RewriteRule): Promise<void>
@@ -101,15 +101,8 @@ package "left second column" as LeftCol2 {
         + matchesUrl(url: string): boolean
       }
 
-      class RewriteRuleMapper <<Mapper>> {
-        - messagingPort: IRewriteRuleMessagingPort
-        + getById(id: number): Promise<RewriteRule>
-        + update(rule: RewriteRule): Promise<void>
-      }
-
       ITabsGateway -[hidden]d- ChromeTabsGateway
       ChromeTabsGateway -[hidden]d- RewriteRule
-      RewriteRule -[hidden]d- RewriteRuleMapper
     }
 
     URCol1 -[hidden]r- URCol2
@@ -120,7 +113,7 @@ package "left second column" as LeftCol2 {
   package "left second column lower row" as LowerRow {
     rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
 
-      ' データアクセス上1行目: Messaging具象, Messaging抽象
+      ' データアクセス上1行目: Messaging具象, Messaging抽象, Mapper
       package "data access upper row" as DAUpperRow {
         class RewriteRuleMessagingService <<Messaging Service>> {
           + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
@@ -132,16 +125,18 @@ package "left second column" as LeftCol2 {
           + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
         }
 
-        RewriteRuleMessagingService -[hidden]r- IRewriteRuleMessagingPort
-      }
-
-      ' データアクセス下2行目: DB Repository, DTO
-      package "data access lower row" as DALowerRow {
-        class DexieRewriteRuleRepository <<Repository>> {
-          + getById(id: number): Promise<RewriteRuleDTO>
-          + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+        class RewriteRuleMapper <<Mapper>> {
+          - messagingPort: IRewriteRuleMessagingPort
+          + getById(id: number): Promise<RewriteRule>
+          + update(rule: RewriteRule): Promise<void>
         }
 
+        RewriteRuleMessagingService -[hidden]r- IRewriteRuleMessagingPort
+        IRewriteRuleMessagingPort -[hidden]r- RewriteRuleMapper
+      }
+
+      ' データアクセス下2行目: DTO, DB Repository
+      package "data access lower row" as DALowerRow {
         class RewriteRuleDTO <<DTO>> {
           + id: number
           + urlPattern: string
@@ -157,9 +152,14 @@ package "left second column" as LeftCol2 {
           + isActive: boolean
         }
 
-        DexieRewriteRuleRepository -[hidden]r- RewriteRuleDTO
+        class DexieRewriteRuleRepository <<Repository>> {
+          + getById(id: number): Promise<RewriteRuleDTO>
+          + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+        }
+
         RewriteRuleDTO -[hidden]r- GetByIdRequestDTO
         GetByIdRequestDTO -[hidden]r- UpdateRuleActiveRequestDTO
+        UpdateRuleActiveRequestDTO -[hidden]r- DexieRewriteRuleRepository
       }
 
       DAUpperRow -[hidden]d- DALowerRow
@@ -195,18 +195,18 @@ ChromeRuntimeRewriteRuleRepository ....|> IRewriteRuleRepository : implements
 ' 上1行目2列目 → 上1行目3列目
 ToggleRuleActiveInteractor ....> ITabsGateway : uses
 ToggleRuleActiveInteractor ....> RewriteRule : uses
-ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMapper : delegates
 
 ' 上1行目3列目内部
 ChromeTabsGateway ....|> ITabsGateway : implements
 ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
-RewriteRuleMapper ....> RewriteRule : creates
 
-' 上1行目3列目 → DataAccess（下方向を明示）
-RewriteRuleMapper ....d> IRewriteRuleMessagingPort : uses
+' 上1行目2列目 → DataAccess（下方向を明示）
+ChromeRuntimeRewriteRuleRepository ....d> RewriteRuleMapper : delegates
 
 ' DataAccess上1行目内部
 RewriteRuleMessagingService ....|> IRewriteRuleMessagingPort : implements
+RewriteRuleMapper ....> IRewriteRuleMessagingPort : uses
+RewriteRuleMapper ....> RewriteRule : creates
 
 ' DataAccess上1行目 → DataAccess下2行目（下方向を明示）
 RewriteRuleMessagingService ....d> DexieRewriteRuleRepository : delegates
