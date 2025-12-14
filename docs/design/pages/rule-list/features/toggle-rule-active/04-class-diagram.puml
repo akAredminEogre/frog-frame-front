@@ -2,7 +2,6 @@
 @startuml ToggleRuleActiveClassDiagram
 
 skinparam packageStyle rectangle
-left to right direction
 
 ' ===================================================
 ' Layout Policy (per docs/docs-rules/design.md):
@@ -173,7 +172,7 @@ package "left second column" as LeftCol2 {
 ' Left 1st column to Left 2nd column layout
 LeftCol1 -[hidden]right- LeftCol2
 
-' ===== Relations (no horizontal direction hints - let hidden links control layout) =====
+' ===== Relations (reverse direction for URCol2->URCol1 to fix layout) =====
 
 ' LeftCol1 internal
 RulesApp ..> ToggleRuleActiveController : uses
@@ -183,11 +182,11 @@ ToggleRuleActivePresenter ..> RulesApp : updates
 ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
 ToggleRuleActivePresenter ..|> IToggleRuleActivePresenter : implements
 
-' URCol2 to URCol1
-ToggleRuleActiveInteractor ..|> IToggleRuleActiveUseCase : implements
-ToggleRuleActiveInteractor ..> IToggleRuleActivePresenter : uses
+' URCol1 to URCol2 (REVERSED: URCol1 classes as source to place URCol1 left of URCol2)
+IToggleRuleActiveUseCase <|.. ToggleRuleActiveInteractor : implements
+IToggleRuleActivePresenter <.. ToggleRuleActiveInteractor : uses
+ToggleRuleActiveOutputData <.. ToggleRuleActiveInteractor : creates
 ToggleRuleActiveInteractor ..> ToggleRuleActiveInputData : uses
-ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
 
 ' URCol2 internal
 ChromeRuntimeRewriteRuleRepository ..|> IRewriteRuleRepository : implements
@@ -200,21 +199,21 @@ ToggleRuleActiveInteractor ..> RewriteRule : uses
 ChromeTabsGateway ..|> ITabsGateway : implements
 ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
 
-' URCol2 to DataAccess (down direction only)
+' URCol2 to DataAccess (down direction)
 ChromeRuntimeRewriteRuleRepository .down.> RewriteRuleMapper : delegates
 
-' DAUpperRow internal
-RewriteRuleMessagingService ..|> IRewriteRuleMessagingPort : implements
-RewriteRuleMapper ..> IRewriteRuleMessagingPort : uses
+' DAUpperRow internal (REVERSED: place MessagingService left, Mapper right)
+IRewriteRuleMessagingPort <|.. RewriteRuleMessagingService : implements
+IRewriteRuleMessagingPort <.. RewriteRuleMapper : uses
 
-' DataAccess to URCol3 (up direction only)
-RewriteRuleMapper .up.> RewriteRule : creates
+' DataAccess to URCol3 (up direction)
+RewriteRule <.up. RewriteRuleMapper : creates
 
-' DAUpperRow to DALowerRow (down direction only)
-RewriteRuleMessagingService .down.> DexieRewriteRuleRepository : delegates
-RewriteRuleMapper .down.> GetByIdRequestDTO : creates
-RewriteRuleMapper .down.> UpdateRuleActiveRequestDTO : creates
-RewriteRuleMapper .down.> RewriteRuleDTO : converts
+' DAUpperRow to DALowerRow (down direction)
+DexieRewriteRuleRepository <.down. RewriteRuleMessagingService : delegates
+GetByIdRequestDTO <.down. RewriteRuleMapper : creates
+UpdateRuleActiveRequestDTO <.down. RewriteRuleMapper : creates
+RewriteRuleDTO <.down. RewriteRuleMapper : converts
 RewriteRuleMessagingService .down.> GetByIdRequestDTO : receives
 RewriteRuleMessagingService .down.> UpdateRuleActiveRequestDTO : receives
 RewriteRuleMessagingService .down.> RewriteRuleDTO : returns
