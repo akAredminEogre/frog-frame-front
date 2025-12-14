@@ -239,7 +239,7 @@ plantuml.comで画像としてレンダリングしたときに、下記が達�
 - 図を縦に2分割したときに、
   - 左1列目
     - `left first column` packageとしてまとめる
-    - 上から、Controller、 Presenter、ViewModel(あれば)、View(UIコンポーネント)
+    - 上から、Controller、 View(UIコンポーネント)、ViewModel(あれば)、Presenter
   - 左2列目
     - `left second column` packageとしてまとめる
     - これを更に横に2分割したとき
