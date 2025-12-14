@@ -51,7 +51,7 @@ package "upper half" as UpperHalf {
     IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
   }
 
-  ' --- 3列目: Interactor, Repository抽象/具象, Mapper ---
+  ' --- 3列目: Interactor, Repository抽象/具象 ---
   package "upper third column" as Col3 {
     class ToggleRuleActiveInteractor <<Use Case>> {
       - repository: IRewriteRuleRepository
@@ -71,21 +71,8 @@ package "upper half" as UpperHalf {
       + update(rule: RewriteRule): Promise<void>
     }
 
-    class RewriteRuleMapper <<Mapper>> {
-      - messagingPort: IRewriteRuleMessagingPort
-      + getById(id: number): Promise<RewriteRule>
-      + update(rule: RewriteRule): Promise<void>
-    }
-
-    interface IRewriteRuleMessagingPort <<Port>> {
-      + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
-      + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
-    }
-
     ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
     IRewriteRuleRepository -[hidden]d- ChromeRuntimeRewriteRuleRepository
-    ChromeRuntimeRewriteRuleRepository -[hidden]d- RewriteRuleMapper
-    RewriteRuleMapper -[hidden]d- IRewriteRuleMessagingPort
   }
 
   ' --- 4列目: Gateway具象/抽象, Entity ---
@@ -130,8 +117,19 @@ package "lower half" as LowerHalf {
   package "lower second column" as LowerCol2 {
     rectangle "RewriteRule DataAccess" as DataAccess #LightCyan {
 
-      ' データアクセス1列目: MessagingService, Repository
+      ' データアクセス1列目: Mapper, MessagingPort, MessagingService, Repository
       package "data access first column" as DACol1 {
+        class RewriteRuleMapper <<Mapper>> {
+          - messagingPort: IRewriteRuleMessagingPort
+          + getById(id: number): Promise<RewriteRule>
+          + update(rule: RewriteRule): Promise<void>
+        }
+
+        interface IRewriteRuleMessagingPort <<Port>> {
+          + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+          + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+        }
+
         class RewriteRuleMessagingService <<Messaging Service>> {
           + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
           + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
@@ -142,6 +140,8 @@ package "lower half" as LowerHalf {
           + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
         }
 
+        RewriteRuleMapper -[hidden]d- IRewriteRuleMessagingPort
+        IRewriteRuleMessagingPort -[hidden]d- RewriteRuleMessagingService
         RewriteRuleMessagingService -[hidden]d- DexieRewriteRuleRepository
       }
 
@@ -196,16 +196,18 @@ ToggleRuleActiveInteractor ....> ToggleRuleActiveOutputData : creates
 
 ' 3列目内部
 ChromeRuntimeRewriteRuleRepository ....|> IRewriteRuleRepository : implements
-ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMapper : uses
-RewriteRuleMapper ....> IRewriteRuleMessagingPort : uses
-RewriteRuleMapper ....> GetByIdRequestDTO : creates
-RewriteRuleMapper ....> UpdateRuleActiveRequestDTO : creates
-RewriteRuleMapper ....> RewriteRuleDTO : converts
 
 ' 4列目内部
 ChromeTabsGateway ....|> ITabsGateway : implements
 
+' 3列目 → DataAccess
+ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMapper : delegates
+
 ' DataAccessパッケージ内部
+RewriteRuleMapper ....> IRewriteRuleMessagingPort : uses
+RewriteRuleMapper ....> GetByIdRequestDTO : creates
+RewriteRuleMapper ....> UpdateRuleActiveRequestDTO : creates
+RewriteRuleMapper ....> RewriteRuleDTO : converts
 RewriteRuleMessagingService ....|> IRewriteRuleMessagingPort : implements
 RewriteRuleMessagingService ....> DexieRewriteRuleRepository : delegates
 RewriteRuleMessagingService ....> GetByIdRequestDTO : receives
@@ -214,7 +216,9 @@ RewriteRuleMessagingService ....> RewriteRuleDTO : returns
 
 ' 3列目 → 4列目
 ToggleRuleActiveInteractor ....> RewriteRule : uses
-RewriteRuleMapper ....> RewriteRule : creates
 ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
+
+' DataAccess → 4列目
+RewriteRuleMapper ....> RewriteRule : creates
 
 @enduml
