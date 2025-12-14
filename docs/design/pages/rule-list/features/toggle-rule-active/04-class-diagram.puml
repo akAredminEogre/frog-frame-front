@@ -2,9 +2,6 @@
 @startuml ToggleRuleActiveClassDiagram
 
 skinparam packageStyle rectangle
-skinparam padding 2
-skinparam nodesep 15
-skinparam ranksep 15
 
 ' ===================================================
 ' Layout Policy (per docs/docs-rules/design.md):
@@ -204,20 +201,20 @@ ChromeTabsGateway ..|> ITabsGateway : implements
 ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
 
 ' Upper Row Column 2 to DataAccess (down direction)
-ChromeRuntimeRewriteRuleRepository .d.> RewriteRuleMapper : delegates
+ChromeRuntimeRewriteRuleRepository .down.> RewriteRuleMapper : delegates
 
 ' DataAccess Upper Row internal
 RewriteRuleMessagingService ..|> IRewriteRuleMessagingPort : implements
 RewriteRuleMapper ..> IRewriteRuleMessagingPort : uses
 
 ' DataAccess to Upper Row Column 3 (up direction)
-RewriteRuleMapper .u.> RewriteRule : creates
+RewriteRuleMapper .up.> RewriteRule : creates
 
 ' DataAccess Upper Row to DataAccess Lower Row (down direction)
-RewriteRuleMessagingService .d.> DexieRewriteRuleRepository : delegates
-RewriteRuleMapper .d.> GetByIdRequestDTO : creates
-RewriteRuleMapper .d.> UpdateRuleActiveRequestDTO : creates
-RewriteRuleMapper .d.> RewriteRuleDTO : converts
+RewriteRuleMessagingService .down.> DexieRewriteRuleRepository : delegates
+RewriteRuleMapper .down.> GetByIdRequestDTO : creates
+RewriteRuleMapper .down.> UpdateRuleActiveRequestDTO : creates
+RewriteRuleMapper .down.> RewriteRuleDTO : converts
 RewriteRuleMessagingService ..> GetByIdRequestDTO : receives
 RewriteRuleMessagingService ..> UpdateRuleActiveRequestDTO : receives
 RewriteRuleMessagingService ..> RewriteRuleDTO : returns
