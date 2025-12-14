@@ -108,9 +108,7 @@ Mapper（interface-adapters 層）が MessagingService（frameworks-and-drivers 
 ## 影響ドキュメント
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
-
-- [ADR-002: メッセージングに @webext-core/proxy-service を採用](./002-messaging-with-proxy-service.md) - Entity-DTO 変換、依存性逆転
-- [Toggle Rule Active 設計](../design/pages/rule-list/features/toggle-rule-active/) - クラス設計、シーケンス図、ディレクトリ構造、クラス図
+- 各機能の設計ドキュメントのうち、`01-class-design.md`、`02-sequence.puml`
 
 ## 関連ドキュメント
 

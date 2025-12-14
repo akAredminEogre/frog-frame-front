@@ -217,5 +217,4 @@ src/
 ## 影響ドキュメント
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
-
-- [Toggle Rule Active 設計](../design/pages/rule-list/features/toggle-rule-active/) - クラス設計、シーケンス図、ディレクトリ構造
+- [ 002-messaging-via-proxy-service.md](002-messaging-via-proxy-service.md)
