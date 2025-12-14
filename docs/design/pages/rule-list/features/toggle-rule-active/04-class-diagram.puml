@@ -200,8 +200,8 @@ ToggleRuleActiveInteractor ....> RewriteRule : uses
 ChromeTabsGateway ....|> ITabsGateway : implements
 ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
 
-' 上1行目2列目 → DataAccess
-ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMapper : delegates
+' 上1行目2列目 → DataAccess（下方向を明示）
+ChromeRuntimeRewriteRuleRepository ....d> RewriteRuleMapper : delegates
 
 ' DataAccess上1行目内部
 RewriteRuleMapper ....> IRewriteRuleMessagingPort : uses
@@ -216,7 +216,7 @@ RewriteRuleMessagingService ....> GetByIdRequestDTO : receives
 RewriteRuleMessagingService ....> UpdateRuleActiveRequestDTO : receives
 RewriteRuleMessagingService ....> RewriteRuleDTO : returns
 
-' DataAccess → 上1行目3列目
-RewriteRuleMapper ....> RewriteRule : creates
+' DataAccess → 上1行目3列目（上方向を明示）
+RewriteRuleMapper ....u> RewriteRule : creates
 
 @enduml
