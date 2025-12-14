@@ -79,8 +79,16 @@ package "upper half" as UpperHalf {
     IRewriteRuleRepository -[hidden]d- ChromeRuntimeRewriteRuleRepository
   }
 
-  ' --- 4列目: Entity, Gateway抽象/具象 ---
+  ' --- 4列目: Gateway具象/抽象, Entity ---
   package "upper fourth column" as Col4 {
+    class ChromeTabsGateway <<Gateway>> {
+      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    }
+
+    interface ITabsGateway <<Gateway Interface>> {
+      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+    }
+
     class RewriteRule <<Entity>> {
       - id: RuleId
       - urlPattern: UrlPattern
@@ -90,16 +98,8 @@ package "upper half" as UpperHalf {
       + {static} fromDTO(dto: RewriteRuleDTO): RewriteRule
     }
 
-    interface ITabsGateway <<Gateway Interface>> {
-      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-    }
-
-    class ChromeTabsGateway <<Gateway>> {
-      + reloadMatchingTabs(rule: RewriteRule): Promise<void>
-    }
-
-    RewriteRule -[hidden]d- ITabsGateway
-    ITabsGateway -[hidden]d- ChromeTabsGateway
+    ChromeTabsGateway -[hidden]d- ITabsGateway
+    ITabsGateway -[hidden]d- RewriteRule
   }
 
   ' 列間の横配置
