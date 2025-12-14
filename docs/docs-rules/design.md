@@ -239,7 +239,7 @@ plantuml.comで画像としてレンダリングしたときに、下記が達�
     - `upper half` packageとしてまとめる
     - `upper half` をさらに縦に4分割にするpackageにまとめる。左から順に
       - 1列目：`upper first column` package
-        - 上から、Controller、 Presenter、ViewModel(あれば)、View
+        - 上から、Controller、 Presenter、ViewModel(あれば)
       - 2列目：`upper second column` package
         - 上から、InputData、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
       - 3列目：`upper third column` package
@@ -247,7 +247,17 @@ plantuml.comで画像としてレンダリングしたときに、下記が達�
       - 4列目：`upper fourth column` package
         - 上から、Repository以外のGatewayの具象クラス、Repository以外のGatewayの抽象クラス、Entity
   - 下半分
-    - データアクセスpackage(概念的にRepositoryの具象クラス)
+    - `lower half` packageとしてまとめる
+    - `lower half` をさらに縦に2分割にするpackageにまとめる。左から順に
+      - 1列目：`lower first column` package
+        - 上から、View(UIコンポーネント)
+      - 2列目：`lower second column` package
+        - データアクセスpackage(概念的にRepositoryの具象クラス)
+        - データアクセスpackageをさらに縦に2分割にするpackageにまとめる。左から順に
+          - 1列目：`data access first column` package
+            - 上から、DB用メッセージングサービスクラス、DB用リポジトリクラス
+          - 2列目：`data access second column` package
+            - 上から、DB用メッセージングサービスクラス用DTO
 
 ## 関連ドキュメント
 
