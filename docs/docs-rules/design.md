@@ -166,6 +166,10 @@ Clean Architecture 4層に従った**理論的設計**を記載:
 | メソッドの目的 | メソッドの実装 |
 | クラス間の関係 | import文 |
 
+#### 影響ドキュメント
+`01-class-design.md` が変更された際には、以下のドキュメントも更新が必要：
+`02-sequence.puml`
+
 ### 02-sequence.puml（機能単位）
 
 01-class-design.md を実現するシーケンス図をPlantUML形式で記載:
