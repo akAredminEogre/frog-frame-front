@@ -51,7 +51,7 @@ package "upper half" as UpperHalf {
     IToggleRuleActivePresenter -[hidden]d- ToggleRuleActiveOutputData
   }
 
-  ' --- 3列目: Interactor, Repository抽象/具象 ---
+  ' --- 3列目: Interactor, Repository抽象/具象, Mapper ---
   package "upper third column" as Col3 {
     class ToggleRuleActiveInteractor <<Use Case>> {
       - repository: IRewriteRuleRepository
@@ -71,8 +71,14 @@ package "upper half" as UpperHalf {
       + update(rule: RewriteRule): Promise<void>
     }
 
+    class RewriteRuleMapper <<Mapper>> {
+      + toEntity(dto: RewriteRuleDTO): RewriteRule
+      + toDTO(entity: RewriteRule): RewriteRuleDTO
+    }
+
     ToggleRuleActiveInteractor -[hidden]d- IRewriteRuleRepository
     IRewriteRuleRepository -[hidden]d- ChromeRuntimeRewriteRuleRepository
+    ChromeRuntimeRewriteRuleRepository -[hidden]d- RewriteRuleMapper
   }
 
   ' --- 4列目: Gateway具象/抽象, Entity ---
@@ -93,14 +99,8 @@ package "upper half" as UpperHalf {
       + matchesUrl(url: string): boolean
     }
 
-    class RewriteRuleMapper <<Mapper>> {
-      + toEntity(dto: RewriteRuleDTO): RewriteRule
-      + toDTO(entity: RewriteRule): RewriteRuleDTO
-    }
-
     ChromeTabsGateway -[hidden]d- ITabsGateway
     ITabsGateway -[hidden]d- RewriteRule
-    RewriteRule -[hidden]d- RewriteRuleMapper
   }
 
   ' 列間の横配置
@@ -192,6 +192,8 @@ ChromeRuntimeRewriteRuleRepository ....|> IRewriteRuleRepository : implements
 ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMessagingService : uses
 ChromeRuntimeRewriteRuleRepository ....> GetByIdRequestDTO : creates
 ChromeRuntimeRewriteRuleRepository ....> RewriteRuleDTO : receives
+ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMapper : uses
+RewriteRuleMapper ....> RewriteRuleDTO : converts
 
 ' 4列目内部
 ChromeTabsGateway ....|> ITabsGateway : implements
@@ -204,9 +206,7 @@ RewriteRuleMessagingService ....> RewriteRuleDTO : returns
 
 ' 3列目 → 4列目
 ToggleRuleActiveInteractor ....> RewriteRule : uses
-ChromeRuntimeRewriteRuleRepository ....> RewriteRuleMapper : uses
 RewriteRuleMapper ....> RewriteRule : creates
-RewriteRuleMapper ....> RewriteRuleDTO : converts
 ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
 
 @enduml
