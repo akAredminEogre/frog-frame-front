@@ -2,19 +2,26 @@
 @startuml ToggleRuleActiveClassDiagram
 
 skinparam packageStyle rectangle
+skinparam padding 2
+skinparam nodesep 15
+skinparam ranksep 15
 
 ' ===================================================
 ' Layout Policy (per docs/docs-rules/design.md):
 ' Split diagram vertically into 2 columns:
-'   Left 1st column: Controller, Presenter, View
+'   Left 1st column: Controller, View, Presenter
 '   Left 2nd column: upper row (3 cols) + lower row (DataAccess)
 ' ===================================================
 
-' ===== Left 1st Column: Controller, Presenter, View =====
+' ===== Left 1st Column: Controller, View, Presenter =====
 package "left first column" as LeftCol1 {
   class ToggleRuleActiveController <<Controller>> {
     - useCase: IToggleRuleActiveUseCase
     + toggleActive(ruleId: number): Promise<void>
+  }
+
+  class RulesApp <<View>> {
+    + onToggle(ruleId: number): void
   }
 
   class ToggleRuleActivePresenter <<Presenter>> {
@@ -22,12 +29,8 @@ package "left first column" as LeftCol1 {
     + present(outputData: ToggleRuleActiveOutputData): void
   }
 
-  class RulesApp <<View>> {
-    + onToggle(ruleId: number): void
-  }
-
-  ToggleRuleActiveController -[hidden]down- ToggleRuleActivePresenter
-  ToggleRuleActivePresenter -[hidden]down- RulesApp
+  ToggleRuleActiveController -[hidden]down- RulesApp
+  RulesApp -[hidden]down- ToggleRuleActivePresenter
 }
 
 ' ===== Left 2nd Column =====
@@ -175,48 +178,48 @@ LeftCol1 -[hidden]right- LeftCol2
 ' ===== Relations =====
 
 ' Left 1st column internal
-RulesApp ....> ToggleRuleActiveController : uses
-ToggleRuleActivePresenter ....> RulesApp : updates
+RulesApp ..> ToggleRuleActiveController : uses
+ToggleRuleActivePresenter ..> RulesApp : updates
 
 ' Left 1st column to Upper Row Column 1
-ToggleRuleActiveController ....> IToggleRuleActiveUseCase : uses
-ToggleRuleActivePresenter ....|> IToggleRuleActivePresenter : implements
+ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
+ToggleRuleActivePresenter ..|> IToggleRuleActivePresenter : implements
 
 ' Upper Row Column 1 to Upper Row Column 2
-ToggleRuleActiveInteractor ....|> IToggleRuleActiveUseCase : implements
-ToggleRuleActiveInteractor ....> IToggleRuleActivePresenter : uses
-ToggleRuleActiveInteractor ....> IRewriteRuleRepository : uses
-ToggleRuleActiveInteractor ....> ToggleRuleActiveInputData : uses
-ToggleRuleActiveInteractor ....> ToggleRuleActiveOutputData : creates
+ToggleRuleActiveInteractor ..|> IToggleRuleActiveUseCase : implements
+ToggleRuleActiveInteractor ..> IToggleRuleActivePresenter : uses
+ToggleRuleActiveInteractor ..> IRewriteRuleRepository : uses
+ToggleRuleActiveInteractor ..> ToggleRuleActiveInputData : uses
+ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
 
 ' Upper Row Column 2 internal
-ChromeRuntimeRewriteRuleRepository ....|> IRewriteRuleRepository : implements
+ChromeRuntimeRewriteRuleRepository ..|> IRewriteRuleRepository : implements
 
 ' Upper Row Column 2 to Upper Row Column 3
-ToggleRuleActiveInteractor ....> ITabsGateway : uses
-ToggleRuleActiveInteractor ....> RewriteRule : uses
+ToggleRuleActiveInteractor ..> ITabsGateway : uses
+ToggleRuleActiveInteractor ..> RewriteRule : uses
 
 ' Upper Row Column 3 internal
-ChromeTabsGateway ....|> ITabsGateway : implements
-ChromeTabsGateway ....> RewriteRule : calls matchesUrl()
+ChromeTabsGateway ..|> ITabsGateway : implements
+ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
 
-' Upper Row Column 2 to DataAccess (explicit down direction)
-ChromeRuntimeRewriteRuleRepository ..down.> RewriteRuleMapper : delegates
+' Upper Row Column 2 to DataAccess (down direction)
+ChromeRuntimeRewriteRuleRepository .d.> RewriteRuleMapper : delegates
 
 ' DataAccess Upper Row internal
-RewriteRuleMessagingService ....|> IRewriteRuleMessagingPort : implements
-RewriteRuleMapper ....> IRewriteRuleMessagingPort : uses
+RewriteRuleMessagingService ..|> IRewriteRuleMessagingPort : implements
+RewriteRuleMapper ..> IRewriteRuleMessagingPort : uses
 
-' DataAccess to Upper Row Column 3 (explicit up direction)
-RewriteRuleMapper ..up.> RewriteRule : creates
+' DataAccess to Upper Row Column 3 (up direction)
+RewriteRuleMapper .u.> RewriteRule : creates
 
-' DataAccess Upper Row to DataAccess Lower Row (explicit down direction)
-RewriteRuleMessagingService ..down.> DexieRewriteRuleRepository : delegates
-RewriteRuleMapper ..down.> GetByIdRequestDTO : creates
-RewriteRuleMapper ..down.> UpdateRuleActiveRequestDTO : creates
-RewriteRuleMapper ..down.> RewriteRuleDTO : converts
-RewriteRuleMessagingService ....> GetByIdRequestDTO : receives
-RewriteRuleMessagingService ....> UpdateRuleActiveRequestDTO : receives
-RewriteRuleMessagingService ....> RewriteRuleDTO : returns
+' DataAccess Upper Row to DataAccess Lower Row (down direction)
+RewriteRuleMessagingService .d.> DexieRewriteRuleRepository : delegates
+RewriteRuleMapper .d.> GetByIdRequestDTO : creates
+RewriteRuleMapper .d.> UpdateRuleActiveRequestDTO : creates
+RewriteRuleMapper .d.> RewriteRuleDTO : converts
+RewriteRuleMessagingService ..> GetByIdRequestDTO : receives
+RewriteRuleMessagingService ..> UpdateRuleActiveRequestDTO : receives
+RewriteRuleMessagingService ..> RewriteRuleDTO : returns
 
 @enduml
