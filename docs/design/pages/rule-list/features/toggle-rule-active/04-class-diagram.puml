@@ -2,6 +2,7 @@
 @startuml ToggleRuleActiveClassDiagram
 
 skinparam packageStyle rectangle
+left to right direction
 
 ' ===================================================
 ' Layout Policy (per docs/docs-rules/design.md):
