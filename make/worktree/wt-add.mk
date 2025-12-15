@@ -7,6 +7,8 @@
 # See: https://github.com/akAredminEogre/frog-frame-front/pull/241#discussion_r2608419943
 # See: https://github.com/akAredminEogre/frog-frame-front/pull/241#discussion_r2608585252
 
+.PHONY: wt-add _wt-add-create
+
 wt-add: _wt-check-branch
 	@echo "Creating worktree for branch: $(BRANCH)..."
 	@mkdir -p $(dir $(WORKTREE_PATH))
@@ -18,12 +20,21 @@ wt-add: _wt-check-branch
 		exit 1; \
 	fi
 	@rm -f "$(dir $(WORKTREE_PATH)).write_test"
-	@# Check if worktree already exists in git
-	@if git worktree list | awk '{print $$1}' | grep -q "^$(PWD)/$(WORKTREE_PATH)\$$"; then \
-		echo "Error: Worktree already exists at $(WORKTREE_PATH)"; \
-		echo "To remove it, run: make wt-remove BRANCH=$(BRANCH)"; \
-		exit 1; \
+	@# Check if worktree already exists in git (idempotent handling)
+	@if git worktree list | grep -q "^$(PWD)/$(WORKTREE_PATH) "; then \
+		if git worktree list | grep "^$(PWD)/$(WORKTREE_PATH) " | grep -q "prunable"; then \
+			echo "Found prunable worktree, cleaning up..."; \
+			git worktree prune; \
+			$(MAKE) _wt-add-create BRANCH="$(BRANCH)"; \
+		else \
+			echo "Worktree already exists at $(WORKTREE_PATH) (skipping creation)"; \
+		fi; \
+	else \
+		$(MAKE) _wt-add-create BRANCH="$(BRANCH)"; \
 	fi
+
+# Internal helper: Actually create the worktree
+_wt-add-create: _wt-check-branch
 	@# Remove any orphaned directory
 	@$(MAKE) _wt-remove-orphaned BRANCH="$(BRANCH)" 2>/dev/null || true
 	@# Check if branch exists locally
