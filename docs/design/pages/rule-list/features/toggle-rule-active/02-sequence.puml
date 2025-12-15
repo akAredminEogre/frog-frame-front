@@ -35,6 +35,8 @@ end box
 box "Rules Page - frameworks-and-drivers" #LightCyan
   participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
   participant "ChromeTabsGateway" as TabsGateway
+  participant "GetByIdRequestDTO" as GetByIdDTO
+  participant "UpdateRuleActive\nRequestDTO" as UpdateDTO
 end box
 
 box "Background - frameworks-and-drivers (第4層)" #LightGray
@@ -84,11 +86,14 @@ note over MessagingRepo, Mapper : RepositoryはMapperに委譲（DTOを意識し
 MessagingRepo -> Mapper : getById(ruleId)
 activate Mapper
 
-note over Mapper : GetByIdRequestDTOを作成\n{ id }
+Mapper -> GetByIdDTO : new(ruleId)
+activate GetByIdDTO
+GetByIdDTO --> Mapper : dto
+deactivate GetByIdDTO
 
 note over Mapper, IMessagingPort : MapperはIRewriteRuleMessagingPortに依存\n（依存性逆転の原則）
 
-Mapper -> IMessagingPort : getById(GetByIdRequestDTO)
+Mapper -> IMessagingPort : getById(dto)
 activate IMessagingPort
 
 note over IMessagingPort, ProxyService : 実行時はDI経由で\nRewriteRuleMessagingServiceが注入
@@ -137,9 +142,12 @@ note over MessagingRepo, Mapper : RepositoryはMapperに委譲（DTOを意識し
 MessagingRepo -> Mapper : update(updatedRule)
 activate Mapper
 
-note over Mapper : Entity → UpdateRuleActiveRequestDTO 変換\n{ id, isActive }
+Mapper -> UpdateDTO : new(ruleId, isActive)
+activate UpdateDTO
+UpdateDTO --> Mapper : dto
+deactivate UpdateDTO
 
-Mapper -> IMessagingPort : updateActive(UpdateRuleActiveRequestDTO)
+Mapper -> IMessagingPort : updateActive(dto)
 activate IMessagingPort
 
 IMessagingPort -> ProxyService : updateActive(UpdateRuleActiveRequestDTO)
