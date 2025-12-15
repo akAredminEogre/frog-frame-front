@@ -100,7 +100,7 @@
 > **参照**: [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../adr/003-unified-db-access-via-messaging.md)
 
 Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-003 の決定に従い、
-すべてのコンテキストから DB アクセスは messaging 経由で Background Script に集約する。
+すべてのコンテキストからの DB アクセスは messaging 経由で Background Script に集約する。
 
 また、ADR-002 に従い、メッセージングではドメインエンティティではなくDTOを送信する。
 Entity ↔ DTO の変換と MessagingService への通信は RewriteRuleMapper クラスが担当する。
