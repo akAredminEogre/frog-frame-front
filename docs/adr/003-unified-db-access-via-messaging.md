@@ -36,7 +36,7 @@ messaging ではデータは JSON シリアライズされて送信される。�
 
 ### DB アクセスの統一
 
-**すべてのコンテキストから DB アクセスは messaging 経由で Background Script に集約する。**
+**すべてのコンテキストからの DB アクセスは messaging 経由で Background Script に集約する。**
 
 技術的に直接アクセス可能な場合でも、messaging を使用する。
 
