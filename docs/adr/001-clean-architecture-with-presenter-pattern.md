@@ -223,3 +223,4 @@ src/
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
 - [002-messaging-with-proxy-service.md](002-messaging-with-proxy-service.md)
+- [003-xxx.md](003-xxx.md)
