@@ -1,4 +1,4 @@
-' docs/docs-rules/design.mdの記述に従うこと
+' docs/docs-rules/design/02-sequence.mdの記述に従うこと
 @startuml ToggleRuleActive
 
 title ルールトグル機能 シーケンス図
