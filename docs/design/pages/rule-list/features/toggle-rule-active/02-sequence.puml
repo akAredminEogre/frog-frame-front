@@ -112,8 +112,6 @@ deactivate ProxyService
 IMessagingPort --> Mapper : RewriteRuleDTO
 deactivate IMessagingPort
 
-note over Mapper : DTO → Entity 変換
-
 Mapper -> Entity : new(id, pattern, replacement, isActive)
 activate Entity
 Entity --> Mapper : rule
