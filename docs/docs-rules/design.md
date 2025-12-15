@@ -230,37 +230,6 @@ Clean Architecture 4層に従った**理論的設計**を記載:
 矢印の方向 = 依存の方向（外→内のみ許可）
 ```
 
-### 04-class-diagram.puml
-
-機能単位のクラス図をPlantUML形式で記載
-
-plantuml.comで画像としてレンダリングしたときに、下記が達成されていること
-
-- 図を縦に2分割したときに、
-  - 左1列目
-    - `left first column` packageとしてまとめる
-    - 上から、Controller、 View(UIコンポーネント)、ViewModel(あれば)、Presenter
-  - 左2列目
-    - `left second column` packageとしてまとめる
-    - これを更に横に2分割したとき
-    - 上1行目
-      - `left second column upper row` packageとしてまとめる
-      - さらに縦に3分割にするpackageにまとめる。左から順に
-        - 1列目：`left second column upper row first column` package
-          - 上から、UseCaseの抽象クラス、Presenterの抽象クラス、OutputData
-        - 2列目：`left second column upper row second column` package
-          - 上から、InputData、Interactor、Repositoryの抽象クラス、Repositoryの具象クラス
-        - 3列目：`left second column upper row third column` package
-          - 上から、Repository以外のGatewayの抽象クラス、Repository以外のGatewayの具象クラス、Entity
-    - 上2行目
-      - `left second column lower row` packageとしてまとめる
-      - これをさらに横に2分割したとき
-        - 上1行目
-          - `data access upper row` packageとしてまとめる
-          - 左からDB用メッセージング具象クラス、DB用メッセージング抽象クラス、DTOのMapperクラス
-        - 上2行目
-          - `data access lower row` packageとしてまとめる
-          - DB用メッセージングサービスクラス用DTOクラス、DB用リポジトリクラス
 ## 関連ドキュメント
 
 - ユーザーストーリー: `docs/user-stories/`
