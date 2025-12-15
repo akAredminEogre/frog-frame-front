@@ -90,36 +90,16 @@
 ### 前提タスク（分類B: 移行必須）
 
 - [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移行（51ファイル）
-  - withActive() メソッド追加
-  - matchesUrl() メソッド追加（ADR-001参照）
-  - importパス更新
 - [ ] IRewriteRuleRepository.ts を application-business-rules/ports/gateway/ へ移行（14ファイル）
-  - importパス更新のみ
 
 ### ユーザーストーリー達成タスク
 
-- [ ] ToggleSwitch UIコンポーネント（atoms）を追加
-- [ ] Gateway関連クラスを追加
-  - ITabsGateway（application-business-rules/ports/gateway/）
-  - ChromeTabsGateway（frameworks-and-drivers/browser/）
+- [ ] ToggleSwitch UIコンポーネントを追加
+- [ ] ITabsGateway / ChromeTabsGateway を追加
 - [ ] Toggle UseCase関連クラスを実装
-  - ToggleRuleActiveInputData（application-business-rules/dto/input/）
-  - ToggleRuleActiveOutputData（application-business-rules/dto/output/）
-  - IToggleRuleActiveUseCase（application-business-rules/ports/input/）
-  - IToggleRuleActivePresenter（application-business-rules/ports/output/）
-  - ToggleRuleActiveInteractor（application-business-rules/interactors/）
-  - ToggleRuleActiveController（interface-adapters/controllers/）
-  - ToggleRuleActivePresenter（interface-adapters/presenters/）
 - [ ] Messaging関連クラスを実装（ADR-002、ADR-003参照）
-  - IRewriteRuleMessagingPort（interface-adapters/ports/messaging/）
-  - RewriteRuleMapper（interface-adapters/mappers/）
-  - RewriteRuleMessagingService（frameworks-and-drivers/proxy-service/）
-  - RewriteRuleDTO（frameworks-and-drivers/messaging/dto/）
-  - GetByIdRequestDTO（frameworks-and-drivers/messaging/dto/）
-  - UpdateRuleActiveRequestDTO（frameworks-and-drivers/messaging/dto/）
 - [ ] ChromeRuntimeRewriteRuleRepository をMapper委譲方式に変更
-- [ ] RulesApp.tsx にトグルハンドラーを追加
-- [ ] container.ts にDI登録を追加
+- [ ] RulesApp.tsx にトグルUIを統合
 
 ### 対応しない（分類C）
 
