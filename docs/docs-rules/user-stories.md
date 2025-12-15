@@ -69,11 +69,11 @@ docs/user-stories/
 
 | ファイル | 現在位置 | 理論位置 | 修正 | 分類 |
 |---------|---------|---------|------|------|
-| RewriteRule.ts | domain/entities/ | enterprise-business-rules/entities/ | 必須 | B |
+| RewriteRule.ts | domain/entities/ | enterprise-business-rules/entities/ | 必須 | C |
 | IRewriteRuleRepository.ts | application/ports/ | interface-adapters/gateways/ | 必須 | B |
 | DexieDatabase.ts | infrastructure/persistence/ | frameworks-and-drivers/persistence/ | 不要 | C |
 
-### 分類B: 移行必須ファイルの影響分析
+### 分類C: 移行必須ファイルの影響分析
 
 #### RewriteRule.ts（51ファイル影響）
 - 変更内容: enterprise-business-rules/entities/へ移動 + withActive()追加
