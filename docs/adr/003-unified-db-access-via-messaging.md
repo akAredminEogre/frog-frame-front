@@ -42,21 +42,6 @@ messaging ではデータは JSON シリアライズされて送信される。�
 
 DTO の使用規約と定義基準については ADR-002 を参照。
 
-## RewriteRule の DTO 定義
-
-DB アクセスに使用する RewriteRule 固有の DTO を定義する。
-
-### RewriteRuleDTO（エンティティ全体）
-
-エンティティの全プロパティを含む DTO。`getById` の応答などで使用。
-
-### 操作別 DTO
-
-| DTO名 | 用途 | 構造 |
-|-------|------|------|
-| `GetByIdRequestDTO` | ルール取得要求 | `{ id: number }` |
-| `UpdateRuleActiveRequestDTO` | 有効/無効トグル | `{ id: number, isActive: boolean }` |
-
 ### 変換責務
 
 Entity と DTO の変換は専用の Mapper クラスで行う。Mapper は変換に加え、MessagingService への通信も担当する。これにより Repository は DTO を意識せずに済む。
