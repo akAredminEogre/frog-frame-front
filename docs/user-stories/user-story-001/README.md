@@ -87,13 +87,14 @@
 
 ## 開発戦略
 
-### 前提タスク（分類B: 移行必須）
+### 前提タスク（分類B: ディレクトリ移動のみ）
 
-- [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移行（51ファイル）
-- [ ] IRewriteRuleRepository.ts を application-business-rules/ports/gateway/ へ移行（14ファイル）
+- [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移動（51ファイル）
+- [ ] IRewriteRuleRepository.ts を application-business-rules/ports/gateway/ へ移動（14ファイル）
 
 ### ユーザーストーリー達成タスク
 
+- [ ] RewriteRule に withActive(), matchesUrl() を追加
 - [ ] ToggleSwitch UIコンポーネントを追加
 - [ ] ITabsGateway / ChromeTabsGateway を追加
 - [ ] Toggle UseCase関連クラスを実装
