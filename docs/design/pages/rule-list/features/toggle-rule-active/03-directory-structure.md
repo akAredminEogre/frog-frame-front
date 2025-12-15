@@ -47,10 +47,9 @@ src/interface-adapters/
 ├── presenters/                                  ← Presenter
 │   └── rule/
 │       └── ToggleRuleActivePresenter.ts
-├── ports/                                       ← Port（Mapperが依存、依存性逆転のため）
+├── ports/                                       ← Port（Mapperが依存、ADR-002参照）
 │   └── messaging/
-│       └── IRewriteRuleMessagingPort.ts         ← MessagingService の抽象化（ADR-002参照）
-│                                                  ※ Mapper（第3層）が依存するため第3層に配置
+│       └── IRewriteRuleMessagingPort.ts         ← MessagingService の抽象化
 └── mappers/                                     ← Mapper（ADR-002、ADR-003参照）
     └── rule/
         └── RewriteRuleMapper.ts                 ← Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信
