@@ -83,23 +83,59 @@
 
 ## 開発戦略
 
-### 前提タスク（分類Cファイルのディレクトリ移動のみ行う）
+### 方針: 案C + Parallel Change
 
-- [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移動（51ファイル）
-- [ ] RulesApp.tsx を frameworks-and-drivers/ui/pages/rules/ へ移動
-- [ ] container.ts を frameworks-and-drivers/di/ へ移動
-- [ ] ChromeRuntimeRewriteRuleRepository.ts を frameworks-and-drivers/messaging/ へ移動
+既存コードを壊さずに新機能を追加するため、**Parallel Change**パターンを採用する。
 
-### ユーザーストーリー達成タスク
+```
+[Phase 1] 新ディレクトリ構造を作成（空のまま）
+[Phase 2] 新クラスを新ディレクトリに追加（既存コードに影響なし）
+[Phase 3] 新旧を並行稼働させながら段階的に移行
+[Phase 4] 旧コードを削除（このユーザーストーリーでは実施しない）
+```
 
-- [ ] RewriteRule に withActive(), matchesUrl() を追加
-- [ ] ToggleSwitch UIコンポーネントを追加
-- [ ] ITabsGateway / ChromeTabsGateway を追加
-- [ ] Toggle UseCase関連クラスを実装
-- [ ] Messaging関連クラスを実装（ADR-002、ADR-003参照）
-- [ ] ChromeRuntimeRewriteRuleRepository をMapper委譲方式に変更
-- [ ] container.ts にToggle関連クラスのDI登録追加
+### Phase 1: ディレクトリ構造の準備
+
+- [ ] Clean Architecture 4層ディレクトリを作成
+  - `src/enterprise-business-rules/entities/`
+  - `src/application-business-rules/ports/{input,output,gateway}/`
+  - `src/application-business-rules/interactors/`
+  - `src/application-business-rules/dto/{input,output}/`
+  - `src/interface-adapters/{controllers,presenters,mappers,ports}/`
+  - `src/frameworks-and-drivers/{ui,persistence,messaging,proxy-service,browser,di}/`
+
+### Phase 2: 新クラスの追加（既存コードに影響なし）
+
+- [ ] RewriteRule に withActive(), matchesUrl() を追加（既存メソッドはそのまま）
+- [ ] ToggleSwitch UIコンポーネントを新規作成
+- [ ] Toggle UseCase関連クラスを新規作成
+  - IToggleRuleActiveUseCase（Input Port）
+  - IToggleRuleActivePresenter（Output Port）
+  - ToggleRuleActiveInteractor
+  - ToggleRuleActiveInputData / OutputData
+- [ ] Toggle Controller / Presenter を新規作成
+- [ ] ITabsGateway / ChromeTabsGateway を新規作成
+- [ ] Messaging関連クラスを新規作成（ADR-002、ADR-003参照）
+  - IRewriteRuleMessagingPort
+  - RewriteRuleMapper
+  - RewriteRuleMessagingService
+  - RewriteRuleDTO, GetByIdRequestDTO, UpdateRuleActiveRequestDTO
+
+### Phase 3: 統合（新旧並行稼働）
+
+- [ ] container.ts に新クラスのDI登録を追加（既存登録はそのまま）
+- [ ] ChromeRuntimeRewriteRuleRepository を Mapper委譲方式に変更
+  - 既存の直接DB操作 → Mapper経由に変更
+  - IRewriteRuleRepository インターフェースは変更なし
 - [ ] RulesApp.tsx にトグルUIを統合
+  - ToggleSwitch コンポーネントを配置
+  - ToggleRuleActiveController を呼び出すハンドラーを追加
+
+### Phase 4: 旧コード削除（このユーザーストーリーでは実施しない）
+
+以下は将来のリファクタリングタスクとして残す：
+- 旧ディレクトリ構造の削除
+- 分類Bファイルの理論的配置への移動
 
 ### 対応しない（分類B）
 
