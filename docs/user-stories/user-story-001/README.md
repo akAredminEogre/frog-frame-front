@@ -98,6 +98,7 @@
 - [ ] Toggle UseCase関連クラスを実装
 - [ ] Messaging関連クラスを実装（ADR-002、ADR-003参照）
 - [ ] ChromeRuntimeRewriteRuleRepository をMapper委譲方式に変更
+- [ ] container.ts にToggle関連クラスのDI登録追加
 - [ ] RulesApp.tsx にトグルUIを統合
 
 ### 対応しない（分類B）

@@ -98,26 +98,32 @@ docs/user-stories/
 
 **完了条件**: ユーザーストーリー完了時に、関連するファイル（分類A, C, E）はClean Architectureを遵守していること
 - 分類Bのファイルは問わない
-- 開発戦略作成後に、 `## 現状分析` セクションを満たすことができているか確認すること
+
+**タスク網羅性チェック**: 開発戦略作成後、以下を確認すること:
+1. 差分分類で「修正:必須」としたすべてのファイルに対応するタスクがあるか
+2. 01-class-design.md で新規作成とした全クラスに対応するタスクがあるか
+3. 分類Cファイルの移動タスク（前提タスク）と修正タスク（達成タスク）が両方あるか
 
 記述例
 ```markdown
 ## 開発戦略
 
-### 前提タスク（分類Bファイルのディレクトリ移動のみ行う）
+### 前提タスク（分類Cファイルのディレクトリ移動のみ行う）
 
 - [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移行（51ファイル）
-- [ ] IRewriteRuleRepository.ts を interface-adapters/gateways/ へ移行（14ファイル）
+- [ ] container.ts を frameworks-and-drivers/di/ へ移行
 
 ### ユーザーストーリー達成タスク
 
+- [ ] RewriteRule に withActive() を追加
 - [ ] トグルスイッチUIコンポーネントを追加
 - [ ] トグル処理UseCaseを実装
+- [ ] container.ts にDI登録追加
 - [ ] RuleTableRowにトグルUIを統合
 
-### 対応しない（分類C）
+### 対応しない（分類B）
 
-- DexieDatabase.ts - 修正不要のため現行位置のまま
+- IRewriteRuleRepository.ts - ロジック変更なしのため現行位置のまま
 ```
 
 ### acceptance-criteria.md
