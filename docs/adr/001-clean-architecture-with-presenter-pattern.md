@@ -15,7 +15,6 @@
 
 ### 参考資料
 
-- [nrslib Clean Architecture Sample](https://github.com/nrslib/CleanArchitectureSample)
 - [実践クリーンアーキテクチャ - nrslib](https://nrslib.com/clean-architecture/)
 - Robert C. Martin「Clean Architecture」
 
