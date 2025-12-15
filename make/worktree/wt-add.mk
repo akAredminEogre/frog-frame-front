@@ -20,18 +20,18 @@ wt-add: _wt-check-branch
 		exit 1; \
 	fi
 	@rm -f "$(dir $(WORKTREE_PATH)).write_test"
-	@# Check if worktree already exists in git (idempotent handling)
-	@if git worktree list | grep -q "^$(PWD)/$(WORKTREE_PATH) "; then \
-		if git worktree list | grep "^$(PWD)/$(WORKTREE_PATH) " | grep -q "prunable"; then \
-			echo "Found prunable worktree, cleaning up..."; \
-			git worktree prune; \
-			$(MAKE) _wt-add-create BRANCH="$(BRANCH)"; \
-		else \
-			echo "Worktree already exists at $(WORKTREE_PATH) (skipping creation)"; \
-		fi; \
-	else \
+	@# Check if worktree already exists in git (idempotent handling using early return)
+	@if ! git worktree list | grep -q "^$(PWD)/$(WORKTREE_PATH) "; then \
 		$(MAKE) _wt-add-create BRANCH="$(BRANCH)"; \
-	fi
+		exit 0; \
+	fi; \
+	if git worktree list | grep "^$(PWD)/$(WORKTREE_PATH) " | grep -q "prunable"; then \
+		echo "Found prunable worktree, cleaning up..."; \
+		git worktree prune; \
+		$(MAKE) _wt-add-create BRANCH="$(BRANCH)"; \
+		exit 0; \
+	fi; \
+	echo "Worktree already exists at $(WORKTREE_PATH) (skipping creation)"
 
 # Internal helper: Actually create the worktree
 _wt-add-create: _wt-check-branch
