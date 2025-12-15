@@ -87,7 +87,7 @@
 
 ## 開発戦略
 
-### 前提タスク（分類B: 移行必須）
+### 前提タスク（分類Bファイルのディレクトリ移動のみ行う）
 
 - [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移動（51ファイル）
 - [ ] IRewriteRuleRepository.ts を application-business-rules/ports/gateway/ へ移動（14ファイル）
