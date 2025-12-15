@@ -98,12 +98,19 @@
 
 ### 前提タスク: 分類Cファイルのディレクトリ移動
 
-分類Cファイルを理論位置へ移動する（ロジック変更なし、import文の修正のみ）：
+各層ごとに1PRとして実施し、各PR完了時に`make testcheck`が通ることを確認：
 
-- [ ] RewriteRule.ts: `src/domain/entities/` → `src/enterprise-business-rules/entities/`
-- [ ] RulesApp.tsx: `src/entrypoints/rules/` → `src/frameworks-and-drivers/ui/pages/rules/`
-- [ ] container.ts: `src/infrastructure/di/` → `src/frameworks-and-drivers/di/`
-- [ ] ChromeRuntimeRewriteRuleRepository.ts: `src/infrastructure/` → `src/frameworks-and-drivers/messaging/`
+**RewriteRule.ts移行（51ファイル影響 → 5PR）**
+- [ ] PR1: RewriteRule.ts移行 + enterprise-business-rules層の修正（7ファイル + 関連テスト）
+- [ ] PR2: RewriteRule.ts移行後のapplication-business-rules層の修正（5ファイル + 関連テスト）
+- [ ] PR3: RewriteRule.ts移行後のinterface-adapters層の修正（2ファイル + 関連テスト）
+- [ ] PR4: RewriteRule.ts移行後のframeworks-and-drivers層の修正（10ファイル + 関連テスト）
+- [ ] PR5: RewriteRule.ts移行後の残りのtests層の修正（単体テスト以外のテストファイル）
+
+**その他のファイル移行（各1PR）**
+- [ ] PR6: RulesApp.tsx を `src/frameworks-and-drivers/ui/pages/rules/` へ移行（entrypointsとテスト修正）
+- [ ] PR7: container.ts を `src/frameworks-and-drivers/di/` へ移行（全層のimport修正含む）
+- [ ] PR8: ChromeRuntimeRewriteRuleRepository.ts を `src/frameworks-and-drivers/messaging/` へ移行（関連ファイル修正）
 
 ### Phase 1: ディレクトリ構造の準備
 
