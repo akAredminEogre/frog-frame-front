@@ -99,7 +99,7 @@ docs/user-stories/
 ```markdown
 ## 開発戦略
 
-### 前提タスク（分類B: 移行必須）
+### 前提タスク（分類Bファイルのディレクトリ移動のみ行う）
 
 - [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移行（51ファイル）
 - [ ] IRewriteRuleRepository.ts を interface-adapters/gateways/ へ移行（14ファイル）
