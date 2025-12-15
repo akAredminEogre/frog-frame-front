@@ -81,13 +81,10 @@ src/
 | 6 | Output Boundary (Output Port) | `application-business-rules/ports/output/` | |
 | 7 | Use Case Interactor | `application-business-rules/interactors/` | |
 | 8 | Data Access Interface | `application-business-rules/ports/gateway/` | Gateway Interface（Interactorが依存） |
-| 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` | DB Gateway 実装 |
-| 9 | Data Access (Repository) | `frameworks-and-drivers/messaging/` | messaging Gateway 実装 |
+| 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/`, `frameworks-and-drivers/messaging/` | DB Gateway 実装, messaging Gateway 実装 |
 | 10 | Database | IndexedDB (Dexie) | |
 | 11 | Entities | `enterprise-business-rules/entities/` | |
-| 12 | External Interfaces | `frameworks-and-drivers/browser/` | Chrome API ラッパー |
-| 12 | External Interfaces | `frameworks-and-drivers/entrypoints/background.ts` | Chrome runtime、tabs API、メッセージング |
-| 12 | External Interfaces | `frameworks-and-drivers/entrypoints/content.ts` | Webページ操作、DOM操作 |
+| 12 | External Interfaces | `frameworks-and-drivers/browser/`, `frameworks-and-drivers/entrypoints/` | Chrome API ラッパー、background.ts、content.ts |
 
 ### 4. 詳細ディレクトリ構造
 
