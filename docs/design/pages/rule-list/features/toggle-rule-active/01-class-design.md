@@ -108,7 +108,7 @@
 | ITabsGateway | タブ操作のみ | 永続化ロジックを含まない |
 | Interactor | ワークフロー調整 | Repository更新後にTabsGatewayを呼び出す |
 
-これにより、Repository の update メッセージは純粋なDB操作のみを行い、
+これにより、messaging 経由の update は純粋なDB操作のみを行い、
 タブリロードは Interactor が ITabsGateway を通じて明示的に制御する。
 
 ### Chrome拡張機能のコンテキスト分離
