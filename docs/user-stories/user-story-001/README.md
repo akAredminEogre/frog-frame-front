@@ -24,14 +24,14 @@
 
 | ファイル | 現在位置 | 理論位置 | 修正 | 分類 |
 |---------|---------|---------|------|------|
-| RewriteRule.ts | src/domain/entities/ | src/enterprise-business-rules/entities/ | 必須（withActive, matchesUrl追加） | B |
-| IRewriteRuleRepository.ts | src/application/ports/ | src/application-business-rules/ports/gateway/ | 必須（パス変更のみ） | B |
-| RulesApp.tsx | src/entrypoints/rules/ | src/frameworks-and-drivers/ui/pages/rules/ | 必須（トグルハンドラー追加） | B |
-| container.ts | src/infrastructure/di/ | src/frameworks-and-drivers/di/ | 必須（DI登録追加） | B |
-| DexieRewriteRuleRepository.ts | src/infrastructure/persistence/ | src/frameworks-and-drivers/persistence/ | 不要 | C |
-| ChromeRuntimeRewriteRuleRepository.ts | src/infrastructure/ | src/frameworks-and-drivers/messaging/ | 必須（Mapper委譲に変更、ADR-002参照） | B |
+| RewriteRule.ts | src/domain/entities/ | src/enterprise-business-rules/entities/ | 必須（withActive, matchesUrl追加） | C |
+| IRewriteRuleRepository.ts | src/application/ports/ | src/application-business-rules/ports/gateway/ | 不要（パス変更のみ） | B |
+| RulesApp.tsx | src/entrypoints/rules/ | src/frameworks-and-drivers/ui/pages/rules/ | 必須（トグルハンドラー追加） | C |
+| container.ts | src/infrastructure/di/ | src/frameworks-and-drivers/di/ | 必須（DI登録追加） | C |
+| DexieRewriteRuleRepository.ts | src/infrastructure/persistence/ | src/frameworks-and-drivers/persistence/ | 不要 | B |
+| ChromeRuntimeRewriteRuleRepository.ts | src/infrastructure/ | src/frameworks-and-drivers/messaging/ | 必須（Mapper委譲に変更、ADR-002参照） | C |
 
-### 分類B: 移行必須ファイルの影響分析
+### 分類C: 移行必須ファイルの影響分析
 
 #### RewriteRule.ts
 
@@ -47,23 +47,14 @@
   - frameworks-and-drivers/ (10ファイル) - Repository実装, handlers
   - tests/ (27ファイル)
 
-#### IRewriteRuleRepository.ts
-
-- **変更内容**:
-  - `src/application-business-rules/ports/gateway/` への移動（Gateway Interface）
-  - Interactorが依存するため application-business-rules 層に配置
-- **影響ファイル数**: 14ファイル
-- **影響モジュール**:
-  - application-business-rules/ (5ファイル) - UseCases
-  - frameworks-and-drivers/ (6ファイル) - container, Repository実装
-  - tests/ (3ファイル)
-
 #### ChromeRuntimeRewriteRuleRepository.ts
 
 - **変更内容**:
   - `src/frameworks-and-drivers/messaging/` への移動
   - RewriteRuleMapperへの委譲に変更（DTOを意識しない、ADR-002参照）
 - **影響ファイル数**: 少数
+- **影響モジュール**:
+  - frameworks-and-drivers/ (少数) - container, テスト
 
 #### RulesApp.tsx
 
@@ -71,6 +62,8 @@
   - `src/frameworks-and-drivers/ui/pages/rules/` への移動
   - トグルハンドラー追加
 - **影響ファイル数**: 少数（entrypoint）
+- **影響モジュール**:
+  - frameworks-and-drivers/ (少数) - entrypoints
 
 #### container.ts
 
@@ -78,19 +71,24 @@
   - `src/frameworks-and-drivers/di/` への移動
   - Toggle関連クラスのDI登録追加
 - **影響ファイル数**: 多数（DI設定は全体に影響）
+- **影響モジュール**:
+  - 全層 - DI解決が変わるため広範囲に影響
 
-### 分類C: 対応しない
+### 分類B: 対応しない
 
-以下のファイルは修正不要のため、現行位置のまま：
+以下のファイルは配置不適切だがロジック変更不要のため、機能開発後にリファクタリング（または対応しない）：
 
+- `IRewriteRuleRepository.ts` - パス変更のみ（ロジック変更なし）
 - `DexieRewriteRuleRepository.ts` - ロジック変更なし
 
 ## 開発戦略
 
-### 前提タスク（分類Bファイルのディレクトリ移動のみ行う）
+### 前提タスク（分類Cファイルのディレクトリ移動のみ行う）
 
 - [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移動（51ファイル）
-- [ ] IRewriteRuleRepository.ts を application-business-rules/ports/gateway/ へ移動（14ファイル）
+- [ ] RulesApp.tsx を frameworks-and-drivers/ui/pages/rules/ へ移動
+- [ ] container.ts を frameworks-and-drivers/di/ へ移動
+- [ ] ChromeRuntimeRewriteRuleRepository.ts を frameworks-and-drivers/messaging/ へ移動
 
 ### ユーザーストーリー達成タスク
 
@@ -102,9 +100,10 @@
 - [ ] ChromeRuntimeRewriteRuleRepository をMapper委譲方式に変更
 - [ ] RulesApp.tsx にトグルUIを統合
 
-### 対応しない（分類C）
+### 対応しない（分類B）
 
-- DexieRewriteRuleRepository.ts - 修正不要のため現行位置のまま
+- IRewriteRuleRepository.ts - パス変更のみ（ロジック変更なし）のため現行位置のまま
+- DexieRewriteRuleRepository.ts - ロジック変更なしのため現行位置のまま
 
 ## 受け入れ条件
 
