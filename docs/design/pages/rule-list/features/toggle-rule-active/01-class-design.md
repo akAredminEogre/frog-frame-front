@@ -68,7 +68,7 @@
 | ToggleRuleActiveController | interface-adapters | ユーザー入力をInputDataに変換 |
 | ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
 | RewriteRuleMapper | interface-adapters | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信（ADR-002、ADR-003参照） |
-| IRewriteRuleMessagingPort | interface-adapters | MessagingService の抽象化（Port）。依存性逆転のため導入（ADR-002参照） |
+| IRewriteRuleMessagingPort | interface-adapters | MessagingService の抽象化（Port）。本来は第2層（application-business-rules）に配置すべきGateway Interfaceだが、Mapper（第3層）が依存するため、特例としてinterface-adapters層に配置している（設計原則との違いに注意。詳細はADR-002参照） |
 | ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。Mapperへの委譲のみ（DTOを意識しない）（Rules Page用、ADR-002参照） |
 | RewriteRuleMessagingService | frameworks-and-drivers | IRewriteRuleMessagingPort を実装。proxy-serviceで定義、Background Scriptで実行（ADR-002参照） |
 | DexieRewriteRuleRepository | frameworks-and-drivers | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
