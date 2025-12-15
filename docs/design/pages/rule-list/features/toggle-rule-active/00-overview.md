@@ -28,7 +28,6 @@
 ## 関連ドキュメント
 
 - [ユーザーストーリー](../../../../../user-stories/user-story-001/)
-- [PR計画](../../../../../user-stories/user-story-001/prs/)
 - [ADR-001: Clean Architecture with Presenter Pattern](../../../../adr/001-clean-architecture-with-presenter-pattern.md)
 - [ADR-002: メッセージングに @webext-core/proxy-service を採用](../../../../adr/002-messaging-with-proxy-service.md)
 - [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../adr/003-unified-db-access-via-messaging.md)
