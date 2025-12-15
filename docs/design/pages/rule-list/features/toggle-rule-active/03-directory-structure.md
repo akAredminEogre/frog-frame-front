@@ -47,9 +47,10 @@ src/interface-adapters/
 ├── presenters/                                  ← Presenter
 │   └── rule/
 │       └── ToggleRuleActivePresenter.ts
-├── ports/                                       ← Port（依存性逆転のため、ADR-002参照）
+├── ports/                                       ← Port（Mapperが依存、依存性逆転のため）
 │   └── messaging/
-│       └── IRewriteRuleMessagingPort.ts         ← MessagingService の抽象化
+│       └── IRewriteRuleMessagingPort.ts         ← MessagingService の抽象化（ADR-002参照）
+│                                                  ※ Mapper（第3層）が依存するため第3層に配置
 └── mappers/                                     ← Mapper（ADR-002、ADR-003参照）
     └── rule/
         └── RewriteRuleMapper.ts                 ← Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信
@@ -176,5 +177,5 @@ src/frameworks-and-drivers/
 | 新規 | ToggleSwitch.tsx | UIコンポーネント 新規作成 |
 | 変更 | RulesApp.tsx | トグルハンドラー追加 |
 | 変更 | container.ts | DI登録追加 |
-| 既存 | ChromeRuntimeRewriteRuleRepository.ts | Mapperへの委譲のみ（DTOを意識しない）（ADR-002参照） |
-| 既存 | DexieRewriteRuleRepository.ts | DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
+| 変更 | ChromeRuntimeRewriteRuleRepository.ts | Mapperへの委譲方式に変更（DTOを意識しない）（ADR-002参照） |
+| 対象外 | DexieRewriteRuleRepository.ts | DTO ↔ DBレコード変換（Background Script用、ADR-003参照）※修正不要 |

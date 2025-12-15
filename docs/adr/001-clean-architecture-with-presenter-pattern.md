@@ -81,8 +81,7 @@ src/
 | 5 | Input Boundary (Input Port) | `application-business-rules/ports/input/` | |
 | 6 | Output Boundary (Output Port) | `application-business-rules/ports/output/` | |
 | 7 | Use Case Interactor | `application-business-rules/interactors/` | |
-| 8 | Data Access Interface | `application-business-rules/ports/gateway/` | DB関連 Gateway Interface |
-| 8 | Data Access Interface | `application-business-rules/ports/gateway/` | messaging関連 Gateway Interface |
+| 8 | Data Access Interface | `application-business-rules/ports/gateway/` | Gateway Interface（Interactorが依存） |
 | 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` | DB Gateway 実装 |
 | 9 | Data Access (Repository) | `frameworks-and-drivers/messaging/` | messaging Gateway 実装 |
 | 10 | Database | IndexedDB (Dexie) | |
@@ -109,9 +108,12 @@ src/
 │   │   ├── input/                              ← Input Port (Interface)
 │   │   │   └── rule/
 │   │   │       └── IToggleRuleActiveUseCase.ts
-│   │   └── output/                             ← Output Port (Interface)
-│   │       └── rule/
-│   │           └── IToggleRuleActivePresenter.ts
+│   │   ├── output/                             ← Output Port (Interface)
+│   │   │   └── rule/
+│   │   │       └── IToggleRuleActivePresenter.ts
+│   │   └── gateway/                            ← Gateway Interface（Interactorが依存）
+│   │       ├── IRewriteRuleRepository.ts
+│   │       └── ITabsGateway.ts
 │   ├── interactors/                            ← Use Case Interactor
 │   │   └── rule/
 │   │       └── ToggleRuleActiveInteractor.ts
@@ -130,12 +132,12 @@ src/
 │   ├── presenters/                             ← Presenter
 │   │   └── rule/
 │   │       └── ToggleRuleActivePresenter.ts
-│   └── gateways/                               ← Gateway (Interface)
-│       ├── persistence/                        ← DB関連
-│       │   └── IRewriteRuleRepository.ts
-│       └── messaging/                          ← messaging関連
-│           ├── ITabReloadGateway.ts
-│           └── IDomOperationGateway.ts
+│   ├── ports/                                  ← Port（Mapperが依存、依存性逆転のため）
+│   │   └── messaging/
+│   │       └── IRewriteRuleMessagingPort.ts
+│   └── mappers/                                ← Mapper
+│       └── rule/
+│           └── RewriteRuleMapper.ts
 │
 └── frameworks-and-drivers/                      ← 第4層: Frameworks & Drivers
     ├── ui/                                     ← View (React)
@@ -147,9 +149,9 @@ src/
     ├── persistence/                            ← DB Gateway 実装
     │   └── indexeddb/
     ├── messaging/                              ← messaging Gateway 実装
-    │   ├── ChromeTabReloadGateway.ts
-    │   └── ChromeDomOperationGateway.ts
-    ├── browser/                                ← Chrome API ラッパー
+    │   └── ChromeRuntimeRewriteRuleRepository.ts
+    ├── browser/                                ← ブラウザ操作 Gateway 実装
+    │   └── ChromeTabsGateway.ts
     ├── di/                                     ← DI Container
     └── entrypoints/                            ← WXT Entry Points (CA外への橋)
 ```
@@ -217,4 +219,4 @@ src/
 ## 影響ドキュメント
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
-- [ 002-messaging-via-proxy-service.md](002-messaging-via-proxy-service.md)
+- [002-messaging-with-proxy-service.md](002-messaging-with-proxy-service.md)
