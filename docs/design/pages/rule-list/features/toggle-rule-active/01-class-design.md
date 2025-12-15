@@ -55,29 +55,46 @@
 
 ## クラス一覧
 
-| クラス | 層 | 責務 |
-|--------|-----|------|
-| RewriteRule | enterprise-business-rules | ルールエンティティ。有効/無効状態を持つ。`matchesUrl()`でURLマッチング判定（ADR-001参照） |
-| ToggleRuleActiveInputData | application-business-rules | 入力DTO。対象ルールIDを保持 |
-| ToggleRuleActiveOutputData | application-business-rules | 出力DTO。更新後のルールを保持 |
-| IToggleRuleActiveUseCase | application-business-rules | Input Port。トグル処理のインターフェース |
-| IToggleRuleActivePresenter | application-business-rules | Output Port。結果通知のインターフェース |
-| ToggleRuleActiveInteractor | application-business-rules | UseCase実装。トグル処理を実行 |
-| IRewriteRuleRepository | application-business-rules | Gateway Interface。ルール永続化（Interactorが依存） |
-| ITabsGateway | application-business-rules | Gateway Interface。タブ操作（Interactorが依存） |
-| ToggleRuleActiveController | interface-adapters | ユーザー入力をInputDataに変換 |
-| ToggleRuleActivePresenter | interface-adapters | OutputDataをViewに通知 |
-| RewriteRuleMapper | interface-adapters | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信（ADR-002、ADR-003参照） |
-| IRewriteRuleMessagingPort | interface-adapters | MessagingService の抽象化（Port） |
-| ChromeRuntimeRewriteRuleRepository | frameworks-and-drivers | IRewriteRuleRepositoryの実装。Mapperへの委譲のみ（DTOを意識しない）（Rules Page用、ADR-002参照） |
-| RewriteRuleMessagingService | frameworks-and-drivers | IRewriteRuleMessagingPort を実装。proxy-serviceで定義、Background Scriptで実行（ADR-002参照） |
-| DexieRewriteRuleRepository | frameworks-and-drivers | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
-| ChromeTabsGateway | frameworks-and-drivers | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（ADR-001参照） |
-| RewriteRuleDTO | frameworks-and-drivers | メッセージング用DTO。エンティティ全体を表現（ADR-002、ADR-003参照） |
-| GetByIdRequestDTO | frameworks-and-drivers | メッセージング用DTO。ルール取得要求 `{ id }`（ADR-002、ADR-003参照） |
-| UpdateRuleActiveRequestDTO | frameworks-and-drivers | メッセージング用DTO。トグル更新時の最小データ `{ id, isActive }`（ADR-002、ADR-003参照） |
-| ToggleSwitch | frameworks-and-drivers | UIコンポーネント。トグルスイッチ |
-| RulesApp | frameworks-and-drivers | View。ルール一覧画面 |
+### enterprise-business-rules (第1層)
+
+| クラス | 責務 |
+|--------|------|
+| RewriteRule | ルールエンティティ。有効/無効状態を持つ。`matchesUrl()`でURLマッチング判定（ADR-001参照） |
+
+### application-business-rules (第2層)
+
+| クラス | 責務 |
+|--------|------|
+| ToggleRuleActiveInputData | 入力DTO。対象ルールIDを保持 |
+| ToggleRuleActiveOutputData | 出力DTO。更新後のルールを保持 |
+| IToggleRuleActiveUseCase | Input Port。トグル処理のインターフェース |
+| IToggleRuleActivePresenter | Output Port。結果通知のインターフェース |
+| ToggleRuleActiveInteractor | UseCase実装。トグル処理を実行 |
+| IRewriteRuleRepository | Gateway Interface。ルール永続化（Interactorが依存） |
+| ITabsGateway | Gateway Interface。タブ操作（Interactorが依存） |
+
+### interface-adapters (第3層)
+
+| クラス | 責務 |
+|--------|------|
+| ToggleRuleActiveController | ユーザー入力をInputDataに変換 |
+| ToggleRuleActivePresenter | OutputDataをViewに通知 |
+| RewriteRuleMapper | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信（ADR-002、ADR-003参照） |
+| IRewriteRuleMessagingPort | MessagingService の抽象化（Port） |
+
+### frameworks-and-drivers (第4層)
+
+| クラス | 責務 |
+|--------|------|
+| ChromeRuntimeRewriteRuleRepository | IRewriteRuleRepositoryの実装。Mapperへの委譲のみ（DTOを意識しない）（Rules Page用、ADR-002参照） |
+| RewriteRuleMessagingService | IRewriteRuleMessagingPort を実装。proxy-serviceで定義、Background Scriptで実行（ADR-002参照） |
+| DexieRewriteRuleRepository | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
+| ChromeTabsGateway | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（ADR-001参照） |
+| RewriteRuleDTO | メッセージング用DTO。エンティティ全体を表現（ADR-002、ADR-003参照） |
+| GetByIdRequestDTO | メッセージング用DTO。ルール取得要求 `{ id }`（ADR-002、ADR-003参照） |
+| UpdateRuleActiveRequestDTO | メッセージング用DTO。トグル更新時の最小データ `{ id, isActive }`（ADR-002、ADR-003参照） |
+| ToggleSwitch | UIコンポーネント。トグルスイッチ |
+| RulesApp | View。ルール一覧画面 |
 
 ## アーキテクチャ補足
 
