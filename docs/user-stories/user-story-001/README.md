@@ -10,11 +10,11 @@
 
 ## 設計ドキュメント
 
-- [toggle-rule-active 設計](../../design/pages/rule-list/features/toggle-rule-active/)
-  - [00-overview.md](../../design/pages/rule-list/features/toggle-rule-active/00-overview.md) - 機能概要
-  - [01-class-design.md](../../design/pages/rule-list/features/toggle-rule-active/01-class-design.md) - クラス設計
-  - [02-sequence.puml](../../design/pages/rule-list/features/toggle-rule-active/02-sequence.puml) - シーケンス図
-  - [03-directory-structure.md](../../design/pages/rule-list/features/toggle-rule-active/03-directory-structure.md) - ディレクトリ構造
+- [toggle-rule-active 設計](../../../design/pages/rule-list/features/toggle-rule-active/)
+  - [00-overview.md](../../../design/pages/rule-list/features/toggle-rule-active/00-overview.md) - 機能概要
+  - [01-class-design.md](../../../design/pages/rule-list/features/toggle-rule-active/01-class-design.md) - クラス設計
+  - [02-sequence.puml](../../../design/pages/rule-list/features/toggle-rule-active/02-sequence.puml) - シーケンス図
+  - [03-directory-structure.md](../../../design/pages/rule-list/features/toggle-rule-active/03-directory-structure.md) - ディレクトリ構造
 
 ## 現状分析
 
