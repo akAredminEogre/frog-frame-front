@@ -81,8 +81,8 @@ src/
 | 5 | Input Boundary (Input Port) | `application-business-rules/ports/input/` | |
 | 6 | Output Boundary (Output Port) | `application-business-rules/ports/output/` | |
 | 7 | Use Case Interactor | `application-business-rules/interactors/` | |
-| 8 | Data Access Interface | `interface-adapters/gateways/persistence/` | DB関連 Gateway Interface |
-| 8 | Data Access Interface | `interface-adapters/gateways/messaging/` | messaging関連 Gateway Interface |
+| 8 | Data Access Interface | `application-business-rules/ports/gateway/` | DB関連 Gateway Interface |
+| 8 | Data Access Interface | `application-business-rules/ports/gateway/` | messaging関連 Gateway Interface |
 | 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` | DB Gateway 実装 |
 | 9 | Data Access (Repository) | `frameworks-and-drivers/messaging/` | messaging Gateway 実装 |
 | 10 | Database | IndexedDB (Dexie) | |
