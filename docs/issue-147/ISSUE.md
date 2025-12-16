@@ -5,8 +5,8 @@ user-story-001/readme.md の開発戦略のタスクのうち、`RewriteRuleエ�
 - issue-146-feat-toggle-rule-activation（親ブランチ）
 
 # 受け入れ条件
-- [ ] RewriteRuleエンティティが、 docs/design/pages/rule-list/featuresとuser-story-001のドキュメントに従って、ディレクトリ移動がされること(ロジック修正は行わない)
-- [ ] make testcheck が成功すること
+- [x] RewriteRuleエンティティが、 docs/design/pages/rule-list/featuresとuser-story-001のドキュメントに従って、ディレクトリ移動がされること(ロジック修正は行わない)
+- [x] make testcheck が成功すること
 
 # 心配事
 

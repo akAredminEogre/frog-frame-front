@@ -2,9 +2,9 @@
 
 # DAILY-SCRUM単位のタスク
 - ISSUE.mdを元に、開発タスクをデイリースクラム単位に分解する
-- [ ] Daily Scrum 1: RewriteRuleエンティティのディレクトリ移動の調査・計画
-- [ ] Daily Scrum 2: RewriteRuleエンティティとその依存ファイルのディレクトリ移動実施
-- [ ] Daily Scrum 3: import文の修正とテスト実行、必要に応じたimport pathの調整
+- [x] Daily Scrum 1: RewriteRuleエンティティのディレクトリ移動の調査・計画・実施
+  - RewriteRule.ts移行 + enterprise-business-rules層の修正（7ファイル + 関連テスト）のみ
+  - 段階的移行の第1段階として実施
 
 # ISSUEを通した相談事
 <!-- 相談したいこと、質問したいこと、レビューしてほしいこと -->
