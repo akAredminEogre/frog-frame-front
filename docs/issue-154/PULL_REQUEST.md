@@ -12,16 +12,8 @@ user-story-001の開発戦略に基づき、RewriteRuleエンティティをClea
 - RewriteRule.tsを`src/domain/entities/RewriteRule/`から`src/enterprise-business-rules/entities/RewriteRule/`に移動
 - Clean Architectureに基づく適切な層分離の実現
 
-### ファイル移動・作成
-**新規作成されたファイル:**
-- `src/enterprise-business-rules/entities/RewriteRule/RewriteRule.ts`
-
 **import文修正対象:**
 - 75ファイルのimport pathを修正（src: 33ファイル + tests: 42ファイル）
-
-### レビューコメント対応
-- 当初移動していた非RewriteRule.tsファイル（9ファイル）をdomainに復元
-- RewriteRule.ts **のみ** をenterprise-business-rules層に配置する方針に調整
 
 ## テスト方法
 [動作確認の手順]
