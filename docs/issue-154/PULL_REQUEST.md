@@ -1,4 +1,4 @@
-# ISSUE-147 PULL REQUEST
+# ISSUE-154 PULL REQUEST
 
 ## タイトル
 refactor: RewriteRuleエンティティをenterprise-business-rulesへ移行
