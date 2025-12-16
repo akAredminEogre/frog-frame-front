@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from 'src/components/molecules/RuleTableRow/RuleTableRow.module.css';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 interface RuleTableRowProps {
   rule: RewriteRule;

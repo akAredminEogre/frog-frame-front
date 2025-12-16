@@ -1,6 +1,6 @@
 import { ElementMatchesFlexiblePattern } from 'src/domain/entities/ElementMatchesFlexiblePattern';
 import { ReplaceElementPreservingState } from 'src/domain/entities/ReplaceElementPreservingState';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { IElementFactory } from 'src/domain/ports/IElementFactory';
 import { MatchingElements } from 'src/domain/value-objects/MatchingElements';
 
