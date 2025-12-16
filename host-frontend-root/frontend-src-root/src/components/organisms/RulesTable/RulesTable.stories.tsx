@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 const meta: Meta<typeof RulesTable> = {
   title: 'Organisms/RulesTable',

@@ -12,7 +12,7 @@ import ErrorMessage from 'src/components/molecules/ErrorMessage/ErrorMessage';
 import LoadingMessage from 'src/components/molecules/LoadingMessage/LoadingMessage';
 import EmptyStateMessage from 'src/components/organisms/EmptyStateMessage/EmptyStateMessage';
 import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);

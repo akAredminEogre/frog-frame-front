@@ -2,7 +2,7 @@ import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactor
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 const mockElementFactory = createMockElementFactory();
 

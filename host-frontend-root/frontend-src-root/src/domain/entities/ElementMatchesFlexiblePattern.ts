@@ -1,5 +1,5 @@
 import { RegexConstants } from 'src/domain/constants/RegexConstants';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * 正規表現によるパターンマッチングを行う要素チェック

@@ -1,5 +1,5 @@
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { IElementFactory } from 'src/domain/ports/IElementFactory';
 
 /**

@@ -1,6 +1,6 @@
 import { describe, expect,it } from 'vitest';
 
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { Tab } from 'src/domain/value-objects/Tab';
 import { Tabs } from 'src/domain/value-objects/Tabs';
 
