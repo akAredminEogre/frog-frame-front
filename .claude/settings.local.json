@@ -74,6 +74,7 @@
       "Bash(timeout:*)",
       "Bash(npx vitest run:*)",
       "Bash(scripts/.clinerules/get-issue-number.sh:*)",
+      "Bash(scripts/.clinerules/get-new-issue-number.sh:*)",
       "Bash(gh api:*)"
     ],
     "deny": [
