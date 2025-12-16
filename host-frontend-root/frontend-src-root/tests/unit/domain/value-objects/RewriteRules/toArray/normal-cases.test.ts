@@ -1,7 +1,7 @@
 import { beforeEach,describe, expect, it } from 'vitest';
 
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * 1. すべてのルールを配列として取得できることを確認
