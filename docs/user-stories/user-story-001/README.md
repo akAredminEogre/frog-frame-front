@@ -98,12 +98,15 @@
 
 ### 前提タスク: 分類Cファイルのディレクトリ移動
 
-分類Cファイルを理論位置へ移動する（ロジック変更なし、import文の修正のみ）：
+各層ごとに1PRとして実施し、各PR完了時に`make testcheck`が通ることを確認：
 
-- [ ] RewriteRule.ts: `src/domain/entities/` → `src/enterprise-business-rules/entities/`
-- [ ] RulesApp.tsx: `src/entrypoints/rules/` → `src/frameworks-and-drivers/ui/pages/rules/`
-- [ ] container.ts: `src/infrastructure/di/` → `src/frameworks-and-drivers/di/`
-- [ ] ChromeRuntimeRewriteRuleRepository.ts: `src/infrastructure/` → `src/frameworks-and-drivers/messaging/`
+**RewriteRule.ts移行（51ファイル影響）**
+- [ ] RewriteRule.ts移行 + enterprise-business-rules層の修正（7ファイル + 関連テスト）
+
+**その他のファイル移行（各1PR）**
+- [ ] RulesApp.tsx を `src/frameworks-and-drivers/ui/pages/rules/` へ移行（entrypointsとテスト修正）
+- [ ] container.ts を `src/frameworks-and-drivers/di/` へ移行（全層のimport修正含む）
+- [ ] ChromeRuntimeRewriteRuleRepository.ts を `src/frameworks-and-drivers/messaging/` へ移行（関連ファイル修正）
 
 ### Phase 1: ディレクトリ構造の準備
 
