@@ -10,7 +10,7 @@
  */
 import { describe, expect,it } from 'vitest';
 
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 const addHtmlWhitespaceIgnoringPatternCases = [
   {

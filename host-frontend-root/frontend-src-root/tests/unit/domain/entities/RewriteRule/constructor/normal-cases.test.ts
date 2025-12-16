@@ -7,7 +7,7 @@
  */
 import { describe, expect,it } from 'vitest';
 
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 describe('RewriteRule.constructor - 正常系', () => {
   it('should create RewriteRule instance with required parameters', () => {

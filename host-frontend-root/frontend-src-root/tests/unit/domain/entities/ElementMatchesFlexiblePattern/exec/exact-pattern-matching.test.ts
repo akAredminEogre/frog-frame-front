@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { ElementMatchesFlexiblePattern } from 'src/domain/entities/ElementMatchesFlexiblePattern';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 describe('ElementMatchesFlexiblePattern.exec() - Exact Pattern Matching (isRegex: false)', () => {
   let container: HTMLElement;
