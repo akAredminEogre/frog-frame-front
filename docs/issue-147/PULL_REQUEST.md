@@ -37,8 +37,5 @@ user-story-001の開発戦略に基づき、RewriteRuleエンティティをClea
 - WXT frameworkとの統合を維持
 - 段階的リファクタリングの第1段階として実施
 
-## 本スコープの対象外となったタスク応）
-
-
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/02-submit-pull-request.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/03-merge-pull-request.md -->
