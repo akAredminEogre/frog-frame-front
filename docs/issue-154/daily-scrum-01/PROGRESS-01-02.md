@@ -14,7 +14,7 @@ kk=01
 
 ### 実装内容
 1. **アーキテクチャ状況調査**
-   - user-story-001/README.md を確認し、issue-147のスコープがRewriteRule.tsのみの移動であることを確認
+   - user-story-001/README.md を確認し、issue-154のスコープがRewriteRule.tsのみの移動であることを確認
    - 現在の状況: Strategy files が両方のディレクトリに存在していることを確認
 
 2. **Strategy files の移動取り消し**
@@ -61,12 +61,12 @@ kk=01
 
 ### 次回以降のスクラムに先送りする課題
 <!-- 本issueで解決するが、本スクラムでは取り扱わない課題 -->
-<!-- 課題があれば、docs/issue-nnn/PLAN.md の `# DAILY-SCRUM単位のタスク` に追加してください -->
+<!-- 課題があれば、docs/issue-154/PLAN.md の `# DAILY-SCRUM単位のタスク` に追加してください -->
 
 なし。レビューコメント対応完了。
 
 ### 本issueの対象外とする課題
-<!-- 課題があれば、docs/issue-nnn/PLAN.md の `# 本issueの対象外とする課題` に追加してください -->
+<!-- 課題があれば、docs/issue-154/PLAN.md の `# 本issueの対象外とする課題` に追加してください -->
 
 - Strategy files の enterprise-business-rules への移動（別issueで対応予定）
 - RulesApp.tsx、container.ts、ChromeRuntimeRewriteRuleRepository.ts の移動（別issueで対応予定）
