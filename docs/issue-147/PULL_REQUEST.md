@@ -37,16 +37,7 @@ user-story-001の開発戦略に基づき、RewriteRuleエンティティをClea
 - WXT frameworkとの統合を維持
 - 段階的リファクタリングの第1段階として実施
 
-## 本スコープの対象外となったタスク
-- RewriteRuleエンティティへのwithActive()、matchesUrl()メソッドの追加（別issueで対応）
-- 新しいクリーンアーキテクチャ層のディレクトリ全体構築
-- ChromeRuntimeRewriteRuleRepository.tsのMapper委譲方式への変更
-- RulesApp.tsxのディレクトリ移動
-- container.tsのディレクトリ移動
-- application-business-rules層の修正（後続PRで対応）
-- interface-adapters層の修正（後続PRで対応）
-- frameworks-and-drivers層の修正（後続PRで対応）
-- 残りのテスト層の修正（後続PRで対応）
+## 本スコープの対象外となったタスク応）
 
 
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/04-pull-request/02-submit-pull-request.md -->
