@@ -117,6 +117,9 @@ DomDiffer.ts → MatchingElements.ts → RewriteRule.ts (enterprise-business-rul
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
-ありがとうございます。Tab.ts, Tabs.tsの分離は良いアイデアだと思います。提案されたPR1とPR2の分割で進めてください。
-まずPR2の範囲は、PLAN.mdの「本issueの対象外とする課題」に追加してください。その後、PR1の実装に着手をしてください。親ブランチのドキュメントはこちらで修正しておきます。
+すいません、意図をちゃんと伝えきれていませんでした。
+今回行う変更を
+- RewriteRule.tsのenterprise-business-rules層への移行
+- DomDiffer.tsで、RewriteRule.tsのimport修正
+だけ1PRにして行いたいのですが、これでも他のファイルに影響が出てしまいますか？二転三転して申し訳ありませんが、分析と説明をお願いします
 ---
