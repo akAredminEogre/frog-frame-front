@@ -102,6 +102,8 @@
 
 **RewriteRule.ts移行（51ファイル影響 → 5PR）**
 - [ ] PR1: RewriteRule.ts移行 + enterprise-business-rules層の修正（7ファイル + 関連テスト）
+  - [ ] `Tab.ts`, `Tabs.ts` 以外の enterprise-business-rules層の修正
+  - [ ] `Tab.ts`, `Tabs.ts` の修正
 - [ ] PR2: RewriteRule.ts移行後のapplication-business-rules層の修正（5ファイル + 関連テスト）
 - [ ] PR3: RewriteRule.ts移行後のinterface-adapters層の修正（2ファイル + 関連テスト）
 - [ ] PR4: RewriteRule.ts移行後のframeworks-and-drivers層の修正（10ファイル + 関連テスト）
