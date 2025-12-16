@@ -5,8 +5,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { Tabs } from 'src/domain/value-objects/Tabs';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * UpdateRewriteRuleUseCase.execute - 正常系テスト

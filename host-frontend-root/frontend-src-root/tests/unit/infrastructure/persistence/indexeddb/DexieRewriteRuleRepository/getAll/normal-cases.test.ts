@@ -2,8 +2,8 @@ import '../../setup';
 
 import { afterEach,beforeEach, describe, expect, it } from 'vitest';
 
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 

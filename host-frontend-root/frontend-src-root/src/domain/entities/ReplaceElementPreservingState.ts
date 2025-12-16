@@ -1,7 +1,7 @@
 import { RegexConstants } from 'src/domain/constants/RegexConstants';
 import { ParserContextStrategyFactory } from 'src/domain/entities/ParserContextStrategy';
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { IElementFactory } from 'src/domain/ports/IElementFactory';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * 要素の状態を保持しながら置換を実行するクラス
