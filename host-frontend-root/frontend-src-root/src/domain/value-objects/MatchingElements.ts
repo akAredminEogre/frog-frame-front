@@ -1,4 +1,4 @@
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * First-class collection for DOM elements that match a rewrite rule pattern
