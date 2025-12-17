@@ -38,6 +38,10 @@ _wt-setup-env:
 			echo "Copied matchUrl.ts.example to worktree as matchUrl.ts"; \
 		fi \
 	fi
+	@if [ -d .claude ]; then \
+		cp -r .claude $(WORKTREE_PATH)/.claude; \
+		echo "Copied .claude/ to worktree"; \
+	fi
 
 # Internal helper: Copy override template to docker-compose.override.yml
 _wt-copy-override-template:
