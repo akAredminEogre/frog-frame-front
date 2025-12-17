@@ -10,7 +10,7 @@ import { GetElementSelectionUseCase } from 'src/application/usecases/selection/G
 import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { IElementFactory } from 'src/domain/ports/IElementFactory';
 import { observerControl } from 'src/infrastructure/browser/content/observer/observerState';
-import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
+import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/messaging/ChromeRuntimeRewriteRuleRepository';
 import { DebounceTimer } from 'src/infrastructure/browser/timer/DebounceTimer';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
 import { DomRootChecker } from 'src/infrastructure/document/DomRootChecker';
