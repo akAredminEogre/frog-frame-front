@@ -105,7 +105,7 @@
 
 **その他のファイル移行（各1PR）**
 - [x] RulesApp.tsx を `src/frameworks-and-drivers/ui/pages/rules/` へ移行（entrypointsとテスト修正）
-- [ ] container.ts を `src/frameworks-and-drivers/di/` へ移行（全層のimport修正含む）
+- [x] container.ts を `src/frameworks-and-drivers/di/` へ移行（全層のimport修正含む）
 - [ ] ChromeRuntimeRewriteRuleRepository.ts を `src/frameworks-and-drivers/messaging/` へ移行（関連ファイル修正）
 
 ### Phase 1: ディレクトリ構造の準備
