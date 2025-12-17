@@ -1,5 +1,3 @@
-import { container } from 'src/infrastructure/di/container';
-
 import { describe, expect, it } from 'vitest';
 
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
@@ -9,6 +7,7 @@ import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/Loa
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
+import { container } from 'src/frameworks-and-drivers/di/container';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';

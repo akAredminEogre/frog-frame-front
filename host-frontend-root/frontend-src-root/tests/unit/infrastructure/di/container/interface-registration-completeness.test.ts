@@ -1,6 +1,6 @@
-import { container } from 'src/infrastructure/di/container';
-
 import { describe, expect, it } from 'vitest';
+
+import { container } from 'src/frameworks-and-drivers/di/container';
 
 /**
  * containerの内部プロパティからinterfaceToKeyMapを動的に取得する
