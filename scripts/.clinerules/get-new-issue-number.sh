@@ -33,6 +33,11 @@ CHECK_NUMBER=""
 while [[ $# -gt 0 ]]; do
     case $1 in
         --check)
+            # --check にはチェック対象の番号が必須
+            if [ -z "${2:-}" ]; then
+                echo "エラー: --check オプションにはチェック対象のissue番号を指定してください。" >&2
+                exit 1
+            fi
             CHECK_MODE=true
             CHECK_NUMBER="$2"
             shift 2
