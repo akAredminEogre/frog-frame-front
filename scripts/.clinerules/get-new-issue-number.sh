@@ -6,10 +6,24 @@
 
 set -e
 
+# ヘルパー関数: 全issueブランチを取得
+get_all_issue_branches() {
+    git --no-pager branch -a | grep -E '(^|/)issue-[0-9]+(-|$)'
+}
+
+# ヘルパー関数: 入力値が数字のみかバリデーション
+validate_digit_only() {
+    local value="$1"
+    [[ "$value" =~ ^[0-9]+$ ]] && return 0
+    echo "Error: Invalid issue number format: $value (digits only)" >&2
+    exit 1
+}
+
 # ヘルパー関数: 指定した番号のissueブランチを検索
 find_existing_issue_branch() {
     local issue_number="$1"
-    git --no-pager branch -a | grep -E "(^|/)issue-${issue_number}(-|$)" | head -n 1
+    validate_digit_only "$issue_number"
+    get_all_issue_branches | grep -E "(^|/)issue-${issue_number}(-|$)" | head -n 1
 }
 
 # オプション解析
@@ -35,13 +49,14 @@ git fetch --prune claude 2>/dev/null || true
 
 # 指定番号の存在チェックモード
 if [ "$CHECK_MODE" = true ]; then
+    [ -z "$CHECK_NUMBER" ] && echo "Error: --check requires an issue number argument" >&2 && exit 1
     existing_branch=$(find_existing_issue_branch "$CHECK_NUMBER")
     [ -z "$existing_branch" ] && echo "available" || echo "exists"
     exit 0
 fi
 
 # 最大issue番号を取得
-maximum_number=$(git --no-pager branch -a | grep -E '(^|/)issue-[0-9]+(-|$)' | sed -E 's/.*issue-([0-9]+).*/\1/' | sort -n | tail -n 1)
+maximum_number=$(get_all_issue_branches | sed -E 's/.*issue-([0-9]+).*/\1/' | sort -n | tail -n 1)
 
 # 番号が見つからなければ0から開始
 if [ -z "$maximum_number" ]; then
