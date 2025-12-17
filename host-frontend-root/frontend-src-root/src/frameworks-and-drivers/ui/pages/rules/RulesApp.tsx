@@ -1,4 +1,4 @@
-import 'src/entrypoints/rules/style.css';
+import 'src/frameworks-and-drivers/ui/pages/rules/style.css';
 
 import { container } from 'src/infrastructure/di/container';
 
