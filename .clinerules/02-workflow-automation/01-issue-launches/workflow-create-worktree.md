@@ -1,11 +1,7 @@
 workflow-create-worktree branch-suffix=
 ```cline-instructions
 issue番号の採番：
-```
-git checkout develop && git pull && \
-git fetch --prune && git --no-pager branch -a | grep 'issue-*' | sort -r | head -n 1
-```
-nnn=(上記で表示されたブランチ名からissue番号+1を取得)
+- `workflow-get-new-branch-number` ワークフローを実行して新しいissue番号(nnn)を取得
 
 - ブランチを作成（developブランチ上で）
   - issue-nnn-<branch-suffix>
