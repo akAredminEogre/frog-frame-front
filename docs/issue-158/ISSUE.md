@@ -18,6 +18,6 @@ Clean Architectureの層分離を進め、Chrome Runtime APIを使用したリ�
 - なし
 
 # タスク
-- [ ] ChromeRuntimeRewriteRuleRepository.ts をframeworks-and-drivers/messaging/へ移動
-- [ ] 関連ファイルのimportパスを修正
-- [ ] テスト実行と確認
+- [x] ChromeRuntimeRewriteRuleRepository.ts をframeworks-and-drivers/messaging/へ移動
+- [x] 関連ファイルのimportパスを修正
+- [x] テスト実行と確認
