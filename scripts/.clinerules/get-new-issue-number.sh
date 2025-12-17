@@ -13,17 +13,17 @@ get_all_issue_branches() {
 
 # ヘルパー関数: 入力値が数字のみかバリデーション
 validate_digit_only() {
-    local value="$1"
-    [[ "$value" =~ ^[0-9]+$ ]] && return 0
-    echo "Error: Invalid issue number format: $value (digits only)" >&2
+    local VALUE="$1"
+    [[ "$VALUE" =~ ^[0-9]+$ ]] && return 0
+    echo "Error: Invalid issue number format: $VALUE (digits only)" >&2
     exit 1
 }
 
 # ヘルパー関数: 指定した番号のissueブランチを検索
 find_existing_issue_branch() {
-    local issue_number="$1"
-    validate_digit_only "$issue_number"
-    get_all_issue_branches | grep -E "(^|/)issue-${issue_number}(-|$)" | head -n 1
+    local ISSUE_NUMBER="$1"
+    validate_digit_only "$ISSUE_NUMBER"
+    get_all_issue_branches | grep -E "(^|/)issue-${ISSUE_NUMBER}(-|$)" | head -n 1
 }
 
 # オプション解析
@@ -50,30 +50,30 @@ git fetch --prune claude 2>/dev/null || true
 # 指定番号の存在チェックモード
 if [ "$CHECK_MODE" = true ]; then
     [ -z "$CHECK_NUMBER" ] && echo "Error: --check requires an issue number argument" >&2 && exit 1
-    existing_branch=$(find_existing_issue_branch "$CHECK_NUMBER")
-    [ -z "$existing_branch" ] && echo "available" || echo "exists"
+    EXISTING_BRANCH=$(find_existing_issue_branch "$CHECK_NUMBER")
+    [ -z "$EXISTING_BRANCH" ] && echo "available" || echo "exists"
     exit 0
 fi
 
 # 最大issue番号を取得
-maximum_number=$(get_all_issue_branches | sed -E 's/.*issue-([0-9]+).*/\1/' | sort -n | tail -n 1)
+MAXIMUM_NUMBER=$(get_all_issue_branches | sed -E 's/.*issue-([0-9]+).*/\1/' | sort -n | tail -n 1)
 
 # 番号が見つからなければ0から開始
-if [ -z "$maximum_number" ]; then
-    maximum_number=0
+if [ -z "$MAXIMUM_NUMBER" ]; then
+    MAXIMUM_NUMBER=0
 fi
 
 # +1して新番号を決定
-new_number=$((maximum_number + 1))
+NEW_NUMBER=$((MAXIMUM_NUMBER + 1))
 
 # 重複チェックループ
-formatted_number=$(printf "%03d" $new_number)
-existing_branch=$(find_existing_issue_branch "$formatted_number")
-while [ -n "$existing_branch" ]; do
-    new_number=$((new_number + 1))
-    formatted_number=$(printf "%03d" $new_number)
-    existing_branch=$(find_existing_issue_branch "$formatted_number")
+FORMATTED_NUMBER=$(printf "%03d" $NEW_NUMBER)
+EXISTING_BRANCH=$(find_existing_issue_branch "$FORMATTED_NUMBER")
+while [ -n "$EXISTING_BRANCH" ]; do
+    NEW_NUMBER=$((NEW_NUMBER + 1))
+    FORMATTED_NUMBER=$(printf "%03d" $NEW_NUMBER)
+    EXISTING_BRANCH=$(find_existing_issue_branch "$FORMATTED_NUMBER")
 done
 
 # 3桁でフォーマットして出力
-printf "%03d\n" $new_number
+printf "%03d\n" $NEW_NUMBER
