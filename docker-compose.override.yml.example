@@ -10,10 +10,15 @@
 # the default value from .env to correctly mount the worktree's source directory.
 # This allows node_modules and .wxt/tsconfig.json generated inside the container
 # to be visible on the host side, enabling VSCode to resolve module imports.
+#
+# IMPORTANT: Both .env and .env.worktree are listed explicitly to ensure proper
+# variable override order. Docker Compose reads env_file entries in order, so
+# .env.worktree values (like HOST_FRONTEND_ROOT_PATH) will override .env values.
 
 services:
   frontend:
     env_file:
+      - .env
       - .env.worktree
     environment:
       # Tracking variable to identify worktree usage
