@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
+import { contentContainer } from 'src/frameworks-and-drivers/di/contentContainer';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/infrastructure/browser/messaging/ChromeRuntimeRewriteRuleRepository';
 import { DebounceTimer } from 'src/infrastructure/browser/timer/DebounceTimer';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';
-import { contentContainer } from 'src/infrastructure/di/contentContainer';
 import { DomRootChecker } from 'src/infrastructure/document/DomRootChecker';
 import { ElementFactory } from 'src/infrastructure/document/ElementFactory';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
