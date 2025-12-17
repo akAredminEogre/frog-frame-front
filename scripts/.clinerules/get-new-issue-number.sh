@@ -38,7 +38,7 @@ if [ "$CHECK_MODE" = true ]; then
 fi
 
 # 最大issue番号を取得
-maximum_number=$(git --no-pager branch -a | grep -E '(^|/)issue-[0-9]+' | sed -E 's/.*issue-([0-9]+).*/\1/' | sort -n | tail -n 1)
+maximum_number=$(git --no-pager branch -a | grep -E '(^|/)issue-[0-9]+(-|$)' | sed -E 's/.*issue-([0-9]+).*/\1/' | sort -n | tail -n 1)
 
 # 番号が見つからなければ0から開始
 if [ -z "$maximum_number" ]; then
