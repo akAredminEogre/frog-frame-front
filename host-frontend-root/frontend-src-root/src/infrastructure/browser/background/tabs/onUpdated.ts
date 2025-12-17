@@ -1,6 +1,5 @@
-import { container } from 'src/infrastructure/di/container';
-
 import { TabId } from 'src/domain/value-objects/TabId';
+import { container } from 'src/frameworks-and-drivers/di/container';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 

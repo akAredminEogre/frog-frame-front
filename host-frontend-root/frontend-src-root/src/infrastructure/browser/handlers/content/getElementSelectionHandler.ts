@@ -1,6 +1,6 @@
 // cspell:ignore usecases
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
-import { contentContainer } from 'src/infrastructure/di/contentContainer';
+import { contentContainer } from 'src/frameworks-and-drivers/di/contentContainer';
 
 type GetElementSelectionMessage = { type: 'getElementSelection' };
 

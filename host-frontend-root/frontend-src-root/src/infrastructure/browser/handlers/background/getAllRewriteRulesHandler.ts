@@ -1,7 +1,6 @@
-import { container } from 'src/infrastructure/di/container';
-
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
+import { container } from 'src/frameworks-and-drivers/di/container';
 
 /**
  * getAllRules message handler
