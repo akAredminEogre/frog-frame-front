@@ -1,7 +1,5 @@
 import 'src/frameworks-and-drivers/ui/pages/rules/style.css';
 
-import { container } from 'src/infrastructure/di/container';
-
 import { useEffect,useState } from 'react';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
@@ -13,6 +11,7 @@ import LoadingMessage from 'src/components/molecules/LoadingMessage/LoadingMessa
 import EmptyStateMessage from 'src/components/organisms/EmptyStateMessage/EmptyStateMessage';
 import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { container } from 'src/frameworks-and-drivers/di/container';
 
 function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);

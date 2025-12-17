@@ -1,6 +1,5 @@
-import { container } from 'src/infrastructure/di/container';
-
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
+import { container } from 'src/frameworks-and-drivers/di/container';
 
 export function contextMenusOnClicked() {
   chrome.contextMenus.onClicked.addListener(async (info, tab) => {
