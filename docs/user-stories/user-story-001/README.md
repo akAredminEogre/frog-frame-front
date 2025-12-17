@@ -101,7 +101,7 @@
 各層ごとに1PRとして実施し、各PR完了時に`make testcheck`が通ることを確認：
 
 **RewriteRule.ts移行（51ファイル影響）**
-- [ ] RewriteRule.ts移行 + enterprise-business-rules層の修正（7ファイル + 関連テスト）
+- [x] RewriteRule.ts移行 + enterprise-business-rules層の修正（7ファイル + 関連テスト）
 
 **その他のファイル移行（各1PR）**
 - [ ] RulesApp.tsx を `src/frameworks-and-drivers/ui/pages/rules/` へ移行（entrypointsとテスト修正）
