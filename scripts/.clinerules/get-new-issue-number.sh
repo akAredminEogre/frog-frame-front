@@ -25,6 +25,7 @@ done
 
 # リモート情報を最新化
 git fetch --prune origin 2>/dev/null || true
+git fetch --prune claude 2>/dev/null || true
 
 # 指定番号の存在チェックモード
 if [ "$CHECK_MODE" = true ]; then
