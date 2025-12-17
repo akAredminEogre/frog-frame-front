@@ -1,5 +1,5 @@
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';
-import { contentContainer } from 'src/infrastructure/di/contentContainer';
+import { contentContainer } from 'src/frameworks-and-drivers/di/contentContainer';
 
 /**
  * Content Script用のApplyRulesOnDomMutationUseCaseシングルトンインスタンス
