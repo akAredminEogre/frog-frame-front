@@ -39,3 +39,21 @@ get_and_check_active_branch() {
     echo "$branch"
     return 0
 }
+
+# Get CONTAINER_APP_ROOT from .env or .env.example, with fallback to default
+# Outputs: CONTAINER_APP_ROOT path to stdout
+# Returns: 0 always (uses default if not found)
+get_container_app_root() {
+    local container_root
+    # Try .env first, then .env.example
+    container_root=$(grep '^CONTAINER_APP_ROOT=' "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env" 2>/dev/null | cut -d'=' -f2)
+    if [ -z "$container_root" ]; then
+        container_root=$(grep '^CONTAINER_APP_ROOT=' "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env.example" 2>/dev/null | cut -d'=' -f2)
+    fi
+    # Use default if still not found
+    if [ -z "$container_root" ]; then
+        container_root="/opt/frontend-container-app-root"
+    fi
+    echo "$container_root"
+    return 0
+}
