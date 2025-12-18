@@ -1,5 +1,9 @@
 import { asValue, createContainer } from 'awilix';
 
+import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
+import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
+import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/IToggleRuleActiveUseCase';
+import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
@@ -15,6 +19,8 @@ import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/Loa
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
+import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
+import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
@@ -23,18 +29,10 @@ import { ChromeWindowService } from 'src/infrastructure/browser/window/ChromeWin
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 import { SelectedPageTextRepository } from 'src/infrastructure/persistence/storage/SelectedPageTextRepository';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
-
-// Toggle Rule Active feature (skeleton implementations)
-import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/IToggleRuleActiveUseCase';
-import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
-import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
-import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
-import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
-import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
-import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
+import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
 
 // Create Awilix container
 const awilixContainer = createContainer({
