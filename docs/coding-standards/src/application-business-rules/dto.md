@@ -1,12 +1,15 @@
 # dtoのコード規約
+
 ## input DTO
-- input DTOは、アプリケーションサービスのメソッドの引数として使用
-- input DTOの命名規則は「[アプリケーションサービス名]InputDto」とする
-- construtor
+- input DTOは、Interactorのメソッドの引数として使用
+- 命名規則は「[機能名]InputData」とする
+  - 例: `ToggleRuleActiveInputData`
+- constructor
   - 引数はプリミティブ型 / 値オブジェクト型 とする
 
 ## output DTO
-- output DTOは、アプリケーションサービスのメソッドの戻り値として使用
-- output DTOの命名規則は「[アプリケーションサービス名]OutputDto」とする
-- construtor
+- output DTOは、Interactorのメソッドの戻り値として使用
+- 命名規則は「[機能名]OutputData」とする
+  - 例: `ToggleRuleActiveOutputData`
+- constructor
   - エンティティ型を推奨とする
