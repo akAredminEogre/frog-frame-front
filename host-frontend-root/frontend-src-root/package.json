@@ -4,6 +4,9 @@
   "private": true,
   "version": "0.1.1.1",
   "type": "module",
+  "imports": {
+    "#eslint-rules/*": "./eslint-rules/*"
+  },
   "scripts": {
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
@@ -44,8 +47,8 @@
     "sort:imports": "eslint . --ext .ts,.tsx,.js,.jsx --fix --rule 'simple-import-sort/imports: error' --rule 'simple-import-sort/exports: error'"
   },
   "dependencies": {
-    "debounce": "^3.0.0",
     "awilix": "^12.0.5",
+    "debounce": "^3.0.0",
     "dexie": "^4.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -70,6 +73,7 @@
     "eslint-plugin-storybook": "9.1.8",
     "eslint-plugin-unused-imports": "^4.1.4",
     "fake-indexeddb": "^6.2.4",
+    "globals": "^16.5.0",
     "happy-dom": "^18.0.1",
     "knip": "^5.62.0",
     "postcss": "^8.5.6",
