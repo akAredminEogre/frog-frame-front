@@ -10,7 +10,7 @@ export class ToggleRuleActivePresenter implements IToggleRuleActivePresenter {
    * @param outputData 出力データ
    */
   presentSuccess(outputData: ToggleRuleActiveOutputData): void {
-    throw new Error(`Not implemented: presentSuccess with ruleId=${outputData.ruleId}`);
+    throw new Error(`Not implemented: presentSuccess with toggledRule.id=${outputData.toggledRule.id}`);
   }
 
   /**
