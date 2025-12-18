@@ -24,6 +24,18 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/index
 import { SelectedPageTextRepository } from 'src/infrastructure/persistence/storage/SelectedPageTextRepository';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 
+// Toggle Rule Active feature (skeleton implementations)
+import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/IToggleRuleActiveUseCase';
+import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
+import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
+import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
+import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
+import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
+import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
+import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
+import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
+import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
+
 // Create Awilix container
 const awilixContainer = createContainer({
   strict: true
@@ -60,6 +72,14 @@ const saveRewriteRuleAndApplyToCurrentTabUseCase = new SaveRewriteRuleAndApplyTo
 );
 const popupInitFormUseCase = new PopupInitFormUseCase(currentTabService, selectedPageTextRepository);
 
+// Toggle Rule Active feature (skeleton instances)
+const toggleRuleActivePresenter = new ToggleRuleActivePresenter();
+const toggleRuleActiveInteractor = new ToggleRuleActiveInteractor(toggleRuleActivePresenter);
+const toggleRuleActiveController = new ToggleRuleActiveController(toggleRuleActiveInteractor);
+const rewriteRuleMapper = new RewriteRuleMapper();
+const chromeTabsGateway = new ChromeTabsGateway();
+const rewriteRuleMessagingService = new RewriteRuleMessagingService();
+
 // Register all instances with asValue (no automatic injection needed)
 awilixContainer.register({
   // Infrastructure services
@@ -83,7 +103,15 @@ awilixContainer.register({
 
   // Concrete classes for direct resolution (aliases)
   dexieRewriteRuleRepository: asValue(rewriteRuleRepository),
-  chromeCurrentTabService: asValue(currentTabService)
+  chromeCurrentTabService: asValue(currentTabService),
+
+  // Toggle Rule Active feature (skeleton registrations)
+  toggleRuleActivePresenter: asValue(toggleRuleActivePresenter),
+  toggleRuleActiveInteractor: asValue(toggleRuleActiveInteractor),
+  toggleRuleActiveController: asValue(toggleRuleActiveController),
+  rewriteRuleMapper: asValue(rewriteRuleMapper),
+  chromeTabsGateway: asValue(chromeTabsGateway),
+  rewriteRuleMessagingService: asValue(rewriteRuleMessagingService)
 });
 
 // Type definitions for container resolution
@@ -110,6 +138,14 @@ interface ContainerCradle {
   // Concrete classes
   dexieRewriteRuleRepository: DexieRewriteRuleRepository;
   chromeCurrentTabService: ChromeCurrentTabService;
+
+  // Toggle Rule Active feature
+  toggleRuleActivePresenter: ToggleRuleActivePresenter;
+  toggleRuleActiveInteractor: ToggleRuleActiveInteractor;
+  toggleRuleActiveController: ToggleRuleActiveController;
+  rewriteRuleMapper: RewriteRuleMapper;
+  chromeTabsGateway: ChromeTabsGateway;
+  rewriteRuleMessagingService: RewriteRuleMessagingService;
 }
 
 // Token mappings for interface-based resolution (legacy compatibility)
@@ -121,7 +157,11 @@ type InterfaceToken =
   | 'ISelectedPageTextRepository'
   | 'ICurrentTabService'
   | 'IChromeRuntimeService'
-  | 'IGetSelectionService';
+  | 'IGetSelectionService'
+  | 'IToggleRuleActiveUseCase'
+  | 'IToggleRuleActivePresenter'
+  | 'ITabsGateway'
+  | 'IRewriteRuleMessagingPort';
 
 const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeTabsService': 'chromeTabsService',
@@ -131,7 +171,11 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'ISelectedPageTextRepository': 'selectedPageTextRepository',
   'ICurrentTabService': 'currentTabService',
   'IChromeRuntimeService': 'chromeRuntimeService',
-  'IGetSelectionService': 'getSelectionService'
+  'IGetSelectionService': 'getSelectionService',
+  'IToggleRuleActiveUseCase': 'toggleRuleActiveInteractor',
+  'IToggleRuleActivePresenter': 'toggleRuleActivePresenter',
+  'ITabsGateway': 'chromeTabsGateway',
+  'IRewriteRuleMessagingPort': 'rewriteRuleMessagingService'
 };
 
 // Class to key mappings for class-based resolution
@@ -145,7 +189,13 @@ const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [PopupInitFormUseCase, 'popupInitFormUseCase'],
   [DexieRewriteRuleRepository, 'dexieRewriteRuleRepository'],
   [ChromeTabsService, 'chromeTabsService'],
-  [ChromeCurrentTabService, 'chromeCurrentTabService']
+  [ChromeCurrentTabService, 'chromeCurrentTabService'],
+  [ToggleRuleActivePresenter, 'toggleRuleActivePresenter'],
+  [ToggleRuleActiveInteractor, 'toggleRuleActiveInteractor'],
+  [ToggleRuleActiveController, 'toggleRuleActiveController'],
+  [RewriteRuleMapper, 'rewriteRuleMapper'],
+  [ChromeTabsGateway, 'chromeTabsGateway'],
+  [RewriteRuleMessagingService, 'rewriteRuleMessagingService']
 ]);
 
 // Container interface with overloaded resolve
@@ -160,6 +210,12 @@ interface Container {
   resolve(token: typeof DexieRewriteRuleRepository): DexieRewriteRuleRepository;
   resolve(token: typeof ChromeTabsService): ChromeTabsService;
   resolve(token: typeof ChromeCurrentTabService): ChromeCurrentTabService;
+  resolve(token: typeof ToggleRuleActivePresenter): ToggleRuleActivePresenter;
+  resolve(token: typeof ToggleRuleActiveInteractor): ToggleRuleActiveInteractor;
+  resolve(token: typeof ToggleRuleActiveController): ToggleRuleActiveController;
+  resolve(token: typeof RewriteRuleMapper): RewriteRuleMapper;
+  resolve(token: typeof ChromeTabsGateway): ChromeTabsGateway;
+  resolve(token: typeof RewriteRuleMessagingService): RewriteRuleMessagingService;
   resolve<T>(token: InterfaceToken): T;
   resolve<T>(token: Function): T;
 }
