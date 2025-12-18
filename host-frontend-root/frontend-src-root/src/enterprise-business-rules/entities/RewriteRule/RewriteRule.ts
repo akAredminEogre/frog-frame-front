@@ -119,6 +119,6 @@ export class RewriteRule {
    * @returns 新しいRewriteRuleインスタンス
    */
   public withActive(active: boolean): RewriteRule {
-    throw new Error('Not implemented');
+    throw new Error(`Not implemented: withActive(${active}) for rule id=${this.id}`);
   }
 }
