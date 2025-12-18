@@ -112,4 +112,13 @@ export class RewriteRule {
     }
     return url.startsWith(this.urlPattern);
   }
+
+  /**
+   * 指定されたactive状態を持つ新しいRewriteRuleインスタンスを生成する
+   * @param active 新しいactive状態
+   * @returns 新しいRewriteRuleインスタンス
+   */
+  public withActive(active: boolean): RewriteRule {
+    throw new Error('Not implemented');
+  }
 }
