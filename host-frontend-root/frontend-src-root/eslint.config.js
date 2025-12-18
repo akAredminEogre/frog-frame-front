@@ -10,8 +10,8 @@ import react from './eslint-rules/react.js';
 import general from './eslint-rules/general.js';
 import noRelativePaths from './eslint-rules/no-relative-paths.js';
 import backgroundHandlers from './eslint-rules/clean-architecture/infrastructure/browser/handlers/background.js';
-import contentHandlers from './eslint-rules/restricted-imports/content-handlers.js';
-import contentUsecases from './eslint-rules/restricted-imports/content-usecases.js';
+import contentHandlers from './eslint-rules/clean-architecture/infrastructure/browser/handlers/content.js';
+import contentUsecases from './eslint-rules/clean-architecture/application/usecases/contentOnMessageReceived.js';
 import domainLayer from './eslint-rules/clean-architecture/domain.js';
 import ignores from './eslint-rules/ignores.js';
 
