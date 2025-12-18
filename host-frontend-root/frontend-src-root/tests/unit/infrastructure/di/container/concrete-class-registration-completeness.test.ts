@@ -11,6 +11,12 @@ import { container } from 'src/frameworks-and-drivers/di/container';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
+import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
+import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
+import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
+import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
+import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
+import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 
 /**
  * containerの内部プロパティからclassToKeyMapを動的に取得する
@@ -87,6 +93,36 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
       description: 'ChromeCurrentTabServiceを解決できること',
       input: { classToken: ChromeCurrentTabService },
       expected: { className: 'ChromeCurrentTabService' }
+    },
+    {
+      description: 'ToggleRuleActivePresenterを解決できること',
+      input: { classToken: ToggleRuleActivePresenter },
+      expected: { className: 'ToggleRuleActivePresenter' }
+    },
+    {
+      description: 'ToggleRuleActiveInteractorを解決できること',
+      input: { classToken: ToggleRuleActiveInteractor },
+      expected: { className: 'ToggleRuleActiveInteractor' }
+    },
+    {
+      description: 'ToggleRuleActiveControllerを解決できること',
+      input: { classToken: ToggleRuleActiveController },
+      expected: { className: 'ToggleRuleActiveController' }
+    },
+    {
+      description: 'RewriteRuleMapperを解決できること',
+      input: { classToken: RewriteRuleMapper },
+      expected: { className: 'RewriteRuleMapper' }
+    },
+    {
+      description: 'ChromeTabsGatewayを解決できること',
+      input: { classToken: ChromeTabsGateway },
+      expected: { className: 'ChromeTabsGateway' }
+    },
+    {
+      description: 'RewriteRuleMessagingServiceを解決できること',
+      input: { classToken: RewriteRuleMessagingService },
+      expected: { className: 'RewriteRuleMessagingService' }
     }
   ];
 

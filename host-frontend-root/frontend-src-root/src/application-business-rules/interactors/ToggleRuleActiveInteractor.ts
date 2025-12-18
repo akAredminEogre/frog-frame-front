@@ -11,6 +11,8 @@ export class ToggleRuleActiveInteractor implements IToggleRuleActiveUseCase {
   ) {}
 
   async execute(inputData: ToggleRuleActiveInputData): Promise<void> {
-    throw new Error('Not implemented');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _presenter = this.presenter;
+    throw new Error(`Not implemented: execute with ruleId=${inputData.ruleId}`);
   }
 }
