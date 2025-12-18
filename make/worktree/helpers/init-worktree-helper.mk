@@ -62,5 +62,6 @@ _wt-create-override:
 	@echo "Adding volume mount for worktree to docker-compose.override.yml..."
 	@source scripts/worktree/check_logic.sh && \
 	CONTAINER_ROOT=$$(get_container_app_root) && \
+	echo "" >> docker-compose.override.yml && \
 	echo "    volumes:" >> docker-compose.override.yml && \
 	echo "      - ./$(WORKTREE_PATH)/host-frontend-root:$$CONTAINER_ROOT/" >> docker-compose.override.yml
