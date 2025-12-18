@@ -1,4 +1,6 @@
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { GetByIdRequestDTO } from 'src/frameworks-and-drivers/messaging/dto/GetByIdRequestDTO';
+import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
+import { UpdateRuleActiveRequestDTO } from 'src/frameworks-and-drivers/messaging/dto/UpdateRuleActiveRequestDTO';
 import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
 /**
@@ -7,19 +9,18 @@ import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewrite
 export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
   /**
    * IDでルールを取得する
-   * @param id ルールID
-   * @returns RewriteRuleエンティティ、または見つからない場合はnull
+   * @param dto 取得リクエストDTO
+   * @returns RewriteRuleDTO
    */
-  async getById(id: number): Promise<RewriteRule | null> {
-    throw new Error(`Not implemented: getById with id=${id}`);
+  async getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO> {
+    throw new Error(`Not implemented: getById with id=${dto.id}`);
   }
 
   /**
    * ルールの有効状態を更新する
-   * @param id ルールID
-   * @param active 新しい有効状態
+   * @param dto 更新リクエストDTO
    */
-  async updateActive(id: number, active: boolean): Promise<void> {
-    throw new Error(`Not implemented: updateActive with id=${id}, active=${active}`);
+  async updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void> {
+    throw new Error(`Not implemented: updateActive with id=${dto.id}, active=${dto.active}`);
   }
 }
