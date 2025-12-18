@@ -62,19 +62,15 @@ get_container_app_root() {
     # Try .env first
     if check_env_exists; then
         container_root=$(grep '^CONTAINER_APP_ROOT=' "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env" | cut -d'=' -f2)
-        if [ -n "$container_root" ]; then
-            echo "$container_root"
-            return 0
-        fi
+        echo "$container_root"
+        return 0
     fi
 
     # Try .env.example
     if check_env_example_exists; then
         container_root=$(grep '^CONTAINER_APP_ROOT=' "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env.example" | cut -d'=' -f2)
-        if [ -n "$container_root" ]; then
-            echo "$container_root"
-            return 0
-        fi
+        echo "$container_root"
+        return 0
     fi
 
     # Fallback to default
