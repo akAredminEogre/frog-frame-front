@@ -6,18 +6,10 @@ import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports
  */
 export class ToggleRuleActivePresenter implements IToggleRuleActivePresenter {
   /**
-   * 成功時の出力を表示する
+   * 出力を表示する
    * @param outputData 出力データ
    */
-  presentSuccess(outputData: ToggleRuleActiveOutputData): void {
-    throw new Error(`Not implemented: presentSuccess with toggledRule.id=${outputData.toggledRule.id}`);
-  }
-
-  /**
-   * 失敗時の出力を表示する
-   * @param error エラー情報
-   */
-  presentError(error: Error): void {
-    throw new Error(`Not implemented: presentError with message=${error.message}`);
+  present(outputData: ToggleRuleActiveOutputData): void {
+    throw new Error(`Not implemented: present with toggledRule.id=${outputData.toggledRule.id}`);
   }
 }
