@@ -12,7 +12,7 @@ import noRelativePaths from './eslint-rules/no-relative-paths.js';
 import backgroundHandlers from './eslint-rules/restricted-imports/background-handlers.js';
 import contentHandlers from './eslint-rules/restricted-imports/content-handlers.js';
 import contentUsecases from './eslint-rules/restricted-imports/content-usecases.js';
-import domainLayer from './eslint-rules/restricted-imports/domain-layer.js';
+import domainLayer from './eslint-rules/clean-architecture/domain.js';
 import ignores from './eslint-rules/ignores.js';
 
 export default [
