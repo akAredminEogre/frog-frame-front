@@ -3,7 +3,7 @@
 export default {
   files: ['**/*.{ts,tsx,js,jsx}'],
   rules: {
-    // React settings
+    // React rules (React-specific ESLint rules; React settings like `settings.react.version` are defined in base.js)
     'react/react-in-jsx-scope': 'off', // Not required for React 17+
     'react/prop-types': 'off', // Not needed with TypeScript
 
