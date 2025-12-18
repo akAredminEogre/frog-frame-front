@@ -11,3 +11,7 @@
 - 命名規則は「[機能名]OutputData」とする
 - constructor
   - エンティティ型を推奨とする
+
+## eslint-rule
+
+`host-frontend-root/frontend-src-root/eslint-rules/clean-architecture/application-business-rules/dto.js`
