@@ -8,7 +8,7 @@ import backgroundHandlers from '#eslint-rules/clean-architecture/infrastructure/
 import contentHandlers from '#eslint-rules/clean-architecture/infrastructure/browser/handlers/content.js';
 
 export default [
-  applicationBusinessRulesDto,
+  ...applicationBusinessRulesDto,
   contentOnMessageReceivedUsecases,
   domain,
   backgroundHandlers,
