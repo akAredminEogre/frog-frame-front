@@ -14,8 +14,6 @@ export class ToggleRuleActiveController {
    * @param active 新しい有効状態
    */
   async toggleRuleActive(ruleId: number, active: boolean): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const _useCase = this.useCase;
-    throw new Error(`Not implemented: toggleRuleActive(${ruleId}, ${active})`);
+    throw new Error(`Not implemented: toggleRuleActive(${ruleId}, ${active}) with useCase=${this.useCase.constructor.name}`);
   }
 }
