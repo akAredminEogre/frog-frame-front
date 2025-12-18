@@ -25,6 +25,18 @@ check_env_worktree_exists() {
     return 0
 }
 
+# Check if .env file exists
+# Returns: 0 if exists, 1 if not exists
+check_env_exists() {
+    [ -f "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env" ]
+}
+
+# Check if .env.example file exists
+# Returns: 0 if exists, 1 if not exists
+check_env_example_exists() {
+    [ -f "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env.example" ]
+}
+
 # Get active branch from .env.worktree and validate it's not empty
 # Outputs: branch name to stdout if valid
 # Returns: 0 if valid, 1 if empty/invalid (with error message)
@@ -45,15 +57,27 @@ get_and_check_active_branch() {
 # Returns: 0 always (uses default if not found)
 get_container_app_root() {
     local container_root
-    # Try .env first, then .env.example
-    container_root=$(grep '^CONTAINER_APP_ROOT=' "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env" 2>/dev/null | cut -d'=' -f2)
-    if [ -z "$container_root" ]; then
-        container_root=$(grep '^CONTAINER_APP_ROOT=' "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env.example" 2>/dev/null | cut -d'=' -f2)
+    local default_value="/opt/frontend-container-app-root"
+
+    # Try .env first
+    if check_env_exists; then
+        container_root=$(grep '^CONTAINER_APP_ROOT=' "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env" | cut -d'=' -f2)
+        if [ -n "$container_root" ]; then
+            echo "$container_root"
+            return 0
+        fi
     fi
-    # Use default if still not found
-    if [ -z "$container_root" ]; then
-        container_root="/opt/frontend-container-app-root"
+
+    # Try .env.example
+    if check_env_example_exists; then
+        container_root=$(grep '^CONTAINER_APP_ROOT=' "$_REPOSITORY_TOP_ABSOLUTE_PATH/.env.example" | cut -d'=' -f2)
+        if [ -n "$container_root" ]; then
+            echo "$container_root"
+            return 0
+        fi
     fi
-    echo "$container_root"
+
+    # Fallback to default
+    echo "$default_value"
     return 0
 }
