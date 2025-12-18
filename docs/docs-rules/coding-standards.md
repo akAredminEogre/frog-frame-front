@@ -20,11 +20,14 @@
 - 命名規則
 - 型の使い分け方針
 - 禁止事項と許可事項
-- eslint-ruleセクション（該当するlinterルールがある場合）
+- eslint-ruleセクション
 
 ### eslint-ruleセクション
 
-規約を実現するESLintルールがある場合、`## eslint-rule` セクションを設け、ルールファイルへのパスを記述する。
+`## eslint-rule` セクションを設け、規約に対応するESLintルールの状態を記述する。
+
+- ESLintルールがある場合: ルールファイルへのパスを記述
+- ESLint化できない場合: その旨を記述
 
 記述形式:
 ```
@@ -33,7 +36,12 @@
 `host-frontend-root/frontend-src-root/eslint-rules/clean-architecture/[layer]/[rule].js`
 ```
 
-該当するルールがない場合は記述不要。
+または:
+```
+## eslint-rule
+
+該当なし（この規約はESLintで検証できないため、PRレビューで確認）
+```
 
 ### 記述すべきでない内容
 
