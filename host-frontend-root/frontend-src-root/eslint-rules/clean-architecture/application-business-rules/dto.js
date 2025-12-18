@@ -13,21 +13,7 @@ export default {
     // DTO files must follow naming conventions
     // Input DTOs must end with "InputData"
     // Output DTOs must end with "OutputData"
+    // Note: File naming conventions are documented; actual enforcement
+    // would require a custom ESLint rule or eslint-plugin-filenames
   },
-  overrides: [
-    {
-      files: ['**/application-business-rules/dto/input/**/*.ts'],
-      rules: {
-        // Naming convention enforced by file path pattern
-        // Files in dto/input/ must be named *InputData.ts
-      },
-    },
-    {
-      files: ['**/application-business-rules/dto/output/**/*.ts'],
-      rules: {
-        // Naming convention enforced by file path pattern
-        // Files in dto/output/ must be named *OutputData.ts
-      },
-    },
-  ],
 };
