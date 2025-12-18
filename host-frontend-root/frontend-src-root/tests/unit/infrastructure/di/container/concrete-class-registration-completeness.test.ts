@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
 import { HandleContextMenuReplaceDomElement } from 'src/application/usecases/contextmenu/HandleContextMenuSelectionUseCase';
 import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
@@ -7,16 +8,15 @@ import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/Loa
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
+import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
 import { container } from 'src/frameworks-and-drivers/di/container';
+import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
-import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
-import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
-import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
-import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
+import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
 
 /**
  * containerの内部プロパティからclassToKeyMapを動的に取得する
