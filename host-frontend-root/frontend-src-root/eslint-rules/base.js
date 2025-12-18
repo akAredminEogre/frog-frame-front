@@ -6,6 +6,7 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import unusedImports from 'eslint-plugin-unused-imports';
+import globals from 'globals';
 
 export default {
   files: ['**/*.{ts,tsx,js,jsx}'],
@@ -19,10 +20,10 @@ export default {
       },
     },
     globals: {
-      browser: true,
-      node: true,
-      webextensions: true,
-      es2021: true,
+      ...globals.browser,
+      ...globals.node,
+      ...globals.webextensions,
+      ...globals.es2021,
     },
   },
   plugins: {
