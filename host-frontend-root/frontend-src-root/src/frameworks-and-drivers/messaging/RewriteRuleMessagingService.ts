@@ -1,5 +1,5 @@
-import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
 /**
  * Chrome Runtime APIを使用したRewriteRuleメッセージングサービス（スケルトン実装）

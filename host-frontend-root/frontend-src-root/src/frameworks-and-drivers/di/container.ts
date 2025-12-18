@@ -1,9 +1,5 @@
 import { asValue, createContainer } from 'awilix';
 
-import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
-import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
-import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/IToggleRuleActiveUseCase';
-import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
@@ -19,6 +15,7 @@ import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/Loa
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
+import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
@@ -31,7 +28,6 @@ import { SelectedPageTextRepository } from 'src/infrastructure/persistence/stora
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
-import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
 
 // Create Awilix container
