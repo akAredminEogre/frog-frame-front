@@ -24,3 +24,7 @@
 | エンティティDTO | `{Entity}DTO` |
 
 > **参照**: [メッセージング層 コーディング規約](../messaging.md)
+
+## eslint-rule
+
+該当なし（この規約はESLintで検証できないため、PRレビューで確認）
