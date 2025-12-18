@@ -8,5 +8,6 @@ export default {
     '.output/**',
     '*.config.js',
     '*.config.ts',
+    'eslint-rules/**',
   ],
 };

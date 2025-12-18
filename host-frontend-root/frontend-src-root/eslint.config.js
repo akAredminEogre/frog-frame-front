@@ -9,10 +9,7 @@ import typescript from './eslint-rules/typescript.js';
 import react from './eslint-rules/react.js';
 import general from './eslint-rules/general.js';
 import noRelativePaths from './eslint-rules/no-relative-paths.js';
-import backgroundHandlers from './eslint-rules/clean-architecture/infrastructure/browser/handlers/background.js';
-import contentHandlers from './eslint-rules/clean-architecture/infrastructure/browser/handlers/content.js';
-import contentUsecases from './eslint-rules/clean-architecture/application/usecases/contentOnMessageReceived.js';
-import domainLayer from './eslint-rules/clean-architecture/domain.js';
+import cleanArchitecture from './eslint-rules/clean-architecture/main.js';
 import ignores from './eslint-rules/ignores.js';
 
 export default [
@@ -23,10 +20,7 @@ export default [
   react,
   general,
   noRelativePaths,
-  backgroundHandlers,
-  contentHandlers,
-  contentUsecases,
-  domainLayer,
+  ...cleanArchitecture,
   ignores,
   ...storybook.configs["flat/recommended"],
 ];
