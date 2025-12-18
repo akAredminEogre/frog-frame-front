@@ -31,6 +31,10 @@ Pages や Organisms は特定のユースケースに特化するため、エン
 
 Presenter は View (Page) にエンティティを渡し、View はエンティティから必要な値のみを抽出して、Atom にはプリミティブ型として値を渡す。
 
+## eslint-rule
+
+該当なし（この規約はESLintで検証できないため、PRレビューで確認）
+
 ## 関連ドキュメント
 
 - [ADR-001: Clean Architecture with Presenter Pattern](../../../../adr/001-clean-architecture-with-presenter-pattern.md)
