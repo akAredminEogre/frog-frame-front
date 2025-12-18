@@ -50,7 +50,7 @@ _wt-copy-override-template:
 
 # Create docker-compose.override.yml with worktree-specific volume mount
 # Note: We write the volume mount path directly to avoid Docker Compose variable
-# interpolation issues. The CONTAINER_APP_ROOT is read from .env to stay in sync.
+# interpolation issues. The CONTAINER_APP_ROOT is retrieved via get_container_app_root helper.
 _wt-create-override:
 	@$(MAKE) -s _wt-copy-override-template
 	@echo "Setting worktree environment variables..."
@@ -60,7 +60,7 @@ _wt-create-override:
 	@echo "# Override HOST_FRONTEND_ROOT_PATH to mount worktree source directory" >> .env.worktree
 	@echo "HOST_FRONTEND_ROOT_PATH=./$(WORKTREE_PATH)/host-frontend-root" >> .env.worktree
 	@echo "Adding volume mount for worktree to docker-compose.override.yml..."
-	@CONTAINER_ROOT=$$(grep '^CONTAINER_APP_ROOT=' .env 2>/dev/null | cut -d'=' -f2 || grep '^CONTAINER_APP_ROOT=' .env.example 2>/dev/null | cut -d'=' -f2); \
-	if [ -z "$$CONTAINER_ROOT" ]; then CONTAINER_ROOT="/opt/frontend-container-app-root"; fi; \
-	echo "    volumes:" >> docker-compose.override.yml; \
+	@source scripts/worktree/check_logic.sh && \
+	CONTAINER_ROOT=$$(get_container_app_root) && \
+	echo "    volumes:" >> docker-compose.override.yml && \
 	echo "      - ./$(WORKTREE_PATH)/host-frontend-root:$$CONTAINER_ROOT/" >> docker-compose.override.yml
