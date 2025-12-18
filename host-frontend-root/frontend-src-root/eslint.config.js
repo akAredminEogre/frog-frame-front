@@ -3,14 +3,14 @@ import storybook from "eslint-plugin-storybook";
 import js from '@eslint/js';
 
 // Import rule configurations
-import base from './eslint-rules/base.js';
-import importSort from './eslint-rules/import-sort.js';
-import typescript from './eslint-rules/typescript.js';
-import reactRules from './eslint-rules/react.js';
-import general from './eslint-rules/general.js';
-import noRelativePaths from './eslint-rules/no-relative-paths.js';
-import cleanArchitecture from './eslint-rules/clean-architecture/main.js';
-import ignores from './eslint-rules/ignores.js';
+import base from '#eslint-rules/base.js';
+import importSort from '#eslint-rules/import-sort.js';
+import typescript from '#eslint-rules/typescript.js';
+import reactRules from '#eslint-rules/react.js';
+import general from '#eslint-rules/general.js';
+import noRelativePaths from '#eslint-rules/no-relative-paths.js';
+import cleanArchitecture from '#eslint-rules/clean-architecture/main.js';
+import ignores from '#eslint-rules/ignores.js';
 
 export default [
   js.configs.recommended,
