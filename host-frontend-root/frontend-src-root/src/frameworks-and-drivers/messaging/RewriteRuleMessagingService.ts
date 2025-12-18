@@ -11,7 +11,7 @@ export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
    * @returns RewriteRuleエンティティ、または見つからない場合はnull
    */
   async getById(id: number): Promise<RewriteRule | null> {
-    throw new Error('Not implemented');
+    throw new Error(`Not implemented: getById with id=${id}`);
   }
 
   /**
@@ -20,6 +20,6 @@ export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
    * @param active 新しい有効状態
    */
   async updateActive(id: number, active: boolean): Promise<void> {
-    throw new Error('Not implemented');
+    throw new Error(`Not implemented: updateActive with id=${id}, active=${active}`);
   }
 }

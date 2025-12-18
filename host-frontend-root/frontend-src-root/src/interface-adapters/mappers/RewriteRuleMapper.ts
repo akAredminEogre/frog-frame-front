@@ -10,7 +10,7 @@ export class RewriteRuleMapper {
    * @returns RewriteRuleエンティティ
    */
   toEntity(dto: unknown): RewriteRule {
-    throw new Error('Not implemented');
+    throw new Error(`Not implemented: toEntity with dto=${JSON.stringify(dto)}`);
   }
 
   /**
@@ -19,6 +19,6 @@ export class RewriteRuleMapper {
    * @returns DTOオブジェクト
    */
   toDto(entity: RewriteRule): unknown {
-    throw new Error('Not implemented');
+    throw new Error(`Not implemented: toDto with entity id=${entity.id}`);
   }
 }

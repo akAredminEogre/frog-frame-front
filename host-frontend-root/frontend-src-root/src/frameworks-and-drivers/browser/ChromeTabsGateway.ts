@@ -9,6 +9,6 @@ export class ChromeTabsGateway implements ITabsGateway {
    * @param urlPattern URLパターン
    */
   async reloadMatchingTabs(urlPattern: string): Promise<void> {
-    throw new Error('Not implemented');
+    throw new Error(`Not implemented: reloadMatchingTabs with urlPattern=${urlPattern}`);
   }
 }
