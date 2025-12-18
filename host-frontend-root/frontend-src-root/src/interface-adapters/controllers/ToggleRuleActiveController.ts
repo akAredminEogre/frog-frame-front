@@ -1,3 +1,4 @@
+import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/ToggleRuleActiveInputData';
 import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/IToggleRuleActiveUseCase';
 
 /**
@@ -11,9 +12,8 @@ export class ToggleRuleActiveController {
   /**
    * ルールの有効/無効を切り替える
    * @param ruleId ルールID
-   * @param active 新しい有効状態
    */
-  async toggleRuleActive(ruleId: number, active: boolean): Promise<void> {
-    throw new Error(`Not implemented: toggleRuleActive(${ruleId}, ${active}) with useCase=${this.useCase.constructor.name}`);
+  async toggleActive(ruleId: number): Promise<void> {
+    throw new Error(`Not implemented: toggleActive(${ruleId}) with useCase=${this.useCase.constructor.name}, inputData=${ToggleRuleActiveInputData.name}`);
   }
 }
