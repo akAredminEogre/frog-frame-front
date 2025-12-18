@@ -6,7 +6,7 @@ import js from '@eslint/js';
 import base from './eslint-rules/base.js';
 import importSort from './eslint-rules/import-sort.js';
 import typescript from './eslint-rules/typescript.js';
-import react from './eslint-rules/react.js';
+import reactRules from './eslint-rules/react.js';
 import general from './eslint-rules/general.js';
 import noRelativePaths from './eslint-rules/no-relative-paths.js';
 import cleanArchitecture from './eslint-rules/clean-architecture/main.js';
@@ -17,7 +17,7 @@ export default [
   base,
   importSort,
   typescript,
-  react,
+  reactRules,
   general,
   noRelativePaths,
   ...cleanArchitecture,
