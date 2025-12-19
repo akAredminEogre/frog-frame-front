@@ -4,11 +4,15 @@
  * 1. 有効なタブのみで初期化
  * 2. 空配列で初期化
  * 3. 単一タブで初期化
+ *
+ * 検証方法: filterByRuleで特定URLにマッチするタブを抽出し、
+ * そのタブ数が期待値と一致することを確認
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Tabs } from 'src/frameworks-and-drivers/browser/Tabs';
 
+import { createMockRule } from '../mocks/createMockRule';
 import { createMockTab } from '../mocks/createMockTab';
 
 describe('Tabs.constructor - 正常系', () => {
@@ -35,28 +39,33 @@ describe('Tabs.constructor - 正常系', () => {
         createMockTab(1, 'https://example.com'),
         createMockTab(2, 'https://test.com'),
       ],
-      expectedReloadCount: 2,
+      matchingUrls: ['https://example.com', 'https://test.com'],
+      expectedTabCount: 2,
     },
     {
       description: '空配列で初期化した場合、タブは0件',
       input: [],
-      expectedReloadCount: 0,
+      matchingUrls: [],
+      expectedTabCount: 0,
     },
     {
       description: '単一タブで初期化した場合、1件のタブが保持される',
       input: [createMockTab(1, 'https://example.com')],
-      expectedReloadCount: 1,
+      matchingUrls: ['https://example.com'],
+      expectedTabCount: 1,
     },
   ];
 
-  it.each(testCases)('$description', async ({ input, expectedReloadCount }) => {
+  it.each(testCases)('$description', async ({ input, matchingUrls, expectedTabCount }) => {
     // Arrange
-    const tabs = new Tabs(input);
+    const rule = createMockRule(matchingUrls);
 
     // Act
-    await tabs.reloadAll();
+    const tabs = new Tabs(input);
 
-    // Assert
-    expect(mockReload).toHaveBeenCalledTimes(expectedReloadCount);
+    // Assert - filterByRuleで全URLにマッチするタブを取得し、reloadAllで数を検証
+    const filtered = tabs.filterByRule(rule);
+    await filtered.reloadAll();
+    expect(mockReload).toHaveBeenCalledTimes(expectedTabCount);
   });
 });

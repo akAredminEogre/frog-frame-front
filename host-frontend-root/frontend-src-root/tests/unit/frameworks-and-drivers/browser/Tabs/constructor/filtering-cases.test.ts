@@ -5,11 +5,15 @@
  * 2. idがundefinedのタブを除外
  * 3. url/id両方undefinedのタブを除外
  * 4. 有効/無効タブが混在するケース
+ *
+ * 検証方法: filterByRuleで有効なURLにマッチするタブを抽出し、
+ * そのタブ数が期待値と一致することを確認
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Tabs } from 'src/frameworks-and-drivers/browser/Tabs';
 
+import { createMockRule } from '../mocks/createMockRule';
 import { createMockTab } from '../mocks/createMockTab';
 
 describe('Tabs.constructor - フィルタリング', () => {
@@ -36,7 +40,8 @@ describe('Tabs.constructor - フィルタリング', () => {
         createMockTab(1, undefined),
         createMockTab(2, 'https://example.com'),
       ],
-      expectedReloadCount: 1,
+      validUrls: ['https://example.com'],
+      expectedTabCount: 1,
     },
     {
       description: 'idがundefinedのタブは除外される',
@@ -44,7 +49,8 @@ describe('Tabs.constructor - フィルタリング', () => {
         createMockTab(undefined, 'https://example.com'),
         createMockTab(2, 'https://test.com'),
       ],
-      expectedReloadCount: 1,
+      validUrls: ['https://test.com'],
+      expectedTabCount: 1,
     },
     {
       description: 'url/id両方undefinedのタブは除外される',
@@ -52,7 +58,8 @@ describe('Tabs.constructor - フィルタリング', () => {
         createMockTab(undefined, undefined),
         createMockTab(2, 'https://example.com'),
       ],
-      expectedReloadCount: 1,
+      validUrls: ['https://example.com'],
+      expectedTabCount: 1,
     },
     {
       description: '有効/無効タブが混在する場合、有効タブのみ保持される',
@@ -63,18 +70,21 @@ describe('Tabs.constructor - フィルタリング', () => {
         createMockTab(4, 'https://valid.com'),
         createMockTab(undefined, undefined),
       ],
-      expectedReloadCount: 2,
+      validUrls: ['https://example.com', 'https://valid.com'],
+      expectedTabCount: 2,
     },
   ];
 
-  it.each(testCases)('$description', async ({ input, expectedReloadCount }) => {
+  it.each(testCases)('$description', async ({ input, validUrls, expectedTabCount }) => {
     // Arrange
-    const tabs = new Tabs(input);
+    const rule = createMockRule(validUrls);
 
     // Act
-    await tabs.reloadAll();
+    const tabs = new Tabs(input);
 
-    // Assert
-    expect(mockReload).toHaveBeenCalledTimes(expectedReloadCount);
+    // Assert - filterByRuleで有効URLにマッチするタブを取得し、数を検証
+    const filtered = tabs.filterByRule(rule);
+    await filtered.reloadAll();
+    expect(mockReload).toHaveBeenCalledTimes(expectedTabCount);
   });
 });
