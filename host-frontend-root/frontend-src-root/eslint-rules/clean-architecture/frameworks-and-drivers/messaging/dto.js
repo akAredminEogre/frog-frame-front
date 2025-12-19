@@ -22,10 +22,9 @@ const requestDtoConfig = {
   },
 };
 
-// EntityDTO config: must end with DTO
+// EntityDTO config: must end with DTO (only direct files in dto/, not subdirectories)
 const entityDtoConfig = {
-  files: ['**/frameworks-and-drivers/messaging/dto/**/*.ts'],
-  ignores: ['**/frameworks-and-drivers/messaging/dto/request-dto/**/*.ts'],
+  files: ['**/frameworks-and-drivers/messaging/dto/*.ts'],
   rules: {
     '@typescript-eslint/naming-convention': [
       'error',
