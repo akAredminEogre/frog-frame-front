@@ -23,4 +23,12 @@
 - src/frameworks-and-drivers/browser以下のコード
 
 ## eslint-rule
-`host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/`
+
+| ルール | ESLintファイル |
+|--------|----------------|
+| Rule 2: else句禁止 | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/no-else.js` |
+| Rule 4: 1行1ドット | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/one-dot-per-line.js` |
+| Rule 7: インスタンス変数2つまで | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/max-instance-variables.js` |
+| Rule 9: Getter/Setter禁止 | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/no-getter-setter.js` |
+
+その他のルール（1, 3, 5, 6, 8）は実装が複雑なため、PRレビューで確認。
