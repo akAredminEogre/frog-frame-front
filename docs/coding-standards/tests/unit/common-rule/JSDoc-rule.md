@@ -23,10 +23,36 @@ describe('SelectedPageTextService.setSelectedPageText - 正常系', () => {
 /**
  * 1. 空文字列の保存処理
  * 2. 特殊文字・Unicodeの保存処理
- * 3. 長文テキストの保存処理  
+ * 3. 長文テキストの保存処理
  * 4. 改行・制御文字の保存処理
  */
 describe('SelectedPageTextService.setSelectedPageText - エッジケース', () => {
   // 各ケースの実装
 });
+```
+
+### 2.3 配列ベーステストのJSDoc
+配列化したテストケース群では、JSDocの各行が配列内の`description`と一致すること。
+番号付きリスト形式で記述してよい。
+
+```typescript
+/**
+ * RewriteRule.withActive - 正常系テスト（isActive状態変更）
+ * 1. isActive=true のルールを false に変更できる
+ * 2. isActive=false のルールを true に変更できる
+ * 3. 同じ値(true)を設定しても新しいインスタンスが返される
+ * 4. 同じ値(false)を設定しても新しいインスタンスが返される
+ */
+
+const testCases = [
+  {
+    description: 'isActive=true のルールを false に変更できる',  // JSDocの1と一致
+    ...
+  },
+  {
+    description: 'isActive=false のルールを true に変更できる',  // JSDocの2と一致
+    ...
+  },
+  // 以下同様
+];
 ```
