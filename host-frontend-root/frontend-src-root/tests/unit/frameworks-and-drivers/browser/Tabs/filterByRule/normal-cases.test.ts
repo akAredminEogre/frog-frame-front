@@ -69,7 +69,7 @@ describe('Tabs.filterByRule - 正常系', () => {
     const filtered = tabs.filterByRule(rule);
     await filtered.reloadAll();
 
-    // Assert
+    // Assert - reloadAllの呼び出し回数でフィルタリング結果のタブ数を検証
     expect(filtered).toBeInstanceOf(Tabs);
     expect(mockReload).toHaveBeenCalledTimes(expectedReloadCount);
   });
