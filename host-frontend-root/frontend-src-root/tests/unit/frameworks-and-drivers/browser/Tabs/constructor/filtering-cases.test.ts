@@ -98,12 +98,12 @@ describe('Tabs.constructor - フィルタリング', () => {
    */
   it.each(testCases)('$description', async ({ input, expected }) => {
     // Arrange
-    const allTabs = [...input.tabsRemained, ...input.tabsEliminated];
+    const tabsArray = [...input.tabsRemained, ...input.tabsEliminated];
     const matchingUrls = input.tabsRemained.map((tab) => tab.url!);
     const rule = createMockRule(matchingUrls);
 
     // Act
-    const tabs = new Tabs(allTabs);
+    const tabs = new Tabs(tabsArray);
 
     // Assert - filterByRuleで有効URLにマッチするタブを取得し、reloadAllで検証
     const filtered = tabs.filterByRule(rule);
