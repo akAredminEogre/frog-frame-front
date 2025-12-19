@@ -7,7 +7,8 @@ branch_name="$(git branch --show-current)"
 
 # issue-XXX形式からXXXを抽出
 # 例: issue-131-feat-numbering-shell -> 131
-issue_number=$(echo "$branch_name" | sed -n 's/^issue-\([0-9]\+\).*/\1/p')
+# 例: claude/issue-131-feat-xxx-Ab12c -> 131
+issue_number=$(echo "$branch_name" | sed -n 's/.*issue-\([0-9]\+\).*/\1/p')
 
 # 番号が取得できなかった場合はエラー
 if [ -z "$issue_number" ]; then
