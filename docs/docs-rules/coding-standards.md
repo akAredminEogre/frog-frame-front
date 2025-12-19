@@ -24,24 +24,11 @@
 
 ### eslint-ruleセクション
 
-`## eslint-rule` セクションを設け、規約に対応するESLintルールの状態を記述する。
+`## eslint-rule` セクションを設け、**各規約ごとに** ESLintルールの有無を明示する。
 
 - ESLintルールがある場合: ルールファイルへのパスを記述
 - ESLint化できない場合: その旨を記述
-
-記述形式:
-```
-## eslint-rule
-
-`host-frontend-root/frontend-src-root/eslint-rules/clean-architecture/[layer]/[rule].js`
-```
-
-または:
-```
-## eslint-rule
-
-該当なし（この規約はESLintで検証できないため、PRレビューで確認）
-```
+  - ESlint化できない場合は、無理に空のeslint-rule.jsのファイルを作成しないこと
 
 ### 記述すべきでない内容
 
