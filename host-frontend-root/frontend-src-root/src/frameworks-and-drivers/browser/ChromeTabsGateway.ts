@@ -11,9 +11,8 @@ export class ChromeTabsGateway implements ITabsGateway {
    */
   async reloadMatchingTabs(rule: RewriteRule): Promise<void> {
     const tabs = await chrome.tabs.query({});
-    const reloadPromises = tabs
-      .filter((tab) => tab.url !== undefined && rule.matchesUrl(tab.url))
-      .map((tab) => chrome.tabs.reload(tab.id!));
+    const matchingTabs = tabs.filter((tab) => tab.url !== undefined && rule.matchesUrl(tab.url));
+    const reloadPromises = matchingTabs.map((tab) => chrome.tabs.reload(tab.id!));
     await Promise.all(reloadPromises);
   }
 }
