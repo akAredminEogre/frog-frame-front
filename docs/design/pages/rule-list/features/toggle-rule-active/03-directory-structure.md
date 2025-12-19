@@ -67,7 +67,7 @@ src/frameworks-and-drivers/
 │       ├── RewriteRuleDTO.ts                    ← エンティティDTO
 │       └── request-dto/                         ← リクエストDTO
 │           ├── GetByIdRequestDTO.ts             ← ルール取得要求 { id }
-│           └── UpdateRuleActiveRequestDTO.ts    ← トグル更新 { id, active }
+│           └── UpdateRuleActiveRequestDTO.ts    ← トグル更新 { id, isActive }
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
 │   └── ChromeTabsGateway.ts                     ← rule.matchesUrl()判定後リロード（ADR-001参照）
 └── di/                                          ← DI Container
