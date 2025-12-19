@@ -32,35 +32,70 @@ describe('Tabs.filterByRule - エッジケース', () => {
   const testCases = [
     {
       description: '空のTabs: エラーなく空のTabsを返す',
-      input: [],
-      matchingUrls: ['https://example.com'],
-      expectedReloadCount: 0,
+      input: {
+        tabsRemained: [],
+        tabsEliminated: [],
+        matchingUrls: ['https://example.com'],
+      },
+      expected: {
+        remainedIds: [],
+        eliminatedIds: [],
+      },
     },
     {
       description: '単一タブマッチ: 1件がフィルタリング結果に含まれる',
-      input: [createMockTab(1, 'https://example.com')],
-      matchingUrls: ['https://example.com'],
-      expectedReloadCount: 1,
+      input: {
+        tabsRemained: [createMockTab(1, 'https://example.com')],
+        tabsEliminated: [],
+        matchingUrls: ['https://example.com'],
+      },
+      expected: {
+        remainedIds: [1],
+        eliminatedIds: [],
+      },
     },
     {
       description: '単一タブ不一致: フィルタリング結果は空',
-      input: [createMockTab(1, 'https://example.com')],
-      matchingUrls: ['https://nomatch.com'],
-      expectedReloadCount: 0,
+      input: {
+        tabsRemained: [],
+        tabsEliminated: [createMockTab(1, 'https://example.com')],
+        matchingUrls: ['https://nomatch.com'],
+      },
+      expected: {
+        remainedIds: [],
+        eliminatedIds: [1],
+      },
     },
   ];
 
-  it.each(testCases)('$description', async ({ input, matchingUrls, expectedReloadCount }) => {
+  /**
+   * 検証方法について:
+   * Tabs.tabsはprivate readonlyのため、テストから直接アクセスできない。
+   * reloadAllを実行し、chrome.tabs.reloadの呼び出し引数でフィルタリング結果を検証する:
+   * - remainedIds: reloadが呼ばれるべきタブID
+   * - eliminatedIds: reloadが呼ばれないべきタブID
+   */
+  it.each(testCases)('$description', async ({ input, expected }) => {
     // Arrange
-    const tabs = new Tabs(input);
-    const rule = createMockRule(matchingUrls);
+    const allTabs = [...input.tabsRemained, ...input.tabsEliminated];
+    const tabs = new Tabs(allTabs);
+    const rule = createMockRule(input.matchingUrls);
 
     // Act
     const filtered = tabs.filterByRule(rule);
     await filtered.reloadAll();
 
-    // Assert - reloadAllの呼び出し回数でフィルタリング結果のタブ数を検証
+    // Assert - 戻り値の型を検証
     expect(filtered).toBeInstanceOf(Tabs);
-    expect(mockReload).toHaveBeenCalledTimes(expectedReloadCount);
+
+    // Assert - 残るべきタブがreloadされたことを検証
+    for (const id of expected.remainedIds) {
+      expect(mockReload).toHaveBeenCalledWith(id);
+    }
+
+    // Assert - 除外されるべきタブがreloadされていないことを検証
+    for (const id of expected.eliminatedIds) {
+      expect(mockReload).not.toHaveBeenCalledWith(id);
+    }
   });
 });
