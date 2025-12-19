@@ -110,7 +110,7 @@
 
 ### Phase 1: ディレクトリ構造の準備
 
-- [ ] Clean Architecture 4層ディレクトリを作成
+- [x] Clean Architecture 4層ディレクトリを作成
   - `src/enterprise-business-rules/entities/`
   - `src/application-business-rules/ports/{input,output,gateway}/`
   - `src/application-business-rules/interactors/`
@@ -120,7 +120,7 @@
 
 ### Phase 2: Skeleton（インターフェース・スケルトンクラス作成）
 
-コンパイルが通る最小実装でスケルトンを作成（実際のロジックは空または NotImplementedError）：
+- [x] コンパイルが通る最小実装でスケルトンを作成（実際のロジックは空または NotImplementedError）：
 
 **第1層: enterprise-business-rules**
 - [ ] RewriteRule に withActive(), matchesUrl() のスケルトンを追加

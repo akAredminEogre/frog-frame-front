@@ -1,0 +1,15 @@
+import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveOutputData';
+import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
+
+/**
+ * ルールの有効/無効切り替え結果のPresenter（スケルトン実装）
+ */
+export class ToggleRuleActivePresenter implements IToggleRuleActivePresenter {
+  /**
+   * 出力を表示する
+   * @param outputData 出力データ
+   */
+  present(outputData: ToggleRuleActiveOutputData): void {
+    throw new Error(`Not implemented: present with toggledRule.id=${outputData.toggledRule.id}`);
+  }
+}
