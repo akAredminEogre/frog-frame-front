@@ -14,43 +14,35 @@ describe('ToggleRuleActiveOutputData.constructor - 正常系', () => {
   const testCases = [
     {
       description: 'isActive=true のルールでインスタンスを作成できる',
-      input: {
-        ruleId: 1,
-        oldString: 'old',
-        newString: 'new',
-        urlPattern: 'https://example.com',
-        isRegex: false,
-        isActive: true,
-      },
+      input: { isActive: true },
     },
     {
       description: 'isActive=false のルールでインスタンスを作成できる',
-      input: {
-        ruleId: 2,
-        oldString: 'before',
-        newString: 'after',
-        urlPattern: 'https://test.com',
-        isRegex: true,
-        isActive: false,
-      },
+      input: { isActive: false },
     },
   ];
 
   testCases.forEach((testCase) => {
     it(testCase.description, () => {
+      const ruleId = 1;
+      const oldString = 'old';
+      const newString = 'new';
+      const urlPattern = 'https://example.com';
+      const isRegex = false;
+
       const rule = new RewriteRule(
-        testCase.input.ruleId,
-        testCase.input.oldString,
-        testCase.input.newString,
-        testCase.input.urlPattern,
-        testCase.input.isRegex,
+        ruleId,
+        oldString,
+        newString,
+        urlPattern,
+        isRegex,
         testCase.input.isActive
       );
 
       const outputData = new ToggleRuleActiveOutputData(rule);
 
       expect(outputData.toggledRule).toBe(rule);
-      expect(outputData.toggledRule.id).toBe(testCase.input.ruleId);
+      expect(outputData.toggledRule.id).toBe(ruleId);
       expect(outputData.toggledRule.isActive).toBe(testCase.input.isActive);
     });
   });
