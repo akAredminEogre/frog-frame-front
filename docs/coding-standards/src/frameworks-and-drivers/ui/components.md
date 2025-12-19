@@ -33,7 +33,9 @@ Presenter は View (Page) にエンティティを渡し、View はエンティ�
 
 ## eslint-rule
 
-該当なし（この規約はESLintで検証できないため、PRレビューで確認）
+`host-frontend-root/frontend-src-root/eslint-rules/clean-architecture/frameworks-and-drivers/ui/atoms.js`
+
+Atoms内でのエンティティ/値オブジェクトのimportを禁止。プリミティブ型のみかどうかの完全な検証はPRレビューで確認。
 
 ## 関連ドキュメント
 
