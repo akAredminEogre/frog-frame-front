@@ -123,26 +123,26 @@
 - [x] コンパイルが通る最小実装でスケルトンを作成（実際のロジックは空または NotImplementedError）：
 
 **第1層: enterprise-business-rules**
-- [ ] RewriteRule に withActive(), matchesUrl() のスケルトンを追加
+- [x] RewriteRule に withActive(), matchesUrl() のスケルトンを追加
 
 **第2層: application-business-rules**
-- [ ] IToggleRuleActiveUseCase（Input Port インターフェース）
-- [ ] IToggleRuleActivePresenter（Output Port インターフェース）
-- [ ] ITabsGateway（Gateway インターフェース）
-- [ ] ToggleRuleActiveInputData / OutputData（DTO）
-- [ ] ToggleRuleActiveInteractor（スケルトン実装）
+- [x] IToggleRuleActiveUseCase（Input Port インターフェース）
+- [x] IToggleRuleActivePresenter（Output Port インターフェース）
+- [x] ITabsGateway（Gateway インターフェース）
+- [x] ToggleRuleActiveInputData / OutputData（DTO）
+- [x] ToggleRuleActiveInteractor（スケルトン実装）
 
 **第3層: interface-adapters**
-- [ ] ToggleRuleActiveController（スケルトン実装）
-- [ ] ToggleRuleActivePresenter（スケルトン実装）
-- [ ] IRewriteRuleMessagingPort（インターフェース）
-- [ ] RewriteRuleMapper（スケルトン実装）
+- [x] ToggleRuleActiveController（スケルトン実装）
+- [x] ToggleRuleActivePresenter（スケルトン実装）
+- [x] IRewriteRuleMessagingPort（インターフェース）
+- [x] RewriteRuleMapper（スケルトン実装）
 
 **第4層: frameworks-and-drivers**
-- [ ] ToggleSwitch UIコンポーネント（スケルトン）
-- [ ] ChromeTabsGateway（スケルトン実装）
-- [ ] RewriteRuleMessagingService（スケルトン実装）
-- [ ] RewriteRuleDTO, GetByIdRequestDTO, UpdateRuleActiveRequestDTO（DTO）
+- [x] ToggleSwitch UIコンポーネント（スケルトン）
+- [x] ChromeTabsGateway（スケルトン実装）
+- [x] RewriteRuleMessagingService（スケルトン実装）
+- [x] RewriteRuleDTO, GetByIdRequestDTO, UpdateRuleActiveRequestDTO（DTO）
 - [ ] container.ts にスケルトンクラスのDI登録を追加
 
 ### Phase 3: 実装（スケルトンにロジック追加）
