@@ -9,7 +9,7 @@ import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/content
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
 import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { IElementFactory } from 'src/domain/ports/IElementFactory';
-import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/messaging/ChromeRuntimeRewriteRuleRepository';
+import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
 import { observerControl } from 'src/infrastructure/browser/content/observer/observerState';
 import { DebounceTimer } from 'src/infrastructure/browser/timer/DebounceTimer';
 import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/WindowCurrentUrlService';

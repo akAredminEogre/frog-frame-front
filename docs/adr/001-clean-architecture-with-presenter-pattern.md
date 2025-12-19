@@ -81,7 +81,7 @@ src/
 | 6 | Output Boundary (Output Port) | `application-business-rules/ports/output/` | |
 | 7 | Use Case Interactor | `application-business-rules/interactors/` | |
 | 8 | Data Access Interface | `application-business-rules/ports/gateway/` | Gateway Interface（Interactorが依存） |
-| 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/`, `frameworks-and-drivers/messaging/` | DB Gateway 実装, messaging Gateway 実装 |
+| 9 | Data Access (Repository) | `frameworks-and-drivers/persistence/` | Repository 実装（DB, メッセージング経由等） |
 | 10 | Database | IndexedDB (Dexie) | |
 | 11 | Entities | `enterprise-business-rules/entities/` | |
 | 12 | External Interfaces | `frameworks-and-drivers/browser/`, `frameworks-and-drivers/entrypoints/` | Chrome API ラッパー、background.ts、content.ts |
@@ -102,38 +102,29 @@ src/
 ├── application-business-rules/                  ← 第2層: Application Business Rules
 │   ├── ports/
 │   │   ├── input/                              ← Input Port (Interface)
-│   │   │   └── rule/
-│   │   │       └── IToggleRuleActiveUseCase.ts
+│   │   │   └── IToggleRuleActiveUseCase.ts
 │   │   ├── output/                             ← Output Port (Interface)
-│   │   │   └── rule/
-│   │   │       └── IToggleRuleActivePresenter.ts
+│   │   │   └── IToggleRuleActivePresenter.ts
 │   │   └── gateway/                            ← Gateway Interface（Interactorが依存）
 │   │       ├── IRewriteRuleRepository.ts
 │   │       └── ITabsGateway.ts
 │   ├── interactors/                            ← Use Case Interactor
-│   │   └── rule/
-│   │       └── ToggleRuleActiveInteractor.ts
+│   │   └── ToggleRuleActiveInteractor.ts
 │   └── dto/                                    ← Data Transfer Objects
 │       ├── input/
-│       │   └── rule/
-│       │       └── ToggleRuleActiveInputData.ts
+│       │   └── ToggleRuleActiveInputData.ts
 │       └── output/
-│           └── rule/
-│               └── ToggleRuleActiveOutputData.ts
+│           └── ToggleRuleActiveOutputData.ts
 │
 ├── interface-adapters/                          ← 第3層: Interface Adapters
 │   ├── controllers/                            ← Controller
-│   │   └── rule/
-│   │       └── ToggleRuleActiveController.ts
+│   │   └── ToggleRuleActiveController.ts
 │   ├── presenters/                             ← Presenter
-│   │   └── rule/
-│   │       └── ToggleRuleActivePresenter.ts
+│   │   └── ToggleRuleActivePresenter.ts
 │   ├── ports/                                  ← Port（Mapperが依存、依存性逆転のため）
-│   │   └── messaging/
-│   │       └── IRewriteRuleMessagingPort.ts
+│   │   └── IRewriteRuleMessagingPort.ts
 │   └── mappers/                                ← Mapper
-│       └── rule/
-│           └── RewriteRuleMapper.ts
+│       └── RewriteRuleMapper.ts
 │
 └── frameworks-and-drivers/                      ← 第4層: Frameworks & Drivers
     ├── ui/                                     ← View (React)
@@ -142,10 +133,15 @@ src/
     │   │   ├── molecules/
     │   │   └── organisms/
     │   └── pages/
-    ├── persistence/                            ← DB Gateway 実装
-    │   └── indexeddb/
-    ├── messaging/                              ← messaging Gateway 実装
-    │   └── ChromeRuntimeRewriteRuleRepository.ts
+    ├── persistence/                            ← Repository 実装
+    │   └── ChromeRuntimeRewriteRuleRepository.ts  ← Content Script用（メッセージング経由）
+    ├── messaging/                              ← メッセージング層
+    │   ├── RewriteRuleMessagingService.ts      ← IRewriteRuleMessagingPort 実装
+    │   └── dto/                                ← メッセージング用DTO
+    │       ├── RewriteRuleDTO.ts               ← エンティティDTO
+    │       └── request-dto/                    ← リクエストDTO
+    │           ├── GetByIdRequestDTO.ts
+    │           └── UpdateRuleActiveRequestDTO.ts
     ├── browser/                                ← ブラウザ操作 Gateway 実装
     │   └── ChromeTabsGateway.ts
     ├── di/                                     ← DI Container
