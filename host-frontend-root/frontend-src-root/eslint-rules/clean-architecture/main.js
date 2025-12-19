@@ -5,6 +5,7 @@ import applicationBusinessRulesDto from '#eslint-rules/clean-architecture/applic
 import contentOnMessageReceivedUsecases from '#eslint-rules/clean-architecture/application/usecases/contentOnMessageReceived.js';
 import domain from '#eslint-rules/clean-architecture/domain.js';
 import frameworksAndDriversMessagingDto from '#eslint-rules/clean-architecture/frameworks-and-drivers/messaging/dto.js';
+import frameworksAndDriversMessagingService from '#eslint-rules/clean-architecture/frameworks-and-drivers/messaging/service.js';
 import backgroundHandlers from '#eslint-rules/clean-architecture/infrastructure/browser/handlers/background.js';
 import contentHandlers from '#eslint-rules/clean-architecture/infrastructure/browser/handlers/content.js';
 
@@ -13,6 +14,7 @@ export default [
   contentOnMessageReceivedUsecases,
   domain,
   frameworksAndDriversMessagingDto,
+  frameworksAndDriversMessagingService,
   backgroundHandlers,
   contentHandlers,
 ];
