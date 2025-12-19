@@ -4,6 +4,7 @@
  * 2. URLが前方一致する場合はtrueを返す - 完全一致
  * 3. 前方一致の境界値テスト - パス付きURLで一致
  * 4. 前方一致の境界値テスト - パス完全一致
+ * 5. localhost + ポート番号のURLパターンでパス付きURLに一致
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
