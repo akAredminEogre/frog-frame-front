@@ -14,7 +14,7 @@ export class ToggleRuleActiveController {
    * @param ruleId ルールID
    */
   async toggleActive(ruleId: number): Promise<void> {
-    const _inputData = new ToggleRuleActiveInputData(ruleId);
-    throw new Error(`Not implemented: toggleActive(${ruleId}) with useCase=${this.useCase.constructor.name}`);
+    const inputData = new ToggleRuleActiveInputData(ruleId);
+    throw new Error(`Not implemented: toggleActive(${ruleId}) with useCase=${this.useCase.constructor.name}, inputData.ruleId=${inputData.ruleId}`);
   }
 }
