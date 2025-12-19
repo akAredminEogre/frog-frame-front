@@ -86,8 +86,8 @@ describe('Tabs.filterByRule - 正常系', () => {
    */
   it.each(testCases)('$description', async ({ input, expected }) => {
     // Arrange
-    const allTabs = [...input.tabsRemained, ...input.tabsEliminated];
-    const tabs = new Tabs(allTabs);
+    const tabsArray = [...input.tabsRemained, ...input.tabsEliminated];
+    const tabs = new Tabs(tabsArray);
     const rule = createMockRule(input.matchingUrls);
 
     // Act
