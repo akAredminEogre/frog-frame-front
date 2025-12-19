@@ -3,9 +3,9 @@
 //
 // MessagingService: {Entity}MessagingService
 
+// Only direct files in messaging/, not subdirectories
 export default {
-  files: ['**/frameworks-and-drivers/messaging/**/*.ts'],
-  ignores: ['**/frameworks-and-drivers/messaging/dto/**/*.ts'],
+  files: ['**/frameworks-and-drivers/messaging/*.ts'],
   rules: {
     '@typescript-eslint/naming-convention': [
       'error',
