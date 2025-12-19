@@ -157,6 +157,12 @@ docs/user-stories/
 - [ ] AC-3: 該当URLのタブがリロードされる
 ```
 
+### network-diagram.puml (任意)
+README.mdの開発戦略セクションのタスクをもとに作成。
+適宜更新する。
+
+参考資料のため厳密なルールはなし。
+
 ## 関連ドキュメント
 
 - 設計ドキュメント: `docs/design/pages/{画面名}/features/{機能名}/`
