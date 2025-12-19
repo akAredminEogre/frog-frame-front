@@ -63,8 +63,19 @@ tests/unit/frameworks-and-drivers/browser/Tabs/filterByRule/
 
 RewriteRuleのmatchesUrl()メソッドをモック化。
 
+### モックファイル構成
+
+```
+tests/unit/frameworks-and-drivers/browser/Tabs/
+└── mocks/
+    ├── createMockTab.ts    # Tab生成関数（constructorと共用）
+    └── createMockRule.ts   # RewriteRuleモック生成関数
+```
+
+### 使用方法
+
 ```typescript
-const createMockRule = (matchingUrls: string[]): RewriteRule => ({
-  matchesUrl: vi.fn((url: string) => matchingUrls.includes(url)),
-} as unknown as RewriteRule);
+// テストコード内で直接モックを定義せず、インポートして使用
+import { createMockTab } from '../mocks/createMockTab';
+import { createMockRule } from '../mocks/createMockRule';
 ```

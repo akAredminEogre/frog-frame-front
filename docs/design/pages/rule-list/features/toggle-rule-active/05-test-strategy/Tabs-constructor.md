@@ -54,10 +54,17 @@ tests/unit/frameworks-and-drivers/browser/Tabs/constructor/
 chrome.tabs.Tab型のモックオブジェクトを使用。
 chrome APIの呼び出しはないため、グローバルモックは不要。
 
+### モックファイル構成
+
+```
+tests/unit/frameworks-and-drivers/browser/Tabs/
+└── mocks/
+    └── createMockTab.ts   # モック生成関数
+```
+
+### 使用方法
+
 ```typescript
-const createMockTab = (id?: number, url?: string): chrome.tabs.Tab => ({
-  id,
-  url,
-  // その他の必須プロパティは省略可能（テスト対象外）
-} as chrome.tabs.Tab);
+// テストコード内で直接モックを定義せず、インポートして使用
+import { createMockTab } from '../mocks/createMockTab';
 ```
