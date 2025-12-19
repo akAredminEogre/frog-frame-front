@@ -1,14 +1,19 @@
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
- * Chrome Tabs APIを使用したGateway実装（スケルトン実装）
+ * Chrome Tabs APIを使用したGateway実装
  */
 export class ChromeTabsGateway implements ITabsGateway {
   /**
-   * 指定されたURLパターンにマッチするタブをリロードする
-   * @param urlPattern URLパターン
+   * 指定されたルールのURLパターンにマッチするタブをリロードする
+   * @param rule マッチング判定に使用するRewriteRule
    */
-  async reloadMatchingTabs(urlPattern: string): Promise<void> {
-    throw new Error(`Not implemented: reloadMatchingTabs with urlPattern=${urlPattern}`);
+  async reloadMatchingTabs(rule: RewriteRule): Promise<void> {
+    const tabs = await chrome.tabs.query({});
+    const reloadPromises = tabs
+      .filter((tab) => tab.url !== undefined && rule.matchesUrl(tab.url))
+      .map((tab) => chrome.tabs.reload(tab.id!));
+    await Promise.all(reloadPromises);
   }
 }
