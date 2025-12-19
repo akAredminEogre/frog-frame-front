@@ -2,7 +2,7 @@ workflow-ccw-create-branch branch-suffix=
 ```cline-instructions
 ## Claude Code Web用ブランチ作成ワークフロー
 
-### issue番号の採番
+### Issue番号の採番
 - `workflow-get-new-branch-number` ワークフローを実行して新しいissue番号(nnn)を取得
 
 ### ディレクトリ作成
