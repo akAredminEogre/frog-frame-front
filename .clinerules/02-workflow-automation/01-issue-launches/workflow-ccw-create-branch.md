@@ -25,7 +25,7 @@ ghコマンドが使用できないため、以下のPR作成リンクを表示�
 
 https://github.com/akAredminEogre/frog-frame-front/compare/develop...<ブランチ名>?expand=1
 
-（<ブランチ名>は実際に作成したブランチ名に置き換えてください）
+（<ブランチ名>の部分を実際に作成したブランチ名、例：claude/issue-123-feature-a1b2c に置き換えてください）
 ```
 
 ### 注意事項
