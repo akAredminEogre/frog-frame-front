@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
-import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/messaging/ChromeRuntimeRewriteRuleRepository';
+import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
 
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
