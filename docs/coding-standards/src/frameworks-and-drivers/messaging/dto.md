@@ -27,4 +27,4 @@
 
 ## eslint-rule
 
-該当なし（この規約はESLintで検証できないため、PRレビューで確認）
+`host-frontend-root/frontend-src-root/eslint-rules/clean-architecture/frameworks-and-drivers/messaging/dto.js`
