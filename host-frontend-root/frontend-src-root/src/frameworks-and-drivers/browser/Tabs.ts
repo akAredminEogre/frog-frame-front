@@ -3,9 +3,14 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 /**
  * chrome.tabs.Tab[]のファーストクラスコレクション
  * オブジェクト指向9ルールのルール8に準拠
+ * URLが存在するタブのみを保持する
  */
 export class Tabs {
-  constructor(private readonly tabs: chrome.tabs.Tab[]) {}
+  private readonly tabs: chrome.tabs.Tab[];
+
+  constructor(chromeTabs: chrome.tabs.Tab[]) {
+    this.tabs = chromeTabs.filter((tab) => tab.url !== undefined);
+  }
 
   /**
    * 指定されたルールのURLパターンにマッチするタブをフィルタリングする
@@ -14,9 +19,7 @@ export class Tabs {
    */
   filterByRule(rule: RewriteRule): Tabs {
     const tabsArray = this.tabs;
-    const filtered = tabsArray.filter(
-      (tab) => tab.url !== undefined && rule.matchesUrl(tab.url)
-    );
+    const filtered = tabsArray.filter((tab) => rule.matchesUrl(tab.url!));
     return new Tabs(filtered);
   }
 
