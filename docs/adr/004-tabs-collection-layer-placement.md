@@ -79,8 +79,8 @@ export class Tabs {
   private readonly tabs: chrome.tabs.Tab[];
 
   constructor(chromeTabs: chrome.tabs.Tab[]) {
-    // URLが存在するタブのみを保持（技術的フィルタリング）
-    this.tabs = chromeTabs.filter((tab) => tab.url !== undefined);
+    // URLとIDが存在するタブのみを保持（技術的フィルタリング）
+    this.tabs = chromeTabs.filter((tab) => tab.url !== undefined && tab.id !== undefined);
   }
 
   filterByRule(rule: RewriteRule): Tabs {
