@@ -243,6 +243,38 @@ class Tabs {
 - ドメイン型のコレクション → `enterprise-business-rules`
 - 技術的型のコレクション → `frameworks-and-drivers`
 
+## 解消すべき事項
+
+### 現状の問題: ドメイン層に誤って配置された Tab 関連クラス
+
+以下のファイルが `src/domain/value-objects/` に存在しているが、本 ADR の決定に基づき、これらは**誤った配置**である:
+
+| ファイル | 現在の配置 | 問題点 |
+|---------|-----------|--------|
+| `Tab.ts` | `src/domain/value-objects/` | 技術概念がドメイン層に存在 |
+| `Tabs.ts` | `src/domain/value-objects/` | 技術概念がドメイン層に存在 |
+| `TabId.ts` | `src/domain/value-objects/` | chrome.tabs.Tab.id のラッパー |
+| `TabUrl.ts` | `src/domain/value-objects/` | chrome.tabs.Tab.url のラッパー |
+
+### 問題の本質
+
+これらのクラスは「アンチパターン: 抽象化によるドメイン層への引き上げ」の典型例である:
+
+1. **Tab, Tabs**: ブラウザ固有の「タブ」概念をドメイン層に持ち込んでいる
+2. **TabId, TabUrl**: `chrome.tabs.Tab` のプロパティを Value Object としてラップしているが、これらはドメイン概念ではなく技術的詳細のラッパーに過ぎない
+
+### 対応方針
+
+| 対応 | 内容 |
+|------|------|
+| **削除対象** | `src/domain/value-objects/Tab.ts`, `Tabs.ts`, `TabId.ts`, `TabUrl.ts` |
+| **代替** | `src/frameworks-and-drivers/browser/Tabs.ts`（本 ADR で新規作成済み） |
+| **移行** | 既存の使用箇所を新しい `Tabs` クラスに置き換え |
+
+### 注意事項
+
+この対応は本ユーザーストーリー（user-story-001）のスコープ外とし、別途リファクタリングタスクとして実施する。
+
 ## 影響ドキュメント
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
