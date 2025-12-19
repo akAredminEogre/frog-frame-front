@@ -13,7 +13,7 @@ workflow-ccw-create-branch branch-suffix=
 ### ブランチ作成（claude/配下）
 - ブランチ名: `claude/issue-nnn-<branch-suffix>-<ランダム5文字>`
   - ランダム5文字: 英数字のランダムな文字列（例: A1b2C）
-- 作成したブランチをgit push -u originしてください
+- 作成したブランチをgit push originしてください
 
 ### PR作成リンクの表示
 ghコマンドが使用できないため、以下のPR作成リンクを表示してください：
