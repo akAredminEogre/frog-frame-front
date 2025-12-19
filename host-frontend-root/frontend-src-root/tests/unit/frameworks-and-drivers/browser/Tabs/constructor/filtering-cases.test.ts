@@ -33,66 +33,90 @@ describe('Tabs.constructor - フィルタリング', () => {
   const testCases = [
     {
       description: 'urlがundefinedのタブは除外される',
-      input: [
-        createMockTab(1, undefined),
-        createMockTab(2, 'https://example.com'),
-      ],
-      validUrls: ['https://example.com'],
-      expectedTabCount: 1,
+      input: {
+        tabsRemained: [createMockTab(2, 'https://example.com')],
+        tabsEliminated: [createMockTab(1, undefined)],
+      },
+      expected: {
+        remainedIds: [2],
+        eliminatedIds: [1],
+      },
     },
     {
       description: 'idがundefinedのタブは除外される',
-      input: [
-        createMockTab(undefined, 'https://example.com'),
-        createMockTab(2, 'https://test.com'),
-      ],
-      validUrls: ['https://test.com'],
-      expectedTabCount: 1,
+      input: {
+        tabsRemained: [createMockTab(2, 'https://test.com')],
+        tabsEliminated: [createMockTab(undefined, 'https://example.com')],
+      },
+      expected: {
+        remainedIds: [2],
+        // idがundefinedのため、not.toHaveBeenCalledWithでは検証できない
+        eliminatedIds: [],
+      },
     },
     {
       description: 'url/id両方undefinedのタブは除外される',
-      input: [
-        createMockTab(undefined, undefined),
-        createMockTab(2, 'https://example.com'),
-      ],
-      validUrls: ['https://example.com'],
-      expectedTabCount: 1,
+      input: {
+        tabsRemained: [createMockTab(2, 'https://example.com')],
+        tabsEliminated: [createMockTab(undefined, undefined)],
+      },
+      expected: {
+        remainedIds: [2],
+        // idがundefinedのため、not.toHaveBeenCalledWithでは検証できない
+        eliminatedIds: [],
+      },
     },
     {
       description: '有効/無効タブが混在する場合、有効タブのみ保持される',
-      input: [
-        createMockTab(1, 'https://example.com'),
-        createMockTab(undefined, 'https://no-id.com'),
-        createMockTab(3, undefined),
-        createMockTab(4, 'https://valid.com'),
-        createMockTab(undefined, undefined),
-      ],
-      validUrls: ['https://example.com', 'https://valid.com'],
-      expectedTabCount: 2,
+      input: {
+        tabsRemained: [
+          createMockTab(1, 'https://example.com'),
+          createMockTab(4, 'https://valid.com'),
+        ],
+        tabsEliminated: [
+          createMockTab(undefined, 'https://no-id.com'),
+          createMockTab(3, undefined),
+          createMockTab(undefined, undefined),
+        ],
+      },
+      expected: {
+        remainedIds: [1, 4],
+        eliminatedIds: [3],
+      },
     },
   ];
 
   /**
    * 検証方法について:
    * Tabs.tabsはprivate readonlyのため、テストから直接アクセスできない。
-   * getterを追加するとオブジェクト指向9ルールのルール9（Getter禁止）に違反するため、
-   * 以下の間接的な方法でタブ数を検証する:
-   * 1. filterByRuleで有効タブのURLにマッチするルールを適用
-   * 2. reloadAllを実行し、chrome.tabs.reloadの呼び出し回数でタブ数を確認
+   * reloadAllを実行し、chrome.tabs.reloadの呼び出し引数でconstructorのフィルタリング結果を検証する:
+   * - remainedIds: reloadが呼ばれるべきタブID（url/id両方存在するタブ）
+   * - eliminatedIds: reloadが呼ばれないべきタブID（idが存在するがurlがundefinedのタブ）
    *
-   * validUrlsは有効なタブ（url/id両方存在）のURLのみを含め、
-   * constructorでフィルタリングされた結果を検証する。
+   * 注: idがundefinedのタブはnot.toHaveBeenCalledWithで検証できないため、
+   * eliminatedIdsにはidが存在するタブのみを含める。
    */
-  it.each(testCases)('$description', async ({ input, validUrls, expectedTabCount }) => {
+  it.each(testCases)('$description', async ({ input, expected }) => {
     // Arrange
-    const rule = createMockRule(validUrls);
+    const allTabs = [...input.tabsRemained, ...input.tabsEliminated];
+    const matchingUrls = input.tabsRemained.map((tab) => tab.url!);
+    const rule = createMockRule(matchingUrls);
 
     // Act
-    const tabs = new Tabs(input);
+    const tabs = new Tabs(allTabs);
 
-    // Assert - filterByRuleで有効URLにマッチするタブを取得し、数を検証
+    // Assert - filterByRuleで有効URLにマッチするタブを取得し、reloadAllで検証
     const filtered = tabs.filterByRule(rule);
     await filtered.reloadAll();
-    expect(mockReload).toHaveBeenCalledTimes(expectedTabCount);
+
+    // Assert - 残るべきタブがreloadされたことを検証
+    for (const id of expected.remainedIds) {
+      expect(mockReload).toHaveBeenCalledWith(id);
+    }
+
+    // Assert - 除外されるべきタブがreloadされていないことを検証
+    for (const id of expected.eliminatedIds) {
+      expect(mockReload).not.toHaveBeenCalledWith(id);
+    }
   });
 });
