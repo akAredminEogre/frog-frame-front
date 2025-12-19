@@ -10,7 +10,7 @@
 | 4 | 1行につきドットは1つまでにすること | ✅ 実装済 |
 | 5 | 名前を省略しないこと | ❌ 未実装（複雑） |
 | 6 | すべてのエンティティを小さくすること | ❌ 未実装（複雑） |
-| 7 | 1つのクラスにつきインスタンス変数は2つまでにすること | ⚠️ 部分実装（コードレビューで補完） |
+| 7 | 1つのクラスにつきインスタンス変数は2つまでにすること | ❌ 未実装（複雑） |
 | 8 | ファーストクラスコレクションを使用すること | ❌ 未実装（複雑） |
 | 9 | Getter、Setter、プロパティを使用しないこと | ✅ 実装済 |
 
@@ -28,7 +28,6 @@
 |--------|----------------|
 | Rule 2: else句禁止 | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/no-else.js` |
 | Rule 4: 1行1ドット | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/one-dot-per-line.js` |
-| Rule 7: インスタンス変数2つまで | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/max-instance-variables.js` |
 | Rule 9: Getter/Setter禁止 | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/no-getter-setter.js` |
 
-その他のルール（1, 3, 5, 6, 8）は実装が複雑なため、PRレビューで確認。
+その他のルール（1, 3, 5, 6, 7, 8）は実装が複雑なため、PRレビューで確認。
