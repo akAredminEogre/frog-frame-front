@@ -4,18 +4,6 @@
  * 1. 有効なタブのみで初期化
  * 2. 空配列で初期化
  * 3. 単一タブで初期化
- *
- * ## 検証方法について
- *
- * Tabs.tabsはprivate readonlyのため、テストから直接アクセスできない。
- * getterを追加するとオブジェクト指向9ルールのルール9（Getter禁止）に違反するため、
- * 以下の間接的な方法でタブ数を検証する:
- *
- * 1. filterByRuleで入力タブのURLにマッチするルールを適用
- * 2. reloadAllを実行し、chrome.tabs.reloadの呼び出し回数でタブ数を確認
- *
- * matchingUrlsは入力タブのURLと一致させることで、
- * constructorで保持されたタブがそのまま取得されることを検証する。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -65,6 +53,14 @@ describe('Tabs.constructor - 正常系', () => {
     },
   ];
 
+  /**
+   * 検証方法について:
+   * Tabs.tabsはprivate readonlyのため、テストから直接アクセスできない。
+   * getterを追加するとオブジェクト指向9ルールのルール9（Getter禁止）に違反するため、
+   * 以下の間接的な方法でタブ数を検証する:
+   * 1. filterByRuleで入力タブのURLにマッチするルールを適用
+   * 2. reloadAllを実行し、chrome.tabs.reloadの呼び出し回数でタブ数を確認
+   */
   it.each(testCases)('$description', async ({ input, matchingUrls, expectedTabCount }) => {
     // Arrange
     const rule = createMockRule(matchingUrls);
