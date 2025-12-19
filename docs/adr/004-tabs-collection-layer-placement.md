@@ -111,6 +111,121 @@ export class Tabs {
 | 表現するもの | ドメイン概念（ルールの集合） | 技術的詳細（ブラウザタブの集合） |
 | 外部依存 | なし | Chrome API |
 
+## アンチパターン: 抽象化によるドメイン層への引き上げ
+
+### 陥りがちな誤った設計
+
+「インターフェースで抽象化すれば、タブをドメイン層に配置できるのではないか」という考え方がある:
+
+```typescript
+// ❌ アンチパターン: enterprise-business-rules層に配置
+
+// 抽象化されたタブインターフェース
+interface ITab {
+  readonly url: string;
+  readonly id: number;
+}
+
+// 抽象化されたタブコレクション
+class Tabs {
+  constructor(private readonly tabs: ITab[]) {}
+
+  filterByRule(rule: RewriteRule): Tabs {
+    const filtered = this.tabs.filter((tab) => rule.matchesUrl(tab.url));
+    return new Tabs(filtered);
+  }
+}
+
+// frameworks-and-drivers層でChrome実装を提供
+class ChromeTab implements ITab {
+  constructor(private readonly chromeTab: chrome.tabs.Tab) {}
+  get url() { return this.chromeTab.url!; }
+  get id() { return this.chromeTab.id!; }
+}
+```
+
+### なぜこれがアンチパターンなのか
+
+#### 1. ドメイン層への技術的概念の漏れ
+
+**「タブ」という概念自体がブラウザ固有であり、ドメイン概念ではない。**
+
+ADR-001 の原則:
+> ドメインエンティティの値を用いた判定・計算・変換は、**その結果がビジネス上の意味を持つ場合**、`enterprise-business-rules` 層で実装する。
+
+「タブ」はビジネス上の意味を持たない。これは「URLパターンにマッチするページをリロードする」という**技術的な副作用**を実現するための手段に過ぎない。
+
+| 概念 | ビジネス上の意味 | 配置 |
+|------|----------------|------|
+| RewriteRule | ルールの定義（何を何に書き換えるか） | ドメイン層 |
+| URLパターンマッチング | ルールがどのURLに適用されるか | ドメイン層 |
+| タブ | ブラウザの表示単位 | **ドメイン概念ではない** |
+| タブのリロード | 技術的な副作用 | インフラ層 |
+
+#### 2. 抽象化の目的の誤解
+
+Clean Architecture における抽象化（インターフェース）の目的:
+
+| 目的 | 例 | 正当性 |
+|------|-----|--------|
+| **依存性逆転** | `IRewriteRuleRepository` | ✅ ドメインがインフラに依存しないため |
+| **テスタビリティ** | `ITabsGateway` | ✅ ユースケースをモックでテスト可能にするため |
+| **技術詳細の隠蔽のみ** | `ITab` | ❌ ドメインに技術概念を持ち込む言い訳になる |
+
+`ITab` インターフェースは「技術詳細を隠す」だけであり、「タブ」という技術概念がドメイン層に存在すること自体が問題である。
+
+#### 3. 過度な抽象化による複雑さの増加
+
+```
+❌ アンチパターンの層構造:
+enterprise-business-rules/
+  └── ITab, Tabs           ← 技術概念がドメイン層に侵入
+frameworks-and-drivers/
+  └── ChromeTab            ← 実装クラス
+
+✅ 正しい層構造:
+enterprise-business-rules/
+  └── RewriteRule          ← 純粋なドメインロジックのみ
+frameworks-and-drivers/
+  └── Tabs, ChromeTabsGateway  ← 技術的詳細はここに閉じ込める
+```
+
+抽象化によるドメイン層への引き上げは:
+- 不要なインターフェース（`ITab`）を生む
+- ドメイン層のテストに技術概念のモックが必要になる
+- 「ドメイン層は外部依存がない」という原則を形骸化させる
+
+#### 4. ADR-001 の原則に反する
+
+ADR-001 の明確な指針:
+
+> **`frameworks-and-drivers` 層は、ドメインロジックの呼び出しと技術的な入出力のみを担当する。**
+
+タブの操作は「技術的な入出力」であり、抽象化してもこの性質は変わらない。
+
+### 正しいアプローチ
+
+技術的概念は `frameworks-and-drivers` 層に留め、ドメインロジックのみをドメイン層に配置する:
+
+```typescript
+// ✅ 正しいアプローチ
+
+// enterprise-business-rules層: ドメインロジックのみ
+class RewriteRule {
+  matchesUrl(url: string): boolean { /* ドメイン判定 */ }
+}
+
+// frameworks-and-drivers層: 技術的詳細
+class Tabs {
+  filterByRule(rule: RewriteRule): Tabs {
+    // ドメインロジックを「呼び出す」だけ
+    return new Tabs(this.tabs.filter(tab => rule.matchesUrl(tab.url)));
+  }
+}
+```
+
+**ポイント**: `Tabs.filterByRule()` はドメインロジック（`matchesUrl`）を**呼び出す**だけであり、ドメインロジック自体を**実装**しているわけではない。
+
 ## 理由
 
 ### 採用理由
