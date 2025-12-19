@@ -363,7 +363,9 @@ docs/
 ### ブランチ作成（Claude Code Web用）
 Claude Code Webでは `gh` コマンドが使用できないため、専用のワークフローを使用します。
 
-- **ワークフローファイル**: `.clinerules/02-workflow-automation/01-issue-launches/workflow-ccw-create-branch.md`
+**重要**: ブランチ作成を行う場合は、必ず以下のワークフローファイルの手順に従ってください：
+- `.clinerules/02-workflow-automation/01-issue-launches/workflow-ccw-create-branch.md`
+
 - **ブランチ命名規則**: `claude/issue-nnn-<branch-suffix>-<random5chars>`
   - Claude Code Webの制約により、ブランチ名は `claude/` で始める必要があります
 
