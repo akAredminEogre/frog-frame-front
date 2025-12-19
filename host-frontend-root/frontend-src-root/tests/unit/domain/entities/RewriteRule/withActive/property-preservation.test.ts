@@ -26,6 +26,7 @@ describe('RewriteRule.withActive - プロパティ維持', () => {
 
     const newRule = originalRule.withActive(false);
 
+    expect(newRule.isActive).toBe(false);
     expect(newRule.id).toBe(ruleId);
     expect(newRule.oldString).toBe(oldString);
     expect(newRule.newString).toBe(newString);
