@@ -43,16 +43,4 @@ describe('SelectedPageTextService.setSelectedPageText - エッジケース', () 
  * 3. 同じ値(true)を設定しても新しいインスタンスが返される
  * 4. 同じ値(false)を設定しても新しいインスタンスが返される
  */
-
-const testCases = [
-  {
-    description: 'isActive=true のルールを false に変更できる',  // JSDocの1と一致
-    ...
-  },
-  {
-    description: 'isActive=false のルールを true に変更できる',  // JSDocの2と一致
-    ...
-  },
-  // 以下同様
-];
 ```
