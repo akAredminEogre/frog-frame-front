@@ -21,6 +21,6 @@ export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
    * @param dto 更新リクエストDTO
    */
   async updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void> {
-    throw new Error(`Not implemented: updateActive with id=${dto.id}, isActive=${dto.isActive}`);
+    throw new Error(`Not implemented: updateActive with id=${dto.id}, active=${dto.active}`);
   }
 }

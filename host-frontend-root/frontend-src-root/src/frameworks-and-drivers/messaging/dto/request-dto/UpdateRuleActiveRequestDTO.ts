@@ -3,5 +3,5 @@
  */
 export interface UpdateRuleActiveRequestDTO {
   id: number;
-  isActive: boolean;
+  active: boolean;
 }
