@@ -1,0 +1,104 @@
+@startuml
+!theme plain
+title User Story 001: ルールトグル機能 - タスク依存ネットワーク図
+
+' ノード定義（タスク）
+rectangle "3A-1\nRewriteRule\n.withActive()\n実装\n[1日]" as withActive #lightblue
+rectangle "3A-2\nRewriteRule\n.matchesUrl()\n実装\n[1日]" as matchesUrl #lightblue
+
+rectangle "3B-1\nDTO実装\n[1日]" as dto #lightgreen
+rectangle "3B-2\nITabsGateway\n実装\n[1日]" as tabsGateway #lightgreen
+rectangle "3B-3\nToggleRuleActive\nInteractor実装\n[2日]" as interactor #lightgreen
+
+rectangle "3C-1\nRewriteRuleMapper\n実装\n[2日]" as mapper #lightyellow
+rectangle "3C-2\nToggleRuleActive\nController実装\n[1日]" as controller #lightyellow
+rectangle "3C-3\nToggleRuleActive\nPresenter実装\n[1日]" as presenter #lightyellow
+
+rectangle "3D-1\nメッセージング\n関連DTO実装\n[1日]" as msgDto #lightcoral
+rectangle "3D-2\nChromeTabsGateway\n実装\n[2日]" as chromeTabs #lightcoral
+rectangle "3D-3\nRewriteRule\nMessagingService\n実装\n[2日]" as messaging #lightcoral
+
+rectangle "3E-1\nToggleSwitch\nUIコンポーネント\n実装\n[2日]" as toggleUI #lightpink
+
+rectangle "4-1\nDI登録追加\n[1日]" as di #lavender
+rectangle "4-2\nChromeRuntime\nRewriteRule\nRepository改修\n[2日]" as repoFix #lavender
+rectangle "4-3\nRulesApp.tsx\n統合\n[1日]" as appIntegration #lavender
+
+' 依存関係（矢印）
+withActive --> dto : 完了後
+withActive --> interactor : 必要
+matchesUrl --> interactor : 必要
+
+dto --> mapper : 完了後
+dto --> controller : 必要
+dto --> presenter : 必要
+
+tabsGateway --> interactor : 必要
+tabsGateway --> chromeTabs : インターフェース
+
+interactor --> controller : 完了後
+interactor --> presenter : 完了後
+
+mapper --> messaging : 必要
+mapper --> repoFix : 必要
+
+controller --> appIntegration : 必要
+presenter --> appIntegration : 必要
+
+msgDto --> messaging : 必要
+chromeTabs --> di : 登録必要
+messaging --> repoFix : 完了後
+
+toggleUI --> appIntegration : 統合必要
+
+di --> repoFix : 完了後
+repoFix --> appIntegration : 完了後
+
+' 色分け凡例
+note top of withActive
+**Phase 3A: 核となるドメインロジック**
+#lightblue
+end note
+
+note top of dto
+**Phase 3B: Application Business Rules**
+#lightgreen
+end note
+
+note top of mapper
+**Phase 3C: Interface Adapters**
+#lightyellow
+end note
+
+note top of msgDto
+**Phase 3D: Frameworks & Drivers**
+#lightcoral
+end note
+
+note top of toggleUI
+**Phase 3E: UI実装**
+#lightpink
+end note
+
+note top of di
+**Phase 4: 統合**
+#lavender
+end note
+
+' クリティカルパス強調
+withActive -[#red,thickness=3]-> interactor
+interactor -[#red,thickness=3]-> controller
+controller -[#red,thickness=3]-> appIntegration
+
+note bottom
+**クリティカルパス (赤線):**
+withActive → interactor → controller → appIntegration
+**総所要時間: 5日**
+
+**並行実行可能タスク:**
+- matchesUrl, dto, tabsGateway, msgDto
+- mapper, presenter, chromeTabs
+- toggleUI, di
+end note
+
+@enduml
