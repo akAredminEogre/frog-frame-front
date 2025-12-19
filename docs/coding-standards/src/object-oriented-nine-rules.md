@@ -18,13 +18,6 @@
 8. **ファーストクラスコレクションを使用すること**
 9. **Getter、Setter、プロパティを使用しないこと**
 
-## メソッド設計
-
-- **メソッドは必ずインスタンス変数を使うこと**
-  - 除外パターン
-    - infrastructure層（frameworks-and-drivers層）のコード
-  - **ESLint除外**: このルールはESLintで自動チェックしない（カスタムルール実装の複雑さのため、コードレビューで確認）
-
 ## 対象ファイル
 - src/frameworks-and-drivers/browser以下のコード
 
