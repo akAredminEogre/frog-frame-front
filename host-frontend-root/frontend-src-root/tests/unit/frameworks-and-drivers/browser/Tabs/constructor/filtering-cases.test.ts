@@ -6,8 +6,17 @@
  * 3. url/id両方undefinedのタブを除外
  * 4. 有効/無効タブが混在するケース
  *
- * 検証方法: filterByRuleで有効なURLにマッチするタブを抽出し、
- * そのタブ数が期待値と一致することを確認
+ * ## 検証方法について
+ *
+ * Tabs.tabsはprivate readonlyのため、テストから直接アクセスできない。
+ * getterを追加するとオブジェクト指向9ルールのルール9（Getter禁止）に違反するため、
+ * 以下の間接的な方法でタブ数を検証する:
+ *
+ * 1. filterByRuleで有効タブのURLにマッチするルールを適用
+ * 2. reloadAllを実行し、chrome.tabs.reloadの呼び出し回数でタブ数を確認
+ *
+ * validUrlsは有効なタブ（url/id両方存在）のURLのみを含め、
+ * constructorでフィルタリングされた結果を検証する。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
