@@ -13,7 +13,7 @@ export default [
   ...applicationBusinessRulesDto,
   contentOnMessageReceivedUsecases,
   domain,
-  frameworksAndDriversMessagingDto,
+  ...frameworksAndDriversMessagingDto,
   frameworksAndDriversMessagingService,
   backgroundHandlers,
   contentHandlers,
