@@ -13,7 +13,8 @@ export class Tabs {
    * @returns マッチするタブのみを含む新しいTabsインスタンス
    */
   filterByRule(rule: RewriteRule): Tabs {
-    const filtered = this.tabs.filter(
+    const tabsArray = this.tabs;
+    const filtered = tabsArray.filter(
       (tab) => tab.url !== undefined && rule.matchesUrl(tab.url)
     );
     return new Tabs(filtered);
@@ -23,7 +24,8 @@ export class Tabs {
    * すべてのタブをリロードする
    */
   async reloadAll(): Promise<void> {
-    const reloadPromises = this.tabs.map((tab) => chrome.tabs.reload(tab.id!));
+    const tabsArray = this.tabs;
+    const reloadPromises = tabsArray.map((tab) => chrome.tabs.reload(tab.id!));
     await Promise.all(reloadPromises);
   }
 }
