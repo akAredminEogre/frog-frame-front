@@ -5,15 +5,11 @@
  * 3. 同じ値(true)を設定しても新しいインスタンスが返される
  * 4. 同じ値(false)を設定しても新しいインスタンスが返される
  */
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 describe('RewriteRule.withActive - 正常系（isActive状態変更）', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   const testCases = [
     {
       description: 'isActive=true のルールを false に変更できる',
