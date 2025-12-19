@@ -44,5 +44,8 @@ testCases.forEach((testCase) => {
   - 入力値/期待値の構造や型が異なる場合
   - その他 `testCases.forEach` の中でif文が必要になる場合。
     - if文が必要ということはarrange/act/assertの手法が異なるので、テストファイルを分けること
+- テスト用配列
+  - inputについて
+    - JSDocにかかれているテスト観点に関係のないinputの値は共通化し、forEach内で設定すること
 - JSDoc
   - 配列化したテストケース群のJSDocは日本語で記述し、配列内の`description`は必ず一致させること
