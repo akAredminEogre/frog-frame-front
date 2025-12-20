@@ -47,7 +47,7 @@ export function registerBackgroundMessageHandlers() {
   });
 
   // applyAllRulesハンドラー
-  onMessage('applyAllRules', async ({ data }) => {
+  onMessage('applyAllRules', async (data) => {
     try {
       const { tabId, tabUrl } = data;
 
