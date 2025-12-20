@@ -32,8 +32,8 @@ init-dev:
 	@docker compose exec frontend npm run dev
 
 init-hooks:
-	@echo "Installing Git hooks..."
-	@ln -sf ../../scripts/hooks/pre-commit .git/hooks/pre-commit
+	@echo "Installing Git hooks with Lefthook..."
+	@docker compose exec frontend npx lefthook install
 	@echo "Git hooks installed successfully!"
 	@echo ""
 	@echo "The following hooks are now active:"

@@ -1,0 +1,16 @@
+# Lefthook configuration for pre-commit hooks
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+  parallel: true
+  commands:
+    sort-imports:
+      glob: "*.{ts,tsx,js,jsx}"
+      root: "host-frontend-root/frontend-src-root/"
+      run: docker compose exec -T frontend npm run sort:imports -- {staged_files}
+      stage_fixed: true
+    lint:
+      glob: "*.{ts,tsx,js,jsx}"
+      root: "host-frontend-root/frontend-src-root/"
+      run: docker compose exec -T frontend npm run lint -- --fix {staged_files}
+      stage_fixed: true
