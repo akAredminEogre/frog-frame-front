@@ -1,0 +1,86 @@
+name: Move Docs on PR Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - develop
+
+jobs:
+  move-docs:
+    name: Move Issue Docs to Completed
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract issue number from branch name
+        id: extract-issue
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          echo "Branch name: $BRANCH_NAME"
+
+          # Extract issue number from branch name patterns:
+          # - issue-086-docs-how-to-set-up
+          # - claude/issue-086-some-suffix-xxxxx
+          # - feature/issue-123-something
+          ISSUE_NUMBER=$(echo "$BRANCH_NAME" | grep -oE 'issue-[0-9]+' | head -1 | sed 's/issue-//')
+
+          if [ -z "$ISSUE_NUMBER" ]; then
+            echo "No issue number found in branch name"
+            echo "found=false" >> $GITHUB_OUTPUT
+          else
+            echo "Found issue number: $ISSUE_NUMBER"
+            echo "found=true" >> $GITHUB_OUTPUT
+            echo "number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if docs directory exists
+        id: check-docs
+        if: steps.extract-issue.outputs.found == 'true'
+        run: |
+          ISSUE_NUMBER="${{ steps.extract-issue.outputs.number }}"
+          DOCS_DIR="docs/issue-${ISSUE_NUMBER}"
+
+          if [ -d "$DOCS_DIR" ]; then
+            echo "Found docs directory: $DOCS_DIR"
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "source=$DOCS_DIR" >> $GITHUB_OUTPUT
+            echo "dest=docs/completed/issue-${ISSUE_NUMBER}" >> $GITHUB_OUTPUT
+          else
+            echo "No docs directory found at: $DOCS_DIR"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Move docs to completed
+        if: steps.check-docs.outputs.exists == 'true'
+        run: |
+          SOURCE="${{ steps.check-docs.outputs.source }}"
+          DEST="${{ steps.check-docs.outputs.dest }}"
+
+          echo "Moving $SOURCE to $DEST"
+
+          # Ensure completed directory exists
+          mkdir -p docs/completed
+
+          # Move the directory
+          mv "$SOURCE" "$DEST"
+
+          echo "Successfully moved docs"
+
+      - name: Commit and push changes
+        if: steps.check-docs.outputs.exists == 'true'
+        run: |
+          ISSUE_NUMBER="${{ steps.extract-issue.outputs.number }}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add docs/
+          git commit -m "docs: move issue-${ISSUE_NUMBER} docs to completed"
+          git push origin develop
