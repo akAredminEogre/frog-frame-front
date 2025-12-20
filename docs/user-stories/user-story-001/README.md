@@ -156,7 +156,6 @@
 - [x] ChromeTabsGateway の実装（タブリロード）（developマージで完了）
 - [ ] RewriteRuleMessagingService の実装 **（3d-3b: ロジック実装 + proxy-service統合）**
   - 現在はスケルトン実装（3d-3a完了: パッケージ追加、クラス・DTO・インターフェース定義のみ）
-  - background.ts で registerRewriteRuleMessagingService() を呼び出す
   - E2Eテストへの影響を調査・修正
 - [ ] ToggleSwitch UIコンポーネントの実装（テスト未実装）
 
