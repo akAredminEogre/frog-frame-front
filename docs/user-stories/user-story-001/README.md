@@ -154,7 +154,13 @@
 - [ ] ToggleRuleActiveController / Presenter の実装（テスト未実装）
 - [ ] RewriteRuleMapper の実装（Entity ↔ DTO 変換）（テスト未実装）
 - [x] ChromeTabsGateway の実装（タブリロード）（developマージで完了）
-- [x] RewriteRuleMessagingService の実装（ADR-002、ADR-003参照）（テスト実装済み）
+- [x] RewriteRuleMessagingService の実装 **（3d-3a: スケルトン実装のみ）**（テスト実装済み）
+  - @webext-core/proxy-service パッケージ追加済み
+  - RewriteRuleMessagingService クラス、DTO、インターフェース実装済み
+  - **注意**: proxy-serviceとの統合（background.ts登録）はE2Eテストへの影響があり、別タスク（3d-3b）に分割
+- [ ] RewriteRuleMessagingService の統合 **（3d-3b: proxy-service統合）**
+  - background.ts で registerRewriteRuleMessagingService() を呼び出す
+  - E2Eテストへの影響を調査・修正
 - [ ] ToggleSwitch UIコンポーネントの実装（テスト未実装）
 
 ### Phase 4: 統合（新旧並行稼働）
