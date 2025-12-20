@@ -11,11 +11,54 @@
 
 ## 配置
 
+テスト戦略書は **ソースコードのディレクトリ構造をミラーリング** して配置する（Clean Architecture準拠）。
+
 ```
-docs/design/pages/[page]/features/[feature]/
-└── 05-test-strategy/
-    └── [ClassName]-[methodName].md
+docs/design/layers/
+└── [layer]/
+    └── [category]/
+        └── [ClassName]/
+            └── [methodName].md
 ```
+
+### 配置例
+
+| ソースコード | テスト戦略書 |
+|-------------|-------------|
+| `src/enterprise-business-rules/entities/RewriteRule/` | `docs/design/layers/enterprise-business-rules/entities/RewriteRule/` |
+| `src/interface-adapters/mappers/RewriteRuleMapper.ts` | `docs/design/layers/interface-adapters/mappers/RewriteRuleMapper/` |
+| `src/frameworks-and-drivers/browser/Tabs.ts` | `docs/design/layers/frameworks-and-drivers/browser/Tabs/` |
+
+### ディレクトリ構造
+
+```
+docs/design/layers/
+├── enterprise-business-rules/
+│   └── entities/
+│       └── RewriteRule/
+│           ├── withActive.md
+│           └── matchesUrl.md
+├── application-business-rules/
+│   └── interactors/
+│       └── ToggleRuleActiveInteractor/
+│           └── execute.md
+├── interface-adapters/
+│   └── mappers/
+│       └── RewriteRuleMapper/
+│           ├── toEntity.md
+│           └── toDto.md
+└── frameworks-and-drivers/
+    └── browser/
+        └── Tabs/
+            ├── constructor.md
+            └── filterByRule.md
+```
+
+### 設計意図
+
+- **srcと1:1対応**: ソースコードと同じ構造でテスト戦略書を配置
+- **レイヤー意識**: Clean Architectureの4層構造を反映
+- **共通モジュール対応**: 特定機能に依存しない配置で、機能横断的なモジュールも自然に配置可能
 
 ## 必須セクション
 
