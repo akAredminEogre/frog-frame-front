@@ -6,6 +6,21 @@ import { backgroundMessaging } from 'src/frameworks-and-drivers/messaging/backgr
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 
 /**
+ * unknownエラーから安全にメッセージを抽出する
+ * @param error 任意のエラー値
+ * @returns エラーメッセージ文字列
+ */
+function extractErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  return 'Unknown error occurred';
+}
+
+/**
  * Background Script用メッセージハンドラーを登録
  * @webext-core/messagingを使用した新しいメッセージングパターン
  *
@@ -25,9 +40,9 @@ export function registerBackgroundMessageHandlers() {
         success: true,
         rules: rules,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[background] getAllRules error:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: extractErrorMessage(error) };
     }
   });
 
@@ -42,9 +57,9 @@ export function registerBackgroundMessageHandlers() {
       const response = await chromeTabsService.sendApplyAllRulesMessage(tab);
 
       return { success: true, response };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[background] applyAllRules error:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: extractErrorMessage(error) };
     }
   });
 }

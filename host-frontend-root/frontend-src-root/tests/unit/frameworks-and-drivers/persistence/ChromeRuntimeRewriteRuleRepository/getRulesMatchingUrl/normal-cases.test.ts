@@ -34,8 +34,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
     {
       description: 'URLにマッチするルールのみを取得する',
       mockRules: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false },
-        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: false },
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: false, isActive: true },
       ],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
@@ -44,7 +44,7 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
     {
       description: 'マッチするルールがない場合は空のRewriteRulesを返す',
       mockRules: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://other.com', isRegex: false },
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://other.com', isRegex: false, isActive: true },
       ],
       currentUrl: 'https://example.com/page',
       expectedLength: 0,
@@ -53,8 +53,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
     {
       description: '空のurlPatternを持つルールは取得されない',
       mockRules: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: '', isRegex: false },
-        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://example.com', isRegex: false },
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: '', isRegex: false, isActive: true },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://example.com', isRegex: false, isActive: true },
       ],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
