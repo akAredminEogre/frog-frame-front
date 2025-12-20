@@ -38,5 +38,5 @@ PresenterはOutputDataを受け取りViewに通知するのみで、エラーハ
 
 ```
 tests/unit/interface-adapters/presenters/ToggleRuleActivePresenter/present/
-└── normal-cases.test.ts       # コールバック呼び出し確認（配列ベース、2ケース）
+└── normal-cases.test.ts       # コールバック呼び出し確認（配列ベース）
 ```
