@@ -368,15 +368,18 @@ docs/
 
 **注意**: このセクションはClaude Code Web（ブラウザ版）専用です。ターミナル版のClaude Codeでは `.claude/commands/` 内のスラッシュコマンドを使用してください。
 
-### ブランチ作成（Claude Code Web用）
+### セッション開始時（Claude Code Web用）
 
-**重要**: Claude Code Webで新しいセッションを開始してブランチを作成する場合は、**必ず**以下のスラッシュコマンドを使用してください：
+**重要**: Claude Code Webで新しいセッションを開始する場合は、**ブランチが既に指定されていても**、以下のスラッシュコマンドでIssue管理のセットアップを行ってください：
 
 ```
-/workflow-ccw-create-branch
+/workflow-ccw-session-start
 ```
 
-このスラッシュコマンドは `.claude/commands/workflow-ccw-create-branch.md` に定義されており、Claude Code Web専用のブランチ作成ワークフローを実行します。
+このワークフローは以下を行います：
+- Issue番号の採番と `docs/issue-nnn/` ディレクトリ作成
+- ブランチ作成（既にブランチが指定されている場合はスキップ）
+- PR作成リンクの表示
 
 - **ブランチ命名規則**: `claude/issue-nnn-<branch-suffix>-<random5chars>`
   - Claude Code Webの制約により、ブランチ名は `claude/` で始める必要があります
