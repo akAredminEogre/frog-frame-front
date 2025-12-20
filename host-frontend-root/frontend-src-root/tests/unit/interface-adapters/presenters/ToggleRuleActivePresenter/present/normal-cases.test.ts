@@ -1,8 +1,7 @@
 /**
  * ToggleRuleActivePresenter.present - 正常系テスト（コールバック呼び出し）
- * 1. isActive=trueのルールでコールバックが呼び出される
- * 2. isActive=falseのルールでコールバックが呼び出される
- * 3. コールバックにtoggledRuleが正しく渡される
+ * 1. isActive=trueのルールでコールバックが呼び出され、toggledRuleが正しく渡される
+ * 2. isActive=falseのルールでコールバックが呼び出され、toggledRuleが正しく渡される
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -21,21 +20,15 @@ describe('ToggleRuleActivePresenter.present - 正常系（コールバック呼�
 
   const testCases = [
     {
-      description: 'isActive=trueのルールでコールバックが呼び出される',
+      description: 'isActive=trueのルールでコールバックが呼び出され、toggledRuleが正しく渡される',
       input: {
         isActive: true,
       },
     },
     {
-      description: 'isActive=falseのルールでコールバックが呼び出される',
+      description: 'isActive=falseのルールでコールバックが呼び出され、toggledRuleが正しく渡される',
       input: {
         isActive: false,
-      },
-    },
-    {
-      description: 'コールバックにtoggledRuleが正しく渡される',
-      input: {
-        isActive: true,
       },
     },
   ];
