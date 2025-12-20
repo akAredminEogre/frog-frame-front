@@ -4,8 +4,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
 describe('RewriteRuleMapper.toDto - 正常系', () => {
   it('全プロパティを持つエンティティからDTOに変換できる', () => {
