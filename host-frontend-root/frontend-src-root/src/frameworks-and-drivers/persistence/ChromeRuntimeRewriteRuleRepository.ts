@@ -2,12 +2,15 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { backgroundMessaging } from 'src/frameworks-and-drivers/messaging/backgroundMessaging';
 
 /**
  * Chrome Runtime Messaging を使用したRewriteRuleリポジトリの実装
  * Content Script用: IndexedDBの代わりにBackground Scriptとのメッセージングでデータアクセス
  * Clean Architectureのインフラストラクチャ層に配置
  * IRewriteRuleRepositoryインターフェースを実装
+ *
+ * @webext-core/messagingを使用した型安全なメッセージング（ADR-002準拠）
  */
 export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepository {
 
@@ -18,16 +21,17 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
    */
   async getAll(): Promise<RewriteRules> {
     try {
-      const response = await chrome.runtime.sendMessage({ type: 'getAllRules' });
-      
+      const { sendMessage } = backgroundMessaging;
+      const response = await sendMessage('getAllRules', undefined);
+
       if (!response.success) {
         console.error('[ChromeRuntimeRewriteRuleRepository] Background script returned error:', response.error);
         throw new Error(`Failed to get rules from background: ${response.error}`);
       }
-      
+
       const rulesObject: Record<string, RewriteRule> = {};
 
-      response.rules.forEach((ruleData: any) => {
+      response.rules?.forEach((ruleData: any) => {
         const rule = new RewriteRule(
           ruleData.id,
           ruleData.oldString,
@@ -35,7 +39,7 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
           ruleData.urlPattern,
           ruleData.isRegex
         );
-        
+
         rulesObject[rule.id] = rule;
       });
 
