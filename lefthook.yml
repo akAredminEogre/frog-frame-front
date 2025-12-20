@@ -2,15 +2,9 @@
 # https://github.com/evilmartians/lefthook
 
 pre-commit:
-  parallel: true
   commands:
-    sort-imports:
-      glob: "host-frontend-root/frontend-src-root/**/*.{ts,tsx,js,jsx}"
-      root: "host-frontend-root/frontend-src-root/"
-      run: "npx eslint --fix --rule 'simple-import-sort/imports: error' --rule 'simple-import-sort/exports: error' {staged_files}"
-      stage_fixed: true
     lint:
       glob: "host-frontend-root/frontend-src-root/**/*.{ts,tsx,js,jsx}"
       root: "host-frontend-root/frontend-src-root/"
-      run: "npx eslint --fix {staged_files}"
+      run: "npx eslint --fix --rule 'simple-import-sort/imports: error' --rule 'simple-import-sort/exports: error' {staged_files}"
       stage_fixed: true
