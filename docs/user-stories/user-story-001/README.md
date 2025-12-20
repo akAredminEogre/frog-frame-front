@@ -143,28 +143,34 @@
 - [x] ChromeTabsGateway（スケルトン実装）
 - [x] RewriteRuleMessagingService（スケルトン実装）
 - [x] RewriteRuleDTO, GetByIdRequestDTO, UpdateRuleActiveRequestDTO（DTO）
-- [ ] container.ts にスケルトンクラスのDI登録を追加
+- [x] container.ts にスケルトンクラスのDI登録を追加
 
 ### Phase 3: 実装（スケルトンにロジック追加）
 
 スケルトンに実際のビジネスロジックを実装：
 
-- [ ] RewriteRule.withActive(), matchesUrl() の実装
-- [ ] ToggleRuleActiveInteractor の実装
-- [ ] ToggleRuleActiveController / Presenter の実装
-- [ ] RewriteRuleMapper の実装（Entity ↔ DTO 変換）
-- [ ] ChromeTabsGateway の実装（タブリロード）
-- [ ] RewriteRuleMessagingService の実装（ADR-002、ADR-003参照）
-- [ ] ToggleSwitch UIコンポーネントの実装
+- [x] RewriteRule.withActive(), matchesUrl() の実装
+- [ ] ToggleRuleActiveInteractor の実装（テスト未実装）
+- [ ] ToggleRuleActiveController / Presenter の実装（テスト未実装）
+- [ ] RewriteRuleMapper の実装（Entity ↔ DTO 変換）（テスト未実装）
+- [x] ChromeTabsGateway の実装（タブリロード）（developマージで完了）
+- [ ] RewriteRuleMessagingService の実装（ADR-002、ADR-003参照）（テスト未実装）
+- [ ] ToggleSwitch UIコンポーネントの実装（テスト未実装）
 
 ### Phase 4: 統合（新旧並行稼働）
 
+**現状**: developマージ完了（2024-12-20）、ChromeTabsGateway実装済み、残り統合タスクに集中
+
 - [ ] ChromeRuntimeRewriteRuleRepository を Mapper委譲方式に変更
-  - 既存の直接DB操作 → Mapper経由に変更
+  - 既存の直接DB操作 → Mapper経由に変更  
   - IRewriteRuleRepository インターフェースは変更なし
+  - **現在位置**: `src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository.ts`
 - [ ] RulesApp.tsx にトグルUIを統合
   - ToggleSwitch コンポーネントを配置
   - ToggleRuleActiveController を呼び出すハンドラーを追加
+  - **現在位置**: `src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx`
+
+**優先順位**: 上記2タスクを完了後、テスト実装に並行移行可能
 
 ### Phase 5: 旧コード削除（このユーザーストーリーでは実施しない）
 

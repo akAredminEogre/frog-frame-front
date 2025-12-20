@@ -1,104 +1,105 @@
 @startuml
 !theme plain
-title User Story 001: ルールトグル機能 - タスク依存ネットワーク図
+title User Story 001: ルールトグル機能 - タスク依存ネットワーク図（更新版）
 
 ' ノード定義（タスク）
-rectangle "3A-1\nRewriteRule\n.withActive()\n実装\n[1日]" as withActive #lightblue
-rectangle "3A-2\nRewriteRule\n.matchesUrl()\n実装\n[1日]" as matchesUrl #lightblue
+rectangle "3A-1\nRewriteRule\n.withActive()\n実装\n[完了]" as withActive #green
+rectangle "3A-2\nRewriteRule\n.matchesUrl()\n実装\n[完了]" as matchesUrl #green
 
-rectangle "3B-1\nDTO実装\n[1日]" as dto #lightgreen
-rectangle "3B-2\nITabsGateway\n実装\n[1日]" as tabsGateway #lightgreen
-rectangle "3B-3\nToggleRuleActive\nInteractor実装\n[2日]" as interactor #lightgreen
+rectangle "3B-1\nDTO実装\n[完了]" as dto #green
+rectangle "3B-2\nITabsGateway\n実装\n[完了]" as tabsGateway #green
+rectangle "3B-3\nToggleRuleActive\nInteractor実装\n[実装済・テスト未]" as interactor #yellow
 
-rectangle "3C-1\nRewriteRuleMapper\n実装\n[2日]" as mapper #lightyellow
-rectangle "3C-2\nToggleRuleActive\nController実装\n[1日]" as controller #lightyellow
-rectangle "3C-3\nToggleRuleActive\nPresenter実装\n[1日]" as presenter #lightyellow
+rectangle "3C-1\nRewriteRuleMapper\n実装\n[実装済・テスト未]" as mapper #yellow
+rectangle "3C-2\nToggleRuleActive\nController実装\n[実装済・テスト未]" as controller #yellow
+rectangle "3C-3\nToggleRuleActive\nPresenter実装\n[実装済・テスト未]" as presenter #yellow
 
-rectangle "3D-1\nメッセージング\n関連DTO実装\n[1日]" as msgDto #lightcoral
-rectangle "3D-2\nChromeTabsGateway\n実装\n[2日]" as chromeTabs #lightcoral
-rectangle "3D-3\nRewriteRule\nMessagingService\n実装\n[2日]" as messaging #lightcoral
+rectangle "3D-1\nメッセージング\n関連DTO実装\n[完了]" as msgDto #green
+rectangle "3D-2\nChromeTabsGateway\n実装\n[完了・developマージ]" as chromeTabs #green
+rectangle "3D-3\nRewriteRule\nMessagingService\n実装\n[実装済・テスト未]" as messaging #yellow
 
-rectangle "3E-1\nToggleSwitch\nUIコンポーネント\n実装\n[2日]" as toggleUI #lightpink
+rectangle "3E-1\nToggleSwitch\nUIコンポーネント\n実装\n[実装済・テスト未]" as toggleUI #yellow
 
-rectangle "4-1\nDI登録追加\n[1日]" as di #lavender
-rectangle "4-2\nChromeRuntime\nRewriteRule\nRepository改修\n[2日]" as repoFix #lavender
-rectangle "4-3\nRulesApp.tsx\n統合\n[1日]" as appIntegration #lavender
+rectangle "4-1\nDI登録追加\n[完了]" as di #green
+rectangle "4-2\nChromeRuntime\nRewriteRule\nRepository改修\n[未完了]" as repoFix #lightcoral
+rectangle "4-3\nRulesApp.tsx\n統合\n[未完了]" as appIntegration #lightcoral
+
+' 新規追加: テストタスク
+rectangle "TEST-1\nInteractor\nテスト実装\n[未実装]" as testInteractor #lightblue
+rectangle "TEST-2\nController/Presenter\nテスト実装\n[未実装]" as testControllerPresenter #lightblue
+rectangle "TEST-3\nMapper/Gateway\nテスト実装\n[未実装]" as testMapperGateway #lightblue
+rectangle "TEST-4\nUI/Messaging\nテスト実装\n[未実装]" as testUIMessaging #lightblue
 
 ' 依存関係（矢印）
-withActive --> dto : 完了後
-withActive --> interactor : 必要
-matchesUrl --> interactor : 必要
+' 実装完了済みの依存関係（グレー）
+withActive -[#gray]-> dto : 完了済み
+withActive -[#gray]-> interactor : 完了済み
+matchesUrl -[#gray]-> interactor : 完了済み
+dto -[#gray]-> mapper : 完了済み
+dto -[#gray]-> controller : 完了済み
+dto -[#gray]-> presenter : 完了済み
+tabsGateway -[#gray]-> interactor : 完了済み
+tabsGateway -[#gray]-> chromeTabs : 完了済み
+msgDto -[#gray]-> messaging : 完了済み
+di -[#gray]-> controller : 完了済み
+di -[#gray]-> presenter : 完了済み
 
-dto --> mapper : 完了後
-dto --> controller : 必要
-dto --> presenter : 必要
+' 新規追加: テスト依存関係
+interactor --> testInteractor : テスト必要
+controller --> testControllerPresenter : テスト必要
+presenter --> testControllerPresenter : テスト必要
+mapper --> testMapperGateway : テスト必要
+toggleUI --> testUIMessaging : テスト必要
+messaging --> testUIMessaging : テスト必要
 
-tabsGateway --> interactor : 必要
-tabsGateway --> chromeTabs : インターフェース
-
-interactor --> controller : 完了後
-interactor --> presenter : 完了後
-
-mapper --> messaging : 必要
-mapper --> repoFix : 必要
-
-controller --> appIntegration : 必要
-presenter --> appIntegration : 必要
-
-msgDto --> messaging : 必要
-chromeTabs --> di : 登録必要
-messaging --> repoFix : 完了後
-
-toggleUI --> appIntegration : 統合必要
-
-di --> repoFix : 完了後
-repoFix --> appIntegration : 完了後
+' 残りの主要依存関係（統合タスク）
+mapper -[#red,thickness=3]-> repoFix : 必要
+messaging -[#red,thickness=3]-> repoFix : 必要
+controller -[#red,thickness=3]-> appIntegration : 必要
+presenter -[#red,thickness=3]-> appIntegration : 必要
+toggleUI -[#red,thickness=3]-> appIntegration : 必要
+repoFix -[#red,thickness=3]-> appIntegration : 完了後
 
 ' 色分け凡例
 note top of withActive
-**Phase 3A: 核となるドメインロジック**
+**完了済み**
+#green
+end note
+
+note top of interactor
+**実装済み・テスト未実装**
+#yellow
+end note
+
+note top of testInteractor
+**新規テスト実装**
 #lightblue
 end note
 
-note top of dto
-**Phase 3B: Application Business Rules**
-#lightgreen
-end note
-
-note top of mapper
-**Phase 3C: Interface Adapters**
-#lightyellow
-end note
-
-note top of msgDto
-**Phase 3D: Frameworks & Drivers**
+note top of repoFix
+**残りタスク**
 #lightcoral
 end note
 
-note top of toggleUI
-**Phase 3E: UI実装**
-#lightpink
-end note
-
-note top of di
-**Phase 4: 統合**
-#lavender
-end note
-
-' クリティカルパス強調
-withActive -[#red,thickness=3]-> interactor
-interactor -[#red,thickness=3]-> controller
-controller -[#red,thickness=3]-> appIntegration
-
+' 現在のクリティカルパス
 note bottom
-**クリティカルパス (赤線):**
-withActive → interactor → controller → appIntegration
-**総所要時間: 5日**
+**現在のクリティカルパス (赤線):**
+mapper/messaging → repoFix → appIntegration
 
-**並行実行可能タスク:**
-- matchesUrl, dto, tabsGateway, msgDto
-- mapper, presenter, chromeTabs
-- toggleUI, di
+**最新状況 (2024-12-20):**
+- ✅ developマージ完了
+- ✅ ChromeTabsGateway実装完了（developから取り込み）
+- 🎯 残り: Phase 4統合（2タスク）
+
+**次のステップ:**
+1. ChromeRuntimeRewriteRuleRepository改修
+2. RulesApp.tsx UI統合
+3. テスト実装（並行実行可能）
+
+**進捗状況:**
+- ✅ 完了: 基本実装、DTO、DI設定、ChromeTabsGateway
+- 🔄 実装済み: ビジネスロジック（テスト未）
+- 🎯 集中: Repository改修、UI統合
 end note
 
 @enduml
