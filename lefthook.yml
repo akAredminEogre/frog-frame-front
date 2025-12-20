@@ -5,12 +5,12 @@ pre-commit:
   parallel: true
   commands:
     sort-imports:
-      glob: "*.{ts,tsx,js,jsx}"
+      glob: "host-frontend-root/frontend-src-root/**/*.{ts,tsx,js,jsx}"
       root: "host-frontend-root/frontend-src-root/"
-      run: docker compose exec -T frontend npm run sort:imports -- {staged_files}
+      run: "npx eslint --fix --rule 'simple-import-sort/imports: error' --rule 'simple-import-sort/exports: error' {staged_files}"
       stage_fixed: true
     lint:
-      glob: "*.{ts,tsx,js,jsx}"
+      glob: "host-frontend-root/frontend-src-root/**/*.{ts,tsx,js,jsx}"
       root: "host-frontend-root/frontend-src-root/"
-      run: docker compose exec -T frontend npm run lint -- --fix {staged_files}
+      run: "npx eslint --fix {staged_files}"
       stage_fixed: true
