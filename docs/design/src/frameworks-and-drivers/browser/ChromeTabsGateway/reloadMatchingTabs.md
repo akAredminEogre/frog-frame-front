@@ -9,6 +9,13 @@ Chrome Tabs APIを使用してタブを取得し、`Tabs`クラスでフィル�
 
 本メソッドはテストコードの実装が不要である。
 
+> **参照**: [frameworks-and-drivers テストガイドライン](../../../../../coding-standards/tests/unit/frameworks-and-drivers.md)
+>
+> frameworks-and-driversのロジックそのものが動作することを確認するテストは不要（任意）:
+> - 非同期処理
+> - フレームワークやライブラリの動作確認
+> - 外部サービスとの連携確認
+
 ### 不要な理由
 
 #### 1. 外部APIの薄いラッパーである
