@@ -87,8 +87,9 @@ note bottom
 mapper/messaging → repoFix → appIntegration
 
 **最新状況 (2024-12-20):**
-- ✅ developマージ完了
+- ✅ developマージ完了（2回目）
 - ✅ ChromeTabsGateway実装完了（developから取り込み）
+- ✅ RewriteRuleMessagingService詳細情報取得
 - 🎯 残り: Phase 4統合（2タスク）
 
 **次のステップ:**
