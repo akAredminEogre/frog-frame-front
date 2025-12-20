@@ -11,11 +11,54 @@
 
 ## 配置
 
+テスト戦略書は **ソースコードのディレクトリ構造をミラーリング** して配置する（Clean Architecture準拠）。
+
 ```
-docs/design/pages/[page]/features/[feature]/
-└── 05-test-strategy/
-    └── [ClassName]-[methodName].md
+docs/design/src/
+└── [layer]/
+    └── [category]/
+        └── [ClassName]/
+            └── [methodName].md
 ```
+
+### 配置例
+
+| ソースコード | テスト戦略書 |
+|-------------|-------------|
+| `src/enterprise-business-rules/entities/RewriteRule/` | `docs/design/src/enterprise-business-rules/entities/RewriteRule/` |
+| `src/interface-adapters/mappers/RewriteRuleMapper.ts` | `docs/design/src/interface-adapters/mappers/RewriteRuleMapper/` |
+| `src/frameworks-and-drivers/browser/Tabs.ts` | `docs/design/src/frameworks-and-drivers/browser/Tabs/` |
+
+### ディレクトリ構造
+
+```
+docs/design/src/
+├── enterprise-business-rules/
+│   └── entities/
+│       └── RewriteRule/
+│           ├── withActive.md
+│           └── matchesUrl.md
+├── application-business-rules/
+│   └── interactors/
+│       └── ToggleRuleActiveInteractor/
+│           └── execute.md
+├── interface-adapters/
+│   └── mappers/
+│       └── RewriteRuleMapper/
+│           ├── toEntity.md
+│           └── toDto.md
+└── frameworks-and-drivers/
+    └── browser/
+        └── Tabs/
+            ├── constructor.md
+            └── filterByRule.md
+```
+
+### 設計意図
+
+- **srcと1:1対応**: ソースコードと同じ構造でテスト戦略書を配置
+- **レイヤー意識**: Clean Architectureの4層構造を反映
+- **共通モジュール対応**: 特定機能に依存しない配置で、機能横断的なモジュールも自然に配置可能
 
 ## 必須セクション
 
@@ -128,3 +171,24 @@ tests/unit/[path]/[methodName]/
 ### 一貫性の維持
 - テスト戦略書の「テスト分類」表とJSDocの番号付きリストが対応すること
 - テストケースを追加・削除した場合、JSDocと戦略書の両方を更新すること
+
+## 適用待ちの箇所
+
+### 旧配置ルールで作成されたテスト戦略書
+
+本規約の配置ルール変更（`docs/design/pages/.../05-test-strategy/` → `docs/design/src/`）により、以下のファイルが新しい規約に適合していない:
+
+| 現在の配置 | 新規約での配置 |
+|-----------|---------------|
+| `docs/design/pages/rule-list/features/toggle-rule-active/05-test-strategy/RewriteRule-withActive.md` | `docs/design/src/enterprise-business-rules/entities/RewriteRule/withActive.md` |
+| `docs/design/pages/rule-list/features/toggle-rule-active/05-test-strategy/Tabs-constructor.md` | `docs/design/src/frameworks-and-drivers/browser/Tabs/constructor.md` |
+| `docs/design/pages/rule-list/features/toggle-rule-active/05-test-strategy/Tabs-filterByRule.md` | `docs/design/src/frameworks-and-drivers/browser/Tabs/filterByRule.md` |
+| `docs/design/pages/rule-list/features/toggle-rule-active/05-test-strategy/ToggleRuleActiveInputData-constructor.md` | `docs/design/src/application-business-rules/dto/input/ToggleRuleActiveInputData/constructor.md` |
+| `docs/design/pages/rule-list/features/toggle-rule-active/05-test-strategy/ToggleRuleActiveOutputData-constructor.md` | `docs/design/src/application-business-rules/dto/output/ToggleRuleActiveOutputData/constructor.md` |
+| `docs/design/pages/rule-list/features/url-pattern-matching/05-test-strategy/RewriteRule-matchesUrl.md` | `docs/design/src/enterprise-business-rules/entities/RewriteRule/matchesUrl.md` |
+
+### 対応方針
+
+- **新規作成**: 新しい規約に従う（必須）
+- **既存修正**: 別タスクとして対応（本ユーザーストーリーのスコープ外）
+

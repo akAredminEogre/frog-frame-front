@@ -277,6 +277,14 @@ These 9 rules are strictly enforced:
 
 ## Testing Requirements
 
+### Test Strategy Document (Required)
+
+**CRITICAL**: Before writing any test code, create a test strategy document following `docs/docs-rules/design/05-test-strategy.md`.
+
+- **Location**: `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md` (mirrors src/ structure)
+- **Required sections**: 目的、テスト分類、網羅性チェック、テストファイル構成
+- **Workflow**: テスト戦略書作成 → テストコード実装
+
 ### Test Structure
 - **Location**: Tests mirror `src/` directory structure in `tests/`
 - **Granularity**: One test file per method minimum (split further if needed)
@@ -360,14 +368,22 @@ docs/
 
 **注意**: このセクションはClaude Code Web（ブラウザ版）専用です。ターミナル版のClaude Codeでは `.claude/commands/` 内のスラッシュコマンドを使用してください。
 
-### ブランチ作成（Claude Code Web用）
-Claude Code Webでは `gh` コマンドが使用できないため、専用のワークフローを使用します。
+### セッション開始時（Claude Code Web用）
 
-**重要**: ブランチ作成を行う場合は、必ず以下のワークフローファイルの手順に従ってください：
-- `.clinerules/02-workflow-automation/01-issue-launches/workflow-ccw-create-branch.md`
+**重要**: Claude Code Webで新しいセッションを開始する場合は、**ブランチが既に指定されていても**、以下のスラッシュコマンドでIssue管理のセットアップを行ってください：
+
+```
+/workflow-ccw-session-start
+```
+
+このワークフローは以下を行います：
+- Issue番号の採番と `docs/issue-nnn/` ディレクトリ作成
+- ブランチ作成（既にブランチが指定されている場合はスキップ）
+- PR作成リンクの表示
 
 - **ブランチ命名規則**: `claude/issue-nnn-<branch-suffix>-<random5chars>`
   - Claude Code Webの制約により、ブランチ名は `claude/` で始める必要があります
+- `gh` コマンドが使用できないため、このワークフローでは代替手段を使用します
 
 ### PR作成（Claude Code Web用）
 ghコマンドが使用できないため、以下のURLフォーマットでPRを作成します：
