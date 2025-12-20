@@ -1,4 +1,4 @@
-import { registerRewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
+import { registerRewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/rewriteRuleProxyService';
 import { contextMenusOnClicked } from 'src/infrastructure/browser/background/contextMenus/onClicked';
 import { runtimeOnExtensionInstalled } from 'src/infrastructure/browser/background/runtime/onExtensionInstalled';
 import { runtimeOnMessageReceived } from 'src/infrastructure/browser/background/runtime/onMessageReceived';

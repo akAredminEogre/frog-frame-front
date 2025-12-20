@@ -35,13 +35,12 @@ export function resetRewriteRuleRepositoryFactory(): void {
 }
 
 /**
- * 遅延初期化用のプロキシサービス参照
- * defineProxyServiceはモジュールロード時ではなく、registerRewriteRuleMessagingService呼び出し時に実行
+ * 現在のリポジトリファクトリを取得する
+ * background.tsでのプロキシサービス初期化時に使用
  */
-let proxyServiceInstance: {
-  register: () => void;
-  get: () => RewriteRuleMessagingService;
-} | null = null;
+export function getRepositoryFactory(): RepositoryFactory {
+  return repositoryFactory;
+}
 
 /**
  * @webext-core/proxy-serviceを使用したRewriteRuleメッセージングサービス
@@ -90,43 +89,4 @@ export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
       isActive: rule.isActive
     };
   }
-}
-
-/**
- * プロキシサービスを遅延初期化する
- * defineProxyServiceはブラウザAPIに依存するため、モジュールロード時ではなく
- * 実際に必要になった時点で初期化する
- */
-function initializeProxyService(): void {
-  if (proxyServiceInstance !== null) {
-    return;
-  }
-
-  // 動的インポートを避けるため、require-likeパターンで遅延実行
-  const { defineProxyService } = require('@webext-core/proxy-service');
-
-  const [register, get] = defineProxyService('RewriteRuleMessagingService', () => {
-    const repository = repositoryFactory();
-    return new RewriteRuleMessagingService(repository);
-  });
-
-  proxyServiceInstance = { register, get };
-}
-
-/**
- * Background Scriptでサービスを登録する
- * この関数を呼び出すとプロキシサービスが初期化され、メッセージリスナーが登録される
- */
-export function registerRewriteRuleMessagingService(): void {
-  initializeProxyService();
-  proxyServiceInstance!.register();
-}
-
-/**
- * 他のコンテキスト（Rules Page等）からサービスを取得する
- * @returns RewriteRuleMessagingServiceのプロキシ
- */
-export function getRewriteRuleMessagingService(): RewriteRuleMessagingService {
-  initializeProxyService();
-  return proxyServiceInstance!.get();
 }
