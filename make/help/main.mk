@@ -7,6 +7,7 @@ help:
 	@echo "## Setup Commands"
 	@echo "  make init-config  - Apply git configuration from template"
 	@echo "  make init-dev     - Initial setup for development (first time only)"
+	@echo "  make init-hooks   - Install git hooks (pre-commit: sortimports + lint)"
 	@echo ""
 	@echo "## Development Commands"
 	@echo "  make dev          - Start development server"
