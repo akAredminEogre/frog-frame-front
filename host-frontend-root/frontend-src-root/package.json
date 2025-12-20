@@ -54,7 +54,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@evilmartians/lefthook": "^1.11.6",
+    "@evilmartians/lefthook": "^1.13.6",
     "@eslint/js": "^9.33.0",
     "@playwright/test": "^1.56.0",
     "@storybook/react-vite": "^9.1.8",
