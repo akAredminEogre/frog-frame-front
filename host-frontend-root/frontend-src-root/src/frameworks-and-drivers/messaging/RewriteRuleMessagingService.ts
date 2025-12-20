@@ -4,11 +4,15 @@ import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/Rewrite
 import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
 /**
- * Chrome Runtime APIを使用したRewriteRuleメッセージングサービス（スケルトン実装）
+ * @webext-core/proxy-serviceを使用したRewriteRuleメッセージングサービス（スケルトン実装）
+ * Background Scriptで実行され、他のコンテキスト（Rules Page等）からのDB操作を仲介
+ * ADR-002, ADR-003に従い、DTOを使用してメッセージング通信を行う
+ *
+ * 注意: 現在はスケルトン実装のみ。実際のロジックとproxy-serviceとの統合は3d-3bタスクで実装予定。
  */
 export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
   /**
-   * IDでルールを取得する
+   * IDでルールを取得する（スケルトン）
    * @param dto 取得リクエストDTO
    * @returns RewriteRuleDTO
    */
@@ -17,7 +21,7 @@ export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
   }
 
   /**
-   * ルールの有効状態を更新する
+   * ルールの有効状態を更新する（スケルトン）
    * @param dto 更新リクエストDTO
    */
   async updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void> {
