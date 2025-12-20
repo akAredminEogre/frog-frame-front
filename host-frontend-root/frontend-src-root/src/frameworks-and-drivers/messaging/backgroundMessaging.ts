@@ -23,7 +23,7 @@ interface BackgroundMessagingProtocol {
    * すべてのルールを取得
    * @returns ルール配列を含む成功レスポンス、またはエラーレスポンス
    */
-  getAllRules: () => GetAllRulesResponse;
+  getAllRules: () => Promise<GetAllRulesResponse>;
 
   /**
    * Content Scriptにルール適用メッセージを転送
