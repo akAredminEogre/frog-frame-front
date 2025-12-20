@@ -156,21 +156,9 @@
 - [x] ChromeTabsGateway の実装（タブリロード）（developマージで完了）
 - [ ] RewriteRuleMessagingService の実装 **（3d-3b: ロジック実装 + proxy-service統合）**
   - 現在はスケルトン実装（3d-3a完了: パッケージ追加、クラス・DTO・インターフェース定義のみ）
-  - [x] background.ts で registerRewriteRuleMessagingService() を呼び出す（⚠️ 一時無効化、下記参照）
-  - [ ] 既存メッセージングとの競合を解決（下記「既知の問題」参照）
+  - [x] background.ts で registerRewriteRuleMessagingService() を呼び出す
+  - [x] 既存メッセージングを `@webext-core/messaging` に移行（Background Script側完了）
   - E2Eテストへの影響を調査・修正
-
-**既知の問題: @webext-core/messaging と既存メッセージングの競合**
-
-`registerRewriteRuleMessagingService()` は現在コメントアウトされています。理由：
-- `@webext-core/messaging` は `{ type, timestamp }` 形式のメッセージを期待
-- 既存のメッセージング（`{ type: 'getAllRules' }` など）には `timestamp` がない
-- `@webext-core/messaging` は形式の異なるメッセージに対してエラーをスロー
-- これにより既存のDOM置換機能が壊れる（E2Eテスト失敗）
-
-**解決策（優先度順）**:
-1. 既存メッセージングを `@webext-core/messaging` に段階的に移行
-2. 移行完了後に `registerRewriteRuleMessagingService()` を有効化
 
 - [ ] ToggleSwitch UIコンポーネントの実装（テスト未実装）
 
