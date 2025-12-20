@@ -151,8 +151,9 @@
 
 - [x] RewriteRule.withActive(), matchesUrl() の実装
 - [ ] ToggleRuleActiveInteractor の実装（テスト未実装）
-- [ ] ToggleRuleActiveController / Presenter の実装（テスト未実装）
-- [ ] RewriteRuleMapper の実装（Entity ↔ DTO 変換）（テスト未実装）
+- [x] ToggleRuleActiveController の実装（テスト済み）
+- [x] ToggleRuleActivePresenter の実装（テスト済み）
+- [x] RewriteRuleMapper の実装（Entity ↔ DTO 変換）（テスト済み）
 - [x] ChromeTabsGateway の実装（タブリロード）（developマージで完了）
 - [ ] RewriteRuleMessagingService の実装 **（3d-3b: ロジック実装 + proxy-service統合）**
   - 現在はスケルトン実装（3d-3a完了: パッケージ追加、クラス・DTO・インターフェース定義のみ）
@@ -162,7 +163,7 @@
 
 ### Phase 4: 統合（新旧並行稼働）
 
-**現状**: developマージ完了（2024-12-20）、ChromeTabsGateway実装済み、残り統合タスクに集中
+**現状**: developマージ完了（2024-12-20 3回目）、ChromeTabsGateway・ToggleRuleActivePresenter実装済み、RewriteRuleMessagingService詳細情報取得、残り統合タスクに集中
 
 - [ ] ChromeRuntimeRewriteRuleRepository を Mapper委譲方式に変更
   - 既存の直接DB操作 → Mapper経由に変更  
