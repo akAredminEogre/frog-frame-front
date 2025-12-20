@@ -1,4 +1,4 @@
-import { asValue, createContainer } from 'awilix';
+import { asFunction, asValue, createContainer, Lifetime } from 'awilix';
 
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
@@ -17,7 +17,7 @@ import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRe
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
-import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
+import { getRewriteRuleMessagingService, RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
@@ -72,7 +72,9 @@ const toggleRuleActiveInteractor = new ToggleRuleActiveInteractor(toggleRuleActi
 const toggleRuleActiveController = new ToggleRuleActiveController(toggleRuleActiveInteractor);
 const rewriteRuleMapper = new RewriteRuleMapper();
 const chromeTabsGateway = new ChromeTabsGateway();
-const rewriteRuleMessagingService = new RewriteRuleMessagingService();
+// NOTE: rewriteRuleMessagingServiceは遅延初期化（asFunction + SINGLETON）
+// proxy-serviceはモジュールロード時にbrowser.runtime.getManifest()を呼び出すため、
+// テスト環境でのインポートエラーを避けるために遅延初期化が必要（ADR-002）
 
 // Register all instances with asValue (no automatic injection needed)
 awilixContainer.register({
@@ -105,7 +107,8 @@ awilixContainer.register({
   toggleRuleActiveController: asValue(toggleRuleActiveController),
   rewriteRuleMapper: asValue(rewriteRuleMapper),
   chromeTabsGateway: asValue(chromeTabsGateway),
-  rewriteRuleMessagingService: asValue(rewriteRuleMessagingService)
+  // proxy-serviceは遅延初期化（最初のresolve時にgetRewriteRuleMessagingService()を呼び出す）
+  rewriteRuleMessagingService: asFunction(() => getRewriteRuleMessagingService(), { lifetime: Lifetime.SINGLETON })
 });
 
 // Type definitions for container resolution

@@ -154,7 +154,7 @@
 - [ ] ToggleRuleActiveController / Presenter の実装（テスト未実装）
 - [ ] RewriteRuleMapper の実装（Entity ↔ DTO 変換）（テスト未実装）
 - [x] ChromeTabsGateway の実装（タブリロード）（developマージで完了）
-- [ ] RewriteRuleMessagingService の実装（ADR-002、ADR-003参照）（テスト未実装）
+- [x] RewriteRuleMessagingService の実装（ADR-002、ADR-003参照）（テスト実装済み）
 - [ ] ToggleSwitch UIコンポーネントの実装（テスト未実装）
 
 ### Phase 4: 統合（新旧並行稼働）
