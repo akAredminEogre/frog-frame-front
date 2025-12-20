@@ -1,4 +1,4 @@
-import { asFunction, asValue, createContainer, Lifetime } from 'awilix';
+import { asValue, createContainer } from 'awilix';
 
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
@@ -18,7 +18,6 @@ import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/Close
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
-import { getRewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/rewriteRuleProxyService';
 import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
@@ -73,9 +72,7 @@ const toggleRuleActiveInteractor = new ToggleRuleActiveInteractor(toggleRuleActi
 const toggleRuleActiveController = new ToggleRuleActiveController(toggleRuleActiveInteractor);
 const rewriteRuleMapper = new RewriteRuleMapper();
 const chromeTabsGateway = new ChromeTabsGateway();
-// NOTE: rewriteRuleMessagingServiceは遅延初期化（asFunction + SINGLETON）
-// proxy-serviceはモジュールロード時にbrowser.runtime.getManifest()を呼び出すため、
-// テスト環境でのインポートエラーを避けるために遅延初期化が必要（ADR-002）
+const rewriteRuleMessagingService = new RewriteRuleMessagingService();
 
 // Register all instances with asValue (no automatic injection needed)
 awilixContainer.register({
@@ -108,8 +105,7 @@ awilixContainer.register({
   toggleRuleActiveController: asValue(toggleRuleActiveController),
   rewriteRuleMapper: asValue(rewriteRuleMapper),
   chromeTabsGateway: asValue(chromeTabsGateway),
-  // proxy-serviceは遅延初期化（最初のresolve時にgetRewriteRuleMessagingService()を呼び出す）
-  rewriteRuleMessagingService: asFunction(() => getRewriteRuleMessagingService(), { lifetime: Lifetime.SINGLETON })
+  rewriteRuleMessagingService: asValue(rewriteRuleMessagingService)
 });
 
 // Type definitions for container resolution

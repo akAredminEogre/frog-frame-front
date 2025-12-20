@@ -7,51 +7,21 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/index
 import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
 /**
- * リポジトリファクトリの型定義
- * テスト時にモックリポジトリを注入可能にするためのファクトリパターン
- */
-type RepositoryFactory = () => IRewriteRuleRepository;
-
-/**
- * デフォルトのリポジトリファクトリ（本番用）
- * DexieRewriteRuleRepositoryを生成する
- */
-let repositoryFactory: RepositoryFactory = () => new DexieRewriteRuleRepository();
-
-/**
- * テスト用にリポジトリファクトリを設定する
- * @param factory モックリポジトリを返すファクトリ関数
- */
-export function setRewriteRuleRepositoryFactory(factory: RepositoryFactory): void {
-  repositoryFactory = factory;
-}
-
-/**
- * リポジトリファクトリをデフォルト（本番用）にリセットする
- * テスト後のクリーンアップ用
- */
-export function resetRewriteRuleRepositoryFactory(): void {
-  repositoryFactory = () => new DexieRewriteRuleRepository();
-}
-
-/**
- * 現在のリポジトリファクトリを取得する
- * background.tsでのプロキシサービス初期化時に使用
- */
-export function getRepositoryFactory(): RepositoryFactory {
-  return repositoryFactory;
-}
-
-/**
  * @webext-core/proxy-serviceを使用したRewriteRuleメッセージングサービス
  * Background Scriptで実行され、他のコンテキスト（Rules Page等）からのDB操作を仲介
  * ADR-002, ADR-003に従い、DTOを使用してメッセージング通信を行う
+ *
+ * 注意: 現在はスケルトン実装のみ。proxy-serviceとの統合は3d-3bタスクで実装予定。
  */
 export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
   private readonly repository: IRewriteRuleRepository;
 
-  constructor(repository: IRewriteRuleRepository) {
-    this.repository = repository;
+  /**
+   * コンストラクタ
+   * @param repository リポジトリ（省略時はDexieRewriteRuleRepositoryを使用）
+   */
+  constructor(repository?: IRewriteRuleRepository) {
+    this.repository = repository ?? new DexieRewriteRuleRepository();
   }
 
   /**
