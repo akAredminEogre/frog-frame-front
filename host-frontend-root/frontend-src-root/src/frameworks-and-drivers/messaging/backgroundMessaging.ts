@@ -13,10 +13,10 @@ import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/Rewrite
 /**
  * メッセージプロトコルの型定義
  * key: メッセージタイプ
- * value: (引数の型) => 戻り値の型
+ * value: (引数の型) => Promise<戻り値の型>
  *
- * 注意: @webext-core/messagingは内部でPromiseを処理するため、
- * プロトコル定義では同期的な戻り値型を使用
+ * @webext-core/messagingはメッセージハンドラーを非同期で処理するため、
+ * 戻り値の型はPromiseでラップする
  */
 interface BackgroundMessagingProtocol {
   /**

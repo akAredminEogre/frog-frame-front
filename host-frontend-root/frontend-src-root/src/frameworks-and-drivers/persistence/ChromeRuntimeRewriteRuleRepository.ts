@@ -31,13 +31,14 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
 
       const rulesObject: Record<string, RewriteRule> = {};
 
-      response.rules?.forEach((ruleData: any) => {
+      response.rules?.forEach((ruleData) => {
         const rule = new RewriteRule(
           ruleData.id,
           ruleData.oldString,
           ruleData.newString,
           ruleData.urlPattern,
-          ruleData.isRegex
+          ruleData.isRegex,
+          ruleData.isActive
         );
 
         rulesObject[rule.id] = rule;
