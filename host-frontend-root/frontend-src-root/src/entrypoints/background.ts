@@ -1,3 +1,4 @@
+import { registerRewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { contextMenusOnClicked } from 'src/infrastructure/browser/background/contextMenus/onClicked';
 import { runtimeOnExtensionInstalled } from 'src/infrastructure/browser/background/runtime/onExtensionInstalled';
 import { runtimeOnMessageReceived } from 'src/infrastructure/browser/background/runtime/onMessageReceived';
@@ -8,6 +9,9 @@ export default defineBackground({
   type: 'module',
 
   main() {
+    // proxy-serviceの登録（ADR-002: messaging経由でDBアクセスを統一）
+    registerRewriteRuleMessagingService();
+
     // DI準備は container側で完了済み
     // 各イベントリスナーを登録（Composition Root）
     tabsOnUpdated();
