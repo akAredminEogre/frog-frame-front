@@ -361,13 +361,18 @@ docs/
 **注意**: このセクションはClaude Code Web（ブラウザ版）専用です。ターミナル版のClaude Codeでは `.claude/commands/` 内のスラッシュコマンドを使用してください。
 
 ### ブランチ作成（Claude Code Web用）
-Claude Code Webでは `gh` コマンドが使用できないため、専用のワークフローを使用します。
 
-**重要**: ブランチ作成を行う場合は、必ず以下のワークフローファイルの手順に従ってください：
-- `.clinerules/02-workflow-automation/01-issue-launches/workflow-ccw-create-branch.md`
+**重要**: Claude Code Webで新しいセッションを開始してブランチを作成する場合は、**必ず**以下のスラッシュコマンドを使用してください：
+
+```
+/workflow-ccw-create-branch
+```
+
+このスラッシュコマンドは `.claude/commands/workflow-ccw-create-branch.md` に定義されており、Claude Code Web専用のブランチ作成ワークフローを実行します。
 
 - **ブランチ命名規則**: `claude/issue-nnn-<branch-suffix>-<random5chars>`
   - Claude Code Webの制約により、ブランチ名は `claude/` で始める必要があります
+- `gh` コマンドが使用できないため、このワークフローでは代替手段を使用します
 
 ### PR作成（Claude Code Web用）
 ghコマンドが使用できないため、以下のURLフォーマットでPRを作成します：
