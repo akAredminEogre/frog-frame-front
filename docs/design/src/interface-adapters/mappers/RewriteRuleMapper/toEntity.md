@@ -7,26 +7,21 @@ RewriteRuleDTOからRewriteRuleエンティティへの変換を行う。
 
 ## テスト分類
 
-### 1. プロパティ変換（同値分割）
+### 1. プロパティ変換
 
-各プロパティが正しく変換されることを確認。
+全プロパティが正しく変換されることを確認。
 
 | 分類 | テストケース | 根拠 |
 |------|-------------|------|
-| 全プロパティ変換 | 6プロパティ全てが正しく変換される | 基本動作確認 |
-| isActive=true | isActive=trueのDTOを変換 | boolean値の変換確認 |
-| isActive=false | isActive=falseのDTOを変換 | boolean値の変換確認 |
-| isRegex=true | isRegex=trueのDTOを変換 | boolean値の変換確認 |
-| isRegex=false | isRegex=falseのDTOを変換 | boolean値の変換確認 |
+| 全プロパティ変換 | 6プロパティ全てが正しく変換される | Mapperの基本責務確認 |
 
 **対応テスト**: `normal-cases.test.ts`
 
 ## 網羅性チェック
 
 - [x] 全プロパティの変換（6プロパティ）
-- [x] isActive true/false の両パターン
-- [x] isRegex true/false の両パターン
 - [x] 戻り値がRewriteRuleインスタンスであること
+- [ ] boolean値の個別パターン → 不要（プロパティ変換で網羅）
 - [ ] 異常系（null/undefinedプロパティ） → 不要（RewriteRuleDTOインターフェースで型制約）
 - [ ] 境界値 → 不要（文字列・数値の境界はMapper責務外）
 
@@ -34,5 +29,5 @@ RewriteRuleDTOからRewriteRuleエンティティへの変換を行う。
 
 ```
 tests/unit/interface-adapters/mappers/RewriteRuleMapper/toEntity/
-└── normal-cases.test.ts       # プロパティ変換（5ケース、配列ベース）
+└── normal-cases.test.ts       # プロパティ変換（1ケース）
 ```
