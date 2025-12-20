@@ -30,7 +30,7 @@ interface BackgroundMessagingProtocol {
    * @param data tabId と tabUrl を含むオブジェクト
    * @returns 成功レスポンス、またはエラーレスポンス
    */
-  applyAllRules: (data: ApplyAllRulesRequest) => ApplyAllRulesResponse;
+  applyAllRules: (data: ApplyAllRulesRequest) => Promise<ApplyAllRulesResponse>;
 }
 
 /**
