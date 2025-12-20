@@ -33,8 +33,8 @@ init-dev:
 
 init-hooks:
 	@echo "Installing Git hooks with Lefthook..."
-	@docker compose exec frontend npx lefthook install
+	@cd host-frontend-root/frontend-src-root && npx lefthook install
 	@echo "Git hooks installed successfully!"
 	@echo ""
 	@echo "The following hooks are now active:"
-	@echo "  - pre-commit: Runs npm run sort:imports and lint on staged files"
+	@echo "  - pre-commit: Runs sortimports and lint on staged files"
