@@ -391,6 +391,20 @@ ghコマンドが使用できないため、以下のURLフォーマットでPR�
 https://github.com/akAredminEogre/frog-frame-front/compare/develop...<ブランチ名>?expand=1
 ```
 
+### PRマージ（Claude Code Web用）
+
+PRをマージする際は以下のスラッシュコマンドを使用します：
+
+```
+/workflow-ccw-merge-pull-request
+```
+
+このワークフローは以下を行います：
+- **自動実行**: ドキュメントテンプレート削除、残ファイルコミット、ディレクトリ移動、変更のプッシュ
+- **手動操作が必要**: PRのマージ（ブラウザからGitHub UIで実行）
+
+ghコマンドが使用できないため、PRのマージはブラウザから手動で行う必要があります。
+
 ## Troubleshooting
 
 ### `.wxt/tsconfig.json` Not Found
