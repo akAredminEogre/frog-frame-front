@@ -50,13 +50,6 @@ https://github.com/akAredminEogre/frog-frame-front/pulls
 マージが完了したら、このチャットに「マージ完了」と入力してください。
 ```
 
-### 4. マージ後作業（マージ完了報告後に実行）
-
-ユーザーから「マージ完了」の報告を受けたら、以下を実行：
-
-- git checkout develop
-- git pull origin develop
-
 ### 完了時の表示
 
 ```
