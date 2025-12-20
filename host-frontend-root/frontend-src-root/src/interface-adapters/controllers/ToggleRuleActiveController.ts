@@ -2,7 +2,7 @@ import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/in
 import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/IToggleRuleActiveUseCase';
 
 /**
- * ルールの有効/無効切り替えのController（スケルトン実装）
+ * ルールの有効/無効切り替えのController
  */
 export class ToggleRuleActiveController {
   constructor(
@@ -15,6 +15,6 @@ export class ToggleRuleActiveController {
    */
   async toggleActive(ruleId: number): Promise<void> {
     const inputData = new ToggleRuleActiveInputData(ruleId);
-    throw new Error(`Not implemented: toggleActive(${ruleId}) with useCase=${this.useCase.constructor.name}, inputData.ruleId=${inputData.ruleId}`);
+    await this.useCase.execute(inputData);
   }
 }
