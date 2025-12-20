@@ -1,5 +1,3 @@
-import { defineProxyService } from '@webext-core/proxy-service';
-
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { GetByIdRequestDTO } from 'src/frameworks-and-drivers/messaging/dto/request-dto/GetByIdRequestDTO';
@@ -35,6 +33,15 @@ export function setRewriteRuleRepositoryFactory(factory: RepositoryFactory): voi
 export function resetRewriteRuleRepositoryFactory(): void {
   repositoryFactory = () => new DexieRewriteRuleRepository();
 }
+
+/**
+ * 遅延初期化用のプロキシサービス参照
+ * defineProxyServiceはモジュールロード時ではなく、registerRewriteRuleMessagingService呼び出し時に実行
+ */
+let proxyServiceInstance: {
+  register: () => void;
+  get: () => RewriteRuleMessagingService;
+} | null = null;
 
 /**
  * @webext-core/proxy-serviceを使用したRewriteRuleメッセージングサービス
@@ -86,12 +93,40 @@ export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
 }
 
 /**
- * proxy-serviceとしてのRewriteRuleMessagingServiceの定義
- * registerRewriteRuleMessagingService: Background Scriptで呼び出してサービスを登録
- * getRewriteRuleMessagingService: 他のコンテキストからサービスを取得
+ * プロキシサービスを遅延初期化する
+ * defineProxyServiceはブラウザAPIに依存するため、モジュールロード時ではなく
+ * 実際に必要になった時点で初期化する
  */
-export const [registerRewriteRuleMessagingService, getRewriteRuleMessagingService] =
-  defineProxyService('RewriteRuleMessagingService', () => {
+function initializeProxyService(): void {
+  if (proxyServiceInstance !== null) {
+    return;
+  }
+
+  // 動的インポートを避けるため、require-likeパターンで遅延実行
+  const { defineProxyService } = require('@webext-core/proxy-service');
+
+  const [register, get] = defineProxyService('RewriteRuleMessagingService', () => {
     const repository = repositoryFactory();
     return new RewriteRuleMessagingService(repository);
   });
+
+  proxyServiceInstance = { register, get };
+}
+
+/**
+ * Background Scriptでサービスを登録する
+ * この関数を呼び出すとプロキシサービスが初期化され、メッセージリスナーが登録される
+ */
+export function registerRewriteRuleMessagingService(): void {
+  initializeProxyService();
+  proxyServiceInstance!.register();
+}
+
+/**
+ * 他のコンテキスト（Rules Page等）からサービスを取得する
+ * @returns RewriteRuleMessagingServiceのプロキシ
+ */
+export function getRewriteRuleMessagingService(): RewriteRuleMessagingService {
+  initializeProxyService();
+  return proxyServiceInstance!.get();
+}
