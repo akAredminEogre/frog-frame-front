@@ -67,7 +67,8 @@ const saveRewriteRuleAndApplyToCurrentTabUseCase = new SaveRewriteRuleAndApplyTo
 const popupInitFormUseCase = new PopupInitFormUseCase(currentTabService, selectedPageTextRepository);
 
 // Toggle Rule Active feature (skeleton instances)
-const toggleRuleActivePresenter = new ToggleRuleActivePresenter();
+// NOTE: Presenterはファクトリーで動的に生成する設計だが、スケルトン段階ではダミーコールバックで登録
+const toggleRuleActivePresenter = new ToggleRuleActivePresenter(() => {});
 const toggleRuleActiveInteractor = new ToggleRuleActiveInteractor(toggleRuleActivePresenter);
 const toggleRuleActiveController = new ToggleRuleActiveController(toggleRuleActiveInteractor);
 const rewriteRuleMapper = new RewriteRuleMapper();
