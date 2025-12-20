@@ -9,6 +9,34 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/index
 import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
 /**
+ * リポジトリファクトリの型定義
+ * テスト時にモックリポジトリを注入可能にするためのファクトリパターン
+ */
+type RepositoryFactory = () => IRewriteRuleRepository;
+
+/**
+ * デフォルトのリポジトリファクトリ（本番用）
+ * DexieRewriteRuleRepositoryを生成する
+ */
+let repositoryFactory: RepositoryFactory = () => new DexieRewriteRuleRepository();
+
+/**
+ * テスト用にリポジトリファクトリを設定する
+ * @param factory モックリポジトリを返すファクトリ関数
+ */
+export function setRewriteRuleRepositoryFactory(factory: RepositoryFactory): void {
+  repositoryFactory = factory;
+}
+
+/**
+ * リポジトリファクトリをデフォルト（本番用）にリセットする
+ * テスト後のクリーンアップ用
+ */
+export function resetRewriteRuleRepositoryFactory(): void {
+  repositoryFactory = () => new DexieRewriteRuleRepository();
+}
+
+/**
  * @webext-core/proxy-serviceを使用したRewriteRuleメッセージングサービス
  * Background Scriptで実行され、他のコンテキスト（Rules Page等）からのDB操作を仲介
  * ADR-002, ADR-003に従い、DTOを使用してメッセージング通信を行う
@@ -64,6 +92,6 @@ export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
  */
 export const [registerRewriteRuleMessagingService, getRewriteRuleMessagingService] =
   defineProxyService('RewriteRuleMessagingService', () => {
-    const repository = new DexieRewriteRuleRepository();
+    const repository = repositoryFactory();
     return new RewriteRuleMessagingService(repository);
   });

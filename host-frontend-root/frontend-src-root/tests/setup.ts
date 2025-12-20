@@ -2,7 +2,7 @@
  * Vitest グローバルセットアップファイル
  * テスト実行前にブラウザAPIのモックを設定
  */
-import { beforeAll,vi } from 'vitest';
+import { beforeAll, vi } from 'vitest';
 
 /**
  * @webext-core/proxy-service で使用される browser.runtime.getManifest をモック
