@@ -1,5 +1,7 @@
 import { defineExtensionMessaging } from '@webext-core/messaging';
 
+import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
+
 /**
  * Background Script用メッセージングプロトコル定義
  * @webext-core/messagingを使用した型安全なメッセージング
@@ -11,7 +13,10 @@ import { defineExtensionMessaging } from '@webext-core/messaging';
 /**
  * メッセージプロトコルの型定義
  * key: メッセージタイプ
- * value: [引数の型, 戻り値の型]
+ * value: (引数の型) => 戻り値の型
+ *
+ * 注意: @webext-core/messagingは内部でPromiseを処理するため、
+ * プロトコル定義では同期的な戻り値型を使用
  */
 interface BackgroundMessagingProtocol {
   /**
@@ -33,7 +38,7 @@ interface BackgroundMessagingProtocol {
  */
 export interface GetAllRulesResponse {
   success: boolean;
-  rules?: any[];
+  rules?: RewriteRuleDTO[];
   error?: string;
 }
 
@@ -50,7 +55,7 @@ export interface ApplyAllRulesRequest {
  */
 export interface ApplyAllRulesResponse {
   success: boolean;
-  response?: any;
+  response?: unknown;
   error?: string;
 }
 

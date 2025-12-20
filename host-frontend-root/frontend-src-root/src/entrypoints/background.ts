@@ -1,7 +1,7 @@
 import { registerRewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { contextMenusOnClicked } from 'src/infrastructure/browser/background/contextMenus/onClicked';
-import { registerBackgroundMessageHandlers } from 'src/infrastructure/browser/background/runtime/registerBackgroundMessageHandlers';
 import { runtimeOnExtensionInstalled } from 'src/infrastructure/browser/background/runtime/onExtensionInstalled';
+import { registerBackgroundMessageHandlers } from 'src/infrastructure/browser/background/runtime/registerBackgroundMessageHandlers';
 import { tabsOnUpdated } from 'src/infrastructure/browser/background/tabs/onUpdated';
 
 export default defineBackground({
