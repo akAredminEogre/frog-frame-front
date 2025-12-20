@@ -3,6 +3,7 @@
  * 1. ruleId=1 でUseCaseが呼び出される
  * 2. 大きなruleId でUseCaseが呼び出される
  */
+import { createMockToggleRuleActiveUseCase } from 'tests/unit/interface-adapters/controllers/ToggleRuleActiveController/mocks/createMockToggleRuleActiveUseCase';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/ToggleRuleActiveInputData';
@@ -14,9 +15,7 @@ describe('ToggleRuleActiveController.toggleActive - 正常系', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseCase = {
-      execute: vi.fn().mockResolvedValue(undefined),
-    };
+    mockUseCase = createMockToggleRuleActiveUseCase();
   });
 
   const testCases = [
