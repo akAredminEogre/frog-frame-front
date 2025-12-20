@@ -281,7 +281,7 @@ These 9 rules are strictly enforced:
 
 **CRITICAL**: Before writing any test code, create a test strategy document following `docs/docs-rules/design/05-test-strategy.md`.
 
-- **Location**: `docs/design/layers/[layer]/[category]/[ClassName]/[methodName].md` (mirrors src/ structure)
+- **Location**: `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md` (mirrors src/ structure)
 - **Required sections**: 目的、テスト分類、網羅性チェック、テストファイル構成
 - **Workflow**: テスト戦略書作成 → テストコード実装
 

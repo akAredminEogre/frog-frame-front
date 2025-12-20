@@ -14,7 +14,7 @@
 テスト戦略書は **ソースコードのディレクトリ構造をミラーリング** して配置する（Clean Architecture準拠）。
 
 ```
-docs/design/layers/
+docs/design/src/
 └── [layer]/
     └── [category]/
         └── [ClassName]/
@@ -25,14 +25,14 @@ docs/design/layers/
 
 | ソースコード | テスト戦略書 |
 |-------------|-------------|
-| `src/enterprise-business-rules/entities/RewriteRule/` | `docs/design/layers/enterprise-business-rules/entities/RewriteRule/` |
-| `src/interface-adapters/mappers/RewriteRuleMapper.ts` | `docs/design/layers/interface-adapters/mappers/RewriteRuleMapper/` |
-| `src/frameworks-and-drivers/browser/Tabs.ts` | `docs/design/layers/frameworks-and-drivers/browser/Tabs/` |
+| `src/enterprise-business-rules/entities/RewriteRule/` | `docs/design/src/enterprise-business-rules/entities/RewriteRule/` |
+| `src/interface-adapters/mappers/RewriteRuleMapper.ts` | `docs/design/src/interface-adapters/mappers/RewriteRuleMapper/` |
+| `src/frameworks-and-drivers/browser/Tabs.ts` | `docs/design/src/frameworks-and-drivers/browser/Tabs/` |
 
 ### ディレクトリ構造
 
 ```
-docs/design/layers/
+docs/design/src/
 ├── enterprise-business-rules/
 │   └── entities/
 │       └── RewriteRule/
