@@ -47,9 +47,9 @@ export function registerBackgroundMessageHandlers() {
   });
 
   // applyAllRulesハンドラー
-  onMessage('applyAllRules', async (data) => {
+  onMessage('applyAllRules', async (message) => {
     try {
-      const { tabId, tabUrl } = data;
+      const { tabId, tabUrl } = message.data;
 
       // Infrastructure層のサービスを使用してcontent scriptにメッセージを転送
       const chromeTabsService = container.resolve(ChromeTabsService);
