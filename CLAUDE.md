@@ -277,6 +277,14 @@ These 9 rules are strictly enforced:
 
 ## Testing Requirements
 
+### Test Strategy Document (Required)
+
+**CRITICAL**: Before writing any test code, create a test strategy document following `docs/docs-rules/design/05-test-strategy.md`.
+
+- **Location**: `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md` (mirrors src/ structure)
+- **Required sections**: 目的、テスト分類、網羅性チェック、テストファイル構成
+- **Workflow**: テスト戦略書作成 → テストコード実装
+
 ### Test Structure
 - **Location**: Tests mirror `src/` directory structure in `tests/`
 - **Granularity**: One test file per method minimum (split further if needed)
