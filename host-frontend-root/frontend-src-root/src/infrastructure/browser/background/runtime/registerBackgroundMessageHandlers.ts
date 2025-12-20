@@ -4,6 +4,7 @@ import { Tab } from 'src/domain/value-objects/Tab';
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { backgroundMessaging } from 'src/frameworks-and-drivers/messaging/backgroundMessaging';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
+import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
 /**
  * unknownエラーから安全にメッセージを抽出する
@@ -36,9 +37,13 @@ export function registerBackgroundMessageHandlers() {
       const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
       const rules = await getAllRulesUseCase.execute();
 
+      // エンティティをDTOに変換
+      const mapper = new RewriteRuleMapper();
+      const ruleDtos = rules.map((rule) => mapper.toDto(rule));
+
       return {
         success: true,
-        rules: rules,
+        rules: ruleDtos,
       };
     } catch (error: unknown) {
       console.error('[background] getAllRules error:', error);
