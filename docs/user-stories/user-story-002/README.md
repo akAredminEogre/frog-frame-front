@@ -114,6 +114,50 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+### ディレクトリ構成
+
+```
+src/
+├── interface-adapters/
+│   ├── ports/
+│   │   └── IRewriteRuleMessagingPort.ts      # MessagingService の抽象化
+│   └── mappers/
+│       └── RewriteRuleMapper.ts              # Entity ↔ DTO 変換
+│
+├── frameworks-and-drivers/
+│   ├── messaging/
+│   │   ├── RewriteRuleMessagingService.ts    # proxy-service 実装
+│   │   ├── protocol.ts                       # messaging プロトコル定義（新規）
+│   │   └── dto/
+│   │       ├── RewriteRuleDTO.ts
+│   │       └── request-dto/
+│   │           ├── GetByIdRequestDTO.ts
+│   │           └── UpdateRuleActiveRequestDTO.ts
+│   ├── persistence/
+│   │   └── ChromeRuntimeRewriteRuleRepository.ts  # Mapper 経由に変更
+│   └── entrypoints/
+│       ├── background.ts                     # proxy-service 登録
+│       └── content.ts                        # messaging.onMessage 登録
+│
+└── infrastructure/
+    └── browser/
+        ├── tabs/
+        │   └── ChromeTabsService.ts          # messaging 使用に変更
+        ├── background/
+        │   ├── tabs/
+        │   │   └── onUpdated.ts              # messaging 経由に変更
+        │   └── runtime/
+        │       └── onMessageReceived.ts      # 削除対象
+        ├── handlers/
+        │   └── background/
+        │       ├── getAllRewriteRulesHandler.ts  # 削除対象
+        │       └── applyAllRulesHandler.ts       # 削除対象
+        └── router/
+            └── background/
+                ├── messageRouter.ts          # 削除対象
+                └── messageHandlers.ts        # 削除対象
+```
+
 ## 開発戦略
 
 ### 方針: フロー単位で段階移行
