@@ -1,5 +1,4 @@
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-
 import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/ToggleRuleActiveInputData';
 import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveOutputData';
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
