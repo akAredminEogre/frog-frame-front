@@ -22,9 +22,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   ariaLabel
 }) => {
   const handleClick = () => {
-    if (!disabled) {
-      onChange(!checked);
-    }
+    onChange(!checked);
   };
 
   return (
