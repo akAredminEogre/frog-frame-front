@@ -1,4 +1,4 @@
-@import 'src/components/tokens.module.css';
+@import '../../../../../components/tokens.module.css';
 
 .toggleContainer {
   display: inline-flex;
@@ -39,7 +39,7 @@
 }
 
 .toggle:hover:not(:disabled) {
-  background-color: var(--color-secondary);
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .toggle[aria-checked='true']:hover:not(:disabled) {
