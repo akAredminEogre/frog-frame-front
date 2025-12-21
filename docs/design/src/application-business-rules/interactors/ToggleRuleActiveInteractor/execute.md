@@ -67,3 +67,42 @@ Interactorは正常フローの調整のみを担当し、エラーハンドリ�
 tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/
 └── normal-cases.test.ts       # 状態変更確認（配列ベース、2ケース）
 ```
+
+## モック戦略
+
+Interactorの3つの依存関係をモック化してテストする。
+
+### モック対象
+
+| 依存関係 | モック方法 | 理由 |
+|---------|-----------|------|
+| IRewriteRuleRepository | vi.fn()でメソッドをモック | DB/メッセージング層を分離 |
+| ITabsGateway | vi.fn()でメソッドをモック | Chrome API層を分離 |
+| IToggleRuleActivePresenter | vi.fn()でメソッドをモック | View層を分離 |
+
+### モック生成関数
+
+テストファイル内でインライン定義。
+Interactor固有のモックであり、他で再利用する見込みがないため外部ファイル化しない。
+
+```typescript
+const createMockRepository = (): IRewriteRuleRepository => ({
+  create: vi.fn(),
+  update: vi.fn().mockResolvedValue(undefined),
+  getAll: vi.fn(),
+  getById: vi.fn(),
+  getRulesMatchingUrl: vi.fn(),
+});
+
+const createMockTabsGateway = (): ITabsGateway => ({
+  reloadMatchingTabs: vi.fn().mockResolvedValue(undefined),
+});
+
+const createMockPresenter = (): IToggleRuleActivePresenter => ({
+  present: vi.fn(),
+});
+```
+
+### テストデータ
+
+RewriteRuleエンティティは実インスタンスを使用（withActiveの動作確認のため）。
