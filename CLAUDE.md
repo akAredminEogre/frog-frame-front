@@ -369,6 +369,15 @@ docs/
 
 **注意**: このセクションはClaude Code Web（ブラウザ版）専用です。ターミナル版のClaude Codeでは `.claude/commands/` 内のスラッシュコマンドを使用してください。
 
+### テスト実行ルール（Claude Code Web用）
+
+**重要**: Claude Code Web環境では、**E2Eテストは手動で実行せず、CIに任せてください**。
+
+- **実行するもの**: `make unit` または `make check`（ユニットテスト、コンパイル、lint等）
+- **実行しないもの**: `make e2e`、`make testall`、`make testlint`（E2Eテストを含むコマンド）
+
+E2Eテスト（Playwright）はブラウザ環境での実行が制限されるため、PRマージ時のCIで検証されます。
+
 ### セッション開始時（Claude Code Web用）
 
 **重要**: Claude Code Webで新しいセッションを開始する場合は、**ブランチが既に指定されていても**、以下のスラッシュコマンドでIssue管理のセットアップを行ってください：

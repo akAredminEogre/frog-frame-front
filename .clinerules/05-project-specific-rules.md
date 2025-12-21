@@ -36,6 +36,14 @@
 
 **IMPORTANT: attempt_completionツールを使用する前に、必ず以下のプロジェクト固有チェックを実行すること。**
 
+#### Claude Code Web環境の場合
+E2Eテストはブラウザ環境での実行が制限されるため、以下のコマンドを使用してください（E2Eテストを除いたチェック）：
+```bash
+make unit && make check
+```
+E2EテストはPRマージ時のCIで検証されます。
+
+#### 通常環境（ターミナル版Claude Code）の場合
 1. **未使用コードチェックの実行**
    ```bash
    (cd で絶対パスでfrog-frame-frontに移動) && \
