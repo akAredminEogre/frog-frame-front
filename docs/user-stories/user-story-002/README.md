@@ -147,19 +147,9 @@ src/
     └── browser/
         ├── tabs/
         │   └── ChromeTabsService.ts          # messaging 使用に変更
-        ├── background/
-        │   ├── tabs/
-        │   │   └── onUpdated.ts              # messaging 経由に変更
-        │   └── runtime/
-        │       └── onMessageReceived.ts      # 削除対象
-        ├── handlers/
-        │   └── background/
-        │       ├── getAllRewriteRulesHandler.ts  # 削除対象
-        │       └── applyAllRulesHandler.ts       # 削除対象
-        └── router/
-            └── background/
-                ├── messageRouter.ts          # 削除対象
-                └── messageHandlers.ts        # 削除対象
+        └── background/
+            └── tabs/
+                └── onUpdated.ts              # messaging 経由に変更
 ```
 
 ## 開発戦略
