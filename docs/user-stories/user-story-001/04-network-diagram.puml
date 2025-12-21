@@ -10,9 +10,9 @@ rectangle "3B-1\nDTO実装\n[完了]" as dto #green
 rectangle "3B-2\nITabsGateway\n実装\n[完了]" as tabsGateway #green
 rectangle "3B-3\nToggleRuleActive\nInteractor実装\n[実装済・テスト未]" as interactor #yellow
 
-rectangle "3C-1\nRewriteRuleMapper\n実装\n[実装済・テスト未]" as mapper #yellow
-rectangle "3C-2\nToggleRuleActive\nController実装\n[実装済・テスト未]" as controller #yellow
-rectangle "3C-3\nToggleRuleActive\nPresenter実装\n[実装済・テスト未]" as presenter #yellow
+rectangle "3C-1\nRewriteRuleMapper\n実装\n[完了・テスト済]" as mapper #green
+rectangle "3C-2\nToggleRuleActive\nController実装\n[完了・テスト済]" as controller #green
+rectangle "3C-3\nToggleRuleActive\nPresenter実装\n[完了・テスト済]" as presenter #green
 
 rectangle "3D-1\nメッセージング\n関連DTO実装\n[完了]" as msgDto #green
 rectangle "3D-2\nChromeTabsGateway\n実装\n[完了・developマージ]" as chromeTabs #green
@@ -26,8 +26,8 @@ rectangle "4-3\nRulesApp.tsx\n統合\n[未完了]" as appIntegration #lightcoral
 
 ' 新規追加: テストタスク
 rectangle "TEST-1\nInteractor\nテスト実装\n[未実装]" as testInteractor #lightblue
-rectangle "TEST-2\nController/Presenter\nテスト実装\n[未実装]" as testControllerPresenter #lightblue
-rectangle "TEST-3\nMapper/Gateway\nテスト実装\n[未実装]" as testMapperGateway #lightblue
+rectangle "TEST-2\nController/Presenter\nテスト実装\n[完了]" as testControllerPresenter #lightgreen
+rectangle "TEST-3\nMapper/Gateway\nテスト実装\n[Mapper完了]" as testMapperGateway #lightgreen
 rectangle "TEST-4\nUI/Messaging\nテスト実装\n[未実装]" as testUIMessaging #lightblue
 
 ' 依存関係（矢印）
@@ -87,8 +87,9 @@ note bottom
 mapper/messaging → repoFix → appIntegration
 
 **最新状況 (2024-12-20):**
-- ✅ developマージ完了
+- ✅ developマージ完了（3回目）
 - ✅ ChromeTabsGateway実装完了（developから取り込み）
+- ✅ ToggleRuleActivePresenterテスト実装完了\n- ✅ Controller/Presenterテスト完了
 - 🎯 残り: Phase 4統合（2タスク）
 
 **次のステップ:**
@@ -97,9 +98,10 @@ mapper/messaging → repoFix → appIntegration
 3. テスト実装（並行実行可能）
 
 **進捗状況:**
-- ✅ 完了: 基本実装、DTO、DI設定、ChromeTabsGateway
-- 🔄 実装済み: ビジネスロジック（テスト未）
+- ✅ 完了: 基本実装、DTO、DI設定、Mapper/Controller/Presenterテスト
+- 🔄 実装済み: 一部ビジネスロジック（テスト未）
 - 🎯 集中: Repository改修、UI統合
+- 📝 テスト必要: Interactor、Messaging、UI
 end note
 
 @enduml

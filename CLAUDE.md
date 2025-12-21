@@ -58,6 +58,7 @@ All commands should be run from the repository root unless otherwise specified.
 ```bash
 make init-config    # Apply Git configuration
 make init-dev       # Build containers, install dependencies, generate .wxt/tsconfig.json, and start dev server
+make init-hooks     # Install Git hooks (pre-commit: ESLint with import sorting)
 ```
 
 ### Development (After Initial Setup)
@@ -102,6 +103,8 @@ docker compose exec frontend npm run knip:all           # Check for unused expor
 make testlint
 ```
 This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
+
+**Note**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
 
 ### Git Worktree (Parallel Development)
 For working on multiple branches simultaneously:
@@ -368,6 +371,15 @@ docs/
 
 **注意**: このセクションはClaude Code Web（ブラウザ版）専用です。ターミナル版のClaude Codeでは `.claude/commands/` 内のスラッシュコマンドを使用してください。
 
+### テスト実行ルール（Claude Code Web用）
+
+**重要**: Claude Code Web環境では、**テストは手動で実行せず、CIに任せてください**。
+
+- **実行しないもの**: `make unit`、`make e2e`、`make testall`、`make testlint`、`make check` 等のmakeコマンド
+  - これらのコマンドはDocker内部で実行されるため、Claude Code Web環境では使用できません
+
+テスト（ユニットテスト、E2Eテスト、lint等）はPRマージ時のCIで検証されます。
+
 ### セッション開始時（Claude Code Web用）
 
 **重要**: Claude Code Webで新しいセッションを開始する場合は、**ブランチが既に指定されていても**、以下のスラッシュコマンドでIssue管理のセットアップを行ってください：
@@ -390,6 +402,20 @@ ghコマンドが使用できないため、以下のURLフォーマットでPR�
 ```
 https://github.com/akAredminEogre/frog-frame-front/compare/develop...<ブランチ名>?expand=1
 ```
+
+### PRマージ（Claude Code Web用）
+
+PRをマージする際は以下のスラッシュコマンドを使用します：
+
+```
+/workflow-ccw-merge-pull-request
+```
+
+このワークフローは以下を行います：
+- **自動実行**: ドキュメントテンプレート削除、残ファイルコミット、ディレクトリ移動、変更のプッシュ
+- **手動操作が必要**: PRのマージ（ブラウザからGitHub UIで実行）
+
+ghコマンドが使用できないため、PRのマージはブラウザから手動で行う必要があります。
 
 ## Troubleshooting
 

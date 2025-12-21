@@ -66,12 +66,17 @@ const saveRewriteRuleAndApplyToCurrentTabUseCase = new SaveRewriteRuleAndApplyTo
 );
 const popupInitFormUseCase = new PopupInitFormUseCase(currentTabService, selectedPageTextRepository);
 
-// Toggle Rule Active feature (skeleton instances)
-const toggleRuleActivePresenter = new ToggleRuleActivePresenter();
-const toggleRuleActiveInteractor = new ToggleRuleActiveInteractor(toggleRuleActivePresenter);
+// Toggle Rule Active feature
+// NOTE: Presenterはファクトリーで動的に生成する設計だが、現段階ではダミーコールバックで登録
+const chromeTabsGateway = new ChromeTabsGateway();
+const toggleRuleActivePresenter = new ToggleRuleActivePresenter(() => {});
+const toggleRuleActiveInteractor = new ToggleRuleActiveInteractor(
+  rewriteRuleRepository,
+  chromeTabsGateway,
+  toggleRuleActivePresenter
+);
 const toggleRuleActiveController = new ToggleRuleActiveController(toggleRuleActiveInteractor);
 const rewriteRuleMapper = new RewriteRuleMapper();
-const chromeTabsGateway = new ChromeTabsGateway();
 const rewriteRuleMessagingService = new RewriteRuleMessagingService();
 
 // Register all instances with asValue (no automatic injection needed)
