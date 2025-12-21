@@ -5,20 +5,12 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 // モックホルダー
 const mockHolder = vi.hoisted(() => {
   return {
-    onMessage: vi.fn(),
     resolve: vi.fn(),
     execute: vi.fn(),
     sendApplyAllRulesMessage: vi.fn(),
     toDto: vi.fn(),
   };
 });
-
-// backgroundMessagingをモック
-vi.mock('src/frameworks-and-drivers/messaging/backgroundMessaging', () => ({
-  backgroundMessaging: {
-    onMessage: mockHolder.onMessage,
-  },
-}));
 
 // containerをモック
 vi.mock('src/frameworks-and-drivers/di/container', () => ({
@@ -66,41 +58,38 @@ import { registerBackgroundMessageHandlers } from 'src/infrastructure/browser/ba
  * registerBackgroundMessageHandlers - 正常系テスト
  *
  * この関数の責務:
- * 1. getAllRulesハンドラーを登録
- * 2. applyAllRulesハンドラーを登録
+ * 1. chrome.runtime.onMessage.addListenerを使用してメッセージリスナーを登録
+ * 2. getAllRulesメッセージを処理してルール一覧を返す
+ * 3. applyAllRulesメッセージを処理してコンテンツスクリプトにメッセージを転送
  */
 describe('registerBackgroundMessageHandlers - 正常系', () => {
+  let capturedListener: (
+    message: { type: string; tabId?: number; tabUrl?: string },
+    sender: chrome.runtime.MessageSender,
+    sendResponse: (response: unknown) => void
+  ) => boolean;
+
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // addListenerに渡されるコールバックをキャプチャ
+    mockAddListener.mockImplementation((listener) => {
+      capturedListener = listener;
+    });
   });
 
   afterEach(() => {
     vi.resetAllMocks();
   });
 
-  describe('ハンドラー登録', () => {
-    it('should register getAllRules handler', () => {
+  describe('リスナー登録', () => {
+    it('should register chrome.runtime.onMessage listener', () => {
       // Act
       registerBackgroundMessageHandlers();
 
       // Assert
-      expect(mockHolder.onMessage).toHaveBeenCalledWith('getAllRules', expect.any(Function));
-    });
-
-    it('should register applyAllRules handler', () => {
-      // Act
-      registerBackgroundMessageHandlers();
-
-      // Assert
-      expect(mockHolder.onMessage).toHaveBeenCalledWith('applyAllRules', expect.any(Function));
-    });
-
-    it('should register exactly two handlers', () => {
-      // Act
-      registerBackgroundMessageHandlers();
-
-      // Assert
-      expect(mockHolder.onMessage).toHaveBeenCalledTimes(2);
+      expect(mockAddListener).toHaveBeenCalledTimes(1);
+      expect(mockAddListener).toHaveBeenCalledWith(expect.any(Function));
     });
   });
 
@@ -123,20 +112,18 @@ describe('registerBackgroundMessageHandlers - 正常系', () => {
         return expectedDtos.find((dto) => dto.id === rule.id);
       });
 
-      let capturedHandler: (() => Promise<unknown>) | null = null;
-      mockHolder.onMessage.mockImplementation((type: string, handler: () => Promise<unknown>) => {
-        if (type === 'getAllRules') {
-          capturedHandler = handler;
-        }
-      });
-
       registerBackgroundMessageHandlers();
 
       // Act
-      const result = await capturedHandler!();
+      const sendResponse = vi.fn();
+      const result = capturedListener({ type: 'getAllRules' }, {} as chrome.runtime.MessageSender, sendResponse);
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
-      expect(result).toEqual({
+      expect(result).toBe(true); // 非同期レスポンスを示す
+      expect(sendResponse).toHaveBeenCalledWith({
         success: true,
         rules: expectedDtos,
       });
@@ -146,20 +133,18 @@ describe('registerBackgroundMessageHandlers - 正常系', () => {
       // Arrange
       mockHolder.execute.mockResolvedValue([]);
 
-      let capturedHandler: (() => Promise<unknown>) | null = null;
-      mockHolder.onMessage.mockImplementation((type: string, handler: () => Promise<unknown>) => {
-        if (type === 'getAllRules') {
-          capturedHandler = handler;
-        }
-      });
-
       registerBackgroundMessageHandlers();
 
       // Act
-      const result = await capturedHandler!();
+      const sendResponse = vi.fn();
+      const result = capturedListener({ type: 'getAllRules' }, {} as chrome.runtime.MessageSender, sendResponse);
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
-      expect(result).toEqual({
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
         success: true,
         rules: [],
       });
@@ -175,23 +160,40 @@ describe('registerBackgroundMessageHandlers - 正常系', () => {
         sendApplyAllRulesMessage: mockHolder.sendApplyAllRulesMessage,
       });
 
-      let capturedHandler: ((message: { data: { tabId: number; tabUrl: string } }) => Promise<unknown>) | null = null;
-      mockHolder.onMessage.mockImplementation((type: string, handler: (message: { data: { tabId: number; tabUrl: string } }) => Promise<unknown>) => {
-        if (type === 'applyAllRules') {
-          capturedHandler = handler;
-        }
-      });
-
       registerBackgroundMessageHandlers();
 
       // Act
-      const result = await capturedHandler!({ data: { tabId: 123, tabUrl: 'https://example.com' } });
+      const sendResponse = vi.fn();
+      const result = capturedListener(
+        { type: 'applyAllRules', tabId: 123, tabUrl: 'https://example.com' },
+        {} as chrome.runtime.MessageSender,
+        sendResponse
+      );
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
-      expect(result).toEqual({
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
         success: true,
         response: mockResponse,
       });
+    });
+  });
+
+  describe('未知のメッセージタイプ', () => {
+    it('should return false for unknown message types', () => {
+      // Arrange
+      registerBackgroundMessageHandlers();
+
+      // Act
+      const sendResponse = vi.fn();
+      const result = capturedListener({ type: 'unknownType' }, {} as chrome.runtime.MessageSender, sendResponse);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(sendResponse).not.toHaveBeenCalled();
     });
   });
 });
