@@ -40,6 +40,16 @@ vi.mock('src/infrastructure/browser/tabs/ChromeTabsService', () => ({
   },
 }));
 
+// chrome.runtime.onMessage.addListenerをモック
+const mockAddListener = vi.fn();
+vi.stubGlobal('chrome', {
+  runtime: {
+    onMessage: {
+      addListener: mockAddListener,
+    },
+  },
+});
+
 import { registerBackgroundMessageHandlers } from 'src/infrastructure/browser/background/runtime/registerBackgroundMessageHandlers';
 
 /**

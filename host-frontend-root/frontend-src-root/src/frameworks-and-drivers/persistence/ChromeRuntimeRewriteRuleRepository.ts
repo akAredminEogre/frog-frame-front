@@ -2,7 +2,7 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-import { backgroundMessaging } from 'src/frameworks-and-drivers/messaging/backgroundMessaging';
+import { GetAllRulesResponse } from 'src/frameworks-and-drivers/messaging/backgroundMessaging';
 
 /**
  * Chrome Runtime Messaging を使用したRewriteRuleリポジトリの実装
@@ -10,7 +10,8 @@ import { backgroundMessaging } from 'src/frameworks-and-drivers/messaging/backgr
  * Clean Architectureのインフラストラクチャ層に配置
  * IRewriteRuleRepositoryインターフェースを実装
  *
- * @webext-core/messagingを使用した型安全なメッセージング（ADR-002準拠）
+ * 注意: Content Script → Background Script のメッセージングには
+ * chrome.runtime.sendMessage を直接使用（@webext-core/messaging との互換性問題を回避）
  */
 export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepository {
 
@@ -21,8 +22,8 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
    */
   async getAll(): Promise<RewriteRules> {
     try {
-      const { sendMessage } = backgroundMessaging;
-      const response = await sendMessage('getAllRules', undefined);
+      // chrome.runtime.sendMessageを直接使用（Content Script → Background Script）
+      const response = await chrome.runtime.sendMessage({ type: 'getAllRules' }) as GetAllRulesResponse;
 
       if (!response.success) {
         console.error('[ChromeRuntimeRewriteRuleRepository] Background script returned error:', response.error);

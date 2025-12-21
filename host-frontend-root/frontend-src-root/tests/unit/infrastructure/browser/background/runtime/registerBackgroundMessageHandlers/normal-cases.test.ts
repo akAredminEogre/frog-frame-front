@@ -9,6 +9,7 @@ const mockHolder = vi.hoisted(() => {
     resolve: vi.fn(),
     execute: vi.fn(),
     sendApplyAllRulesMessage: vi.fn(),
+    toDto: vi.fn(),
   };
 });
 
@@ -41,6 +42,23 @@ vi.mock('src/infrastructure/browser/tabs/ChromeTabsService', () => ({
     sendApplyAllRulesMessage = mockHolder.sendApplyAllRulesMessage;
   },
 }));
+
+// RewriteRuleMapperをモック
+vi.mock('src/interface-adapters/mappers/RewriteRuleMapper', () => ({
+  RewriteRuleMapper: class {
+    toDto = mockHolder.toDto;
+  },
+}));
+
+// chrome.runtime.onMessage.addListenerをモック
+const mockAddListener = vi.fn();
+vi.stubGlobal('chrome', {
+  runtime: {
+    onMessage: {
+      addListener: mockAddListener,
+    },
+  },
+});
 
 import { registerBackgroundMessageHandlers } from 'src/infrastructure/browser/background/runtime/registerBackgroundMessageHandlers';
 
@@ -94,7 +112,18 @@ describe('registerBackgroundMessageHandlers - 正常系', () => {
         new RewriteRule(2, 'old2', 'new2', 'https://test.com', true, false),
       ];
 
+      const expectedDtos = [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://test.com', isRegex: true, isActive: false },
+      ];
+
       mockHolder.execute.mockResolvedValue(mockRules);
+      // toDtoが呼ばれるたびに対応するDTOを返す
+      mockHolder.toDto.mockImplementation((rule: { id: number }) => {
+        return expectedDtos.find((dto) => dto.id === rule.id);
+      });
+      // container.resolveがRewriteRuleMapperインスタンスを返すようにモック
+      mockHolder.resolve.mockReturnValue({ toDto: mockHolder.toDto });
 
       let capturedHandler: (() => Promise<unknown>) | null = null;
       mockHolder.onMessage.mockImplementation((type: string, handler: () => Promise<unknown>) => {
@@ -111,10 +140,7 @@ describe('registerBackgroundMessageHandlers - 正常系', () => {
       // Assert
       expect(result).toEqual({
         success: true,
-        rules: [
-          { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
-          { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://test.com', isRegex: true, isActive: false },
-        ],
+        rules: expectedDtos,
       });
     });
 
