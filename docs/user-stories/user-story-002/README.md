@@ -186,11 +186,7 @@
 
 ## 受け入れ条件
 
-- [ ] すべてのメッセージング通信が @webext-core 経由になっている
-- [ ] 型安全性が確保されている（any 型の排除）
-- [ ] レガシーな messageRouter / handlers が削除されている
-- [ ] E2E テストがすべてパスする
-- [ ] make testlint がパスする
+[acceptance-criteria.md](./acceptance-criteria.md) を参照
 
 ## 関連ドキュメント
 
