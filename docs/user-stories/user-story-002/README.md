@@ -1,12 +1,21 @@
-# メッセージング移行設計: @webext-core への統一
+# User Story 002: メッセージングを @webext-core に移行
+
+## ストーリー
+
+> 既存のメッセージング実装を @webext-core エコシステムに統一し、型安全性と保守性を向上させる
 
 ## 概要
 
-現在の `chrome.runtime.sendMessage` / `chrome.tabs.sendMessage` を直接使用した実装を、`@webext-core` エコシステムに移行する。
+現在の `chrome.runtime.sendMessage` / `chrome.tabs.sendMessage` を直接使用した実装を、`@webext-core/proxy-service` と `@webext-core/messaging` に移行する。
 
-## 現状の問題
+## 設計ドキュメント
 
-### 車輪の再発明
+- [ADR-002: メッセージングに @webext-core を採用](../../adr/002-messaging-with-proxy-service.md)
+- [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../adr/003-unified-db-access-via-messaging.md)
+
+## 現状分析
+
+### 問題点: 車輪の再発明
 
 現在の実装は以下の問題を抱えている：
 
@@ -26,15 +35,22 @@
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
-│ Flow 2: applyAllRules (Popup → Background → Content Script)     │
+│ Flow 2: applyAllRules (Background → Content Script)             │
 ├─────────────────────────────────────────────────────────────────┤
-│ ChromeRuntimeService.sendApplyRewriteRuleMessage()              │
-│   → chrome.runtime.sendMessage({ type: 'applyAllRules', ... })  │
-│   → messageRouter → applyAllRulesHandler                        │
+│ onUpdated / applyAllRulesHandler                                │
 │   → ChromeTabsService.sendApplyAllRulesMessage()                │
 │   → chrome.tabs.sendMessage → Content Script                    │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+### 対象ファイル
+
+| 方向 | ファイル | 用途 |
+|------|---------|------|
+| Content → BG | `ChromeRuntimeRewriteRuleRepository.ts` | ルール取得 |
+| Popup → BG | `ChromeRuntimeService.ts` | ルール適用コマンド |
+| BG → Content | `applyAllRulesHandler.ts` | Popupからの適用リクエスト転送 |
+| BG → Content | `onUpdated.ts` | タブ読み込み時の自動適用 |
 
 ## 移行後の設計
 
@@ -98,7 +114,19 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 開発順序
+## 開発戦略
+
+### 方針: フロー単位で段階移行
+
+送信と受信は同時に移行する必要があるため、フロー単位で移行する。
+
+```
+❌ 受信だけ先に移行 → 送信側が旧方式のまま → 動作しない
+❌ 送信だけ先に移行 → 受信側が旧方式のまま → 動作しない
+✅ 1つのフローを送受信セットで移行
+```
+
+旧ハンドラーは最後まで残し、PR-3で一括削除する。
 
 ### PR-1: proxy-service 基盤 + Flow 1 移行
 
@@ -115,9 +143,9 @@
 | `IRewriteRuleMessagingPort.ts` | getAll メソッド追加 |
 
 **確認項目**:
-- Content Script がルールを取得できる
-- E2E テストが通る
-- 旧ハンドラー（getAllRules）は残す（Flow 2 がまだ旧方式のため）
+- [ ] Content Script がルールを取得できる
+- [ ] E2E テストが通る
+- [ ] 旧ハンドラー（getAllRules）は残す（Flow 2 がまだ旧方式のため）
 
 ### PR-2: messaging 基盤 + Flow 2 移行
 
@@ -134,9 +162,9 @@
 | `applyAllRulesHandler.ts` | messaging 経由に変更 |
 
 **確認項目**:
-- タブ読み込み時にルールが自動適用される
-- Popup からのルール適用が動作する
-- E2E テストが通る
+- [ ] タブ読み込み時にルールが自動適用される
+- [ ] Popup からのルール適用が動作する
+- [ ] E2E テストが通る
 
 ### PR-3: レガシーコード削除
 
@@ -153,24 +181,20 @@
 | `onMessageReceived.ts` | 全体削除（Background, Content 両方） |
 
 **確認項目**:
-- 全 E2E テストが通る
-- 未使用コードがないこと（knip チェック）
+- [ ] 全 E2E テストが通る
+- [ ] 未使用コードがないこと（knip チェック）
 
-## 注意事項
+## 受け入れ条件
 
-### 送信と受信は同時に移行
-
-```
-❌ 受信だけ先に移行 → 送信側が旧方式のまま → 動作しない
-❌ 送信だけ先に移行 → 受信側が旧方式のまま → 動作しない
-✅ 1つのフローを送受信セットで移行
-```
-
-### 旧ハンドラーは最後まで残す
-
-PR-1, PR-2 の間は両方のハンドラーが共存する。PR-3 で一括削除。
+- [ ] すべてのメッセージング通信が @webext-core 経由になっている
+- [ ] 型安全性が確保されている（any 型の排除）
+- [ ] レガシーな messageRouter / handlers が削除されている
+- [ ] E2E テストがすべてパスする
+- [ ] make testlint がパスする
 
 ## 関連ドキュメント
 
-- [ADR-002: メッセージングに @webext-core を採用](../../../../adr/002-messaging-with-proxy-service.md)
-- [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../adr/003-unified-db-access-via-messaging.md)
+- [ADR-001: Clean Architecture with Presenter Pattern](../../adr/001-clean-architecture-with-presenter-pattern.md)
+- [ADR-002: メッセージングに @webext-core を採用](../../adr/002-messaging-with-proxy-service.md)
+- [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../adr/003-unified-db-access-via-messaging.md)
+- [User Story 001: ルールトグル機能](../user-story-001/README.md) - 関連する RewriteRuleMessagingService のスケルトン実装
