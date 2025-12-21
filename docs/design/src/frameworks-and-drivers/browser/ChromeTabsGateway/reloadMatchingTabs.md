@@ -12,6 +12,7 @@ Chrome Tabs APIを使用してタブを取得し、`Tabs`クラスでフィル�
 > **参照**: [frameworks-and-drivers テストガイドライン](../../../../../coding-standards/tests/unit/frameworks-and-drivers.md)
 >
 > frameworks-and-driversのロジックそのものが動作することを確認するテストは不要（任意）:
+> - 並列処理
 > - 非同期処理
 > - フレームワークやライブラリの動作確認
 > - 外部サービスとの連携確認
@@ -43,9 +44,9 @@ async reloadMatchingTabs(rule: RewriteRule): Promise<void> {
 |------|-----------|
 | `Tabs.constructor()` | テスト済み |
 | `Tabs.filterByRule()` | テスト済み |
-| `Tabs.reloadAll()` | テスト済み |
+| `Tabs.reloadAll()` | 間接的にテスト済み（filterByRule等のテストで使用） |
 
-本メソッドで使用する`Tabs`クラスのメソッドは全てテストでカバーされている。
+本メソッドで使用する`Tabs`クラスのメソッドはテストでカバーされている。
 
 #### 3. Chrome APIのモックは価値が低い
 
