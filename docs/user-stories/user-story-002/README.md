@@ -78,8 +78,8 @@
 │ Flow 2: applyAllRules (Background → Content Script)             │
 ├─────────────────────────────────────────────────────────────────┤
 │ onUpdated / applyAllRulesHandler                                │
-│   → messaging.sendMessage('applyAllRules', {}, tabId)           │
-│   → Content Script: messaging.onMessage('applyAllRules', ...)   │
+│   → BackgroundScriptMessaging.sendApplyAllRules(tabId)          │
+│   → Content Script: ContentScriptMessaging.onApplyAllRules()    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -108,9 +108,11 @@
 │   - proxy-service として定義                                     │
 │   - Background で登録、他コンテキストから呼び出し                 │
 │                                                                 │
+│ BackgroundScriptMessaging                                       │
+│   - Background → Content Script への messaging 送信              │
+│                                                                 │
 │ ContentScriptMessaging                                          │
-│   - messaging プロトコル定義                                     │
-│   - Background → Content Script 通信用                          │
+│   - Content Script 側の messaging 受信                          │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -128,6 +130,7 @@ src/
 │   ├── messaging/
 │   │   ├── RewriteRuleMessagingService.ts    # proxy-service 実装
 │   │   ├── protocol.ts                       # messaging プロトコル定義（新規）
+│   │   ├── BackgroundScriptMessaging.ts      # Background 側の messaging 送信（新規）
 │   │   ├── ContentScriptMessaging.ts         # Content Script 側の messaging 受信（新規）
 │   │   └── dto/
 │   │       ├── RewriteRuleDTO.ts
@@ -201,10 +204,12 @@ src/
 | ファイル | 変更内容 |
 |---------|---------|
 | `messaging/protocol.ts` | 新規作成: messaging プロトコル定義 |
-| `content.ts` | messaging.onMessage 登録 |
-| `ChromeTabsService.ts` | sendApplyAllRulesMessage を messaging 使用に変更 |
-| `onUpdated.ts` | messaging 経由に変更 |
-| `applyAllRulesHandler.ts` | messaging 経由に変更 |
+| `messaging/BackgroundScriptMessaging.ts` | 新規作成: Background → Content Script への messaging 送信 |
+| `messaging/ContentScriptMessaging.ts` | 新規作成: Content Script 側の messaging 受信 |
+| `content.ts` | ContentScriptMessaging の onMessage 登録 |
+| `ChromeTabsService.ts` | BackgroundScriptMessaging 経由に変更 |
+| `onUpdated.ts` | BackgroundScriptMessaging 経由に変更 |
+| `applyAllRulesHandler.ts` | BackgroundScriptMessaging 経由に変更 |
 
 **確認項目**:
 - [ ] タブ読み込み時にルールが自動適用される
