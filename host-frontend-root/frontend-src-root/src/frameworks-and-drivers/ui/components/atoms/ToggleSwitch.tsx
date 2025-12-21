@@ -9,6 +9,7 @@ export interface ToggleSwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   disabled?: boolean;
+  ariaLabel?: string;
 }
 
 /**
@@ -17,7 +18,8 @@ export interface ToggleSwitchProps {
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   checked,
   onChange,
-  disabled = false
+  disabled = false,
+  ariaLabel
 }) => {
   const handleClick = () => {
     if (!disabled) {
@@ -40,6 +42,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         type="button"
         role="switch"
         aria-checked={checked}
+        aria-label={ariaLabel}
         disabled={disabled}
         className={styles.toggle}
         onClick={handleClick}
