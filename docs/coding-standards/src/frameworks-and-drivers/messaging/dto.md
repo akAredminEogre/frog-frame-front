@@ -4,7 +4,7 @@
 
 `@webext-core/proxy-service` を使用したメッセージング用DTOの規約。
 
-> **参照**: [ADR-002: メッセージングに @webext-core/proxy-service を採用](../../../../adr/002-messaging-with-proxy-service.md)
+> **参照**: [ADR-002: メッセージングに @webext-core を採用](../../../../adr/002-messaging-with-proxy-service.md)
 
 ## action/type フィールドは不要
 
