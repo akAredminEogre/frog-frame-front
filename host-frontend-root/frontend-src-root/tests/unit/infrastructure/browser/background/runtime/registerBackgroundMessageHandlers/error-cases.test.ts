@@ -193,7 +193,8 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
       // Act
       const sendResponse = vi.fn();
       const result = capturedListener(
-        { type: 'applyAllRules', tabId: '123' as unknown as number, tabUrl: 'https://example.com' },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { type: 'applyAllRules', tabId: '123', tabUrl: 'https://example.com' } as any,
         {} as chrome.runtime.MessageSender,
         sendResponse
       );
