@@ -26,7 +26,7 @@ rectangle "4-3\nRulesApp.tsx\n統合\n[未完了]" as appIntegration #lightcoral
 
 ' 新規追加: テストタスク
 rectangle "TEST-1\nInteractor\nテスト実装\n[未実装]" as testInteractor #lightblue
-rectangle "TEST-2\nController/Presenter\nテスト実装\n[完了]" as testControllerPresenter #lightgreen
+rectangle "TEST-2\nController/Presenter\nテスト実装\n[完了]" as testControllerPresenter #green
 rectangle "TEST-3\nMapper/Gateway\nテスト実装\n[Mapper完了]" as testMapperGateway #lightgreen
 rectangle "TEST-4\nUI/Messaging\nテスト実装\n[未実装]" as testUIMessaging #lightblue
 
