@@ -27,15 +27,6 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === ' ' || event.key === 'Enter') {
-      event.preventDefault();
-      if (!disabled) {
-        onChange(!checked);
-      }
-    }
-  };
-
   return (
     <div className={styles.toggleContainer}>
       <button
@@ -46,7 +37,6 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         disabled={disabled}
         className={styles.toggle}
         onClick={handleClick}
-        onKeyDown={handleKeyDown}
       />
     </div>
   );
