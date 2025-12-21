@@ -22,10 +22,16 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   ariaLabel
 }) => {
   const handleClick = () => {
+    if (disabled) {
+      return;
+    }
     onChange(!checked);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (disabled) {
+      return;
+    }
     if (event.key === ' ') {
       event.preventDefault();
       onChange(!checked);
@@ -46,9 +52,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         className={styles.toggle}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-      >
-        <span aria-hidden="true" />
-      </button>
+      />
     </div>
   );
 };
