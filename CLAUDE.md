@@ -104,6 +104,8 @@ make testlint
 ```
 This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
 
+**Note**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
+
 ### Git Worktree (Parallel Development)
 For working on multiple branches simultaneously:
 
