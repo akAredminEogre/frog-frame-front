@@ -1,9 +1,10 @@
+import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+
 import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/ToggleRuleActiveInputData';
 import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveOutputData';
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/IToggleRuleActiveUseCase';
 import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 
 /**
  * ルールの有効/無効を切り替えるInteractor
