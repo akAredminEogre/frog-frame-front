@@ -122,8 +122,6 @@ describe('registerBackgroundMessageHandlers - 正常系', () => {
       mockHolder.toDto.mockImplementation((rule: { id: number }) => {
         return expectedDtos.find((dto) => dto.id === rule.id);
       });
-      // container.resolveがRewriteRuleMapperインスタンスを返すようにモック
-      mockHolder.resolve.mockReturnValue({ toDto: mockHolder.toDto });
 
       let capturedHandler: (() => Promise<unknown>) | null = null;
       mockHolder.onMessage.mockImplementation((type: string, handler: () => Promise<unknown>) => {
