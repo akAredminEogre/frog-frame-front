@@ -32,7 +32,7 @@ async function handleGetAllRules() {
     const rules = await getAllRulesUseCase.execute();
 
     // エンティティをDTOに変換
-    const mapper = container.resolve(RewriteRuleMapper);
+    const mapper = new RewriteRuleMapper();
     const ruleDtos = rules.map((rule) => mapper.toDto(rule));
 
     return {
