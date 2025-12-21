@@ -36,6 +36,8 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       event.preventDefault();
       onChange(!checked);
     }
+    // WAI-ARIA: role="switch"はSpaceキーのみでトグル。
+    // Enterはフォーム送信用に予約されているため、トグルせずデフォルト動作のみ防ぐ。
     if (event.key === 'Enter') {
       event.preventDefault();
     }
