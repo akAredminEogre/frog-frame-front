@@ -1,16 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
-import * as backgroundMessagingModule from 'src/frameworks-and-drivers/messaging/backgroundMessaging';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
 
-// backgroundMessagingをモック
-vi.mock('src/frameworks-and-drivers/messaging/backgroundMessaging', () => ({
-  backgroundMessaging: {
-    sendMessage: vi.fn(),
-    onMessage: vi.fn(),
+// chrome.runtime.sendMessageをモック
+const mockSendMessage = vi.fn();
+vi.stubGlobal('chrome', {
+  runtime: {
+    sendMessage: mockSendMessage,
   },
-}));
+});
 
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
@@ -65,7 +64,7 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
   testCases.forEach(({ description, mockRules, currentUrl, expectedLength, expectedOldStrings }) => {
     it(description, async () => {
       // Arrange
-      vi.mocked(backgroundMessagingModule.backgroundMessaging.sendMessage).mockResolvedValue({
+      mockSendMessage.mockResolvedValue({
         success: true,
         rules: mockRules,
       });
