@@ -10,8 +10,8 @@ export default defineBackground({
   main() {
     // DI準備は container側で完了済み
 
-    // @webext-core/messagingを使用したメッセージハンドラーを登録（ADR-002準拠）
-    // Background Script用メッセージハンドラー（getAllRules, applyAllRules）
+    // chrome.runtime.onMessageを使用したメッセージハンドラーを登録
+    // Popup/Content Scriptからのメッセージを処理（getAllRules, applyAllRules）
     registerBackgroundMessageHandlers();
 
     // TODO: registerRewriteRuleMessagingService()は別PRで対応予定

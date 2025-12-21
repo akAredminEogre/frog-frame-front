@@ -68,9 +68,9 @@ async function handleApplyAllRules(tabId: number, tabUrl: string) {
  * Background Script用メッセージハンドラーを登録
  * chrome.runtime.onMessageを使用してPopup/Content Scriptからのメッセージを処理
  *
- * 注意: @webext-core/messagingハンドラーは削除
- * Popup/Content Scriptはすべてnative chrome.runtime.sendMessage を使用するため
- * @webext-core/messagingハンドラーとの競合を避けるため、nativeリスナーのみを使用
+ * 対応するメッセージタイプ:
+ * - getAllRules: すべてのルールを取得
+ * - applyAllRules: 指定タブにルール適用メッセージを転送
  *
  * 呼び出し元: entrypoints/background.ts
  */
@@ -83,6 +83,16 @@ export function registerBackgroundMessageHandlers() {
 
     if (message.type === 'applyAllRules') {
       const { tabId, tabUrl } = message;
+
+      // tabId と tabUrl の存在チェック
+      if (typeof tabId !== 'number' || typeof tabUrl !== 'string') {
+        sendResponse({
+          success: false,
+          error: 'Invalid message: tabId (number) and tabUrl (string) are required',
+        });
+        return true;
+      }
+
       handleApplyAllRules(tabId, tabUrl).then(sendResponse);
       return true;
     }

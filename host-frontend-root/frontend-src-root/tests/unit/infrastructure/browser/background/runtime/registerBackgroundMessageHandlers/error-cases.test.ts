@@ -139,6 +139,68 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
     });
   });
 
+  describe('applyAllRulesハンドラー - バリデーションエラー', () => {
+    it('should return error when tabId is missing', () => {
+      // Arrange
+      registerBackgroundMessageHandlers();
+
+      // Act
+      const sendResponse = vi.fn();
+      const result = capturedListener(
+        { type: 'applyAllRules', tabUrl: 'https://example.com' } as { type: string; tabId?: number; tabUrl?: string },
+        {} as chrome.runtime.MessageSender,
+        sendResponse
+      );
+
+      // Assert
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
+        success: false,
+        error: 'Invalid message: tabId (number) and tabUrl (string) are required',
+      });
+    });
+
+    it('should return error when tabUrl is missing', () => {
+      // Arrange
+      registerBackgroundMessageHandlers();
+
+      // Act
+      const sendResponse = vi.fn();
+      const result = capturedListener(
+        { type: 'applyAllRules', tabId: 123 } as { type: string; tabId?: number; tabUrl?: string },
+        {} as chrome.runtime.MessageSender,
+        sendResponse
+      );
+
+      // Assert
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
+        success: false,
+        error: 'Invalid message: tabId (number) and tabUrl (string) are required',
+      });
+    });
+
+    it('should return error when tabId is not a number', () => {
+      // Arrange
+      registerBackgroundMessageHandlers();
+
+      // Act
+      const sendResponse = vi.fn();
+      const result = capturedListener(
+        { type: 'applyAllRules', tabId: '123' as unknown as number, tabUrl: 'https://example.com' },
+        {} as chrome.runtime.MessageSender,
+        sendResponse
+      );
+
+      // Assert
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
+        success: false,
+        error: 'Invalid message: tabId (number) and tabUrl (string) are required',
+      });
+    });
+  });
+
   describe('applyAllRulesハンドラー - エラーケース', () => {
     it('should return error response when Error is thrown', async () => {
       // Arrange
