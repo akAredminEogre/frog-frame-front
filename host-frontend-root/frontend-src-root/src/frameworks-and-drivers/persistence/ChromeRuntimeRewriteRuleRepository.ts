@@ -30,9 +30,14 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
         throw new Error(`Failed to get rules from background: ${response.error}`);
       }
 
+      // success時はrulesが存在することを保証
+      if (!response.rules) {
+        throw new Error('Background script returned success but rules array is missing');
+      }
+
       const rulesObject: Record<string, RewriteRule> = {};
 
-      response.rules?.forEach((ruleData) => {
+      response.rules.forEach((ruleData) => {
         const rule = new RewriteRule(
           ruleData.id,
           ruleData.oldString,
