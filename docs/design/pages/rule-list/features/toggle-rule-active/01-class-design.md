@@ -113,7 +113,7 @@
 
 ### Chrome拡張機能のコンテキスト分離
 
-> **参照**: [ADR-002: メッセージングに @webext-core/proxy-service を採用](../../../../adr/002-messaging-with-proxy-service.md)
+> **参照**: [ADR-002: メッセージングに @webext-core を採用](../../../../adr/002-messaging-with-webext-core.md)
 > **参照**: [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../adr/003-unified-db-access-via-messaging.md)
 
 Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-003 の決定に従い、

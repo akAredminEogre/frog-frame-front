@@ -10,7 +10,7 @@
 
 ## 設計ドキュメント
 
-- [ADR-002: メッセージングに @webext-core を採用](../../adr/002-messaging-with-proxy-service.md)
+- [ADR-002: メッセージングに @webext-core を採用](../../adr/002-messaging-with-webext-core.md)
 - [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../adr/003-unified-db-access-via-messaging.md)
 
 ## 現状分析
@@ -191,6 +191,6 @@
 ## 関連ドキュメント
 
 - [ADR-001: Clean Architecture with Presenter Pattern](../../adr/001-clean-architecture-with-presenter-pattern.md)
-- [ADR-002: メッセージングに @webext-core を採用](../../adr/002-messaging-with-proxy-service.md)
+- [ADR-002: メッセージングに @webext-core を採用](../../adr/002-messaging-with-webext-core.md)
 - [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../adr/003-unified-db-access-via-messaging.md)
 - [User Story 001: ルールトグル機能](../user-story-001/README.md) - 関連する RewriteRuleMessagingService のスケルトン実装
