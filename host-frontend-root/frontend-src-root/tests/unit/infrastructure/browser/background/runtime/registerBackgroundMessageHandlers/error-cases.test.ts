@@ -140,7 +140,7 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
   });
 
   describe('applyAllRulesハンドラー - バリデーションエラー', () => {
-    it('should return error when tabId is missing', () => {
+    it('should return error when tabId is missing', async () => {
       // Arrange
       registerBackgroundMessageHandlers();
 
@@ -152,6 +152,9 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
         sendResponse
       );
 
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       // Assert
       expect(result).toBe(true);
       expect(sendResponse).toHaveBeenCalledWith({
@@ -160,7 +163,7 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
       });
     });
 
-    it('should return error when tabUrl is missing', () => {
+    it('should return error when tabUrl is missing', async () => {
       // Arrange
       registerBackgroundMessageHandlers();
 
@@ -172,6 +175,9 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
         sendResponse
       );
 
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       // Assert
       expect(result).toBe(true);
       expect(sendResponse).toHaveBeenCalledWith({
@@ -180,7 +186,7 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
       });
     });
 
-    it('should return error when tabId is not a number', () => {
+    it('should return error when tabId is not a number', async () => {
       // Arrange
       registerBackgroundMessageHandlers();
 
@@ -191,6 +197,9 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
         {} as chrome.runtime.MessageSender,
         sendResponse
       );
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
       expect(result).toBe(true);
