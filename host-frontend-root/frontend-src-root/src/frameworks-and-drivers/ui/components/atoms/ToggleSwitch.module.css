@@ -3,6 +3,11 @@
 .toggleContainer {
   display: inline-flex;
   align-items: center;
+  cursor: pointer;
+}
+
+.toggleContainer:has(input:disabled) {
+  cursor: not-allowed;
 }
 
 .toggle {
@@ -30,28 +35,28 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.toggle[aria-checked='true'] {
+.toggle[data-selected='true'] {
   background-color: var(--color-primary);
 }
 
-.toggle[aria-checked='true']::after {
+.toggle[data-selected='true']::after {
   transform: translateX(20px);
 }
 
-.toggle:hover:not(:disabled) {
+.toggle:hover:not([data-disabled='true']) {
   background-color: rgba(0, 0, 0, 0.25);
 }
 
-.toggle[aria-checked='true']:hover:not(:disabled) {
+.toggle[data-selected='true']:hover:not([data-disabled='true']) {
   background-color: var(--color-hover);
 }
 
-.toggle:focus-visible {
+.toggle.focusVisible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
-.toggle:disabled {
+.toggle[data-disabled='true'] {
   opacity: 0.5;
   cursor: not-allowed;
 }
