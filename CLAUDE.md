@@ -371,12 +371,12 @@ docs/
 
 ### テスト実行ルール（Claude Code Web用）
 
-**重要**: Claude Code Web環境では、**E2Eテストは手動で実行せず、CIに任せてください**。
+**重要**: Claude Code Web環境では、**テストは手動で実行せず、CIに任せてください**。
 
-- **実行するもの**: `make unit` または `make check`（ユニットテスト、コンパイル、lint等）
-- **実行しないもの**: `make e2e`、`make testall`、`make testlint`（E2Eテストを含むコマンド）
+- **実行しないもの**: `make unit`、`make e2e`、`make testall`、`make testlint`、`make check` 等のmakeコマンド
+  - これらのコマンドはDocker内部で実行されるため、Claude Code Web環境では使用できません
 
-E2Eテスト（Playwright）はブラウザ環境での実行が制限されるため、PRマージ時のCIで検証されます。
+テスト（ユニットテスト、E2Eテスト、lint等）はPRマージ時のCIで検証されます。
 
 ### セッション開始時（Claude Code Web用）
 
