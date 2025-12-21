@@ -9,7 +9,7 @@ export interface ToggleSwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   disabled?: boolean;
-  ariaLabel?: string;
+  ariaLabel: string;
 }
 
 /**
