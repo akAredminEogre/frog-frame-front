@@ -58,6 +58,7 @@ All commands should be run from the repository root unless otherwise specified.
 ```bash
 make init-config    # Apply Git configuration
 make init-dev       # Build containers, install dependencies, generate .wxt/tsconfig.json, and start dev server
+make init-hooks     # Install Git hooks (pre-commit: ESLint with import sorting)
 ```
 
 ### Development (After Initial Setup)
