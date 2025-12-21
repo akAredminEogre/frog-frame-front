@@ -1,4 +1,8 @@
-import React from 'react';
+import { useFocusRing } from '@react-aria/focus';
+import { useSwitch } from '@react-aria/switch';
+import { VisuallyHidden } from '@react-aria/visually-hidden';
+import { useToggleState } from '@react-stately/toggle';
+import React, { useRef } from 'react';
 
 import styles from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.module.css';
 
@@ -14,6 +18,7 @@ export interface ToggleSwitchProps {
 
 /**
  * ルールの有効/無効を切り替えるToggleSwitchコンポーネント
+ * React Ariaを使用してWAI-ARIA準拠のアクセシビリティを実現
  */
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   checked,
@@ -21,40 +26,35 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   disabled = false,
   ariaLabel
 }) => {
-  const handleClick = () => {
-    if (disabled) {
-      return;
-    }
-    onChange(!checked);
-  };
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (disabled) {
-      return;
-    }
-    if (event.key === ' ') {
-      event.preventDefault();
-      onChange(!checked);
-    }
-    // WAI-ARIA: role="switch"はSpaceキーのみでトグル。
-    // Enterはフォーム送信用に予約されているため、トグルせずデフォルト動作のみ防ぐ。
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-  };
+  const state = useToggleState({
+    isSelected: checked,
+    onChange: onChange,
+    isDisabled: disabled
+  });
+
+  const { inputProps } = useSwitch(
+    {
+      'aria-label': ariaLabel,
+      isDisabled: disabled
+    },
+    state,
+    inputRef
+  );
+
+  const { isFocusVisible, focusProps } = useFocusRing();
 
   return (
-    <div className={styles.toggleContainer}>
-      <button
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        aria-label={ariaLabel}
-        disabled={disabled}
-        className={styles.toggle}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
+    <label className={styles.toggleContainer}>
+      <VisuallyHidden>
+        <input {...inputProps} {...focusProps} ref={inputRef} />
+      </VisuallyHidden>
+      <div
+        className={`${styles.toggle} ${isFocusVisible ? styles.focusVisible : ''}`}
+        data-selected={state.isSelected}
+        data-disabled={disabled}
       />
-    </div>
+    </label>
   );
 };
