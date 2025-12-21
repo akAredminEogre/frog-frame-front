@@ -70,7 +70,7 @@
 │ ChromeRuntimeRewriteRuleRepository.getAll()                     │
 │   → RewriteRuleMapper.getAllRules()                             │
 │   → IRewriteRuleMessagingPort.getAll()                          │
-│   → RewriteRuleMessagingService (proxy-service)                 │
+│   → RewriteRuleProxyService (proxy-service)                     │
 │   → Background: DexieRewriteRuleRepository                      │
 └─────────────────────────────────────────────────────────────────┘
 
@@ -78,8 +78,8 @@
 │ Flow 2: applyAllRules (Background → Content Script)             │
 ├─────────────────────────────────────────────────────────────────┤
 │ onUpdated / applyAllRulesHandler                                │
-│   → BackgroundScriptMessaging.sendApplyAllRules(tabId)          │
-│   → Content Script: ContentScriptMessaging.onApplyAllRules()    │
+│   → BackgroundScriptMessageSender.sendApplyAllRules(tabId)      │
+│   → Content Script: ContentScriptMessageReceiver.onApplyAllRules()
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -104,14 +104,14 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │ frameworks-and-drivers                                          │
 ├─────────────────────────────────────────────────────────────────┤
-│ RewriteRuleMessagingService implements IRewriteRuleMessagingPort│
+│ RewriteRuleProxyService implements IRewriteRuleMessagingPort    │
 │   - proxy-service として定義                                     │
 │   - Background で登録、他コンテキストから呼び出し                 │
 │                                                                 │
-│ BackgroundScriptMessaging                                       │
+│ BackgroundScriptMessageSender                                   │
 │   - Background → Content Script への messaging 送信              │
 │                                                                 │
-│ ContentScriptMessaging                                          │
+│ ContentScriptMessageReceiver                                    │
 │   - Content Script 側の messaging 受信                          │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -122,16 +122,16 @@
 src/
 ├── interface-adapters/
 │   ├── ports/
-│   │   └── IRewriteRuleMessagingPort.ts      # MessagingService の抽象化
+│   │   └── IRewriteRuleMessagingPort.ts      # ProxyService の抽象化
 │   └── mappers/
 │       └── RewriteRuleMapper.ts              # Entity ↔ DTO 変換
 │
 ├── frameworks-and-drivers/
 │   ├── messaging/
-│   │   ├── RewriteRuleMessagingService.ts    # proxy-service 実装
+│   │   ├── RewriteRuleProxyService.ts        # proxy-service 実装
 │   │   ├── protocol.ts                       # messaging プロトコル定義（新規）
-│   │   ├── BackgroundScriptMessaging.ts      # Background 側の messaging 送信（新規）
-│   │   ├── ContentScriptMessaging.ts         # Content Script 側の messaging 受信（新規）
+│   │   ├── BackgroundScriptMessageSender.ts  # Background 側の messaging 送信（新規）
+│   │   ├── ContentScriptMessageReceiver.ts   # Content Script 側の messaging 受信（新規）
 │   │   └── dto/
 │   │       ├── RewriteRuleDTO.ts
 │   │       └── request-dto/
@@ -141,7 +141,7 @@ src/
 │   │   └── ChromeRuntimeRewriteRuleRepository.ts  # Mapper 経由に変更
 │   └── entrypoints/
 │       ├── background.ts                     # proxy-service 登録
-│       └── content.ts                        # ContentScriptMessaging 登録
+│       └── content.ts                        # ContentScriptMessageReceiver 登録
 │
 └── infrastructure/
     └── browser/
@@ -154,7 +154,7 @@ src/
 
 ### 実装例
 
-#### RewriteRuleMessagingService.ts（proxy-service）
+#### RewriteRuleProxyService.ts（proxy-service）
 
 ```typescript
 import { defineProxyService } from '@webext-core/proxy-service';
@@ -164,7 +164,7 @@ import type { GetByIdRequestDTO } from './dto/request-dto/GetByIdRequestDTO';
 import type { UpdateRuleActiveRequestDTO } from './dto/request-dto/UpdateRuleActiveRequestDTO';
 import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
 
-class RewriteRuleMessagingServiceImpl implements IRewriteRuleMessagingPort {
+class RewriteRuleProxyServiceImpl implements IRewriteRuleMessagingPort {
   private readonly repository = new DexieRewriteRuleRepository();
 
   async getAll(): Promise<RewriteRuleDTO[]> {
@@ -180,11 +180,11 @@ class RewriteRuleMessagingServiceImpl implements IRewriteRuleMessagingPort {
   }
 }
 
-export const [registerRewriteRuleMessagingService, getRewriteRuleMessagingService] =
-  defineProxyService('RewriteRuleMessagingService', () => new RewriteRuleMessagingServiceImpl());
+export const [registerRewriteRuleProxyService, getRewriteRuleProxyService] =
+  defineProxyService('RewriteRuleProxyService', () => new RewriteRuleProxyServiceImpl());
 ```
 
-#### BackgroundScriptMessaging.ts（messaging 送信側）
+#### BackgroundScriptMessageSender.ts（messaging 送信側）
 
 ```typescript
 import { defineExtensionMessaging } from '@webext-core/messaging';
@@ -196,26 +196,26 @@ interface MessagingProtocol {
 
 const messaging = defineExtensionMessaging<MessagingProtocol>();
 
-export const BackgroundScriptMessaging = {
+export const BackgroundScriptMessageSender = {
   async sendApplyAllRules(tabId: number): Promise<void> {
     await messaging.sendMessage('applyAllRules', undefined, tabId);
   },
 };
 ```
 
-#### ContentScriptMessaging.ts（messaging 受信側）
+#### ContentScriptMessageReceiver.ts（messaging 受信側）
 
 ```typescript
 import { defineExtensionMessaging } from '@webext-core/messaging';
 
-// プロトコル定義（BackgroundScriptMessaging と同じ型を共有）
+// プロトコル定義（BackgroundScriptMessageSender と同じ型を共有）
 interface MessagingProtocol {
   applyAllRules: () => void;
 }
 
 const messaging = defineExtensionMessaging<MessagingProtocol>();
 
-export const ContentScriptMessaging = {
+export const ContentScriptMessageReceiver = {
   onApplyAllRules(handler: () => void): void {
     messaging.onMessage('applyAllRules', handler);
   },
@@ -244,7 +244,7 @@ export const ContentScriptMessaging = {
 
 | ファイル | 変更内容 |
 |---------|---------|
-| `RewriteRuleMessagingService.ts` | スケルトンから実装へ（proxy-service 登録） |
+| `RewriteRuleProxyService.ts` | スケルトンから実装へ（proxy-service 登録） |
 | `background.ts` | proxy-service 登録呼び出し追加 |
 | `RewriteRuleMapper.ts` | IRewriteRuleMessagingPort 経由で通信するメソッド追加 |
 | `ChromeRuntimeRewriteRuleRepository.ts` | Mapper 経由に変更 |
@@ -264,12 +264,12 @@ export const ContentScriptMessaging = {
 | ファイル | 変更内容 |
 |---------|---------|
 | `messaging/protocol.ts` | 新規作成: messaging プロトコル定義 |
-| `messaging/BackgroundScriptMessaging.ts` | 新規作成: Background → Content Script への messaging 送信 |
-| `messaging/ContentScriptMessaging.ts` | 新規作成: Content Script 側の messaging 受信 |
-| `content.ts` | ContentScriptMessaging の onMessage 登録 |
-| `ChromeTabsService.ts` | BackgroundScriptMessaging 経由に変更 |
-| `onUpdated.ts` | BackgroundScriptMessaging 経由に変更 |
-| `applyAllRulesHandler.ts` | BackgroundScriptMessaging 経由に変更 |
+| `messaging/BackgroundScriptMessageSender.ts` | 新規作成: Background → Content Script への messaging 送信 |
+| `messaging/ContentScriptMessageReceiver.ts` | 新規作成: Content Script 側の messaging 受信 |
+| `content.ts` | ContentScriptMessageReceiver の onMessage 登録 |
+| `ChromeTabsService.ts` | BackgroundScriptMessageSender 経由に変更 |
+| `onUpdated.ts` | BackgroundScriptMessageSender 経由に変更 |
+| `applyAllRulesHandler.ts` | BackgroundScriptMessageSender 経由に変更 |
 
 **確認項目**:
 - [ ] タブ読み込み時にルールが自動適用される
@@ -303,4 +303,4 @@ export const ContentScriptMessaging = {
 - [ADR-001: Clean Architecture with Presenter Pattern](../../adr/001-clean-architecture-with-presenter-pattern.md)
 - [ADR-002: メッセージングに @webext-core を採用](../../adr/002-messaging-with-webext-core.md)
 - [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../adr/003-unified-db-access-via-messaging.md)
-- [User Story 001: ルールトグル機能](../user-story-001/README.md) - 関連する RewriteRuleMessagingService のスケルトン実装
+- [User Story 001: ルールトグル機能](../user-story-001/README.md) - 関連する RewriteRuleProxyService のスケルトン実装
