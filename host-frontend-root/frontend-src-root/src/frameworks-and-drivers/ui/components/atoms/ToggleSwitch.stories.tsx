@@ -20,12 +20,14 @@ type Story = StoryObj<typeof meta>;
 export const Off: Story = {
   args: {
     checked: false,
+    ariaLabel: 'ルールを有効にする',
   },
 };
 
 export const On: Story = {
   args: {
     checked: true,
+    ariaLabel: 'ルールを無効にする',
   },
 };
 
@@ -33,6 +35,7 @@ export const DisabledOff: Story = {
   args: {
     checked: false,
     disabled: true,
+    ariaLabel: 'ルールを有効にする（無効）',
   },
 };
 
@@ -40,5 +43,6 @@ export const DisabledOn: Story = {
   args: {
     checked: true,
     disabled: true,
+    ariaLabel: 'ルールを無効にする（無効）',
   },
 };
