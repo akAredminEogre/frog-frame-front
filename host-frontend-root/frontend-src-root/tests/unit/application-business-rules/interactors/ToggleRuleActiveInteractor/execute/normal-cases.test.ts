@@ -3,6 +3,9 @@
  * 1. isActive=true のルールを false に切り替え
  * 2. isActive=false のルールを true に切り替え
  */
+import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockPresenter';
+import { createMockRepository } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockRepository';
+import { createMockTabsGateway } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
@@ -12,22 +15,6 @@ import { ToggleRuleActiveInteractor } from 'src/application-business-rules/inter
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-
-const createMockRepository = (): IRewriteRuleRepository => ({
-  create: vi.fn(),
-  update: vi.fn().mockResolvedValue(undefined),
-  getAll: vi.fn(),
-  getById: vi.fn(),
-  getRulesMatchingUrl: vi.fn(),
-});
-
-const createMockTabsGateway = (): ITabsGateway => ({
-  reloadMatchingTabs: vi.fn().mockResolvedValue(undefined),
-});
-
-const createMockPresenter = (): IToggleRuleActivePresenter => ({
-  present: vi.fn(),
-});
 
 describe('ToggleRuleActiveInteractor.execute - 正常系', () => {
   let mockRepository: IRewriteRuleRepository;

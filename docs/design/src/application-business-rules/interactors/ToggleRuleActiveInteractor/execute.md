@@ -71,6 +71,7 @@ tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/exe
 ## モック戦略
 
 Interactorの3つの依存関係をモック化してテストする。
+責務分離のため、モック生成関数は外部ファイルに配置する。
 
 ### モック対象
 
@@ -80,27 +81,14 @@ Interactorの3つの依存関係をモック化してテストする。
 | ITabsGateway | vi.fn()でメソッドをモック | Chrome API層を分離 |
 | IToggleRuleActivePresenter | vi.fn()でメソッドをモック | View層を分離 |
 
-### モック生成関数
+### モックファイル構成
 
-テストファイル内でインライン定義。
-Interactor固有のモックであり、他で再利用する見込みがないため外部ファイル化しない。
-
-```typescript
-const createMockRepository = (): IRewriteRuleRepository => ({
-  create: vi.fn(),
-  update: vi.fn().mockResolvedValue(undefined),
-  getAll: vi.fn(),
-  getById: vi.fn(),
-  getRulesMatchingUrl: vi.fn(),
-});
-
-const createMockTabsGateway = (): ITabsGateway => ({
-  reloadMatchingTabs: vi.fn().mockResolvedValue(undefined),
-});
-
-const createMockPresenter = (): IToggleRuleActivePresenter => ({
-  present: vi.fn(),
-});
+```
+tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/
+└── mocks/
+    ├── createMockRepository.ts    # IRewriteRuleRepositoryのモック生成
+    ├── createMockTabsGateway.ts   # ITabsGatewayのモック生成
+    └── createMockPresenter.ts     # IToggleRuleActivePresenterのモック生成
 ```
 
 ### テストデータ
