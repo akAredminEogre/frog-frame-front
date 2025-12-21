@@ -104,6 +104,8 @@ make testlint
 ```
 This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
 
+**Note**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
+
 ### Git Worktree (Parallel Development)
 For working on multiple branches simultaneously:
 
@@ -368,6 +370,15 @@ docs/
 ## Claude Code Web専用ワークフロー
 
 **注意**: このセクションはClaude Code Web（ブラウザ版）専用です。ターミナル版のClaude Codeでは `.claude/commands/` 内のスラッシュコマンドを使用してください。
+
+### テスト実行ルール（Claude Code Web用）
+
+**重要**: Claude Code Web環境では、**テストは手動で実行せず、CIに任せてください**。
+
+- **実行しないもの**: `make unit`、`make e2e`、`make testall`、`make testlint`、`make check` 等のmakeコマンド
+  - これらのコマンドはDocker内部で実行されるため、Claude Code Web環境では使用できません
+
+テスト（ユニットテスト、E2Eテスト、lint等）はPRマージ時のCIで検証されます。
 
 ### セッション開始時（Claude Code Web用）
 
