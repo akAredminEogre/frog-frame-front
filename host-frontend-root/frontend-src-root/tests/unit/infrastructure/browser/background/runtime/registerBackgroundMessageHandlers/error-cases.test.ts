@@ -3,19 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // モックホルダー
 const mockHolder = vi.hoisted(() => {
   return {
-    onMessage: vi.fn(),
     resolve: vi.fn(),
     execute: vi.fn(),
     sendApplyAllRulesMessage: vi.fn(),
   };
 });
-
-// backgroundMessagingをモック
-vi.mock('src/frameworks-and-drivers/messaging/backgroundMessaging', () => ({
-  backgroundMessaging: {
-    onMessage: mockHolder.onMessage,
-  },
-}));
 
 // containerをモック
 vi.mock('src/frameworks-and-drivers/di/container', () => ({
@@ -61,10 +53,21 @@ import { registerBackgroundMessageHandlers } from 'src/infrastructure/browser/ba
  * 3. その他のエラー型は'Unknown error occurred'を返す
  */
 describe('registerBackgroundMessageHandlers - エラーケース', () => {
+  let capturedListener: (
+    message: { type: string; tabId?: number; tabUrl?: string },
+    sender: chrome.runtime.MessageSender,
+    sendResponse: (response: unknown) => void
+  ) => boolean;
+
   beforeEach(() => {
     vi.clearAllMocks();
     // console.errorをモック
     vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    // addListenerに渡されるコールバックをキャプチャ
+    mockAddListener.mockImplementation((listener) => {
+      capturedListener = listener;
+    });
   });
 
   afterEach(() => {
@@ -76,20 +79,18 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
       // Arrange
       mockHolder.execute.mockRejectedValue(new Error('Database connection failed'));
 
-      let capturedHandler: (() => Promise<unknown>) | null = null;
-      mockHolder.onMessage.mockImplementation((type: string, handler: () => Promise<unknown>) => {
-        if (type === 'getAllRules') {
-          capturedHandler = handler;
-        }
-      });
-
       registerBackgroundMessageHandlers();
 
       // Act
-      const result = await capturedHandler!();
+      const sendResponse = vi.fn();
+      const result = capturedListener({ type: 'getAllRules' }, {} as chrome.runtime.MessageSender, sendResponse);
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
-      expect(result).toEqual({
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
         success: false,
         error: 'Database connection failed',
       });
@@ -99,20 +100,18 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
       // Arrange
       mockHolder.execute.mockRejectedValue('String error message');
 
-      let capturedHandler: (() => Promise<unknown>) | null = null;
-      mockHolder.onMessage.mockImplementation((type: string, handler: () => Promise<unknown>) => {
-        if (type === 'getAllRules') {
-          capturedHandler = handler;
-        }
-      });
-
       registerBackgroundMessageHandlers();
 
       // Act
-      const result = await capturedHandler!();
+      const sendResponse = vi.fn();
+      const result = capturedListener({ type: 'getAllRules' }, {} as chrome.runtime.MessageSender, sendResponse);
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
-      expect(result).toEqual({
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
         success: false,
         error: 'String error message',
       });
@@ -122,20 +121,18 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
       // Arrange
       mockHolder.execute.mockRejectedValue({ code: 500 });
 
-      let capturedHandler: (() => Promise<unknown>) | null = null;
-      mockHolder.onMessage.mockImplementation((type: string, handler: () => Promise<unknown>) => {
-        if (type === 'getAllRules') {
-          capturedHandler = handler;
-        }
-      });
-
       registerBackgroundMessageHandlers();
 
       // Act
-      const result = await capturedHandler!();
+      const sendResponse = vi.fn();
+      const result = capturedListener({ type: 'getAllRules' }, {} as chrome.runtime.MessageSender, sendResponse);
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
-      expect(result).toEqual({
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
         success: false,
         error: 'Unknown error occurred',
       });
@@ -150,20 +147,22 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
         sendApplyAllRulesMessage: mockHolder.sendApplyAllRulesMessage,
       });
 
-      let capturedHandler: ((message: { data: { tabId: number; tabUrl: string } }) => Promise<unknown>) | null = null;
-      mockHolder.onMessage.mockImplementation((type: string, handler: (message: { data: { tabId: number; tabUrl: string } }) => Promise<unknown>) => {
-        if (type === 'applyAllRules') {
-          capturedHandler = handler;
-        }
-      });
-
       registerBackgroundMessageHandlers();
 
       // Act
-      const result = await capturedHandler!({ data: { tabId: 123, tabUrl: 'https://example.com' } });
+      const sendResponse = vi.fn();
+      const result = capturedListener(
+        { type: 'applyAllRules', tabId: 123, tabUrl: 'https://example.com' },
+        {} as chrome.runtime.MessageSender,
+        sendResponse
+      );
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
-      expect(result).toEqual({
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
         success: false,
         error: 'Tab not found',
       });
@@ -176,20 +175,22 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
         sendApplyAllRulesMessage: mockHolder.sendApplyAllRulesMessage,
       });
 
-      let capturedHandler: ((message: { data: { tabId: number; tabUrl: string } }) => Promise<unknown>) | null = null;
-      mockHolder.onMessage.mockImplementation((type: string, handler: (message: { data: { tabId: number; tabUrl: string } }) => Promise<unknown>) => {
-        if (type === 'applyAllRules') {
-          capturedHandler = handler;
-        }
-      });
-
       registerBackgroundMessageHandlers();
 
       // Act
-      const result = await capturedHandler!({ data: { tabId: 123, tabUrl: 'https://example.com' } });
+      const sendResponse = vi.fn();
+      const result = capturedListener(
+        { type: 'applyAllRules', tabId: 123, tabUrl: 'https://example.com' },
+        {} as chrome.runtime.MessageSender,
+        sendResponse
+      );
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
-      expect(result).toEqual({
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
         success: false,
         error: 'Content script not loaded',
       });
@@ -202,20 +203,22 @@ describe('registerBackgroundMessageHandlers - エラーケース', () => {
         sendApplyAllRulesMessage: mockHolder.sendApplyAllRulesMessage,
       });
 
-      let capturedHandler: ((message: { data: { tabId: number; tabUrl: string } }) => Promise<unknown>) | null = null;
-      mockHolder.onMessage.mockImplementation((type: string, handler: (message: { data: { tabId: number; tabUrl: string } }) => Promise<unknown>) => {
-        if (type === 'applyAllRules') {
-          capturedHandler = handler;
-        }
-      });
-
       registerBackgroundMessageHandlers();
 
       // Act
-      const result = await capturedHandler!({ data: { tabId: 123, tabUrl: 'https://example.com' } });
+      const sendResponse = vi.fn();
+      const result = capturedListener(
+        { type: 'applyAllRules', tabId: 123, tabUrl: 'https://example.com' },
+        {} as chrome.runtime.MessageSender,
+        sendResponse
+      );
+
+      // 非同期処理を待つ
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Assert
-      expect(result).toEqual({
+      expect(result).toBe(true);
+      expect(sendResponse).toHaveBeenCalledWith({
         success: false,
         error: 'Unknown error occurred',
       });

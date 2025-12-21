@@ -2,7 +2,6 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
 import { Tab } from 'src/domain/value-objects/Tab';
 import { container } from 'src/frameworks-and-drivers/di/container';
-import { backgroundMessaging } from 'src/frameworks-and-drivers/messaging/backgroundMessaging';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
@@ -67,29 +66,15 @@ async function handleApplyAllRules(tabId: number, tabUrl: string) {
 
 /**
  * Background Script用メッセージハンドラーを登録
- * @webext-core/messagingを使用した新しいメッセージングパターン
- * 加えて、Content Script用にchrome.runtime.onMessageも登録
+ * chrome.runtime.onMessageを使用してPopup/Content Scriptからのメッセージを処理
+ *
+ * 注意: @webext-core/messagingハンドラーは削除
+ * Popup/Content Scriptはすべてnative chrome.runtime.sendMessage を使用するため
+ * @webext-core/messagingハンドラーとの競合を避けるため、nativeリスナーのみを使用
  *
  * 呼び出し元: entrypoints/background.ts
  */
 export function registerBackgroundMessageHandlers() {
-  const { onMessage } = backgroundMessaging;
-
-  // @webext-core/messaging用ハンドラー（Popup等から使用）
-  // getAllRulesハンドラー
-  onMessage('getAllRules', async () => {
-    return handleGetAllRules();
-  });
-
-  // applyAllRulesハンドラー
-  onMessage('applyAllRules', async (message) => {
-    const { tabId, tabUrl } = message.data;
-    return handleApplyAllRules(tabId, tabUrl);
-  });
-
-  // Content Script用: chrome.runtime.onMessageリスナー
-  // Content Scriptはchrome.runtime.sendMessage({ type: 'getAllRules' })を使用
-  // @webext-core/messagingとは異なるメッセージ形式のため、別途リスナーが必要
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message.type === 'getAllRules') {
       handleGetAllRules().then(sendResponse);
