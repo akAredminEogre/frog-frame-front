@@ -152,6 +152,76 @@ src/
                 └── onUpdated.ts              # messaging 経由に変更
 ```
 
+### 実装例
+
+#### RewriteRuleMessagingService.ts（proxy-service）
+
+```typescript
+import { defineProxyService } from '@webext-core/proxy-service';
+import type { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
+import type { RewriteRuleDTO } from './dto/RewriteRuleDTO';
+import type { GetByIdRequestDTO } from './dto/request-dto/GetByIdRequestDTO';
+import type { UpdateRuleActiveRequestDTO } from './dto/request-dto/UpdateRuleActiveRequestDTO';
+import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
+
+class RewriteRuleMessagingServiceImpl implements IRewriteRuleMessagingPort {
+  private readonly repository = new DexieRewriteRuleRepository();
+
+  async getAll(): Promise<RewriteRuleDTO[]> {
+    return this.repository.getAll();
+  }
+
+  async getById(request: GetByIdRequestDTO): Promise<RewriteRuleDTO> {
+    return this.repository.getById(request.id);
+  }
+
+  async updateActive(request: UpdateRuleActiveRequestDTO): Promise<void> {
+    await this.repository.updateActive(request.id, request.isActive);
+  }
+}
+
+export const [registerRewriteRuleMessagingService, getRewriteRuleMessagingService] =
+  defineProxyService('RewriteRuleMessagingService', () => new RewriteRuleMessagingServiceImpl());
+```
+
+#### BackgroundScriptMessaging.ts（messaging 送信側）
+
+```typescript
+import { defineExtensionMessaging } from '@webext-core/messaging';
+
+// プロトコル定義
+interface MessagingProtocol {
+  applyAllRules: () => void;
+}
+
+const messaging = defineExtensionMessaging<MessagingProtocol>();
+
+export const BackgroundScriptMessaging = {
+  async sendApplyAllRules(tabId: number): Promise<void> {
+    await messaging.sendMessage('applyAllRules', undefined, tabId);
+  },
+};
+```
+
+#### ContentScriptMessaging.ts（messaging 受信側）
+
+```typescript
+import { defineExtensionMessaging } from '@webext-core/messaging';
+
+// プロトコル定義（BackgroundScriptMessaging と同じ型を共有）
+interface MessagingProtocol {
+  applyAllRules: () => void;
+}
+
+const messaging = defineExtensionMessaging<MessagingProtocol>();
+
+export const ContentScriptMessaging = {
+  onApplyAllRules(handler: () => void): void {
+    messaging.onMessage('applyAllRules', handler);
+  },
+};
+```
+
 ## 開発戦略
 
 ### 方針: フロー単位で段階移行
