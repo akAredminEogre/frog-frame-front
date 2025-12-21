@@ -86,10 +86,11 @@ export function registerBackgroundMessageHandlers() {
 
       // tabId と tabUrl の存在チェック
       if (typeof tabId !== 'number' || typeof tabUrl !== 'string') {
-        sendResponse({
+        // 非同期パターンに統一するためPromise.resolve()でラップ
+        Promise.resolve({
           success: false,
           error: 'Invalid message: tabId (number) and tabUrl (string) are required',
-        });
+        }).then(sendResponse);
         return true;
       }
 
