@@ -8,7 +8,7 @@ rectangle "3A-2\nRewriteRule\n.matchesUrl()\n実装\n[完了]" as matchesUrl #gr
 
 rectangle "3B-1\nDTO実装\n[完了]" as dto #green
 rectangle "3B-2\nITabsGateway\n実装\n[完了]" as tabsGateway #green
-rectangle "3B-3\nToggleRuleActive\nInteractor実装\n[実装済・テスト未]" as interactor #yellow
+rectangle "3B-3\nToggleRuleActive\nInteractor実装\n[完了・テスト済]" as interactor #green
 
 rectangle "3C-1\nRewriteRuleMapper\n実装\n[完了・テスト済]" as mapper #green
 rectangle "3C-2\nToggleRuleActive\nController実装\n[完了・テスト済]" as controller #green
@@ -25,9 +25,9 @@ rectangle "4-2\nChromeRuntime\nRewriteRule\nRepository改修\n[未完了]" as re
 rectangle "4-3\nRulesApp.tsx\n統合\n[未完了]" as appIntegration #lightcoral
 
 ' 新規追加: テストタスク
-rectangle "TEST-1\nInteractor\nテスト実装\n[未実装]" as testInteractor #lightblue
+rectangle "TEST-1\nInteractor\nテスト実装\n[完了]" as testInteractor #green
 rectangle "TEST-2\nController/Presenter\nテスト実装\n[完了]" as testControllerPresenter #green
-rectangle "TEST-3\nMapper/Gateway\nテスト実装\n[Mapper完了]" as testMapperGateway #lightgreen
+rectangle "TEST-3\nMapper/Gateway\nテスト実装\n[完了]" as testMapperGateway #green
 rectangle "TEST-4\nUI/Messaging\nテスト実装\n[未実装]" as testUIMessaging #lightblue
 
 ' 依存関係（矢印）
@@ -67,13 +67,13 @@ note top of withActive
 end note
 
 note top of interactor
-**実装済み・テスト未実装**
-#yellow
+**完了済み**
+#green
 end note
 
 note top of testInteractor
-**新規テスト実装**
-#lightblue
+**完了済み**
+#green
 end note
 
 note top of repoFix
@@ -87,9 +87,11 @@ note bottom
 mapper/messaging → repoFix → appIntegration
 
 **最新状況 (2024-12-20):**
-- ✅ developマージ完了（3回目）
+- ✅ developマージ完了（5回目）
 - ✅ ChromeTabsGateway実装完了（developから取り込み）
-- ✅ ToggleRuleActivePresenterテスト実装完了\n- ✅ Controller/Presenterテスト完了
+- ✅ ToggleRuleActivePresenterテスト実装完了
+- ✅ Controller/Presenterテスト完了
+- ✅ ToggleRuleActiveInteractorテスト実装完了\n- ✅ Git hooks導入（pre-commit: ESLint）
 - 🎯 残り: Phase 4統合（2タスク）
 
 **次のステップ:**
@@ -98,10 +100,10 @@ mapper/messaging → repoFix → appIntegration
 3. テスト実装（並行実行可能）
 
 **進捗状況:**
-- ✅ 完了: 基本実装、DTO、DI設定、Mapper/Controller/Presenterテスト
-- 🔄 実装済み: 一部ビジネスロジック（テスト未）
+- ✅ 完了: 基本実装、DTO、DI設定、全ビジネスロジックテスト
+- 🔄 実装済み: 一部コンポーネント（テスト未）
 - 🎯 集中: Repository改修、UI統合
-- 📝 テスト必要: Interactor、Messaging、UI
+- 📝 テスト必要: Messaging、UI
 end note
 
 @enduml
