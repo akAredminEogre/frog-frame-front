@@ -156,9 +156,9 @@
 - [x] ChromeTabsGateway の実装（タブリロード）（developマージで完了）
 - [ ] RewriteRuleMessagingService の実装 **（3d-3b: ロジック実装 + proxy-service統合）**
   - 現在はスケルトン実装（3d-3a完了: パッケージ追加、クラス・DTO・インターフェース定義のみ）
-  - [x] background.ts で registerRewriteRuleMessagingService() を呼び出す
+  - [ ] background.ts で registerRewriteRuleMessagingService() を呼び出す **（別PRで対応予定）**
+    - @webext-core/proxy-serviceの統合は追加の調査が必要なため保留
   - [x] 既存メッセージングを `@webext-core/messaging` に移行（Background Script側完了）
-  - E2Eテストへの影響を調査・修正
 
 - [ ] ToggleSwitch UIコンポーネントの実装（テスト未実装）
 
