@@ -128,6 +128,7 @@ src/
 │   ├── messaging/
 │   │   ├── RewriteRuleMessagingService.ts    # proxy-service 実装
 │   │   ├── protocol.ts                       # messaging プロトコル定義（新規）
+│   │   ├── ContentScriptMessaging.ts         # Content Script 側の messaging 受信（新規）
 │   │   └── dto/
 │   │       ├── RewriteRuleDTO.ts
 │   │       └── request-dto/
@@ -137,7 +138,7 @@ src/
 │   │   └── ChromeRuntimeRewriteRuleRepository.ts  # Mapper 経由に変更
 │   └── entrypoints/
 │       ├── background.ts                     # proxy-service 登録
-│       └── content.ts                        # messaging.onMessage 登録
+│       └── content.ts                        # ContentScriptMessaging 登録
 │
 └── infrastructure/
     └── browser/
