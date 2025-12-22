@@ -79,7 +79,7 @@
 ├─────────────────────────────────────────────────────────────────┤
 │ onUpdated / applyAllRulesHandler                                │
 │   → BackgroundScriptMessageSender.sendApplyAllRules(tabId)      │
-│   → Content Script: ContentScriptMessageReceiver.onApplyAllRules()
+│   → Content Script: ContentScriptMessageReceiver.onApplyAllRules()│
 └─────────────────────────────────────────────────────────────────┘
 ```
 
