@@ -44,7 +44,8 @@ describe('ToggleSwitch - レンダリング', () => {
   };
 
   const getToggleElement = () => {
-    return container.querySelector('[class*="toggle"]');
+    // data-selected属性を持つ要素を検索（CSSモジュールのクラス名はハッシュ化されるため属性で検索）
+    return container.querySelector('[data-selected]');
   };
 
   describe('checked状態のレンダリング', () => {
