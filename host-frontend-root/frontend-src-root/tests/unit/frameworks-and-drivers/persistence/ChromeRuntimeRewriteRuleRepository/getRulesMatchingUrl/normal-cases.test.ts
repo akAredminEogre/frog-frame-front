@@ -4,12 +4,10 @@ import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
 
-// getRewriteRuleProxyServiceをモック
+// 動的importをモック
 vi.mock('src/frameworks-and-drivers/messaging/RewriteRuleProxyService', () => ({
   getRewriteRuleProxyService: vi.fn(),
 }));
-
-import { getRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
 
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
@@ -21,13 +19,18 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
   let repository: ChromeRuntimeRewriteRuleRepository;
   let mockProxyService: { getAll: ReturnType<typeof vi.fn> };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
 
     // Create mock proxy service
     mockProxyService = {
       getAll: vi.fn(),
     };
+
+    // 動的importされるモジュールのモックを設定
+    const { getRewriteRuleProxyService } = await import(
+      'src/frameworks-and-drivers/messaging/RewriteRuleProxyService'
+    );
     vi.mocked(getRewriteRuleProxyService).mockReturnValue(mockProxyService as any);
 
     repository = new ChromeRuntimeRewriteRuleRepository();

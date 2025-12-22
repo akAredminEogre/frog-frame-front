@@ -2,8 +2,8 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-import { getRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
+import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
 /**
  * Chrome Runtime Messaging を使用したRewriteRuleリポジトリの実装
@@ -16,8 +16,29 @@ import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/Rewrite
  * 遅延初期化: proxy-serviceは実際にデータが必要になるまで呼び出されない。
  * これによりBackground Scriptの初期化完了を待てる。
  * 注意: このクラスは内部で直接proxy-serviceを呼び出し、DIコンテナを経由しない。
+ *
+ * 重要: proxy-serviceモジュールは動的importで読み込む。
+ * 静的importだとContent Scriptのモジュールロード時に@webext-core/proxy-serviceの
+ * 初期化が走り、E2Eテストに影響を与える可能性があるため。
  */
 export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepository {
+  private cachedProxyService: IRewriteRuleMessagingPort | null = null;
+
+  /**
+   * proxy-serviceを取得する（遅延初期化 + 動的import）
+   * 初回呼び出し時にモジュールを動的importしてサービスを取得、以降はキャッシュを返す
+   */
+  private async getProxyService(): Promise<IRewriteRuleMessagingPort> {
+    if (!this.cachedProxyService) {
+      // 動的importでproxy-serviceモジュールを読み込む
+      const { getRewriteRuleProxyService } = await import(
+        'src/frameworks-and-drivers/messaging/RewriteRuleProxyService'
+      );
+      this.cachedProxyService = getRewriteRuleProxyService();
+    }
+    return this.cachedProxyService;
+  }
+
   /**
    * DTOからエンティティに変換する
    * @param dto RewriteRuleDTO
@@ -40,8 +61,7 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
    * @returns RewriteRulesオブジェクト
    */
   async getAll(): Promise<RewriteRules> {
-    // 遅延初期化: ここで初めてproxy-serviceを呼び出す
-    const proxyService = getRewriteRuleProxyService();
+    const proxyService = await this.getProxyService();
     const dtos = await proxyService.getAll();
 
     const rulesObject: Record<string, RewriteRule> = {};
