@@ -3,13 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
 
-// @webext-core/proxy-service の getRewriteRuleProxyService をモック
-const mockGetAllRules = vi.fn();
-vi.mock('src/frameworks-and-drivers/messaging/RewriteRuleProxyService', () => ({
-  getRewriteRuleProxyService: () => ({
-    getAllRules: mockGetAllRules,
-  }),
+// @webext-core/messaging の sendToBackground をモック
+vi.mock('src/frameworks-and-drivers/messaging/messaging', () => ({
+  sendToBackground: vi.fn(),
 }));
+
+import { sendToBackground } from 'src/frameworks-and-drivers/messaging/messaging';
 
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
@@ -63,8 +62,11 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
 
   testCases.forEach(({ description, mockRules, currentUrl, expectedLength, expectedOldStrings }) => {
     it(description, async () => {
-      // Arrange - proxy-service の getAllRules をモック
-      mockGetAllRules.mockResolvedValue(mockRules);
+      // Arrange - sendToBackground をモック
+      vi.mocked(sendToBackground).mockResolvedValue({
+        success: true,
+        rules: mockRules,
+      });
 
       // Act
       const result = await repository.getRulesMatchingUrl(currentUrl);
@@ -77,8 +79,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
         expect(rulesArray[index].oldString).toBe(expectedOldString);
       });
 
-      // proxy-service の getAllRules が呼ばれたことを確認
-      expect(mockGetAllRules).toHaveBeenCalled();
+      // sendToBackground が正しく呼ばれたことを確認
+      expect(sendToBackground).toHaveBeenCalledWith('getAllRules', undefined);
     });
   });
 });
