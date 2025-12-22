@@ -30,8 +30,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
 
   const state = useToggleState({
     isSelected: checked,
-    onChange,
-    isDisabled: disabled
+    onChange
   });
 
   const { inputProps } = useSwitch(
