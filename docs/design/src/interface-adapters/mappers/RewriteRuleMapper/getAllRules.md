@@ -38,6 +38,8 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/getAllRules/
 
 ## モック戦略
 
+> **重要**: [basic-rule.md](../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従う。
+
 ### モック対象
 
 - **IRewriteRuleMessagingPort**: 外部依存（proxy-service経由のBackground通信）をモック化
@@ -46,18 +48,16 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/getAllRules/
 
 ### モック方法
 
-`beforeEach`でモックを初期化し、各テストケースでインスタンス生成時に注入（コンストラクタインジェクション）:
+モックファクトリからインポートし、`beforeEach`で初期化（コンストラクタインジェクション）:
 
 ```typescript
+import { createMockRewriteRuleMessagingPort } from '../mocks/createMockRewriteRuleMessagingPort';
+
 let mockMessagingPort: IRewriteRuleMessagingPort;
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mockMessagingPort = {
-    getAll: vi.fn(),
-    getById: vi.fn(),
-    updateActive: vi.fn(),
-  };
+  mockMessagingPort = createMockRewriteRuleMessagingPort();
 });
 
 afterEach(() => {
@@ -71,9 +71,10 @@ const mapper = new RewriteRuleMapper(mockMessagingPort);
 
 ### モックファイル構成
 
-インラインモックを使用するため、別ファイルは不要。
-
 ```
-tests/unit/interface-adapters/mappers/RewriteRuleMapper/getAllRules/
-└── normal-cases.test.ts       # モックはファイル内で定義
+tests/unit/interface-adapters/mappers/RewriteRuleMapper/
+├── getAllRules/
+│   └── normal-cases.test.ts
+└── mocks/
+    └── createMockRewriteRuleMessagingPort.ts    # モックファクトリ
 ```
