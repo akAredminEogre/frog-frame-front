@@ -1,50 +1,39 @@
-' docs/docs-rules/design/02-sequence.mdの記述に従うこと
 @startuml ToggleRuleActive
 
 title ルールトグル機能 シーケンス図
 
-skinparam sequenceArrowThickness 2
-skinparam sequenceParticipantBorderColor #666666
-skinparam sequenceLifeLineBorderColor #888888
-
-box "Rules Page - frameworks-and-drivers (第4層)" #LightBlue
+box "Rules Page - UI" #LightBlue
   participant "ToggleSwitch" as UI
   participant "RulesApp" as View
 end box
 
-box "Rules Page - interface-adapters (第3層)" #LightGreen
-  participant "ToggleRuleActive\nController" as Controller
-  participant "ToggleRuleActive\nPresenter" as PresenterImpl
-end box
-
-box "Rules Page - application-business-rules (第2層)" #LightYellow
-  participant "<<interface>>\nIToggleRuleActiveUseCase" as IUseCase
-  participant "ToggleRuleActive\nInteractor" as Interactor
-  participant "<<interface>>\nIToggleRuleActivePresenter" as IPresenter
-  participant "<<interface>>\nIRewriteRuleRepository" as IRepository
-  participant "<<interface>>\nITabsGateway" as ITabsGateway
-  participant "ToggleRuleActive\nInputData" as InputData
-  participant "ToggleRuleActive\nOutputData" as OutputData
-end box
-
-box "Rules Page - interface-adapters" #LightCyan
+box "interface-adapters" #LightGreen
+  participant "ToggleRuleActiveController" as Controller
+  participant "ToggleRuleActivePresenter" as Presenter
   participant "RewriteRuleMapper" as Mapper
   participant "<<interface>>\nIRewriteRuleMessagingPort" as IMessagingPort
 end box
 
-box "Rules Page - frameworks-and-drivers" #LightCyan
-  participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
+box "application-business-rules" #LightYellow
+  participant "ToggleRuleActiveInteractor" as Interactor
+  participant "<<interface>>\nIRewriteRuleRepository" as IRepository
+  participant "<<interface>>\nITabsGateway" as ITabsGateway
+end box
+
+box "frameworks-and-drivers" #LightCyan
+  participant "ChromeRuntimeRewriteRuleRepository" as MessagingRepo
   participant "ChromeTabsGateway" as TabsGateway
-  participant "GetByIdRequestDTO" as GetByIdDTO
-  participant "UpdateRuleActive\nRequestDTO" as UpdateDTO
+  participant "RewriteRuleMessagingService" as MessagingService
+  participant "<<interface>>\nIRewriteRuleProxyService" as IProxyService
 end box
 
-box "Background - frameworks-and-drivers (第4層)" #LightGray
+box "Background" #LightGray
   participant "RewriteRuleProxyService" as ProxyService
-  participant "DexieRewriteRule\nRepository" as DexieRepo
+  participant "RewriteRuleProxyServiceImpl" as ProxyServiceImpl
+  participant "DexieRewriteRuleRepository" as DexieRepo
 end box
 
-box "enterprise-business-rules (第1層)" #LightPink
+box "enterprise-business-rules" #LightPink
   participant "RewriteRule" as Entity
 end box
 
@@ -56,108 +45,108 @@ activate View
 View -> Controller : toggleActive(ruleId)
 activate Controller
 
-Controller -> InputData : new(ruleId)
-activate InputData
-InputData --> Controller : inputData
-deactivate InputData
-
-note over Controller, IUseCase : ControllerはInput Port（IUseCase）に依存\n（依存性逆転の原則）
-
-Controller -> IUseCase : execute(ToggleRuleActiveInputData)
-activate IUseCase
-
-note over IUseCase, Interactor : 実行時はDI経由で\nInteractorが注入
-
-IUseCase -> Interactor : execute(ToggleRuleActiveInputData)
+Controller -> Interactor : execute(inputData)
 activate Interactor
-
-note over Interactor, IRepository : InteractorはGateway Interfaceに依存\n（同じ第2層内で定義）
 
 Interactor -> IRepository : getById(ruleId)
 activate IRepository
 
-note over IRepository, MessagingRepo : 実行時はDI経由で\nChromeRuntimeRewriteRuleRepositoryが注入
-
 IRepository -> MessagingRepo : getById(ruleId)
 activate MessagingRepo
-
-note over MessagingRepo, Mapper : RepositoryはMapperに委譲（DTOを意識しない）\n（ADR-002、ADR-003参照）
 
 MessagingRepo -> Mapper : getById(ruleId)
 activate Mapper
 
-Mapper -> GetByIdDTO : new(ruleId)
-activate GetByIdDTO
-GetByIdDTO --> Mapper : dto
-deactivate GetByIdDTO
-
-note over Mapper, IMessagingPort : MapperはIRewriteRuleMessagingPortに依存\n（依存性逆転の原則）
-
 Mapper -> IMessagingPort : getById(dto)
 activate IMessagingPort
 
-note over IMessagingPort, ProxyService : 実行時はDI経由で\nRewriteRuleProxyServiceが注入
+IMessagingPort -> MessagingService : getById(dto)
+activate MessagingService
 
-IMessagingPort -> ProxyService : getById(GetByIdRequestDTO)
+MessagingService -> IProxyService : getById(dto)
+activate IProxyService
+
+IProxyService -> ProxyService : getById(dto)
 activate ProxyService
 
-ProxyService -> DexieRepo : getById(ruleId)
+ProxyService -> ProxyServiceImpl : getById(dto)
+activate ProxyServiceImpl
+
+ProxyServiceImpl -> DexieRepo : getById(ruleId)
 activate DexieRepo
-DexieRepo --> ProxyService : RewriteRuleDTO
+DexieRepo --> ProxyServiceImpl : DTO
 deactivate DexieRepo
 
-ProxyService --> IMessagingPort : RewriteRuleDTO
+ProxyServiceImpl --> ProxyService : DTO
+deactivate ProxyServiceImpl
+
+ProxyService --> IProxyService : DTO
 deactivate ProxyService
 
-IMessagingPort --> Mapper : RewriteRuleDTO
+IProxyService --> MessagingService : DTO
+deactivate IProxyService
+
+MessagingService --> IMessagingPort : DTO
+deactivate MessagingService
+
+IMessagingPort --> Mapper : DTO
 deactivate IMessagingPort
 
-Mapper -> Entity : new(id, pattern, replacement, isActive)
-activate Entity
+Mapper -> Entity : new(...)
 Entity --> Mapper : rule
-deactivate Entity
 
 Mapper --> MessagingRepo : rule
 deactivate Mapper
 
 MessagingRepo --> IRepository : rule
 deactivate MessagingRepo
+
 IRepository --> Interactor : rule
 deactivate IRepository
 
 Interactor -> Entity : withActive(!isActive)
-activate Entity
 Entity --> Interactor : updatedRule
-deactivate Entity
 
 Interactor -> IRepository : update(updatedRule)
 activate IRepository
+
 IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
-
-note over MessagingRepo, Mapper : RepositoryはMapperに委譲（DTOを意識しない）
 
 MessagingRepo -> Mapper : update(updatedRule)
 activate Mapper
 
-Mapper -> UpdateDTO : new(ruleId, isActive)
-activate UpdateDTO
-UpdateDTO --> Mapper : dto
-deactivate UpdateDTO
-
 Mapper -> IMessagingPort : updateActive(dto)
 activate IMessagingPort
 
-IMessagingPort -> ProxyService : updateActive(UpdateRuleActiveRequestDTO)
+IMessagingPort -> MessagingService : updateActive(dto)
+activate MessagingService
+
+MessagingService -> IProxyService : updateActive(dto)
+activate IProxyService
+
+IProxyService -> ProxyService : updateActive(dto)
 activate ProxyService
 
-ProxyService -> DexieRepo : updateActive(UpdateRuleActiveRequestDTO)
+ProxyService -> ProxyServiceImpl : updateActive(dto)
+activate ProxyServiceImpl
+
+ProxyServiceImpl -> DexieRepo : updateActive(dto)
 activate DexieRepo
-DexieRepo --> ProxyService : void
+DexieRepo --> ProxyServiceImpl : void
 deactivate DexieRepo
 
-ProxyService --> IMessagingPort : void
+ProxyServiceImpl --> ProxyService : void
+deactivate ProxyServiceImpl
+
+ProxyService --> IProxyService : void
 deactivate ProxyService
+
+IProxyService --> MessagingService : void
+deactivate IProxyService
+
+MessagingService --> IMessagingPort : void
+deactivate MessagingService
 
 IMessagingPort --> Mapper : void
 deactivate IMessagingPort
@@ -167,56 +156,35 @@ deactivate Mapper
 
 MessagingRepo --> IRepository : void
 deactivate MessagingRepo
+
 IRepository --> Interactor : void
 deactivate IRepository
 
-note over Interactor, ITabsGateway : InteractorはITabsGatewayに依存（同じ第2層内で定義）\n（責務分離: Repository=永続化, TabsGateway=タブ操作）
-
-Interactor -> ITabsGateway : reloadMatchingTabs(updatedRule)
+Interactor -> ITabsGateway : reloadMatchingTabs(rule)
 activate ITabsGateway
 
-note over ITabsGateway, TabsGateway : 実行時はDI経由で\nChromeTabsGatewayが注入
-
-ITabsGateway -> TabsGateway : reloadMatchingTabs(updatedRule)
+ITabsGateway -> TabsGateway : reloadMatchingTabs(rule)
 activate TabsGateway
 
-note over TabsGateway : chrome.tabs.query()でタブ一覧取得
-
-loop 各タブに対して
-  TabsGateway -> Entity : matchesUrl(tab.url)
-  activate Entity
+loop 各タブ
+  TabsGateway -> Entity : matchesUrl(url)
   Entity --> TabsGateway : boolean
-  deactivate Entity
-  note over TabsGateway : trueの場合chrome.tabs.reload()\n（ADR-001: ドメインロジックは第1層で実行）
 end
 
 TabsGateway --> ITabsGateway : void
 deactivate TabsGateway
+
 ITabsGateway --> Interactor : void
 deactivate ITabsGateway
 
-Interactor -> OutputData : new(updatedRule)
-activate OutputData
-OutputData --> Interactor : outputData
-deactivate OutputData
+Interactor -> Presenter : present(outputData)
+activate Presenter
 
-note over Interactor, IPresenter : InteractorはOutput Port（IPresenter）に依存
-
-Interactor -> IPresenter : present(ToggleRuleActiveOutputData)
-activate IPresenter
-
-note over IPresenter, PresenterImpl : 実行時はDI経由で\nPresenter実装が注入
-
-IPresenter -> PresenterImpl : present(ToggleRuleActiveOutputData)
-activate PresenterImpl
-
-PresenterImpl -> View : updateRuleInView(rule)
+Presenter -> View : updateRuleInView(rule)
 View --> UI : 状態更新
 
-deactivate PresenterImpl
-deactivate IPresenter
+deactivate Presenter
 deactivate Interactor
-deactivate IUseCase
 deactivate Controller
 deactivate View
 
