@@ -1,36 +1,12 @@
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { container } from 'src/frameworks-and-drivers/di/container';
 import {
-  IRewriteRuleProxyService,
   registerRewriteRuleProxyService,
   setRewriteRuleProxyServiceImpl,
 } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
+import { createRewriteRuleProxyServiceImpl } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl';
 import { contextMenusOnClicked } from 'src/infrastructure/browser/background/contextMenus/onClicked';
 import { runtimeOnExtensionInstalled } from 'src/infrastructure/browser/background/runtime/onExtensionInstalled';
 import { runtimeOnMessageReceived } from 'src/infrastructure/browser/background/runtime/onMessageReceived';
 import { tabsOnUpdated } from 'src/infrastructure/browser/background/tabs/onUpdated';
-
-/**
- * RewriteRuleProxyService の実装を作成
- * container を使用してリポジトリを解決し、ルールを取得する
- */
-function createRewriteRuleProxyServiceImpl(): IRewriteRuleProxyService {
-  return {
-    async getAllRules() {
-      const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
-      const rules = await repository.getAll();
-
-      return rules.toArray().map((rule) => ({
-        id: rule.id,
-        oldString: rule.oldString,
-        newString: rule.newString,
-        urlPattern: rule.urlPattern,
-        isRegex: rule.isRegex,
-        isActive: rule.isActive,
-      }));
-    },
-  };
-}
 
 export default defineBackground({
   // Set manifest options
