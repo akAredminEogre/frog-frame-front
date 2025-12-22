@@ -162,7 +162,7 @@ import type { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRe
 import type { RewriteRuleDTO } from './dto/RewriteRuleDTO';
 import type { GetByIdRequestDTO } from './dto/request-dto/GetByIdRequestDTO';
 import type { UpdateRuleActiveRequestDTO } from './dto/request-dto/UpdateRuleActiveRequestDTO';
-import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
+import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 
 class RewriteRuleProxyServiceImpl implements IRewriteRuleMessagingPort {
   private readonly repository = new DexieRewriteRuleRepository();
