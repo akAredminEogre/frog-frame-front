@@ -42,16 +42,38 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/getAllRules/
 
 - **IRewriteRuleMessagingPort**: 外部依存（proxy-service経由のBackground通信）をモック化
   - `getAll()`: テストケースごとに異なるDTO配列を返すようモック設定
+  - `getById()`, `updateActive()`: インターフェース準拠のためダミー定義
 
 ### モック方法
 
-インスタンス生成時にモックを注入（コンストラクタインジェクション）:
+`beforeEach`でモックを初期化し、各テストケースでインスタンス生成時に注入（コンストラクタインジェクション）:
 
 ```typescript
-const mockMessagingPort: IRewriteRuleMessagingPort = {
-  getAll: vi.fn(),
-  getById: vi.fn(),
-  updateActive: vi.fn(),
-};
+let mockMessagingPort: IRewriteRuleMessagingPort;
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  mockMessagingPort = {
+    getAll: vi.fn(),
+    getById: vi.fn(),
+    updateActive: vi.fn(),
+  };
+});
+
+afterEach(() => {
+  vi.resetAllMocks();
+});
+
+// 各テストケース内
+(mockMessagingPort.getAll as ReturnType<typeof vi.fn>).mockResolvedValue(mockDtos);
 const mapper = new RewriteRuleMapper(mockMessagingPort);
+```
+
+### モックファイル構成
+
+インラインモックを使用するため、別ファイルは不要。
+
+```
+tests/unit/interface-adapters/mappers/RewriteRuleMapper/getAllRules/
+└── normal-cases.test.ts       # モックはファイル内で定義
 ```
