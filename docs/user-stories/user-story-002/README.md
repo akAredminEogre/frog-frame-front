@@ -129,7 +129,7 @@ src/
 ├── frameworks-and-drivers/
 │   ├── messaging/
 │   │   ├── RewriteRuleProxyService.ts        # proxy-service 実装
-│   │   ├── protocol.ts                       # messaging プロトコル定義（新規）
+│   │   ├── MessagingProtocol.ts              # messaging プロトコル定義（新規）
 │   │   ├── BackgroundScriptMessageSender.ts  # Background 側の messaging 送信（新規）
 │   │   ├── ContentScriptMessageReceiver.ts   # Content Script 側の messaging 受信（新規）
 │   │   └── dto/
@@ -184,7 +184,7 @@ export const [registerRewriteRuleProxyService, getRewriteRuleProxyService] =
   defineProxyService('RewriteRuleProxyService', () => new RewriteRuleProxyServiceImpl());
 ```
 
-#### protocol.ts（プロトコル定義）
+#### MessagingProtocol.ts（プロトコル定義）
 
 ```typescript
 import { defineExtensionMessaging } from '@webext-core/messaging';
@@ -200,7 +200,7 @@ export const messaging = defineExtensionMessaging<MessagingProtocol>();
 #### BackgroundScriptMessageSender.ts（messaging 送信側）
 
 ```typescript
-import { messaging } from './protocol';
+import { messaging } from './MessagingProtocol';
 
 export const BackgroundScriptMessageSender = {
   async sendApplyAllRules(tabId: number): Promise<void> {
@@ -212,7 +212,7 @@ export const BackgroundScriptMessageSender = {
 #### ContentScriptMessageReceiver.ts（messaging 受信側）
 
 ```typescript
-import { messaging } from './protocol';
+import { messaging } from './MessagingProtocol';
 
 export const ContentScriptMessageReceiver = {
   onApplyAllRules(handler: () => void): void {
@@ -262,7 +262,7 @@ export const ContentScriptMessageReceiver = {
 
 | ファイル | 変更内容 |
 |---------|---------|
-| `messaging/protocol.ts` | 新規作成: messaging プロトコル定義 |
+| `messaging/MessagingProtocol.ts` | 新規作成: messaging プロトコル定義 |
 | `messaging/BackgroundScriptMessageSender.ts` | 新規作成: Background → Content Script への messaging 送信 |
 | `messaging/ContentScriptMessageReceiver.ts` | 新規作成: Content Script 側の messaging 受信 |
 | `content.ts` | ContentScriptMessageReceiver の onMessage 登録 |
