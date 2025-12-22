@@ -1,8 +1,8 @@
 /**
  * RewriteRuleMapper.getAllRules - 正常系テスト
- * 1. MessagingPort経由でDTOを取得し、エンティティに変換できる
- * 2. 空の配列の場合も正常に処理できる
- * 3. 複数のルールを正しく変換できる
+ * 1. 単一ルール: 1件のDTOをEntityに変換
+ * 2. 空配列: 0件のDTOを空配列で返却
+ * 3. 複数ルール: 複数件のDTOをEntity配列に変換
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -29,7 +29,7 @@ describe('RewriteRuleMapper.getAllRules - 正常系', () => {
 
   const testCases = [
     {
-      description: 'MessagingPort経由でDTOを取得し、エンティティに変換できる',
+      description: '単一ルール: 1件のDTOをEntityに変換',
       mockDtos: [
         { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
       ] as RewriteRuleDTO[],
@@ -37,13 +37,13 @@ describe('RewriteRuleMapper.getAllRules - 正常系', () => {
       expectedIds: [1],
     },
     {
-      description: '空の配列の場合も正常に処理できる',
+      description: '空配列: 0件のDTOを空配列で返却',
       mockDtos: [] as RewriteRuleDTO[],
       expectedLength: 0,
       expectedIds: [],
     },
     {
-      description: '複数のルールを正しく変換できる',
+      description: '複数ルール: 複数件のDTOをEntity配列に変換',
       mockDtos: [
         { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
         { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: true, isActive: false },
