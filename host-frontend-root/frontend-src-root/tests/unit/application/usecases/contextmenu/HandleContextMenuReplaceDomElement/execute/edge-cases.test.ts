@@ -44,8 +44,8 @@ describe('HandleContextMenuReplaceDomElement.execute - エッジケース', () =
   ])('$description', async ({ tabId }) => {
     // Arrange
     const mockResponse = { selection: 'test' };
-    
-    vi.mocked(mockTabsService.sendMessage).mockResolvedValue(mockResponse);
+
+    vi.mocked(mockTabsService.sendGetElementSelectionMessage).mockResolvedValue(mockResponse);
     vi.mocked(mockSelectedPageTextRepository.setSelectedPageText).mockResolvedValue();
     vi.mocked(mockPopupService.openPopup).mockResolvedValue();
 
@@ -53,10 +53,7 @@ describe('HandleContextMenuReplaceDomElement.execute - エッジケース', () =
     await useCase.execute(tabId);
 
     // Assert
-    expect(mockTabsService.sendMessage).toHaveBeenCalledWith(
-      tabId,
-      { type: 'getElementSelection' }
-    );
+    expect(mockTabsService.sendGetElementSelectionMessage).toHaveBeenCalledWith(tabId);
     expect(mockSelectedPageTextRepository.setSelectedPageText).toHaveBeenCalledWith('test');
     expect(mockPopupService.openPopup).toHaveBeenCalledTimes(1);
   });
