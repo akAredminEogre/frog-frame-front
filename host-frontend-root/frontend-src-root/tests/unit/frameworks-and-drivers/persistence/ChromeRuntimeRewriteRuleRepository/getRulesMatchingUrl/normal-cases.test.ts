@@ -25,7 +25,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
       toDto: vi.fn(),
     } as unknown as RewriteRuleMapper;
 
-    repository = new ChromeRuntimeRewriteRuleRepository(mockMapper);
+    // MapperFactoryとして渡す（遅延初期化パターン）
+    repository = new ChromeRuntimeRewriteRuleRepository(() => mockMapper);
   });
 
   afterEach(() => {
