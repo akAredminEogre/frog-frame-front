@@ -23,13 +23,13 @@ export interface ContentScriptProtocolMap {
    * ルールを適用する
    * Background → Content Script
    */
-  applyAllRules(): { success: boolean; error?: string };
+  applyAllRules(data: void): { success: boolean; error?: string };
 
   /**
    * 要素選択を取得する
    * Background → Content Script
    */
-  getElementSelection(): { selection: string };
+  getElementSelection(data: void): { selection: string };
 }
 
 /**
