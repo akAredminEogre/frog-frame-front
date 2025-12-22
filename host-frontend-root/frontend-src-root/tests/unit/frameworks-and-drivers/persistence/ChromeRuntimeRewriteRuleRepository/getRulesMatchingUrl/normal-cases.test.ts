@@ -2,12 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
-import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
-
-// 動的importをモック
-vi.mock('src/frameworks-and-drivers/messaging/RewriteRuleProxyService', () => ({
-  getRewriteRuleProxyService: vi.fn(),
-}));
 
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
@@ -17,21 +11,16 @@ vi.mock('src/frameworks-and-drivers/messaging/RewriteRuleProxyService', () => ({
  */
 describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', () => {
   let repository: ChromeRuntimeRewriteRuleRepository;
-  let mockProxyService: { getAll: ReturnType<typeof vi.fn> };
 
-  beforeEach(async () => {
+  beforeEach(() => {
     vi.clearAllMocks();
 
-    // Create mock proxy service
-    mockProxyService = {
-      getAll: vi.fn(),
-    };
-
-    // 動的importされるモジュールのモックを設定
-    const { getRewriteRuleProxyService } = await import(
-      'src/frameworks-and-drivers/messaging/RewriteRuleProxyService'
-    );
-    vi.mocked(getRewriteRuleProxyService).mockReturnValue(mockProxyService as any);
+    // Mock chrome.runtime.sendMessage
+    global.chrome = {
+      runtime: {
+        sendMessage: vi.fn(),
+      },
+    } as any;
 
     repository = new ChromeRuntimeRewriteRuleRepository();
   });
@@ -43,39 +32,42 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
   const testCases = [
     {
       description: 'URLにマッチするルールのみを取得する',
-      mockDtos: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
-        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: false, isActive: true },
-      ] as RewriteRuleDTO[],
+      mockRules: [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: false },
+      ],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
       expectedOldStrings: ['old1'],
     },
     {
       description: 'マッチするルールがない場合は空のRewriteRulesを返す',
-      mockDtos: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://other.com', isRegex: false, isActive: true },
-      ] as RewriteRuleDTO[],
+      mockRules: [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://other.com', isRegex: false },
+      ],
       currentUrl: 'https://example.com/page',
       expectedLength: 0,
       expectedOldStrings: [],
     },
     {
       description: '空のurlPatternを持つルールは取得されない',
-      mockDtos: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: '', isRegex: false, isActive: true },
-        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://example.com', isRegex: false, isActive: true },
-      ] as RewriteRuleDTO[],
+      mockRules: [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: '', isRegex: false },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://example.com', isRegex: false },
+      ],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
       expectedOldStrings: ['old2'],
     },
   ];
 
-  testCases.forEach(({ description, mockDtos, currentUrl, expectedLength, expectedOldStrings }) => {
+  testCases.forEach(({ description, mockRules, currentUrl, expectedLength, expectedOldStrings }) => {
     it(description, async () => {
-      // Arrange - proxy-service.getAll() がDTOを返すようにモック
-      mockProxyService.getAll.mockResolvedValue(mockDtos);
+      // Arrange
+      vi.mocked(chrome.runtime.sendMessage).mockResolvedValue({
+        success: true,
+        rules: mockRules,
+      });
 
       // Act
       const result = await repository.getRulesMatchingUrl(currentUrl);
