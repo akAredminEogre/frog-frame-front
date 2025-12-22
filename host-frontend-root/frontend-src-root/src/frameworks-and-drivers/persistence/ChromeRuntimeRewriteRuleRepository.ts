@@ -2,13 +2,8 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
-
-/**
- * Mapperを作成するファクトリ関数の型
- * 遅延初期化のために使用
- */
-export type MapperFactory = () => RewriteRuleMapper;
+import { getRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
+import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
 
 /**
  * Chrome Runtime Messaging を使用したRewriteRuleリポジトリの実装
@@ -16,37 +11,46 @@ export type MapperFactory = () => RewriteRuleMapper;
  * Clean Architectureのインフラストラクチャ層に配置
  * IRewriteRuleRepositoryインターフェースを実装
  *
- * ADR-002に従い、RewriteRuleMapper経由でproxy-serviceと通信する
+ * ADR-002に従い、@webext-core/proxy-service経由でBackground Scriptと通信する
  *
- * 遅延初期化: Mapperはファクトリ関数経由で取得し、実際に必要になるまで
- * proxy-serviceとの通信を開始しない。これによりBackground Scriptの初期化完了を待てる。
+ * 遅延初期化: proxy-serviceは実際にデータが必要になるまで呼び出されない。
+ * これによりBackground Scriptの初期化完了を待てる。
+ * 注意: このクラスは内部で直接proxy-serviceを呼び出し、DIコンテナを経由しない。
  */
 export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepository {
-  private readonly mapperFactory: MapperFactory;
-  private cachedMapper: RewriteRuleMapper | null = null;
-
-  constructor(mapperFactory: MapperFactory) {
-    this.mapperFactory = mapperFactory;
-  }
-
   /**
-   * Mapperを取得する（遅延初期化）
-   * 初回呼び出し時にファクトリからMapperを作成し、以降はキャッシュを返す
+   * DTOからエンティティに変換する
+   * @param dto RewriteRuleDTO
+   * @returns RewriteRuleエンティティ
    */
-  private getMapper(): RewriteRuleMapper {
-    if (!this.cachedMapper) {
-      this.cachedMapper = this.mapperFactory();
-    }
-    return this.cachedMapper;
+  private toEntity(dto: RewriteRuleDTO): RewriteRule {
+    return new RewriteRule(
+      dto.id,
+      dto.oldString,
+      dto.newString,
+      dto.urlPattern,
+      dto.isRegex,
+      dto.isActive
+    );
   }
 
   /**
    * すべてのルールを取得する
-   * Mapper経由でproxy-serviceを通じてBackgroundからデータを取得
+   * proxy-service経由でBackgroundからデータを取得し、Entityに変換
    * @returns RewriteRulesオブジェクト
    */
   async getAll(): Promise<RewriteRules> {
-    return this.getMapper().getAllRules();
+    // 遅延初期化: ここで初めてproxy-serviceを呼び出す
+    const proxyService = getRewriteRuleProxyService();
+    const dtos = await proxyService.getAll();
+
+    const rulesObject: Record<string, RewriteRule> = {};
+    dtos.forEach((dto) => {
+      const rule = this.toEntity(dto);
+      rulesObject[rule.id] = rule;
+    });
+
+    return new RewriteRules(rulesObject);
   }
 
   /**
