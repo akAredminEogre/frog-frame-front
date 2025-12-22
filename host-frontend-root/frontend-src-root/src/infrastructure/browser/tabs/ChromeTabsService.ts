@@ -8,16 +8,6 @@ import { sendToContentScript } from 'src/frameworks-and-drivers/messaging/messag
  * @webext-core/messaging を使用してContent Scriptと通信する
  */
 export class ChromeTabsService implements IChromeTabsService {
-  async sendMessage(tabId: number, message: any): Promise<any> {
-    try {
-      const response = await chrome.tabs.sendMessage(tabId, message);
-      return response;
-    } catch (error) {
-      console.error('[ChromeTabsService] sendMessage error:', error);
-      throw error;
-    }
-  }
-
   async queryTabs(queryInfo: any): Promise<Tabs> {
     try {
       const tabs = await chrome.tabs.query(queryInfo);
@@ -36,6 +26,16 @@ export class ChromeTabsService implements IChromeTabsService {
       return response;
     } catch (error) {
       console.error('[ChromeTabsService] sendApplyAllRulesMessage error:', error);
+      throw error;
+    }
+  }
+
+  async sendGetElementSelectionMessage(tabId: number): Promise<{ selection: string }> {
+    try {
+      const response = await sendToContentScript('getElementSelection', undefined, tabId);
+      return response;
+    } catch (error) {
+      console.error('[ChromeTabsService] sendGetElementSelectionMessage error:', error);
       throw error;
     }
   }

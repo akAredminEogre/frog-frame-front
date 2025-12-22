@@ -18,7 +18,7 @@ export class HandleContextMenuReplaceDomElement {
    * @returns Promise<void>
    */
   async execute(tabId: number): Promise<void> {
-    const response = await this.chromeTabsService.sendMessage(tabId, { type: 'getElementSelection' });
+    const response = await this.chromeTabsService.sendGetElementSelectionMessage(tabId);
 
     await this.saveSelectionAndOpenPopup(response.selection);
   }
