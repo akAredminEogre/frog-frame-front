@@ -28,7 +28,6 @@ URLパターンに基づいてルールをフィルタリングできること�
 - [x] 空urlPatternのスキップ
 - [x] IRewriteRuleMessagingPort.getAll()が呼ばれること
 - [x] 戻り値がRewriteRulesインスタンスであること
-- [ ] 正規表現パターンマッチング → 将来検討（isRegex: trueのケース）
 - [ ] 異常系（MessagingPortエラー） → 将来検討（現時点ではエラーハンドリングなし）
 
 ## テストファイル構成
