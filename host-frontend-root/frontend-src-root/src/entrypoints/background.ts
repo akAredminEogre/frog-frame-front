@@ -26,6 +26,7 @@ function createRewriteRuleProxyServiceImpl(): IRewriteRuleProxyService {
         newString: rule.newString,
         urlPattern: rule.urlPattern,
         isRegex: rule.isRegex,
+        isActive: rule.isActive,
       }));
     },
   };

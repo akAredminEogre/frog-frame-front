@@ -1,21 +1,18 @@
 import { defineProxyService } from '@webext-core/proxy-service';
 
+import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
+
 /**
  * RewriteRule取得用のプロキシサービスインターフェース
  * Content Script から Background へのルール取得に使用
+ * ADR-002, ADR-003に準拠し、DTOを使用
  */
 export interface IRewriteRuleProxyService {
   /**
    * 全ルールを取得する
-   * @returns ルールデータの配列
+   * @returns RewriteRuleDTO配列
    */
-  getAllRules(): Promise<Array<{
-    id: number;
-    oldString: string;
-    newString: string;
-    urlPattern: string;
-    isRegex: boolean;
-  }>>;
+  getAllRules(): Promise<RewriteRuleDTO[]>;
 }
 
 /**
