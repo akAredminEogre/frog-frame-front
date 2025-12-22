@@ -136,7 +136,7 @@ src/
     ├── persistence/                            ← Repository 実装
     │   └── ChromeRuntimeRewriteRuleRepository.ts  ← Content Script用（メッセージング経由）
     ├── messaging/                              ← メッセージング層
-    │   ├── RewriteRuleMessagingService.ts      ← IRewriteRuleMessagingPort 実装
+    │   ├── RewriteRuleProxyService.ts          ← IRewriteRuleMessagingPort 実装
     │   └── dto/                                ← メッセージング用DTO
     │       ├── RewriteRuleDTO.ts               ← エンティティDTO
     │       └── request-dto/                    ← リクエストDTO

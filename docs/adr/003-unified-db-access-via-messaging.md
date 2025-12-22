@@ -55,7 +55,7 @@ Mapper（interface-adapters 層）が MessagingService（frameworks-and-drivers 
 | `ChromeRuntimeRewriteRuleRepository` | frameworks-and-drivers | Mapper への委譲のみ（DTO を意識しない） |
 | `RewriteRuleMapper` | interface-adapters | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信 |
 | `IRewriteRuleMessagingPort` | interface-adapters | MessagingService の抽象化（Port） |
-| `RewriteRuleMessagingService` | frameworks-and-drivers | IRewriteRuleMessagingPort を実装、proxy-service として DTO を受け渡し |
+| `RewriteRuleProxyService` | frameworks-and-drivers | IRewriteRuleMessagingPort を実装、proxy-service として DTO を受け渡し |
 | `DexieRewriteRuleRepository` | frameworks-and-drivers | DTO ↔ DB レコード 変換 |
 
 #### Mapper + Port 導入の理由

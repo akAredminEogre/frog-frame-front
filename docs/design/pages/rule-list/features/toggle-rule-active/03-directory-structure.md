@@ -62,7 +62,7 @@ src/frameworks-and-drivers/
 │   │   └── DexieRewriteRuleRepository.ts        ← DTO ↔ DBレコード変換（Background Script用）
 │   └── ChromeRuntimeRewriteRuleRepository.ts    ← メッセージング経由（Content Script用）
 ├── messaging/                                   ← メッセージング層
-│   ├── RewriteRuleMessagingService.ts           ← IRewriteRuleMessagingPort 実装
+│   ├── RewriteRuleProxyService.ts                ← IRewriteRuleMessagingPort 実装
 │   └── dto/                                     ← メッセージング用DTO（ADR-002、ADR-003参照）
 │       ├── RewriteRuleDTO.ts                    ← エンティティDTO
 │       └── request-dto/                         ← リクエストDTO
