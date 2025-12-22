@@ -35,12 +35,13 @@ end box
 box "Rules Page - frameworks-and-drivers" #LightCyan
   participant "ChromeRuntime\nRewriteRuleRepository" as MessagingRepo
   participant "ChromeTabsGateway" as TabsGateway
+  participant "RewriteRule\nMessagingService" as MessagingService
   participant "GetByIdRequestDTO" as GetByIdDTO
   participant "UpdateRuleActive\nRequestDTO" as UpdateDTO
 end box
 
 box "Background - frameworks-and-drivers (第4層)" #LightGray
-  participant "RewriteRuleProxyService" as ProxyService
+  participant "RewriteRule\nProxyService" as ProxyService
   participant "DexieRewriteRule\nRepository" as DexieRepo
 end box
 
@@ -96,9 +97,14 @@ note over Mapper, IMessagingPort : MapperはIRewriteRuleMessagingPortに依存\n
 Mapper -> IMessagingPort : getById(dto)
 activate IMessagingPort
 
-note over IMessagingPort, ProxyService : 実行時はDI経由で\nRewriteRuleProxyServiceが注入
+note over IMessagingPort, MessagingService : 実行時はDI経由で\nRewriteRuleMessagingServiceが注入
 
-IMessagingPort -> ProxyService : getById(GetByIdRequestDTO)
+IMessagingPort -> MessagingService : getById(GetByIdRequestDTO)
+activate MessagingService
+
+note over MessagingService, ProxyService : MessagingServiceはproxy-service経由で\nBackground Scriptと通信
+
+MessagingService -> ProxyService : getById(GetByIdRequestDTO)
 activate ProxyService
 
 ProxyService -> DexieRepo : getById(ruleId)
@@ -106,8 +112,11 @@ activate DexieRepo
 DexieRepo --> ProxyService : RewriteRuleDTO
 deactivate DexieRepo
 
-ProxyService --> IMessagingPort : RewriteRuleDTO
+ProxyService --> MessagingService : RewriteRuleDTO
 deactivate ProxyService
+
+MessagingService --> IMessagingPort : RewriteRuleDTO
+deactivate MessagingService
 
 IMessagingPort --> Mapper : RewriteRuleDTO
 deactivate IMessagingPort
@@ -148,7 +157,10 @@ deactivate UpdateDTO
 Mapper -> IMessagingPort : updateActive(dto)
 activate IMessagingPort
 
-IMessagingPort -> ProxyService : updateActive(UpdateRuleActiveRequestDTO)
+IMessagingPort -> MessagingService : updateActive(UpdateRuleActiveRequestDTO)
+activate MessagingService
+
+MessagingService -> ProxyService : updateActive(UpdateRuleActiveRequestDTO)
 activate ProxyService
 
 ProxyService -> DexieRepo : updateActive(UpdateRuleActiveRequestDTO)
@@ -156,8 +168,11 @@ activate DexieRepo
 DexieRepo --> ProxyService : void
 deactivate DexieRepo
 
-ProxyService --> IMessagingPort : void
+ProxyService --> MessagingService : void
 deactivate ProxyService
+
+MessagingService --> IMessagingPort : void
+deactivate MessagingService
 
 IMessagingPort --> Mapper : void
 deactivate IMessagingPort
