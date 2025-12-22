@@ -116,11 +116,25 @@ export const [registerRewriteRuleProxyService, getRewriteRuleProxyService] =
 ```
 
 ```typescript
-// background.ts（Background Script のみで container.ts を import）
-import { container } from 'container.ts';
+// RewriteRuleProxyServiceImpl.ts（実装を別ファイルに分離）
+import { container } from 'src/frameworks-and-drivers/di/container';
 
-const impl = { getAllRules: () => container.resolve(...).getAll() };
-setRewriteRuleProxyServiceImpl(impl);
+export function createRewriteRuleProxyServiceImpl(): IRewriteRuleProxyService {
+  return {
+    async getAllRules() {
+      const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+      const rules = await repository.getAll();
+      return rules.toArray().map((rule) => RewriteRuleMapper.toDto(rule));
+    },
+  };
+}
+```
+
+```typescript
+// background.ts（実装ファイルを import して注入）
+import { createRewriteRuleProxyServiceImpl } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl';
+
+setRewriteRuleProxyServiceImpl(createRewriteRuleProxyServiceImpl());
 registerRewriteRuleProxyService();
 ```
 
