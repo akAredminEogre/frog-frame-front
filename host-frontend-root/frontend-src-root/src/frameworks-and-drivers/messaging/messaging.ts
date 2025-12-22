@@ -11,7 +11,7 @@ export interface BackgroundProtocolMap {
    * 全ルールを適用する
    * Popup → Background
    */
-  applyAllRules(data: { tabId: number; tabUrl: string }): { success: boolean; response?: any; error?: string };
+  applyAllRules(data: { tabId: number; tabUrl: string }): { success: boolean; response?: unknown; error?: string };
 }
 
 /**

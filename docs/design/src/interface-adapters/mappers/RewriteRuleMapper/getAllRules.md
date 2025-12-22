@@ -48,10 +48,10 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/getAllRules/
 
 ### モック方法
 
-モックファクトリからインポートし、`beforeEach`で初期化（コンストラクタインジェクション）:
+共通モックファクトリからインポートし、`beforeEach`で初期化（コンストラクタインジェクション）:
 
 ```typescript
-import { createMockRewriteRuleMessagingPort } from '../mocks/createMockRewriteRuleMessagingPort';
+import { createMockRewriteRuleMessagingPort } from 'tests/unit/shared/mocks/createMockRewriteRuleMessagingPort';
 
 let mockMessagingPort: IRewriteRuleMessagingPort;
 
@@ -71,10 +71,9 @@ const mapper = new RewriteRuleMapper(mockMessagingPort);
 
 ### モックファイル構成
 
+共通モックファクトリを使用（複数テストで共有）:
+
 ```
-tests/unit/interface-adapters/mappers/RewriteRuleMapper/
-├── getAllRules/
-│   └── normal-cases.test.ts
-└── mocks/
-    └── createMockRewriteRuleMessagingPort.ts    # モックファクトリ
+tests/unit/shared/mocks/
+└── createMockRewriteRuleMessagingPort.ts    # 共通モックファクトリ
 ```
