@@ -5,18 +5,39 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
 /**
+ * Mapperを作成するファクトリ関数の型
+ * 遅延初期化のために使用
+ */
+export type MapperFactory = () => RewriteRuleMapper;
+
+/**
  * Chrome Runtime Messaging を使用したRewriteRuleリポジトリの実装
  * Content Script用: IndexedDBの代わりにBackground Scriptとのメッセージングでデータアクセス
  * Clean Architectureのインフラストラクチャ層に配置
  * IRewriteRuleRepositoryインターフェースを実装
  *
  * ADR-002に従い、RewriteRuleMapper経由でproxy-serviceと通信する
+ *
+ * 遅延初期化: Mapperはファクトリ関数経由で取得し、実際に必要になるまで
+ * proxy-serviceとの通信を開始しない。これによりBackground Scriptの初期化完了を待てる。
  */
 export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepository {
-  private readonly mapper: RewriteRuleMapper;
+  private readonly mapperFactory: MapperFactory;
+  private cachedMapper: RewriteRuleMapper | null = null;
 
-  constructor(mapper: RewriteRuleMapper) {
-    this.mapper = mapper;
+  constructor(mapperFactory: MapperFactory) {
+    this.mapperFactory = mapperFactory;
+  }
+
+  /**
+   * Mapperを取得する（遅延初期化）
+   * 初回呼び出し時にファクトリからMapperを作成し、以降はキャッシュを返す
+   */
+  private getMapper(): RewriteRuleMapper {
+    if (!this.cachedMapper) {
+      this.cachedMapper = this.mapperFactory();
+    }
+    return this.cachedMapper;
   }
 
   /**
@@ -25,7 +46,7 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
    * @returns RewriteRulesオブジェクト
    */
   async getAll(): Promise<RewriteRules> {
-    return this.mapper.getAllRules();
+    return this.getMapper().getAllRules();
   }
 
   /**

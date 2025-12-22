@@ -25,10 +25,10 @@ const awilixContainer = createContainer({
 });
 
 // Infrastructure services (singleton instances)
-// proxy-service経由でBackgroundと通信するためのMapperとRepository
-const rewriteRuleProxyService = getRewriteRuleProxyService();
-const rewriteRuleMapper = new RewriteRuleMapper(rewriteRuleProxyService);
-const chromeRuntimeRewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository(rewriteRuleMapper);
+// 遅延初期化: Mapperファクトリ関数を渡すことで、実際にデータが必要になるまで
+// proxy-serviceとの通信を開始しない（Background Scriptの初期化完了を待てる）
+const createMapper = () => new RewriteRuleMapper(getRewriteRuleProxyService());
+const chromeRuntimeRewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository(createMapper);
 const windowCurrentUrlService = new WindowCurrentUrlService();
 const debounceTimer = new DebounceTimer();
 const getSelectionService = new GetSelectionService();
