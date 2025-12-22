@@ -40,11 +40,11 @@ export class RewriteRuleMapper {
   }
 
   /**
-   * エンティティからDTOに変換する
+   * エンティティからDTOに変換する（静的メソッド）
    * @param entity RewriteRuleエンティティ
    * @returns RewriteRuleDTO
    */
-  toDto(entity: RewriteRule): RewriteRuleDTO {
+  static toDto(entity: RewriteRule): RewriteRuleDTO {
     return {
       id: entity.id,
       oldString: entity.oldString,
