@@ -9,6 +9,7 @@ import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/content
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
 import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { IElementFactory } from 'src/domain/ports/IElementFactory';
+import { getRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
 import { observerControl } from 'src/infrastructure/browser/content/observer/observerState';
 import { DebounceTimer } from 'src/infrastructure/browser/timer/DebounceTimer';
@@ -16,6 +17,7 @@ import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/Windo
 import { DomRootChecker } from 'src/infrastructure/document/DomRootChecker';
 import { ElementFactory } from 'src/infrastructure/document/ElementFactory';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
+import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
 // Create Awilix container for content script
 const awilixContainer = createContainer({
@@ -23,7 +25,10 @@ const awilixContainer = createContainer({
 });
 
 // Infrastructure services (singleton instances)
-const chromeRuntimeRewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository();
+// proxy-service経由でBackgroundと通信するためのMapperとRepository
+const rewriteRuleProxyService = getRewriteRuleProxyService();
+const rewriteRuleMapper = new RewriteRuleMapper(rewriteRuleProxyService);
+const chromeRuntimeRewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository(rewriteRuleMapper);
 const windowCurrentUrlService = new WindowCurrentUrlService();
 const debounceTimer = new DebounceTimer();
 const getSelectionService = new GetSelectionService();
