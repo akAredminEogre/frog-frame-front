@@ -17,3 +17,9 @@
   - ※ handlers ディレクトリは @webext-core/messaging 経由で使用中（レガシーではない）
 - [x] AC-6: E2E テストがすべてパスする
 - [x] AC-7: make testcheck がパスする（CI で確認）
+
+## 将来対応（PR-4）
+
+- [ ] AC-8: handlers ディレクトリが `frameworks-and-drivers/messaging/` 配下に移管されている
+  - `infrastructure/browser/handlers/` → `frameworks-and-drivers/messaging/handlers/`
+  - `infrastructure/browser/*/runtime/onMessageReceived.ts` → `frameworks-and-drivers/messaging/`
