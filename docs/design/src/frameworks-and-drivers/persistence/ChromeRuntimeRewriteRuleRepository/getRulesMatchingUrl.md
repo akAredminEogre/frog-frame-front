@@ -50,10 +50,10 @@ tests/unit/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository
 
 ### モック方法
 
-モックファクトリからインポートし、`beforeEach`で初期化（コンストラクタインジェクション）:
+共通モックファクトリからインポートし、`beforeEach`で初期化（コンストラクタインジェクション）:
 
 ```typescript
-import { createMockRewriteRuleMessagingPort } from '../mocks/createMockRewriteRuleMessagingPort';
+import { createMockRewriteRuleMessagingPort } from 'tests/unit/shared/mocks/createMockRewriteRuleMessagingPort';
 
 let mockMessagingPort: IRewriteRuleMessagingPort;
 
@@ -74,10 +74,9 @@ repository = new ChromeRuntimeRewriteRuleRepository(mapper);
 
 ### モックファイル構成
 
+共通モックファクトリを使用（複数テストで共有）:
+
 ```
-tests/unit/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository/
-├── getRulesMatchingUrl/
-│   └── normal-cases.test.ts
-└── mocks/
-    └── createMockRewriteRuleMessagingPort.ts    # モックファクトリ
+tests/unit/shared/mocks/
+└── createMockRewriteRuleMessagingPort.ts    # 共通モックファクトリ
 ```

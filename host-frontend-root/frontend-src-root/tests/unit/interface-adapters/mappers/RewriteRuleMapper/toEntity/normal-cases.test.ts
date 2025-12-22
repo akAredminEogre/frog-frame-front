@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
-import { createMockRewriteRuleMessagingPort } from '../mocks/createMockRewriteRuleMessagingPort';
+import { createMockRewriteRuleMessagingPort } from 'tests/unit/shared/mocks/createMockRewriteRuleMessagingPort';
 
 describe('RewriteRuleMapper.toEntity - 正常系', () => {
   it('全プロパティを持つDTOからエンティティに変換できる', () => {
