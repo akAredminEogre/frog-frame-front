@@ -5,8 +5,8 @@
 set -e
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-FRONTEND_DIR="$REPO_ROOT/host-frontend-root/frontend-src-root"
-PRE_COMMIT_HOOK="$REPO_ROOT/.git/hooks/pre-commit"
+FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
+PRE_COMMIT_HOOK="${REPO_ROOT}/.git/hooks/pre-commit"
 
 echo "Setting up pre-commit hook for Claude Code Web..."
 
@@ -16,10 +16,16 @@ if ! command -v npx >/dev/null 2>&1; then
   exit 1
 fi
 
+# Check if frontend directory exists
+if [ ! -d "${FRONTEND_DIR}" ]; then
+  echo "Error: Frontend directory not found at ${FRONTEND_DIR}"
+  exit 1
+fi
+
 # Check if node_modules exists, if not install (using subshell to preserve directory)
-if [ ! -d "$FRONTEND_DIR/node_modules" ]; then
+if [ ! -d "${FRONTEND_DIR}/node_modules" ]; then
   echo "Installing npm dependencies..."
-  if ! (cd "$FRONTEND_DIR" && npm install --no-audit --no-fund); then
+  if ! (cd "${FRONTEND_DIR}" && npm install --no-audit --no-fund); then
     echo "Error: Failed to install npm dependencies. Check permissions and network connectivity."
     exit 1
   fi
@@ -27,21 +33,25 @@ fi
 
 # Install lefthook (using subshell to preserve directory)
 echo "Installing lefthook..."
-if ! (cd "$REPO_ROOT" && npx --prefix "$FRONTEND_DIR" lefthook install); then
+if ! (cd "${REPO_ROOT}" && npx --prefix "${FRONTEND_DIR}" lefthook install); then
   echo "Error: Failed to install lefthook."
   exit 1
 fi
 
 # Patch pre-commit hook to find node_modules in host-frontend-root/frontend-src-root
-if [ -f "$PRE_COMMIT_HOOK" ]; then
+if [ -f "${PRE_COMMIT_HOOK}" ]; then
   # Check if already patched
-  if ! grep -q "host-frontend-root/frontend-src-root/node_modules" "$PRE_COMMIT_HOOK"; then
+  if ! grep -Fq "host-frontend-root/frontend-src-root/node_modules" "${PRE_COMMIT_HOOK}"; then
     echo "Patching pre-commit hook for custom node_modules path..."
+
+    # Create backup before modification
+    BACKUP_FILE="${PRE_COMMIT_HOOK}.backup"
+    cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"
 
     # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
     # Insert custom path check after the @evilmartians/lefthook execution line
     TEMP_FILE=$(mktemp)
-    trap 'rm -f "$TEMP_FILE"' EXIT ERR
+    trap 'rm -f "${TEMP_FILE}" "${BACKUP_FILE}"' EXIT
 
     awk '
     # Match the execution line for @evilmartians/lefthook (using flexible pattern for arch string)
@@ -53,13 +63,16 @@ if [ -f "$PRE_COMMIT_HOOK" ]; then
       next
     }
     { print }
-    ' "$PRE_COMMIT_HOOK" > "$TEMP_FILE"
-    mv "$TEMP_FILE" "$PRE_COMMIT_HOOK"
-    chmod +x "$PRE_COMMIT_HOOK"
+    ' "${PRE_COMMIT_HOOK}" > "${TEMP_FILE}"
+    mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"
+    chmod +x "${PRE_COMMIT_HOOK}"
 
-    # Verify patch was applied successfully
-    if ! grep -q "host-frontend-root/frontend-src-root/node_modules" "$PRE_COMMIT_HOOK"; then
+    # Verify patch was applied successfully with exact string match
+    EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
+    if ! grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
       echo "Error: Failed to patch pre-commit hook. The awk pattern may not have matched."
+      # Restore backup on failure
+      mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
       exit 1
     fi
 

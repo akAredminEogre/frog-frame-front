@@ -390,7 +390,8 @@ docs/
 
 このワークフローは以下を行います：
 - **Pre-commitフックのセットアップ**（ESLint + import sorting）
-- Issue番号の採番と `docs/issue-nnn/` ディレクトリ作成
+- Issue番号の採番
+- `docs/issue-nnn/` ディレクトリ作成
 - ブランチ作成（既にブランチが指定されている場合はスキップ）
 - PR作成リンクの表示
 
