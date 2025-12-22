@@ -15,7 +15,7 @@ export interface BackgroundProtocolMap {
    * 全ルールを適用する
    * Popup → Background
    */
-  applyAllRules(data: { tabId: number; tabUrl: string }): void;
+  applyAllRules(data: { tabId: number; tabUrl: string }): { success: boolean; response?: any; error?: string };
 }
 
 /**
@@ -33,7 +33,7 @@ export interface ContentScriptProtocolMap {
    * 要素選択を取得する
    * Background → Content Script
    */
-  getElementSelection(): { success: boolean; outerHtml?: string; error?: string };
+  getElementSelection(): { selection: string };
 }
 
 /**
