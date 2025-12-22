@@ -87,7 +87,8 @@
 | クラス | 責務 |
 |--------|------|
 | ChromeRuntimeRewriteRuleRepository | IRewriteRuleRepositoryの実装。Mapperへの委譲のみ（DTOを意識しない）（Rules Page用、ADR-002参照） |
-| RewriteRuleProxyService | IRewriteRuleMessagingPort を実装。defineProxyService で定義、Background Scriptで実行（ADR-002参照） |
+| RewriteRuleMessagingService | IRewriteRuleMessagingPort を実装。proxy-service 経由で DTO を送受信（ADR-002参照） |
+| RewriteRuleProxyService | proxy-service として定義（実装注入パターン）、Background Scriptで実行（ADR-002参照） |
 | DexieRewriteRuleRepository | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | ChromeTabsGateway | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（ADR-001参照） |
 | RewriteRuleDTO | メッセージング用DTO。エンティティ全体を表現（ADR-002、ADR-003参照） |
@@ -124,13 +125,15 @@ Entity ↔ DTO の変換と MessagingService への通信は RewriteRuleMapper �
 ChromeRuntimeRewriteRuleRepository は Mapper への委譲のみを行い、DTO を意識しない（ADR-002、ADR-003参照）。
 
 依存性逆転のため、Mapper は IRewriteRuleMessagingPort インターフェースに依存し、
-RewriteRuleProxyService がこれを実装する（ADR-002参照）。
+RewriteRuleMessagingService がこれを実装する。RewriteRuleMessagingService は内部で
+RewriteRuleProxyService（proxy-service）を使用して Background Script と通信する（ADR-002参照）。
 
 ADR-002 に従い、メッセージングには @webext-core/proxy-service を使用する。
+また、proxy-service は実装注入パターンを採用している（詳細は ADR-002 参照）。
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Rules Page (別タブ)                                              │
+│ Rules Page / Content Script                                      │
 │  ┌─────────────────────────────────────────────────────────────┐│
 │  │ RulesApp → Controller → Interactor                          ││
 │  │                              ↓                              ││
@@ -142,18 +145,23 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │  │              RewriteRuleMapper                              ││
 │  │              (Entity ↔ DTO変換 + IRewriteRuleMessagingPort) ││
 │  │                              ↓                              ││
-│  │              IRewriteRuleMessagingPort ←─────────────────┐  ││
-│  │                                                          │  ││
-│  │ Interactor → ITabsGateway → ChromeTabsGateway           │  ││
-│  │              (rule.matchesUrl()判定 → chrome.tabs.reload)│  ││
-│  └──────────────────────────────┬───────────────────────────┘──┘│
+│  │              IRewriteRuleMessagingPort                      ││
+│  │                              ↓                              ││
+│  │              RewriteRuleMessagingService                    ││
+│  │              (IRewriteRuleMessagingPort実装)                ││
+│  │                              ↓                              ││
+│  │              getRewriteRuleProxyService()                   ││
+│  │                                                             ││
+│  │ Interactor → ITabsGateway → ChromeTabsGateway              ││
+│  │              (rule.matchesUrl()判定 → chrome.tabs.reload)   ││
+│  └──────────────────────────────┬──────────────────────────────┘│
 └─────────────────────────────────┼───────────────────────────────┘
                                   │ proxy-service (DTO)
                                   ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │ Background Script                                                │
 │  ┌─────────────────────────────────────────────────────────────┐│
-│  │ RewriteRuleProxyService (implements IRewriteRuleMessagingPort)    ││
+│  │ RewriteRuleProxyService (実装注入パターン)                   ││
 │  │       ↓                                                     ││
 │  │ DexieRewriteRuleRepository (IndexedDB)                      ││
 │  └─────────────────────────────────────────────────────────────┘│

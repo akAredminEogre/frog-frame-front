@@ -70,7 +70,8 @@ Clean Architecture の依存ルールを守るため、Mapper（interface-adapte
   RewriteRuleMapper → uses → IRewriteRuleMessagingPort
 
 [frameworks-and-drivers]
-  RewriteRuleProxyService implements IRewriteRuleMessagingPort
+  RewriteRuleMessagingService implements IRewriteRuleMessagingPort
+  RewriteRuleMessagingService → uses → RewriteRuleProxyService (proxy-service)
 ```
 
 | コンポーネント | 層 | 責務 |
@@ -78,7 +79,52 @@ Clean Architecture の依存ルールを守るため、Mapper（interface-adapte
 | Repository | frameworks-and-drivers | Mapper への委譲のみ（DTO を意識しない） |
 | Mapper | interface-adapters | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信 |
 | IRewriteRuleMessagingPort | interface-adapters | MessagingService の抽象化（Port） |
-| MessagingService | frameworks-and-drivers | IRewriteRuleMessagingPort を実装、DTO の実際の送受信 |
+| RewriteRuleMessagingService | frameworks-and-drivers | IRewriteRuleMessagingPort を実装、proxy-service 経由で DTO を送受信 |
+| RewriteRuleProxyService | frameworks-and-drivers | proxy-service として定義、Background Script で実行 |
+
+#### 実装注入パターン（proxy-service 向け）
+
+`@webext-core/proxy-service` を使用する場合、Background Script と Content Script の両方で同じモジュールを import する必要がある。しかし、proxy-service 実装が DI コンテナ（container.ts）を静的 import すると、Content Script でモジュールをロードした際に Background 専用の依存関係も一緒にロードされ、問題が発生する。
+
+```
+# 問題のあるパターン
+RewriteRuleProxyService.ts
+  └── import { container } from 'container.ts'  ← 静的 import
+
+content.ts
+  └── import { getRewriteRuleProxyService } from 'RewriteRuleProxyService.ts'
+      └── container.ts も一緒にロードされる（副作用）
+```
+
+この問題を解決するため、**実装注入パターン**を採用する：
+
+```typescript
+// RewriteRuleProxyService.ts（container.ts を import しない）
+let serviceImpl: IRewriteRuleProxyService | null = null;
+
+export function setRewriteRuleProxyServiceImpl(impl: IRewriteRuleProxyService): void {
+  serviceImpl = impl;
+}
+
+function createRewriteRuleProxyService(): IRewriteRuleProxyService {
+  if (!serviceImpl) throw new Error('Implementation not set');
+  return serviceImpl;
+}
+
+export const [registerRewriteRuleProxyService, getRewriteRuleProxyService] =
+  defineProxyService('RewriteRuleProxyService', createRewriteRuleProxyService);
+```
+
+```typescript
+// background.ts（Background Script のみで container.ts を import）
+import { container } from 'container.ts';
+
+const impl = { getAllRules: () => container.resolve(...).getAll() };
+setRewriteRuleProxyServiceImpl(impl);
+registerRewriteRuleProxyService();
+```
+
+これにより、Content Script は `RewriteRuleProxyService.ts` を import しても `container.ts` がロードされない。
 
 この分離により以下を実現する：
 - **依存性逆転**: interface-adapters → frameworks-and-drivers の直接依存を回避
