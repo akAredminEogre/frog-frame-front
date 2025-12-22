@@ -1,5 +1,4 @@
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
-import { Tab } from 'src/domain/value-objects/Tab';
 import { sendToBackground } from 'src/frameworks-and-drivers/messaging/messaging';
 
 /**
@@ -7,14 +6,11 @@ import { sendToBackground } from 'src/frameworks-and-drivers/messaging/messaging
  * @webext-core/messaging を使用してBackground Scriptと通信する
  */
 export class ChromeRuntimeService implements IChromeRuntimeService {
-  async sendApplyRewriteRuleMessage(currentTab: Tab): Promise<{ success: boolean; error?: string }> {
+  async sendApplyRewriteRuleMessage(tabId: number, tabUrl: string): Promise<{ success: boolean; error?: string }> {
     try {
-      const tabId = currentTab.getTabId();
-      const tabUrl = currentTab.getTabUrl();
-
       await sendToBackground('applyAllRules', {
-        tabId: tabId.value,
-        tabUrl: tabUrl.value,
+        tabId,
+        tabUrl,
       });
 
       return { success: true };
