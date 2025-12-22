@@ -19,7 +19,10 @@ fi
 # Check if node_modules exists, if not install (using subshell to preserve directory)
 if [ ! -d "$FRONTEND_DIR/node_modules" ]; then
   echo "Installing npm dependencies..."
-  (cd "$FRONTEND_DIR" && npm install)
+  if ! (cd "$FRONTEND_DIR" && npm install --no-audit --no-fund); then
+    echo "Error: Failed to install npm dependencies. Check permissions and network connectivity."
+    exit 1
+  fi
 fi
 
 # Install lefthook (using subshell to preserve directory)
