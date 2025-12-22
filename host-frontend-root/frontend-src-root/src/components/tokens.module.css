@@ -8,7 +8,10 @@
   --color-text-light: #666;
   --color-background: #fff;
   --color-border: rgba(0, 0, 0, 0.15);
-  --color-border-hover: rgba(0, 0, 0, 0.25);
+  /* トグルスイッチのトラック用ホバー色 */
+  --color-toggle-track-hover: rgba(0, 0, 0, 0.25);
+  /* 後方互換用: 汎用ボーダーホバー色のトークンはトグル用ホバー色を参照する */
+  --color-border-hover: var(--color-toggle-track-hover);
   --color-hover: #0e7fcd;
 }
 
