@@ -11,10 +11,9 @@ type GetElementSelectionMessage = { type: 'getElementSelection' };
  * @param _msg - メッセージオブジェクト（このハンドラーでは使用しないが、統一的なハンドラーシグネチャのために受け取る）
  *
  * 呼び出し経路:
- * 1. chrome.runtime.onMessage.addListener が chrome から message を受信
- * 2. listeners/runtime/content.onMessage.ts の registerRuntimeOnMessageForContent が message を route 関数に渡す
- * 3. router/content/messageRouter.ts の createContentMessageRouter が message を適切な handler に振り分ける
- * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
+ * 1. @webext-core/messaging の onContentScriptMessage でメッセージを受信
+ * 2. content/runtime/onMessageReceived.ts でハンドラーが登録される
+ * 3. このハンドラーが呼び出される
  *
  * Awilix DIコンテナから解決: contentContainer.tsで登録されたインスタンスを取得
  */
