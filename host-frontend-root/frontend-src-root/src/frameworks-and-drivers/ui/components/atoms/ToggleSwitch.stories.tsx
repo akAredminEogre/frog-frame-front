@@ -17,21 +17,21 @@ const meta: Meta<typeof ToggleSwitch> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Off: Story = {
+export const Unchecked: Story = {
   args: {
     checked: false,
     ariaLabel: 'ルールの有効化',
   },
 };
 
-export const On: Story = {
+export const Checked: Story = {
   args: {
     checked: true,
     ariaLabel: 'ルールの有効化',
   },
 };
 
-export const DisabledOff: Story = {
+export const Disabled: Story = {
   args: {
     checked: false,
     disabled: true,
@@ -39,7 +39,7 @@ export const DisabledOff: Story = {
   },
 };
 
-export const DisabledOn: Story = {
+export const CheckedDisabled: Story = {
   args: {
     checked: true,
     disabled: true,
