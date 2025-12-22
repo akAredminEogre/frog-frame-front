@@ -1,19 +1,21 @@
-import { createContentMessageRouter } from 'src/infrastructure/browser/router/content/messageRouter';
+import { onContentScriptMessage } from 'src/frameworks-and-drivers/messaging/messaging';
+import { applyAllRulesHandler } from 'src/infrastructure/browser/handlers/content/applyAllRulesHandler';
+import { getElementSelectionHandler } from 'src/infrastructure/browser/handlers/content/getElementSelectionHandler';
 
 /**
  * 呼び出し元: entrypoints/content.ts
  *
- * Content Script用のruntime.onMessageリスナーを登録し、メッセージをルーティングする
+ * @webext-core/messaging を使用してContent Script用メッセージハンドラーを登録する
+ * 従来の chrome.runtime.onMessage.addListener から移行
  */
 export function runtimeOnMessageReceived() {
-  const route = createContentMessageRouter();
+  // applyAllRules: Background → Content Script
+  onContentScriptMessage('applyAllRules', async () => {
+    return applyAllRulesHandler();
+  });
 
-  chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-    (async () => {
-      const messageRequest = request;
-      const routingResult = await route(messageRequest);
-      sendResponse(routingResult);
-    })();
-    return true; // async response
+  // getElementSelection: Background → Content Script
+  onContentScriptMessage('getElementSelection', async () => {
+    return getElementSelectionHandler({ type: 'getElementSelection' });
   });
 }

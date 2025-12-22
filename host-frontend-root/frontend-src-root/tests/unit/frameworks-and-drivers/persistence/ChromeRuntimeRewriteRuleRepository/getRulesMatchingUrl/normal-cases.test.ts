@@ -3,6 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
 
+// @webext-core/messaging の sendToBackground をモック
+vi.mock('src/frameworks-and-drivers/messaging/messaging', () => ({
+  sendToBackground: vi.fn(),
+}));
+
+import { sendToBackground } from 'src/frameworks-and-drivers/messaging/messaging';
+
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
  * 1. URLにマッチするルールのみを取得する
@@ -14,14 +21,6 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
 
   beforeEach(() => {
     vi.clearAllMocks();
-
-    // Mock chrome.runtime.sendMessage
-    global.chrome = {
-      runtime: {
-        sendMessage: vi.fn(),
-      },
-    } as any;
-
     repository = new ChromeRuntimeRewriteRuleRepository();
   });
 
@@ -63,8 +62,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
 
   testCases.forEach(({ description, mockRules, currentUrl, expectedLength, expectedOldStrings }) => {
     it(description, async () => {
-      // Arrange
-      vi.mocked(chrome.runtime.sendMessage).mockResolvedValue({
+      // Arrange - sendToBackground をモック
+      vi.mocked(sendToBackground).mockResolvedValue({
         success: true,
         rules: mockRules,
       });
@@ -79,6 +78,9 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
       expectedOldStrings.forEach((expectedOldString, index) => {
         expect(rulesArray[index].oldString).toBe(expectedOldString);
       });
+
+      // sendToBackground が正しく呼ばれたことを確認
+      expect(sendToBackground).toHaveBeenCalledWith('getAllRules', undefined);
     });
   });
 });
