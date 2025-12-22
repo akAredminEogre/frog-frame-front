@@ -30,8 +30,8 @@ if [ -f "$PRE_COMMIT_HOOK" ]; then
     # Insert custom path check after the @evilmartians/lefthook execution line
     TEMP_FILE=$(mktemp)
     awk '
-    # Match the execution line for @evilmartians/lefthook
-    /@evilmartians\/lefthook\/bin\/lefthook-\$\{osArch\}-\$\{cpuArch\}\/lefthook" "\$@"$/ {
+    # Match the execution line for @evilmartians/lefthook (using flexible pattern for arch string)
+    /@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook" "\$@"$/ {
       print
       print "    elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
       print "    then"
