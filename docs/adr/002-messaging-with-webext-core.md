@@ -1,4 +1,4 @@
-# ADR-002: メッセージングに @webext-core/proxy-service を採用
+# ADR-002: メッセージングに @webext-core を採用
 
 ## ステータス
 
@@ -17,15 +17,32 @@ Chrome 拡張機能では、複数のコンテキスト（Background Script、Ru
 
 ## 決定
 
-**メッセージングに `@webext-core/proxy-service` を採用する。**
+**メッセージングに `@webext-core` エコシステムを採用し、通信方向に応じて使い分ける。**
 
-このライブラリは WXT が公式に推奨するメッセージングソリューションであり、Background Script で実行するサービスを他のコンテキストから透過的に呼び出せる。
+| 通信方向 | ライブラリ | 理由 |
+|---------|-----------|------|
+| → Background（データ取得） | `@webext-core/proxy-service` | Repository パターンと親和性が高い |
+| Background → Content Script（コマンド送信） | `@webext-core/messaging` | 特定タブへの送信をサポート |
 
-### 方式
+### @webext-core/proxy-service
+
+Background Script で実行するサービスを他のコンテキストから透過的に呼び出す（RPC スタイル）。
 
 - `defineProxyService` でサービスを定義
 - Background Script で同期的に登録
 - 他のコンテキストから通常のメソッド呼び出しと同じ感覚で使用
+
+**適用対象**: Content Script / Popup / Rules Page → Background への通信
+
+### @webext-core/messaging
+
+型安全なイベント駆動型メッセージング。
+
+- `defineExtensionMessaging` でプロトコルを定義
+- `sendMessage` で送信、`onMessage` で受信
+- 第3引数で `tabId` を指定することで特定タブへの送信が可能
+
+**適用対象**: Background → Content Script への通信
 
 ### 命名規約
 
@@ -53,7 +70,7 @@ Clean Architecture の依存ルールを守るため、Mapper（interface-adapte
   RewriteRuleMapper → uses → IRewriteRuleMessagingPort
 
 [frameworks-and-drivers]
-  RewriteRuleMessagingService implements IRewriteRuleMessagingPort
+  RewriteRuleProxyService implements IRewriteRuleMessagingPort
 ```
 
 | コンポーネント | 層 | 責務 |
@@ -94,14 +111,21 @@ DTO の粒度は以下の基準に従う：
 1. **WXT 公式推奨**: WXT が推奨するメッセージングライブラリ
 2. **型安全**: TypeScript の型推論が自動的に機能
 3. **コード規約準拠**: switch 文が不要
-4. **シンプル**: 通常のメソッド呼び出しと同じ感覚で使用可能
-5. **一貫性**: すべてのコンテキストで同じパターンを使用
+4. **適材適所**: データ取得は RPC スタイル、コマンド送信はイベント駆動で自然な表現
+5. **全方向の型安全性**: Background → Content Script 通信も型安全
+
+### 使い分けの理由
+
+| ライブラリ | 向いているケース | 理由 |
+|-----------|-----------------|------|
+| proxy-service | データ取得、CRUD 操作 | `service.getAll()` のような Repository パターンと親和 |
+| messaging | コマンド送信、通知 | 特定タブへの送信、イベント駆動が自然 |
 
 ### トレードオフ
 
-- 外部ライブラリへの依存が増加
-- ライブラリの学習コスト
-- Background Script での同期的な登録が必須
+- 外部ライブラリへの依存が増加（2つ）
+- 2つのライブラリの学習コスト
+- Background Script での同期的な登録が必須（proxy-service）
 
 ## 影響ドキュメント
 
@@ -115,4 +139,5 @@ DTO の粒度は以下の基準に従う：
 - [ADR-001: Clean Architecture with Presenter Pattern](./001-clean-architecture-with-presenter-pattern.md)
 - [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](./003-unified-db-access-via-messaging.md)
 - [@webext-core/proxy-service - npm](https://www.npmjs.com/package/@webext-core/proxy-service)
+- [@webext-core/messaging - npm](https://www.npmjs.com/package/@webext-core/messaging)
 - [WXT Messaging Guide](https://wxt.dev/guide/essentials/messaging)

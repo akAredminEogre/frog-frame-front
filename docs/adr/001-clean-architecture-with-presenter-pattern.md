@@ -136,7 +136,7 @@ src/
     ├── persistence/                            ← Repository 実装
     │   └── ChromeRuntimeRewriteRuleRepository.ts  ← Content Script用（メッセージング経由）
     ├── messaging/                              ← メッセージング層
-    │   ├── RewriteRuleMessagingService.ts      ← IRewriteRuleMessagingPort 実装
+    │   ├── RewriteRuleProxyService.ts          ← IRewriteRuleMessagingPort 実装
     │   └── dto/                                ← メッセージング用DTO
     │       ├── RewriteRuleDTO.ts               ← エンティティDTO
     │       └── request-dto/                    ← リクエストDTO
@@ -218,5 +218,5 @@ src/
 ## 影響ドキュメント
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
-- [002-messaging-with-proxy-service.md](002-messaging-with-proxy-service.md)
-- [003-xxx.md](003-xxx.md)
+- [002-messaging-with-webext-core.md](002-messaging-with-webext-core.md)
+- [003-unified-db-access-via-messaging.md](003-unified-db-access-via-messaging.md)

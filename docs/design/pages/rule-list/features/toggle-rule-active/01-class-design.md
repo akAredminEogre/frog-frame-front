@@ -87,7 +87,7 @@
 | クラス | 責務 |
 |--------|------|
 | ChromeRuntimeRewriteRuleRepository | IRewriteRuleRepositoryの実装。Mapperへの委譲のみ（DTOを意識しない）（Rules Page用、ADR-002参照） |
-| RewriteRuleMessagingService | IRewriteRuleMessagingPort を実装。defineProxyService で定義、Background Scriptで実行（ADR-002参照） |
+| RewriteRuleProxyService | IRewriteRuleMessagingPort を実装。defineProxyService で定義、Background Scriptで実行（ADR-002参照） |
 | DexieRewriteRuleRepository | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | ChromeTabsGateway | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（ADR-001参照） |
 | RewriteRuleDTO | メッセージング用DTO。エンティティ全体を表現（ADR-002、ADR-003参照） |
@@ -113,7 +113,7 @@
 
 ### Chrome拡張機能のコンテキスト分離
 
-> **参照**: [ADR-002: メッセージングに @webext-core/proxy-service を採用](../../../../adr/002-messaging-with-proxy-service.md)
+> **参照**: [ADR-002: メッセージングに @webext-core を採用](../../../../adr/002-messaging-with-webext-core.md)
 > **参照**: [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../adr/003-unified-db-access-via-messaging.md)
 
 Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-003 の決定に従い、
@@ -124,7 +124,7 @@ Entity ↔ DTO の変換と MessagingService への通信は RewriteRuleMapper �
 ChromeRuntimeRewriteRuleRepository は Mapper への委譲のみを行い、DTO を意識しない（ADR-002、ADR-003参照）。
 
 依存性逆転のため、Mapper は IRewriteRuleMessagingPort インターフェースに依存し、
-RewriteRuleMessagingService がこれを実装する（ADR-002参照）。
+RewriteRuleProxyService がこれを実装する（ADR-002参照）。
 
 ADR-002 に従い、メッセージングには @webext-core/proxy-service を使用する。
 
@@ -153,7 +153,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 ┌─────────────────────────────────────────────────────────────────┐
 │ Background Script                                                │
 │  ┌─────────────────────────────────────────────────────────────┐│
-│  │ RewriteRuleMessagingService (implements IRewriteRuleMessagingPort) ││
+│  │ RewriteRuleProxyService (implements IRewriteRuleMessagingPort)    ││
 │  │       ↓                                                     ││
 │  │ DexieRewriteRuleRepository (IndexedDB)                      ││
 │  └─────────────────────────────────────────────────────────────┘│
