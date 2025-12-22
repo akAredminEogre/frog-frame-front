@@ -1,4 +1,4 @@
-@import 'src/components/tokens.module.css';
+@import '../../../../../components/tokens.module.css';
 
 .toggleContainer {
   display: inline-flex;
