@@ -55,7 +55,7 @@ Mapper（interface-adapters 層）が MessagingService（frameworks-and-drivers 
 | `ChromeRuntimeRewriteRuleRepository` | frameworks-and-drivers | Mapper への委譲のみ（DTO を意識しない） |
 | `RewriteRuleMapper` | interface-adapters | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信 |
 | `IRewriteRuleMessagingPort` | interface-adapters | MessagingService の抽象化（Port） |
-| `RewriteRuleMessagingService` | frameworks-and-drivers | IRewriteRuleMessagingPort を実装、proxy-service として DTO を受け渡し |
+| `RewriteRuleProxyService` | frameworks-and-drivers | IRewriteRuleMessagingPort を実装、proxy-service として DTO を受け渡し |
 | `DexieRewriteRuleRepository` | frameworks-and-drivers | DTO ↔ DB レコード 変換 |
 
 #### Mapper + Port 導入の理由
@@ -98,5 +98,5 @@ Mapper（interface-adapters 層）が MessagingService（frameworks-and-drivers 
 ## 関連ドキュメント
 
 - [ADR-001: Clean Architecture with Presenter Pattern](./001-clean-architecture-with-presenter-pattern.md)
-- [ADR-002: メッセージングに @webext-core/proxy-service を採用](./002-messaging-with-proxy-service.md)
+- [ADR-002: メッセージングに @webext-core を採用](./002-messaging-with-webext-core.md)
 - [Toggle Rule Active 設計](../design/pages/rule-list/features/toggle-rule-active/)
