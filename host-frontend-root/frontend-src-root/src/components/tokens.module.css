@@ -17,7 +17,8 @@
 
 /* シャドウ */
 :root {
-  --shadow-toggle-knob: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-toggle-knob: var(--shadow-sm);
 }
 
 /* サイズ */
