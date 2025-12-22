@@ -9,7 +9,6 @@ import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/content
 import { GetElementSelectionUseCase } from 'src/application/usecases/selection/GetElementSelectionUseCase';
 import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { IElementFactory } from 'src/domain/ports/IElementFactory';
-import { getRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
 import { observerControl } from 'src/infrastructure/browser/content/observer/observerState';
 import { DebounceTimer } from 'src/infrastructure/browser/timer/DebounceTimer';
@@ -17,7 +16,6 @@ import { WindowCurrentUrlService } from 'src/infrastructure/browser/window/Windo
 import { DomRootChecker } from 'src/infrastructure/document/DomRootChecker';
 import { ElementFactory } from 'src/infrastructure/document/ElementFactory';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
-import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
 // Create Awilix container for content script
 const awilixContainer = createContainer({
@@ -25,10 +23,9 @@ const awilixContainer = createContainer({
 });
 
 // Infrastructure services (singleton instances)
-// 遅延初期化: Mapperファクトリ関数を渡すことで、実際にデータが必要になるまで
-// proxy-serviceとの通信を開始しない（Background Scriptの初期化完了を待てる）
-const createMapper = () => new RewriteRuleMapper(getRewriteRuleProxyService());
-const chromeRuntimeRewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository(createMapper);
+// ChromeRuntimeRewriteRuleRepositoryは内部で遅延初期化を行うため、
+// ここではシンプルにインスタンス化するだけでよい
+const chromeRuntimeRewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository();
 const windowCurrentUrlService = new WindowCurrentUrlService();
 const debounceTimer = new DebounceTimer();
 const getSelectionService = new GetSelectionService();

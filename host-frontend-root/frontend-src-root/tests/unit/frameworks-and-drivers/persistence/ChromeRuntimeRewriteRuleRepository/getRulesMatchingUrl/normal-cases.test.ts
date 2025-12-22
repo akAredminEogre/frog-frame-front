@@ -1,9 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
-import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
+import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
+
+// getRewriteRuleProxyServiceをモック
+vi.mock('src/frameworks-and-drivers/messaging/RewriteRuleProxyService', () => ({
+  getRewriteRuleProxyService: vi.fn(),
+}));
+
+import { getRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
 
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
@@ -13,20 +19,18 @@ import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMap
  */
 describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', () => {
   let repository: ChromeRuntimeRewriteRuleRepository;
-  let mockMapper: RewriteRuleMapper;
+  let mockProxyService: { getAll: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Create mock mapper
-    mockMapper = {
-      getAllRules: vi.fn(),
-      toEntity: vi.fn(),
-      toDto: vi.fn(),
-    } as unknown as RewriteRuleMapper;
+    // Create mock proxy service
+    mockProxyService = {
+      getAll: vi.fn(),
+    };
+    vi.mocked(getRewriteRuleProxyService).mockReturnValue(mockProxyService as any);
 
-    // MapperFactoryとして渡す（遅延初期化パターン）
-    repository = new ChromeRuntimeRewriteRuleRepository(() => mockMapper);
+    repository = new ChromeRuntimeRewriteRuleRepository();
   });
 
   afterEach(() => {
@@ -36,43 +40,39 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
   const testCases = [
     {
       description: 'URLにマッチするルールのみを取得する',
-      mockRules: [
-        new RewriteRule(1, 'old1', 'new1', 'https://example.com', false, true),
-        new RewriteRule(2, 'old2', 'new2', 'https://other.com', false, true),
-      ],
+      mockDtos: [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: false, isActive: true },
+      ] as RewriteRuleDTO[],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
       expectedOldStrings: ['old1'],
     },
     {
       description: 'マッチするルールがない場合は空のRewriteRulesを返す',
-      mockRules: [
-        new RewriteRule(1, 'old1', 'new1', 'https://other.com', false, true),
-      ],
+      mockDtos: [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://other.com', isRegex: false, isActive: true },
+      ] as RewriteRuleDTO[],
       currentUrl: 'https://example.com/page',
       expectedLength: 0,
       expectedOldStrings: [],
     },
     {
       description: '空のurlPatternを持つルールは取得されない',
-      mockRules: [
-        new RewriteRule(1, 'old1', 'new1', '', false, true),
-        new RewriteRule(2, 'old2', 'new2', 'https://example.com', false, true),
-      ],
+      mockDtos: [
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: '', isRegex: false, isActive: true },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://example.com', isRegex: false, isActive: true },
+      ] as RewriteRuleDTO[],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
       expectedOldStrings: ['old2'],
     },
   ];
 
-  testCases.forEach(({ description, mockRules, currentUrl, expectedLength, expectedOldStrings }) => {
+  testCases.forEach(({ description, mockDtos, currentUrl, expectedLength, expectedOldStrings }) => {
     it(description, async () => {
-      // Arrange - Mapper.getAllRules() が RewriteRules を返すようにモック
-      const rulesObject: Record<string, RewriteRule> = {};
-      mockRules.forEach((rule) => {
-        rulesObject[rule.id] = rule;
-      });
-      vi.mocked(mockMapper.getAllRules).mockResolvedValue(new RewriteRules(rulesObject));
+      // Arrange - proxy-service.getAll() がDTOを返すようにモック
+      mockProxyService.getAll.mockResolvedValue(mockDtos);
 
       // Act
       const result = await repository.getRulesMatchingUrl(currentUrl);
