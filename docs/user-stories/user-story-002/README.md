@@ -162,12 +162,17 @@ import type { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRe
 import type { RewriteRuleDTO } from './dto/RewriteRuleDTO';
 import type { GetByIdRequestDTO } from './dto/request-dto/GetByIdRequestDTO';
 import type { UpdateRuleActiveRequestDTO } from './dto/request-dto/UpdateRuleActiveRequestDTO';
-import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
+import type { IDexieRewriteRuleRepository } from 'src/application-business-rules/repositories/IDexieRewriteRuleRepository';
+import { container } from 'src/frameworks-and-drivers/di/container';
 
 // ProxyService は DTO をそのまま受け渡す（ADR-002, ADR-003参照）
 // Entity ↔ DTO 変換は RewriteRuleMapper の責務
 class RewriteRuleProxyServiceImpl implements IRewriteRuleMessagingPort {
-  private readonly repository = new DexieRewriteRuleRepository();
+  private readonly repository: IDexieRewriteRuleRepository;
+
+  constructor() {
+    this.repository = container.resolve(IDexieRewriteRuleRepository);
+  }
 
   async getAll(): Promise<RewriteRuleDTO[]> {
     return this.repository.getAll();
