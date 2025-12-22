@@ -3,10 +3,14 @@ import { defineExtensionMessaging } from '@webext-core/messaging';
 /**
  * Background Script へのメッセージプロトコル定義
  * Content Script, Popup から Background へ送信するメッセージ
- *
- * Note: getAllRules は @webext-core/proxy-service (RewriteRuleProxyService) に移行済み
  */
 export interface BackgroundProtocolMap {
+  /**
+   * 全ルールを取得する
+   * Content Script → Background
+   */
+  getAllRules(): { success: boolean; rules?: any[]; error?: string };
+
   /**
    * 全ルールを適用する
    * Popup → Background
