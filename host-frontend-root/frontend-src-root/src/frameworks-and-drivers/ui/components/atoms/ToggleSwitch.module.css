@@ -17,7 +17,6 @@
   background-color: var(--color-border);
   border-radius: 12px;
   transition: background-color 0.2s ease;
-  cursor: pointer;
   border: none;
   padding: 0;
 }
@@ -32,7 +31,7 @@
   background-color: var(--color-background);
   border-radius: 50%;
   transition: transform 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-toggle-knob);
 }
 
 .toggle[data-selected='true'] {
@@ -44,7 +43,7 @@
 }
 
 .toggle:hover:not([data-disabled='true']) {
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: var(--color-border-hover);
 }
 
 .toggle[data-selected='true']:hover:not([data-disabled='true']) {

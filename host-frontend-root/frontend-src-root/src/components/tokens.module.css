@@ -8,7 +8,13 @@
   --color-text-light: #666;
   --color-background: #fff;
   --color-border: rgba(0, 0, 0, 0.15);
+  --color-border-hover: rgba(0, 0, 0, 0.25);
   --color-hover: #0e7fcd;
+}
+
+/* シャドウ */
+:root {
+  --shadow-toggle-knob: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* サイズ */
