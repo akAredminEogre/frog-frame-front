@@ -40,7 +40,7 @@ box "Rules Page - frameworks-and-drivers" #LightCyan
 end box
 
 box "Background - frameworks-and-drivers (第4層)" #LightGray
-  participant "RewriteRuleMessagingService" as ProxyService
+  participant "RewriteRuleProxyService" as ProxyService
   participant "DexieRewriteRule\nRepository" as DexieRepo
 end box
 
@@ -96,7 +96,7 @@ note over Mapper, IMessagingPort : MapperはIRewriteRuleMessagingPortに依存\n
 Mapper -> IMessagingPort : getById(dto)
 activate IMessagingPort
 
-note over IMessagingPort, ProxyService : 実行時はDI経由で\nRewriteRuleMessagingServiceが注入
+note over IMessagingPort, ProxyService : 実行時はDI経由で\nRewriteRuleProxyServiceが注入
 
 IMessagingPort -> ProxyService : getById(GetByIdRequestDTO)
 activate ProxyService

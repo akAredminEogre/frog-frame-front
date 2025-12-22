@@ -70,7 +70,7 @@ Clean Architecture の依存ルールを守るため、Mapper（interface-adapte
   RewriteRuleMapper → uses → IRewriteRuleMessagingPort
 
 [frameworks-and-drivers]
-  RewriteRuleMessagingService implements IRewriteRuleMessagingPort
+  RewriteRuleProxyService implements IRewriteRuleMessagingPort
 ```
 
 | コンポーネント | 層 | 責務 |
