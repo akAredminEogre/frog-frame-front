@@ -76,8 +76,10 @@ const toggleRuleActiveInteractor = new ToggleRuleActiveInteractor(
   toggleRuleActivePresenter
 );
 const toggleRuleActiveController = new ToggleRuleActiveController(toggleRuleActiveInteractor);
-const rewriteRuleMapper = new RewriteRuleMapper();
+// NOTE: Background contextでは RewriteRuleMessagingService はダミー実装
+// Background では DexieRewriteRuleRepository を直接使用するため、Mapper の getAllRules は呼ばれない
 const rewriteRuleMessagingService = new RewriteRuleMessagingService();
+const rewriteRuleMapper = new RewriteRuleMapper(rewriteRuleMessagingService);
 
 // Register all instances with asValue (no automatic injection needed)
 awilixContainer.register({

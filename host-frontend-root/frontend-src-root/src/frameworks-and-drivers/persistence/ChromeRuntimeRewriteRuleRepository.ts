@@ -2,7 +2,7 @@ import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleReposi
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-import { getRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
+import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
 /**
  * Chrome Runtime Messaging を使用したRewriteRuleリポジトリの実装
@@ -10,31 +10,27 @@ import { getRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging
  * Clean Architectureのインフラストラクチャ層に配置
  * IRewriteRuleRepositoryインターフェースを実装
  *
- * @webext-core/proxy-service を使用してBackground Scriptと通信する
+ * ADR-002, ADR-003に準拠し、RewriteRuleMapper経由でデータを取得する
  */
 export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepository {
+  private readonly mapper: RewriteRuleMapper;
+
+  constructor(mapper: RewriteRuleMapper) {
+    this.mapper = mapper;
+  }
 
   /**
    * すべてのルールを取得する
-   * @webext-core/proxy-service 経由でBackground ScriptからIndexedDBデータを取得
+   * RewriteRuleMapper経由でBackground ScriptからIndexedDBデータを取得
    * @returns RewriteRulesオブジェクト
    */
   async getAll(): Promise<RewriteRules> {
     try {
-      const proxyService = getRewriteRuleProxyService();
-      const rulesData = await proxyService.getAllRules();
+      const rules = await this.mapper.getAllRules();
 
       const rulesObject: Record<string, RewriteRule> = {};
 
-      rulesData.forEach((ruleData) => {
-        const rule = new RewriteRule(
-          ruleData.id,
-          ruleData.oldString,
-          ruleData.newString,
-          ruleData.urlPattern,
-          ruleData.isRegex
-        );
-
+      rules.forEach((rule) => {
         rulesObject[rule.id] = rule;
       });
 

@@ -1,28 +1,31 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
-
-// @webext-core/proxy-service の getRewriteRuleProxyService をモック
-const mockGetAllRules = vi.fn();
-vi.mock('src/frameworks-and-drivers/messaging/RewriteRuleProxyService', () => ({
-  getRewriteRuleProxyService: () => ({
-    getAllRules: mockGetAllRules,
-  }),
-}));
+import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
+import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
+import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
  * 1. URLにマッチするルールのみを取得する
  * 2. マッチするルールがない場合は空のRewriteRulesを返す
  * 3. 空のurlPatternを持つルールは取得されない
+ *
+ * ADR-002, ADR-003に準拠: IRewriteRuleMessagingPort → Mapper → Repository
  */
 describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', () => {
   let repository: ChromeRuntimeRewriteRuleRepository;
+  let mockMessagingPort: IRewriteRuleMessagingPort;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    repository = new ChromeRuntimeRewriteRuleRepository();
+    // IRewriteRuleMessagingPortのモックを作成
+    mockMessagingPort = {
+      getAll: vi.fn(),
+      getById: vi.fn(),
+      updateActive: vi.fn(),
+    };
   });
 
   afterEach(() => {
@@ -33,8 +36,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
     {
       description: 'URLにマッチするルールのみを取得する',
       mockRules: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false },
-        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: false },
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: false, isActive: true },
       ],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
@@ -43,7 +46,7 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
     {
       description: 'マッチするルールがない場合は空のRewriteRulesを返す',
       mockRules: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://other.com', isRegex: false },
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://other.com', isRegex: false, isActive: true },
       ],
       currentUrl: 'https://example.com/page',
       expectedLength: 0,
@@ -52,8 +55,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
     {
       description: '空のurlPatternを持つルールは取得されない',
       mockRules: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: '', isRegex: false },
-        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://example.com', isRegex: false },
+        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: '', isRegex: false, isActive: true },
+        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://example.com', isRegex: false, isActive: true },
       ],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
@@ -63,8 +66,10 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
 
   testCases.forEach(({ description, mockRules, currentUrl, expectedLength, expectedOldStrings }) => {
     it(description, async () => {
-      // Arrange - proxy-service の getAllRules をモック
-      mockGetAllRules.mockResolvedValue(mockRules);
+      // Arrange - IRewriteRuleMessagingPort の getAll をモック
+      (mockMessagingPort.getAll as ReturnType<typeof vi.fn>).mockResolvedValue(mockRules as RewriteRuleDTO[]);
+      const mapper = new RewriteRuleMapper(mockMessagingPort);
+      repository = new ChromeRuntimeRewriteRuleRepository(mapper);
 
       // Act
       const result = await repository.getRulesMatchingUrl(currentUrl);
@@ -77,8 +82,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
         expect(rulesArray[index].oldString).toBe(expectedOldString);
       });
 
-      // proxy-service の getAllRules が呼ばれたことを確認
-      expect(mockGetAllRules).toHaveBeenCalled();
+      // IRewriteRuleMessagingPort の getAll が呼ばれたことを確認
+      expect(mockMessagingPort.getAll).toHaveBeenCalled();
     });
   });
 });
