@@ -1,10 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
-import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+
+import { createMockRewriteRuleMessagingPort } from '../mocks/createMockRewriteRuleMessagingPort';
 
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
@@ -20,12 +22,7 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // IRewriteRuleMessagingPortのモックを作成
-    mockMessagingPort = {
-      getAll: vi.fn(),
-      getById: vi.fn(),
-      updateActive: vi.fn(),
-    };
+    mockMessagingPort = createMockRewriteRuleMessagingPort();
   });
 
   afterEach(() => {

@@ -11,16 +11,14 @@ import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/Rewrite
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
+import { createMockRewriteRuleMessagingPort } from '../mocks/createMockRewriteRuleMessagingPort';
+
 describe('RewriteRuleMapper.getAllRules - 正常系', () => {
   let mockMessagingPort: IRewriteRuleMessagingPort;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockMessagingPort = {
-      getAll: vi.fn(),
-      getById: vi.fn(),
-      updateActive: vi.fn(),
-    };
+    mockMessagingPort = createMockRewriteRuleMessagingPort();
   });
 
   afterEach(() => {
