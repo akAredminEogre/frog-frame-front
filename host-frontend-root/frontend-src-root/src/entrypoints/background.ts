@@ -1,7 +1,11 @@
+import { registerRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
 import { contextMenusOnClicked } from 'src/infrastructure/browser/background/contextMenus/onClicked';
 import { runtimeOnExtensionInstalled } from 'src/infrastructure/browser/background/runtime/onExtensionInstalled';
 import { runtimeOnMessageReceived } from 'src/infrastructure/browser/background/runtime/onMessageReceived';
 import { tabsOnUpdated } from 'src/infrastructure/browser/background/tabs/onUpdated';
+
+// proxy-serviceの登録（同期的に実行）
+registerRewriteRuleProxyService();
 
 export default defineBackground({
   // Set manifest options

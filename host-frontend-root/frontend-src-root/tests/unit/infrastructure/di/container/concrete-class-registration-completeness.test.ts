@@ -10,7 +10,6 @@ import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/Close
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
 import { container } from 'src/frameworks-and-drivers/di/container';
-import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
@@ -121,19 +120,6 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
     }
   ];
 
-  /**
-   * proxy-service経由で解決されるテストケース
-   * proxy-serviceはProxyオブジェクトを返すため、toBeInstanceOfではなく
-   * インターフェースのメソッドが存在することを確認する
-   */
-  const proxyServiceTestCases = [
-    {
-      description: 'RewriteRuleMessagingServiceを解決できること（proxy-service経由）',
-      input: { classToken: RewriteRuleMessagingService },
-      expected: { methods: ['getById', 'updateActive'] }
-    }
-  ];
-
   testCases.forEach((testCase) => {
     it(testCase.description, () => {
       // Arrange
@@ -151,24 +137,6 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
     });
   });
 
-  proxyServiceTestCases.forEach((testCase) => {
-    it(testCase.description, () => {
-      // Arrange
-      const { classToken } = testCase.input;
-      const { methods } = testCase.expected;
-
-      // Act
-      const resolved = container.resolve(classToken) as any;
-
-      // Assert - proxy-serviceはProxyオブジェクトを返すため、メソッドの存在を確認
-      expect(resolved).toBeDefined();
-      expect(resolved).not.toBeNull();
-      methods.forEach((method) => {
-        expect(typeof resolved[method]).toBe('function');
-      });
-    });
-  });
-
   /**
    * DIコンテナに登録されている具体クラス数と、テストケースで期待する数が一致することを検証
    * これにより、DIコンテナに新しいクラスが追加された場合にテストケースの追加漏れを検出できる
@@ -177,22 +145,19 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
     // Act - DIコンテナから登録済み具体クラストークンを動的取得
     const actualRegisteredTokens = getRegisteredConcreteClassTokens();
 
-    // 全テストケースの合計（通常のケース + proxy-serviceケース）
-    const allTestCases = [...testCases, ...proxyServiceTestCases];
-
     // Assert - 期待される登録数と一致することを確認
-    expect(actualRegisteredTokens).toHaveLength(allTestCases.length);
+    expect(actualRegisteredTokens).toHaveLength(testCases.length);
 
     // Assert - 各具体クラスがDIコンテナに登録されていることを確認
     const actualTokenSet = new Set(actualRegisteredTokens.map(({ token }) => token));
-    allTestCases.forEach(({ input: { classToken } }) => {
+    testCases.forEach(({ input: { classToken } }) => {
       expect(actualTokenSet.has(classToken),
         `Test case exists for ${classToken.name} but it's not registered in classToKeyMap`
       ).toBe(true);
     });
 
     // Assert - DIコンテナに登録されている各クラスにテストケースが存在することを確認
-    const testCaseTokenSet = new Set<Function>(allTestCases.map(tc => tc.input.classToken));
+    const testCaseTokenSet = new Set<Function>(testCases.map(tc => tc.input.classToken));
     actualRegisteredTokens.forEach(({ token }) => {
       expect(testCaseTokenSet.has(token),
         `Class ${(token as any).name} is registered in classToKeyMap but missing a test case`
