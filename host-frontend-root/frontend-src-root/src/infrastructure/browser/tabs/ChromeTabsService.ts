@@ -32,7 +32,7 @@ export class ChromeTabsService implements IChromeTabsService {
   async sendApplyAllRulesMessage(tab: Tab): Promise<any> {
     try {
       const tabId = tab.getTabId().value;
-      const response = await sendToContentScript('applyAllRules', undefined, tabId);
+      const response = await sendToContentScript('applyAllRules', tabId);
       return response;
     } catch (error) {
       console.error('[ChromeTabsService] sendApplyAllRulesMessage error:', error);
