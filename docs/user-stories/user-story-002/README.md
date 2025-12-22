@@ -77,9 +77,10 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │ Flow 2: applyAllRules (Background → Content Script)             │
 ├─────────────────────────────────────────────────────────────────┤
-│ onUpdated / applyAllRulesHandler                                │
-│   → BackgroundScriptMessageSender.sendApplyAllRules(tabId)      │
-│   → Content Script: ContentScriptMessageReceiver.onApplyAllRules()│
+│ onUpdated / onBackgroundMessage('applyAllRules')                │
+│   → ChromeTabsService.sendApplyAllRulesMessage(tab)             │
+│   → sendToContentScript('applyAllRules', tabId)                 │
+│   → Content Script: onContentScriptMessage('applyAllRules')     │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -130,6 +131,7 @@ src/
 ├── frameworks-and-drivers/
 │   ├── messaging/
 │   │   ├── RewriteRuleProxyService.ts        # proxy-service 定義（実装注入パターン）
+│   │   ├── RewriteRuleProxyServiceImpl.ts    # proxy-service 実装（container依存を分離）
 │   │   ├── RewriteRuleMessagingService.ts    # IRewriteRuleMessagingPort 実装
 │   │   ├── messaging.ts                      # messaging プロトコル定義・送受信
 │   │   └── dto/

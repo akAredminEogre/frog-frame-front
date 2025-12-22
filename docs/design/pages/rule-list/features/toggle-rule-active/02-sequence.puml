@@ -28,6 +28,7 @@ end box
 
 box "Background" #LightGray
   participant "RewriteRuleProxyService" as ProxyService
+  participant "RewriteRuleProxyServiceImpl" as ProxyServiceImpl
   participant "DexieRewriteRuleRepository" as DexieRepo
 end box
 
@@ -64,10 +65,16 @@ activate MessagingService
 MessagingService -> ProxyService : getById(dto)
 activate ProxyService
 
-ProxyService -> DexieRepo : getById(ruleId)
+ProxyService -> ProxyServiceImpl : getById(dto)
+activate ProxyServiceImpl
+
+ProxyServiceImpl -> DexieRepo : getById(ruleId)
 activate DexieRepo
-DexieRepo --> ProxyService : DTO
+DexieRepo --> ProxyServiceImpl : DTO
 deactivate DexieRepo
+
+ProxyServiceImpl --> ProxyService : DTO
+deactivate ProxyServiceImpl
 
 ProxyService --> MessagingService : DTO
 deactivate ProxyService
@@ -111,10 +118,16 @@ activate MessagingService
 MessagingService -> ProxyService : updateActive(dto)
 activate ProxyService
 
-ProxyService -> DexieRepo : updateActive(dto)
+ProxyService -> ProxyServiceImpl : updateActive(dto)
+activate ProxyServiceImpl
+
+ProxyServiceImpl -> DexieRepo : updateActive(dto)
 activate DexieRepo
-DexieRepo --> ProxyService : void
+DexieRepo --> ProxyServiceImpl : void
 deactivate DexieRepo
+
+ProxyServiceImpl --> ProxyService : void
+deactivate ProxyServiceImpl
 
 ProxyService --> MessagingService : void
 deactivate ProxyService
