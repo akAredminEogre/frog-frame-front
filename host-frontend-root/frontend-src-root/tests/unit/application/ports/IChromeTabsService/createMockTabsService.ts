@@ -7,9 +7,9 @@ import type { IChromeTabsService } from 'src/application/ports/IChromeTabsServic
  */
 export function createMockTabsService(): IChromeTabsService {
   return {
-    sendMessage: vi.fn(),
     queryTabs: vi.fn(),
     sendApplyAllRulesMessage: vi.fn(),
+    sendGetElementSelectionMessage: vi.fn(),
     openEditPage: vi.fn(),
     reloadTab: vi.fn(),
   };

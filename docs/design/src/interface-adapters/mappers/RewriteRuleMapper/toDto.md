@@ -2,8 +2,10 @@
 
 ## 目的
 
-RewriteRuleエンティティからRewriteRuleDTOへの変換を行う。
+RewriteRuleエンティティからRewriteRuleDTOへの変換を行う（**静的メソッド**）。
 全6プロパティ（id, oldString, newString, urlPattern, isRegex, isActive）を正しく変換する。
+
+インスタンス不要で呼び出し可能なため、`RewriteRuleProxyServiceImpl`等からも共通で使用できる。
 
 ## テスト分類
 

@@ -141,7 +141,7 @@
 **第4層: frameworks-and-drivers**
 - [x] ToggleSwitch UIコンポーネント（スケルトン）
 - [x] ChromeTabsGateway（スケルトン実装）
-- [x] RewriteRuleMessagingService（スケルトン実装）
+- [x] RewriteRuleProxyService（スケルトン実装）
 - [x] RewriteRuleDTO, GetByIdRequestDTO, UpdateRuleActiveRequestDTO（DTO）
 - [x] container.ts にスケルトンクラスのDI登録を追加
 
@@ -153,20 +153,20 @@
 - [x] ToggleRuleActiveInteractor の実装（テスト済み）
 - [x] ToggleRuleActiveController の実装（テスト済み）
 - [x] ToggleRuleActivePresenter の実装（テスト済み）
-- [x] RewriteRuleMapper の実装（Entity ↔ DTO 変換）（テスト済み）
+- [x] RewriteRuleMapper の実装（Entity ↔ DTO 変換 + getAllRules()）（テスト済み）
 - [x] ChromeTabsGateway の実装（タブリロード）（developマージで完了）
-- [ ] RewriteRuleMessagingService の実装 **（3d-3b: ロジック実装 + proxy-service統合）**
-  - 現在はスケルトン実装（3d-3a完了: パッケージ追加、クラス・DTO・インターフェース定義のみ）
-  - background.ts で registerRewriteRuleMessagingService() を呼び出す **（未実装。別PRで対応予定）**
-  - E2Eテストへの影響を調査・修正
+- [x] RewriteRuleProxyService の実装 **（user-story-002 PR-1 で完了）**
+  - 実装注入パターン採用（ADR-002 参照）
+  - background.ts で setRewriteRuleProxyServiceImpl() + registerRewriteRuleProxyService() 呼び出し
+  - RewriteRuleMessagingService が IRewriteRuleMessagingPort を実装
 - [ ] ToggleSwitch UIコンポーネントの実装（テスト未実装）
 
 ### Phase 4: 統合（新旧並行稼働）
 
-**現状**: developマージ完了（2024-12-20 5回目）、ToggleRuleActiveInteractorテスト実装完了、Git hooks導入、残り統合タスクに集中
+**現状**: RewriteRuleProxyService 実装完了、ChromeRuntimeRewriteRuleRepository Mapper委譲完了
 
-- [ ] ChromeRuntimeRewriteRuleRepository を Mapper委譲方式に変更
-  - 既存の直接DB操作 → Mapper経由に変更  
+- [x] ChromeRuntimeRewriteRuleRepository を Mapper委譲方式に変更 **（user-story-002 PR-1 で完了）**
+  - 既存の直接DB操作 → Mapper経由に変更
   - IRewriteRuleRepository インターフェースは変更なし
   - **現在位置**: `src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository.ts`
 - [ ] RulesApp.tsx にトグルUIを統合

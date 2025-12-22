@@ -1,6 +1,6 @@
 /**
  * RewriteRuleMapper.toDto - 正常系テスト
- * 1. 全プロパティを持つエンティティからDTOに変換できる
+ * 1. 全プロパティを持つエンティティからDTOに変換できる（静的メソッド）
  */
 import { describe, expect, it } from 'vitest';
 
@@ -9,7 +9,7 @@ import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMap
 
 describe('RewriteRuleMapper.toDto - 正常系', () => {
   it('全プロパティを持つエンティティからDTOに変換できる', () => {
-    const mapper = new RewriteRuleMapper();
+    // 静的メソッドなのでインスタンス不要
     const entity = new RewriteRule(
       1,
       'old text',
@@ -19,7 +19,7 @@ describe('RewriteRuleMapper.toDto - 正常系', () => {
       true
     );
 
-    const result = mapper.toDto(entity);
+    const result = RewriteRuleMapper.toDto(entity);
 
     expect(result.id).toBe(1);
     expect(result.oldString).toBe('old text');
