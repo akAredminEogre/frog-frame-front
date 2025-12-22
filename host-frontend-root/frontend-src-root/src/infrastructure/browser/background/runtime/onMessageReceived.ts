@@ -1,19 +1,21 @@
-import { createMessageRouter } from 'src/infrastructure/browser/router/background/messageRouter';
+import { onBackgroundMessage } from 'src/frameworks-and-drivers/messaging/messaging';
+import { applyAllRulesHandler } from 'src/infrastructure/browser/handlers/background/applyAllRulesHandler';
 
 /**
  * 呼び出し元: entrypoints/background.ts
- * 
- * runtime.onMessageリスナーを登録し、メッセージをルーティングする
+ *
+ * @webext-core/messaging を使用してメッセージハンドラーを登録する
+ * 従来の chrome.runtime.onMessage.addListener から移行
+ *
+ * Note: getAllRules は @webext-core/proxy-service (RewriteRuleProxyService) に移行済み
  */
 export function runtimeOnMessageReceived() {
-  const route = createMessageRouter();
-
-  chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-    (async () => {
-      const messageRequest = request;
-      const routingResult = await route(messageRequest);
-      sendResponse(routingResult);
-    })();
-    return true; // async response
+  // applyAllRules: Popup → Background
+  onBackgroundMessage('applyAllRules', async (message) => {
+    return applyAllRulesHandler({
+      type: 'applyAllRules',
+      tabId: message.data.tabId,
+      tabUrl: message.data.tabUrl,
+    });
   });
 }

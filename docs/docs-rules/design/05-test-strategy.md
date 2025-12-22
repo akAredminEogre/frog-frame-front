@@ -125,6 +125,11 @@ tests/unit/[path]/[methodName]/
 
 [モックを使用する理由と対象を記述]
 
+> **重要**: モック作成は [basic-rule.md](../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
+> - モック作成は、別のクラスファイルに切り出し、それをインポートして使用すること
+> - テストコード内で直接モックを定義しないこと
+> - モックファクトリは `createMock[ClassName].ts` の形式で命名
+
 ### モック対象
 
 - [モック対象1]: [モックする理由]
@@ -134,9 +139,8 @@ tests/unit/[path]/[methodName]/
 
 \`\`\`
 tests/unit/[path]/[methodName]/
-├── mocks/
-│   ├── [MockName].mock.ts    # [説明]
-│   └── ...
+└── mocks/
+    └── createMock[ClassName].ts    # モックファクトリ
 \`\`\`
 ```
 

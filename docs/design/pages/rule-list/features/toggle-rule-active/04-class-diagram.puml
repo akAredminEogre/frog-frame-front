@@ -79,7 +79,7 @@ class ChromeTabsGateway <<Gateway>> {
   + reloadMatchingTabs(rule: RewriteRule): Promise<void>
 }
 
-class RewriteRuleMessagingService <<Messaging Service>> {
+class RewriteRuleProxyService <<Proxy Service>> {
   + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
   + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
 }
@@ -125,10 +125,10 @@ RewriteRuleMapper ..> RewriteRule : creates
 RewriteRuleMapper ..> GetByIdRequestDTO : creates
 RewriteRuleMapper ..> UpdateRuleActiveRequestDTO : creates
 RewriteRuleMapper ..> RewriteRuleDTO : converts
-RewriteRuleMessagingService ..|> IRewriteRuleMessagingPort : implements
-RewriteRuleMessagingService ..> DexieRewriteRuleRepository : delegates
-RewriteRuleMessagingService ..> GetByIdRequestDTO : receives
-RewriteRuleMessagingService ..> UpdateRuleActiveRequestDTO : receives
-RewriteRuleMessagingService ..> RewriteRuleDTO : returns
+RewriteRuleProxyService ..|> IRewriteRuleMessagingPort : implements
+RewriteRuleProxyService ..> DexieRewriteRuleRepository : delegates
+RewriteRuleProxyService ..> GetByIdRequestDTO : receives
+RewriteRuleProxyService ..> UpdateRuleActiveRequestDTO : receives
+RewriteRuleProxyService ..> RewriteRuleDTO : returns
 
 @enduml

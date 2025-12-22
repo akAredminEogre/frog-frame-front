@@ -58,8 +58,8 @@ describe('HandleContextMenuReplaceDomElement.execute - 正常系', () => {
   ])('$description', async ({ tabId, selection }) => {
     // Arrange
     const mockResponse = { selection };
-    
-    vi.mocked(mockTabsService.sendMessage).mockResolvedValue(mockResponse);
+
+    vi.mocked(mockTabsService.sendGetElementSelectionMessage).mockResolvedValue(mockResponse);
     vi.mocked(mockSelectedPageTextRepository.setSelectedPageText).mockResolvedValue();
     vi.mocked(mockPopupService.openPopup).mockResolvedValue();
 
@@ -67,15 +67,12 @@ describe('HandleContextMenuReplaceDomElement.execute - 正常系', () => {
     await useCase.execute(tabId);
 
     // Assert
-    expect(mockTabsService.sendMessage).toHaveBeenCalledTimes(1);
-    expect(mockTabsService.sendMessage).toHaveBeenCalledWith(
-      tabId,
-      { type: 'getElementSelection' }
-    );
+    expect(mockTabsService.sendGetElementSelectionMessage).toHaveBeenCalledTimes(1);
+    expect(mockTabsService.sendGetElementSelectionMessage).toHaveBeenCalledWith(tabId);
 
     expect(mockSelectedPageTextRepository.setSelectedPageText).toHaveBeenCalledTimes(1);
     expect(mockSelectedPageTextRepository.setSelectedPageText).toHaveBeenCalledWith(selection);
-    
+
     expect(mockPopupService.openPopup).toHaveBeenCalledTimes(1);
   });
 });

@@ -6,10 +6,9 @@ import { disconnectObserver, reconnectObserver } from 'src/infrastructure/browse
  * ページに保存されたすべてのルールを適用する
  *
  * 呼び出し経路:
- * 1. chrome.runtime.onMessage.addListener が chrome から message を受信
- * 2. listeners/runtime/content.onMessage.ts の registerRuntimeOnMessageForContent が message を route 関数に渡す
- * 3. router/content/messageRouter.ts の createContentMessageRouter が message を適切な handler に振り分ける
- * 4. このハンドラーが呼び出される（router/content/messageRouter.ts の handler(message)）
+ * 1. @webext-core/messaging の onContentScriptMessage でメッセージを受信
+ * 2. content/runtime/onMessageReceived.ts でハンドラーが登録される
+ * 3. このハンドラーが呼び出される
  *
  * domMutationUseCaseInstanceはシングルトンで、onMutate.tsと共有される
  * これにより、ページロード時とDOM Mutation時のルール適用の状態管理が簡素化される
