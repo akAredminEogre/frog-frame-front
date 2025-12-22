@@ -10,6 +10,12 @@ PRE_COMMIT_HOOK="$REPO_ROOT/.git/hooks/pre-commit"
 
 echo "Setting up pre-commit hook for Claude Code Web..."
 
+# Check npx availability
+if ! command -v npx >/dev/null 2>&1; then
+  echo "Error: npx command not found. Please install Node.js and npm."
+  exit 1
+fi
+
 # Check if node_modules exists, if not install (using subshell to preserve directory)
 if [ ! -d "$FRONTEND_DIR/node_modules" ]; then
   echo "Installing npm dependencies..."
@@ -18,7 +24,10 @@ fi
 
 # Install lefthook (using subshell to preserve directory)
 echo "Installing lefthook..."
-(cd "$REPO_ROOT" && npx --prefix "$FRONTEND_DIR" lefthook install)
+if ! (cd "$REPO_ROOT" && npx --prefix "$FRONTEND_DIR" lefthook install); then
+  echo "Error: Failed to install lefthook."
+  exit 1
+fi
 
 # Patch pre-commit hook to find node_modules in host-frontend-root/frontend-src-root
 if [ -f "$PRE_COMMIT_HOOK" ]; then
@@ -29,6 +38,8 @@ if [ -f "$PRE_COMMIT_HOOK" ]; then
     # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
     # Insert custom path check after the @evilmartians/lefthook execution line
     TEMP_FILE=$(mktemp)
+    trap 'rm -f "$TEMP_FILE"' EXIT ERR
+
     awk '
     # Match the execution line for @evilmartians/lefthook (using flexible pattern for arch string)
     /@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook" "\$@"$/ {
@@ -42,6 +53,12 @@ if [ -f "$PRE_COMMIT_HOOK" ]; then
     ' "$PRE_COMMIT_HOOK" > "$TEMP_FILE"
     mv "$TEMP_FILE" "$PRE_COMMIT_HOOK"
     chmod +x "$PRE_COMMIT_HOOK"
+
+    # Verify patch was applied successfully
+    if ! grep -q "host-frontend-root/frontend-src-root/node_modules" "$PRE_COMMIT_HOOK"; then
+      echo "Error: Failed to patch pre-commit hook. The awk pattern may not have matched."
+      exit 1
+    fi
 
     echo "Pre-commit hook patched successfully!"
   else
