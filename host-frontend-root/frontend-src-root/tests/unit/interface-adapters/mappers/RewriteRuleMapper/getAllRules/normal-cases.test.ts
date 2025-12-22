@@ -11,7 +11,7 @@ import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/Rewrite
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
-import { createMockRewriteRuleMessagingPort } from 'tests/unit/shared/mocks/createMockRewriteRuleMessagingPort';
+import { createMockRewriteRuleMessagingPort } from 'tests/unit/interface-adapters/ports/IRewriteRuleMessagingPort/mocks/createMockRewriteRuleMessagingPort';
 
 describe('RewriteRuleMapper.getAllRules - 正常系', () => {
   let mockMessagingPort: IRewriteRuleMessagingPort;
