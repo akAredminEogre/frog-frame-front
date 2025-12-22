@@ -2,14 +2,20 @@
  * RewriteRuleMapper.toEntity - 正常系テスト
  * 1. 全プロパティを持つDTOからエンティティに変換できる
  */
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
+import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
 describe('RewriteRuleMapper.toEntity - 正常系', () => {
   it('全プロパティを持つDTOからエンティティに変換できる', () => {
-    const mapper = new RewriteRuleMapper();
+    const mockMessagingPort: IRewriteRuleMessagingPort = {
+      getAll: vi.fn(),
+      getById: vi.fn(),
+      updateActive: vi.fn(),
+    };
+    const mapper = new RewriteRuleMapper(mockMessagingPort);
     const dto: RewriteRuleDTO = {
       id: 1,
       oldString: 'old text',
