@@ -1,22 +1,15 @@
 /**
  * RewriteRuleMapper.toDto - 正常系テスト
- * 1. 全プロパティを持つエンティティからDTOに変換できる
+ * 1. 全プロパティを持つエンティティからDTOに変換できる（静的メソッド）
  */
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
-import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
 describe('RewriteRuleMapper.toDto - 正常系', () => {
   it('全プロパティを持つエンティティからDTOに変換できる', () => {
-    // toDtoテストではMessagingPortは使用しないためダミーモックを渡す
-    const mockMessagingPort: IRewriteRuleMessagingPort = {
-      getAll: vi.fn(),
-      getById: vi.fn(),
-      updateActive: vi.fn(),
-    };
-    const mapper = new RewriteRuleMapper(mockMessagingPort);
+    // 静的メソッドなのでインスタンス不要
     const entity = new RewriteRule(
       1,
       'old text',
@@ -26,7 +19,7 @@ describe('RewriteRuleMapper.toDto - 正常系', () => {
       true
     );
 
-    const result = mapper.toDto(entity);
+    const result = RewriteRuleMapper.toDto(entity);
 
     expect(result.id).toBe(1);
     expect(result.oldString).toBe('old text');

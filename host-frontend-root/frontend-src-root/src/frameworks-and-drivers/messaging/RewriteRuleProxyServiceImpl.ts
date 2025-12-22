@@ -1,6 +1,7 @@
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { IRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
+import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
 /**
  * RewriteRuleProxyService の実装を作成
@@ -15,14 +16,7 @@ export function createRewriteRuleProxyServiceImpl(): IRewriteRuleProxyService {
       const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
       const rules = await repository.getAll();
 
-      return rules.toArray().map((rule) => ({
-        id: rule.id,
-        oldString: rule.oldString,
-        newString: rule.newString,
-        urlPattern: rule.urlPattern,
-        isRegex: rule.isRegex,
-        isActive: rule.isActive,
-      }));
+      return rules.toArray().map((rule) => RewriteRuleMapper.toDto(rule));
     },
   };
 }
