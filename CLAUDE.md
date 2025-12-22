@@ -2,6 +2,22 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## タスク別チェックリスト（実装前に必ず確認）
+
+### 新規メソッド/クラスを追加する場合
+
+1. [ ] **テスト戦略書を先に作成**（`docs/design/src/[layer]/.../[methodName].md`）
+2. [ ] 実装コードを作成
+3. [ ] テストコードを実装
+
+### 既存メソッドを修正する場合
+
+1. [ ] 既存テストが通ることを確認
+2. [ ] 必要に応じてテスト戦略書を更新
+3. [ ] テストコードを更新
+
+---
+
 ## Project Overview
 
 **frog-frame-front** is a Chrome extension project built with the WXT framework that manipulates DOM elements. The project follows Clean Architecture principles with Domain-Driven Design (DDD) patterns.
@@ -275,7 +291,7 @@ These 9 rules are strictly enforced:
 - Don't create unused methods (no speculative coding like `isValid()` or `equals()`)
 
 **Class Design**:
-- When adding a class, add unit tests too
+- When adding a class, add unit tests too（**テスト戦略書を先に作成すること**）
 - Prefer modifying methods to use instance variables rather than adding new ones
 
 ## Testing Requirements
@@ -287,6 +303,18 @@ These 9 rules are strictly enforced:
 - **Location**: `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md` (mirrors src/ structure)
 - **Required sections**: 目的、テスト分類、網羅性チェック、テストファイル構成
 - **Workflow**: テスト戦略書作成 → テストコード実装
+
+### テストを伴う実装時のTodoWrite使用
+
+新規メソッド追加時は、TodoWriteで以下の順序でタスクを作成すること:
+
+```
+1. テスト戦略書の作成（docs/design/src/[layer]/.../[methodName].md）
+2. 実装コードの作成
+3. テストコードの実装
+```
+
+**重要**: テストコードを書く前に、必ずテスト戦略書の作成タスクを完了させること。
 
 ### Test Structure
 - **Location**: Tests mirror `src/` directory structure in `tests/`
