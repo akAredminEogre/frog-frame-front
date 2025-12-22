@@ -1,6 +1,6 @@
 import 'src/frameworks-and-drivers/ui/pages/rules/style.css';
 
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
@@ -12,6 +12,7 @@ import EmptyStateMessage from 'src/components/organisms/EmptyStateMessage/EmptyS
 import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { container } from 'src/frameworks-and-drivers/di/container';
+import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
 
 function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);
@@ -78,14 +79,25 @@ function RulesApp() {
     await openRuleEditPageUseCase.execute(ruleId);
   };
 
+  const handleToggle = async (ruleId: number, isActive: boolean) => {
+    setRules((prevRules) =>
+      prevRules.map((rule) =>
+        rule.id === ruleId ? rule.withActive(isActive) : rule
+      )
+    );
+
+    const toggleController = container.resolve(ToggleRuleActiveController);
+    await toggleController.toggleActive(ruleId);
+  };
+
   return (
     <div className="container">
       <h1>保存されたルール一覧</h1>
-      
+
       {rules.length === 0 ? (
         <EmptyStateMessage />
       ) : (
-        <RulesTable rules={rules} onEdit={handleEdit} />
+        <RulesTable rules={rules} onEdit={handleEdit} onToggle={handleToggle} />
       )}
       
       <div className="footer">
