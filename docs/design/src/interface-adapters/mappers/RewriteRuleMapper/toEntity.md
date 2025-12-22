@@ -31,3 +31,33 @@ RewriteRuleDTOからRewriteRuleエンティティへの変換を行う。
 tests/unit/interface-adapters/mappers/RewriteRuleMapper/toEntity/
 └── normal-cases.test.ts       # プロパティ変換（1ケース）
 ```
+
+## モック戦略
+
+### モック対象
+
+- **IRewriteRuleMessagingPort**: コンストラクタインジェクション用のダミーモック
+  - `toEntity()` は MessagingPort を使用しないため、呼び出しは発生しない
+  - インターフェース準拠のため `getAll()`, `getById()`, `updateActive()` をダミー定義
+
+### モック方法
+
+各テストケース内でダミーモックを作成し、インスタンス生成時に注入:
+
+```typescript
+const mockMessagingPort: IRewriteRuleMessagingPort = {
+  getAll: vi.fn(),
+  getById: vi.fn(),
+  updateActive: vi.fn(),
+};
+const mapper = new RewriteRuleMapper(mockMessagingPort);
+```
+
+### モックファイル構成
+
+インラインモックを使用するため、別ファイルは不要。
+
+```
+tests/unit/interface-adapters/mappers/RewriteRuleMapper/toEntity/
+└── normal-cases.test.ts       # モックはファイル内で定義
+```
