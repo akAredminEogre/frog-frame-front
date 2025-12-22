@@ -237,6 +237,29 @@ src/
 - [x] 全 E2E テストが通る
 - [x] `chrome.runtime.sendMessage` / `chrome.tabs.sendMessage` の直接使用がない
 
+### PR-4: handlers ディレクトリの移管 📋 将来対応
+
+**目的**: `infrastructure/browser/handlers/` を `frameworks-and-drivers/` 配下に移管し、Clean Architecture の層構造を整理
+
+**背景**:
+- 現在の `handlers/` は `@webext-core/messaging` のハンドラーとして機能
+- `infrastructure/` と `frameworks-and-drivers/` の責務が混在している
+- メッセージング関連コードを `frameworks-and-drivers/messaging/` に集約することで一貫性を向上
+
+**移管対象**:
+
+| 現在の場所 | 移管先 |
+|-----------|--------|
+| `infrastructure/browser/handlers/background/` | `frameworks-and-drivers/messaging/handlers/background/` |
+| `infrastructure/browser/handlers/content/` | `frameworks-and-drivers/messaging/handlers/content/` |
+| `infrastructure/browser/background/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` |
+| `infrastructure/browser/content/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` |
+
+**確認項目**:
+- [ ] 全 E2E テストが通る
+- [ ] import パスが正しく更新されている
+- [ ] Clean Architecture の層構造が整理されている
+
 ## 受け入れ条件
 
 [acceptance-criteria.md](./acceptance-criteria.md) を参照
