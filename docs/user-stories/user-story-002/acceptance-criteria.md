@@ -9,9 +9,11 @@
 ## 技術要件
 
 - [x] AC-4: 型安全性が確保されている（any 型の排除）
-- [ ] AC-5: レガシーな messageRouter / handlers が削除されている
+- [x] AC-5: レガシーなメッセージングコードが削除されている
   - messageRouter: ✅ 削除済み
   - getAllRewriteRulesHandler: ✅ 削除済み
-  - applyAllRulesHandler: ⚠️ 残存（messaging 経由で使用中、将来リファクタリング）
+  - `chrome.runtime.sendMessage` 直接使用: ✅ 削除済み
+  - `chrome.tabs.sendMessage` 直接使用: ✅ 削除済み（`sendGetElementSelectionMessage` に置換）
+  - ※ handlers ディレクトリは @webext-core/messaging 経由で使用中（レガシーではない）
 - [x] AC-6: E2E テストがすべてパスする
 - [x] AC-7: make testcheck がパスする（CI で確認）
