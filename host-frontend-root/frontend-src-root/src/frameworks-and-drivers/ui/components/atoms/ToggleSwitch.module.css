@@ -57,5 +57,11 @@
 
 .toggle[data-disabled='true'] {
   opacity: 0.5;
-  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle,
+  .toggle::after {
+    transition: none;
+  }
 }
