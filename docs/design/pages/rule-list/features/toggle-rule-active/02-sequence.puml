@@ -15,8 +15,8 @@ end box
 
 box "application-business-rules" #LightYellow
   participant "ToggleRuleActiveInteractor" as Interactor
-  participant "ToggleRuleActiveInputData" as InputData
-  participant "ToggleRuleActiveOutputData" as OutputData
+  participant "<<interface>>\nIRewriteRuleRepository" as IRepository
+  participant "<<interface>>\nITabsGateway" as ITabsGateway
 end box
 
 box "frameworks-and-drivers" #LightCyan
@@ -42,13 +42,13 @@ activate View
 View -> Controller : toggleActive(ruleId)
 activate Controller
 
-Controller -> InputData : new(ruleId)
-InputData --> Controller : inputData
-
 Controller -> Interactor : execute(inputData)
 activate Interactor
 
-Interactor -> MessagingRepo : getById(ruleId)
+Interactor -> IRepository : getById(ruleId)
+activate IRepository
+
+IRepository -> MessagingRepo : getById(ruleId)
 activate MessagingRepo
 
 MessagingRepo -> Mapper : getById(ruleId)
@@ -77,13 +77,19 @@ Entity --> Mapper : rule
 Mapper --> MessagingRepo : rule
 deactivate Mapper
 
-MessagingRepo --> Interactor : rule
+MessagingRepo --> IRepository : rule
 deactivate MessagingRepo
+
+IRepository --> Interactor : rule
+deactivate IRepository
 
 Interactor -> Entity : withActive(!isActive)
 Entity --> Interactor : updatedRule
 
-Interactor -> MessagingRepo : update(updatedRule)
+Interactor -> IRepository : update(updatedRule)
+activate IRepository
+
+IRepository -> MessagingRepo : update(updatedRule)
 activate MessagingRepo
 
 MessagingRepo -> Mapper : update(updatedRule)
@@ -109,10 +115,16 @@ deactivate MessagingService
 Mapper --> MessagingRepo : void
 deactivate Mapper
 
-MessagingRepo --> Interactor : void
+MessagingRepo --> IRepository : void
 deactivate MessagingRepo
 
-Interactor -> TabsGateway : reloadMatchingTabs(rule)
+IRepository --> Interactor : void
+deactivate IRepository
+
+Interactor -> ITabsGateway : reloadMatchingTabs(rule)
+activate ITabsGateway
+
+ITabsGateway -> TabsGateway : reloadMatchingTabs(rule)
 activate TabsGateway
 
 loop 各タブ
@@ -120,11 +132,11 @@ loop 各タブ
   Entity --> TabsGateway : boolean
 end
 
-TabsGateway --> Interactor : void
+TabsGateway --> ITabsGateway : void
 deactivate TabsGateway
 
-Interactor -> OutputData : new(updatedRule)
-OutputData --> Interactor : outputData
+ITabsGateway --> Interactor : void
+deactivate ITabsGateway
 
 Interactor -> Presenter : present(outputData)
 activate Presenter
