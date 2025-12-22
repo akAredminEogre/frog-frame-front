@@ -162,21 +162,33 @@ import type { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRe
 import type { RewriteRuleDTO } from './dto/RewriteRuleDTO';
 import type { GetByIdRequestDTO } from './dto/request-dto/GetByIdRequestDTO';
 import type { UpdateRuleActiveRequestDTO } from './dto/request-dto/UpdateRuleActiveRequestDTO';
+import type { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 
 class RewriteRuleProxyServiceImpl implements IRewriteRuleMessagingPort {
   private readonly repository = new DexieRewriteRuleRepository();
 
   async getAll(): Promise<RewriteRuleDTO[]> {
-    return this.repository.getAll();
+    const entities = await this.repository.getAll();
+    return entities.map(this.toDTO);
   }
 
   async getById(request: GetByIdRequestDTO): Promise<RewriteRuleDTO> {
-    return this.repository.getById(request.id);
+    const entity = await this.repository.getById(request.id);
+    return this.toDTO(entity);
   }
 
   async updateActive(request: UpdateRuleActiveRequestDTO): Promise<void> {
     await this.repository.updateActive(request.id, request.isActive);
+  }
+
+  private toDTO(entity: RewriteRule): RewriteRuleDTO {
+    return {
+      id: entity.id,
+      urlPattern: entity.urlPattern,
+      isActive: entity.isActive,
+      // ... other fields
+    };
   }
 }
 
