@@ -11,6 +11,7 @@ box "interface-adapters" #LightGreen
   participant "ToggleRuleActiveController" as Controller
   participant "ToggleRuleActivePresenter" as Presenter
   participant "RewriteRuleMapper" as Mapper
+  participant "<<interface>>\nIRewriteRuleMessagingPort" as IMessagingPort
 end box
 
 box "application-business-rules" #LightYellow
@@ -54,7 +55,10 @@ activate MessagingRepo
 MessagingRepo -> Mapper : getById(ruleId)
 activate Mapper
 
-Mapper -> MessagingService : getById(dto)
+Mapper -> IMessagingPort : getById(dto)
+activate IMessagingPort
+
+IMessagingPort -> MessagingService : getById(dto)
 activate MessagingService
 
 MessagingService -> ProxyService : getById(dto)
@@ -68,8 +72,11 @@ deactivate DexieRepo
 ProxyService --> MessagingService : DTO
 deactivate ProxyService
 
-MessagingService --> Mapper : DTO
+MessagingService --> IMessagingPort : DTO
 deactivate MessagingService
+
+IMessagingPort --> Mapper : DTO
+deactivate IMessagingPort
 
 Mapper -> Entity : new(...)
 Entity --> Mapper : rule
@@ -95,7 +102,10 @@ activate MessagingRepo
 MessagingRepo -> Mapper : update(updatedRule)
 activate Mapper
 
-Mapper -> MessagingService : updateActive(dto)
+Mapper -> IMessagingPort : updateActive(dto)
+activate IMessagingPort
+
+IMessagingPort -> MessagingService : updateActive(dto)
 activate MessagingService
 
 MessagingService -> ProxyService : updateActive(dto)
@@ -109,8 +119,11 @@ deactivate DexieRepo
 ProxyService --> MessagingService : void
 deactivate ProxyService
 
-MessagingService --> Mapper : void
+MessagingService --> IMessagingPort : void
 deactivate MessagingService
+
+IMessagingPort --> Mapper : void
+deactivate IMessagingPort
 
 Mapper --> MessagingRepo : void
 deactivate Mapper
