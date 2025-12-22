@@ -23,8 +23,6 @@ const awilixContainer = createContainer({
 });
 
 // Infrastructure services (singleton instances)
-// ChromeRuntimeRewriteRuleRepositoryは内部で遅延初期化を行うため、
-// ここではシンプルにインスタンス化するだけでよい
 const chromeRuntimeRewriteRuleRepository = new ChromeRuntimeRewriteRuleRepository();
 const windowCurrentUrlService = new WindowCurrentUrlService();
 const debounceTimer = new DebounceTimer();
