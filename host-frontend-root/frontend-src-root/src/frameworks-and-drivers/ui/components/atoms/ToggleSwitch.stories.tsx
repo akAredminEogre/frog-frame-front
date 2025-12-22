@@ -1,3 +1,4 @@
+import { useArgs } from '@storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
@@ -22,12 +23,34 @@ export const Unchecked: Story = {
     checked: false,
     ariaLabel: 'ルールの有効化',
   },
+  render: function Render(args) {
+    const [{ checked }, updateArgs] = useArgs<typeof args>();
+
+    return (
+      <ToggleSwitch
+        {...args}
+        checked={checked ?? false}
+        onChange={(newChecked) => updateArgs({ checked: newChecked })}
+      />
+    );
+  },
 };
 
 export const Checked: Story = {
   args: {
     checked: true,
     ariaLabel: 'ルールの有効化',
+  },
+  render: function Render(args) {
+    const [{ checked }, updateArgs] = useArgs<typeof args>();
+
+    return (
+      <ToggleSwitch
+        {...args}
+        checked={checked ?? true}
+        onChange={(newChecked) => updateArgs({ checked: newChecked })}
+      />
+    );
   },
 };
 
