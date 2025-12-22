@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository';
+import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
 /**
  * ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系テスト
@@ -11,18 +13,19 @@ import { ChromeRuntimeRewriteRuleRepository } from 'src/frameworks-and-drivers/p
  */
 describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', () => {
   let repository: ChromeRuntimeRewriteRuleRepository;
+  let mockMapper: RewriteRuleMapper;
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Mock chrome.runtime.sendMessage
-    global.chrome = {
-      runtime: {
-        sendMessage: vi.fn(),
-      },
-    } as any;
+    // Create mock mapper
+    mockMapper = {
+      getAllRules: vi.fn(),
+      toEntity: vi.fn(),
+      toDto: vi.fn(),
+    } as unknown as RewriteRuleMapper;
 
-    repository = new ChromeRuntimeRewriteRuleRepository();
+    repository = new ChromeRuntimeRewriteRuleRepository(mockMapper);
   });
 
   afterEach(() => {
@@ -33,8 +36,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
     {
       description: 'URLにマッチするルールのみを取得する',
       mockRules: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false },
-        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: false },
+        new RewriteRule(1, 'old1', 'new1', 'https://example.com', false, true),
+        new RewriteRule(2, 'old2', 'new2', 'https://other.com', false, true),
       ],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
@@ -43,7 +46,7 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
     {
       description: 'マッチするルールがない場合は空のRewriteRulesを返す',
       mockRules: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://other.com', isRegex: false },
+        new RewriteRule(1, 'old1', 'new1', 'https://other.com', false, true),
       ],
       currentUrl: 'https://example.com/page',
       expectedLength: 0,
@@ -52,8 +55,8 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
     {
       description: '空のurlPatternを持つルールは取得されない',
       mockRules: [
-        { id: 1, oldString: 'old1', newString: 'new1', urlPattern: '', isRegex: false },
-        { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://example.com', isRegex: false },
+        new RewriteRule(1, 'old1', 'new1', '', false, true),
+        new RewriteRule(2, 'old2', 'new2', 'https://example.com', false, true),
       ],
       currentUrl: 'https://example.com/page',
       expectedLength: 1,
@@ -63,11 +66,12 @@ describe('ChromeRuntimeRewriteRuleRepository.getRulesMatchingUrl - 正常系', (
 
   testCases.forEach(({ description, mockRules, currentUrl, expectedLength, expectedOldStrings }) => {
     it(description, async () => {
-      // Arrange
-      vi.mocked(chrome.runtime.sendMessage).mockResolvedValue({
-        success: true,
-        rules: mockRules,
+      // Arrange - Mapper.getAllRules() が RewriteRules を返すようにモック
+      const rulesObject: Record<string, RewriteRule> = {};
+      mockRules.forEach((rule) => {
+        rulesObject[rule.id] = rule;
       });
+      vi.mocked(mockMapper.getAllRules).mockResolvedValue(new RewriteRules(rulesObject));
 
       // Act
       const result = await repository.getRulesMatchingUrl(currentUrl);
