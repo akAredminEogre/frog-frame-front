@@ -24,6 +24,7 @@ box "frameworks-and-drivers" #LightCyan
   participant "ChromeRuntimeRewriteRuleRepository" as MessagingRepo
   participant "ChromeTabsGateway" as TabsGateway
   participant "RewriteRuleMessagingService" as MessagingService
+  participant "<<interface>>\nIRewriteRuleProxyService" as IProxyService
 end box
 
 box "Background" #LightGray
@@ -62,7 +63,10 @@ activate IMessagingPort
 IMessagingPort -> MessagingService : getById(dto)
 activate MessagingService
 
-MessagingService -> ProxyService : getById(dto)
+MessagingService -> IProxyService : getById(dto)
+activate IProxyService
+
+IProxyService -> ProxyService : getById(dto)
 activate ProxyService
 
 ProxyService -> ProxyServiceImpl : getById(dto)
@@ -76,8 +80,11 @@ deactivate DexieRepo
 ProxyServiceImpl --> ProxyService : DTO
 deactivate ProxyServiceImpl
 
-ProxyService --> MessagingService : DTO
+ProxyService --> IProxyService : DTO
 deactivate ProxyService
+
+IProxyService --> MessagingService : DTO
+deactivate IProxyService
 
 MessagingService --> IMessagingPort : DTO
 deactivate MessagingService
@@ -115,7 +122,10 @@ activate IMessagingPort
 IMessagingPort -> MessagingService : updateActive(dto)
 activate MessagingService
 
-MessagingService -> ProxyService : updateActive(dto)
+MessagingService -> IProxyService : updateActive(dto)
+activate IProxyService
+
+IProxyService -> ProxyService : updateActive(dto)
 activate ProxyService
 
 ProxyService -> ProxyServiceImpl : updateActive(dto)
@@ -129,8 +139,11 @@ deactivate DexieRepo
 ProxyServiceImpl --> ProxyService : void
 deactivate ProxyServiceImpl
 
-ProxyService --> MessagingService : void
+ProxyService --> IProxyService : void
 deactivate ProxyService
+
+IProxyService --> MessagingService : void
+deactivate IProxyService
 
 MessagingService --> IMessagingPort : void
 deactivate MessagingService
