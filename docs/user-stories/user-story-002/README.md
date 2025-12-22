@@ -211,9 +211,9 @@ src/
 - [x] Popup からのルール適用が動作する
 - [x] E2E テストが通る
 
-### PR-3: レガシーコード削除 ⚠️ 部分完了
+### PR-3: レガシーコード削除 ✅ 完了
 
-**目的**: 旧メッセージングハンドラーを削除
+**目的**: 旧メッセージングコードを削除し、すべての通信を @webext-core 経由に移行
 
 **削除状況**:
 
@@ -221,12 +221,44 @@ src/
 |---------|------|
 | `messageRouter.ts` | ✅ 削除済み |
 | `getAllRewriteRulesHandler.ts` | ✅ 削除済み（proxy-service に移行） |
-| `applyAllRulesHandler.ts` | ⚠️ 残存（messaging 経由で動作中） |
-| `onMessageReceived.ts` | ⚠️ 残存（messaging ハンドラー登録用に使用中） |
+| `chrome.runtime.sendMessage` 直接使用 | ✅ 削除済み |
+| `chrome.tabs.sendMessage` 直接使用 | ✅ 削除済み（`ChromeTabsService.sendMessage` を `sendGetElementSelectionMessage` に置換） |
+
+**現在のハンドラー構成**（@webext-core/messaging 経由で動作）:
+
+| ファイル | 用途 |
+|---------|------|
+| `handlers/background/applyAllRulesHandler.ts` | Popup → Background → Content Script 転送 |
+| `handlers/content/applyAllRulesHandler.ts` | ルール適用処理 |
+| `handlers/content/getElementSelectionHandler.ts` | 要素選択取得 |
+| `onMessageReceived.ts` | @webext-core/messaging ハンドラー登録 |
 
 **確認項目**:
 - [x] 全 E2E テストが通る
-- [ ] 未使用コードがないこと（knip チェック）- 将来のリファクタリングで対応
+- [x] `chrome.runtime.sendMessage` / `chrome.tabs.sendMessage` の直接使用がない
+
+### PR-4: handlers ディレクトリの移管 📋 将来対応
+
+**目的**: `infrastructure/browser/handlers/` を `frameworks-and-drivers/` 配下に移管し、Clean Architecture の層構造を整理
+
+**背景**:
+- 現在の `handlers/` は `@webext-core/messaging` のハンドラーとして機能
+- `infrastructure/` と `frameworks-and-drivers/` の責務が混在している
+- メッセージング関連コードを `frameworks-and-drivers/messaging/` に集約することで一貫性を向上
+
+**移管対象**:
+
+| 現在の場所 | 移管先 |
+|-----------|--------|
+| `infrastructure/browser/handlers/background/` | `frameworks-and-drivers/messaging/handlers/background/` |
+| `infrastructure/browser/handlers/content/` | `frameworks-and-drivers/messaging/handlers/content/` |
+| `infrastructure/browser/background/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` |
+| `infrastructure/browser/content/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` |
+
+**確認項目**:
+- [ ] 全 E2E テストが通る
+- [ ] import パスが正しく更新されている
+- [ ] Clean Architecture の層構造が整理されている
 
 ## 受け入れ条件
 
