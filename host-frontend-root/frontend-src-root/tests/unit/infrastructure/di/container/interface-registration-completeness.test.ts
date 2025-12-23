@@ -78,14 +78,9 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
       expected: { implementationName: 'GetSelectionService' }
     },
     {
-      description: 'IToggleRuleActiveUseCaseをToggleRuleActiveInteractorに解決できること',
-      input: { interfaceToken: 'IToggleRuleActiveUseCase' as const },
-      expected: { implementationName: 'ToggleRuleActiveInteractor' }
-    },
-    {
-      description: 'IToggleRuleActivePresenterをToggleRuleActivePresenterに解決できること',
-      input: { interfaceToken: 'IToggleRuleActivePresenter' as const },
-      expected: { implementationName: 'ToggleRuleActivePresenter' }
+      description: 'IToggleRuleActiveControllerFactoryをToggleRuleActiveControllerFactoryに解決できること',
+      input: { interfaceToken: 'IToggleRuleActiveControllerFactory' as const },
+      expected: { implementationName: 'ToggleRuleActiveControllerFactory' }
     },
     {
       description: 'ITabsGatewayをChromeTabsGatewayに解決できること',
