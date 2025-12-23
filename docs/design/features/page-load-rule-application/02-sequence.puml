@@ -1,0 +1,153 @@
+@startuml page-load-rule-application
+
+title ページロード時ルール適用機能 シーケンス図
+
+skinparam participant {
+    BackgroundColor<<layer1>> LightGreen
+    BackgroundColor<<layer2>> LightBlue
+    BackgroundColor<<layer4>> LightYellow
+}
+
+box "Background Script" #LightGray
+    participant "tabsOnUpdated" as TabsOnUpdated <<layer4>>
+    participant "ChromeCurrentTabService" as CurrentTabService <<layer4>>
+    participant "TabUrl" as TabUrl <<layer1>>
+    participant "ChromeTabsService" as TabsService <<layer4>>
+end box
+
+box "Content Script" #LightGray
+    participant "applyAllRulesHandler" as ApplyHandler <<layer4>>
+    participant "ObserverControl" as ObserverCtrl <<layer4>>
+    participant "ApplyRulesOnDomMutation\nUseCase" as UseCase <<layer2>>
+    participant "IRewriteRuleRepository" as IRepository <<layer2>>
+    participant "ChromeRuntimeRewriteRule\nRepository" as Repository <<layer4>>
+    participant "RewriteRules" as Rules <<layer1>>
+end box
+
+== ページロード時（初回適用） ==
+
+[-> TabsOnUpdated : chrome.tabs.onUpdated\n(status === 'complete')
+activate TabsOnUpdated
+
+TabsOnUpdated -> CurrentTabService : getTabById(tabId)
+activate CurrentTabService
+CurrentTabService --> TabsOnUpdated : Tab
+deactivate CurrentTabService
+
+TabsOnUpdated -> TabUrl : canInjectContentScript()
+activate TabUrl
+TabUrl --> TabsOnUpdated : boolean
+deactivate TabUrl
+
+alt URLが注入可能な場合
+    TabsOnUpdated -> TabsService : sendApplyAllRulesMessage(tab)
+    activate TabsService
+
+    TabsService ->> ApplyHandler : messaging (applyAllRules)
+    activate ApplyHandler
+
+    ApplyHandler -> ObserverCtrl : disconnect()
+    activate ObserverCtrl
+    ObserverCtrl --> ApplyHandler
+    deactivate ObserverCtrl
+
+    ApplyHandler -> UseCase : applyRulesToRoot(document.body)
+    activate UseCase
+
+    UseCase -> IRepository : getRulesMatchingUrl(url)
+    activate IRepository
+    IRepository -> Repository : getRulesMatchingUrl(url)
+    activate Repository
+    Repository --> IRepository : RewriteRules
+    deactivate Repository
+    IRepository --> UseCase : RewriteRules
+    deactivate IRepository
+
+    UseCase -> Rules : applyRulesWithDomDiffer(root, factory)
+    activate Rules
+    Rules --> UseCase
+    deactivate Rules
+
+    UseCase --> ApplyHandler : success
+    deactivate UseCase
+
+    ApplyHandler -> ObserverCtrl : reconnect()
+    activate ObserverCtrl
+    ObserverCtrl --> ApplyHandler
+    deactivate ObserverCtrl
+
+    ApplyHandler --> TabsService : { success: true }
+    deactivate ApplyHandler
+
+    TabsService --> TabsOnUpdated
+    deactivate TabsService
+end
+
+deactivate TabsOnUpdated
+
+== DOM変更時（Lazy Load対応） ==
+
+participant "observerOnMutate\n(MutationObserver)" as Observer <<layer4>>
+participant "IDebounceTimer" as ITimer <<layer2>>
+participant "WindowDebounceTimer" as Timer <<layer4>>
+
+[-> Observer : mutations
+activate Observer
+
+Observer -> UseCase : handleMutations(mutations)
+activate UseCase
+
+note right of UseCase
+    hasInitialLoadCompleted が
+    false の場合はスキップ
+end note
+
+UseCase -> UseCase : extractAddedElements()
+
+UseCase -> ITimer : scheduleWithGuard(callback, delay)
+activate ITimer
+ITimer -> Timer : scheduleWithGuard(callback, delay)
+activate Timer
+Timer --> ITimer
+deactivate Timer
+ITimer --> UseCase
+deactivate ITimer
+
+UseCase --> Observer
+deactivate UseCase
+
+Observer --> [
+deactivate Observer
+
+... 100ms後（デバウンス） ...
+
+Timer ->> UseCase : callback()
+activate UseCase
+
+UseCase -> ObserverCtrl : disconnect()
+activate ObserverCtrl
+ObserverCtrl --> UseCase
+deactivate ObserverCtrl
+
+UseCase -> IRepository : getRulesMatchingUrl(url)
+activate IRepository
+IRepository -> Repository : getRulesMatchingUrl(url)
+activate Repository
+Repository --> IRepository : RewriteRules
+deactivate Repository
+IRepository --> UseCase : RewriteRules
+deactivate IRepository
+
+UseCase -> Rules : applyRulesWithDomDiffer(element, factory)
+activate Rules
+Rules --> UseCase
+deactivate Rules
+
+UseCase -> ObserverCtrl : reconnect()
+activate ObserverCtrl
+ObserverCtrl --> UseCase
+deactivate ObserverCtrl
+
+deactivate UseCase
+
+@enduml
