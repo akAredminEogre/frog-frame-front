@@ -50,9 +50,18 @@ Presenterに渡されるOutputDataが正しいことを確認。
 |------|-------------|------|
 | Repository.getById失敗 | エラー時にpresentErrorが呼び出される | ルール取得失敗の通知 |
 | Repository.update失敗 | エラー時にpresentErrorが呼び出される | ルール更新失敗の通知 |
-| TabsGateway.reloadMatchingTabs失敗 | presentが先に呼び出され、その後presentErrorが呼び出される | DB更新成功後のタブリロード失敗（部分的成功） |
 
 **対応テスト**: `error-cases.test.ts`
+
+### 5. 部分的成功（タブリロード失敗）
+
+DB更新成功後にタブリロードが失敗した場合の挙動を確認。
+
+| 分類 | テストケース | 根拠 |
+|------|-------------|------|
+| TabsGateway.reloadMatchingTabs失敗 | presentが先に呼び出され、その後presentErrorが呼び出される | DB更新成功後のタブリロード失敗 |
+
+**対応テスト**: `partial-success-cases.test.ts`
 
 ## 網羅性チェック
 
@@ -79,8 +88,9 @@ Repository.update成功後にTabsGateway.reloadMatchingTabsが失敗した場合
 
 ```
 tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/
-├── normal-cases.test.ts       # 状態変更確認（配列ベース、2ケース）
-└── error-cases.test.ts        # 異常系確認（3ケース）
+├── normal-cases.test.ts          # 状態変更確認（配列ベース、2ケース）
+├── error-cases.test.ts           # 異常系確認（配列ベース、2ケース）
+└── partial-success-cases.test.ts # 部分的成功確認（配列ベース、1ケース）
 ```
 
 ## モック戦略
