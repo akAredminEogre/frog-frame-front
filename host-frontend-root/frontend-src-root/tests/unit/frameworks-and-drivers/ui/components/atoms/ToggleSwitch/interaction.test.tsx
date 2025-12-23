@@ -1,7 +1,8 @@
 /**
  * ToggleSwitch コンポーネント - インタラクションテスト
- * 1. クリック: onChangeが新しい状態で呼ばれる
- * 2. disabled時クリック: onChangeが呼ばれない
+ * 配列形式でまとめたクリック操作のテストケース
+ * - クリック: onChangeが新しい状態で呼ばれる
+ * - disabled時クリック: onChangeが呼ばれない
  */
 import { flushPromises, ToggleSwitchTestHelper } from 'tests/unit/frameworks-and-drivers/ui/components/atoms/ToggleSwitch/test-helpers';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -17,34 +18,41 @@ describe('ToggleSwitch - インタラクション', () => {
     helper.cleanup();
   });
 
-  it('クリック時にonChangeが新しい状態で呼ばれる', async () => {
-    // Arrange
-    const mockOnChange = vi.fn();
-    await helper.render({ checked: false, onChange: mockOnChange, ariaLabel: 'ルールの有効化' });
+  const testCases = [
+    {
+      description: 'クリック時にonChangeが新しい状態で呼ばれる',
+      input: { checked: false, disabled: false },
+      expected: { callCount: 1, expectedCalls: [true] },
+    },
+    {
+      description: 'disabled時はクリックしてもonChangeが呼ばれない',
+      input: { checked: false, disabled: true },
+      expected: { callCount: 0, expectedCalls: [] as boolean[] },
+    },
+  ];
 
-    // Act
-    const input = helper.getInputElement();
-    expect(input).not.toBeNull();
-    input?.click();
-    await flushPromises();
+  testCases.forEach((testCase) => {
+    it(testCase.description, async () => {
+      // Arrange
+      const mockOnChange = vi.fn();
+      await helper.render({
+        checked: testCase.input.checked,
+        disabled: testCase.input.disabled,
+        onChange: mockOnChange,
+        ariaLabel: 'ルールの有効化',
+      });
 
-    // Assert
-    expect(mockOnChange).toHaveBeenCalledTimes(1);
-    expect(mockOnChange).toHaveBeenCalledWith(true);
-  });
+      // Act
+      const input = helper.getInputElement();
+      expect(input).not.toBeNull();
+      input?.click();
+      await flushPromises();
 
-  it('disabled時はクリックしてもonChangeが呼ばれない', async () => {
-    // Arrange
-    const mockOnChange = vi.fn();
-    await helper.render({ checked: false, onChange: mockOnChange, disabled: true, ariaLabel: 'ルールの有効化' });
-
-    // Act
-    const input = helper.getInputElement();
-    expect(input).not.toBeNull();
-    input?.click();
-    await flushPromises();
-
-    // Assert
-    expect(mockOnChange).not.toHaveBeenCalled();
+      // Assert
+      expect(mockOnChange).toHaveBeenCalledTimes(testCase.expected.callCount);
+      for (const expectedValue of testCase.expected.expectedCalls) {
+        expect(mockOnChange).toHaveBeenCalledWith(expectedValue);
+      }
+    });
   });
 });
