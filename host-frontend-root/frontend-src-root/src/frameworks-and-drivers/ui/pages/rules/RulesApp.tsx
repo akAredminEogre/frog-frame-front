@@ -6,16 +6,13 @@ import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
 import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
-import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
-import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import ErrorMessage from 'src/components/molecules/ErrorMessage/ErrorMessage';
 import LoadingMessage from 'src/components/molecules/LoadingMessage/LoadingMessage';
 import EmptyStateMessage from 'src/components/organisms/EmptyStateMessage/EmptyStateMessage';
 import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { container } from 'src/frameworks-and-drivers/di/container';
-import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
-import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
+import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 
 function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);
@@ -25,9 +22,8 @@ function RulesApp() {
   const [toggleError, setToggleError] = useState<{ ruleId: number; message: string } | null>(null);
 
   const toggleController = useMemo(() => {
-    const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
-    const tabsGateway = container.resolve<ITabsGateway>('ITabsGateway');
-    const presenter = new ToggleRuleActivePresenter(
+    const factory = container.resolve<IToggleRuleActiveControllerFactory>('IToggleRuleActiveControllerFactory');
+    return factory.create(
       (rule: RewriteRule) => {
         setRules((prevRules) =>
           prevRules.map((r) => (r.id === rule.id ? rule : r))
@@ -37,8 +33,6 @@ function RulesApp() {
         setToggleError({ ruleId, message });
       }
     );
-    const interactor = new ToggleRuleActiveInteractor(repository, tabsGateway, presenter);
-    return new ToggleRuleActiveController(interactor);
   }, [setRules, setToggleError]);
 
   useEffect(() => {
