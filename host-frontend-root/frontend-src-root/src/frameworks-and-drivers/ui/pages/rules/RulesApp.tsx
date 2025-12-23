@@ -123,9 +123,9 @@ function RulesApp() {
       <h1>保存されたルール一覧</h1>
 
       {toggleError && (
-        <div className="toggle-error">
-          ルール {toggleError.ruleId} の切り替えに失敗しました: {toggleError.message}
-        </div>
+        <ErrorMessage
+          message={`ルール ${toggleError.ruleId} の切り替えに失敗しました: ${toggleError.message}`}
+        />
       )}
 
       {rules.length === 0 ? (
