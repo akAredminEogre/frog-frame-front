@@ -126,3 +126,19 @@ jobs:
 
       - name: Run E2E tests
         run: npm run test:e2e
+
+  copilot-review:
+    name: Request Copilot Review
+    runs-on: ubuntu-latest
+    needs: [unit, check, e2e]
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Request Copilot Review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} --add-reviewer copilot
