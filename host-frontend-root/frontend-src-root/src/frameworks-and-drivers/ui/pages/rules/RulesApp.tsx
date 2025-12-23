@@ -33,7 +33,7 @@ function RulesApp() {
         setToggleError({ ruleId, message });
       }
     );
-  }, [setRules, setToggleError]);
+  }, []);
 
   useEffect(() => {
     // TODO: ロジックをUseCaseに分離するタスクを追加
