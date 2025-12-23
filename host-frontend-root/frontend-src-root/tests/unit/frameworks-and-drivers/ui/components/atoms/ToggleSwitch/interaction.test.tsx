@@ -24,7 +24,7 @@ describe('ToggleSwitch - インタラクション', () => {
     await helper.render({ checked: false, onChange: mockOnChange, ariaLabel: 'ルールの有効化' });
 
     // Act
-    const input = helper.getCheckboxElement();
+    const input = helper.getInputElement();
     expect(input).not.toBeNull();
     input?.click();
     await flushPromises();
@@ -40,7 +40,7 @@ describe('ToggleSwitch - インタラクション', () => {
     await helper.render({ checked: false, onChange: mockOnChange, disabled: true, ariaLabel: 'ルールの有効化' });
 
     // Act
-    const input = helper.getCheckboxElement();
+    const input = helper.getInputElement();
     expect(input).not.toBeNull();
     input?.click();
     await flushPromises();
