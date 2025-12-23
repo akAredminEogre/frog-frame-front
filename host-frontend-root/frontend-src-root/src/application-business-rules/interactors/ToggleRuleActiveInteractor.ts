@@ -21,9 +21,9 @@ export class ToggleRuleActiveInteractor implements IToggleRuleActiveUseCase {
       const rule = await this.repository.getById(inputData.ruleId);
       const toggledRule = rule.withActive(!rule.isActive);
       await this.repository.update(toggledRule);
-      await this.tabsGateway.reloadMatchingTabs(toggledRule);
       const outputData = new ToggleRuleActiveOutputData(toggledRule);
       this.presenter.present(outputData);
+      await this.tabsGateway.reloadMatchingTabs(toggledRule);
     } catch (error) {
       const errorData = new ToggleRuleActiveErrorOutputData(inputData.ruleId, error);
       this.presenter.presentError(errorData);
