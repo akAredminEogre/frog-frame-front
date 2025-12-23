@@ -148,14 +148,13 @@ BEGIN { matched = 0; patched = 0 }
 { print }
 END { print matched > STATUS_FILE }
 ' "${PRE_COMMIT_HOOK}" > "${TEMP_FILE}"; then
-    echo "Error: awk processing failed. Restoring backup."
-    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
+    echo "Error: awk processing failed."
+    rm -f "${BACKUP_FILE}" || echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
     exit 1
 fi
 
 # Verify awk pattern matched
-PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
-readonly PATTERN_MATCHED
+readonly PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
     echo "This may indicate lefthook version incompatibility. Check generated hook format."
