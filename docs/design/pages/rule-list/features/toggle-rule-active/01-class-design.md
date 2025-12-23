@@ -242,16 +242,16 @@ ADR-001 に従い、ドメインエンティティの値を用いた判定・計
 │                                                                             │
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
 │  │ <<interface>>               │    │ <<interface>>               │        │
-│  │ IToggleRuleActiveController │    │ IToggleRuleActiveController │        │
-│  │ Factory                     │    │                             │        │
+│  │ IToggleRuleActive           │    │ IToggleRuleActiveController │        │
+│  │ ControllerFactory           │    │                             │        │
 │  │ ─────────────────────────── │    │ ─────────────────────────── │        │
 │  │ + create(onSuccess,         │    │ + toggleActive(ruleId)      │        │
 │  │   onError): IToggle...Ctrl  │    └──────────▲──────────────────┘        │
 │  └──────────▲──────────────────┘               │ implements                │
 │             │ implements                       │                           │
 │  ┌──────────┴──────────────────┐    ┌──────────┴──────────────────┐        │
-│  │ ToggleRuleActiveController  │    │ ToggleRuleActiveController  │        │
-│  │ Factory                     │    │ ─────────────────────────── │        │
+│  │ ToggleRuleActive            │    │ ToggleRuleActiveController  │        │
+│  │ ControllerFactory           │    │ ─────────────────────────── │        │
 │  │ ─────────────────────────── │    │ - useCase: IToggleRule...   │        │
 │  │ - repository: IRewriteRule..│    │ ─────────────────────────── │        │
 │  │ - tabsGateway: ITabsGateway │    │ + toggleActive(ruleId)      │        │
