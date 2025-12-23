@@ -13,10 +13,17 @@ import { ToggleSwitch, ToggleSwitchProps } from 'src/frameworks-and-drivers/ui/c
  * 注意: render()などのメソッドを呼ぶ前に必ずsetup()を呼び出すこと
  */
 export class ToggleSwitchTestHelper {
-  // Definite assignment assertion: setup()で初期化される
-  // setup()を呼び忘れるとランタイムエラーになるため、beforeEach内で必ず呼び出すこと
-  private container!: HTMLDivElement;
-  private root!: ReactDOM.Root;
+  private container: HTMLDivElement | null = null;
+  private root: ReactDOM.Root | null = null;
+
+  /**
+   * setup()が呼ばれているか確認し、未呼び出しの場合はエラーをスロー
+   */
+  private ensureSetup(): void {
+    if (!this.container || !this.root) {
+      throw new Error('ToggleSwitchTestHelper.setup() must be called before using other methods. Add helper.setup() to beforeEach().');
+    }
+  }
 
   /**
    * テスト前のセットアップ
@@ -34,8 +41,11 @@ export class ToggleSwitchTestHelper {
    * afterEach 内で呼び出す
    */
   cleanup(): void {
-    this.root.unmount();
-    this.container.remove();
+    this.ensureSetup();
+    this.root!.unmount();
+    this.container!.remove();
+    this.container = null;
+    this.root = null;
     vi.resetAllMocks();
   }
 
@@ -44,11 +54,12 @@ export class ToggleSwitchTestHelper {
    * @param props ToggleSwitchProps。onChangeを省略した場合はvi.fn()がデフォルト値として使用される
    */
   async render(props: Omit<ToggleSwitchProps, 'onChange'> & { onChange?: (checked: boolean) => void }): Promise<void> {
+    this.ensureSetup();
     const defaultProps: ToggleSwitchProps = {
       onChange: vi.fn(),
       ...props,
     };
-    this.root.render(<ToggleSwitch {...defaultProps} />);
+    this.root!.render(<ToggleSwitch {...defaultProps} />);
     // Flush React updates
     await new Promise<void>((resolve) => setTimeout(resolve, 0));
   }
@@ -57,7 +68,8 @@ export class ToggleSwitchTestHelper {
    * data-selected属性を持つトグル要素を取得
    */
   getToggleElement(): Element | null {
-    return this.container.querySelector('[data-selected]');
+    this.ensureSetup();
+    return this.container!.querySelector('[data-selected]');
   }
 
   /**
@@ -65,14 +77,16 @@ export class ToggleSwitchTestHelper {
    * React Ariaのuswitchはtype="checkbox"とrole="switch"を設定する
    */
   getInputElement(): HTMLInputElement | null {
-    return this.container.querySelector('input') as HTMLInputElement | null;
+    this.ensureSetup();
+    return this.container!.querySelector('input') as HTMLInputElement | null;
   }
 
   /**
    * コンテナを取得
    */
   getContainer(): HTMLDivElement {
-    return this.container;
+    this.ensureSetup();
+    return this.container!;
   }
 }
 
