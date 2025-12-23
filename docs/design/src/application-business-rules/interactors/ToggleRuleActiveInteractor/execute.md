@@ -4,6 +4,7 @@
 
 ルールの有効/無効状態をトグルするワークフローを調整する。
 Repository経由でルールを取得・更新し、TabsGateway経由でマッチするタブをリロードし、Presenterへ結果を通知する。
+エラー発生時はPresenter.presentErrorを呼び出してエラーを通知する。
 
 ## テスト分類
 
@@ -41,6 +42,18 @@ Presenterに渡されるOutputDataが正しいことを確認。
 
 **対応テスト**: `normal-cases.test.ts`（同一テスト内で検証）
 
+### 4. 異常系（エラーハンドリング）
+
+各依存関係でエラーが発生した場合にpresentErrorが呼び出されることを確認。
+
+| 分類 | テストケース | 根拠 |
+|------|-------------|------|
+| Repository.getById失敗 | エラー時にpresentErrorが呼び出される | ルール取得失敗の通知 |
+| Repository.update失敗 | エラー時にpresentErrorが呼び出される | ルール更新失敗の通知 |
+| TabsGateway.reloadMatchingTabs失敗 | presentが先に呼び出され、その後presentErrorが呼び出される | DB更新成功後のタブリロード失敗（部分的成功） |
+
+**対応テスト**: `error-cases.test.ts`
+
 ## 網羅性チェック
 
 - [x] isActive=true → falseの切り替え
@@ -50,22 +63,24 @@ Presenterに渡されるOutputDataが正しいことを確認。
 - [x] TabsGateway.reloadMatchingTabsの呼び出し確認
 - [x] Presenter.presentの呼び出し確認
 - [x] OutputDataの内容確認
-- [ ] 異常系（Repository.getByIdでルールが見つからない） → 不要（Repository層で例外処理、Interactorは例外を伝播）
-- [ ] 異常系（Repository.updateの失敗） → 不要（Infrastructure層で例外処理、Interactorは例外を伝播）
+- [x] 異常系（Repository.getByIdでエラー発生）
+- [x] 異常系（Repository.updateでエラー発生）
+- [x] 異常系（TabsGateway.reloadMatchingTabsでエラー発生）
 
-### 異常系テストが不要な理由
+### 部分的成功の取り扱い
 
-Interactorは正常フローの調整のみを担当し、エラーハンドリングの責務を持たない：
+Repository.update成功後にTabsGateway.reloadMatchingTabsが失敗した場合：
+- Presenter.presentが先に呼び出される（UIはトグル後の状態を表示）
+- その後Presenter.presentErrorが呼び出される（タブリロード失敗をユーザーに通知）
 
-1. **責務の分離**: Interactorはワークフロー調整のみ、エラー処理はInfrastructure層
-2. **エラー伝播**: Repositoryからのエラーは呼び出し元（Controller→View層）に伝播してUIで処理
-3. **シンプルな設計**: 現時点でのビジネスルールに複雑な条件分岐がない
+これにより、データベースは更新されたがタブリロードが失敗した場合でも、UIは正しい状態を表示する。
 
 ## テストファイル構成
 
 ```
 tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/
-└── normal-cases.test.ts       # 状態変更確認（配列ベース、2ケース）
+├── normal-cases.test.ts       # 状態変更確認（配列ベース、2ケース）
+└── error-cases.test.ts        # 異常系確認（3ケース）
 ```
 
 ## モック戦略
