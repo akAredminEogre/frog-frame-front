@@ -115,11 +115,18 @@ BEGIN { matched = 0 }
     # Extract leading indentation from matched line (spaces and tabs only)
     match($0, /^[ \t]*/)
     base_indent = substr($0, RSTART, RLENGTH)
-    # Remove one level (2 spaces) for elif/then which should be at outer level
-    if (length(base_indent) >= 2) {
-        outer_indent = substr(base_indent, 1, length(base_indent) - 2)
+    # Remove one indentation level for elif/then (outer level)
+    # Detect indent style: check if base_indent ends with tab or spaces
+    len = length(base_indent)
+    if (len >= 1 && substr(base_indent, len, 1) == "\t") {
+        # Tab-based indentation: remove one tab
+        outer_indent = substr(base_indent, 1, len - 1)
+    } else if (len >= 2 && substr(base_indent, len - 1, 2) == "  ") {
+        # Space-based indentation (2-space): remove 2 spaces
+        outer_indent = substr(base_indent, 1, len - 2)
     } else {
-        outer_indent = ""
+        # Fallback: use same indentation (no removal)
+        outer_indent = base_indent
     }
     print
     print outer_indent "elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
