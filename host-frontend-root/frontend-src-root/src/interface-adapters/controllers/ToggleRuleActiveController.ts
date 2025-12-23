@@ -1,10 +1,11 @@
 import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/ToggleRuleActiveInputData';
 import { IToggleRuleActiveUseCase } from 'src/application-business-rules/ports/input/IToggleRuleActiveUseCase';
+import { IToggleRuleActiveController } from 'src/interface-adapters/controllers/IToggleRuleActiveController';
 
 /**
  * ルールの有効/無効切り替えのController
  */
-export class ToggleRuleActiveController {
+export class ToggleRuleActiveController implements IToggleRuleActiveController {
   constructor(
     private readonly useCase: IToggleRuleActiveUseCase
   ) {}
