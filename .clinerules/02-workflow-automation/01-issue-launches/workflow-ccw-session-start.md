@@ -8,7 +8,7 @@ workflow-ccw-session-start branch-suffix=
 ### Pre-commitフックのセットアップ
 セッション開始時に以下のスクリプトを実行して、pre-commitフック（ESLint + import sorting）を有効化します：
 ```bash
-./scripts/setup-precommit-hook.sh
+./scripts/ci/precommit-hook/main.sh
 ```
 ※ node_modulesがない場合は自動的にnpm installも実行されます
 
