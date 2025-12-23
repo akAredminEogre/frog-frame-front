@@ -15,7 +15,7 @@ export default defineConfig({
     environment: 'happy-dom',
     // テスト実行前にモックを設定（@webext-core/proxy-service対応）
     setupFiles: ['./tests/setup.ts'],
-    // tests/ ディレクトリのVitestテストファイルのみを対象とする（.tsx含む）
+    // tests/ ディレクトリのVitestテストファイル（.ts, .tsx形式）を対象とする
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
     // Playwrightテストファイルとnode_modulesを明示的に除外
     exclude: ['**/*.spec.ts', 'e2e/**/*', 'node_modules/**/*']
