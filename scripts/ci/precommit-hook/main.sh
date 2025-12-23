@@ -95,6 +95,11 @@ if ! cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"; then
     exit 1
 fi
 
+# Helper function to restore backup on failure
+restore_backup() {
+    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
+}
+
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
 TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
@@ -127,7 +132,10 @@ BEGIN { matched = 0; patched = 0 }
         match($0, /^[ \t]*/)
         base_indent = substr($0, RSTART, RLENGTH)
         # Remove one indentation level for elif/then (outer level)
-        # Detect indent style: check if base_indent ends with tab or spaces
+        # Assumption: lefthook generates hooks with either:
+        #   - Tab-based indentation (1 tab per level)
+        #   - Space-based indentation (2 spaces per level)
+        # This covers standard shell script formatting conventions.
         len = length(base_indent)
         # Default: use same indentation (no removal)
         outer_indent = base_indent
@@ -136,6 +144,7 @@ BEGIN { matched = 0; patched = 0 }
             outer_indent = substr(base_indent, 1, len - 1)
         }
         # Space-based indentation (2-space): remove 2 spaces (only if not tab-based)
+        # substr(base_indent, len - 1, 2) gets last 2 chars to verify space indent
         if (outer_indent == base_indent && len >= 2 && substr(base_indent, len - 1, 2) == "  ") {
             outer_indent = substr(base_indent, 1, len - 2)
         }
@@ -165,21 +174,20 @@ fi
 # Apply patched file with error handling
 if ! mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to apply patch. Restoring backup."
-    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
+    restore_backup
     exit 1
 fi
 
 if ! chmod +x "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to set execute permission. Restoring backup."
-    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
+    restore_backup
     exit 1
 fi
 
 # Verify patch was applied successfully with exact string match
 if ! grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to patch pre-commit hook. Patch verification failed."
-    # Restore backup on failure
-    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
+    restore_backup
     exit 1
 fi
 
