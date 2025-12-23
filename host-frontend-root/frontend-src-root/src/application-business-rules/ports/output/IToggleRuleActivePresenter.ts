@@ -1,4 +1,4 @@
-import { ToggleRuleActiveErrorData } from 'src/application-business-rules/dto/output/ToggleRuleActiveErrorData';
+import { ToggleRuleActiveErrorOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveErrorOutputData';
 import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveOutputData';
 
 /**
@@ -15,5 +15,5 @@ export interface IToggleRuleActivePresenter {
    * エラー時の出力を表示する
    * @param errorData エラーデータ
    */
-  presentError(errorData: ToggleRuleActiveErrorData): void;
+  presentError(errorData: ToggleRuleActiveErrorOutputData): void;
 }

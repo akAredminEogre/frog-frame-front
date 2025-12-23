@@ -1,4 +1,4 @@
-import { ToggleRuleActiveErrorData } from 'src/application-business-rules/dto/output/ToggleRuleActiveErrorData';
+import { ToggleRuleActiveErrorOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveErrorOutputData';
 import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveOutputData';
 import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
@@ -25,7 +25,7 @@ export class ToggleRuleActivePresenter implements IToggleRuleActivePresenter {
    * エラー時の出力を表示する
    * @param errorData エラーデータ
    */
-  presentError(errorData: ToggleRuleActiveErrorData): void {
+  presentError(errorData: ToggleRuleActiveErrorOutputData): void {
     this.showErrorInView(errorData.ruleId, errorData.message);
   }
 }
