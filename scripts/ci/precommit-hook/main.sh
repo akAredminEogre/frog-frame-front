@@ -11,6 +11,7 @@ set -e
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
 PRE_COMMIT_HOOK="${REPO_ROOT}/.git/hooks/pre-commit"
+readonly REPO_ROOT FRONTEND_DIR PRE_COMMIT_HOOK
 
 echo "Setting up pre-commit hook for Claude Code Web..."
 
@@ -55,8 +56,12 @@ if [ ! -f "${PRE_COMMIT_HOOK}" ]; then
     exit 1
 fi
 
+# Expected patch path for verification
+EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
+readonly EXPECTED_PATH
+
 # Check if already patched (early return pattern)
-if grep -Fq "host-frontend-root/frontend-src-root/node_modules" "${PRE_COMMIT_HOOK}"; then
+if grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Pre-commit hook already patched."
     echo "Pre-commit hook setup complete!"
     echo "The hook will run ESLint with import sorting on staged TypeScript/JavaScript files."
@@ -68,23 +73,34 @@ echo "Patching pre-commit hook for custom node_modules path..."
 
 # Create backup before modification
 BACKUP_FILE="${PRE_COMMIT_HOOK}.backup"
+readonly BACKUP_FILE
 cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"
 
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
 TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX")
 MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX")
+readonly TEMP_FILE MATCH_STATUS_FILE
 trap 'rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"' EXIT
 
 awk -v STATUS_FILE="${MATCH_STATUS_FILE}" '
 BEGIN { matched = 0 }
-# Match the execution line for @evilmartians/lefthook (using flexible pattern for arch string)
-/@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook" "\$@"[[:space:]]*$/ {
+# Match the execution line for @evilmartians/lefthook (flexible pattern for arch and quote styles)
+/@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook['"'"'"]?[[:space:]]+['"'"'"]?\$@['"'"'"]?[[:space:]]*$/ {
     matched = 1
+    # Extract leading indentation from matched line
+    match($0, /^[[:space:]]*/)
+    base_indent = substr($0, RSTART, RLENGTH)
+    # Remove one level (2 spaces) for elif/then which should be at outer level
+    if (length(base_indent) >= 2) {
+        outer_indent = substr(base_indent, 1, length(base_indent) - 2)
+    } else {
+        outer_indent = ""
+    }
     print
-    print "    elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
-    print "    then"
-    print "      \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\" \"$@\""
+    print outer_indent "elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
+    print outer_indent "then"
+    print base_indent "\"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\" \"$@\""
     next
 }
 { print }
@@ -93,6 +109,7 @@ END { print matched > STATUS_FILE }
 
 # Verify awk pattern matched
 PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
+readonly PATTERN_MATCHED
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
     rm -f "${BACKUP_FILE}"
@@ -102,22 +119,27 @@ fi
 # Apply patched file with error handling
 if ! mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to apply patch. Restoring backup."
-    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
+    if ! mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"; then
+        echo "Error: Failed to restore backup. Manual recovery required."
+    fi
     exit 1
 fi
 
 if ! chmod +x "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to set execute permission. Restoring backup."
-    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
+    if ! mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"; then
+        echo "Error: Failed to restore backup. Manual recovery required."
+    fi
     exit 1
 fi
 
 # Verify patch was applied successfully with exact string match
-EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
 if ! grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to patch pre-commit hook. Patch verification failed."
     # Restore backup on failure
-    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
+    if ! mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"; then
+        echo "Error: Failed to restore backup. Manual recovery required."
+    fi
     exit 1
 fi
 
