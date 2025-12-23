@@ -43,14 +43,30 @@ interface ITabsGateway <<Gateway Interface>> {
 }
 
 ' === Interface Adapters ===
+interface IToggleRuleActiveController <<Controller Interface>> {
+  + toggleActive(ruleId: number): Promise<void>
+}
+
 class ToggleRuleActiveController <<Controller>> {
   - useCase: IToggleRuleActiveUseCase
   + toggleActive(ruleId: number): Promise<void>
 }
 
+interface IToggleRuleActiveControllerFactory <<Factory Interface>> {
+  + create(onSuccess, onError): IToggleRuleActiveController
+}
+
+class ToggleRuleActiveControllerFactory <<Factory>> {
+  - repository: IRewriteRuleRepository
+  - tabsGateway: ITabsGateway
+  + create(onSuccess, onError): IToggleRuleActiveController
+}
+
 class ToggleRuleActivePresenter <<Presenter>> {
   - updateRuleInView: (rule: RewriteRule) => void
+  - showErrorInView: (ruleId: number, message: string) => void
   + present(outputData: ToggleRuleActiveOutputData): void
+  + presentError(errorData: ToggleRuleActiveErrorOutputData): void
 }
 
 class RewriteRuleMapper <<Mapper>> {
@@ -105,7 +121,13 @@ class UpdateRuleActiveRequestDTO <<DTO>> {
 }
 
 ' === Relationships ===
-RulesApp ..> ToggleRuleActiveController : uses
+RulesApp ..> IToggleRuleActiveControllerFactory : uses
+ToggleRuleActiveControllerFactory ..|> IToggleRuleActiveControllerFactory : implements
+ToggleRuleActiveControllerFactory ..> ToggleRuleActiveController : creates
+ToggleRuleActiveControllerFactory ..> ToggleRuleActivePresenter : creates
+ToggleRuleActiveControllerFactory ..> ToggleRuleActiveInteractor : creates
+ToggleRuleActiveController ..|> IToggleRuleActiveController : implements
+RulesApp ..> IToggleRuleActiveController : uses
 ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
 ToggleRuleActiveInteractor ..|> IToggleRuleActiveUseCase : implements
 ToggleRuleActiveInteractor ..> ToggleRuleActiveInputData : uses
