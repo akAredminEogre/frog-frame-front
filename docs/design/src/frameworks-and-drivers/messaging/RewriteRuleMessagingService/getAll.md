@@ -41,8 +41,11 @@ getRewriteRuleProxyService()で取得したサービスのgetAllRules()が呼ば
 ## テストファイル構成
 
 ```
-tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/getAll/
-└── normal-cases.test.ts       # ProxyService連携（3ケース）
+tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/
+├── getAll/
+│   └── normal-cases.test.ts       # ProxyService連携（3ケース）
+└── mocks/
+    └── createMockRewriteRuleProxyService.ts  # モックファクトリ
 ```
 
 ## モック戦略
@@ -51,24 +54,43 @@ tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/getAll/
 
 ### モック対象
 
-- **getRewriteRuleProxyService**: @webext-core/proxy-serviceの関数をモック化
-  - 返却値のIRewriteRuleProxyServiceオブジェクトのgetAllRules()をモック設定
+- **IRewriteRuleProxyService**: @webext-core/proxy-serviceから取得されるサービスオブジェクト
+  - `getAllRules()` メソッドをモック設定
+
+### モックファイル構成
+
+```
+tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/mocks/
+└── createMockRewriteRuleProxyService.ts    # モックファクトリ
+```
+
+### モックファクトリ
+
+```typescript
+// createMockRewriteRuleProxyService.ts
+import { vi } from 'vitest';
+import { IRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
+
+export function createMockRewriteRuleProxyService(): IRewriteRuleProxyService {
+  return {
+    getAllRules: vi.fn(),
+  };
+}
+```
 
 ### モック方法
 
 ```typescript
-import { getRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
+import { createMockRewriteRuleProxyService } from 'tests/unit/.../mocks/createMockRewriteRuleProxyService';
 
+// モジュールレベルのモック設定（vi.mock()はファイルトップレベルで呼び出す必要がある）
 vi.mock('src/frameworks-and-drivers/messaging/RewriteRuleProxyService', () => ({
   getRewriteRuleProxyService: vi.fn(),
 }));
 
-const mockProxyService = {
-  getAllRules: vi.fn(),
-};
-
 beforeEach(() => {
   vi.clearAllMocks();
+  const mockProxyService = createMockRewriteRuleProxyService();
   (getRewriteRuleProxyService as ReturnType<typeof vi.fn>).mockReturnValue(mockProxyService);
 });
 ```
@@ -76,3 +98,4 @@ beforeEach(() => {
 ### モック対象の理由
 
 - getRewriteRuleProxyService: @webext-core/proxy-serviceはChrome拡張機能のランタイム通信に依存するため、単体テストではモック化が必須
+- vi.mock()はモジュールレベルで呼び出す必要があるため、テストファイル内に記述（モック分離ルールの例外）
