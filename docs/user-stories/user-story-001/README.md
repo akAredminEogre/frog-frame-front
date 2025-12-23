@@ -163,18 +163,18 @@
 
 ### Phase 4: 統合（新旧並行稼働）
 
-**現状**: 全ての基礎実装およびテスト完了、統合タスク残り2個
+**現状**: 全ての実装およびテスト完了、統合完了
 
 - [x] ChromeRuntimeRewriteRuleRepository を Mapper委譲方式に変更 **（user-story-002 PR-1 で完了）**
   - 既存の直接DB操作 → Mapper経由に変更
   - IRewriteRuleRepository インターフェースは変更なし
   - **現在位置**: `src/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository.ts`
-- [ ] RulesApp.tsx にトグルUIを統合
+- [x] RulesApp.tsx にトグルUIを統合 **（完了）**
   - ToggleSwitch コンポーネントを配置
   - ToggleRuleActiveController を呼び出すハンドラーを追加
   - **現在位置**: `src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx`
 
-**最終段階**: 残りタスク - RulesApp.tsx統合のみ（テストは全て完了済み）
+**完了**: 全タスク完了（100%完成）
 
 ### Phase 5: 旧コード削除（このユーザーストーリーでは実施しない）
 
