@@ -57,6 +57,7 @@ WAI-ARIA属性の正しい設定を確認。
 
 ```
 tests/unit/frameworks-and-drivers/ui/components/atoms/ToggleSwitch/
+├── test-helpers.tsx          # 共通テストヘルパー（ToggleSwitchTestHelper）
 ├── rendering.test.tsx        # レンダリング（4ケース）
 ├── interaction.test.tsx      # ユーザーインタラクション（2ケース）
 └── accessibility.test.tsx    # アクセシビリティ（2ケース）
@@ -70,14 +71,27 @@ tests/unit/frameworks-and-drivers/ui/components/atoms/ToggleSwitch/
 
 ### テスト環境
 
-- React Testing Library使用
+- ReactDOM.createRoot()を使用した直接レンダリング
 - happy-dom環境（vitest設定済み）
 
-### モック方法
+### テストヘルパー
+
+共通のセットアップ・クリーンアップロジックを`ToggleSwitchTestHelper`クラスに集約:
 
 ```typescript
-const mockOnChange = vi.fn();
-render(<ToggleSwitch checked={false} onChange={mockOnChange} ariaLabel="test" />);
+import { ToggleSwitchTestHelper } from 'tests/unit/.../test-helpers';
+
+const helper = new ToggleSwitchTestHelper();
+
+beforeEach(() => helper.setup());
+afterEach(() => helper.cleanup());
+
+// レンダリング
+await helper.render({ checked: false, onChange: mockOnChange, ariaLabel: 'test' });
+
+// 要素取得
+const toggle = helper.getToggleElement();
+const input = helper.getInputElement();
 ```
 
 外部依存（CSSモジュール）はVitestの設定で自動処理されるため、明示的なモックは不要。
