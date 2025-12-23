@@ -74,7 +74,7 @@ export class ToggleSwitchTestHelper {
 
   /**
    * input要素を取得
-   * React Ariaのuswitchはtype="checkbox"とrole="switch"を設定する
+   * React AriaのuseSwitchはtype="checkbox"とrole="switch"を設定する
    */
   getInputElement(): HTMLInputElement | null {
     this.ensureSetup();
