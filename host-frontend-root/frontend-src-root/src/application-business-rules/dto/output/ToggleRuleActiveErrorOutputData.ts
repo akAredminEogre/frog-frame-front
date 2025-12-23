@@ -1,7 +1,7 @@
 /**
  * ルールの有効/無効切り替えエラーの出力データ
  */
-export class ToggleRuleActiveErrorData {
+export class ToggleRuleActiveErrorOutputData {
   public readonly message: string;
 
   constructor(
