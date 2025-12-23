@@ -1,6 +1,9 @@
 #!/bin/bash
 # Setup pre-commit hook for Claude Code Web environment
 # This script installs lefthook and patches the pre-commit hook to find the correct node_modules path
+#
+# 使用例:
+#   ./scripts/ci/precommit-hook/main.sh
 
 set -e
 
