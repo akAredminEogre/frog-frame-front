@@ -46,11 +46,15 @@ export class ToggleSwitchTestHelper {
   /**
    * テスト後のクリーンアップ
    * afterEach 内で呼び出す
+   * setup()が呼ばれていない場合は何もせず早期リターン（カスケード障害を防ぐ）
    */
   cleanup(): void {
-    this.ensureSetup();
-    this.root!.unmount();
-    this.container!.remove();
+    if (!this.container || !this.root) {
+      vi.resetAllMocks();
+      return;
+    }
+    this.root.unmount();
+    this.container.remove();
     this.container = null;
     this.root = null;
     vi.resetAllMocks();

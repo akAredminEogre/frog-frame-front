@@ -71,11 +71,11 @@ tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/mocks/
 import { vi } from 'vitest';
 import { IRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
 
-export function createMockRewriteRuleProxyService(): IRewriteRuleProxyService {
+export const createMockRewriteRuleProxyService = (): IRewriteRuleProxyService => {
   return {
     getAllRules: vi.fn(),
   };
-}
+};
 ```
 
 ### モック方法
@@ -98,4 +98,4 @@ beforeEach(() => {
 ### モック対象の理由
 
 - getRewriteRuleProxyService: @webext-core/proxy-serviceはChrome拡張機能のランタイム通信に依存するため、単体テストではモック化が必須
-- vi.mock()はモジュールレベルで呼び出す必要があるため、テストファイル内に記述（モック分離ルールの例外）
+- vi.mock()はテストファイルのモジュールトップレベルでのみ呼び出す（本番コードのbackground.tsで行う実装注入は本テストでは実行しない）
