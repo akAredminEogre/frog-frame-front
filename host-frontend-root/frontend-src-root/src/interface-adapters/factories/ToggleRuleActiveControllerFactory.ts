@@ -1,6 +1,7 @@
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
+import { IToggleRuleActiveController } from 'src/interface-adapters/controllers/IToggleRuleActiveController';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
 import {
   IToggleRuleActiveControllerFactory,
@@ -15,7 +16,7 @@ export class ToggleRuleActiveControllerFactory implements IToggleRuleActiveContr
     private readonly tabsGateway: ITabsGateway
   ) {}
 
-  create(onSuccess: ToggleSuccessCallback, onError: ToggleErrorCallback): ToggleRuleActiveController {
+  create(onSuccess: ToggleSuccessCallback, onError: ToggleErrorCallback): IToggleRuleActiveController {
     const presenter = new ToggleRuleActivePresenter(onSuccess, onError);
     const interactor = new ToggleRuleActiveInteractor(this.repository, this.tabsGateway, presenter);
     return new ToggleRuleActiveController(interactor);
