@@ -6,11 +6,13 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { createMockRewriteRuleProxyService } from 'tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/mocks/createMockRewriteRuleProxyService';
+
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { getRewriteRuleProxyService, IRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
 
-// モック設定
+// モジュールレベルのモック設定（vi.mock()はファイルトップレベルで呼び出す必要がある）
 vi.mock('src/frameworks-and-drivers/messaging/RewriteRuleProxyService', () => ({
   getRewriteRuleProxyService: vi.fn(),
 }));
@@ -20,9 +22,7 @@ describe('RewriteRuleMessagingService.getAll - 正常系', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockProxyService = {
-      getAllRules: vi.fn(),
-    };
+    mockProxyService = createMockRewriteRuleProxyService();
     (getRewriteRuleProxyService as ReturnType<typeof vi.fn>).mockReturnValue(mockProxyService);
   });
 
