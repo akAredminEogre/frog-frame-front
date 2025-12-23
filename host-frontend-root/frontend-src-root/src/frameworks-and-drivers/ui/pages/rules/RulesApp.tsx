@@ -18,6 +18,7 @@ function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
 
   const toggleController = container.resolve(ToggleRuleActiveController);
 
@@ -90,8 +91,22 @@ function RulesApp() {
   };
 
   const handleToggle = async (ruleId: number, isActive: boolean) => {
+    if (togglingIds.has(ruleId)) {
+      return;
+    }
+
+    setTogglingIds((prev) => new Set(prev).add(ruleId));
     updateRuleById(ruleId, (rule) => rule.withActive(isActive));
-    await toggleController.toggleActive(ruleId);
+
+    try {
+      await toggleController.toggleActive(ruleId);
+    } finally {
+      setTogglingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(ruleId);
+        return next;
+      });
+    }
   };
 
   return (
@@ -101,7 +116,7 @@ function RulesApp() {
       {rules.length === 0 ? (
         <EmptyStateMessage />
       ) : (
-        <RulesTable rules={rules} onEdit={handleEdit} onToggle={handleToggle} />
+        <RulesTable rules={rules} onEdit={handleEdit} onToggle={handleToggle} togglingIds={togglingIds} />
       )}
       
       <div className="footer">

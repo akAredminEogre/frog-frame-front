@@ -8,9 +8,10 @@ interface RulesTableProps {
   rules: RewriteRule[];
   onEdit: (ruleId: string | number) => void;
   onToggle: (ruleId: number, isActive: boolean) => void;
+  togglingIds: Set<number>;
 }
 
-const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onToggle }) => {
+const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onToggle, togglingIds }) => {
   return (
     <div className={styles.rulesTableContainer} data-testid="rules-table-container">
       <table className={styles.rulesTable} data-testid="rules-table">
@@ -25,7 +26,13 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onToggle }) => {
         </thead>
         <tbody>
           {rules.map((rule) => (
-            <RuleTableRow key={rule.id} rule={rule} onEdit={onEdit} onToggle={onToggle} />
+            <RuleTableRow
+              key={rule.id}
+              rule={rule}
+              onEdit={onEdit}
+              onToggle={onToggle}
+              isToggling={togglingIds.has(rule.id)}
+            />
           ))}
         </tbody>
       </table>

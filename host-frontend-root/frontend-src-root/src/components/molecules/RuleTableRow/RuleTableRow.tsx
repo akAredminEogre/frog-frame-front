@@ -8,9 +8,10 @@ interface RuleTableRowProps {
   rule: RewriteRule;
   onEdit: (ruleId: string | number) => void;
   onToggle: (ruleId: number, isActive: boolean) => void;
+  isToggling: boolean;
 }
 
-const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit, onToggle }) => {
+const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit, onToggle, isToggling }) => {
   return (
     <tr className={styles.ruleRow}>
       <td className={styles.toggleCell}>
@@ -18,6 +19,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit, onToggle }) =
           checked={rule.isActive}
           onChange={(checked) => onToggle(rule.id, checked)}
           ariaLabel={`ルール ${rule.id} の有効/無効を切り替え`}
+          disabled={isToggling}
         />
       </td>
       <td>
