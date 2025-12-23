@@ -27,19 +27,24 @@
 
 /* テーブルヘッダーの幅指定 */
 .rulesTable thead th:nth-child(1) {
-  width: 60px;  /* 操作列 */
+  width: 60px;  /* 有効列 */
+  text-align: center;
 }
 
 .rulesTable thead th:nth-child(2) {
-  width: 200px; /* URLパターン列 */
+  width: 60px;  /* 操作列 */
 }
 
 .rulesTable thead th:nth-child(3) {
-  width: calc((100% - 260px) / 2); /* 置換前列 */
+  width: 200px; /* URLパターン列 */
 }
 
 .rulesTable thead th:nth-child(4) {
-  width: calc((100% - 260px) / 2); /* 置換後列 */
+  width: calc((100% - 320px) / 2); /* 置換前列 */
+}
+
+.rulesTable thead th:nth-child(5) {
+  width: calc((100% - 320px) / 2); /* 置換後列 */
 }
 
 .rulesTable tbody tr {
@@ -69,11 +74,17 @@
 
 /* テーブルデータセルの幅指定（nth-childでより確実に適用） */
 .rulesTable tbody td:nth-child(1) {
+  width: 60px;  /* 有効列 */
+  text-align: center;
+  vertical-align: middle;
+}
+
+.rulesTable tbody td:nth-child(2) {
   width: 60px;  /* 操作列 */
   text-align: center;
 }
 
-.rulesTable tbody td:nth-child(2) {
+.rulesTable tbody td:nth-child(3) {
   width: 200px; /* URLパターン列 */
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 12px;
@@ -83,8 +94,8 @@
   text-overflow: ellipsis;
 }
 
-.rulesTable tbody td:nth-child(3) {
-  width: calc((100% - 260px) / 2); /* 置換前列 */
+.rulesTable tbody td:nth-child(4) {
+  width: calc((100% - 320px) / 2); /* 置換前列 */
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 13px;
   color: #e74c3c;
@@ -92,8 +103,8 @@
   white-space: pre-wrap;
 }
 
-.rulesTable tbody td:nth-child(4) {
-  width: calc((100% - 260px) / 2); /* 置換後列 */
+.rulesTable tbody td:nth-child(5) {
+  width: calc((100% - 320px) / 2); /* 置換後列 */
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 13px;
   color: #27ae60;

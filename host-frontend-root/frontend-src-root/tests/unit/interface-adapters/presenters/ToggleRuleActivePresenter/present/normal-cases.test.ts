@@ -51,8 +51,9 @@ describe('ToggleRuleActivePresenter.present - 正常系（コールバック呼�
       );
       const outputData = new ToggleRuleActiveOutputData(toggledRule);
       const mockUpdateRuleInView = vi.fn();
+      const mockShowErrorInView = vi.fn();
 
-      const presenter = new ToggleRuleActivePresenter(mockUpdateRuleInView);
+      const presenter = new ToggleRuleActivePresenter(mockUpdateRuleInView, mockShowErrorInView);
       presenter.present(outputData);
 
       expect(mockUpdateRuleInView).toHaveBeenCalledTimes(1);
