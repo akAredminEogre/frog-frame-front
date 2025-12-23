@@ -7,14 +7,17 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 interface RulesTableProps {
   rules: RewriteRule[];
   onEdit: (ruleId: string | number) => void;
+  onToggle: (ruleId: number) => void;
+  togglingIds: Set<number>;
 }
 
-const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit }) => {
+const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onToggle, togglingIds }) => {
   return (
     <div className={styles.rulesTableContainer} data-testid="rules-table-container">
       <table className={styles.rulesTable} data-testid="rules-table">
         <thead>
           <tr>
+            <th>有効</th>
             <th>操作</th>
             <th>URLパターン</th>
             <th>置換前</th>
@@ -23,7 +26,13 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit }) => {
         </thead>
         <tbody>
           {rules.map((rule) => (
-            <RuleTableRow key={rule.id} rule={rule} onEdit={onEdit} />
+            <RuleTableRow
+              key={rule.id}
+              rule={rule}
+              onEdit={onEdit}
+              onToggle={onToggle}
+              isToggling={togglingIds.has(rule.id)}
+            />
           ))}
         </tbody>
       </table>
