@@ -39,7 +39,7 @@ function RulesApp() {
     );
     const interactor = new ToggleRuleActiveInteractor(repository, tabsGateway, presenter);
     return new ToggleRuleActiveController(interactor);
-  }, []);
+  }, [setRules, setToggleError]);
 
   useEffect(() => {
     // TODO: ロジックをUseCaseに分離するタスクを追加
