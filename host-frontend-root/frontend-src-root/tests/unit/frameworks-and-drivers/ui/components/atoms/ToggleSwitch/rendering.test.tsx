@@ -5,9 +5,8 @@
  * 3. disabled=true: data-disabled=trueでレンダリング
  * 4. disabled未指定: data-disabled=falseでレンダリング
  */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-
 import { ToggleSwitchTestHelper } from 'tests/unit/frameworks-and-drivers/ui/components/atoms/ToggleSwitch/test-helpers';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 describe('ToggleSwitch - レンダリング', () => {
   const helper = new ToggleSwitchTestHelper();

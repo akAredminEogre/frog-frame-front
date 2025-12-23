@@ -4,9 +4,8 @@
  * 2. 空配列: 0件のDTOを空配列で返却
  * 3. 複数ルール: 複数件のDTOを配列で返却
  */
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { createMockRewriteRuleProxyService } from 'tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/mocks/createMockRewriteRuleProxyService';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
