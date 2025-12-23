@@ -7,7 +7,7 @@ import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/Tog
 interface RuleTableRowProps {
   rule: RewriteRule;
   onEdit: (ruleId: string | number) => void;
-  onToggle: (ruleId: number, isActive: boolean) => void;
+  onToggle: (ruleId: number) => void;
   isToggling: boolean;
 }
 
@@ -17,7 +17,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit, onToggle, isT
       <td className={styles.toggleCell}>
         <ToggleSwitch
           checked={rule.isActive}
-          onChange={(checked) => onToggle(rule.id, checked)}
+          onChange={() => onToggle(rule.id)}
           ariaLabel={`ルール ${rule.id} の有効/無効を切り替え`}
           disabled={isToggling}
         />
