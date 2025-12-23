@@ -1,0 +1,231 @@
+@startuml DeleteRule
+
+title ルール削除機能 シーケンス図
+
+box "Rules Page - UI" #LightBlue
+  participant "DeleteButton" as DeleteBtn
+  participant "ConfirmDialog" as Dialog
+  participant "RulesApp" as View
+  participant "ToastNotification" as Toast
+end box
+
+box "interface-adapters" #LightGreen
+  participant "DeleteRuleController" as Controller
+  participant "DeleteRulePresenter" as Presenter
+  participant "RewriteRuleMapper" as Mapper
+  participant "<<interface>>\nIRewriteRuleMessagingPort" as IMessagingPort
+end box
+
+box "application-business-rules" #LightYellow
+  participant "DeleteRuleInteractor" as Interactor
+  participant "<<interface>>\nIRewriteRuleRepository" as IRepository
+  participant "<<interface>>\nITabsGateway" as ITabsGateway
+end box
+
+box "frameworks-and-drivers" #LightCyan
+  participant "ChromeRuntimeRewriteRuleRepository" as MessagingRepo
+  participant "ChromeTabsGateway" as TabsGateway
+  participant "RewriteRuleMessagingService" as MessagingService
+  participant "<<interface>>\nIRewriteRuleProxyService" as IProxyService
+end box
+
+box "Background" #LightGray
+  participant "RewriteRuleProxyService" as ProxyService
+  participant "RewriteRuleProxyServiceImpl" as ProxyServiceImpl
+  participant "DexieRewriteRuleRepository" as DexieRepo
+end box
+
+box "enterprise-business-rules" #LightPink
+  participant "RewriteRule" as Entity
+end box
+
+== 確認ダイアログ表示 ==
+
+DeleteBtn -> View : onDeleteClick(ruleId)
+activate View
+
+View -> Dialog : show("このルールを削除しますか？")
+activate Dialog
+
+alt キャンセル選択
+  Dialog --> View : onCancel()
+  deactivate Dialog
+  View --> DeleteBtn : 何もしない
+  deactivate View
+end
+
+== 削除確認後 ==
+
+Dialog --> View : onConfirm()
+deactivate Dialog
+
+View -> Controller : deleteRule(ruleId)
+activate Controller
+
+Controller -> Interactor : execute(inputData)
+activate Interactor
+
+== ルール取得（タブリロード用） ==
+
+Interactor -> IRepository : getById(ruleId)
+activate IRepository
+
+IRepository -> MessagingRepo : getById(ruleId)
+activate MessagingRepo
+
+MessagingRepo -> Mapper : getById(ruleId)
+activate Mapper
+
+Mapper -> IMessagingPort : getById(dto)
+activate IMessagingPort
+
+IMessagingPort -> MessagingService : getById(dto)
+activate MessagingService
+
+MessagingService -> IProxyService : getById(dto)
+activate IProxyService
+
+IProxyService -> ProxyService : getById(dto)
+activate ProxyService
+
+ProxyService -> ProxyServiceImpl : getById(dto)
+activate ProxyServiceImpl
+
+ProxyServiceImpl -> DexieRepo : getById(ruleId)
+activate DexieRepo
+DexieRepo --> ProxyServiceImpl : DTO
+deactivate DexieRepo
+
+ProxyServiceImpl --> ProxyService : DTO
+deactivate ProxyServiceImpl
+
+ProxyService --> IProxyService : DTO
+deactivate ProxyService
+
+IProxyService --> MessagingService : DTO
+deactivate IProxyService
+
+MessagingService --> IMessagingPort : DTO
+deactivate MessagingService
+
+IMessagingPort --> Mapper : DTO
+deactivate IMessagingPort
+
+Mapper -> Entity : new(...)
+Entity --> Mapper : rule
+
+Mapper --> MessagingRepo : rule
+deactivate Mapper
+
+MessagingRepo --> IRepository : rule
+deactivate MessagingRepo
+
+IRepository --> Interactor : rule
+deactivate IRepository
+
+== ルール削除 ==
+
+Interactor -> IRepository : delete(ruleId)
+activate IRepository
+
+IRepository -> MessagingRepo : delete(ruleId)
+activate MessagingRepo
+
+MessagingRepo -> Mapper : delete(ruleId)
+activate Mapper
+
+Mapper -> IMessagingPort : delete(dto)
+activate IMessagingPort
+
+IMessagingPort -> MessagingService : delete(dto)
+activate MessagingService
+
+MessagingService -> IProxyService : delete(dto)
+activate IProxyService
+
+IProxyService -> ProxyService : delete(dto)
+activate ProxyService
+
+ProxyService -> ProxyServiceImpl : delete(dto)
+activate ProxyServiceImpl
+
+ProxyServiceImpl -> DexieRepo : delete(ruleId)
+activate DexieRepo
+DexieRepo --> ProxyServiceImpl : void
+deactivate DexieRepo
+
+ProxyServiceImpl --> ProxyService : void
+deactivate ProxyServiceImpl
+
+ProxyService --> IProxyService : void
+deactivate ProxyService
+
+IProxyService --> MessagingService : void
+deactivate IProxyService
+
+MessagingService --> IMessagingPort : void
+deactivate IMessagingPort
+
+IMessagingPort --> Mapper : void
+deactivate IMessagingPort
+
+Mapper --> MessagingRepo : void
+deactivate Mapper
+
+MessagingRepo --> IRepository : void
+deactivate MessagingRepo
+
+IRepository --> Interactor : void
+deactivate IRepository
+
+== タブリロード ==
+
+Interactor -> ITabsGateway : reloadMatchingTabs(rule)
+activate ITabsGateway
+
+ITabsGateway -> TabsGateway : reloadMatchingTabs(rule)
+activate TabsGateway
+
+loop 各タブ
+  TabsGateway -> Entity : matchesUrl(url)
+  Entity --> TabsGateway : boolean
+end
+
+TabsGateway --> ITabsGateway : void
+deactivate TabsGateway
+
+ITabsGateway --> Interactor : void
+deactivate ITabsGateway
+
+== 結果通知（成功時） ==
+
+Interactor -> Presenter : present(outputData { success: true, deletedRuleId })
+activate Presenter
+
+Presenter -> View : onSuccess(deletedRuleId)
+View -> View : ルール一覧から削除
+
+deactivate Presenter
+deactivate Interactor
+deactivate Controller
+deactivate View
+
+== エラー発生時 ==
+
+note over Interactor : 削除処理中にエラー発生
+
+Interactor -> Presenter : present(outputData { success: false, error })
+activate Presenter
+
+Presenter -> View : onError(error)
+activate View
+
+View -> Toast : show("削除に失敗しました", type: "error")
+activate Toast
+Toast --> View : 表示
+deactivate Toast
+
+deactivate View
+deactivate Presenter
+
+@enduml
