@@ -81,7 +81,7 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
    */
   async getRulesMatchingUrl(currentUrl: string): Promise<RewriteRules> {
     const schemas = await this.database.rewriteRules
-      .filter(schema => currentUrl.startsWith(schema.urlPattern) && schema.urlPattern !== '')
+      .filter(schema => schema.isActive && currentUrl.startsWith(schema.urlPattern) && schema.urlPattern !== '')
       .toArray();
 
     const rulesObject: Record<string, RewriteRule> = {};
