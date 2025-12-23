@@ -144,26 +144,20 @@ readonly PATTERN_MATCHED
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
     echo "This may indicate lefthook version incompatibility. Check generated hook format."
-    if ! rm -f "${BACKUP_FILE}"; then
-        echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
-    fi
+    rm -f "${BACKUP_FILE}" || echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
     exit 1
 fi
 
 # Apply patched file with error handling
 if ! mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to apply patch. Restoring backup."
-    if ! mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"; then
-        echo "Error: Failed to restore backup. Manual recovery required."
-    fi
+    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
     exit 1
 fi
 
 if ! chmod +x "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to set execute permission. Restoring backup."
-    if ! mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"; then
-        echo "Error: Failed to restore backup. Manual recovery required."
-    fi
+    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
     exit 1
 fi
 
@@ -171,18 +165,14 @@ fi
 if ! grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to patch pre-commit hook. Patch verification failed."
     # Restore backup on failure
-    if ! mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"; then
-        echo "Error: Failed to restore backup. Manual recovery required."
-    fi
+    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
     exit 1
 fi
 
 # Clear trap and cleanup temp files on success
 trap - EXIT
 rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"
-if ! rm -f "${BACKUP_FILE}"; then
-    echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
-fi
+rm -f "${BACKUP_FILE}" || echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
 
 echo "Pre-commit hook patched successfully!"
 echo "Pre-commit hook setup complete!"
