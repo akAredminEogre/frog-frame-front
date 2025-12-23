@@ -9,7 +9,7 @@ import styles from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch.
 /**
  * ToggleSwitchコンポーネントのProps
  */
-export interface ToggleSwitchProps {
+interface ToggleSwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   disabled?: boolean;
