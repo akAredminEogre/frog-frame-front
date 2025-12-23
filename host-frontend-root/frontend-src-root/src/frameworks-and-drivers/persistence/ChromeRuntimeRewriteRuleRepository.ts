@@ -77,7 +77,7 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
    */
   async getRulesMatchingUrl(currentUrl: string): Promise<RewriteRules> {
     const allRules = await this.getAll();
-    const matchingRules = allRules.toArray().filter((rule) => rule.matchesUrl(currentUrl));
+    const matchingRules = allRules.toArray().filter((rule) => rule.isActive && rule.matchesUrl(currentUrl));
 
     const rulesObject: Record<string, RewriteRule> = {};
     matchingRules.forEach((rule) => {
