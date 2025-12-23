@@ -79,12 +79,16 @@ function RulesApp() {
     await openRuleEditPageUseCase.execute(ruleId);
   };
 
-  const handleToggle = async (ruleId: number, isActive: boolean) => {
+  const updateRuleById = (ruleId: number, updater: (rule: RewriteRule) => RewriteRule) => {
     setRules((prevRules) =>
       prevRules.map((rule) =>
-        rule.id === ruleId ? rule.withActive(isActive) : rule
+        rule.id === ruleId ? updater(rule) : rule
       )
     );
+  };
+
+  const handleToggle = async (ruleId: number, isActive: boolean) => {
+    updateRuleById(ruleId, (rule) => rule.withActive(isActive));
 
     const toggleController = container.resolve(ToggleRuleActiveController);
     await toggleController.toggleActive(ruleId);
