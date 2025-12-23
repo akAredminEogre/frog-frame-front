@@ -35,6 +35,7 @@ fi
 
 # Install npm dependencies if lefthook package is not present
 # Note: Checking for specific package is more robust than just node_modules existence
+# Trade-off: This may skip installs when package.json updates; run `npm install` manually if needed
 LEFTHOOK_PACKAGE_DIR="${FRONTEND_DIR}/node_modules/@evilmartians/lefthook"
 readonly LEFTHOOK_PACKAGE_DIR
 
@@ -102,8 +103,9 @@ restore_backup() {
 
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
+# Note: Trap handles temp file cleanup; BACKUP_FILE is managed manually (different lifecycle)
 TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
-    echo "Error: Failed to create temporary file for patching."
+    echo "Error: Failed to create temporary file. Set TMPDIR if /tmp is unavailable."
     rm -f "${BACKUP_FILE}"
     exit 1
 }
@@ -111,7 +113,7 @@ TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
 trap 'rm -f "${TEMP_FILE}"' EXIT
 
 MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX") || {
-    echo "Error: Failed to create status file for patching."
+    echo "Error: Failed to create status file. Set TMPDIR if /tmp is unavailable."
     rm -f "${BACKUP_FILE}"
     exit 1
 }
@@ -122,6 +124,8 @@ if ! awk -v STATUS_FILE="${MATCH_STATUS_FILE}" '
 BEGIN { matched = 0; patched = 0 }
 # Match the execution line for @evilmartians/lefthook (flexible pattern for arch and quote styles)
 # Only patch the first occurrence to prevent duplicate patches
+# Note: ['"'"'"]? handles optional single/double quotes via bash string concatenation:
+#   '\'' embeds a literal single quote, and '"'"' concatenates quote sequences
 /@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook['"'"'"]?[ \t]+['"'"'"]?\$@['"'"'"]?[ \t]*$/ {
     matched = 1
     print
@@ -135,7 +139,8 @@ BEGIN { matched = 0; patched = 0 }
         # Assumption: lefthook generates hooks with either:
         #   - Tab-based indentation (1 tab per level)
         #   - Space-based indentation (2 spaces per level)
-        # This covers standard shell script formatting conventions.
+        # For deeper indents (e.g., 4 spaces), we remove 2 spaces which is correct
+        # since elif/then should be one level less indented than the inner command.
         len = length(base_indent)
         # Default: use same indentation (no removal)
         outer_indent = base_indent
