@@ -72,9 +72,9 @@ cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"
 
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
-TEMP_FILE=$(mktemp -t precommit_patch.XXXXXX)
-MATCH_STATUS_FILE=$(mktemp -t precommit_status.XXXXXX)
-trap 'rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}" "${BACKUP_FILE}"' EXIT
+TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX")
+MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX")
+trap 'rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"' EXIT
 
 awk -v STATUS_FILE="${MATCH_STATUS_FILE}" '
 BEGIN { matched = 0 }
@@ -95,6 +95,7 @@ END { print matched > STATUS_FILE }
 PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
+    rm -f "${BACKUP_FILE}"
     exit 1
 fi
 
