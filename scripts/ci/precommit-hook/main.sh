@@ -90,7 +90,10 @@ echo "Patching pre-commit hook for custom node_modules path..."
 # Create backup before modification
 BACKUP_FILE="${PRE_COMMIT_HOOK}.backup"
 readonly BACKUP_FILE
-cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"
+if ! cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"; then
+    echo "Error: Failed to create backup. Check disk space and permissions."
+    exit 1
+fi
 
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
@@ -99,44 +102,56 @@ TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
     rm -f "${BACKUP_FILE}"
     exit 1
 }
+# Set trap immediately after first temp file creation
+trap 'rm -f "${TEMP_FILE}"' EXIT
+
 MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX") || {
     echo "Error: Failed to create status file for patching."
-    rm -f "${TEMP_FILE}" "${BACKUP_FILE}"
+    rm -f "${BACKUP_FILE}"
     exit 1
 }
-readonly TEMP_FILE MATCH_STATUS_FILE
+# Update trap to include both temp files
 trap 'rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"' EXIT
 
-awk -v STATUS_FILE="${MATCH_STATUS_FILE}" '
-BEGIN { matched = 0 }
+if ! awk -v STATUS_FILE="${MATCH_STATUS_FILE}" '
+BEGIN { matched = 0; patched = 0 }
 # Match the execution line for @evilmartians/lefthook (flexible pattern for arch and quote styles)
+# Only patch the first occurrence to prevent duplicate patches
 /@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook['"'"'"]?[ \t]+['"'"'"]?\$@['"'"'"]?[ \t]*$/ {
     matched = 1
-    # Extract leading indentation from matched line (spaces and tabs only)
-    match($0, /^[ \t]*/)
-    base_indent = substr($0, RSTART, RLENGTH)
-    # Remove one indentation level for elif/then (outer level)
-    # Detect indent style: check if base_indent ends with tab or spaces
-    len = length(base_indent)
-    # Default: use same indentation (no removal)
-    outer_indent = base_indent
-    # Tab-based indentation: remove one tab
-    if (len >= 1 && substr(base_indent, len, 1) == "\t") {
-        outer_indent = substr(base_indent, 1, len - 1)
-    }
-    # Space-based indentation (2-space): remove 2 spaces (only if not tab-based)
-    if (outer_indent == base_indent && len >= 2 && substr(base_indent, len - 1, 2) == "  ") {
-        outer_indent = substr(base_indent, 1, len - 2)
-    }
     print
-    print outer_indent "elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
-    print outer_indent "then"
-    print base_indent "\"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\" \"$@\""
+    # Skip if already patched (patched flag prevents duplicate insertion)
+    if (patched == 0) {
+        patched = 1
+        # Extract leading indentation from matched line (spaces and tabs only)
+        match($0, /^[ \t]*/)
+        base_indent = substr($0, RSTART, RLENGTH)
+        # Remove one indentation level for elif/then (outer level)
+        # Detect indent style: check if base_indent ends with tab or spaces
+        len = length(base_indent)
+        # Default: use same indentation (no removal)
+        outer_indent = base_indent
+        # Tab-based indentation: remove one tab
+        if (len >= 1 && substr(base_indent, len, 1) == "\t") {
+            outer_indent = substr(base_indent, 1, len - 1)
+        }
+        # Space-based indentation (2-space): remove 2 spaces (only if not tab-based)
+        if (outer_indent == base_indent && len >= 2 && substr(base_indent, len - 1, 2) == "  ") {
+            outer_indent = substr(base_indent, 1, len - 2)
+        }
+        print outer_indent "elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
+        print outer_indent "then"
+        print base_indent "\"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\" \"$@\""
+    }
     next
 }
 { print }
 END { print matched > STATUS_FILE }
-' "${PRE_COMMIT_HOOK}" > "${TEMP_FILE}"
+' "${PRE_COMMIT_HOOK}" > "${TEMP_FILE}"; then
+    echo "Error: awk processing failed. Restoring backup."
+    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
+    exit 1
+fi
 
 # Verify awk pattern matched
 PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
