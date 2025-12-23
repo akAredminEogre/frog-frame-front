@@ -1,0 +1,175 @@
+/**
+ * user-story-001 結合テスト - Presenter出力整合性
+ * Presenterを通じてView層に正しいデータが渡されることを検証
+ *
+ * 1. updateRuleInViewコールバックが呼び出される
+ * 2. コールバックに渡されるルールが更新後の状態
+ */
+import './setup';
+
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { createTestRule } from 'tests/integration/user-story-001/toggle-rule-active/helpers/createTestRule';
+import { createMockTabsGateway } from 'tests/integration/user-story-001/toggle-rule-active/mocks/createMockTabsGateway';
+
+import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
+import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
+import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
+import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
+import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
+
+describe('user-story-001 結合テスト - Presenter出力整合性', () => {
+  let repository: DexieRewriteRuleRepository;
+  let mockTabsGateway: ITabsGateway;
+  let updateRuleInView: ReturnType<typeof vi.fn>;
+  let showErrorInView: ReturnType<typeof vi.fn>;
+
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    await dexieDatabase.rewriteRules.clear();
+    repository = new DexieRewriteRuleRepository();
+    mockTabsGateway = createMockTabsGateway();
+    updateRuleInView = vi.fn();
+    showErrorInView = vi.fn();
+  });
+
+  afterEach(async () => {
+    vi.resetAllMocks();
+    await dexieDatabase.rewriteRules.clear();
+  });
+
+  it('updateRuleInViewコールバックが正確に1回呼び出される', async () => {
+    // Arrange
+    const initialRule = createTestRule({ isActive: true });
+    await repository.create(initialRule);
+    const createdRules = await repository.getAll();
+    const ruleInDb = createdRules.toArray()[0];
+
+    const presenter = new ToggleRuleActivePresenter(
+      updateRuleInView,
+      showErrorInView
+    );
+    const interactor = new ToggleRuleActiveInteractor(
+      repository,
+      mockTabsGateway,
+      presenter
+    );
+    const controller = new ToggleRuleActiveController(interactor);
+
+    // Act
+    await controller.toggleActive(ruleInDb.id);
+
+    // Assert
+    expect(updateRuleInView).toHaveBeenCalledTimes(1);
+    expect(showErrorInView).not.toHaveBeenCalled();
+  });
+
+  it('コールバックに渡されるルールが更新後の状態を持つ（true→false）', async () => {
+    // Arrange
+    const initialRule = createTestRule({
+      oldString: 'testOld',
+      newString: 'testNew',
+      urlPattern: 'https://test.com',
+      isRegex: false,
+      isActive: true,
+    });
+    await repository.create(initialRule);
+    const createdRules = await repository.getAll();
+    const ruleInDb = createdRules.toArray()[0];
+
+    const presenter = new ToggleRuleActivePresenter(
+      updateRuleInView,
+      showErrorInView
+    );
+    const interactor = new ToggleRuleActiveInteractor(
+      repository,
+      mockTabsGateway,
+      presenter
+    );
+    const controller = new ToggleRuleActiveController(interactor);
+
+    // Act
+    await controller.toggleActive(ruleInDb.id);
+
+    // Assert
+    const callbackArg = updateRuleInView.mock.calls[0][0] as RewriteRule;
+    expect(callbackArg.id).toBe(ruleInDb.id);
+    expect(callbackArg.oldString).toBe('testOld');
+    expect(callbackArg.newString).toBe('testNew');
+    expect(callbackArg.urlPattern).toBe('https://test.com');
+    expect(callbackArg.isRegex).toBe(false);
+    expect(callbackArg.isActive).toBe(false); // true→false に変更
+  });
+
+  it('コールバックに渡されるルールが更新後の状態を持つ（false→true）', async () => {
+    // Arrange
+    const initialRule = createTestRule({
+      oldString: 'inactiveOld',
+      newString: 'inactiveNew',
+      urlPattern: 'https://inactive.com',
+      isRegex: true,
+      isActive: false,
+    });
+    await repository.create(initialRule);
+    const createdRules = await repository.getAll();
+    const ruleInDb = createdRules.toArray()[0];
+
+    const presenter = new ToggleRuleActivePresenter(
+      updateRuleInView,
+      showErrorInView
+    );
+    const interactor = new ToggleRuleActiveInteractor(
+      repository,
+      mockTabsGateway,
+      presenter
+    );
+    const controller = new ToggleRuleActiveController(interactor);
+
+    // Act
+    await controller.toggleActive(ruleInDb.id);
+
+    // Assert
+    const callbackArg = updateRuleInView.mock.calls[0][0] as RewriteRule;
+    expect(callbackArg.id).toBe(ruleInDb.id);
+    expect(callbackArg.oldString).toBe('inactiveOld');
+    expect(callbackArg.newString).toBe('inactiveNew');
+    expect(callbackArg.urlPattern).toBe('https://inactive.com');
+    expect(callbackArg.isRegex).toBe(true);
+    expect(callbackArg.isActive).toBe(true); // false→true に変更
+  });
+
+  it('コールバックに渡されるルールとDBの状態が一致する', async () => {
+    // Arrange
+    const initialRule = createTestRule({ isActive: true });
+    await repository.create(initialRule);
+    const createdRules = await repository.getAll();
+    const ruleInDb = createdRules.toArray()[0];
+
+    const presenter = new ToggleRuleActivePresenter(
+      updateRuleInView,
+      showErrorInView
+    );
+    const interactor = new ToggleRuleActiveInteractor(
+      repository,
+      mockTabsGateway,
+      presenter
+    );
+    const controller = new ToggleRuleActiveController(interactor);
+
+    // Act
+    await controller.toggleActive(ruleInDb.id);
+
+    // Assert: コールバックとDBの状態を比較
+    const callbackArg = updateRuleInView.mock.calls[0][0] as RewriteRule;
+    const updatedRuleInDb = await repository.getById(ruleInDb.id);
+
+    expect(callbackArg.id).toBe(updatedRuleInDb.id);
+    expect(callbackArg.oldString).toBe(updatedRuleInDb.oldString);
+    expect(callbackArg.newString).toBe(updatedRuleInDb.newString);
+    expect(callbackArg.urlPattern).toBe(updatedRuleInDb.urlPattern);
+    expect(callbackArg.isRegex).toBe(updatedRuleInDb.isRegex);
+    expect(callbackArg.isActive).toBe(updatedRuleInDb.isActive);
+  });
+});
