@@ -6,7 +6,7 @@ import { defineExtensionMessaging } from '@webext-core/messaging';
  *
  * Note: getAllRules は @webext-core/proxy-service (RewriteRuleProxyService) に移行済み
  */
-export interface BackgroundProtocolMap {
+interface BackgroundProtocolMap {
   /**
    * 全ルールを適用する
    * Popup → Background
@@ -18,7 +18,7 @@ export interface BackgroundProtocolMap {
  * Content Script へのメッセージプロトコル定義
  * Background から Content Script へ送信するメッセージ
  */
-export interface ContentScriptProtocolMap {
+interface ContentScriptProtocolMap {
   /**
    * ルールを適用する
    * Background → Content Script
