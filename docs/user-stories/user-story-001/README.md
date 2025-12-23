@@ -159,11 +159,11 @@
   - 実装注入パターン採用（ADR-002 参照）
   - background.ts で setRewriteRuleProxyServiceImpl() + registerRewriteRuleProxyService() 呼び出し
   - RewriteRuleMessagingService が IRewriteRuleMessagingPort を実装
-- [ ] ToggleSwitch UIコンポーネントの実装（テスト未実装）
+- [x] ToggleSwitch UIコンポーネントの実装（**テスト完了 - 最新developマージ済み**）
 
 ### Phase 4: 統合（新旧並行稼働）
 
-**現状**: RewriteRuleProxyService 実装完了、ChromeRuntimeRewriteRuleRepository Mapper委譲完了
+**現状**: 全ての基礎実装およびテスト完了、統合タスク残り2個
 
 - [x] ChromeRuntimeRewriteRuleRepository を Mapper委譲方式に変更 **（user-story-002 PR-1 で完了）**
   - 既存の直接DB操作 → Mapper経由に変更
@@ -174,7 +174,7 @@
   - ToggleRuleActiveController を呼び出すハンドラーを追加
   - **現在位置**: `src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx`
 
-**優先順位**: 上記2タスクを完了後、テスト実装に並行移行可能
+**最終段階**: 残りタスク - RulesApp.tsx統合のみ（テストは全て完了済み）
 
 ### Phase 5: 旧コード削除（このユーザーストーリーでは実施しない）
 
