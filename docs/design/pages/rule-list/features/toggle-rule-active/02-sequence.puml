@@ -8,6 +8,9 @@ box "Rules Page - UI" #LightBlue
 end box
 
 box "interface-adapters" #LightGreen
+  participant "<<interface>>\nIToggleRuleActiveControllerFactory" as IFactory
+  participant "ToggleRuleActiveControllerFactory" as Factory
+  participant "<<interface>>\nIToggleRuleActiveController" as IController
   participant "ToggleRuleActiveController" as Controller
   participant "ToggleRuleActivePresenter" as Presenter
   participant "RewriteRuleMapper" as Mapper
@@ -37,12 +40,37 @@ box "enterprise-business-rules" #LightPink
   participant "RewriteRule" as Entity
 end box
 
+== 初期化（useMemo内） ==
+
+View -> IFactory : create(onSuccess, onError)
+activate IFactory
+
+IFactory -> Factory : create(onSuccess, onError)
+activate Factory
+
+Factory -> Presenter : new(onSuccess, onError)
+Factory -> Interactor : new(repository, tabsGateway, presenter)
+Factory -> Controller : new(interactor)
+Factory --> IFactory : controller
+deactivate Factory
+
+IFactory --> View : controller
+deactivate IFactory
+
+note right of View
+  ADR-005: Factoryパターンにより
+  ReactコールバックをPresenterに注入
+end note
+
 == トグル操作 ==
 
 UI -> View : onToggle(ruleId)
 activate View
 
-View -> Controller : toggleActive(ruleId)
+View -> IController : toggleActive(ruleId)
+activate IController
+
+IController -> Controller : toggleActive(ruleId)
 activate Controller
 
 Controller -> Interactor : execute(inputData)
@@ -186,6 +214,7 @@ View --> UI : 状態更新
 deactivate Presenter
 deactivate Interactor
 deactivate Controller
+deactivate IController
 deactivate View
 
 @enduml

@@ -77,8 +77,11 @@
 
 | クラス | 責務 |
 |--------|------|
-| ToggleRuleActiveController | ユーザー入力をInputDataに変換 |
-| ToggleRuleActivePresenter | OutputDataをViewに通知 |
+| IToggleRuleActiveController | Controllerのインターフェース。Factoryの戻り値型として使用（ADR-005参照） |
+| ToggleRuleActiveController | IToggleRuleActiveControllerの実装。ユーザー入力をInputDataに変換 |
+| IToggleRuleActiveControllerFactory | Controllerを生成するFactoryのインターフェース。ReactコールバックをPresenterに注入（ADR-005参照） |
+| ToggleRuleActiveControllerFactory | IToggleRuleActiveControllerFactoryの実装 |
+| ToggleRuleActivePresenter | OutputDataをViewに通知
 | RewriteRuleMapper | Entity ↔ DTO 変換 + IRewriteRuleMessagingPort 経由で通信（ADR-002、ADR-003参照） |
 | IRewriteRuleMessagingPort | MessagingService の抽象化（Port） |
 
@@ -238,12 +241,31 @@ ADR-001 に従い、ドメインエンティティの値を用いた判定・計
 │                          interface-adapters/                                │
 │                                                                             │
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
-│  │ ToggleRuleActiveController  │    │ ToggleRuleActivePresenter   │        │
+│  │ <<interface>>               │    │ <<interface>>               │        │
+│  │ IToggleRuleActive           │    │ IToggleRuleActiveController │        │
+│  │ ControllerFactory           │    │                             │        │
 │  │ ─────────────────────────── │    │ ─────────────────────────── │        │
-│  │ - useCase: IToggleRule...   │    │ - updateRuleInView: Func    │        │
-│  │ ─────────────────────────── │    │ ─────────────────────────── │        │
-│  │ + toggleActive(ruleId)      │    │ + present(outputData)       │        │
-│  └─────────────────────────────┘    └─────────────────────────────┘        │
+│  │ + create(onSuccess,         │    │ + toggleActive(ruleId)      │        │
+│  │   onError): IToggle...Ctrl  │    └──────────▲──────────────────┘        │
+│  └──────────▲──────────────────┘               │ implements                │
+│             │ implements                       │                           │
+│  ┌──────────┴──────────────────┐    ┌──────────┴──────────────────┐        │
+│  │ ToggleRuleActive            │    │ ToggleRuleActiveController  │        │
+│  │ ControllerFactory           │    │ ─────────────────────────── │        │
+│  │ ─────────────────────────── │    │ - useCase: IToggleRule...   │        │
+│  │ - repository: IRewriteRule..│    │ ─────────────────────────── │        │
+│  │ - tabsGateway: ITabsGateway │    │ + toggleActive(ruleId)      │        │
+│  │ ─────────────────────────── │    └─────────────────────────────┘        │
+│  │ + create(onSuccess,         │                                           │
+│  │   onError): IToggle...Ctrl  │    ┌─────────────────────────────┐        │
+│  └─────────────────────────────┘    │ ToggleRuleActivePresenter   │        │
+│                                     │ ─────────────────────────── │        │
+│                                     │ - updateRuleInView: Func    │        │
+│                                     │ - showErrorInView: Func     │        │
+│                                     │ ─────────────────────────── │        │
+│                                     │ + present(outputData)       │        │
+│                                     │ + presentError(errorData)   │        │
+│                                     └─────────────────────────────┘        │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 

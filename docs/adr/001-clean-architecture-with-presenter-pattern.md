@@ -121,6 +121,8 @@ src/
 │   │   └── ToggleRuleActiveController.ts
 │   ├── presenters/                             ← Presenter
 │   │   └── ToggleRuleActivePresenter.ts
+│   ├── factories/                              ← Factory（ADR-005参照）
+│   │   └── ToggleRuleActiveControllerFactory.ts
 │   ├── ports/                                  ← Port（Mapperが依存、依存性逆転のため）
 │   │   └── IRewriteRuleMessagingPort.ts
 │   └── mappers/                                ← Mapper

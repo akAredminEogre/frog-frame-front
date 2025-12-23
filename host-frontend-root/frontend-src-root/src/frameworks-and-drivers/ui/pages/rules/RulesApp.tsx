@@ -1,6 +1,6 @@
 import 'src/frameworks-and-drivers/ui/pages/rules/style.css';
 
-import { useEffect,useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
@@ -12,11 +12,28 @@ import EmptyStateMessage from 'src/components/organisms/EmptyStateMessage/EmptyS
 import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { container } from 'src/frameworks-and-drivers/di/container';
+import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 
 function RulesApp() {
   const [rules, setRules] = useState<RewriteRule[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
+  const [toggleError, setToggleError] = useState<{ ruleId: number; message: string } | null>(null);
+
+  const toggleController = useMemo(() => {
+    const factory = container.resolve<IToggleRuleActiveControllerFactory>('IToggleRuleActiveControllerFactory');
+    return factory.create(
+      (rule: RewriteRule) => {
+        setRules((prevRules) =>
+          prevRules.map((r) => (r.id === rule.id ? rule : r))
+        );
+      },
+      (ruleId: number, message: string) => {
+        setToggleError({ ruleId, message });
+      }
+    );
+  }, []);
 
   useEffect(() => {
     // TODO: ロジックをUseCaseに分離するタスクを追加
@@ -78,16 +95,39 @@ function RulesApp() {
     await openRuleEditPageUseCase.execute(ruleId);
   };
 
+  const handleToggle = async (ruleId: number) => {
+    if (togglingIds.has(ruleId)) {
+      return;
+    }
+
+    setToggleError(null);
+    setTogglingIds((prev) => new Set(prev).add(ruleId));
+
+    await toggleController.toggleActive(ruleId);
+
+    setTogglingIds((prev) => {
+      const next = new Set(prev);
+      next.delete(ruleId);
+      return next;
+    });
+  };
+
   return (
     <div className="container">
       <h1>保存されたルール一覧</h1>
-      
+
+      {toggleError && (
+        <ErrorMessage
+          message={`ルール ${toggleError.ruleId} の切り替えに失敗しました: ${toggleError.message}`}
+        />
+      )}
+
       {rules.length === 0 ? (
         <EmptyStateMessage />
       ) : (
-        <RulesTable rules={rules} onEdit={handleEdit} />
+        <RulesTable rules={rules} onEdit={handleEdit} onToggle={handleToggle} togglingIds={togglingIds} />
       )}
-      
+
       <div className="footer">
         <p>合計 {rules.length} 件のルールが保存されています</p>
       </div>

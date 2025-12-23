@@ -6,6 +6,10 @@
   background-color: var(--colors-bg-hover);
 }
 
+.toggleCell {
+  text-align: center;
+  vertical-align: middle;
+}
 
 .editButton {
   background-color: var(--colors-primary);
