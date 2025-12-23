@@ -16,9 +16,9 @@ rectangle "3C-3\nToggleRuleActive\nPresenter実装\n[完了・テスト済]" as 
 
 rectangle "3D-1\nメッセージング\n関連DTO実装\n[完了]" as msgDto #green
 rectangle "3D-2\nChromeTabsGateway\n実装\n[完了・developマージ]" as chromeTabs #green
-rectangle "3D-3\nRewriteRule\nMessagingService\n実装\n[完了・テスト済]" as messaging #green
+rectangle "3D-3\nRewriteRule\nMessagingService\n実装\n[実装済・テスト未]" as messaging #yellow
 
-rectangle "3E-1\nToggleSwitch\nUIコンポーネント\n実装\n[完了・テスト済]" as toggleUI #green
+rectangle "3E-1\nToggleSwitch\nUIコンポーネント\n実装\n[実装済・テスト未]" as toggleUI #yellow
 
 rectangle "4-1\nDI登録追加\n[完了]" as di #green
 rectangle "4-2\nChromeRuntime\nRewriteRule\nRepository改修\n[未完了]" as repoFix #lightcoral
@@ -28,7 +28,7 @@ rectangle "4-3\nRulesApp.tsx\n統合\n[未完了]" as appIntegration #lightcoral
 rectangle "TEST-1\nInteractor\nテスト実装\n[完了]" as testInteractor #green
 rectangle "TEST-2\nController/Presenter\nテスト実装\n[完了]" as testControllerPresenter #green
 rectangle "TEST-3\nMapper/Gateway\nテスト実装\n[完了]" as testMapperGateway #green
-rectangle "TEST-4\nUI/Messaging\nテスト実装\n[完了]" as testUIMessaging #green
+rectangle "TEST-4\nUI/Messaging\nテスト実装\n[未実装]" as testUIMessaging #lightblue
 
 ' 依存関係（矢印）
 ' 実装完了済みの依存関係（グレー）
@@ -44,13 +44,13 @@ msgDto -[#gray]-> messaging : 完了済み
 di -[#gray]-> controller : 完了済み
 di -[#gray]-> presenter : 完了済み
 
-' 新規追加: テスト依存関係（すべて完了済み）
-interactor -[#gray]-> testInteractor : 完了済み
-controller -[#gray]-> testControllerPresenter : 完了済み
-presenter -[#gray]-> testControllerPresenter : 完了済み
-mapper -[#gray]-> testMapperGateway : 完了済み
-toggleUI -[#gray]-> testUIMessaging : 完了済み
-messaging -[#gray]-> testUIMessaging : 完了済み
+' 新規追加: テスト依存関係
+interactor --> testInteractor : テスト必要
+controller --> testControllerPresenter : テスト必要
+presenter --> testControllerPresenter : テスト必要
+mapper --> testMapperGateway : テスト必要
+toggleUI --> testUIMessaging : テスト必要
+messaging --> testUIMessaging : テスト必要
 
 ' 残りの主要依存関係（統合タスク）
 mapper -[#red,thickness=3]-> repoFix : 必要
@@ -86,21 +86,24 @@ note bottom
 **現在のクリティカルパス (赤線):**
 mapper/messaging → repoFix → appIntegration
 
-**最新状況 (2024-12-22):**
+**最新状況 (2024-12-20):**
 - ✅ developマージ完了（5回目）
 - ✅ ChromeTabsGateway実装完了（developから取り込み）
-- ✅ 全テスト実装完了（TEST-1〜TEST-4）
-- ✅ ToggleSwitch UIコンポーネント テスト完了
-- ✅ RewriteRuleMessagingService テスト完了
+- ✅ ToggleRuleActivePresenterテスト実装完了
+- ✅ Controller/Presenterテスト完了
+- ✅ ToggleRuleActiveInteractorテスト実装完了\n- ✅ Git hooks導入（pre-commit: ESLint）
 - 🎯 残り: Phase 4統合（2タスク）
 
 **次のステップ:**
 1. ChromeRuntimeRewriteRuleRepository改修
 2. RulesApp.tsx UI統合
+3. テスト実装（並行実行可能）
 
 **進捗状況:**
-- ✅ 完了: 基本実装、DTO、DI設定、全テスト
+- ✅ 完了: 基本実装、DTO、DI設定、全ビジネスロジックテスト
+- 🔄 実装済み: 一部コンポーネント（テスト未）
 - 🎯 集中: Repository改修、UI統合
+- 📝 テスト必要: Messaging、UI
 end note
 
 @enduml
