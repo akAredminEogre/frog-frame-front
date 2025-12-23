@@ -17,6 +17,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit, onToggle, isT
       <td className={styles.toggleCell}>
         <ToggleSwitch
           checked={rule.isActive}
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           onChange={(_checked) => onToggle(rule.id)}
           ariaLabel={`ルール ${rule.id} の有効/無効を切り替え`}
           disabled={isToggling}
