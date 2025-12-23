@@ -89,7 +89,10 @@
 
 | クラス | 責務 |
 |--------|------|
-| DeleteRuleController | ユーザー入力をInputDataに変換 |
+| IDeleteRuleController | Controllerのインターフェース。Factoryの戻り値型として使用（ADR-005参照） |
+| DeleteRuleController | IDeleteRuleControllerの実装。ユーザー入力をInputDataに変換 |
+| IDeleteRuleControllerFactory | Controllerを生成するFactoryのインターフェース。ReactコールバックをPresenterに注入（ADR-005参照） |
+| DeleteRuleControllerFactory | IDeleteRuleControllerFactoryの実装 |
 | DeleteRulePresenter | OutputDataをViewに通知（成功/エラー） |
 | RewriteRuleMapper | Entity ↔ DTO 変換（既存、delete操作追加） |
 | IRewriteRuleMessagingPort | MessagingService の抽象化（既存、delete操作追加） |
@@ -267,13 +270,31 @@
 │                          interface-adapters/                                │
 │                                                                             │
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
-│  │ DeleteRuleController        │    │ DeleteRulePresenter         │        │
+│  │ <<interface>>               │    │ <<interface>>               │        │
+│  │ IDeleteRuleController       │    │ IDeleteRuleControllerFactory│        │
+│  │ Factory                     │    │                             │        │
 │  │ ─────────────────────────── │    │ ─────────────────────────── │        │
-│  │ - useCase: IDeleteRule...   │    │ - onSuccess: Func           │        │
-│  │ ─────────────────────────── │    │ - onError: Func             │        │
-│  │ + deleteRule(ruleId)        │    │ ─────────────────────────── │        │
-│  │                             │    │ + present(outputData)       │        │
-│  └─────────────────────────────┘    └─────────────────────────────┘        │
+│  │ + create(onSuccess,         │    │ + deleteRule(ruleId)        │        │
+│  │   onError): IDeleteRule...  │    └──────────▲──────────────────┘        │
+│  └──────────▲──────────────────┘               │ implements                │
+│             │ implements                       │                           │
+│  ┌──────────┴──────────────────┐    ┌──────────┴──────────────────┐        │
+│  │ DeleteRuleController        │    │ DeleteRuleController        │        │
+│  │ Factory                     │    │ ─────────────────────────── │        │
+│  │ ─────────────────────────── │    │ - useCase: IDeleteRule...   │        │
+│  │ - repository: IRewriteRule..│    │ ─────────────────────────── │        │
+│  │ - tabsGateway: ITabsGateway │    │ + deleteRule(ruleId)        │        │
+│  │ ─────────────────────────── │    └─────────────────────────────┘        │
+│  │ + create(onSuccess,         │                                           │
+│  │   onError): IDeleteRule...  │    ┌─────────────────────────────┐        │
+│  └─────────────────────────────┘    │ DeleteRulePresenter         │        │
+│                                     │ ─────────────────────────── │        │
+│                                     │ - onSuccess: Func           │        │
+│                                     │ - onError: Func             │        │
+│                                     │ ─────────────────────────── │        │
+│                                     │ + present(outputData)       │        │
+│                                     │ + presentError(errorData)   │        │
+│                                     └─────────────────────────────┘        │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
