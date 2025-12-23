@@ -3,9 +3,8 @@
  * 1. クリック: onChangeが新しい状態で呼ばれる
  * 2. disabled時クリック: onChangeが呼ばれない
  */
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { flushPromises, ToggleSwitchTestHelper } from 'tests/unit/frameworks-and-drivers/ui/components/atoms/ToggleSwitch/test-helpers';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('ToggleSwitch - インタラクション', () => {
   const helper = new ToggleSwitchTestHelper();

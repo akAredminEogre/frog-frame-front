@@ -3,9 +3,8 @@
  * 1. aria-label: ariaLabel propが設定される
  * 2. role: switch roleが設定される
  */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-
 import { ToggleSwitchTestHelper } from 'tests/unit/frameworks-and-drivers/ui/components/atoms/ToggleSwitch/test-helpers';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 describe('ToggleSwitch - アクセシビリティ', () => {
   const helper = new ToggleSwitchTestHelper();
