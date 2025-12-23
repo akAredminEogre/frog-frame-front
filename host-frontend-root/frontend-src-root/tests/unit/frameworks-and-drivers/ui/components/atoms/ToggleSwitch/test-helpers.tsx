@@ -12,13 +12,9 @@ import { ToggleSwitch, ToggleSwitchProps } from 'src/frameworks-and-drivers/ui/c
  * テスト用コンテナとReactルートを管理するクラス
  */
 export class ToggleSwitchTestHelper {
-  private container: HTMLDivElement;
-  private root: ReactDOM.Root;
-
-  constructor() {
-    this.container = document.createElement('div');
-    this.root = null as unknown as ReactDOM.Root;
-  }
+  // Definite assignment assertion: setup()で初期化される
+  private container!: HTMLDivElement;
+  private root!: ReactDOM.Root;
 
   /**
    * テスト前のセットアップ
