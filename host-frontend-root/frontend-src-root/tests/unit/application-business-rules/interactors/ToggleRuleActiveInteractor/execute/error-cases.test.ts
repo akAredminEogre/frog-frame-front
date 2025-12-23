@@ -38,7 +38,7 @@ describe('ToggleRuleActiveInteractor.execute - 異常系', () => {
     {
       description: 'repository.getByIdでエラーが発生した場合、presentErrorが呼び出される',
       input: { ruleId: 1 },
-      setupMocks: (repository: IRewriteRuleRepository, _tabsGateway: ITabsGateway) => {
+      setupMocks: (repository: IRewriteRuleRepository) => {
         (repository.getById as ReturnType<typeof vi.fn>).mockRejectedValue(
           new Error('ルールが見つかりません')
         );
@@ -48,7 +48,7 @@ describe('ToggleRuleActiveInteractor.execute - 異常系', () => {
     {
       description: 'repository.updateでエラーが発生した場合、presentErrorが呼び出される',
       input: { ruleId: 2 },
-      setupMocks: (repository: IRewriteRuleRepository, _tabsGateway: ITabsGateway) => {
+      setupMocks: (repository: IRewriteRuleRepository) => {
         const rule = new RewriteRule(2, 'old', 'new', 'https://example.com', false, true);
         (repository.getById as ReturnType<typeof vi.fn>).mockResolvedValue(rule);
         (repository.update as ReturnType<typeof vi.fn>).mockRejectedValue(
@@ -61,7 +61,7 @@ describe('ToggleRuleActiveInteractor.execute - 異常系', () => {
 
   testCases.forEach((testCase) => {
     it(testCase.description, async () => {
-      testCase.setupMocks(mockRepository, mockTabsGateway);
+      testCase.setupMocks(mockRepository);
 
       const interactor = new ToggleRuleActiveInteractor(
         mockRepository,
