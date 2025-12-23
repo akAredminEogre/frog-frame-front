@@ -159,7 +159,7 @@
   - 実装注入パターン採用（ADR-002 参照）
   - background.ts で setRewriteRuleProxyServiceImpl() + registerRewriteRuleProxyService() 呼び出し
   - RewriteRuleMessagingService が IRewriteRuleMessagingPort を実装
-- [x] ToggleSwitch UIコンポーネントの実装（テスト済み）
+- [ ] ToggleSwitch UIコンポーネントの実装（テスト未実装）
 
 ### Phase 4: 統合（新旧並行稼働）
 
