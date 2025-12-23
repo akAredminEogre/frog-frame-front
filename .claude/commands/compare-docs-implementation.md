@@ -32,7 +32,7 @@ docs/design/**/*.md
 docs/coding-standards/**/*.md
 ```
 
-上記パターンでドキュメントを列挙し、TodoWriteで比較タスクを作成する。
+上記パターンでドキュメントを列挙し、比較作業用のTODOタスクを作成する。
 
 ### Step 2: 各ドキュメントの比較
 
