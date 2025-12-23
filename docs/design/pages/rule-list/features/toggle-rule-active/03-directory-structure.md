@@ -37,9 +37,13 @@ src/application-business-rules/
 ```
 src/interface-adapters/
 ├── controllers/                                 ← Controller
+│   ├── IToggleRuleActiveController.ts           ← Controllerインターフェース（ADR-005参照）
 │   └── ToggleRuleActiveController.ts
 ├── presenters/                                  ← Presenter
 │   └── ToggleRuleActivePresenter.ts
+├── factories/                                   ← Factory（ADR-005参照）
+│   ├── IToggleRuleActiveControllerFactory.ts    ← FactoryインターフェースReactコールバック注入用
+│   └── ToggleRuleActiveControllerFactory.ts     ← Factory実装
 ├── ports/                                       ← Port（Mapperが依存、ADR-002参照）
 │   └── IRewriteRuleMessagingPort.ts             ← MessagingService の抽象化
 └── mappers/                                     ← Mapper（ADR-002、ADR-003参照）
