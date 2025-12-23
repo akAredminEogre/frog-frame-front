@@ -1,3 +1,4 @@
+import { ToggleRuleActiveErrorData } from 'src/application-business-rules/dto/output/ToggleRuleActiveErrorData';
 import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveOutputData';
 import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
@@ -8,14 +9,23 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
  */
 export class ToggleRuleActivePresenter implements IToggleRuleActivePresenter {
   constructor(
-    private readonly updateRuleInView: (rule: RewriteRule) => void
+    private readonly updateRuleInView: (rule: RewriteRule) => void,
+    private readonly showErrorInView: (ruleId: number, message: string) => void
   ) {}
 
   /**
-   * 出力を表示する
+   * 成功時の出力を表示する
    * @param outputData 出力データ
    */
   present(outputData: ToggleRuleActiveOutputData): void {
     this.updateRuleInView(outputData.toggledRule);
+  }
+
+  /**
+   * エラー時の出力を表示する
+   * @param errorData エラーデータ
+   */
+  presentError(errorData: ToggleRuleActiveErrorData): void {
+    this.showErrorInView(errorData.ruleId, errorData.message);
   }
 }
