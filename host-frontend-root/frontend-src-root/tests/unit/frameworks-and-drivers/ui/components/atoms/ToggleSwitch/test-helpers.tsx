@@ -10,15 +10,17 @@ import { ToggleSwitch, ToggleSwitchProps } from 'src/frameworks-and-drivers/ui/c
 
 /**
  * テスト用コンテナとReactルートを管理するクラス
+ * 注意: render()などのメソッドを呼ぶ前に必ずsetup()を呼び出すこと
  */
 export class ToggleSwitchTestHelper {
   // Definite assignment assertion: setup()で初期化される
+  // setup()を呼び忘れるとランタイムエラーになるため、beforeEach内で必ず呼び出すこと
   private container!: HTMLDivElement;
   private root!: ReactDOM.Root;
 
   /**
    * テスト前のセットアップ
-   * beforeEach 内で呼び出す
+   * beforeEach 内で必ず呼び出すこと
    */
   setup(): void {
     vi.clearAllMocks();
@@ -39,7 +41,7 @@ export class ToggleSwitchTestHelper {
 
   /**
    * コンポーネントをレンダリング
-   * @param props ToggleSwitchProps（onChangeはオプショナル）
+   * @param props ToggleSwitchProps。onChangeを省略した場合はvi.fn()がデフォルト値として使用される
    */
   async render(props: Omit<ToggleSwitchProps, 'onChange'> & { onChange?: (checked: boolean) => void }): Promise<void> {
     const defaultProps: ToggleSwitchProps = {
@@ -60,16 +62,10 @@ export class ToggleSwitchTestHelper {
 
   /**
    * input要素を取得
+   * React Ariaのuswitchはtype="checkbox"とrole="switch"を設定する
    */
   getInputElement(): HTMLInputElement | null {
     return this.container.querySelector('input') as HTMLInputElement | null;
-  }
-
-  /**
-   * checkbox input要素を取得
-   */
-  getCheckboxElement(): HTMLInputElement | null {
-    return this.container.querySelector('input[type="checkbox"]') as HTMLInputElement | null;
   }
 
   /**
