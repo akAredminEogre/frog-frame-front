@@ -19,6 +19,8 @@ function RulesApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const toggleController = container.resolve(ToggleRuleActiveController);
+
   useEffect(() => {
     // TODO: ロジックをUseCaseに分離するタスクを追加
     const loadRules = async () => {
@@ -89,8 +91,6 @@ function RulesApp() {
 
   const handleToggle = async (ruleId: number, isActive: boolean) => {
     updateRuleById(ruleId, (rule) => rule.withActive(isActive));
-
-    const toggleController = container.resolve(ToggleRuleActiveController);
     await toggleController.toggleActive(ruleId);
   };
 
