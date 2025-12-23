@@ -50,8 +50,8 @@ WAI-ARIA属性の正しい設定を確認。
 - [x] disabled時のonChange抑制
 - [x] aria-label設定
 - [x] role属性確認
-- [ ] フォーカスリング表示 → 不要（CSSの視覚的確認はStorybookで実施）
-- [ ] キーボード操作 → 不要（React Ariaが保証）
+- [ ] フォーカスリング表示 → 対象外（CSSの視覚的確認はStorybookで実施）
+- [ ] キーボード操作 → 対象外（React Ariaが保証）
 
 ## テストファイル構成
 
