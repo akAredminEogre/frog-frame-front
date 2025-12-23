@@ -50,7 +50,6 @@ export class ToggleSwitchTestHelper {
    */
   cleanup(): void {
     if (!this.container || !this.root) {
-      vi.resetAllMocks();
       return;
     }
     this.root.unmount();

@@ -29,17 +29,17 @@ describe('RewriteRuleMessagingService.getAll - 正常系', () => {
     vi.resetAllMocks();
   });
 
-  const testCases = [
+  const testCases: { description: string; mockDtos: RewriteRuleDTO[]; expectedLength: number }[] = [
     {
       description: '単一ルール: 1件のDTOを返却',
       mockDtos: [
         { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
-      ] as RewriteRuleDTO[],
+      ],
       expectedLength: 1,
     },
     {
       description: '空配列: 0件のDTOを空配列で返却',
-      mockDtos: [] as RewriteRuleDTO[],
+      mockDtos: [],
       expectedLength: 0,
     },
     {
@@ -48,7 +48,7 @@ describe('RewriteRuleMessagingService.getAll - 正常系', () => {
         { id: 1, oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com', isRegex: false, isActive: true },
         { id: 2, oldString: 'old2', newString: 'new2', urlPattern: 'https://other.com', isRegex: true, isActive: false },
         { id: 3, oldString: 'old3', newString: 'new3', urlPattern: '*', isRegex: false, isActive: true },
-      ] as RewriteRuleDTO[],
+      ],
       expectedLength: 3,
     },
   ];
