@@ -69,7 +69,7 @@ const popupInitFormUseCase = new PopupInitFormUseCase(currentTabService, selecte
 // Toggle Rule Active feature
 // NOTE: Presenterはファクトリーで動的に生成する設計だが、現段階ではダミーコールバックで登録
 const chromeTabsGateway = new ChromeTabsGateway();
-const toggleRuleActivePresenter = new ToggleRuleActivePresenter(() => {});
+const toggleRuleActivePresenter = new ToggleRuleActivePresenter(() => {}, () => {});
 const toggleRuleActiveInteractor = new ToggleRuleActiveInteractor(
   rewriteRuleRepository,
   chromeTabsGateway,
