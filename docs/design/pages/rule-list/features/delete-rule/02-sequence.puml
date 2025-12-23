@@ -6,6 +6,7 @@ box "Rules Page - UI" #LightBlue
   participant "DeleteButton" as DeleteBtn
   participant "ConfirmDialog" as Dialog
   participant "RulesApp" as View
+  participant "RuleTableRow" as TableRow
   participant "ToastNotification" as Toast
 end box
 
@@ -17,7 +18,11 @@ box "interface-adapters" #LightGreen
 end box
 
 box "application-business-rules" #LightYellow
+  participant "<<interface>>\nIDeleteRuleUseCase" as IUseCase
+  participant "<<interface>>\nIDeleteRulePresenter" as IPresenter
   participant "DeleteRuleInteractor" as Interactor
+  participant "DeleteRuleInputData" as InputData
+  participant "DeleteRuleOutputData" as OutputData
   participant "<<interface>>\nIRewriteRuleRepository" as IRepository
   participant "<<interface>>\nITabsGateway" as ITabsGateway
 end box
@@ -27,6 +32,7 @@ box "frameworks-and-drivers" #LightCyan
   participant "ChromeTabsGateway" as TabsGateway
   participant "RewriteRuleMessagingService" as MessagingService
   participant "<<interface>>\nIRewriteRuleProxyService" as IProxyService
+  participant "DeleteRuleRequestDTO" as DeleteDTO
 end box
 
 box "Background" #LightGray
@@ -41,6 +47,7 @@ end box
 
 == 確認ダイアログ表示 ==
 
+TableRow -> DeleteBtn : render
 DeleteBtn -> View : onDeleteClick(ruleId)
 activate View
 
@@ -62,7 +69,13 @@ deactivate Dialog
 View -> Controller : deleteRule(ruleId)
 activate Controller
 
-Controller -> Interactor : execute(inputData)
+Controller -> InputData : new(ruleId)
+InputData --> Controller : inputData
+
+Controller -> IUseCase : execute(inputData)
+activate IUseCase
+
+IUseCase -> Interactor : execute(inputData)
 activate Interactor
 
 == ルール取得（タブリロード用） ==
@@ -111,7 +124,7 @@ deactivate MessagingService
 IMessagingPort --> Mapper : DTO
 deactivate IMessagingPort
 
-Mapper -> Entity : new(...)
+Mapper -> Entity : fromDTO(dto)
 Entity --> Mapper : rule
 
 Mapper --> MessagingRepo : rule
@@ -133,6 +146,9 @@ activate MessagingRepo
 
 MessagingRepo -> Mapper : delete(ruleId)
 activate Mapper
+
+Mapper -> DeleteDTO : new(ruleId)
+DeleteDTO --> Mapper : dto
 
 Mapper -> IMessagingPort : delete(dto)
 activate IMessagingPort
@@ -164,7 +180,7 @@ IProxyService --> MessagingService : void
 deactivate IProxyService
 
 MessagingService --> IMessagingPort : void
-deactivate IMessagingPort
+deactivate MessagingService
 
 IMessagingPort --> Mapper : void
 deactivate IMessagingPort
@@ -199,14 +215,22 @@ deactivate ITabsGateway
 
 == 結果通知（成功時） ==
 
-Interactor -> Presenter : present(outputData { success: true, deletedRuleId })
+Interactor -> OutputData : new(success: true, deletedRuleId)
+OutputData --> Interactor : outputData
+
+Interactor -> IPresenter : present(outputData)
+activate IPresenter
+
+IPresenter -> Presenter : present(outputData)
 activate Presenter
 
 Presenter -> View : onSuccess(deletedRuleId)
 View -> View : ルール一覧から削除
 
 deactivate Presenter
+deactivate IPresenter
 deactivate Interactor
+deactivate IUseCase
 deactivate Controller
 deactivate View
 
@@ -214,7 +238,13 @@ deactivate View
 
 note over Interactor : 削除処理中にエラー発生
 
-Interactor -> Presenter : present(outputData { success: false, error })
+Interactor -> OutputData : new(success: false, error)
+OutputData --> Interactor : outputData
+
+Interactor -> IPresenter : present(outputData)
+activate IPresenter
+
+IPresenter -> Presenter : present(outputData)
 activate Presenter
 
 Presenter -> View : onError(error)
@@ -227,5 +257,6 @@ deactivate Toast
 
 deactivate View
 deactivate Presenter
+deactivate IPresenter
 
 @enduml
