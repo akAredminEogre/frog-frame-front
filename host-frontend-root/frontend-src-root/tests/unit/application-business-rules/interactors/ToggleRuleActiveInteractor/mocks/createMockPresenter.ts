@@ -8,4 +8,5 @@ import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports
  */
 export const createMockPresenter = (): IToggleRuleActivePresenter => ({
   present: vi.fn(),
+  presentError: vi.fn(),
 });
