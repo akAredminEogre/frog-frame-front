@@ -7,16 +7,14 @@ import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/Loa
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
-import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
-import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
+import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
-import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
 
 /**
  * containerの内部プロパティからclassToKeyMapを動的に取得する
@@ -95,19 +93,9 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
       expected: { className: 'ChromeCurrentTabService' }
     },
     {
-      description: 'ToggleRuleActivePresenterを解決できること',
-      input: { classToken: ToggleRuleActivePresenter },
-      expected: { className: 'ToggleRuleActivePresenter' }
-    },
-    {
-      description: 'ToggleRuleActiveInteractorを解決できること',
-      input: { classToken: ToggleRuleActiveInteractor },
-      expected: { className: 'ToggleRuleActiveInteractor' }
-    },
-    {
-      description: 'ToggleRuleActiveControllerを解決できること',
-      input: { classToken: ToggleRuleActiveController },
-      expected: { className: 'ToggleRuleActiveController' }
+      description: 'ToggleRuleActiveControllerFactoryを解決できること',
+      input: { classToken: ToggleRuleActiveControllerFactory },
+      expected: { className: 'ToggleRuleActiveControllerFactory' }
     },
     {
       description: 'RewriteRuleMapperを解決できること',
