@@ -15,6 +15,13 @@
 | isRegex | boolean | 検索パターンが正規表現かどうか |
 | isActive | boolean | ルールの有効/無効状態（デフォルト: true） |
 
+## 適用条件
+
+ルールがページに適用されるための条件:
+
+1. ページのURLが `urlPattern` に前方一致する
+2. ルールが有効状態 (`isActive = true`) である
+
 ## ビジネスルール
 
 ### URLマッチング
