@@ -71,11 +71,14 @@ cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
 TEMP_FILE=$(mktemp)
-trap 'rm -f "${TEMP_FILE}" "${BACKUP_FILE}"' EXIT
+MATCH_STATUS_FILE=$(mktemp)
+trap 'rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"' EXIT
 
-awk '
+awk -v STATUS_FILE="${MATCH_STATUS_FILE}" '
+BEGIN { matched = 0 }
 # Match the execution line for @evilmartians/lefthook (using flexible pattern for arch string)
 /@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook" "\$@"$/ {
+  matched = 1
   print
   print "    elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
   print "    then"
@@ -83,18 +86,32 @@ awk '
   next
 }
 { print }
+END { print matched > STATUS_FILE }
 ' "${PRE_COMMIT_HOOK}" > "${TEMP_FILE}"
+
+# Verify awk pattern matched
+PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
+if [ "${PATTERN_MATCHED}" != "1" ]; then
+  echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
+  rm -f "${BACKUP_FILE}"
+  exit 1
+fi
+
 mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"
 chmod +x "${PRE_COMMIT_HOOK}"
 
 # Verify patch was applied successfully with exact string match
 EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
 if ! grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
-  echo "Error: Failed to patch pre-commit hook. The awk pattern may not have matched."
+  echo "Error: Failed to patch pre-commit hook. Patch verification failed."
   # Restore backup on failure
   mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
   exit 1
 fi
+
+# Clear trap and remove backup on success
+trap - EXIT
+rm -f "${BACKUP_FILE}"
 
 echo "Pre-commit hook patched successfully!"
 echo "Pre-commit hook setup complete!"
