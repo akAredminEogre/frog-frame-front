@@ -11,6 +11,9 @@ box "Rules Page - UI" #LightBlue
 end box
 
 box "interface-adapters" #LightGreen
+  participant "<<interface>>\nIDeleteRuleControllerFactory" as IFactory
+  participant "DeleteRuleControllerFactory" as Factory
+  participant "<<interface>>\nIDeleteRuleController" as IController
   participant "DeleteRuleController" as Controller
   participant "DeleteRulePresenter" as Presenter
   participant "RewriteRuleMapper" as Mapper
@@ -45,6 +48,28 @@ box "enterprise-business-rules" #LightPink
   participant "RewriteRule" as Entity
 end box
 
+== 初期化（useMemo内） ==
+
+View -> IFactory : create(onSuccess, onError)
+activate IFactory
+
+IFactory -> Factory : create(onSuccess, onError)
+activate Factory
+
+Factory -> Presenter : new(onSuccess, onError)
+Factory -> Interactor : new(repository, tabsGateway, presenter)
+Factory -> Controller : new(interactor)
+Factory --> IFactory : controller
+deactivate Factory
+
+IFactory --> View : controller
+deactivate IFactory
+
+note right of View
+  ADR-005: Factoryパターンにより
+  ReactコールバックをPresenterに注入
+end note
+
 == 確認ダイアログ表示 ==
 
 TableRow -> DeleteBtn : render
@@ -66,16 +91,16 @@ end
 Dialog --> View : onConfirm()
 deactivate Dialog
 
-View -> Controller : deleteRule(ruleId)
+View -> IController : deleteRule(ruleId)
+activate IController
+
+IController -> Controller : deleteRule(ruleId)
 activate Controller
 
 Controller -> InputData : new(ruleId)
 InputData --> Controller : inputData
 
-Controller -> IUseCase : execute(inputData)
-activate IUseCase
-
-IUseCase -> Interactor : execute(inputData)
+Controller -> Interactor : execute(inputData)
 activate Interactor
 
 == ルール取得（タブリロード用） ==
@@ -230,8 +255,8 @@ View -> View : ルール一覧から削除
 deactivate Presenter
 deactivate IPresenter
 deactivate Interactor
-deactivate IUseCase
 deactivate Controller
+deactivate IController
 deactivate View
 
 == エラー発生時 ==
