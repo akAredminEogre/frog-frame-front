@@ -7,7 +7,7 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 interface RulesTableProps {
   rules: RewriteRule[];
   onEdit: (ruleId: string | number) => void;
-  onToggle: (ruleId: number, isActive: boolean) => void;
+  onToggle: (ruleId: number) => void;
   togglingIds: Set<number>;
 }
 

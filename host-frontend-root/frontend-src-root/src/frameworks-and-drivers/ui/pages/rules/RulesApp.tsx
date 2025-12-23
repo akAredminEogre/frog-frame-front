@@ -101,22 +101,13 @@ function RulesApp() {
     await openRuleEditPageUseCase.execute(ruleId);
   };
 
-  const updateRuleById = (ruleId: number, updater: (rule: RewriteRule) => RewriteRule) => {
-    setRules((prevRules) =>
-      prevRules.map((rule) =>
-        rule.id === ruleId ? updater(rule) : rule
-      )
-    );
-  };
-
-  const handleToggle = async (ruleId: number, isActive: boolean) => {
+  const handleToggle = async (ruleId: number) => {
     if (togglingIds.has(ruleId)) {
       return;
     }
 
     setToggleError(null);
     setTogglingIds((prev) => new Set(prev).add(ruleId));
-    updateRuleById(ruleId, (rule) => rule.withActive(isActive));
 
     await toggleController.toggleActive(ruleId);
 
