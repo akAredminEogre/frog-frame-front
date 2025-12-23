@@ -8,6 +8,12 @@
 
 set -e
 
+# Check git availability (early return pattern)
+if ! command -v git >/dev/null 2>&1; then
+    echo "Error: git command not found. Please install Git."
+    exit 1
+fi
+
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
 PRE_COMMIT_HOOK="${REPO_ROOT}/.git/hooks/pre-commit"
@@ -27,15 +33,25 @@ if [ ! -d "${FRONTEND_DIR}" ]; then
     exit 1
 fi
 
-# Install npm dependencies if node_modules doesn't exist
+# Install npm dependencies if lefthook package is not present
+# Note: Checking for specific package is more robust than just node_modules existence
+LEFTHOOK_PACKAGE_DIR="${FRONTEND_DIR}/node_modules/@evilmartians/lefthook"
+readonly LEFTHOOK_PACKAGE_DIR
+
 install_npm_dependencies() {
-    if [ -d "${FRONTEND_DIR}/node_modules" ]; then
+    if [ -d "${LEFTHOOK_PACKAGE_DIR}" ]; then
         return 0
     fi
 
     echo "Installing npm dependencies..."
     if ! (cd "${FRONTEND_DIR}" && npm install --no-audit --no-fund); then
         echo "Error: Failed to install npm dependencies. Check permissions and network connectivity."
+        exit 1
+    fi
+
+    # Verify lefthook package was installed
+    if [ ! -d "${LEFTHOOK_PACKAGE_DIR}" ]; then
+        echo "Error: lefthook package not found after npm install. Installation may be incomplete."
         exit 1
     fi
 }
@@ -78,18 +94,26 @@ cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"
 
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
-TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX")
-MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX")
+TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
+    echo "Error: Failed to create temporary file for patching."
+    rm -f "${BACKUP_FILE}"
+    exit 1
+}
+MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX") || {
+    echo "Error: Failed to create status file for patching."
+    rm -f "${TEMP_FILE}" "${BACKUP_FILE}"
+    exit 1
+}
 readonly TEMP_FILE MATCH_STATUS_FILE
 trap 'rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"' EXIT
 
 awk -v STATUS_FILE="${MATCH_STATUS_FILE}" '
 BEGIN { matched = 0 }
 # Match the execution line for @evilmartians/lefthook (flexible pattern for arch and quote styles)
-/@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook['"'"'"]?[[:space:]]+['"'"'"]?\$@['"'"'"]?[[:space:]]*$/ {
+/@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook['"'"'"]?[ \t]+['"'"'"]?\$@['"'"'"]?[ \t]*$/ {
     matched = 1
-    # Extract leading indentation from matched line
-    match($0, /^[[:space:]]*/)
+    # Extract leading indentation from matched line (spaces and tabs only)
+    match($0, /^[ \t]*/)
     base_indent = substr($0, RSTART, RLENGTH)
     # Remove one level (2 spaces) for elif/then which should be at outer level
     if (length(base_indent) >= 2) {
@@ -112,7 +136,10 @@ PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
 readonly PATTERN_MATCHED
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
-    rm -f "${BACKUP_FILE}"
+    echo "This may indicate lefthook version incompatibility. Check generated hook format."
+    if ! rm -f "${BACKUP_FILE}"; then
+        echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
+    fi
     exit 1
 fi
 
@@ -145,7 +172,10 @@ fi
 
 # Clear trap and cleanup temp files on success
 trap - EXIT
-rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}" "${BACKUP_FILE}"
+rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"
+if ! rm -f "${BACKUP_FILE}"; then
+    echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
+fi
 
 echo "Pre-commit hook patched successfully!"
 echo "Pre-commit hook setup complete!"
