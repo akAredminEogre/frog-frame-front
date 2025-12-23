@@ -9,6 +9,13 @@ import { vi } from 'vitest';
 import { ToggleSwitch, ToggleSwitchProps } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
 
 /**
+ * React更新をフラッシュするためのユーティリティ
+ */
+export const flushPromises = (): Promise<void> => {
+  return new Promise<void>((resolve) => setTimeout(resolve, 0));
+};
+
+/**
  * テスト用コンテナとReactルートを管理するクラス
  * 注意: render()などのメソッドを呼ぶ前に必ずsetup()を呼び出すこと
  */
@@ -60,8 +67,7 @@ export class ToggleSwitchTestHelper {
       ...props,
     };
     this.root!.render(<ToggleSwitch {...defaultProps} />);
-    // Flush React updates
-    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    await flushPromises();
   }
 
   /**
@@ -89,10 +95,3 @@ export class ToggleSwitchTestHelper {
     return this.container!;
   }
 }
-
-/**
- * React更新をフラッシュするためのユーティリティ
- */
-export const flushPromises = (): Promise<void> => {
-  return new Promise<void>((resolve) => setTimeout(resolve, 0));
-};

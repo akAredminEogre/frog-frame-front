@@ -6,8 +6,8 @@ import { IRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/R
  * IRewriteRuleProxyService のモックファクトリ
  * @returns モック化された IRewriteRuleProxyService
  */
-export function createMockRewriteRuleProxyService(): IRewriteRuleProxyService {
+export const createMockRewriteRuleProxyService = (): IRewriteRuleProxyService => {
   return {
     getAllRules: vi.fn(),
   };
-}
+};
