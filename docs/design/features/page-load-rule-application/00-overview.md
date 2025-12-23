@@ -45,5 +45,11 @@
 
 ## 関連ドキュメント
 
+### ドメインモデル
+
+- [リライトルール (RewriteRule)](../../domain-model/rewrite-rule.md) - 本機能で適用されるルールの概念・構造
+
+### ADR
+
 - [ADR-002: メッセージングに @webext-core を採用](../../../adr/002-messaging-with-webext-core.md)
 - [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../adr/003-unified-db-access-via-messaging.md)
