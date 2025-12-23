@@ -6,7 +6,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { vi } from 'vitest';
 
-import { ToggleSwitch, ToggleSwitchProps } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
+import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
+
+type ToggleSwitchProps = React.ComponentProps<typeof ToggleSwitch>;
 
 /**
  * React更新をフラッシュするためのユーティリティ
