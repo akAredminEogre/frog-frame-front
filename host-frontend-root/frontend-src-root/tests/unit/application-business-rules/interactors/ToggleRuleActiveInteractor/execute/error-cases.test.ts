@@ -2,6 +2,7 @@
  * ToggleRuleActiveInteractor.execute - 異常系テスト
  * 1. repository.getByIdでエラーが発生した場合、presentErrorが呼び出される
  * 2. repository.updateでエラーが発生した場合、presentErrorが呼び出される
+ * 3. tabsGateway.reloadMatchingTabsでエラーが発生した場合、presentErrorが呼び出される
  */
 import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockPresenter';
 import { createMockRepository } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockRepository';
@@ -36,7 +37,7 @@ describe('ToggleRuleActiveInteractor.execute - 異常系', () => {
     {
       description: 'repository.getByIdでエラーが発生した場合、presentErrorが呼び出される',
       input: { ruleId: 1 },
-      setupMocks: (repository: IRewriteRuleRepository) => {
+      setupMocks: (repository: IRewriteRuleRepository, _tabsGateway: ITabsGateway) => {
         (repository.getById as ReturnType<typeof vi.fn>).mockRejectedValue(
           new Error('ルールが見つかりません')
         );
@@ -46,7 +47,7 @@ describe('ToggleRuleActiveInteractor.execute - 異常系', () => {
     {
       description: 'repository.updateでエラーが発生した場合、presentErrorが呼び出される',
       input: { ruleId: 2 },
-      setupMocks: (repository: IRewriteRuleRepository) => {
+      setupMocks: (repository: IRewriteRuleRepository, _tabsGateway: ITabsGateway) => {
         const rule = new RewriteRule(2, 'old', 'new', 'https://example.com', false, true);
         (repository.getById as ReturnType<typeof vi.fn>).mockResolvedValue(rule);
         (repository.update as ReturnType<typeof vi.fn>).mockRejectedValue(
@@ -55,11 +56,24 @@ describe('ToggleRuleActiveInteractor.execute - 異常系', () => {
       },
       expectedErrorMessage: '更新に失敗しました',
     },
+    {
+      description: 'tabsGateway.reloadMatchingTabsでエラーが発生した場合、presentErrorが呼び出される',
+      input: { ruleId: 3 },
+      setupMocks: (repository: IRewriteRuleRepository, tabsGateway: ITabsGateway) => {
+        const rule = new RewriteRule(3, 'old', 'new', 'https://example.com', false, true);
+        (repository.getById as ReturnType<typeof vi.fn>).mockResolvedValue(rule);
+        (repository.update as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
+        (tabsGateway.reloadMatchingTabs as ReturnType<typeof vi.fn>).mockRejectedValue(
+          new Error('タブの再読み込みに失敗しました')
+        );
+      },
+      expectedErrorMessage: 'タブの再読み込みに失敗しました',
+    },
   ];
 
   testCases.forEach((testCase) => {
     it(testCase.description, async () => {
-      testCase.setupMocks(mockRepository);
+      testCase.setupMocks(mockRepository, mockTabsGateway);
 
       const interactor = new ToggleRuleActiveInteractor(
         mockRepository,
