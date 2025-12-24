@@ -1,6 +1,6 @@
 /**
- * user-story-001 結合テスト - 正常系
- * Controller → UseCase → Repository → DB → Presenter の一連フローを検証
+ * toggle-rule-active 結合テスト - 正常系
+ * Factory → Controller → UseCase → Repository → DB → Presenter の一連フローを検証
  *
  * 1. isActive=true のルールを false に切り替え
  * 2. isActive=false のルールを true に切り替え
@@ -11,13 +11,11 @@ import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/cre
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
-import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
-import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
+import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 
 describe('toggle-rule-active 結合テスト - 正常系', () => {
   let repository: DexieRewriteRuleRepository;
@@ -60,17 +58,12 @@ describe('toggle-rule-active 結合テスト - 正常系', () => {
       const createdRules = await repository.getAll();
       const ruleInDb = createdRules.toArray()[0];
 
-      // 結合対象のコンポーネントを組み立て
-      const presenter = new ToggleRuleActivePresenter(
-        updateRuleInView,
-        showErrorInView
-      );
-      const interactor = new ToggleRuleActiveInteractor(
+      // Factory経由でControllerを取得（UIと同じフロー）
+      const factory = new ToggleRuleActiveControllerFactory(
         repository,
-        mockTabsGateway,
-        presenter
+        mockTabsGateway
       );
-      const controller = new ToggleRuleActiveController(interactor);
+      const controller = factory.create(updateRuleInView, showErrorInView);
 
       // Act: Controller経由でトグル操作
       await controller.toggleActive(ruleInDb.id);

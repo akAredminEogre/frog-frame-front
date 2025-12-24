@@ -2,16 +2,18 @@
 
 ## 目的
 
-ルールの有効/無効切り替え機能において、入力値（ruleId）からController → UseCase → Repository → DB → Presenterまでの一連のフローが正しく連携し、DBデータの整合性が保たれることを検証する。
+ルールの有効/無効切り替え機能において、UIコンポーネントが呼び出すFactory経由のフロー（Factory → Controller → UseCase → Repository → DB → Presenter）が正しく連携し、DBデータの整合性が保たれることを検証する。
 
 ## テストスコープ
 
 ### 対象レイヤー
 
 ```
-入力: ruleId
+入力: onSuccess, onError, ruleId
   ↓
-ToggleRuleActiveController.toggleActive(ruleId)
+ToggleRuleActiveControllerFactory.create(onSuccess, onError)
+  ↓
+IToggleRuleActiveController.toggleActive(ruleId)
   ↓
 ToggleRuleActiveInteractor.execute(inputData)
   ├→ DexieRewriteRuleRepository.getById(ruleId)
@@ -20,13 +22,14 @@ ToggleRuleActiveInteractor.execute(inputData)
   ├→ [ITabsGateway.reloadMatchingTabs() - モック]
   └→ ToggleRuleActivePresenter.present(outputData)
        ↓
-出力: updateRuleInView(toggledRule)
+出力: onSuccess(toggledRule) または onError(ruleId, message)
 ```
 
 ### 実コンポーネント（モックしない）
 
 | レイヤー | コンポーネント | 理由 |
 |---------|---------------|------|
+| Interface Adapters | ToggleRuleActiveControllerFactory | UIが実際に使用するエントリーポイント |
 | Interface Adapters | ToggleRuleActiveController | 入力変換の整合性検証 |
 | Application | ToggleRuleActiveInteractor | ビジネスロジックの連携検証 |
 | Application | ToggleRuleActiveInputData | DTOの構築検証 |
@@ -121,22 +124,29 @@ tests/integration/toggle-rule-active/
 | コンポーネント | モック方法 | 理由 |
 |---------------|-----------|------|
 | ITabsGateway | createMockTabsGateway | Chrome Tabs APIに依存するため、テスト環境では動作不可 |
-| Presenterコールバック | vi.fn() | View層への出力を検証するため、コールバック関数をスタブ化 |
+| onSuccess / onError | vi.fn() | View層への出力を検証するため、コールバック関数をスタブ化 |
 
-### Presenterの扱い
+### Factory経由のテスト構造
 
-ToggleRuleActivePresenterは**実コンポーネント**として使用するが、コンストラクタに渡すコールバック関数（`updateRuleInView`, `showErrorInView`）は `vi.fn()` でスタブ化する。
+UIコンポーネントと同じ方法でFactoryを使用し、コールバックをスタブとして渡す。
 
 ```typescript
-// Presenter自体は実コンポーネント、コールバックはスタブ
-const presenter = new ToggleRuleActivePresenter(
-  vi.fn(),  // updateRuleInView - スタブ
-  vi.fn()   // showErrorInView - スタブ
+// UIと同じフローでテスト
+const factory = new ToggleRuleActiveControllerFactory(
+  repository,        // 実DB（DexieRewriteRuleRepository）
+  mockTabsGateway    // モック（ITabsGateway）
 );
+
+const onSuccess = vi.fn();  // UIのsetRules相当
+const onError = vi.fn();    // UIのエラー表示相当
+
+const controller = factory.create(onSuccess, onError);
+await controller.toggleActive(ruleId);
 ```
 
 **理由**:
-- Presenter内部のロジック（OutputData → コールバック呼び出し）は実際に動作させて検証
+- UIコンポーネントが実際に行う呼び出しパターンと一致
+- Factory内部でのPresenter/Controller/Interactor生成ロジックも含めて検証
 - View層（React等）は結合テストのスコープ外のため、コールバックはスタブで置き換え
 
 ### モックの実装方針
@@ -197,9 +207,10 @@ const inactiveRule = new RewriteRule(
 │                    テストコード                              │
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │ 1. DBにテストデータ挿入                                 │   │
-│  │ 2. Controller.toggleActive(ruleId) 呼び出し           │   │
-│  │ 3. コールバック結果を検証                               │   │
-│  │ 4. DBの状態を検証                                      │   │
+│  │ 2. Factory.create(onSuccess, onError) でController取得│   │
+│  │ 3. Controller.toggleActive(ruleId) 呼び出し           │   │
+│  │ 4. onSuccess/onError コールバック結果を検証            │   │
+│  │ 5. DBの状態を検証                                      │   │
 │  └─────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                               │
@@ -207,6 +218,9 @@ const inactiveRule = new RewriteRule(
 ┌─────────────────────────────────────────────────────────────┐
 │                  結合対象コンポーネント                       │
 │                                                             │
+│  ToggleRuleActiveControllerFactory  ← UIと同じエントリー    │
+│         │                                                   │
+│         ▼                                                   │
 │  ToggleRuleActiveController                                 │
 │         │                                                   │
 │         ▼                                                   │
@@ -218,8 +232,8 @@ const inactiveRule = new RewriteRule(
 │ (実DB)     (実物)    (モック)       (実物)                  │
 │    │                     │              │                   │
 │    ▼                     │              ▼                   │
-│ IndexedDB                │         コールバック              │
-│ (fake)                   │              │                   │
+│ IndexedDB                │         onSuccess/onError       │
+│ (fake)                   │         (vi.fn())               │
 │                          │              │                   │
 └──────────────────────────┼──────────────┼───────────────────┘
                            │              │

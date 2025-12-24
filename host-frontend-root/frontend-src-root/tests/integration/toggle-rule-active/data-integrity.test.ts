@@ -1,6 +1,6 @@
 /**
- * user-story-001 結合テスト - データ整合性
- * Controller → DB までのデータフローが整合していることを検証
+ * toggle-rule-active 結合テスト - データ整合性
+ * Factory → Controller → DB までのデータフローが整合していることを検証
  *
  * 1. 入力ruleIdと保存されたルールのIDが一致
  * 2. isActive以外のプロパティが変更されない
@@ -12,17 +12,16 @@ import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/cre
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
-import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
-import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
+import { IToggleRuleActiveController } from 'src/interface-adapters/controllers/IToggleRuleActiveController';
+import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 
 describe('toggle-rule-active 結合テスト - データ整合性', () => {
   let repository: DexieRewriteRuleRepository;
   let mockTabsGateway: ITabsGateway;
-  let controller: ToggleRuleActiveController;
+  let controller: IToggleRuleActiveController;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -30,16 +29,12 @@ describe('toggle-rule-active 結合テスト - データ整合性', () => {
     repository = new DexieRewriteRuleRepository();
     mockTabsGateway = createMockTabsGateway();
 
-    const presenter = new ToggleRuleActivePresenter(
-      vi.fn(),
-      vi.fn()
-    );
-    const interactor = new ToggleRuleActiveInteractor(
+    // Factory経由でControllerを取得（UIと同じフロー）
+    const factory = new ToggleRuleActiveControllerFactory(
       repository,
-      mockTabsGateway,
-      presenter
+      mockTabsGateway
     );
-    controller = new ToggleRuleActiveController(interactor);
+    controller = factory.create(vi.fn(), vi.fn());
   });
 
   afterEach(async () => {
