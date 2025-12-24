@@ -8,11 +8,12 @@
 
 set -e
 
-# Check git availability (early return pattern)
-if ! command -v git >/dev/null 2>&1; then
-    echo "Error: git command not found. Please install Git."
-    exit 1
-fi
+# Source helper functions
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${SCRIPT_DIR}/helper.sh"
+
+# Check required commands (early return pattern)
+require_command git "Please install Git."
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
@@ -21,17 +22,10 @@ readonly REPO_ROOT FRONTEND_DIR PRE_COMMIT_HOOK
 
 echo "Setting up pre-commit hook for Claude Code Web..."
 
-# Check npx availability (early return pattern)
-if ! command -v npx >/dev/null 2>&1; then
-    echo "Error: npx command not found. Please install Node.js and npm."
-    exit 1
-fi
+require_command npx "Please install Node.js and npm."
 
 # Check if frontend directory exists (early return pattern)
-if [ ! -d "${FRONTEND_DIR}" ]; then
-    echo "Error: Frontend directory not found at ${FRONTEND_DIR}"
-    exit 1
-fi
+require_directory "${FRONTEND_DIR}" "Frontend directory not found at ${FRONTEND_DIR}"
 
 # Install npm dependencies if lefthook package is not present
 # Note: Checking for specific package is more robust than just node_modules existence
@@ -40,7 +34,7 @@ LEFTHOOK_PACKAGE_DIR="${FRONTEND_DIR}/node_modules/@evilmartians/lefthook"
 readonly LEFTHOOK_PACKAGE_DIR
 
 install_npm_dependencies() {
-    if [ -d "${LEFTHOOK_PACKAGE_DIR}" ]; then
+    if directory_exists "${LEFTHOOK_PACKAGE_DIR}"; then
         return 0
     fi
 
@@ -51,10 +45,7 @@ install_npm_dependencies() {
     fi
 
     # Verify lefthook package was installed
-    if [ ! -d "${LEFTHOOK_PACKAGE_DIR}" ]; then
-        echo "Error: lefthook package not found after npm install. Installation may be incomplete."
-        exit 1
-    fi
+    require_directory "${LEFTHOOK_PACKAGE_DIR}" "lefthook package not found after npm install. Installation may be incomplete."
 }
 
 install_npm_dependencies
@@ -68,10 +59,7 @@ if ! (cd "${REPO_ROOT}" && npx --prefix "${FRONTEND_DIR}" lefthook install); the
 fi
 
 # Check pre-commit hook exists (early return pattern)
-if [ ! -f "${PRE_COMMIT_HOOK}" ]; then
-    echo "Error: Pre-commit hook not found. lefthook install may have failed."
-    exit 1
-fi
+require_file "${PRE_COMMIT_HOOK}" "Pre-commit hook not found. lefthook install may have failed."
 
 # Expected patch path for verification
 EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
@@ -163,7 +151,7 @@ BEGIN { matched = 0; patched = 0 }
 END { print matched > STATUS_FILE }
 ' "${PRE_COMMIT_HOOK}" > "${TEMP_FILE}"; then
     echo "Error: awk processing failed."
-    rm -f "${BACKUP_FILE}" || echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
+    remove_file_with_warning "${BACKUP_FILE}"
     exit 1
 fi
 
@@ -172,7 +160,7 @@ readonly PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
     echo "This may indicate lefthook version incompatibility. Check generated hook format."
-    rm -f "${BACKUP_FILE}" || echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
+    remove_file_with_warning "${BACKUP_FILE}"
     exit 1
 fi
 
@@ -199,7 +187,7 @@ fi
 # Clear trap and cleanup temp files on success
 trap - EXIT
 rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"
-rm -f "${BACKUP_FILE}" || echo "Warning: Failed to remove backup file: ${BACKUP_FILE}"
+remove_file_with_warning "${BACKUP_FILE}"
 
 echo "Pre-commit hook patched successfully!"
 echo "Pre-commit hook setup complete!"
