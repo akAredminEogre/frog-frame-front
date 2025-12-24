@@ -6,15 +6,14 @@
  * 2. isActive以外のプロパティが変更されない
  * 3. 他のルールが影響を受けない
  */
-import './setup';
-
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import 'src/../tests/integration/toggle-rule-active/setup';
 
 import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
+import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
