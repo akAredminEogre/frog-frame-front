@@ -1,6 +1,6 @@
 /**
- * user-story-001 結合テスト - エラー系
- * 存在しないルールIDを指定した場合のエラーハンドリングを検証
+ * toggle-rule-active 結合テスト - エラー系
+ * Factory → Controller経由で存在しないルールIDを指定した場合のエラーハンドリングを検証
  *
  * 1. 存在しないruleIdでエラーコールバックが呼ばれる
  * 2. エラー時にDBが変更されない
@@ -11,12 +11,10 @@ import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/cre
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
-import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
-import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
+import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 
 describe('toggle-rule-active 結合テスト - エラー系', () => {
   let repository: DexieRewriteRuleRepository;
@@ -42,16 +40,12 @@ describe('toggle-rule-active 結合テスト - エラー系', () => {
     // Arrange: DBは空のまま
     const nonExistentRuleId = 99999;
 
-    const presenter = new ToggleRuleActivePresenter(
-      updateRuleInView,
-      showErrorInView
-    );
-    const interactor = new ToggleRuleActiveInteractor(
+    // Factory経由でControllerを取得（UIと同じフロー）
+    const factory = new ToggleRuleActiveControllerFactory(
       repository,
-      mockTabsGateway,
-      presenter
+      mockTabsGateway
     );
-    const controller = new ToggleRuleActiveController(interactor);
+    const controller = factory.create(updateRuleInView, showErrorInView);
 
     // Act
     await controller.toggleActive(nonExistentRuleId);
@@ -74,16 +68,12 @@ describe('toggle-rule-active 結合テスト - エラー系', () => {
     const ruleInDb = createdRules.toArray()[0];
     const nonExistentRuleId = ruleInDb.id + 1000;
 
-    const presenter = new ToggleRuleActivePresenter(
-      updateRuleInView,
-      showErrorInView
-    );
-    const interactor = new ToggleRuleActiveInteractor(
+    // Factory経由でControllerを取得（UIと同じフロー）
+    const factory = new ToggleRuleActiveControllerFactory(
       repository,
-      mockTabsGateway,
-      presenter
+      mockTabsGateway
     );
-    const controller = new ToggleRuleActiveController(interactor);
+    const controller = factory.create(updateRuleInView, showErrorInView);
 
     // Act
     await controller.toggleActive(nonExistentRuleId);
@@ -111,16 +101,12 @@ describe('toggle-rule-active 結合テスト - エラー系', () => {
     const rulesArrayBefore = createdRules.toArray();
     const nonExistentRuleId = 99999;
 
-    const presenter = new ToggleRuleActivePresenter(
-      updateRuleInView,
-      showErrorInView
-    );
-    const interactor = new ToggleRuleActiveInteractor(
+    // Factory経由でControllerを取得（UIと同じフロー）
+    const factory = new ToggleRuleActiveControllerFactory(
       repository,
-      mockTabsGateway,
-      presenter
+      mockTabsGateway
     );
-    const controller = new ToggleRuleActiveController(interactor);
+    const controller = factory.create(updateRuleInView, showErrorInView);
 
     // Act: 存在しないIDでトグル試行
     await controller.toggleActive(nonExistentRuleId);
@@ -142,16 +128,12 @@ describe('toggle-rule-active 結合テスト - エラー系', () => {
     // Arrange
     const nonExistentRuleId = 99999;
 
-    const presenter = new ToggleRuleActivePresenter(
-      updateRuleInView,
-      showErrorInView
-    );
-    const interactor = new ToggleRuleActiveInteractor(
+    // Factory経由でControllerを取得（UIと同じフロー）
+    const factory = new ToggleRuleActiveControllerFactory(
       repository,
-      mockTabsGateway,
-      presenter
+      mockTabsGateway
     );
-    const controller = new ToggleRuleActiveController(interactor);
+    const controller = factory.create(updateRuleInView, showErrorInView);
 
     // Act
     await controller.toggleActive(nonExistentRuleId);

@@ -1,6 +1,6 @@
 /**
- * user-story-001 結合テスト - Presenter出力整合性
- * Presenterを通じてView層に正しいデータが渡されることを検証
+ * toggle-rule-active 結合テスト - Presenter出力整合性
+ * Factory → Controller → Presenterを通じてView層に正しいデータが渡されることを検証
  *
  * 1. updateRuleInViewコールバックが呼び出される
  * 2. コールバックに渡されるルールが更新後の状態
@@ -11,13 +11,11 @@ import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/cre
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
-import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
-import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
+import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 
 describe('toggle-rule-active 結合テスト - Presenter出力整合性', () => {
   let repository: DexieRewriteRuleRepository;
@@ -46,16 +44,12 @@ describe('toggle-rule-active 結合テスト - Presenter出力整合性', () => 
     const createdRules = await repository.getAll();
     const ruleInDb = createdRules.toArray()[0];
 
-    const presenter = new ToggleRuleActivePresenter(
-      updateRuleInView,
-      showErrorInView
-    );
-    const interactor = new ToggleRuleActiveInteractor(
+    // Factory経由でControllerを取得（UIと同じフロー）
+    const factory = new ToggleRuleActiveControllerFactory(
       repository,
-      mockTabsGateway,
-      presenter
+      mockTabsGateway
     );
-    const controller = new ToggleRuleActiveController(interactor);
+    const controller = factory.create(updateRuleInView, showErrorInView);
 
     // Act
     await controller.toggleActive(ruleInDb.id);
@@ -78,16 +72,12 @@ describe('toggle-rule-active 結合テスト - Presenter出力整合性', () => 
     const createdRules = await repository.getAll();
     const ruleInDb = createdRules.toArray()[0];
 
-    const presenter = new ToggleRuleActivePresenter(
-      updateRuleInView,
-      showErrorInView
-    );
-    const interactor = new ToggleRuleActiveInteractor(
+    // Factory経由でControllerを取得（UIと同じフロー）
+    const factory = new ToggleRuleActiveControllerFactory(
       repository,
-      mockTabsGateway,
-      presenter
+      mockTabsGateway
     );
-    const controller = new ToggleRuleActiveController(interactor);
+    const controller = factory.create(updateRuleInView, showErrorInView);
 
     // Act
     await controller.toggleActive(ruleInDb.id);
@@ -115,16 +105,12 @@ describe('toggle-rule-active 結合テスト - Presenter出力整合性', () => 
     const createdRules = await repository.getAll();
     const ruleInDb = createdRules.toArray()[0];
 
-    const presenter = new ToggleRuleActivePresenter(
-      updateRuleInView,
-      showErrorInView
-    );
-    const interactor = new ToggleRuleActiveInteractor(
+    // Factory経由でControllerを取得（UIと同じフロー）
+    const factory = new ToggleRuleActiveControllerFactory(
       repository,
-      mockTabsGateway,
-      presenter
+      mockTabsGateway
     );
-    const controller = new ToggleRuleActiveController(interactor);
+    const controller = factory.create(updateRuleInView, showErrorInView);
 
     // Act
     await controller.toggleActive(ruleInDb.id);
@@ -146,16 +132,12 @@ describe('toggle-rule-active 結合テスト - Presenter出力整合性', () => 
     const createdRules = await repository.getAll();
     const ruleInDb = createdRules.toArray()[0];
 
-    const presenter = new ToggleRuleActivePresenter(
-      updateRuleInView,
-      showErrorInView
-    );
-    const interactor = new ToggleRuleActiveInteractor(
+    // Factory経由でControllerを取得（UIと同じフロー）
+    const factory = new ToggleRuleActiveControllerFactory(
       repository,
-      mockTabsGateway,
-      presenter
+      mockTabsGateway
     );
-    const controller = new ToggleRuleActiveController(interactor);
+    const controller = factory.create(updateRuleInView, showErrorInView);
 
     // Act
     await controller.toggleActive(ruleInDb.id);
