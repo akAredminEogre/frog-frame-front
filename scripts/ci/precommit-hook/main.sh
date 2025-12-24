@@ -127,8 +127,7 @@ BEGIN { matched = 0; patched = 0 }
         # Assumption: lefthook generates hooks with either:
         #   - Tab-based indentation (1 tab per level)
         #   - Space-based indentation (2 spaces per level)
-        # For deeper indents (e.g., 4 spaces), we remove 2 spaces which is correct
-        # since elif/then should be one level less indented than the inner command.
+        #   - Mixed indentation: fallback to removing last character
         len = length(base_indent)
         # Default: use same indentation (no removal)
         outer_indent = base_indent
@@ -137,9 +136,12 @@ BEGIN { matched = 0; patched = 0 }
             outer_indent = substr(base_indent, 1, len - 1)
         }
         # Space-based indentation (2-space): remove 2 spaces (only if not tab-based)
-        # substr(base_indent, len - 1, 2) gets last 2 chars to verify space indent
         if (outer_indent == base_indent && len >= 2 && substr(base_indent, len - 1, 2) == "  ") {
             outer_indent = substr(base_indent, 1, len - 2)
+        }
+        # Mixed indentation fallback: remove last character as single indent step
+        if (outer_indent == base_indent && len >= 1) {
+            outer_indent = substr(base_indent, 1, len - 1)
         }
         print outer_indent "elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
         print outer_indent "then"
