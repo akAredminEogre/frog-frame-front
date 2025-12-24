@@ -59,6 +59,13 @@ docs/design/
 | 02-sequence.puml（機能単位） | [design/02-sequence.md](./design/02-sequence.md) |
 | 03-directory-structure.md（機能単位） | [design/03-directory-structure.md](./design/03-directory-structure.md) |
 
+### テスト戦略書
+
+| ファイル | ルール |
+|---------|--------|
+| 単体テスト戦略書 | [design/05-test-strategy.md](./design/05-test-strategy.md) |
+| 結合テスト戦略書 | [design/06-integration-test-strategy.md](./design/06-integration-test-strategy.md) |
+
 ## 図の記法
 
 - ASCII Art を使用
