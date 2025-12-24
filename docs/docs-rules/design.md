@@ -63,7 +63,6 @@ docs/design/
 
 | ファイル | ルール |
 |---------|--------|
-| 単体テスト戦略書 | [design/05-test-strategy.md](./design/05-test-strategy.md) |
 | 結合テスト戦略書 | [design/06-integration-test-strategy.md](./design/06-integration-test-strategy.md) |
 
 ## 図の記法
