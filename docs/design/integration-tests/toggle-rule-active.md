@@ -118,7 +118,26 @@ tests/integration/toggle-rule-active/
 
 ### モック対象
 
-- **ITabsGateway**: Chrome Tabs API（`chrome.tabs.query`, `chrome.tabs.reload`）に依存するため、テスト環境では動作不可
+| コンポーネント | モック方法 | 理由 |
+|---------------|-----------|------|
+| ITabsGateway | createMockTabsGateway | Chrome Tabs APIに依存するため、テスト環境では動作不可 |
+| Presenterコールバック | vi.fn() | View層への出力を検証するため、コールバック関数をスタブ化 |
+
+### Presenterの扱い
+
+ToggleRuleActivePresenterは**実コンポーネント**として使用するが、コンストラクタに渡すコールバック関数（`updateRuleInView`, `showErrorInView`）は `vi.fn()` でスタブ化する。
+
+```typescript
+// Presenter自体は実コンポーネント、コールバックはスタブ
+const presenter = new ToggleRuleActivePresenter(
+  vi.fn(),  // updateRuleInView - スタブ
+  vi.fn()   // showErrorInView - スタブ
+);
+```
+
+**理由**:
+- Presenter内部のロジック（OutputData → コールバック呼び出し）は実際に動作させて検証
+- View層（React等）は結合テストのスコープ外のため、コールバックはスタブで置き換え
 
 ### モックの実装方針
 
