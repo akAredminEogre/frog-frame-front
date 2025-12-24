@@ -9,8 +9,8 @@ import './setup';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { createTestRule } from 'tests/integration/user-story-001/toggle-rule-active/helpers/createTestRule';
-import { createMockTabsGateway } from 'tests/integration/user-story-001/toggle-rule-active/mocks/createMockTabsGateway';
+import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
+import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';
 
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
@@ -20,7 +20,7 @@ import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/index
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
 import { ToggleRuleActivePresenter } from 'src/interface-adapters/presenters/ToggleRuleActivePresenter';
 
-describe('user-story-001 結合テスト - Presenter出力整合性', () => {
+describe('toggle-rule-active 結合テスト - Presenter出力整合性', () => {
   let repository: DexieRewriteRuleRepository;
   let mockTabsGateway: ITabsGateway;
   let updateRuleInView: ReturnType<typeof vi.fn>;

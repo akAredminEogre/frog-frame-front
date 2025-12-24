@@ -14,46 +14,42 @@
 | 観点 | 単体テスト | 結合テスト |
 |------|-----------|-----------|
 | **スコープ** | 1クラス/1メソッド | 複数レイヤーのフロー |
-| **配置基準** | ソースコード構造に対応 | ユーザーストーリー単位 |
+| **配置基準** | ソースコード構造に対応 | feature単位 |
 | **モック戦略** | 依存を全てモック | 外部依存のみモック |
 | **検証対象** | 入出力の正確性 | レイヤー間の連携・DB整合性 |
 | **DB** | モック | 実DB（fake-indexeddb等） |
 
 ## 配置
 
-結合テストは **ユーザーストーリー単位** で配置する。
+結合テストは **feature単位** で配置する。
 
 ```
 docs/design/integration-tests/
-└── {user-story-id}/
-    └── {feature-name}.md
+└── {feature-name}.md
 ```
 
 ### 配置例
 
-| ユーザーストーリー | テスト戦略書 |
-|------------------|-------------|
-| user-story-001（ルール有効/無効切り替え） | `docs/design/integration-tests/user-story-001/toggle-rule-active.md` |
-| user-story-002（ルール作成） | `docs/design/integration-tests/user-story-002/create-rule.md` |
+| feature | テスト戦略書 |
+|---------|-------------|
+| toggle-rule-active（ルール有効/無効切り替え） | `docs/design/integration-tests/toggle-rule-active.md` |
+| create-rule（ルール作成） | `docs/design/integration-tests/create-rule.md` |
 
 ### ディレクトリ構造
 
 ```
 docs/design/integration-tests/
-├── user-story-001/
-│   └── toggle-rule-active.md
-├── user-story-002/
-│   └── create-rule.md
-└── user-story-003/
-    ├── delete-rule.md
-    └── batch-delete.md
+├── toggle-rule-active.md
+├── create-rule.md
+├── delete-rule.md
+└── batch-delete.md
 ```
 
 ### 設計意図
 
-- **ユーザーストーリー単位**: ビジネス要件と直結した粒度でテストを管理
-- **機能名で分割**: 1つのユーザーストーリーに複数機能がある場合は分割
-- **トレーサビリティ**: 受け入れ条件との対応を明確化
+- **feature単位**: 機能ごとにテストを管理し、再利用性を高める
+- **フラット構造**: シンプルなディレクトリ構造で検索性を向上
+- **トレーサビリティ**: 設計ドキュメント（`docs/design/pages/.../features/`）との対応を明確化
 
 ## 必須セクション
 
@@ -115,7 +111,7 @@ Interactor.execute(inputData)
 ## テンプレート
 
 ```markdown
-# {user-story-id} 結合テスト戦略
+# {feature-name} 結合テスト戦略
 
 ## 目的
 
@@ -201,7 +197,7 @@ Interactor.execute(inputData)
 ## テストファイル構成
 
 \`\`\`
-tests/integration/{user-story-id}/{feature-name}/
+tests/integration/{feature-name}/
 ├── setup.ts                    # 共通セットアップ
 ├── mocks/
 │   └── createMock[Name].ts     # モックファクトリ
@@ -226,7 +222,7 @@ tests/integration/{user-story-id}/{feature-name}/
 ### モックファイル構成
 
 \`\`\`
-tests/integration/{user-story-id}/{feature-name}/
+tests/integration/{feature-name}/
 └── mocks/
     └── createMock[Name].ts
 \`\`\`
@@ -318,7 +314,7 @@ const [変数名] = new [Entity](
 |-----------------|-----------------|
 | 個別メソッドの入出力 | フロー全体の連携 |
 | `docs/design/src/` | `docs/design/integration-tests/` |
-| クラス/メソッド単位 | ユーザーストーリー単位 |
+| クラス/メソッド単位 | feature単位 |
 
 両方のテスト戦略書を作成することで、テストの網羅性を担保する。
 
