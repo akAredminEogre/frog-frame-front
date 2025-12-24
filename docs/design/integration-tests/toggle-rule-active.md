@@ -1,4 +1,4 @@
-# user-story-001 結合テスト戦略
+# toggle-rule-active 結合テスト戦略
 
 ## 目的
 
@@ -102,7 +102,7 @@ Presenterを通じてView層に正しいデータが渡されることを検証�
 ## テストファイル構成
 
 ```
-tests/integration/user-story-001/toggle-rule-active/
+tests/integration/toggle-rule-active/
 ├── setup.ts                    # 共通セットアップ（fake-indexeddb等）
 ├── mocks/
 │   └── createMockTabsGateway.ts  # TabsGatewayモック
@@ -127,7 +127,7 @@ TabsGatewayは `reloadMatchingTabs` メソッドのみをモック化し、呼�
 ### モックファイル構成
 
 ```
-tests/integration/user-story-001/toggle-rule-active/
+tests/integration/toggle-rule-active/
 └── mocks/
     └── createMockTabsGateway.ts    # ITabsGateway モックファクトリ
 ```
