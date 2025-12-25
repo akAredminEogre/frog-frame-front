@@ -21,6 +21,7 @@ BEGIN { pattern_matched = 0; already_patched = 0 }
     match($0, /^[ \t]*/)
     base_indent = substr($0, RSTART, RLENGTH)
     # Remove one indentation level for elif/then (outer level)
+    # Note: lefthook-generated scripts typically use tab indentation
     # Cascade logic: each check only runs if previous checks did not modify outer_indent
     # (detected via "outer_indent == base_indent" guard condition)
     len = length(base_indent)
@@ -52,6 +53,8 @@ BEGIN { pattern_matched = 0; already_patched = 0 }
 
 END {
     print pattern_matched > STATUS_FILE
+    # close() flushes write buffers and returns non-zero on I/O errors (disk full, permission)
+    # This is more portable than fflush() which is not POSIX-standard
     if (close(STATUS_FILE) != 0) {
         print "Error: Failed to write status file: " STATUS_FILE > "/dev/stderr"
         exit 1
