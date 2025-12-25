@@ -68,7 +68,7 @@ remove_file_with_warning() {
     if [ ! -f "${FILE_PATH}" ]; then
         return 0
     fi
-    if ! rm "${FILE_PATH}" 2>/dev/null; then
+    if ! rm "${FILE_PATH}"; then
         echo "Warning: Failed to remove file: ${FILE_PATH}" >&2
     fi
 }
