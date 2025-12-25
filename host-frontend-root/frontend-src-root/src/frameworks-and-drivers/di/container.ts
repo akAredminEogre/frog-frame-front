@@ -5,7 +5,6 @@ import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
 import { IPopupService } from 'src/application/ports/IPopupService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
 import { IWindowService } from 'src/application/ports/IWindowService';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
@@ -15,6 +14,7 @@ import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/Loa
 import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usecases/rule/SaveRewriteRuleAndApplyToCurrentTabUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
