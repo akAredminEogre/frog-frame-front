@@ -167,7 +167,7 @@ if [ ! -s "${MATCH_STATUS_FILE}" ]; then
     remove_file_with_warning "${BACKUP_FILE}"
     exit 1
 fi
-PATTERN_MATCHED=$(<"${MATCH_STATUS_FILE}")
+PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
     echo "This may indicate lefthook version incompatibility. Check generated hook format."
