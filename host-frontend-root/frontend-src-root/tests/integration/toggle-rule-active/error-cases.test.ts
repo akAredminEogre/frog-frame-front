@@ -49,7 +49,7 @@ describe('toggle-rule-active 結合テスト - エラー系', () => {
     expect(showErrorInView).toHaveBeenCalledTimes(1);
     expect(showErrorInView).toHaveBeenCalledWith(
       nonExistentRuleId,
-      expect.stringContaining('99999')
+      expect.stringContaining(String(nonExistentRuleId))
     );
     expect(updateRuleInView).not.toHaveBeenCalled();
     expect(mockTabsGateway.reloadMatchingTabs).not.toHaveBeenCalled();
