@@ -29,11 +29,15 @@ BEGIN { pattern_matched = 0; already_patched = 0 }
     if (len >= 1 && substr(base_indent, len, 1) == "\t") {
         outer_indent = substr(base_indent, 1, len - 1)
     }
-    # Space-based indentation (2-space): only if tab check did not match
+    # Space-based indentation (4-space): only if tab check did not match
+    if (outer_indent == base_indent && len >= 4 && substr(base_indent, len - 3, 4) == "    ") {
+        outer_indent = substr(base_indent, 1, len - 4)
+    }
+    # Space-based indentation (2-space): only if 4-space check did not match
     if (outer_indent == base_indent && len >= 2 && substr(base_indent, len - 1, 2) == "  ") {
         outer_indent = substr(base_indent, 1, len - 2)
     }
-    # Fallback for other indentation styles: only if both tab and space checks failed
+    # Fallback for other indentation styles: only if all checks failed
     if (outer_indent == base_indent && len >= 1) {
         outer_indent = substr(base_indent, 1, len - 1)
     }
