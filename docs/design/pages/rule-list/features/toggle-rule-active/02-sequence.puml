@@ -261,18 +261,31 @@ alt ルール取得失敗 または ルール更新失敗
 
 else タブリロード失敗（部分的成功）
   note over Interactor
-    DB更新は成功済み
-    presenter.present() 呼び出し後に
-    タブリロードでエラー発生
+    **順序保証**
+    1. present() は reloadMatchingTabs() の
+       **前に同期的に呼び出される**
+    2. タブリロードでエラー発生時、
+       catch ブロックで presentError() が呼ばれる
+
+    この実装により、present() → presentError() の
+    順序が保証される（UIは正しい状態を表示）
   end note
   Interactor -> Presenter : present(outputData)
   activate Presenter
+  note right of Presenter
+    【1】DB更新成功を反映
+    （同期的に呼び出し完了）
+  end note
   Presenter -> View : updateRuleInView(rule)
   View --> UI : 状態更新（トグル後の状態）
   deactivate Presenter
 
   Interactor -> Presenter : presentError(errorOutputData)
   activate Presenter
+  note right of Presenter
+    【2】タブリロード失敗を通知
+    （catch ブロックから呼び出し）
+  end note
   Presenter -> View : showErrorInView(ruleId, message)
   View --> UI : エラーメッセージ表示
   deactivate Presenter
