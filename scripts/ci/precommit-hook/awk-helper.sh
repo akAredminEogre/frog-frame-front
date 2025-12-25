@@ -15,7 +15,7 @@ run_awk_patch() {
     local STATUS_FILE="$4"
 
     if ! awk -v STATUS_FILE="${STATUS_FILE}" -f "${AWK_SCRIPT}" "${INPUT_FILE}" > "${OUTPUT_FILE}"; then
-        echo "Error: awk processing failed." >&2
+        echo "Error: awk processing failed. Check input file exists and output location is writable." >&2
         exit 1
     fi
 

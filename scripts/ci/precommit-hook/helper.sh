@@ -60,7 +60,7 @@ directory_exists() {
     [ -d "${DIRECTORY_PATH}" ]
 }
 
-# Remove file with warning on failure
+# Remove file with warning on failure (idempotent: returns success if file doesn't exist)
 # Usage: remove_file_with_warning <file_path>
 # Note: Checks existence first, then uses rm without -f to detect actual failures
 remove_file_with_warning() {
