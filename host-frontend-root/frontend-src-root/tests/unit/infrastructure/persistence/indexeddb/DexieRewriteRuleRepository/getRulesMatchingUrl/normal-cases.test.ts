@@ -1,4 +1,4 @@
-import '../../setup';
+import 'tests/unit/infrastructure/persistence/indexeddb/setup';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 

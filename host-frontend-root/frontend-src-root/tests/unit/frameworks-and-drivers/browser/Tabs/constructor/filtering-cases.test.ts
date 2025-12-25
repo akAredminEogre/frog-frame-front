@@ -6,12 +6,11 @@
  * 3. url/id両方undefinedのタブを除外
  * 4. 有効/無効タブが混在するケース
  */
+import { createMockRule } from 'tests/unit/frameworks-and-drivers/browser/Tabs/mocks/createMockRule';
+import { createMockTab } from 'tests/unit/frameworks-and-drivers/browser/Tabs/mocks/createMockTab';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Tabs } from 'src/frameworks-and-drivers/browser/Tabs';
-
-import { createMockRule } from '../mocks/createMockRule';
-import { createMockTab } from '../mocks/createMockTab';
 
 describe('Tabs.constructor - フィルタリング', () => {
   const mockReload = vi.fn().mockResolvedValue(undefined);

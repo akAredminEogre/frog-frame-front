@@ -1,4 +1,4 @@
-import '../setup';
+import 'tests/unit/infrastructure/persistence/indexeddb/setup';
 
 import { IDBFactory } from 'fake-indexeddb';
 import { describe, expect,it } from 'vitest';
