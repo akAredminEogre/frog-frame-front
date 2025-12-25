@@ -6,7 +6,7 @@ title User Story 001: ルールトグル機能 - タスク依存ネットワー�
 rectangle "3A-1\nRewriteRule\n.withActive()\n実装\n[完了]" as withActive #green
 rectangle "3A-2\nRewriteRule\n.matchesUrl()\n実装\n[完了]" as matchesUrl #green
 
-rectangle "3B-1\nDTO実装\n[完了]" as dto #green
+rectangle "3B-1\nDTO実装\n(Input/Output/\nErrorOutputData)\n[完了]" as dto #green
 rectangle "3B-2\nITabsGateway\n実装\n[完了]" as tabsGateway #green
 rectangle "3B-3\nToggleRuleActive\nInteractor実装\n[完了・テスト済]" as interactor #green
 
@@ -83,7 +83,7 @@ end note
 
 ' 完了状況
 note bottom
-**最新状況 (2024-12-24):**
+**最新状況 (2024-12-25):**
 - ✅ developマージ完了（7回目）
 - ✅ 全ての実装完了（Business Logic、Infrastructure、UI Components）
 - ✅ 全てのテスト実装完了（Unit、Integration、UI、Messaging）
@@ -92,15 +92,17 @@ note bottom
 - ✅ ToggleSwitchUIコンポーネント完成（テスト済み）
 - ✅ RewriteRuleMessagingService完成（テスト済み）
 - ✅ RulesApp.tsx UI統合完了
+- ✅ ToggleRuleActiveErrorOutputData実装完了（エラーハンドリング）
 
 **完了ステータス:**
 ✅ **100% 完成** - 全タスク完了
 
 **進捗状況:**
 - ✅ 完了: 全実装、全テスト、Repository改修
-- ✅ 完了: DTO、DI設定、Gateway、Messaging  
+- ✅ 完了: DTO（Input/Output/ErrorOutputData）、DI設定、Gateway、Messaging
 - ✅ 完了: UI Components、Controller、Presenter
 - ✅ 完了: RulesApp.tsx統合
+- ✅ 完了: エラーハンドリング（部分的成功、競合状態防止）
 end note
 
 @enduml
