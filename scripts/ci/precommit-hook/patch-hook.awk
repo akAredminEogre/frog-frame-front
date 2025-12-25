@@ -58,10 +58,8 @@ BEGIN { pattern_matched = 0; already_patched = 0 }
 
 END {
     print pattern_matched > STATUS_FILE
-    # close() flushes write buffers and returns non-zero on I/O errors (disk full, permission)
-    # This is more portable than fflush() which is not POSIX-standard
-    if (close(STATUS_FILE) != 0) {
-        print "Error: Failed to write status file: " STATUS_FILE > "/dev/stderr"
-        exit 1
-    }
+    # Note: close() return value checking removed for portability (mawk and older AWK
+    # implementations may not handle it consistently). Write errors are detected by
+    # the caller via status file validation.
+    close(STATUS_FILE)
 }
