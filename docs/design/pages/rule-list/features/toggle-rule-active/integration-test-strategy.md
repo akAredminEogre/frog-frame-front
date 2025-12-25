@@ -148,7 +148,8 @@ tests/integration/toggle-rule-active/
 # docs/coding-standards/tests/common-rule.md の「モックファイルの配置ルール」に従い、
 # モックは tests/integration 配下ではなく tests/frameworks-and-drivers 配下に配置する。
 tests/frameworks-and-drivers/browser/ChromeTabsGateway/
-└── createMockTabsGateway.ts      # TabsGatewayモック
+├── createMockTabsGateway.ts           # TabsGatewayモック（正常系）
+└── createFailingTabsGatewayMock.ts    # TabsGatewayモック（タブリロード失敗用）
 ```
 
 ## モック戦略
