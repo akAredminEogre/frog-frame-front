@@ -7,11 +7,11 @@ import { createMockRepository } from 'tests/unit/application-business-rules/inte
 import { createMockTabsGateway } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { ToggleRuleActiveInputData } from 'src/application-business-rules/dto/input/ToggleRuleActiveInputData';
 import { ToggleRuleActiveErrorOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveErrorOutputData';
 import { ToggleRuleActiveOutputData } from 'src/application-business-rules/dto/output/ToggleRuleActiveOutputData';
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { IToggleRuleActivePresenter } from 'src/application-business-rules/ports/output/IToggleRuleActivePresenter';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
