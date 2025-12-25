@@ -92,6 +92,34 @@ Presenterを通じてView層に正しいデータが渡されることを検証�
 
 **対応テスト**: `error-cases.test.ts`
 
+### 5. 部分的成功 - タブリロード失敗
+
+ルール更新成功後にタブリロードが失敗した場合の挙動を検証する（00-overview.md「部分的成功の取り扱い」参照）。
+
+| 分類 | テストケース | 根拠 |
+|------|-------------|------|
+| UI状態維持 | タブリロード失敗時もUIはトグル後の状態を表示 | ルール更新は成功しているため |
+| エラー通知 | タブリロード失敗のエラーメッセージが表示される | ユーザーへのフィードバック |
+| DB状態確認 | タブリロード失敗してもDBは更新済み | 部分的成功の定義通り |
+
+**対応テスト**: `partial-success.test.ts`
+
+## 機能要件トレーサビリティ
+
+### エラーハンドリング要件（00-overview.md参照）
+
+| 機能要件 | UIの状態 | テストケース | テストファイル |
+|---------|---------|-------------|---------------|
+| ルール取得失敗 | 変更なし | 存在しないruleIdでエラーコールバック | error-cases.test.ts |
+| ルール更新失敗 | 変更なし | ※現在のスコープ外（DBエラーは稀少） | - |
+| タブリロード失敗 | トグル後の状態を表示 | TabsGatewayエラー時の挙動検証 | partial-success.test.ts |
+
+### 部分的成功の取り扱い（00-overview.md参照）
+
+| シナリオ | 期待動作 | テストケース | テストファイル |
+|---------|---------|-------------|---------------|
+| ルール更新成功 + タブリロード失敗 | UIは更新、エラー通知表示 | onSuccess呼び出し + onError呼び出し確認 | partial-success.test.ts |
+
 ## 網羅性チェック
 
 - [x] 全入力パターン（true→false, false→true）
@@ -99,6 +127,7 @@ Presenterを通じてView層に正しいデータが渡されることを検証�
 - [x] 出力コールバックの検証
 - [x] エラーケース（存在しないID）
 - [x] 副作用の範囲（他プロパティ、他ルール不変）
+- [x] 部分的成功（タブリロード失敗時のUI状態とエラー通知）
 - [ ] 同時実行 → 不要（単一操作のため）
 - [ ] 境界値 → 不要（ruleIdは存在判定のみ）
 
@@ -112,13 +141,15 @@ tests/integration/toggle-rule-active/
 ├── normal-cases.test.ts        # 正常系テスト
 ├── data-integrity.test.ts      # データ整合性テスト
 ├── presenter-output.test.ts    # Presenter出力テスト
-└── error-cases.test.ts         # エラー系テスト
+├── error-cases.test.ts         # エラー系テスト
+└── partial-success.test.ts     # 部分的成功テスト（タブリロード失敗）
 
 # ITabsGateway モックファイル
 # docs/coding-standards/tests/common-rule.md の「モックファイルの配置ルール」に従い、
 # モックは tests/integration 配下ではなく tests/frameworks-and-drivers 配下に配置する。
 tests/frameworks-and-drivers/browser/ChromeTabsGateway/
-└── createMockTabsGateway.ts      # TabsGatewayモック
+├── createMockTabsGateway.ts           # TabsGatewayモック（正常系）
+└── createFailingTabsGatewayMock.ts    # TabsGatewayモック（タブリロード失敗用）
 ```
 
 ## モック戦略
