@@ -32,7 +32,11 @@ describe('toggle-rule-active 結合テスト - 正常系', () => {
     showErrorInView = vi.fn();
   });
 
-  const testCases = [
+  const testCases: Array<{
+    description: string;
+    initialIsActive: boolean;
+    expectedIsActive: boolean;
+  }> = [
     {
       description: 'isActive=true のルールを false に切り替え',
       initialIsActive: true,
