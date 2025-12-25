@@ -12,23 +12,14 @@
  */
 import 'tests/integration/toggle-rule-active/setup';
 
+import { createFailingTabsGatewayMock } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/createFailingTabsGatewayMock';
 import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
-
-/**
- * タブリロード失敗をシミュレートするモックを生成
- * @param errorMessage エラーメッセージ
- * @returns ITabsGateway型のモックオブジェクト
- */
-const createFailingTabsGatewayMock = (errorMessage: string): ITabsGateway => ({
-  reloadMatchingTabs: vi.fn().mockRejectedValue(new Error(errorMessage)),
-});
 
 describe('toggle-rule-active 結合テスト - 部分的成功（タブリロード失敗）', () => {
   let repository: DexieRewriteRuleRepository;
