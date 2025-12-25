@@ -9,7 +9,7 @@
 import 'tests/integration/toggle-rule-active/setup';
 
 import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
-import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';
+import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
