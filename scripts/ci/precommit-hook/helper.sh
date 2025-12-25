@@ -7,6 +7,7 @@
 # Check if a command is available, exit with error if not
 # Usage: require_command <command_name> <install_hint>
 # Example: require_command git "Please install Git."
+# Note: Exits script on failure (use command -v directly if return value needed)
 require_command() {
     local COMMAND_NAME="$1"
     local INSTALL_HINT="$2"
@@ -22,6 +23,7 @@ require_command() {
 # Check if a directory exists, exit with error if not
 # Usage: require_directory <directory_path> <error_message>
 # Example: require_directory "/path/to/dir" "Directory not found"
+# Note: Exits script on failure (use directory_exists if return value needed)
 require_directory() {
     local DIRECTORY_PATH="$1"
     local ERROR_MESSAGE="$2"
@@ -37,6 +39,7 @@ require_directory() {
 # Check if a file exists, exit with error if not
 # Usage: require_file <file_path> <error_message>
 # Example: require_file "/path/to/file" "File not found"
+# Note: Exits script on failure (use [ -f ] directly if return value needed)
 require_file() {
     local FILE_PATH="$1"
     local ERROR_MESSAGE="$2"
@@ -84,6 +87,8 @@ ensure_npm_dependencies() {
     fi
 
     echo "Installing npm dependencies..."
+    # Note: --no-audit --no-fund speeds up CI but suppresses security notifications
+    # Run 'npm audit' manually if security review is needed
     if ! (cd "${FRONTEND_DIR}" && npm install --no-audit --no-fund); then
         echo "Error: Failed to install npm dependencies. Check permissions and network connectivity." >&2
         return 1
