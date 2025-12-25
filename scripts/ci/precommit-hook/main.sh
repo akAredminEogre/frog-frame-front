@@ -93,25 +93,11 @@ trap 'rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"' EXIT
 
 run_awk_patch "${SCRIPT_DIR}/patch-hook.awk" "${PRE_COMMIT_HOOK}" "${TEMP_FILE}" "${MATCH_STATUS_FILE}"
 
-# Apply patched file with error handling
-if ! mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"; then
-    echo "Error: Failed to apply patch. Restoring backup."
-    restore_backup "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
-    exit 1
-fi
-
-if ! chmod +x "${PRE_COMMIT_HOOK}"; then
-    echo "Error: Failed to set execute permission. Restoring backup."
-    restore_backup "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
-    exit 1
-fi
-
+# Apply patched file with error handling (restore backup on any failure)
+run_or_restore "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" "Failed to apply patch." mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"
+run_or_restore "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" "Failed to set execute permission." chmod +x "${PRE_COMMIT_HOOK}"
 # Verify patch was applied successfully with exact string match
-if ! grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
-    echo "Error: Failed to patch pre-commit hook. Patch verification failed."
-    restore_backup "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
-    exit 1
-fi
+run_or_restore "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" "Patch verification failed." grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"
 
 # Clear trap and cleanup temp files on success
 trap - EXIT

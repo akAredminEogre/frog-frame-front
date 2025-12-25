@@ -86,3 +86,20 @@ restore_backup() {
         exit 1
     fi
 }
+
+# Run a command, restore backup and exit on failure
+# Usage: run_or_restore <backup_file> <target_file> <error_message> <command...>
+# Example: run_or_restore "/path/to/backup" "/path/to/target" "Failed to apply" mv src dst
+# Note: Exits script on failure after restoring backup
+run_or_restore() {
+    local BACKUP_FILE="$1"
+    local TARGET_FILE="$2"
+    local ERROR_MESSAGE="$3"
+    shift 3
+
+    if ! "$@"; then
+        echo "Error: ${ERROR_MESSAGE}" >&2
+        restore_backup "${BACKUP_FILE}" "${TARGET_FILE}"
+        exit 1
+    fi
+}
