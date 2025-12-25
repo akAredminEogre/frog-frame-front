@@ -33,7 +33,7 @@ require_directory "${FRONTEND_DIR}" "Frontend directory not found at ${FRONTEND_
 LEFTHOOK_PACKAGE_DIR="${FRONTEND_DIR}/node_modules/@evilmartians/lefthook"
 readonly LEFTHOOK_PACKAGE_DIR
 
-install_npm_dependencies() {
+ensure_npm_dependencies() {
     if directory_exists "${LEFTHOOK_PACKAGE_DIR}"; then
         return 0
     fi
@@ -48,7 +48,7 @@ install_npm_dependencies() {
     require_directory "${LEFTHOOK_PACKAGE_DIR}" "lefthook package not found after npm install. Installation may be incomplete."
 }
 
-install_npm_dependencies
+ensure_npm_dependencies
 
 # Install lefthook
 # Note: --prefix specifies where to find node_modules, cd to REPO_ROOT ensures lefthook.yml is found
@@ -62,6 +62,7 @@ fi
 require_file "${PRE_COMMIT_HOOK}" "Pre-commit hook not found. lefthook install may have failed."
 
 # Expected patch path for verification
+# Note: This is a literal grep pattern; shell variables ($dir, ${osArch}, etc.) are NOT expanded
 EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
 readonly EXPECTED_PATH
 
@@ -91,13 +92,13 @@ restore_backup() {
 
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
-# Note: Trap handles temp file cleanup; BACKUP_FILE is managed manually (different lifecycle)
 TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
     echo "Error: Failed to create temporary file. Set TMPDIR if /tmp is unavailable."
     rm -f "${BACKUP_FILE}"
     exit 1
 }
 # Set trap immediately after first temp file creation
+# Note: Trap handles temp file cleanup; BACKUP_FILE is managed manually (different lifecycle)
 trap 'rm -f "${TEMP_FILE}"' EXIT
 
 MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX") || {
@@ -124,10 +125,7 @@ BEGIN { matched = 0; patched = 0 }
         match($0, /^[ \t]*/)
         base_indent = substr($0, RSTART, RLENGTH)
         # Remove one indentation level for elif/then (outer level)
-        # Assumption: lefthook generates hooks with either:
-        #   - Tab-based indentation (1 tab per level)
-        #   - Space-based indentation (2 spaces per level)
-        #   - Mixed indentation: fallback to removing last character
+        # Supports tab-based (1 tab), space-based (2 spaces), or mixed indentation
         len = length(base_indent)
         # Default: use same indentation (no removal)
         outer_indent = base_indent
