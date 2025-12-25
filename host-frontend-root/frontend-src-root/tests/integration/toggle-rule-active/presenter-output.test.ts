@@ -7,6 +7,8 @@
  */
 import 'tests/integration/toggle-rule-active/setup';
 
+import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway';
+import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
@@ -14,8 +16,6 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
-import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway';
-import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 
 describe('toggle-rule-active 結合テスト - Presenter出力整合性', () => {
   let repository: DexieRewriteRuleRepository;
