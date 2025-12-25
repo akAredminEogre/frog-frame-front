@@ -1,10 +1,5 @@
 /**
- * user-story-001 結合テスト セットアップファイル
- * fake-indexeddbを使用してIndexedDBをエミュレート
+ * toggle-rule-active 結合テスト セットアップファイル
+ * fake-indexeddb/auto を使用してIndexedDBを自動セットアップ
  */
 import 'fake-indexeddb/auto';
-
-import { IDBFactory } from 'fake-indexeddb';
-
-// グローバルにfake-indexeddbをセットアップ
-globalThis.indexedDB = new IDBFactory();
