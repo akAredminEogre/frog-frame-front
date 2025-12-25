@@ -123,34 +123,33 @@ BEGIN { matched = 0; patched = 0 }
 /@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook['"'"'"]?[ \t]+['"'"'"]?\$@['"'"'"]?[ \t]*$/ {
     matched = 1
     print
-    # Skip if already patched (patched flag prevents duplicate insertion)
-    if (patched == 0) {
-        patched = 1
-        # Extract leading indentation from matched line (spaces and tabs only)
-        match($0, /^[ \t]*/)
-        base_indent = substr($0, RSTART, RLENGTH)
-        # Remove one indentation level for elif/then (outer level)
-        # Cascade logic: each check only runs if previous checks did not modify outer_indent
-        # (detected via "outer_indent == base_indent" guard condition)
-        len = length(base_indent)
-        # Default: use same indentation (no removal)
-        outer_indent = base_indent
-        # Tab-based indentation: remove one tab (most common in shell scripts)
-        if (len >= 1 && substr(base_indent, len, 1) == "\t") {
-            outer_indent = substr(base_indent, 1, len - 1)
-        }
-        # Space-based indentation (2-space): only if tab check did not match
-        if (outer_indent == base_indent && len >= 2 && substr(base_indent, len - 1, 2) == "  ") {
-            outer_indent = substr(base_indent, 1, len - 2)
-        }
-        # Fallback for other indentation styles: only if both tab and space checks failed
-        if (outer_indent == base_indent && len >= 1) {
-            outer_indent = substr(base_indent, 1, len - 1)
-        }
-        print outer_indent "elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
-        print outer_indent "then"
-        print base_indent "\"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\" \"$@\""
+    # Early skip if already patched (prevents duplicate insertion)
+    if (patched == 1) { next }
+    patched = 1
+    # Extract leading indentation from matched line (spaces and tabs only)
+    match($0, /^[ \t]*/)
+    base_indent = substr($0, RSTART, RLENGTH)
+    # Remove one indentation level for elif/then (outer level)
+    # Cascade logic: each check only runs if previous checks did not modify outer_indent
+    # (detected via "outer_indent == base_indent" guard condition)
+    len = length(base_indent)
+    # Default: use same indentation (no removal)
+    outer_indent = base_indent
+    # Tab-based indentation: remove one tab (most common in shell scripts)
+    if (len >= 1 && substr(base_indent, len, 1) == "\t") {
+        outer_indent = substr(base_indent, 1, len - 1)
     }
+    # Space-based indentation (2-space): only if tab check did not match
+    if (outer_indent == base_indent && len >= 2 && substr(base_indent, len - 1, 2) == "  ") {
+        outer_indent = substr(base_indent, 1, len - 2)
+    }
+    # Fallback for other indentation styles: only if both tab and space checks failed
+    if (outer_indent == base_indent && len >= 1) {
+        outer_indent = substr(base_indent, 1, len - 1)
+    }
+    print outer_indent "elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
+    print outer_indent "then"
+    print base_indent "\"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\" \"$@\""
     next
 }
 { print }
