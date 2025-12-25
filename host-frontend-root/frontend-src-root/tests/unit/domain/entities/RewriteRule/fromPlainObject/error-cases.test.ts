@@ -3,7 +3,7 @@
  * バリデーションエラー以外の異常系テスト
  * （バリデーションエラーテストは validation-error-cases.test.ts に移動）
  */
-import { describe, expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 

@@ -29,7 +29,8 @@ src/application-business-rules/
     ├── input/
     │   └── ToggleRuleActiveInputData.ts
     └── output/
-        └── ToggleRuleActiveOutputData.ts
+        ├── ToggleRuleActiveOutputData.ts
+        └── ToggleRuleActiveErrorOutputData.ts   ← エラー出力DTO
 ```
 
 ### 第3層: interface-adapters/
@@ -65,8 +66,10 @@ src/frameworks-and-drivers/
 │   ├── indexeddb/
 │   │   └── DexieRewriteRuleRepository.ts        ← DTO ↔ DBレコード変換（Background Script用）
 │   └── ChromeRuntimeRewriteRuleRepository.ts    ← メッセージング経由（Content Script用）
-├── messaging/                                   ← メッセージング層
-│   ├── RewriteRuleProxyService.ts                ← IRewriteRuleMessagingPort 実装
+├── messaging/                                   ← メッセージング層（ADR-002参照）
+│   ├── RewriteRuleMessagingService.ts           ← IRewriteRuleMessagingPort 実装
+│   ├── RewriteRuleProxyService.ts               ← IRewriteRuleProxyService 定義 + proxy-service
+│   ├── RewriteRuleProxyServiceImpl.ts           ← 実装注入パターン（ADR-002参照）
 │   └── dto/                                     ← メッセージング用DTO（ADR-002、ADR-003参照）
 │       ├── RewriteRuleDTO.ts                    ← エンティティDTO
 │       └── request-dto/                         ← リクエストDTO

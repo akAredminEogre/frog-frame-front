@@ -1,4 +1,4 @@
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { IRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyService';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';

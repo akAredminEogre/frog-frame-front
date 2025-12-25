@@ -417,9 +417,13 @@ docs/
 ```
 
 このワークフローは以下を行います：
-- Issue番号の採番と `docs/issue-nnn/` ディレクトリ作成
+- **pre-commitフックのセットアップ**（ESLint + import sorting）
+- Issue番号の採番
+- `docs/issue-nnn/` ディレクトリ作成
 - ブランチ作成（既にブランチが指定されている場合はスキップ）
 - PR作成リンクの表示
+
+**注意**: pre-commitフックは`./scripts/ci/precommit-hook/main.sh`で手動でも設定可能です。
 
 - **ブランチ命名規則**: `claude/issue-nnn-<branch-suffix>-<random5chars>`
   - Claude Code Webの制約により、ブランチ名は `claude/` で始める必要があります

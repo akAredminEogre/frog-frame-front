@@ -15,6 +15,9 @@
   - [01-class-design.md](../../../design/pages/rule-list/features/toggle-rule-active/01-class-design.md) - クラス設計
   - [02-sequence.puml](../../../design/pages/rule-list/features/toggle-rule-active/02-sequence.puml) - シーケンス図
   - [03-directory-structure.md](../../../design/pages/rule-list/features/toggle-rule-active/03-directory-structure.md) - ディレクトリ構造
+  - [04-class-diagram.puml](../../../design/pages/rule-list/features/toggle-rule-active/04-class-diagram.puml) - クラス図（PlantUML）
+  - [05-test-strategy/](../../../design/pages/rule-list/features/toggle-rule-active/05-test-strategy/) - テスト戦略書
+  - [integration-test-strategy.md](../../../design/pages/rule-list/features/toggle-rule-active/integration-test-strategy.md) - 結合テスト戦略
 
 ## 現状分析
 
@@ -129,7 +132,7 @@
 - [x] IToggleRuleActiveUseCase（Input Port インターフェース）
 - [x] IToggleRuleActivePresenter（Output Port インターフェース）
 - [x] ITabsGateway（Gateway インターフェース）
-- [x] ToggleRuleActiveInputData / OutputData（DTO）
+- [x] ToggleRuleActiveInputData / OutputData / ErrorOutputData（DTO）
 - [x] ToggleRuleActiveInteractor（スケルトン実装）
 
 **第3層: interface-adapters**

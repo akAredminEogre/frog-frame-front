@@ -2,7 +2,7 @@
  * RewriteRule.fromPlainObject - バリデーションエラーテスト
  * 配列形式でまとめた不正入力のテストケース
  */
-import { describe, expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 

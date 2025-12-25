@@ -67,6 +67,7 @@
 |--------|------|
 | ToggleRuleActiveInputData | 入力DTO。対象ルールIDを保持 |
 | ToggleRuleActiveOutputData | 出力DTO。更新後のルールを保持 |
+| ToggleRuleActiveErrorOutputData | エラー出力DTO。エラー発生時のruleIdとエラーメッセージを保持 |
 | IToggleRuleActiveUseCase | Input Port。トグル処理のインターフェース |
 | IToggleRuleActivePresenter | Output Port。結果通知のインターフェース |
 | ToggleRuleActiveInteractor | UseCase実装。トグル処理を実行 |
@@ -91,14 +92,16 @@
 |--------|------|
 | ChromeRuntimeRewriteRuleRepository | IRewriteRuleRepositoryの実装。Mapperへの委譲のみ（DTOを意識しない）（Rules Page用、ADR-002参照） |
 | RewriteRuleMessagingService | IRewriteRuleMessagingPort を実装。proxy-service 経由で DTO を送受信（ADR-002参照） |
-| RewriteRuleProxyService | proxy-service として定義（実装注入パターン）、Background Scriptで実行（ADR-002参照） |
+| IRewriteRuleProxyService | proxy-service のインターフェース。RewriteRuleProxyService.ts で定義（ADR-002参照） |
+| RewriteRuleProxyService | proxy-service として定義。defineProxyService() で register/get 関数を生成（ADR-002参照） |
+| RewriteRuleProxyServiceImpl | IRewriteRuleProxyService の実装を生成。container 依存のため Background Script 専用（ADR-002 実装注入パターン） |
 | DexieRewriteRuleRepository | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、ADR-003参照） |
 | ChromeTabsGateway | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（ADR-001参照） |
 | RewriteRuleDTO | メッセージング用DTO。エンティティ全体を表現（ADR-002、ADR-003参照） |
 | GetByIdRequestDTO | メッセージング用DTO。ルール取得要求 `{ id }`（ADR-002、ADR-003参照） |
 | UpdateRuleActiveRequestDTO | メッセージング用DTO。トグル更新時の最小データ `{ id, isActive }`（ADR-002、ADR-003参照） |
-| ToggleSwitch | UIコンポーネント。トグルスイッチ |
-| RulesApp | View。ルール一覧画面 |
+| ToggleSwitch | UIコンポーネント。トグルスイッチ。`disabled` prop で操作制御 |
+| RulesApp | View。ルール一覧画面。`togglingIds` で競合状態防止を管理 |
 
 ## アーキテクチャ補足
 
@@ -201,32 +204,37 @@ ADR-001 に従い、ドメインエンティティの値を用いた判定・計
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                       application-business-rules/                           │
 │                                                                             │
-│  ┌─────────────────────┐    ┌──────────────────────┐                       │
-│  │ <<interface>>       │    │ <<interface>>        │                       │
-│  │ IToggleRuleActive   │    │ IToggleRuleActive    │                       │
-│  │ UseCase             │    │ Presenter            │                       │
-│  │ ─────────────────── │    │ ────────────────────  │                       │
-│  │ + execute(input)    │    │ + present(output)    │                       │
-│  └──────────▲──────────┘    └──────────▲───────────┘                       │
-│             │                          │                                   │
-│             │ implements               │ uses                              │
-│             │                          │                                   │
-│  ┌──────────┴──────────────────────────┴───────────┐                       │
-│  │ ToggleRuleActiveInteractor                      │                       │
-│  │ ─────────────────────────────────────────────── │                       │
-│  │ - repository: IRewriteRuleRepository            │                       │
-│  │ - tabsGateway: ITabsGateway                     │                       │
-│  │ - presenter: IToggleRuleActivePresenter         │                       │
-│  │ ─────────────────────────────────────────────── │                       │
-│  │ + execute(inputData): Promise<void>             │                       │
-│  └─────────────────────────────────────────────────┘                       │
+│  ┌─────────────────────────┐    ┌─────────────────────────────┐              │
+│  │ <<interface>>           │    │ <<interface>>               │              │
+│  │ IToggleRuleActiveUseCase│    │ IToggleRuleActivePresenter  │              │
+│  │ ─────────────────────── │    │ ─────────────────────────── │              │
+│  │ + execute(input)        │    │ + present(output)           │              │
+│  └──────────▲──────────────┘    │ + presentError(errorData)   │              │
+│             │                   └───────────▲─────────────────┘              │
+│             │                           │                                  │
+│             │ implements                │ uses                             │
+│             │                           │                                  │
+│  ┌──────────┴───────────────────────────┴───────────┐                      │
+│  │ ToggleRuleActiveInteractor                       │                      │
+│  │ ──────────────────────────────────────────────── │                      │
+│  │ - repository: IRewriteRuleRepository             │                      │
+│  │ - tabsGateway: ITabsGateway                      │                      │
+│  │ - presenter: IToggleRuleActivePresenter          │                      │
+│  │ ──────────────────────────────────────────────── │                      │
+│  │ + execute(inputData): Promise<void>              │                      │
+│  └─────────────────────────────────────────────────┘                      │
 │                                                                             │
-│  ┌─────────────────────┐    ┌──────────────────────┐                       │
-│  │ ToggleRuleActive    │    │ ToggleRuleActive     │                       │
-│  │ InputData           │    │ OutputData           │                       │
-│  │ ─────────────────── │    │ ────────────────────  │                       │
-│  │ + ruleId: number    │    │ + toggledRule: Rule  │                       │
-│  └─────────────────────┘    └──────────────────────┘                       │
+│  ┌─────────────────────┐  ┌───────────────────┐  ┌───────────────────────┐ │
+│  │ ToggleRuleActive    │  │ ToggleRuleActive  │  │ ToggleRuleActive      │ │
+│  │ InputData           │  │ OutputData        │  │ ErrorOutputData       │ │
+│  │ ─────────────────── │  │ ───────────────── │  │ ───────────────────── │ │
+│  │ + ruleId: number    │  │ + toggledRule     │  │ + ruleId: number      │ │
+│  │                     │  │                   │  │ + message: string     │ │
+│  └─────────────────────┘  └───────────────────┘  └───────────────────────┘ │
+│         ▲                        ▲                        ▲                │
+│         │                        │                        │                │
+│  Controller が生成         Interactor が生成        Interactor が生成       │
+│  （Interactor に渡す）     （Presenter に渡す）     （Presenter に渡す）     │
 │                                                                             │
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
 │  │ <<interface>>               │    │ <<interface>>               │        │

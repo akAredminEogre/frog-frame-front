@@ -1,11 +1,11 @@
-import '../../setup';
+import 'tests/unit/infrastructure/persistence/indexeddb/setup';
 
-import { afterEach,beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
-import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 
 /**
  * 注意: DB側で自動採番されるためIDは数値文字列（"1", "2", ...）
