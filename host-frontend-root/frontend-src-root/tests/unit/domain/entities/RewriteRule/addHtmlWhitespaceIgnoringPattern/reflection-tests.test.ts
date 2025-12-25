@@ -8,7 +8,7 @@
  * 6. ネストしたHTML要素と混在コンテンツの空白無視処理追加
  * 7. 特殊文字・属性を含むHTML要素パターンの空白無視処理追加
  */
-import { describe, expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
