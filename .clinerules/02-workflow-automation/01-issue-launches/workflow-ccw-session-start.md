@@ -5,6 +5,11 @@ workflow-ccw-session-start branch-suffix=
 このワークフローは、Claude Code Webで新しいセッションを開始する際に実行します。
 **ブランチが既に指定されている場合でも、Issue管理のセットアップのために実行してください。**
 
+### 前提条件
+- Git がインストールされていること
+- Node.js / npm がインストールされていること
+- リポジトリのルートディレクトリで実行すること
+
 ### pre-commitフックのセットアップ
 セッション開始時に以下のスクリプトを実行して、pre-commitフックを有効化します：
 ```bash
@@ -16,6 +21,10 @@ workflow-ccw-session-start branch-suffix=
 - ESLint（コード品質チェック）
 - simple-import-sort（import文の自動整列）
 - 対象ファイル: ステージされた `.ts`, `.tsx`, `.js`, `.jsx` ファイル
+
+**トラブルシューティング**:
+- エラー時はバックアップファイル `.git/hooks/pre-commit.backup` から復元可能
+- パターンマッチエラーの場合は lefthook バージョンの互換性を確認
 
 ### Issue番号の採番
 - `workflow-get-new-branch-number` ワークフローを実行して新しいissue番号(nnn)を取得
