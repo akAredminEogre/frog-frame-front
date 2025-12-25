@@ -107,14 +107,18 @@ Presenterを通じてView層に正しいデータが渡されることを検証�
 ```
 tests/integration/toggle-rule-active/
 ├── setup.ts                    # 共通セットアップ（fake-indexeddb等）
-├── mocks/
-│   └── createMockTabsGateway.ts  # TabsGatewayモック
 ├── helpers/
 │   └── createTestRule.ts         # テストデータ生成ヘルパー
 ├── normal-cases.test.ts        # 正常系テスト
 ├── data-integrity.test.ts      # データ整合性テスト
 ├── presenter-output.test.ts    # Presenter出力テスト
 └── error-cases.test.ts         # エラー系テスト
+
+# ITabsGateway モックファイル
+# docs/coding-standards/tests/common-rule.md の「モックファイルの配置ルール」に従い、
+# モックは integration 配下ではなく frameworks-and-drivers 配下に配置する。
+tests/frameworks-and-drivers/browser/ChromeTabsGateway/
+└── createMockTabsGateway.ts      # TabsGatewayモック
 ```
 
 ## モック戦略
