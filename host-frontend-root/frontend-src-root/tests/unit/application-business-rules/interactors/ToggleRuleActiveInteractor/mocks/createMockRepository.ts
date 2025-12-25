@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 
 /**
  * IRewriteRuleRepositoryのモックオブジェクトを生成する
