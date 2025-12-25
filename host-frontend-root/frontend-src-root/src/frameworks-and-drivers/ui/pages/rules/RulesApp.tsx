@@ -3,7 +3,7 @@ import 'src/frameworks-and-drivers/ui/pages/rules/style.css';
 import { useEffect, useMemo, useState } from 'react';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
 import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
 import ErrorMessage from 'src/components/molecules/ErrorMessage/ErrorMessage';
