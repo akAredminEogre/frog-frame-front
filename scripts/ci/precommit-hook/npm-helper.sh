@@ -27,12 +27,12 @@ ensure_npm_dependencies() {
         echo "Error: package.json not found in ${FRONTEND_DIR}" >&2
         return 1
     fi
-    # Note: --no-audit --no-fund speeds up CI but suppresses security notifications
-    # Run 'npm audit' manually if security review is needed
-    if ! (cd "${FRONTEND_DIR}" && npm install --no-audit --no-fund); then
+    # Note: --no-fund speeds up install by suppressing funding messages
+    if ! (cd "${FRONTEND_DIR}" && npm install --no-fund); then
         echo "Error: npm install failed. Troubleshooting tips:" >&2
         echo "  - Check disk space (df -h)" >&2
-        echo "  - Clear npm cache (npm cache clean --force)" >&2
+        echo "  - Verify cache integrity (npm cache verify)" >&2
+        echo "  - Clear npm cache if corrupted (npm cache clean --force)" >&2
         echo "  - Verify network connectivity" >&2
         echo "  - Check file permissions in ${FRONTEND_DIR}" >&2
         return 1

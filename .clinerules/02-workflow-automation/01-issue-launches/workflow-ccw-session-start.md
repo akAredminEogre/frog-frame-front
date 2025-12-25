@@ -10,7 +10,9 @@ workflow-ccw-session-start branch-suffix=
 - Node.js / npm がインストールされていること
 - リポジトリのルートディレクトリで実行すること
 
-### pre-commitフックのセットアップ
+### pre-commitフックのセットアップ（初回セッションのみ）
+**注意**: このステップはフックが未設定の場合のみ必要です。既に設定済みの場合はスキップされます。
+
 セッション開始時に以下のスクリプトを実行して、pre-commitフックを有効化します：
 ```bash
 ./scripts/ci/precommit-hook/main.sh
