@@ -1,5 +1,5 @@
-import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { ToggleRuleActiveInteractor } from 'src/application-business-rules/interactors/ToggleRuleActiveInteractor';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { IToggleRuleActiveController } from 'src/interface-adapters/controllers/IToggleRuleActiveController';
 import { ToggleRuleActiveController } from 'src/interface-adapters/controllers/ToggleRuleActiveController';
