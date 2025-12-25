@@ -162,6 +162,12 @@ END { print matched > STATUS_FILE }
 fi
 
 # Verify awk pattern matched
+# Check status file exists and is non-empty (distinguishes awk failure from pattern mismatch)
+if [ ! -s "${MATCH_STATUS_FILE}" ]; then
+    echo "Error: Internal processing error. Status file is empty or missing."
+    remove_file_with_warning "${BACKUP_FILE}"
+    exit 1
+fi
 PATTERN_MATCHED=$(<"${MATCH_STATUS_FILE}")
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
