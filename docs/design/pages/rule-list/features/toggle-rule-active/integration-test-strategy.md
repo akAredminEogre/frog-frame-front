@@ -116,7 +116,7 @@ tests/integration/toggle-rule-active/
 
 # ITabsGateway モックファイル
 # docs/coding-standards/tests/common-rule.md の「モックファイルの配置ルール」に従い、
-# モックは integration 配下ではなく frameworks-and-drivers 配下に配置する。
+# モックは tests/integration 配下ではなく tests/frameworks-and-drivers 配下に配置する。
 tests/frameworks-and-drivers/browser/ChromeTabsGateway/
 └── createMockTabsGateway.ts      # TabsGatewayモック
 ```
