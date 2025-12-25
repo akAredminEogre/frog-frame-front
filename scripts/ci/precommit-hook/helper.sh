@@ -76,7 +76,7 @@ remove_file_with_warning() {
 # Restore a backup file to its original location
 # Usage: restore_backup <backup_file> <target_file>
 # Example: restore_backup "/path/to/file.backup" "/path/to/file"
-# Note: Exits on failure because corrupted state is unrecoverable
+# Note: Exits script on failure (corrupted state is unrecoverable)
 restore_backup() {
     local BACKUP_FILE="$1"
     local TARGET_FILE="$2"
