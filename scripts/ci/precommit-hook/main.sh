@@ -32,23 +32,7 @@ require_directory "${FRONTEND_DIR}" "Frontend directory not found at ${FRONTEND_
 # Trade-off: This may skip installs when package.json updates; run `npm install` manually if needed
 readonly LEFTHOOK_PACKAGE_DIR="${FRONTEND_DIR}/node_modules/@evilmartians/lefthook"
 
-ensure_npm_dependencies() {
-    if directory_exists "${LEFTHOOK_PACKAGE_DIR}"; then
-        return 0
-    fi
-
-    echo "Installing npm dependencies..."
-    if ! (cd "${FRONTEND_DIR}" && npm install --no-audit --no-fund); then
-        echo "Error: Failed to install npm dependencies. Check permissions and network connectivity."
-        return 1
-    fi
-
-    # Verify lefthook package was installed
-    # Note: require_directory exits on failure (fatal error - npm install succeeded but package missing)
-    require_directory "${LEFTHOOK_PACKAGE_DIR}" "lefthook package not found after npm install. Installation may be incomplete."
-}
-
-if ! ensure_npm_dependencies; then
+if ! ensure_npm_dependencies "${FRONTEND_DIR}" "${LEFTHOOK_PACKAGE_DIR}" "lefthook package"; then
     exit 1
 fi
 
