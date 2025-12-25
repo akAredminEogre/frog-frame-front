@@ -26,6 +26,7 @@ box "application-business-rules" #LightYellow
   participant "DeleteRuleInteractor" as Interactor
   participant "DeleteRuleInputData" as InputData
   participant "DeleteRuleOutputData" as OutputData
+  participant "DeleteRuleErrorOutputData" as ErrorOutputData
   participant "<<interface>>\nIRewriteRuleRepository" as IRepository
   participant "<<interface>>\nITabsGateway" as ITabsGateway
 end box
@@ -90,6 +91,18 @@ end
 
 Dialog --> View : onConfirm()
 deactivate Dialog
+
+note over View
+  **競合状態防止チェック**
+  deletingIds.has(ruleId) の場合は
+  早期リターン（連続操作防止）
+end note
+
+View -> View : deletingIds.add(ruleId)
+note right of View
+  処理中フラグを設定
+  DeleteButton.disabled = true
+end note
 
 View -> IController : deleteRule(ruleId)
 activate IController
@@ -249,7 +262,7 @@ activate IPresenter
 IPresenter -> Presenter : present(outputData)
 activate Presenter
 
-Presenter -> View : onSuccess(deletedRuleId)
+Presenter -> View : removeRuleFromView(deletedRuleId)
 View -> View : ルール一覧から削除
 
 deactivate Presenter
@@ -257,31 +270,104 @@ deactivate IPresenter
 deactivate Interactor
 deactivate Controller
 deactivate IController
-deactivate View
 
-== エラー発生時 ==
-
-note over Interactor : 削除処理中にエラー発生
-
-Interactor -> OutputData : new(success: false, error)
-OutputData --> Interactor : outputData
-
-Interactor -> IPresenter : present(outputData)
-activate IPresenter
-
-IPresenter -> Presenter : present(outputData)
-activate Presenter
-
-Presenter -> View : onError(error)
-activate View
-
-View -> Toast : show("削除に失敗しました", type: "error")
-activate Toast
-Toast --> View : 表示
-deactivate Toast
+View -> View : deletingIds.delete(ruleId)
+note right of View
+  処理中フラグを解除
+  DeleteButton.disabled = false
+end note
 
 deactivate View
-deactivate Presenter
-deactivate IPresenter
+
+== エラーケース ==
+
+note over Interactor, Presenter
+  エラー発生時のフロー
+  - ルール取得失敗: UIは変更なし
+  - ルール削除失敗: UIは変更なし
+  - タブリロード失敗: DB削除は成功済みのため、
+    UIはルール削除後の状態を表示（部分的成功）
+end note
+
+alt ルール取得失敗 または ルール削除失敗
+  Interactor -> ErrorOutputData : new(ruleId, message)
+  ErrorOutputData --> Interactor : errorOutputData
+
+  Interactor -> IPresenter : presentError(errorOutputData)
+  activate IPresenter
+  note right of IPresenter
+    DeleteRuleErrorOutputData を使用
+    - ruleId: 数値（対象ルールID）
+    - message: 文字列（エラーメッセージ）
+  end note
+
+  IPresenter -> Presenter : presentError(errorOutputData)
+  activate Presenter
+
+  Presenter -> View : showErrorInView(ruleId, message)
+  activate View
+
+  View -> Toast : show("削除に失敗しました", type: "error")
+  activate Toast
+  Toast --> View : 表示
+  deactivate Toast
+
+  View --> Presenter : エラーメッセージ表示（状態変更なし）
+  deactivate View
+  deactivate Presenter
+  deactivate IPresenter
+
+  View -> View : deletingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
+
+else タブリロード失敗（部分的成功）
+  note over Interactor
+    **順序保証**
+    present() は reloadMatchingTabs() の
+    前に同期的に呼び出されるため、
+    present() → presentError() の順序が保証される
+  end note
+
+  Interactor -> OutputData : new(deletedRuleId)
+  OutputData --> Interactor : outputData
+
+  Interactor -> IPresenter : present(outputData)
+  activate IPresenter
+  note right of IPresenter : DB削除成功を反映
+
+  IPresenter -> Presenter : present(outputData)
+  activate Presenter
+
+  Presenter -> View : removeRuleFromView(deletedRuleId)
+  View -> View : ルール一覧から削除
+  deactivate Presenter
+  deactivate IPresenter
+
+  Interactor -> ErrorOutputData : new(ruleId, "タブリロードに失敗しました")
+  ErrorOutputData --> Interactor : errorOutputData
+
+  Interactor -> IPresenter : presentError(errorOutputData)
+  activate IPresenter
+  note right of IPresenter : タブリロード失敗を通知
+
+  IPresenter -> Presenter : presentError(errorOutputData)
+  activate Presenter
+
+  Presenter -> View : showErrorInView(ruleId, message)
+  activate View
+
+  View -> Toast : show("タブリロードに失敗しました", type: "error")
+  activate Toast
+  Toast --> View : 表示
+  deactivate Toast
+
+  View --> Presenter : エラーメッセージ表示
+  deactivate View
+  deactivate Presenter
+  deactivate IPresenter
+
+  View -> View : deletingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
+end
 
 @enduml
