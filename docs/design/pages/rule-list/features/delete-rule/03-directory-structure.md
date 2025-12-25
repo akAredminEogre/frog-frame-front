@@ -29,7 +29,8 @@ src/application-business-rules/
     ├── input/
     │   └── DeleteRuleInputData.ts
     └── output/
-        └── DeleteRuleOutputData.ts
+        ├── DeleteRuleOutputData.ts
+        └── DeleteRuleErrorOutputData.ts         ← エラー出力DTO
 ```
 
 ### 第3層: interface-adapters/
@@ -73,12 +74,15 @@ src/frameworks-and-drivers/
 │   ├── indexeddb/
 │   │   └── DexieRewriteRuleRepository.ts        ← delete() 追加
 │   └── ChromeRuntimeRewriteRuleRepository.ts    ← delete() 追加
-├── messaging/                                   ← メッセージング層
-│   ├── RewriteRuleProxyService.ts               ← delete() 追加
-│   ├── RewriteRuleMessagingService.ts           ← delete() 追加
+├── messaging/                                   ← メッセージング層（ADR-002参照）
+│   ├── RewriteRuleMessagingService.ts           ← IRewriteRuleMessagingPort 実装（delete() 追加）
+│   ├── RewriteRuleProxyService.ts               ← IRewriteRuleProxyService 定義 + proxy-service（delete() 追加）
+│   ├── RewriteRuleProxyServiceImpl.ts           ← 実装注入パターン（ADR-002参照、delete() 追加）
 │   └── dto/                                     ← メッセージング用DTO（ADR-002、ADR-003参照）
-│       └── request-dto/
-│           └── DeleteRuleRequestDTO.ts          ← { id }
+│       ├── RewriteRuleDTO.ts                    ← エンティティDTO
+│       └── request-dto/                         ← リクエストDTO
+│           ├── GetByIdRequestDTO.ts             ← ルール取得要求 { id }
+│           └── DeleteRuleRequestDTO.ts          ← 削除要求 { id }
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
 │   └── ChromeTabsGateway.ts
 └── di/                                          ← DI Container
