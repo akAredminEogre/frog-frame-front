@@ -22,12 +22,12 @@ run_awk_patch() {
     # Verify awk pattern matched
     # Check status file exists and is non-empty (distinguishes awk failure from pattern mismatch)
     if [ ! -s "${STATUS_FILE}" ]; then
-        echo "Error: Internal processing error. Status file is empty or missing." >&2
+        echo "Error: AWK script did not write status file. This may indicate a script failure." >&2
         exit 1
     fi
 
     local PATTERN_MATCHED
-    PATTERN_MATCHED=$(cat "${STATUS_FILE}")
+    read -r PATTERN_MATCHED < "${STATUS_FILE}"
     if [ "${PATTERN_MATCHED}" != "1" ]; then
         echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format." >&2
         echo "This may indicate lefthook version incompatibility. Check generated hook format." >&2

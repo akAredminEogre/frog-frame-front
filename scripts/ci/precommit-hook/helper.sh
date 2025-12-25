@@ -73,7 +73,7 @@ remove_file_with_warning() {
 # Ensure npm dependencies are installed by checking for a specific package
 # Usage: ensure_npm_dependencies <frontend_dir> <package_dir> <package_name>
 # Example: ensure_npm_dependencies "/path/to/frontend" "/path/to/node_modules/pkg" "package"
-# Note: Returns 1 on npm install failure; exits on missing package after install (fatal error)
+# Note: Returns 1 on any failure; caller handles exit
 ensure_npm_dependencies() {
     local FRONTEND_DIR="$1"
     local PACKAGE_DIR="$2"
@@ -90,8 +90,10 @@ ensure_npm_dependencies() {
     fi
 
     # Verify package was installed
-    # Note: require_directory exits on failure (fatal error - npm install succeeded but package missing)
-    require_directory "${PACKAGE_DIR}" "${PACKAGE_NAME} not found after npm install. Installation may be incomplete."
+    if ! directory_exists "${PACKAGE_DIR}"; then
+        echo "Error: ${PACKAGE_NAME} not found after npm install. Installation may be incomplete." >&2
+        return 1
+    fi
 }
 
 # Restore a backup file to its original location

@@ -4,18 +4,18 @@
 # This script inserts an elif block after the @evilmartians/lefthook execution line
 # to check for lefthook in host-frontend-root/frontend-src-root/node_modules
 
-BEGIN { matched = 0; patched = 0 }
+BEGIN { pattern_matched = 0; already_patched = 0 }
 
 # Match the execution line for @evilmartians/lefthook (flexible pattern for arch and quote styles)
 # Only patch the first occurrence to prevent duplicate patches
 # Note: Pattern anchored to line start to avoid matching comments or echo statements
 # Pattern handles optional single/double quotes around paths and $@
 /^[ \t]*['"]?[^'"]*@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook['"]?[ \t]+['"]?\$@['"]?[ \t]*$/ {
-    matched = 1
+    pattern_matched = 1
     print
     # Early skip if already patched (prevents duplicate insertion)
-    if (patched == 1) { next }
-    patched = 1
+    if (already_patched == 1) { next }
+    already_patched = 1
     # Extract leading indentation from matched line (spaces and tabs only)
     match($0, /^[ \t]*/)
     base_indent = substr($0, RSTART, RLENGTH)
@@ -45,4 +45,4 @@ BEGIN { matched = 0; patched = 0 }
 
 { print }
 
-END { print matched > STATUS_FILE }
+END { print pattern_matched > STATUS_FILE }
