@@ -9,7 +9,7 @@ import 'src/../tests/integration/toggle-rule-active/setup';
 
 import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
@@ -30,11 +30,6 @@ describe('toggle-rule-active 結合テスト - 正常系', () => {
     mockTabsGateway = createMockTabsGateway();
     updateRuleInView = vi.fn();
     showErrorInView = vi.fn();
-  });
-
-  afterEach(async () => {
-    vi.resetAllMocks();
-    await dexieDatabase.rewriteRules.clear();
   });
 
   const testCases = [
