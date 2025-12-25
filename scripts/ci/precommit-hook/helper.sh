@@ -93,3 +93,17 @@ ensure_npm_dependencies() {
     # Note: require_directory exits on failure (fatal error - npm install succeeded but package missing)
     require_directory "${PACKAGE_DIR}" "${PACKAGE_NAME} not found after npm install. Installation may be incomplete."
 }
+
+# Restore a backup file to its original location
+# Usage: restore_backup <backup_file> <target_file>
+# Example: restore_backup "/path/to/file.backup" "/path/to/file"
+# Note: Exits on failure because corrupted state is unrecoverable
+restore_backup() {
+    local BACKUP_FILE="$1"
+    local TARGET_FILE="$2"
+
+    if ! mv "${BACKUP_FILE}" "${TARGET_FILE}"; then
+        echo "Error: Failed to restore backup. Manual recovery required: cp ${BACKUP_FILE} ${TARGET_FILE}"
+        exit 1
+    fi
+}
