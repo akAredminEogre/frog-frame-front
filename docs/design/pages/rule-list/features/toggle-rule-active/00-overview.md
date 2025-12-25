@@ -52,7 +52,7 @@
 |---------------|------|------|
 | RulesApp | `togglingIds: Set<number>` | 処理中のルールIDを管理 |
 | RulesApp | `handleToggle()` | 処理中チェック・フラグ設定/解除 |
-| ToggleSwitch | `disabled` prop | UI操作の無効化 |
+| ToggleSwitch | `disabled` prop | disabled 状態の視覚的表示・操作制御の反映 |
 
 ```
 トグル操作時のフロー:
