@@ -12,8 +12,8 @@ import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/cre
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ITabsGateway } from 'src/application-business-rules/ports/gateway/ITabsGateway';
-import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
+import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 
 describe('toggle-rule-active 結合テスト - エラー系', () => {
