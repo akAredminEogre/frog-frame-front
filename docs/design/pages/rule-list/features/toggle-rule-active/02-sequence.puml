@@ -67,6 +67,18 @@ end note
 UI -> View : onToggle(ruleId)
 activate View
 
+note over View
+  **競合状態防止チェック**
+  togglingIds.has(ruleId) の場合は
+  早期リターン（連続操作防止）
+end note
+
+View -> View : togglingIds.add(ruleId)
+note right of View
+  処理中フラグを設定
+  ToggleSwitch.disabled = true
+end note
+
 View -> IController : toggleActive(ruleId)
 activate IController
 
@@ -215,6 +227,13 @@ deactivate Presenter
 deactivate Interactor
 deactivate Controller
 deactivate IController
+
+View -> View : togglingIds.delete(ruleId)
+note right of View
+  処理中フラグを解除
+  ToggleSwitch.disabled = false
+end note
+
 deactivate View
 
 == エラーケース ==
@@ -237,6 +256,8 @@ alt ルール取得失敗 または ルール更新失敗
   Presenter -> View : showErrorInView(ruleId, message)
   View --> UI : エラーメッセージ表示（状態変更なし）
   deactivate Presenter
+  View -> View : togglingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
 
 else タブリロード失敗（部分的成功）
   note over Interactor
@@ -255,6 +276,8 @@ else タブリロード失敗（部分的成功）
   Presenter -> View : showErrorInView(ruleId, message)
   View --> UI : エラーメッセージ表示
   deactivate Presenter
+  View -> View : togglingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
 end
 
 @enduml

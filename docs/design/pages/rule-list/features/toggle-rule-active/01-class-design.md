@@ -98,8 +98,8 @@
 | RewriteRuleDTO | メッセージング用DTO。エンティティ全体を表現（ADR-002、ADR-003参照） |
 | GetByIdRequestDTO | メッセージング用DTO。ルール取得要求 `{ id }`（ADR-002、ADR-003参照） |
 | UpdateRuleActiveRequestDTO | メッセージング用DTO。トグル更新時の最小データ `{ id, isActive }`（ADR-002、ADR-003参照） |
-| ToggleSwitch | UIコンポーネント。トグルスイッチ |
-| RulesApp | View。ルール一覧画面 |
+| ToggleSwitch | UIコンポーネント。トグルスイッチ。`disabled` prop で操作制御 |
+| RulesApp | View。ルール一覧画面。`togglingIds` で競合状態防止を管理 |
 
 ## アーキテクチャ補足
 
