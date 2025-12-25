@@ -250,8 +250,8 @@ alt ルール取得失敗 または ルール更新失敗
   activate Presenter
   note right of Presenter
     ToggleRuleActiveErrorOutputData を使用
-    - ruleId: number
-    - message: string
+    - ruleId: 数値（対象ルールID）
+    - message: 文字列（エラーメッセージ）
   end note
   Presenter -> View : showErrorInView(ruleId, message)
   View --> UI : エラーメッセージ表示（状態変更なし）
@@ -268,13 +268,13 @@ else タブリロード失敗（部分的成功）
        catch ブロックで presentError() が呼ばれる
 
     ToggleRuleActiveInteractor#execute の実装:
-    ┌─────────────────────────────────────────┐
-    │ this.presenter.present(outputData);     │ ← 【1】同期呼び出し
-    │ await this.tabsGateway.reloadMatching   │
-    │     Tabs(toggledRule);                  │ ← ここでエラー発生
-    │ } catch (error) {                       │
-    │   this.presenter.presentError(...);     │ ← 【2】catch内で呼び出し
-    └─────────────────────────────────────────┘
+    ┌───────────────────────────────────────────────┐
+    │ this.presenter.present(outputData);           │ ←【1】
+    │ await this.tabsGateway                        │
+    │   .reloadMatchingTabs(toggledRule);           │ ←エラー発生
+    │ } catch (error) {                             │
+    │   this.presenter.presentError(errorData);     │ ←【2】
+    └───────────────────────────────────────────────┘
     この構造により present() → presentError() の
     順序が保証される（UIは正しい状態を表示）
   end note
