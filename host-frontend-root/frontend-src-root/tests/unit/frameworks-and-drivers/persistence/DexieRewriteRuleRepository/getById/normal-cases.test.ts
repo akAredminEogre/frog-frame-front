@@ -3,8 +3,8 @@ import 'tests/unit/infrastructure/persistence/indexeddb/setup';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
+import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 
 /**
  * 1. 指定されたIDのルールが存在する場合、そのRewriteRuleインスタンスを返却
