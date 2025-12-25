@@ -11,6 +11,7 @@ set -e
 # Source helper functions
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${SCRIPT_DIR}/helper.sh"
+source "${SCRIPT_DIR}/awk-helper.sh"
 
 # Check required commands (early return pattern)
 require_command git "Please install Git."
@@ -89,23 +90,7 @@ MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX") || {
 # Update trap to include both temp files
 trap 'rm -f "${TEMP_FILE}" "${MATCH_STATUS_FILE}"' EXIT
 
-if ! awk -v STATUS_FILE="${MATCH_STATUS_FILE}" -f "${SCRIPT_DIR}/patch-hook.awk" "${PRE_COMMIT_HOOK}" > "${TEMP_FILE}"; then
-    echo "Error: awk processing failed."
-    exit 1
-fi
-
-# Verify awk pattern matched
-# Check status file exists and is non-empty (distinguishes awk failure from pattern mismatch)
-if [ ! -s "${MATCH_STATUS_FILE}" ]; then
-    echo "Error: Internal processing error. Status file is empty or missing."
-    exit 1
-fi
-PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
-if [ "${PATTERN_MATCHED}" != "1" ]; then
-    echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
-    echo "This may indicate lefthook version incompatibility. Check generated hook format."
-    exit 1
-fi
+run_awk_patch "${SCRIPT_DIR}/patch-hook.awk" "${PRE_COMMIT_HOOK}" "${TEMP_FILE}" "${MATCH_STATUS_FILE}"
 
 # Apply patched file with error handling
 if ! mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"; then
