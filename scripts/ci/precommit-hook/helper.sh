@@ -69,3 +69,27 @@ remove_file_with_warning() {
         echo "Warning: Failed to remove file: ${FILE_PATH}"
     fi
 }
+
+# Ensure npm dependencies are installed by checking for a specific package
+# Usage: ensure_npm_dependencies <frontend_dir> <package_dir> <package_name>
+# Example: ensure_npm_dependencies "/path/to/frontend" "/path/to/node_modules/pkg" "package"
+# Note: Returns 1 on npm install failure; exits on missing package after install (fatal error)
+ensure_npm_dependencies() {
+    local FRONTEND_DIR="$1"
+    local PACKAGE_DIR="$2"
+    local PACKAGE_NAME="$3"
+
+    if directory_exists "${PACKAGE_DIR}"; then
+        return 0
+    fi
+
+    echo "Installing npm dependencies..."
+    if ! (cd "${FRONTEND_DIR}" && npm install --no-audit --no-fund); then
+        echo "Error: Failed to install npm dependencies. Check permissions and network connectivity."
+        return 1
+    fi
+
+    # Verify package was installed
+    # Note: require_directory exits on failure (fatal error - npm install succeeded but package missing)
+    require_directory "${PACKAGE_DIR}" "${PACKAGE_NAME} not found after npm install. Installation may be incomplete."
+}
