@@ -8,33 +8,33 @@ box "Rules Page - UI" #LightBlue
 end box
 
 box "interface-adapters" #LightGreen
-  participant "<<interface>>\nIToggleRuleActiveControllerFactory" as IFactory
-  participant "ToggleRuleActiveControllerFactory" as Factory
-  participant "<<interface>>\nIToggleRuleActiveController" as IController
-  participant "ToggleRuleActiveController" as Controller
-  participant "ToggleRuleActivePresenter" as Presenter
-  participant "RewriteRuleMapper" as Mapper
-  participant "<<interface>>\nIRewriteRuleMessagingPort" as IMessagingPort
+  participant "<<interface>>\nIToggleRuleActive\nControllerFactory" as IFactory
+  participant "ToggleRuleActive\nControllerFactory" as Factory
+  participant "<<interface>>\nIToggleRuleActive\nController" as IController
+  participant "ToggleRuleActive\nController" as Controller
+  participant "ToggleRuleActive\nPresenter" as Presenter
+  participant "RewriteRule\nMapper" as Mapper
+  participant "<<interface>>\nIRewriteRule\nMessagingPort" as IMessagingPort
 end box
 
 box "application-business-rules" #LightYellow
-  participant "<<interface>>\nIToggleRuleActiveUseCase" as IUseCase
-  participant "ToggleRuleActiveInteractor" as Interactor
-  participant "<<interface>>\nIRewriteRuleRepository" as IRepository
+  participant "<<interface>>\nIToggleRuleActive\nUseCase" as IUseCase
+  participant "ToggleRuleActive\nInteractor" as Interactor
+  participant "<<interface>>\nIRewriteRule\nRepository" as IRepository
   participant "<<interface>>\nITabsGateway" as ITabsGateway
 end box
 
 box "frameworks-and-drivers" #LightCyan
-  participant "ChromeRuntimeRewriteRuleRepository" as MessagingRepo
-  participant "ChromeTabsGateway" as TabsGateway
-  participant "RewriteRuleMessagingService" as MessagingService
-  participant "<<interface>>\nIRewriteRuleProxyService" as IProxyService
+  participant "ChromeRuntime\nRewriteRule\nRepository" as MessagingRepo
+  participant "ChromeTabs\nGateway" as TabsGateway
+  participant "RewriteRule\nMessagingService" as MessagingService
+  participant "<<interface>>\nIRewriteRule\nProxyService" as IProxyService
 end box
 
 box "Background" #LightGray
-  participant "RewriteRuleProxyService" as ProxyService
-  participant "RewriteRuleProxyServiceImpl" as ProxyServiceImpl
-  participant "DexieRewriteRuleRepository" as DexieRepo
+  participant "RewriteRule\nProxyService" as ProxyService
+  participant "RewriteRule\nProxyServiceImpl" as ProxyServiceImpl
+  participant "DexieRewriteRule\nRepository" as DexieRepo
 end box
 
 box "enterprise-business-rules" #LightPink
