@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import type { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import type { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 
 /**
  * テスト用のモックRewriteRuleRepositoryを作成

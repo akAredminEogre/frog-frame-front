@@ -5,12 +5,11 @@
  * 2. 単一タブマッチ: 1件のみでマッチ
  * 3. 単一タブ不一致: 1件のみで不一致
  */
+import { createMockRule } from 'tests/unit/frameworks-and-drivers/browser/Tabs/mocks/createMockRule';
+import { createMockTab } from 'tests/unit/frameworks-and-drivers/browser/Tabs/mocks/createMockTab';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Tabs } from 'src/frameworks-and-drivers/browser/Tabs';
-
-import { createMockRule } from '../mocks/createMockRule';
-import { createMockTab } from '../mocks/createMockTab';
 
 describe('Tabs.filterByRule - エッジケース', () => {
   const mockReload = vi.fn().mockResolvedValue(undefined);

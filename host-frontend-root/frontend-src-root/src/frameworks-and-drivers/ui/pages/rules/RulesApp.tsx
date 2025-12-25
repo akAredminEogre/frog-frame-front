@@ -3,9 +3,9 @@ import 'src/frameworks-and-drivers/ui/pages/rules/style.css';
 import { useEffect, useMemo, useState } from 'react';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
 import { OpenRuleEditPageUseCase } from 'src/application/usecases/rule/OpenRuleEditPageUseCase';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import ErrorMessage from 'src/components/molecules/ErrorMessage/ErrorMessage';
 import LoadingMessage from 'src/components/molecules/LoadingMessage/LoadingMessage';
 import EmptyStateMessage from 'src/components/organisms/EmptyStateMessage/EmptyStateMessage';

@@ -5,12 +5,11 @@
  * 2. 全マッチ: 全タブがルールにマッチ
  * 3. 全不一致: 全タブがルールに不一致
  */
+import { createMockRule } from 'tests/unit/frameworks-and-drivers/browser/Tabs/mocks/createMockRule';
+import { createMockTab } from 'tests/unit/frameworks-and-drivers/browser/Tabs/mocks/createMockTab';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Tabs } from 'src/frameworks-and-drivers/browser/Tabs';
-
-import { createMockRule } from '../mocks/createMockRule';
-import { createMockTab } from '../mocks/createMockTab';
 
 describe('Tabs.filterByRule - 正常系', () => {
   const mockReload = vi.fn().mockResolvedValue(undefined);
