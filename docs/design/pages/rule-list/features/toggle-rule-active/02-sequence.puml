@@ -217,4 +217,44 @@ deactivate Controller
 deactivate IController
 deactivate View
 
+== エラーケース ==
+
+note over Interactor, Presenter
+  エラー発生時のフロー
+  - ルール取得失敗: UIは変更なし
+  - ルール更新失敗: UIは変更なし
+  - タブリロード失敗: UIはトグル後の状態を表示（部分的成功）
+end note
+
+alt ルール取得失敗 または ルール更新失敗
+  Interactor -> Presenter : presentError(errorOutputData)
+  activate Presenter
+  note right of Presenter
+    ToggleRuleActiveErrorOutputData を使用
+    - ruleId: number
+    - message: string
+  end note
+  Presenter -> View : showErrorInView(ruleId, message)
+  View --> UI : エラーメッセージ表示（状態変更なし）
+  deactivate Presenter
+
+else タブリロード失敗（部分的成功）
+  note over Interactor
+    DB更新は成功済み
+    presenter.present() 呼び出し後に
+    タブリロードでエラー発生
+  end note
+  Interactor -> Presenter : present(outputData)
+  activate Presenter
+  Presenter -> View : updateRuleInView(rule)
+  View --> UI : 状態更新（トグル後の状態）
+  deactivate Presenter
+
+  Interactor -> Presenter : presentError(errorOutputData)
+  activate Presenter
+  Presenter -> View : showErrorInView(ruleId, message)
+  View --> UI : エラーメッセージ表示
+  deactivate Presenter
+end
+
 @enduml
