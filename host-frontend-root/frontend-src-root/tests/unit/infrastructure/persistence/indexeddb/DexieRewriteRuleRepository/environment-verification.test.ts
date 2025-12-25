@@ -1,7 +1,7 @@
 import 'tests/unit/infrastructure/persistence/indexeddb/setup';
 
 import { IDBFactory } from 'fake-indexeddb';
-import { describe, expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 

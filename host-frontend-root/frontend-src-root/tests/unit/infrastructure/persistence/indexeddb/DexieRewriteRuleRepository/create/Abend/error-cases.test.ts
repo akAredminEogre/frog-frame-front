@@ -1,6 +1,6 @@
 import 'tests/unit/infrastructure/persistence/indexeddb/setup';
 
-import { afterEach,beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';

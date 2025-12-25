@@ -1,7 +1,7 @@
 import 'src/entrypoints/popup/App.css';
 
 import * as React from 'react';
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 import { PopupInitFormUseCase } from 'src/application/usecases/popup/PopupInitFormUseCase';
