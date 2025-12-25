@@ -57,10 +57,13 @@ directory_exists() {
     [ -d "${DIRECTORY_PATH}" ]
 }
 
-# Remove file with warning on failure (captures stderr for diagnostics)
+# Remove file with warning on failure
 # Usage: remove_file_with_warning <file_path>
+# Note: Checks file existence after rm since rm -f always returns 0
 remove_file_with_warning() {
     local FILE_PATH="$1"
-    local RM_OUTPUT
-    RM_OUTPUT=$(rm -f "${FILE_PATH}" 2>&1) || echo "Warning: Failed to remove file: ${FILE_PATH} - ${RM_OUTPUT}"
+    rm -f "${FILE_PATH}" 2>/dev/null
+    if [ -f "${FILE_PATH}" ]; then
+        echo "Warning: Failed to remove file: ${FILE_PATH}"
+    fi
 }

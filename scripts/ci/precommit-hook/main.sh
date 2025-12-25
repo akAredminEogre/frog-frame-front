@@ -16,9 +16,9 @@ source "${SCRIPT_DIR}/helper.sh"
 require_command git "Please install Git."
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
-PRE_COMMIT_HOOK="${REPO_ROOT}/.git/hooks/pre-commit"
-readonly REPO_ROOT FRONTEND_DIR PRE_COMMIT_HOOK
+readonly REPO_ROOT
+readonly FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
+readonly PRE_COMMIT_HOOK="${REPO_ROOT}/.git/hooks/pre-commit"
 
 echo "Setting up pre-commit hook for Claude Code Web..."
 
@@ -30,8 +30,7 @@ require_directory "${FRONTEND_DIR}" "Frontend directory not found at ${FRONTEND_
 # Install npm dependencies if lefthook package is not present
 # Note: Checking for specific package is more robust than just node_modules existence
 # Trade-off: This may skip installs when package.json updates; run `npm install` manually if needed
-LEFTHOOK_PACKAGE_DIR="${FRONTEND_DIR}/node_modules/@evilmartians/lefthook"
-readonly LEFTHOOK_PACKAGE_DIR
+readonly LEFTHOOK_PACKAGE_DIR="${FRONTEND_DIR}/node_modules/@evilmartians/lefthook"
 
 ensure_npm_dependencies() {
     if directory_exists "${LEFTHOOK_PACKAGE_DIR}"; then
@@ -45,6 +44,7 @@ ensure_npm_dependencies() {
     fi
 
     # Verify lefthook package was installed
+    # Note: require_directory exits on failure (fatal error - npm install succeeded but package missing)
     require_directory "${LEFTHOOK_PACKAGE_DIR}" "lefthook package not found after npm install. Installation may be incomplete."
 }
 
@@ -65,8 +65,7 @@ require_file "${PRE_COMMIT_HOOK}" "Pre-commit hook not found. lefthook install m
 
 # Expected patch path for verification
 # Note: This is a literal grep pattern; shell variables ($dir, ${osArch}, etc.) are NOT expanded
-EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
-readonly EXPECTED_PATH
+readonly EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
 
 # Check if already patched (early return pattern)
 if grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
@@ -80,8 +79,7 @@ fi
 echo "Patching pre-commit hook for custom node_modules path..."
 
 # Create backup before modification
-BACKUP_FILE="${PRE_COMMIT_HOOK}.backup"
-readonly BACKUP_FILE
+readonly BACKUP_FILE="${PRE_COMMIT_HOOK}.backup"
 if ! cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"; then
     echo "Error: Failed to create backup. Check disk space and permissions."
     exit 1
@@ -104,7 +102,8 @@ TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
     exit 1
 }
 # Set trap immediately after first temp file creation
-# Note: Trap handles temp file cleanup; BACKUP_FILE is managed manually (different lifecycle)
+# Note: BACKUP_FILE excluded from trap - on error, backup is preserved for manual recovery;
+# on success, backup is explicitly removed after verification (see end of script)
 trap 'rm -f "${TEMP_FILE}"' EXIT
 
 MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX") || {
@@ -131,19 +130,20 @@ BEGIN { matched = 0; patched = 0 }
         match($0, /^[ \t]*/)
         base_indent = substr($0, RSTART, RLENGTH)
         # Remove one indentation level for elif/then (outer level)
-        # Supports tab-based (1 tab), space-based (2 spaces), or mixed indentation
+        # Cascade logic: each check only runs if previous checks did not modify outer_indent
+        # (detected via "outer_indent == base_indent" guard condition)
         len = length(base_indent)
         # Default: use same indentation (no removal)
         outer_indent = base_indent
-        # Tab-based indentation: remove one tab
+        # Tab-based indentation: remove one tab (most common in shell scripts)
         if (len >= 1 && substr(base_indent, len, 1) == "\t") {
             outer_indent = substr(base_indent, 1, len - 1)
         }
-        # Space-based indentation (2-space): remove 2 spaces (only if not tab-based)
+        # Space-based indentation (2-space): only if tab check did not match
         if (outer_indent == base_indent && len >= 2 && substr(base_indent, len - 1, 2) == "  ") {
             outer_indent = substr(base_indent, 1, len - 2)
         }
-        # Mixed indentation fallback: remove last character as single indent step
+        # Fallback for other indentation styles: only if both tab and space checks failed
         if (outer_indent == base_indent && len >= 1) {
             outer_indent = substr(base_indent, 1, len - 1)
         }
