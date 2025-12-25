@@ -261,13 +261,21 @@ alt ルール取得失敗 または ルール更新失敗
 
 else タブリロード失敗（部分的成功）
   note over Interactor
-    **順序保証**
+    **順序保証（ToggleRuleActiveInteractor#execute）**
     1. present() は reloadMatchingTabs() の
        **前に同期的に呼び出される**
     2. タブリロードでエラー発生時、
        catch ブロックで presentError() が呼ばれる
 
-    この実装により、present() → presentError() の
+    ToggleRuleActiveInteractor#execute の実装:
+    ┌─────────────────────────────────────────┐
+    │ this.presenter.present(outputData);     │ ← 【1】同期呼び出し
+    │ await this.tabsGateway.reloadMatching   │
+    │     Tabs(toggledRule);                  │ ← ここでエラー発生
+    │ } catch (error) {                       │
+    │   this.presenter.presentError(...);     │ ← 【2】catch内で呼び出し
+    └─────────────────────────────────────────┘
+    この構造により present() → presentError() の
     順序が保証される（UIは正しい状態を表示）
   end note
   Interactor -> Presenter : present(outputData)
