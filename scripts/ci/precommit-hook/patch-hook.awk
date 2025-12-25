@@ -17,12 +17,9 @@ BEGIN { pattern_matched = 0; already_patched = 0 }
     if (already_patched == 1) { next }
     already_patched = 1
     # Extract leading indentation from matched line (spaces and tabs only)
-    # Note: Pattern /^[ \t]*/ always matches (can match zero chars), so match() always returns 1
-    if (match($0, /^[ \t]*/) > 0) {
-        base_indent = substr($0, RSTART, RLENGTH)
-    } else {
-        base_indent = ""
-    }
+    # Note: Pattern /^[ \t]*/ always matches (can match zero chars), so direct assignment is safe
+    match($0, /^[ \t]*/)
+    base_indent = substr($0, RSTART, RLENGTH)
     # Remove one indentation level for elif/then (outer level)
     # Cascade logic: each check only runs if previous checks did not modify outer_indent
     # (detected via "outer_indent == base_indent" guard condition)
