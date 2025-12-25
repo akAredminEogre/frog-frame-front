@@ -199,8 +199,6 @@ Interactor.execute(inputData)
 \`\`\`
 tests/integration/{feature-name}/
 ├── setup.ts                    # 共通セットアップ
-├── mocks/
-│   └── createMock[Name].ts     # モックファクトリ
 ├── helpers/
 │   └── createTest[Name].ts     # テストデータ生成ヘルパー
 ├── normal-cases.test.ts        # 正常系テスト
@@ -208,6 +206,8 @@ tests/integration/{feature-name}/
 ├── presenter-output.test.ts    # Presenter出力テスト
 └── error-cases.test.ts         # エラー系テスト
 \`\`\`
+
+※ モックファイルは `tests/integration/` 配下ではなく、ソース構造に対応するディレクトリに配置する（後述のモック戦略を参照）
 
 ## モック戦略
 
@@ -221,11 +221,16 @@ tests/integration/{feature-name}/
 
 ### モックファイル構成
 
+モックファイルは `docs/coding-standards/tests/common-rule.md` の「モックファイルの配置ルール」に従い、
+モック対象クラスのソースディレクトリ構造を `tests/` 配下で反映したディレクトリに配置する。
+
 \`\`\`
-tests/integration/{feature-name}/
-└── mocks/
-    └── createMock[Name].ts
+tests/{layer}/{category}/{ClassName}/
+└── createMock[Name].ts
 \`\`\`
+
+例: `src/frameworks-and-drivers/browser/ChromeTabsGateway/` のモック
+→ `tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`
 
 ## テストデータ設計
 
@@ -299,8 +304,9 @@ const [変数名] = new [Entity](
 | `data-integrity.test.ts` | データ整合性テスト |
 | `presenter-output.test.ts` | Presenter/コールバック出力テスト |
 | `error-cases.test.ts` | エラー系テスト |
-| `mocks/createMock*.ts` | モックファクトリ |
 | `helpers/createTest*.ts` | テストデータ生成ヘルパー |
+
+※ モックファクトリ（`createMock*.ts`）は `tests/{layer}/{category}/{ClassName}/` に配置
 
 ## 実行環境
 
