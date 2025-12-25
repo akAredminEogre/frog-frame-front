@@ -41,14 +41,16 @@ ensure_npm_dependencies() {
     echo "Installing npm dependencies..."
     if ! (cd "${FRONTEND_DIR}" && npm install --no-audit --no-fund); then
         echo "Error: Failed to install npm dependencies. Check permissions and network connectivity."
-        exit 1
+        return 1
     fi
 
     # Verify lefthook package was installed
     require_directory "${LEFTHOOK_PACKAGE_DIR}" "lefthook package not found after npm install. Installation may be incomplete."
 }
 
-ensure_npm_dependencies
+if ! ensure_npm_dependencies; then
+    exit 1
+fi
 
 # Install lefthook
 # Note: --prefix specifies where to find node_modules, cd to REPO_ROOT ensures lefthook.yml is found
@@ -86,8 +88,12 @@ if ! cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"; then
 fi
 
 # Helper function to restore backup on failure
+# Note: Exits on failure because corrupted hook state is unrecoverable
 restore_backup() {
-    mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" || echo "Error: Failed to restore backup. Manual recovery required."
+    if ! mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"; then
+        echo "Error: Failed to restore backup. Manual recovery required: cp ${BACKUP_FILE} ${PRE_COMMIT_HOOK}"
+        exit 1
+    fi
 }
 
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
@@ -156,7 +162,7 @@ END { print matched > STATUS_FILE }
 fi
 
 # Verify awk pattern matched
-readonly PATTERN_MATCHED=$(<"${MATCH_STATUS_FILE}")
+PATTERN_MATCHED=$(<"${MATCH_STATUS_FILE}")
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
     echo "This may indicate lefthook version incompatibility. Check generated hook format."
