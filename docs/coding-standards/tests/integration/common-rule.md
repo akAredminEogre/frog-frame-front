@@ -2,146 +2,74 @@
 
 結合テストを作成する際の共通ルールをまとめたドキュメント。
 
----
-
-## 1. インポートパスのルール
-
-### パスエイリアスを使用する
-
-`tsconfig.json` で定義されているパスエイリアスを使用する。
-
-```json
-// tsconfig.json
-{
-  "compilerOptions": {
-    "paths": {
-      "src/*": ["./src/*"],
-      "tests/*": ["./tests/*"]
-    }
-  }
-}
-```
-
-### 推奨パターン
-
-```typescript
-// OK: パスエイリアスを使用
-import 'tests/integration/toggle-rule-active/setup';
-import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
-import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
-```
-
-### NG例
-
-```typescript
-// NG: 相対パスや冗長なパスは使用しない
-import 'src/../tests/integration/toggle-rule-active/setup';
-import { createTestRule } from '../helpers/createTestRule';
-import { DexieRewriteRuleRepository } from '../../../src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
-```
+**参照**: インポートパスのルールは [テスト共通ルール](../common-rule.md) を参照。
 
 ---
 
-## 2. fake-indexeddb のセットアップ
+## 1. fake-indexeddb のセットアップ
 
-### 推奨パターン（自動セットアップ）
+### 規約
 
-```typescript
-import 'fake-indexeddb/auto';
-// これだけで globalThis.indexedDB が自動設定される
-```
+- `fake-indexeddb/auto` のインポートのみで自動セットアップされる
+- 手動での `globalThis.indexedDB` 代入は不要
+- `auto` インポートと手動セットアップの併用は禁止
 
-`fake-indexeddb/auto` をインポートするだけで、`globalThis.indexedDB` が自動的に設定される。
-手動で代入する必要はない。
+### 禁止事項
 
-### NG例
+- `fake-indexeddb/auto` インポート後に `globalThis.indexedDB = new IDBFactory()` を実行すること
 
-```typescript
-// NG: 自動セットアップと手動セットアップの併用は冗長
-import 'fake-indexeddb/auto';
-import { IDBFactory } from 'fake-indexeddb';
-globalThis.indexedDB = new IDBFactory(); // 不要
-```
+### 許可事項
 
-### 手動セットアップ（特別な理由がある場合のみ）
+- `import 'fake-indexeddb/auto';` のみでのセットアップ
+- 特別な理由がある場合のみ、`auto` なしで手動セットアップ
 
-```typescript
-// autoインポートを使わない場合のみ
-import { IDBFactory } from 'fake-indexeddb';
-globalThis.indexedDB = new IDBFactory();
-```
+## eslint-rule
+
+ESLint化不可（ライブラリ固有の使用パターンのため、PRレビューで確認）
 
 ---
 
-## 3. Vitestモック管理
+## 2. Vitestモック管理
+
+### 規約
+
+- `beforeEach` で `vi.clearAllMocks()` を使用する
+- `afterEach` でのモッククリア/リセットは原則不要
 
 ### clearAllMocks vs resetAllMocks の違い
 
-| メソッド          | 呼び出し履歴 | 実装(mockImplementation) |
-| ----------------- | ------------ | ------------------------ |
-| `clearAllMocks()` | クリア       | 維持                     |
-| `resetAllMocks()` | クリア       | リセット                 |
-| `restoreAllMocks()` | クリア     | 元の実装に復元           |
+| メソッド            | 呼び出し履歴 | 実装(mockImplementation) |
+| ------------------- | ------------ | ------------------------ |
+| `clearAllMocks()`   | クリア       | 維持                     |
+| `resetAllMocks()`   | クリア       | リセット                 |
+| `restoreAllMocks()` | クリア       | 元の実装に復元           |
 
-### 推奨パターン
+### 禁止事項
 
-- `beforeEach` で `vi.clearAllMocks()` を使用
-- `afterEach` は原則不要（次の `beforeEach` でクリアされる）
+- `beforeEach` と `afterEach` の両方でモック操作を行うこと
 
-```typescript
-// OK: beforeEachのみでモッククリア
-beforeEach(() => {
-  vi.clearAllMocks();
-  // その他のセットアップ
-});
+### 許可事項
 
-// afterEach不要
-```
+- `beforeEach` での `vi.clearAllMocks()` 使用
+- 外部リソースクリーンアップのための `afterEach` 使用（モック操作以外）
 
-### NG例
+## eslint-rule
 
-```typescript
-// NG: beforeEachとafterEachの両方でモック操作は冗長
-beforeEach(() => {
-  vi.clearAllMocks();
-});
-
-afterEach(() => {
-  vi.resetAllMocks(); // 不要：次のbeforeEachでクリアされる
-});
-```
-
-### afterEachが必要なケース
-
-以下のようなリソースクリーンアップが必要な場合のみ `afterEach` を使用：
-
-```typescript
-afterEach(async () => {
-  // 外部リソースのクリーンアップ（モック操作ではない）
-  await someExternalResource.cleanup();
-});
-```
+ESLint化不可（テストパターンの意図判断が必要なため、PRレビューで確認）
 
 ---
 
-## 4. テストセットアップの順序
+## 3. テストセットアップの順序
 
-`beforeEach` 内での処理順序：
+### 規約
 
-```typescript
-beforeEach(async () => {
-  // 1. モックのクリア
-  vi.clearAllMocks();
+`beforeEach` 内での処理順序:
 
-  // 2. DBのクリア
-  await dexieDatabase.rewriteRules.clear();
+1. モックのクリア（`vi.clearAllMocks()`）
+2. DBのクリア
+3. 依存オブジェクトの初期化
+4. コールバック関数の初期化
 
-  // 3. 依存オブジェクトの初期化
-  repository = new DexieRewriteRuleRepository();
-  mockTabsGateway = createMockTabsGateway();
+## eslint-rule
 
-  // 4. コールバック関数の初期化
-  onSuccess = vi.fn();
-  onError = vi.fn();
-});
-```
+ESLint化不可（処理順序の強制は静的解析の範囲外、PRレビューで確認）
