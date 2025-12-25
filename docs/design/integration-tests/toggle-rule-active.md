@@ -160,9 +160,11 @@ TabsGatewayは `reloadMatchingTabs` メソッドのみをモック化し、呼�
 ### モックファイル構成
 
 ```
-tests/integration/toggle-rule-active/
-└── mocks/
-    └── createMockTabsGateway.ts    # ITabsGateway モックファクトリ
+tests/
+└── frameworks-and-drivers/
+    └── browser/
+        └── ChromeTabsGateway/
+            └── createMockTabsGateway.ts    # ITabsGateway モックファクトリ
 ```
 
 ## テストデータ設計
