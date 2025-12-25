@@ -26,4 +26,4 @@
 ## eslint-rule
 
 - srcディレクトリ: `eslint-rules/no-relative-paths.js`
-- testsディレクトリ: `eslint-rules/no-relative-paths-tests.js`
+- testsディレクトリ: `eslint-rules/tests/no-relative-paths-tests.js`
