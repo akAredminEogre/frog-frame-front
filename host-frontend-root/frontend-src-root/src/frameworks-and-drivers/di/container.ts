@@ -22,7 +22,7 @@ import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeR
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { ChromeWindowService } from 'src/infrastructure/browser/window/ChromeWindowService';
-import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
+import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
 import { SelectedPageTextRepository } from 'src/infrastructure/persistence/storage/SelectedPageTextRepository';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
