@@ -16,6 +16,7 @@ interface IToggleRuleActiveUseCase <<Input Port>> {
 
 interface IToggleRuleActivePresenter <<Output Port>> {
   + present(outputData: ToggleRuleActiveOutputData): void
+  + presentError(errorData: ToggleRuleActiveErrorOutputData): void
 }
 
 class ToggleRuleActiveInputData <<Input Data>> {
@@ -24,6 +25,11 @@ class ToggleRuleActiveInputData <<Input Data>> {
 
 class ToggleRuleActiveOutputData <<Output Data>> {
   + toggledRule: RewriteRule
+}
+
+class ToggleRuleActiveErrorOutputData <<Error Output Data>> {
+  + ruleId: number
+  + message: string
 }
 
 class ToggleRuleActiveInteractor <<Use Case>> {
@@ -135,6 +141,7 @@ ToggleRuleActiveInteractor ..> IRewriteRuleRepository : uses
 ToggleRuleActiveInteractor ..> ITabsGateway : uses
 ToggleRuleActiveInteractor ..> IToggleRuleActivePresenter : uses
 ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
+ToggleRuleActiveInteractor ..> ToggleRuleActiveErrorOutputData : creates
 ToggleRuleActiveInteractor ..> RewriteRule : uses
 ToggleRuleActivePresenter ..|> IToggleRuleActivePresenter : implements
 ToggleRuleActivePresenter ..> RulesApp : updates
