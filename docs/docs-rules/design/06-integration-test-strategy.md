@@ -21,35 +21,27 @@
 
 ## 配置
 
-結合テストは **feature単位** で配置する。
+結合テスト戦略書は、featureの `00-overview.md` と同じディレクトリに配置する。
 
 ```
-docs/design/integration-tests/
-└── {feature-name}.md
+docs/design/pages/{page-name}/features/{feature-name}/
+├── 00-overview.md
+├── ...
+└── integration-test-strategy.md    # ← ここに配置
 ```
 
 ### 配置例
 
 | feature | テスト戦略書 |
 |---------|-------------|
-| toggle-rule-active（ルール有効/無効切り替え） | `docs/design/integration-tests/toggle-rule-active.md` |
-| create-rule（ルール作成） | `docs/design/integration-tests/create-rule.md` |
-
-### ディレクトリ構造
-
-```
-docs/design/integration-tests/
-├── toggle-rule-active.md
-├── create-rule.md
-├── delete-rule.md
-└── batch-delete.md
-```
+| toggle-rule-active（ルール有効/無効切り替え） | `docs/design/pages/rule-list/features/toggle-rule-active/integration-test-strategy.md` |
+| create-rule（ルール作成） | `docs/design/pages/rule-list/features/create-rule/integration-test-strategy.md` |
 
 ### 設計意図
 
 - **feature単位**: 機能ごとにテストを管理し、再利用性を高める
-- **フラット構造**: シンプルなディレクトリ構造で検索性を向上
-- **トレーサビリティ**: 設計ドキュメント（`docs/design/pages/.../features/`）との対応を明確化
+- **設計ドキュメントと同一ディレクトリ**: 設計書との対応を明確化、検索性を向上
+- **トレーサビリティ**: `00-overview.md` と同じ場所に配置することで、機能の全体像を把握しやすくする
 
 ## 必須セクション
 
