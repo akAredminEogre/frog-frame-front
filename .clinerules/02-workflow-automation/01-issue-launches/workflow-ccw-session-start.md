@@ -6,11 +6,16 @@ workflow-ccw-session-start branch-suffix=
 **ブランチが既に指定されている場合でも、Issue管理のセットアップのために実行してください。**
 
 ### pre-commitフックのセットアップ
-セッション開始時に以下のスクリプトを実行して、pre-commitフック（ESLint + import sorting）を有効化します：
+セッション開始時に以下のスクリプトを実行して、pre-commitフックを有効化します：
 ```bash
 ./scripts/ci/precommit-hook/main.sh
 ```
 ※ node_modulesがない場合は自動的にnpm installも実行されます
+
+**フックの内容**:
+- ESLint（コード品質チェック）
+- simple-import-sort（import文の自動整列）
+- 対象ファイル: ステージされた `.ts`, `.tsx`, `.js`, `.jsx` ファイル
 
 ### Issue番号の採番
 - `workflow-get-new-branch-number` ワークフローを実行して新しいissue番号(nnn)を取得
