@@ -12,6 +12,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${SCRIPT_DIR}/helper.sh"
 source "${SCRIPT_DIR}/awk-helper.sh"
+source "${SCRIPT_DIR}/npm-helper.sh"
 
 # Check required commands (early return pattern)
 require_command git "Please install Git."
