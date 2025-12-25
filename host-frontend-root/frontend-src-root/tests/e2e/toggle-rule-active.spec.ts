@@ -1,4 +1,4 @@
-import { type Dialog, type Page } from '@playwright/test';
+import { type Page } from '@playwright/test';
 
 import { expect, test } from 'tests/e2e/fixtures';
 
@@ -41,21 +41,20 @@ async function saveRule(
   await beforeInput.fill(options.oldString);
   await afterInput.fill(options.newString);
 
-  // アラートダイアログの処理設定
-  let alertMessage = '';
-  popupPage.on('dialog', async (dialog: Dialog) => {
-    alertMessage = dialog.message();
-    await dialog.accept();
-  });
-
   // 保存ボタンクリック
   const saveButton = popupPage.locator('button:has-text("保存")');
   await expect(saveButton).toBeVisible({ timeout: 60000 });
   await expect(saveButton).toBeEnabled({ timeout: 60000 });
-  await saveButton.click();
 
-  // 保存完了を待機
-  await expect.poll(() => alertMessage, { timeout: 60000 }).toBe('保存して適用しました！');
+  // ダイアログ待機と保存ボタンクリックを同時に実行
+  const [dialog] = await Promise.all([
+    popupPage.waitForEvent('dialog', { timeout: 60000 }),
+    saveButton.click(),
+  ]);
+
+  // ダイアログメッセージを確認して承諾
+  expect(dialog.message()).toBe('保存して適用しました！');
+  await dialog.accept();
 }
 
 /**
