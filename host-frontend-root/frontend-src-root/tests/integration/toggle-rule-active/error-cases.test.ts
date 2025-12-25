@@ -5,7 +5,7 @@
  * 1. 存在しないruleIdでエラーコールバックが呼ばれる
  * 2. エラー時にDBが変更されない
  */
-import 'src/../tests/integration/toggle-rule-active/setup';
+import 'tests/integration/toggle-rule-active/setup';
 
 import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';

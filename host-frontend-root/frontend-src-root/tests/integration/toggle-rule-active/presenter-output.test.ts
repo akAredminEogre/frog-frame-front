@@ -5,7 +5,7 @@
  * 1. updateRuleInViewコールバックが呼び出される
  * 2. コールバックに渡されるルールが更新後の状態
  */
-import 'src/../tests/integration/toggle-rule-active/setup';
+import 'tests/integration/toggle-rule-active/setup';
 
 import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';

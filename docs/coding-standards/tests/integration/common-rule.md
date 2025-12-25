@@ -4,7 +4,45 @@
 
 ---
 
-## 1. fake-indexeddb のセットアップ
+## 1. インポートパスのルール
+
+### パスエイリアスを使用する
+
+`tsconfig.json` で定義されているパスエイリアスを使用する。
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "src/*": ["./src/*"],
+      "tests/*": ["./tests/*"]
+    }
+  }
+}
+```
+
+### 推奨パターン
+
+```typescript
+// OK: パスエイリアスを使用
+import 'tests/integration/toggle-rule-active/setup';
+import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
+import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
+```
+
+### NG例
+
+```typescript
+// NG: 相対パスや冗長なパスは使用しない
+import 'src/../tests/integration/toggle-rule-active/setup';
+import { createTestRule } from '../helpers/createTestRule';
+import { DexieRewriteRuleRepository } from '../../../src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
+```
+
+---
+
+## 2. fake-indexeddb のセットアップ
 
 ### 推奨パターン（自動セットアップ）
 
@@ -35,7 +73,7 @@ globalThis.indexedDB = new IDBFactory();
 
 ---
 
-## 2. Vitestモック管理
+## 3. Vitestモック管理
 
 ### clearAllMocks vs resetAllMocks の違い
 
@@ -86,7 +124,7 @@ afterEach(async () => {
 
 ---
 
-## 3. テストセットアップの順序
+## 4. テストセットアップの順序
 
 `beforeEach` 内での処理順序：
 
