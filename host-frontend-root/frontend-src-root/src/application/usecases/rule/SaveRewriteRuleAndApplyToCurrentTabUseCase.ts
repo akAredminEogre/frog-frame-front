@@ -1,6 +1,6 @@
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 

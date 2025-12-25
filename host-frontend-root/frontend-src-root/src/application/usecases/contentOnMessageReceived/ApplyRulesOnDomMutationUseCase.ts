@@ -1,7 +1,7 @@
 import { ICurrentUrlService } from 'src/application/ports/ICurrentUrlService';
 import { IDebounceTimer } from 'src/application/ports/IDebounceTimer';
 import { IObserverControl } from 'src/application/ports/IObserverControl';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IDomRootChecker } from 'src/domain/ports/IDomRootChecker';
 import { IElementFactory } from 'src/domain/ports/IElementFactory';
 import { Elements } from 'src/domain/value-objects/Elements/Elements';

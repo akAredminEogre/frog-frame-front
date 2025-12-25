@@ -5,7 +5,7 @@ import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
 import { IGetSelectionService } from 'src/application/ports/IGetSelectionService';
 import { IPopupService } from 'src/application/ports/IPopupService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { ISelectedPageTextRepository } from 'src/application/ports/ISelectedPageTextRepository';
 import { IWindowService } from 'src/application/ports/IWindowService';
 import { ContextMenuSetupUseCase } from 'src/application/usecases/contextmenu/ContextMenuSetupUseCase';
