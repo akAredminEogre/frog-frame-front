@@ -1,3 +1,5 @@
+import { type Dialog, type Page } from '@playwright/test';
+
 import { expect, test } from 'tests/e2e/fixtures';
 
 /**
@@ -12,8 +14,8 @@ import { expect, test } from 'tests/e2e/fixtures';
  * テストヘルパー: ルールをポップアップから保存する
  */
 async function saveRule(
-  popupPage: Awaited<ReturnType<typeof test['fixtures']>['popupPage']>,
-  page: Awaited<ReturnType<typeof test['fixtures']>['page']>,
+  popupPage: Page,
+  page: Page,
   options: {
     oldString: string;
     newString: string;
@@ -41,7 +43,7 @@ async function saveRule(
 
   // アラートダイアログの処理設定
   let alertMessage = '';
-  popupPage.on('dialog', async dialog => {
+  popupPage.on('dialog', async (dialog: Dialog) => {
     alertMessage = dialog.message();
     await dialog.accept();
   });
@@ -60,7 +62,7 @@ async function saveRule(
  * テストヘルパー: ToggleSwitchの状態を取得する
  */
 async function getToggleState(
-  rulesPage: Awaited<ReturnType<typeof test['fixtures']>['rulesPage']>,
+  rulesPage: Page,
   ruleIndex: number
 ): Promise<boolean> {
   const toggleDiv = rulesPage.locator('[data-selected]').nth(ruleIndex);
@@ -72,7 +74,7 @@ async function getToggleState(
  * テストヘルパー: ToggleSwitchをクリックする
  */
 async function clickToggle(
-  rulesPage: Awaited<ReturnType<typeof test['fixtures']>['rulesPage']>,
+  rulesPage: Page,
   ruleIndex: number
 ) {
   const toggleLabel = rulesPage.locator('label').filter({ has: rulesPage.locator('[data-selected]') }).nth(ruleIndex);
