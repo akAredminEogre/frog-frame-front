@@ -64,7 +64,7 @@ fi
 echo "Patching pre-commit hook for custom node_modules path..."
 
 # Create backup before modification
-readonly BACKUP_FILE="${PRE_COMMIT_HOOK}.backup"
+BACKUP_FILE="${PRE_COMMIT_HOOK}.backup"
 if ! cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"; then
     echo "Error: Failed to create backup. Check disk space and permissions."
     exit 1

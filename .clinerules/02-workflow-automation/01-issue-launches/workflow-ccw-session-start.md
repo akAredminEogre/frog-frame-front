@@ -15,6 +15,7 @@ workflow-ccw-session-start branch-suffix=
 ```bash
 ./scripts/ci/precommit-hook/main.sh
 ```
+※ このスクリプトは複数回実行しても安全です（既存の設定を検出して終了します）
 ※ node_modulesがない場合は自動的にnpm installも実行されます
 
 **フックの内容**:
