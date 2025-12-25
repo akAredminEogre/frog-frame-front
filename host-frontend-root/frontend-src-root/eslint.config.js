@@ -10,6 +10,7 @@ import reactRules from '#eslint-rules/react.js';
 import general from '#eslint-rules/general.js';
 import noRelativePaths from '#eslint-rules/no-relative-paths.js';
 import noRelativePathsTests from '#eslint-rules/tests/no-relative-paths-tests.js';
+import requireTestDataTypes from '#eslint-rules/tests/require-test-data-types.js';
 import cleanArchitecture from '#eslint-rules/clean-architecture/main.js';
 import ignores from '#eslint-rules/ignores.js';
 
@@ -22,6 +23,7 @@ export default [
   general,
   noRelativePaths,
   noRelativePathsTests,
+  requireTestDataTypes,
   ...cleanArchitecture,
   ignores,
   ...storybook.configs["flat/recommended"],
