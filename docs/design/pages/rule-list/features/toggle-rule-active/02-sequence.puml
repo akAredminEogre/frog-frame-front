@@ -18,6 +18,7 @@ box "interface-adapters" #LightGreen
 end box
 
 box "application-business-rules" #LightYellow
+  participant "<<interface>>\nIToggleRuleActiveUseCase" as IUseCase
   participant "ToggleRuleActiveInteractor" as Interactor
   participant "<<interface>>\nIRewriteRuleRepository" as IRepository
   participant "<<interface>>\nITabsGateway" as ITabsGateway
@@ -50,7 +51,8 @@ activate Factory
 
 Factory -> Presenter : new(onSuccess, onError)
 Factory -> Interactor : new(repository, tabsGateway, presenter)
-Factory -> Controller : new(interactor)
+note right of Factory : Interactor は IToggleRuleActiveUseCase を実装
+Factory -> Controller : new(useCase: IToggleRuleActiveUseCase)
 Factory --> IFactory : controller
 deactivate Factory
 
@@ -85,7 +87,9 @@ activate IController
 IController -> Controller : toggleActive(ruleId)
 activate Controller
 
-Controller -> Interactor : execute(inputData)
+Controller -> IUseCase : execute(inputData)
+note right of Controller : 依存性逆転: Controller は IUseCase に依存
+IUseCase -> Interactor : execute(inputData)
 activate Interactor
 
 Interactor -> IRepository : getById(ruleId)
