@@ -8,8 +8,9 @@ BEGIN { matched = 0; patched = 0 }
 
 # Match the execution line for @evilmartians/lefthook (flexible pattern for arch and quote styles)
 # Only patch the first occurrence to prevent duplicate patches
-# Note: Pattern handles optional single/double quotes around paths and $@
-/@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook['"]?[ \t]+['"]?\$@['"]?[ \t]*$/ {
+# Note: Pattern anchored to line start to avoid matching comments or echo statements
+# Pattern handles optional single/double quotes around paths and $@
+/^[ \t]*['"]?[^'"]*@evilmartians\/lefthook\/bin\/lefthook-[^/]+\/lefthook['"]?[ \t]+['"]?\$@['"]?[ \t]*$/ {
     matched = 1
     print
     # Early skip if already patched (prevents duplicate insertion)
