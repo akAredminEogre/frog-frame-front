@@ -69,15 +69,6 @@ if ! cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"; then
     exit 1
 fi
 
-# Helper function to restore backup on failure
-# Note: Exits on failure because corrupted hook state is unrecoverable
-restore_backup() {
-    if ! mv "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"; then
-        echo "Error: Failed to restore backup. Manual recovery required: cp ${BACKUP_FILE} ${PRE_COMMIT_HOOK}"
-        exit 1
-    fi
-}
-
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
 TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
@@ -159,20 +150,20 @@ fi
 # Apply patched file with error handling
 if ! mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to apply patch. Restoring backup."
-    restore_backup
+    restore_backup "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
     exit 1
 fi
 
 if ! chmod +x "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to set execute permission. Restoring backup."
-    restore_backup
+    restore_backup "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
     exit 1
 fi
 
 # Verify patch was applied successfully with exact string match
 if ! grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Error: Failed to patch pre-commit hook. Patch verification failed."
-    restore_backup
+    restore_backup "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}"
     exit 1
 fi
 
