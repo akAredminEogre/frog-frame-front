@@ -5,7 +5,7 @@
  * 3. isRegexデフォルト値の確認
  * 4. isActiveデフォルト値の確認
  */
-import { describe, expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
