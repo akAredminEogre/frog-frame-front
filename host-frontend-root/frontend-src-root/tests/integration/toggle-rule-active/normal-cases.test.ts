@@ -5,7 +5,7 @@
  * 1. isActive=true のルールを false に切り替え
  * 2. isActive=false のルールを true に切り替え
  */
-import 'src/../tests/integration/toggle-rule-active/setup';
+import 'tests/integration/toggle-rule-active/setup';
 
 import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';

@@ -6,7 +6,7 @@
  * 2. isActive以外のプロパティが変更されない
  * 3. 他のルールが影響を受けない
  */
-import 'src/../tests/integration/toggle-rule-active/setup';
+import 'tests/integration/toggle-rule-active/setup';
 
 import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 import { createMockTabsGateway } from 'tests/integration/toggle-rule-active/mocks/createMockTabsGateway';
