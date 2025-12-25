@@ -50,4 +50,10 @@ BEGIN { pattern_matched = 0; already_patched = 0 }
 
 { print }
 
-END { print pattern_matched > STATUS_FILE }
+END {
+    print pattern_matched > STATUS_FILE
+    if (close(STATUS_FILE) != 0) {
+        print "Error: Failed to write status file: " STATUS_FILE > "/dev/stderr"
+        exit 1
+    }
+}
