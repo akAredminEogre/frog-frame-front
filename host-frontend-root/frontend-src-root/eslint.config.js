@@ -9,6 +9,7 @@ import typescript from '#eslint-rules/typescript.js';
 import reactRules from '#eslint-rules/react.js';
 import general from '#eslint-rules/general.js';
 import noRelativePaths from '#eslint-rules/no-relative-paths.js';
+import noRelativePathsTests from '#eslint-rules/no-relative-paths-tests.js';
 import cleanArchitecture from '#eslint-rules/clean-architecture/main.js';
 import ignores from '#eslint-rules/ignores.js';
 
@@ -20,6 +21,7 @@ export default [
   reactRules,
   general,
   noRelativePaths,
+  noRelativePathsTests,
   ...cleanArchitecture,
   ignores,
   ...storybook.configs["flat/recommended"],
