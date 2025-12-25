@@ -78,4 +78,4 @@ ESLint化不可（ディレクトリ構造の規約はファイルシステム�
 
 ## eslint-rule
 
-`eslint-rules/tests/require-test-data-types.js`
+ESLint化不可（`@typescript-eslint/typedef`はすべての変数宣言に型注釈を要求するため過剰。テストデータ配列のみを対象とするルールは存在しない。PRレビューで確認）
