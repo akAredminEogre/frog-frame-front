@@ -156,7 +156,7 @@ END { print matched > STATUS_FILE }
 fi
 
 # Verify awk pattern matched
-readonly PATTERN_MATCHED=$(cat "${MATCH_STATUS_FILE}")
+readonly PATTERN_MATCHED=$(<"${MATCH_STATUS_FILE}")
 if [ "${PATTERN_MATCHED}" != "1" ]; then
     echo "Error: Failed to patch pre-commit hook. The awk pattern did not match lefthook format."
     echo "This may indicate lefthook version incompatibility. Check generated hook format."
