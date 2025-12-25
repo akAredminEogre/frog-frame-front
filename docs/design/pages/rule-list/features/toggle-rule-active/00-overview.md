@@ -46,6 +46,25 @@
 同一ルールに対する連続トグル操作を防止：
 - トグル処理中はトグルスイッチを操作不可にする
 
+**実装メカニズム**:
+
+| コンポーネント | 実装 | 責務 |
+|---------------|------|------|
+| RulesApp | `togglingIds: Set<number>` | 処理中のルールIDを管理 |
+| RulesApp | `handleToggle()` | 処理中チェック・フラグ設定/解除 |
+| ToggleSwitch | `disabled` prop | UI操作の無効化 |
+
+```
+トグル操作時のフロー:
+1. handleToggle(ruleId) 呼び出し
+2. togglingIds.has(ruleId) → true なら早期リターン（連続操作防止）
+3. togglingIds に ruleId を追加（処理開始）
+4. ToggleSwitch の disabled=true で操作不可に
+5. Controller.toggleActive(ruleId) 実行
+6. togglingIds から ruleId を削除（処理完了）
+7. ToggleSwitch の disabled=false で操作可能に
+```
+
 ## 関連ドキュメント
 
 - [ユーザーストーリー](../../../../../user-stories/user-story-001/)
