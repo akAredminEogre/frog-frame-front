@@ -199,7 +199,7 @@ tests/integration/{feature-name}/
 └── error-cases.test.ts         # エラー系テスト
 \`\`\`
 
-※ モックファイルは `tests/integration/` 配下ではなく、ソース構造に対応するディレクトリに配置する（後述のモック戦略を参照）
+※ モックファイルは `tests/integration/` 配下ではなく、`tests/{layer}/{category}/{ClassName}/` に配置する（後述のモック戦略を参照）
 
 ## モック戦略
 
