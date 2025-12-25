@@ -67,6 +67,7 @@
 |--------|------|
 | ToggleRuleActiveInputData | 入力DTO。対象ルールIDを保持 |
 | ToggleRuleActiveOutputData | 出力DTO。更新後のルールを保持 |
+| ToggleRuleActiveErrorOutputData | エラー出力DTO。エラー発生時のruleIdとエラーメッセージを保持 |
 | IToggleRuleActiveUseCase | Input Port。トグル処理のインターフェース |
 | IToggleRuleActivePresenter | Output Port。結果通知のインターフェース |
 | ToggleRuleActiveInteractor | UseCase実装。トグル処理を実行 |
@@ -227,6 +228,13 @@ ADR-001 に従い、ドメインエンティティの値を用いた判定・計
 │  │ ─────────────────── │    │ ────────────────────  │                       │
 │  │ + ruleId: number    │    │ + toggledRule: Rule  │                       │
 │  └─────────────────────┘    └──────────────────────┘                       │
+│                                                                             │
+│  ┌──────────────────────────────────────────────────┐                       │
+│  │ ToggleRuleActiveErrorOutputData                  │                       │
+│  │ ──────────────────────────────────────────────── │                       │
+│  │ + ruleId: number                                 │                       │
+│  │ + message: string                                │                       │
+│  └──────────────────────────────────────────────────┘                       │
 │                                                                             │
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
 │  │ <<interface>>               │    │ <<interface>>               │        │

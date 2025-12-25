@@ -29,7 +29,8 @@ src/application-business-rules/
     ├── input/
     │   └── ToggleRuleActiveInputData.ts
     └── output/
-        └── ToggleRuleActiveOutputData.ts
+        ├── ToggleRuleActiveOutputData.ts
+        └── ToggleRuleActiveErrorOutputData.ts   ← エラー出力DTO
 ```
 
 ### 第3層: interface-adapters/
