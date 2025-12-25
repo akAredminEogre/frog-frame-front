@@ -15,7 +15,7 @@ require_command() {
         return 0
     fi
 
-    echo "Error: ${COMMAND_NAME} command not found. ${INSTALL_HINT}"
+    echo "Error: ${COMMAND_NAME} command not found. ${INSTALL_HINT}" >&2
     exit 1
 }
 
@@ -30,7 +30,7 @@ require_directory() {
         return 0
     fi
 
-    echo "Error: ${ERROR_MESSAGE}"
+    echo "Error: ${ERROR_MESSAGE}" >&2
     exit 1
 }
 
@@ -45,7 +45,7 @@ require_file() {
         return 0
     fi
 
-    echo "Error: ${ERROR_MESSAGE}"
+    echo "Error: ${ERROR_MESSAGE}" >&2
     exit 1
 }
 
@@ -66,7 +66,7 @@ remove_file_with_warning() {
         return 0
     fi
     if ! rm "${FILE_PATH}" 2>/dev/null; then
-        echo "Warning: Failed to remove file: ${FILE_PATH}"
+        echo "Warning: Failed to remove file: ${FILE_PATH}" >&2
     fi
 }
 
@@ -85,7 +85,7 @@ ensure_npm_dependencies() {
 
     echo "Installing npm dependencies..."
     if ! (cd "${FRONTEND_DIR}" && npm install --no-audit --no-fund); then
-        echo "Error: Failed to install npm dependencies. Check permissions and network connectivity."
+        echo "Error: Failed to install npm dependencies. Check permissions and network connectivity." >&2
         return 1
     fi
 
@@ -103,7 +103,7 @@ restore_backup() {
     local TARGET_FILE="$2"
 
     if ! mv "${BACKUP_FILE}" "${TARGET_FILE}"; then
-        echo "Error: Failed to restore backup. Manual recovery required: cp ${BACKUP_FILE} ${TARGET_FILE}"
+        echo "Error: Failed to restore backup. Manual recovery required: cp ${BACKUP_FILE} ${TARGET_FILE}" >&2
         exit 1
     fi
 }
