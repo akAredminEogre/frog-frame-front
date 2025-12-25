@@ -3,8 +3,8 @@ import 'tests/unit/infrastructure/persistence/indexeddb/setup';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
-import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 
 /**
  * 1. 既存のIDを持つレコードを追加しようとした場合、エラーが発生する

@@ -17,8 +17,8 @@ import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/cre
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
-import { DexieRewriteRuleRepository } from 'src/infrastructure/persistence/indexeddb/DexieRewriteRuleRepository';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 
 describe('toggle-rule-active 結合テスト - 部分的成功（タブリロード失敗）', () => {
