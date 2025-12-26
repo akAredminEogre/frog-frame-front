@@ -1,6 +1,7 @@
 import { expect, test } from 'tests/e2e/fixtures';
 import {
   assertNoConsoleErrors,
+  clearAllRules,
   clickToggle,
   getToggleState,
   reloadAndWaitForTable,
@@ -17,6 +18,11 @@ import {
  * @see docs/design/pages/rule-list/features/toggle-rule-active/e2e-test-strategy.md
  */
 test.describe('ルールトグル機能 - 正常操作フロー', () => {
+  // テスト後にデータをクリーンアップ
+  test.afterEach(async ({ rulesPage }) => {
+    await clearAllRules(rulesPage);
+  });
+
   test('有効なルールを無効に切り替えられる（isActive: true → false）', async ({ page, popupPage, rulesPage }) => {
     // コンソールエラー監視をセットアップ
     const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);

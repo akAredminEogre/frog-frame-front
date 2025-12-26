@@ -1,6 +1,7 @@
 import { expect, test } from 'tests/e2e/fixtures';
 import {
   assertNoConsoleErrors,
+  clearAllRules,
   getToggleState,
   reloadAndWaitForTable,
   RULES_TABLE_TIMEOUT,
@@ -17,6 +18,11 @@ import {
  * @see docs/design/pages/rule-list/features/toggle-rule-active/e2e-test-strategy.md
  */
 test.describe('ルールトグル機能 - 競合防止', () => {
+  // テスト後にデータをクリーンアップ
+  test.afterEach(async ({ rulesPage }) => {
+    await clearAllRules(rulesPage);
+  });
+
   test('素早い連続クリックでも1回分の切り替えのみが適用される（競合防止）', async ({ page, popupPage, rulesPage }) => {
     // コンソールエラー監視をセットアップ
     const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
@@ -31,13 +37,12 @@ test.describe('ルールトグル機能 - 競合防止', () => {
     await reloadAndWaitForTable(rulesPage);
 
     // 3. Act: トグルを素早く2回クリック（競合状態のテスト）
-    // 1回目のクリックの処理中に2回目がブロックされることを確認
+    // awaitなしで連続クリックすることで、1回目の処理中に2回目がブロックされることを確認
     const toggleDataSelected = rulesPage.locator('[data-selected]');
     const toggleLabel = rulesPage.locator('label').filter({ has: toggleDataSelected }).nth(0);
-    await Promise.all([
-      toggleLabel.click(),
-      toggleLabel.click(),
-    ]);
+    // 連続クリック: 1回目のクリック完了を待たずに2回目をトリガー
+    void toggleLabel.click();
+    await toggleLabel.click();
 
     // 4. Assert: 素早い連続クリックでも最終状態が1回分の切り替えになることを確認
     // （2回トグルされていたら true に戻ってしまう）

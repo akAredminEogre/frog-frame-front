@@ -56,6 +56,43 @@ export function assertNoConsoleErrors(consoleMessages: string[]): void {
 }
 
 // =============================================================================
+// データベースクリーンアップ
+// =============================================================================
+
+/**
+ * 全てのルールを削除する（テストデータのクリーンアップ用）
+ *
+ * IndexedDBの'FrogFrameFrontDatabase'データベースから全てのrewriteRulesを削除する。
+ * テスト間のデータ独立性を確保するために使用する。
+ *
+ * @param rulesPage - ルール一覧ページ（Chrome拡張機能のコンテキストが必要）
+ */
+export async function clearAllRules(rulesPage: Page): Promise<void> {
+  await rulesPage.evaluate(async () => {
+    const request = indexedDB.open('FrogFrameFrontDatabase');
+    return new Promise<void>((resolve, reject) => {
+      request.onsuccess = () => {
+        const db = request.result;
+        const transaction = db.transaction(['rewriteRules'], 'readwrite');
+        const store = transaction.objectStore('rewriteRules');
+        const clearRequest = store.clear();
+        clearRequest.onsuccess = () => {
+          db.close();
+          resolve();
+        };
+        clearRequest.onerror = () => {
+          db.close();
+          reject(new Error('Failed to clear rewriteRules'));
+        };
+      };
+      request.onerror = () => {
+        reject(new Error('Failed to open database'));
+      };
+    });
+  });
+}
+
+// =============================================================================
 // ページ操作ヘルパー
 // =============================================================================
 
@@ -146,13 +183,28 @@ export async function saveRule(
 
 /**
  * テストヘルパー: ToggleSwitchの状態を取得する
+ *
+ * @throws Error - 指定されたインデックスのトグル要素が見つからない場合
  */
 export async function getToggleState(
   rulesPage: Page,
   ruleIndex: number
 ): Promise<boolean> {
-  const toggleDiv = rulesPage.locator('[data-selected]').nth(ruleIndex);
+  const toggleElements = rulesPage.locator('[data-selected]');
+  const count = await toggleElements.count();
+
+  if (ruleIndex >= count) {
+    throw new Error(`トグル要素が見つかりません: index=${ruleIndex}, 存在する要素数=${count}`);
+  }
+
+  const toggleDiv = toggleElements.nth(ruleIndex);
+  await expect(toggleDiv).toBeVisible({ timeout: TOGGLE_STATE_TIMEOUT });
+
   const dataSelected = await toggleDiv.getAttribute('data-selected');
+  if (dataSelected === null) {
+    throw new Error(`data-selected属性が見つかりません: index=${ruleIndex}`);
+  }
+
   return dataSelected === 'true';
 }
 
@@ -161,6 +213,8 @@ export async function getToggleState(
  *
  * トグルスイッチはlabel要素でラップされており、labelをクリックすることで
  * 内部のinputのchecked状態を切り替える。
+ *
+ * @throws Error - 指定されたインデックスのトグル要素が見つからない場合
  */
 export async function clickToggle(
   rulesPage: Page,
@@ -168,6 +222,14 @@ export async function clickToggle(
 ): Promise<void> {
   // トグルスイッチを含むlabel要素を特定
   const toggleDataSelected = rulesPage.locator('[data-selected]');
-  const toggleLabel = rulesPage.locator('label').filter({ has: toggleDataSelected }).nth(ruleIndex);
+  const toggleLabels = rulesPage.locator('label').filter({ has: toggleDataSelected });
+  const count = await toggleLabels.count();
+
+  if (ruleIndex >= count) {
+    throw new Error(`トグルラベル要素が見つかりません: index=${ruleIndex}, 存在する要素数=${count}`);
+  }
+
+  const toggleLabel = toggleLabels.nth(ruleIndex);
+  await expect(toggleLabel).toBeVisible({ timeout: TOGGLE_STATE_TIMEOUT });
   await toggleLabel.click();
 }

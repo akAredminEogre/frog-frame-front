@@ -1,6 +1,7 @@
 import { expect, test } from 'tests/e2e/fixtures';
 import {
   assertNoConsoleErrors,
+  clearAllRules,
   clickToggle,
   getToggleState,
   reloadAndWaitForTable,
@@ -17,6 +18,11 @@ import {
  * @see docs/design/pages/rule-list/features/toggle-rule-active/e2e-test-strategy.md
  */
 test.describe('ルールトグル機能 - 複数データ独立性', () => {
+  // テスト後にデータをクリーンアップ
+  test.afterEach(async ({ rulesPage }) => {
+    await clearAllRules(rulesPage);
+  });
+
   /**
    * 複数ルールがある場合、他のルールのトグル状態に影響しないことを確認する。
    *
