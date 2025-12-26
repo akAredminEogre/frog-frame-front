@@ -90,7 +90,7 @@ export async function clearAllRules(rulesPage: Page): Promise<void> {
         const store = transaction.objectStore('rewriteRules');
         store.clear();
 
-        // トランザクション完了を待ってからDBをクローズ
+        // トランザクション完了またはエラー時にDBをクローズ
         transaction.oncomplete = () => {
           db.close();
           resolve();
@@ -245,9 +245,8 @@ export async function clickToggle(
   rulesPage: Page,
   ruleIndex: number
 ): Promise<void> {
-  // トグルスイッチを含むlabel要素を特定
-  const toggleDataSelected = rulesPage.locator('[data-selected]');
-  const toggleLabels = rulesPage.locator('label').filter({ has: toggleDataSelected });
+  // トグルスイッチを含むlabel要素を特定（data-selected属性を持つ要素を含むlabel）
+  const toggleLabels = rulesPage.locator('label:has([data-selected])');
   const count = await toggleLabels.count();
 
   if (ruleIndex >= count) {
