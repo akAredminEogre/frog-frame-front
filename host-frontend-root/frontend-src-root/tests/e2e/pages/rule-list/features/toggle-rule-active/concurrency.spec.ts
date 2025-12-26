@@ -13,9 +13,15 @@ test.describe('ルールトグル機能 - 競合防止', () => {
     // コンソールエラーメッセージを記録するための配列
     const consoleMessages: string[] = [];
 
+    // 拡張機能のページ（popupPage, rulesPage）のコンソールエラーを監視
+    popupPage.on('console', msg => {
+      if (msg.type() === 'error') {
+        consoleMessages.push(`[popup] ${msg.text()}`);
+      }
+    });
     rulesPage.on('console', msg => {
       if (msg.type() === 'error') {
-        consoleMessages.push(msg.text());
+        consoleMessages.push(`[rules] ${msg.text()}`);
       }
     });
 
@@ -29,16 +35,29 @@ test.describe('ルールトグル機能 - 競合防止', () => {
     await rulesPage.reload();
     await expect(rulesPage.locator('[data-testid="rules-table"]')).toBeVisible({ timeout: 60000 });
 
-    // 3. Act: トグルをクリック
-    await clickToggle(rulesPage, 0);
+    // 3. Act: トグルを素早く2回クリック（競合状態のテスト）
+    // 1回目のクリックの処理中に2回目がブロックされることを確認
+    const toggleLabel = rulesPage.locator('label').filter({ has: rulesPage.locator('[data-selected]') }).nth(0);
+    await Promise.all([
+      toggleLabel.click(),
+      toggleLabel.click(),
+    ]);
 
-    // 4. Assert: トグル状態が変更されることを確認（disabled属性のテストは内部実装に依存するため省略）
+    // 4. Assert: 素早い連続クリックでも最終状態が1回分の切り替えになることを確認
+    // （2回トグルされていたら true に戻ってしまう）
     await expect(async () => {
       const state = await getToggleState(rulesPage, 0);
       expect(state).toBe(false);
     }).toPass({ timeout: 10000 });
 
-    // 5. Assert: コンソールエラーが発生していないことを確認
+    // 5. Assert: ページをリロードしても状態が維持されていることを確認（DB永続化）
+    await rulesPage.reload();
+    await expect(rulesPage.locator('[data-testid="rules-table"]')).toBeVisible({ timeout: 60000 });
+
+    const persistedState = await getToggleState(rulesPage, 0);
+    expect(persistedState).toBe(false);
+
+    // 6. Assert: コンソールエラーが発生していないことを確認
     expect(consoleMessages).toHaveLength(0);
   });
 });
