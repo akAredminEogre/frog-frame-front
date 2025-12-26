@@ -9,6 +9,7 @@ import { expect } from 'tests/e2e/fixtures';
 export {
   assertNoConsoleErrors,
   clearAllRules,
+  DEFAULT_TIMEOUT,
   DIALOG_TIMEOUT,
   reloadAndWaitForTable,
   RULES_TABLE_TIMEOUT,
@@ -23,6 +24,9 @@ export {
 
 /** トグル状態変化待機のタイムアウト（ms） */
 export const TOGGLE_STATE_TIMEOUT = 10000;
+
+/** 要素可視性待機のタイムアウト（ms）- toPass内での使用を想定 */
+const ELEMENT_VISIBILITY_TIMEOUT = 5000;
 
 // =============================================================================
 // トグル操作ヘルパー
@@ -68,7 +72,8 @@ export async function getToggleState(
   }
 
   const toggleDiv = toggleElements.nth(ruleIndex);
-  await expect(toggleDiv).toBeVisible({ timeout: TOGGLE_STATE_TIMEOUT });
+  // toPass内で呼ばれる場合を考慮し、短めのタイムアウトを使用
+  await expect(toggleDiv).toBeVisible({ timeout: ELEMENT_VISIBILITY_TIMEOUT });
 
   const dataSelected = await toggleDiv.getAttribute('data-selected');
   if (dataSelected === null) {
@@ -101,6 +106,6 @@ export async function clickToggle(
   }
 
   const toggleLabel = toggleLabels.nth(ruleIndex);
-  await expect(toggleLabel).toBeVisible({ timeout: TOGGLE_STATE_TIMEOUT });
+  await expect(toggleLabel).toBeVisible({ timeout: ELEMENT_VISIBILITY_TIMEOUT });
   await toggleLabel.click();
 }
