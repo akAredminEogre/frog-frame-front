@@ -11,8 +11,8 @@ box "Rules Page - UI" #LightBlue
 end box
 
 box "interface-adapters" #LightGreen
-  participant "<<interface>>\nIDeleteRuleController\nFactory" as IFactory
-  participant "DeleteRuleController\nFactory" as Factory
+  participant "<<interface>>\nIDeleteRule\nControllerFactory" as IFactory
+  participant "DeleteRule\nControllerFactory" as Factory
   participant "<<interface>>\nIDeleteRuleController" as IController
   participant "DeleteRule\nController" as Controller
   participant "DeleteRule\nPresenter" as Presenter
