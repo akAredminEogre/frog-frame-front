@@ -13,9 +13,15 @@ test.describe('ルールトグル機能 - 正常操作フロー', () => {
     // コンソールエラーメッセージを記録するための配列
     const consoleMessages: string[] = [];
 
+    // 拡張機能のページ（popupPage, rulesPage）のコンソールエラーを監視
+    popupPage.on('console', msg => {
+      if (msg.type() === 'error') {
+        consoleMessages.push(`[popup] ${msg.text()}`);
+      }
+    });
     rulesPage.on('console', msg => {
       if (msg.type() === 'error') {
-        consoleMessages.push(msg.text());
+        consoleMessages.push(`[rules] ${msg.text()}`);
       }
     });
 
@@ -57,9 +63,15 @@ test.describe('ルールトグル機能 - 正常操作フロー', () => {
     // コンソールエラーメッセージを記録するための配列
     const consoleMessages: string[] = [];
 
+    // 拡張機能のページ（popupPage, rulesPage）のコンソールエラーを監視
+    popupPage.on('console', msg => {
+      if (msg.type() === 'error') {
+        consoleMessages.push(`[popup] ${msg.text()}`);
+      }
+    });
     rulesPage.on('console', msg => {
       if (msg.type() === 'error') {
-        consoleMessages.push(msg.text());
+        consoleMessages.push(`[rules] ${msg.text()}`);
       }
     });
 

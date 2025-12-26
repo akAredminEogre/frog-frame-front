@@ -13,9 +13,15 @@ test.describe('ルールトグル機能 - 複数データ独立性', () => {
     // コンソールエラーメッセージを記録するための配列
     const consoleMessages: string[] = [];
 
+    // 拡張機能のページ（popupPage, rulesPage）のコンソールエラーを監視
+    popupPage.on('console', msg => {
+      if (msg.type() === 'error') {
+        consoleMessages.push(`[popup] ${msg.text()}`);
+      }
+    });
     rulesPage.on('console', msg => {
       if (msg.type() === 'error') {
-        consoleMessages.push(msg.text());
+        consoleMessages.push(`[rules] ${msg.text()}`);
       }
     });
 
@@ -50,8 +56,10 @@ test.describe('ルールトグル機能 - 複数データ独立性', () => {
       expect(newState0).toBe(false);
     }).toPass({ timeout: 10000 });
 
-    const unchangedState1 = await getToggleState(rulesPage, 1);
-    expect(unchangedState1).toBe(true);
+    await expect(async () => {
+      const unchangedState1 = await getToggleState(rulesPage, 1);
+      expect(unchangedState1).toBe(true);
+    }).toPass({ timeout: 10000 });
 
     // 7. Assert: ページをリロードしても状態が維持されていることを確認
     await rulesPage.reload();
