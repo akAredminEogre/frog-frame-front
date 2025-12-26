@@ -100,7 +100,7 @@
 
 ## テストファイル構成
 
-```
+```plaintext
 tests/e2e/pages/rule-list/features/toggle-rule-active/
 ├── helpers.ts                  # 共通ヘルパー関数
 ├── normal-cases.spec.ts        # 正常操作フロー + DB永続化
