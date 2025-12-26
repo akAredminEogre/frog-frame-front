@@ -2,128 +2,375 @@
 
 title ルール削除機能 シーケンス図
 
-box "UI" #LightBlue
-  participant "RulesApp" as View
+box "Rules Page - UI" #LightBlue
+  participant "DeleteButton" as DeleteBtn
   participant "ConfirmDialog" as Dialog
+  participant "RulesApp" as View
+  participant "RuleTableRow" as TableRow
+  participant "ToastNotification" as Toast
 end box
 
 box "interface-adapters" #LightGreen
-  participant "IDeleteRule\nCtrlFactory" as IFactory
-  participant "Controller" as Controller
-  participant "Presenter" as Presenter
-  participant "Mapper" as Mapper
-  participant "IMessagingPort" as IMessagingPort
+  participant "<<interface>>\nIDeleteRuleController\nFactory" as IFactory
+  participant "DeleteRuleController\nFactory" as Factory
+  participant "<<interface>>\nIDeleteRuleController" as IController
+  participant "DeleteRule\nController" as Controller
+  participant "DeleteRule\nPresenter" as Presenter
+  participant "RewriteRule\nMapper" as Mapper
+  participant "<<interface>>\nIRewriteRule\nMessagingPort" as IMessagingPort
 end box
 
-box "application" #LightYellow
-  participant "InputData" as InputData
-  participant "OutputData" as OutputData
-  participant "ErrorOutputData" as ErrorOutputData
-  participant "IDeleteRule\nUseCase" as IUseCase
-  participant "IDeleteRule\nPresenter" as IPresenter
-  participant "Interactor" as Interactor
-  participant "IRepository" as IRepository
-  participant "ITabsGateway" as ITabsGateway
+box "application-business-rules" #LightYellow
+  participant "DeleteRule\nInputData" as InputData
+  participant "DeleteRule\nOutputData" as OutputData
+  participant "DeleteRule\nErrorOutputData" as ErrorOutputData
+  participant "<<interface>>\nIDeleteRuleUseCase" as IUseCase
+  participant "<<interface>>\nIDeleteRulePresenter" as IPresenter
+  participant "DeleteRule\nInteractor" as Interactor
+  participant "<<interface>>\nIRewriteRule\nRepository" as IRepository
+  participant "<<interface>>\nITabsGateway" as ITabsGateway
 end box
 
-box "frameworks" #LightCyan
-  participant "CRRepo" as MessagingRepo
-  participant "MsgService" as MessagingService
-  participant "IProxySvc" as IProxyService
+box "frameworks-and-drivers" #LightCyan
+  participant "ChromeRuntime\nRewriteRule\nRepository" as MessagingRepo
+  participant "ChromeTabs\nGateway" as TabsGateway
+  participant "RewriteRule\nMessagingService" as MessagingService
+  participant "<<interface>>\nIRewriteRule\nProxyService" as IProxyService
+  participant "DeleteRule\nRequestDTO" as DeleteDTO
 end box
 
 box "Background" #LightGray
-  participant "ProxySvc" as ProxyService
-  participant "ProxySvcImpl" as ProxyServiceImpl
-  participant "DexieRepo" as DexieRepo
+  participant "RewriteRule\nProxyService" as ProxyService
+  participant "RewriteRule\nProxyServiceImpl" as ProxyServiceImpl
+  participant "DexieRewriteRule\nRepository" as DexieRepo
 end box
 
-box "domain" #LightPink
-  participant "Rule" as Entity
+box "enterprise-business-rules" #LightPink
+  participant "RewriteRule" as Entity
 end box
 
-== 初期化 ==
+== 初期化（useMemo内） ==
 
 View -> IFactory : create(onSuccess, onError)
-IFactory --> View : controller
+activate IFactory
 
-== 削除フロー ==
+IFactory -> Factory : create(onSuccess, onError)
+activate Factory
 
-View -> Dialog : show("削除?")
+Factory -> Presenter : new(onSuccess, onError)
+Factory -> Interactor : new(repository, tabsGateway, presenter)
+note right of Factory : Interactor は IDeleteRuleUseCase を実装
+Factory -> Controller : new(useCase: IDeleteRuleUseCase)
+Factory --> IFactory : controller: IDeleteRuleController
+deactivate Factory
+
+IFactory --> View : controller: IDeleteRuleController
+deactivate IFactory
+
+note right of View
+  ADR-005: Factoryパターンにより
+  ReactコールバックをPresenterに注入
+end note
+
+== 確認ダイアログ表示 ==
+
+TableRow -> DeleteBtn : render
+DeleteBtn -> View : onDeleteClick(ruleId)
+activate View
+
+View -> Dialog : show("このルールを削除しますか？")
+activate Dialog
+
+alt キャンセル選択
+  Dialog --> View : onCancel()
+  deactivate Dialog
+  View --> DeleteBtn : 何もしない
+  deactivate View
+end
+
+== 削除確認後 ==
+
 Dialog --> View : onConfirm()
-View -> View : deletingIds.add(ruleId)
+deactivate Dialog
 
-View -> Controller : deleteRule(ruleId)
+note over View
+  **競合状態防止チェック**
+  deletingIds.has(ruleId) の場合は
+  早期リターン（連続操作防止）
+end note
+
+View -> View : deletingIds.add(ruleId)
+note right of View
+  処理中フラグを設定
+  DeleteButton.disabled = true
+end note
+
+View -> IController : deleteRule(ruleId)
+activate IController
+
+IController -> Controller : deleteRule(ruleId)
+activate Controller
+
 Controller -> InputData : new(ruleId)
 InputData --> Controller : inputData
+
 Controller -> IUseCase : execute(inputData)
+note right of Controller : 依存性逆転: Controller は IDeleteRuleUseCase に依存
 IUseCase -> Interactor : execute(inputData)
+activate Interactor
+
+== ルール取得（タブリロード用） ==
 
 Interactor -> IRepository : getById(ruleId)
+activate IRepository
+
 IRepository -> MessagingRepo : getById(ruleId)
+activate MessagingRepo
+
 MessagingRepo -> Mapper : getById(ruleId)
+activate Mapper
+
 Mapper -> IMessagingPort : getById(dto)
+activate IMessagingPort
+
 IMessagingPort -> MessagingService : getById(dto)
+activate MessagingService
+
 MessagingService -> IProxyService : getById(dto)
+activate IProxyService
+
 IProxyService -> ProxyService : getById(dto)
+activate ProxyService
+
 ProxyService -> ProxyServiceImpl : getById(dto)
+activate ProxyServiceImpl
+
 ProxyServiceImpl -> DexieRepo : getById(ruleId)
+activate DexieRepo
 DexieRepo --> ProxyServiceImpl : DTO
+deactivate DexieRepo
+
 ProxyServiceImpl --> ProxyService : DTO
+deactivate ProxyServiceImpl
+
 ProxyService --> IProxyService : DTO
+deactivate ProxyService
+
 IProxyService --> MessagingService : DTO
+deactivate IProxyService
+
 MessagingService --> IMessagingPort : DTO
+deactivate MessagingService
+
 IMessagingPort --> Mapper : DTO
+deactivate IMessagingPort
+
 Mapper -> Entity : fromDTO(dto)
 Entity --> Mapper : rule
+
 Mapper --> MessagingRepo : rule
+deactivate Mapper
+
 MessagingRepo --> IRepository : rule
+deactivate MessagingRepo
+
 IRepository --> Interactor : rule
+deactivate IRepository
+
+== ルール削除 ==
 
 Interactor -> IRepository : delete(ruleId)
+activate IRepository
+
 IRepository -> MessagingRepo : delete(ruleId)
+activate MessagingRepo
+
 MessagingRepo -> Mapper : delete(ruleId)
+activate Mapper
+
+Mapper -> DeleteDTO : new(ruleId)
+DeleteDTO --> Mapper : dto
+
 Mapper -> IMessagingPort : delete(dto)
+activate IMessagingPort
+
 IMessagingPort -> MessagingService : delete(dto)
+activate MessagingService
+
 MessagingService -> IProxyService : delete(dto)
+activate IProxyService
+
 IProxyService -> ProxyService : delete(dto)
+activate ProxyService
+
 ProxyService -> ProxyServiceImpl : delete(dto)
+activate ProxyServiceImpl
+
 ProxyServiceImpl -> DexieRepo : delete(ruleId)
+activate DexieRepo
 DexieRepo --> ProxyServiceImpl : void
+deactivate DexieRepo
+
 ProxyServiceImpl --> ProxyService : void
+deactivate ProxyServiceImpl
+
 ProxyService --> IProxyService : void
+deactivate ProxyService
+
 IProxyService --> MessagingService : void
+deactivate IProxyService
+
 MessagingService --> IMessagingPort : void
+deactivate MessagingService
+
 IMessagingPort --> Mapper : void
+deactivate IMessagingPort
+
 Mapper --> MessagingRepo : void
+deactivate Mapper
+
 MessagingRepo --> IRepository : void
+deactivate MessagingRepo
+
 IRepository --> Interactor : void
+deactivate IRepository
+
+== タブリロード ==
 
 Interactor -> ITabsGateway : reloadMatchingTabs(rule)
+activate ITabsGateway
+
+ITabsGateway -> TabsGateway : reloadMatchingTabs(rule)
+activate TabsGateway
+
 loop 各タブ
-  ITabsGateway -> Entity : matchesUrl(url)
+  TabsGateway -> Entity : matchesUrl(url)
+  Entity --> TabsGateway : boolean
 end
+
+TabsGateway --> ITabsGateway : void
+deactivate TabsGateway
+
 ITabsGateway --> Interactor : void
+deactivate ITabsGateway
+
+== 結果通知（成功時） ==
 
 Interactor -> OutputData : new(deletedRuleId)
 OutputData --> Interactor : outputData
+
 Interactor -> IPresenter : present(outputData)
+activate IPresenter
+
 IPresenter -> Presenter : present(outputData)
+activate Presenter
+
 Presenter -> View : removeRuleFromView(deletedRuleId)
+View -> View : ルール一覧から削除
+
+deactivate Presenter
+deactivate IPresenter
+deactivate Interactor
+deactivate Controller
+deactivate IController
+
 View -> View : deletingIds.delete(ruleId)
+note right of View
+  処理中フラグを解除
+  DeleteButton.disabled = false
+end note
 
-== エラー時 ==
+deactivate View
 
-alt 削除失敗
-  Interactor -> ErrorOutputData : new(ruleId, msg)
-  Interactor -> IPresenter : presentError(errData)
-  IPresenter -> Presenter : presentError(errData)
-  Presenter -> View : showErrorInView(msg)
+== エラーケース ==
+
+note over Interactor, Presenter
+  エラー発生時のフロー
+  - ルール取得失敗: UIは変更なし
+  - ルール削除失敗: UIは変更なし
+  - タブリロード失敗: DB削除は成功済みのため、
+    UIはルール削除後の状態を表示（部分的成功）
+end note
+
+alt ルール取得失敗 または ルール削除失敗
+  Interactor -> ErrorOutputData : new(ruleId, message)
+  ErrorOutputData --> Interactor : errorOutputData
+
+  Interactor -> IPresenter : presentError(errorOutputData)
+  activate IPresenter
+  note right of IPresenter
+    DeleteRuleErrorOutputData を使用
+    - ruleId: 数値（対象ルールID）
+    - message: 文字列（エラーメッセージ）
+  end note
+
+  IPresenter -> Presenter : presentError(errorOutputData)
+  activate Presenter
+
+  Presenter -> View : showErrorInView(ruleId, message)
+  activate View
+
+  View -> Toast : show("削除に失敗しました", type: "error")
+  activate Toast
+  Toast --> View : 表示
+  deactivate Toast
+
+  View --> Presenter : エラーメッセージ表示（状態変更なし）
+  deactivate View
+  deactivate Presenter
+  deactivate IPresenter
+
   View -> View : deletingIds.delete(ruleId)
-else タブリロード失敗
-  Interactor -> IPresenter : present(outData)
-  Interactor -> IPresenter : presentError(errData)
+  note right of View : 処理中フラグを解除
+
+else タブリロード失敗（部分的成功）
+  note over Interactor
+    **順序保証**
+    present() は reloadMatchingTabs() の
+    前に同期的に呼び出されるため、
+    present() → presentError() の順序が保証される
+  end note
+
+  Interactor -> OutputData : new(deletedRuleId)
+  OutputData --> Interactor : outputData
+
+  Interactor -> IPresenter : present(outputData)
+  activate IPresenter
+  note right of IPresenter : DB削除成功を反映
+
+  IPresenter -> Presenter : present(outputData)
+  activate Presenter
+
+  Presenter -> View : removeRuleFromView(deletedRuleId)
+  View -> View : ルール一覧から削除
+  deactivate Presenter
+  deactivate IPresenter
+
+  Interactor -> ErrorOutputData : new(ruleId, "タブリロードに失敗しました")
+  ErrorOutputData --> Interactor : errorOutputData
+
+  Interactor -> IPresenter : presentError(errorOutputData)
+  activate IPresenter
+  note right of IPresenter : タブリロード失敗を通知
+
+  IPresenter -> Presenter : presentError(errorOutputData)
+  activate Presenter
+
+  Presenter -> View : showErrorInView(ruleId, message)
+  activate View
+
+  View -> Toast : show("タブリロードに失敗しました", type: "error")
+  activate Toast
+  Toast --> View : 表示
+  deactivate Toast
+
+  View --> Presenter : エラーメッセージ表示
+  deactivate View
+  deactivate Presenter
+  deactivate IPresenter
+
   View -> View : deletingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
 end
 
 @enduml
