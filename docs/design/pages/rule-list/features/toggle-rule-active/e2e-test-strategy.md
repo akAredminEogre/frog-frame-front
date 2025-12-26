@@ -135,7 +135,7 @@ tests/e2e/pages/rule-list/features/toggle-rule-active/
 async function saveRule(
   popupPage: Page,
   page: Page,
-  options: { oldString: string; newString: string; urlPattern?: string }
+  options: { oldString: string; newString: string }
 ): Promise<void>
 ```
 
