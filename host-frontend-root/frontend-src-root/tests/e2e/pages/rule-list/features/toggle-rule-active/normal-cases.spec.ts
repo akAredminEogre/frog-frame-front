@@ -1,5 +1,13 @@
 import { expect, test } from 'tests/e2e/fixtures';
-import { clickToggle, getToggleState, saveRule } from 'tests/e2e/pages/rule-list/features/toggle-rule-active/helpers';
+import {
+  assertNoConsoleErrors,
+  clickToggle,
+  getToggleState,
+  reloadAndWaitForTable,
+  saveRule,
+  setupConsoleErrorMonitoring,
+  waitForToggleState,
+} from 'tests/e2e/pages/rule-list/features/toggle-rule-active/helpers';
 
 /**
  * ルールトグル機能 - 正常操作フローのE2Eテスト
@@ -10,20 +18,8 @@ import { clickToggle, getToggleState, saveRule } from 'tests/e2e/pages/rule-list
  */
 test.describe('ルールトグル機能 - 正常操作フロー', () => {
   test('有効なルールを無効に切り替えられる（isActive: true → false）', async ({ page, popupPage, rulesPage }) => {
-    // コンソールエラーメッセージを記録するための配列
-    const consoleMessages: string[] = [];
-
-    // 拡張機能のページ（popupPage, rulesPage）のコンソールエラーを監視
-    popupPage.on('console', msg => {
-      if (msg.type() === 'error') {
-        consoleMessages.push(`[popup] ${msg.text()}`);
-      }
-    });
-    rulesPage.on('console', msg => {
-      if (msg.type() === 'error') {
-        consoleMessages.push(`[rules] ${msg.text()}`);
-      }
-    });
+    // コンソールエラー監視をセットアップ
+    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
 
     // 1. Arrange: ルールを保存（デフォルトでisActive=true）
     await saveRule(popupPage, page, {
@@ -32,8 +28,7 @@ test.describe('ルールトグル機能 - 正常操作フロー', () => {
     });
 
     // 2. Arrange: ルール一覧ページをリロード
-    await rulesPage.reload();
-    await expect(rulesPage.locator('[data-testid="rules-table"]')).toBeVisible({ timeout: 60000 });
+    await reloadAndWaitForTable(rulesPage);
 
     // 3. Assert: 初期状態でトグルがON（有効）であることを確認
     const initialState = await getToggleState(rulesPage, 0);
@@ -43,37 +38,21 @@ test.describe('ルールトグル機能 - 正常操作フロー', () => {
     await clickToggle(rulesPage, 0);
 
     // 5. Assert: トグルがOFF（無効）になったことを確認
-    await expect(async () => {
-      const newState = await getToggleState(rulesPage, 0);
-      expect(newState).toBe(false);
-    }).toPass({ timeout: 10000 });
+    await waitForToggleState(rulesPage, 0, false);
 
     // 6. Assert: ページをリロードしてもトグル状態が維持されていることを確認（DB永続化）
-    await rulesPage.reload();
-    await expect(rulesPage.locator('[data-testid="rules-table"]')).toBeVisible({ timeout: 60000 });
+    await reloadAndWaitForTable(rulesPage);
 
     const persistedState = await getToggleState(rulesPage, 0);
     expect(persistedState).toBe(false);
 
     // 7. Assert: コンソールエラーが発生していないことを確認
-    expect(consoleMessages).toHaveLength(0);
+    assertNoConsoleErrors(consoleMessages);
   });
 
   test('無効なルールを有効に切り替えられる（isActive: false → true）', async ({ page, popupPage, rulesPage }) => {
-    // コンソールエラーメッセージを記録するための配列
-    const consoleMessages: string[] = [];
-
-    // 拡張機能のページ（popupPage, rulesPage）のコンソールエラーを監視
-    popupPage.on('console', msg => {
-      if (msg.type() === 'error') {
-        consoleMessages.push(`[popup] ${msg.text()}`);
-      }
-    });
-    rulesPage.on('console', msg => {
-      if (msg.type() === 'error') {
-        consoleMessages.push(`[rules] ${msg.text()}`);
-      }
-    });
+    // コンソールエラー監視をセットアップ
+    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
 
     // 1. Arrange: ルールを保存
     await saveRule(popupPage, page, {
@@ -82,33 +61,25 @@ test.describe('ルールトグル機能 - 正常操作フロー', () => {
     });
 
     // 2. Arrange: ルール一覧ページをリロード
-    await rulesPage.reload();
-    await expect(rulesPage.locator('[data-testid="rules-table"]')).toBeVisible({ timeout: 60000 });
+    await reloadAndWaitForTable(rulesPage);
 
     // 3. Arrange: トグルをOFFにする（無効化）
     await clickToggle(rulesPage, 0);
-    await expect(async () => {
-      const state = await getToggleState(rulesPage, 0);
-      expect(state).toBe(false);
-    }).toPass({ timeout: 10000 });
+    await waitForToggleState(rulesPage, 0, false);
 
     // 4. Act: トグルをクリックして有効に切り替え
     await clickToggle(rulesPage, 0);
 
     // 5. Assert: トグルがON（有効）になったことを確認
-    await expect(async () => {
-      const newState = await getToggleState(rulesPage, 0);
-      expect(newState).toBe(true);
-    }).toPass({ timeout: 10000 });
+    await waitForToggleState(rulesPage, 0, true);
 
     // 6. Assert: ページをリロードしてもトグル状態が維持されていることを確認（DB永続化）
-    await rulesPage.reload();
-    await expect(rulesPage.locator('[data-testid="rules-table"]')).toBeVisible({ timeout: 60000 });
+    await reloadAndWaitForTable(rulesPage);
 
     const persistedState = await getToggleState(rulesPage, 0);
     expect(persistedState).toBe(true);
 
     // 7. Assert: コンソールエラーが発生していないことを確認
-    expect(consoleMessages).toHaveLength(0);
+    assertNoConsoleErrors(consoleMessages);
   });
 });
