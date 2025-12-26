@@ -48,7 +48,13 @@ test.describe('ルールトグル機能 - 競合防止', () => {
     const persistedState = await getToggleState(rulesPage, 0);
     expect(typeof persistedState).toBe('boolean');
 
-    // 6. Assert: コンソールエラーが発生していないことを確認
+    // 6. Assert: トグルが引き続き正常に動作すること（競合防止メカニズムの検証）
+    // 連続クリック後も、単一クリックで状態が正しく反転することを確認
+    await clickToggle(rulesPage, 0);
+    const stateAfterClick = await getToggleState(rulesPage, 0);
+    expect(stateAfterClick).toBe(!persistedState);
+
+    // 7. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
 });

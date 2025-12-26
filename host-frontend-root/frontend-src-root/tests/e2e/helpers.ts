@@ -22,6 +22,9 @@ export const TEST_SERVER_URL = process.env.TEST_SERVER_URL || 'http://localhost:
 /** ルールテーブル表示待機のタイムアウト（ms） */
 export const RULES_TABLE_TIMEOUT = 60000;
 
+/** 要素の表示・入力待機のデフォルトタイムアウト（ms） */
+export const DEFAULT_TIMEOUT = 60000;
+
 /** ダイアログ待機のタイムアウト（ms） */
 export const DIALOG_TIMEOUT = 60000;
 
@@ -74,6 +77,7 @@ export function assertNoConsoleErrors(consoleMessages: string[]): void {
  *
  * IndexedDBの'FrogFrameFrontDatabase'データベースから全てのrewriteRulesを削除する。
  * テスト間のデータ独立性を確保するために使用する。
+ * 削除後、ルール数が0件であることを検証する。
  *
  * @param rulesPage - ルール一覧ページ（Chrome拡張機能のコンテキストが必要）
  */
@@ -89,8 +93,24 @@ export async function clearAllRules(rulesPage: Page): Promise<void> {
 
         // トランザクション完了またはエラー時にDBをクローズ
         transaction.oncomplete = () => {
-          db.close();
-          resolve();
+          // 削除後の件数を検証
+          const verifyTransaction = db.transaction(['rewriteRules'], 'readonly');
+          const verifyStore = verifyTransaction.objectStore('rewriteRules');
+          const countRequest = verifyStore.count();
+
+          countRequest.onsuccess = () => {
+            const count = countRequest.result;
+            db.close();
+            if (count === 0) {
+              resolve();
+            } else {
+              reject(new Error(`Failed to clear all rules: ${count} rules remain`));
+            }
+          };
+          countRequest.onerror = () => {
+            db.close();
+            reject(new Error('Failed to verify rule count'));
+          };
         };
         transaction.onerror = () => {
           db.close();
@@ -149,7 +169,7 @@ export async function saveRule(
 
   // URLパターンの自動入力を待機
   const urlPatternInput = popupPage.locator('input[name="urlPattern"]');
-  await expect(urlPatternInput).toHaveValue(TEST_SERVER_URL, { timeout: RULES_TABLE_TIMEOUT });
+  await expect(urlPatternInput).toHaveValue(TEST_SERVER_URL, { timeout: DEFAULT_TIMEOUT });
 
   // 置換設定の入力
   const beforeInput = popupPage.locator('textarea[name="oldString"]');
@@ -160,8 +180,8 @@ export async function saveRule(
 
   // 保存ボタンクリック（正確なテキストマッチで「保存」ボタンを特定）
   const saveButton = popupPage.getByRole('button', { name: '保存', exact: true });
-  await expect(saveButton).toBeVisible({ timeout: RULES_TABLE_TIMEOUT });
-  await expect(saveButton).toBeEnabled({ timeout: RULES_TABLE_TIMEOUT });
+  await expect(saveButton).toBeVisible({ timeout: DEFAULT_TIMEOUT });
+  await expect(saveButton).toBeEnabled({ timeout: DEFAULT_TIMEOUT });
 
   // ダイアログ待機と保存ボタンクリックを同時に実行
   const [dialog] = await Promise.all([
