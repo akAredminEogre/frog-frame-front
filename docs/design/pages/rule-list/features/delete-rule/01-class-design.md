@@ -272,8 +272,8 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │  │ DeleteRule          │  │ DeleteRule        │  │ DeleteRule            │ │
 │  │ InputData           │  │ OutputData        │  │ ErrorOutputData       │ │
 │  │ ─────────────────── │  │ ───────────────── │  │ ───────────────────── │ │
-│  │ + ruleId: number    │  │ + deletedRuleId   │  │ + ruleId: number      │ │
-│  │                     │  │                   │  │ + message: string     │ │
+│  │ + ruleId: number    │  │ + deletedRuleId:  │  │ + ruleId: number      │ │
+│  │                     │  │     number        │  │ + message: string     │ │
 │  └─────────────────────┘  └───────────────────┘  └───────────────────────┘ │
 │         ▲                        ▲                        ▲                │
 │         │                        │                        │                │
@@ -294,7 +294,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │                                                                             │
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
 │  │ <<interface>>               │    │ <<interface>>               │        │
-│  │ IDeleteRuleController       │    │ IDeleteRuleControllerFactory│        │
+│  │ IDeleteRuleController       │    │ IDeleteRuleController       │        │
 │  │ Factory                     │    │                             │        │
 │  │ ─────────────────────────── │    │ ─────────────────────────── │        │
 │  │ + create(onSuccess,         │    │ + deleteRule(ruleId)        │        │
