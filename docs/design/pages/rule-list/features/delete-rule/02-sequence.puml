@@ -8,33 +8,38 @@ box "UI" #LightBlue
 end box
 
 box "interface-adapters" #LightGreen
-  participant "IDeleteRuleController\nFactory" as IFactory
-  participant "DeleteRule\nController" as Controller
-  participant "DeleteRule\nPresenter" as Presenter
-  participant "RewriteRule\nMapper" as Mapper
-  participant "IRewriteRule\nMessagingPort" as IMessagingPort
+  participant "IDeleteRule\nCtrlFactory" as IFactory
+  participant "Controller" as Controller
+  participant "Presenter" as Presenter
+  participant "Mapper" as Mapper
+  participant "IMessagingPort" as IMessagingPort
 end box
 
 box "application" #LightYellow
-  participant "DeleteRule\nInteractor" as Interactor
-  participant "IRewriteRule\nRepository" as IRepository
+  participant "InputData" as InputData
+  participant "OutputData" as OutputData
+  participant "ErrorOutputData" as ErrorOutputData
+  participant "IDeleteRule\nUseCase" as IUseCase
+  participant "IDeleteRule\nPresenter" as IPresenter
+  participant "Interactor" as Interactor
+  participant "IRepository" as IRepository
   participant "ITabsGateway" as ITabsGateway
 end box
 
 box "frameworks" #LightCyan
-  participant "ChromeRuntime\nRepository" as MessagingRepo
-  participant "RewriteRule\nMessagingService" as MessagingService
-  participant "IRewriteRule\nProxyService" as IProxyService
+  participant "CRRepo" as MessagingRepo
+  participant "MsgService" as MessagingService
+  participant "IProxySvc" as IProxyService
 end box
 
 box "Background" #LightGray
-  participant "RewriteRule\nProxyService" as ProxyService
-  participant "ProxyServiceImpl" as ProxyServiceImpl
-  participant "DexieRepository" as DexieRepo
+  participant "ProxySvc" as ProxyService
+  participant "ProxySvcImpl" as ProxyServiceImpl
+  participant "DexieRepo" as DexieRepo
 end box
 
 box "domain" #LightPink
-  participant "RewriteRule" as Entity
+  participant "Rule" as Entity
 end box
 
 == 初期化 ==
@@ -44,13 +49,15 @@ IFactory --> View : controller
 
 == 削除フロー ==
 
-View -> Dialog : show("削除しますか？")
+View -> Dialog : show("削除?")
 Dialog --> View : onConfirm()
 View -> View : deletingIds.add(ruleId)
 
 View -> Controller : deleteRule(ruleId)
-Controller -> Controller : inputData = new InputData(ruleId)
-Controller -> Interactor : execute(inputData)
+Controller -> InputData : new(ruleId)
+InputData --> Controller : inputData
+Controller -> IUseCase : execute(inputData)
+IUseCase -> Interactor : execute(inputData)
 
 Interactor -> IRepository : getById(ruleId)
 IRepository -> MessagingRepo : getById(ruleId)
@@ -98,19 +105,24 @@ loop 各タブ
 end
 ITabsGateway --> Interactor : void
 
-Interactor -> Presenter : present(outputData)
+Interactor -> OutputData : new(deletedRuleId)
+OutputData --> Interactor : outputData
+Interactor -> IPresenter : present(outputData)
+IPresenter -> Presenter : present(outputData)
 Presenter -> View : removeRuleFromView(deletedRuleId)
 View -> View : deletingIds.delete(ruleId)
 
 == エラー時 ==
 
 alt 削除失敗
-  Interactor -> Presenter : presentError(errorOutputData)
-  Presenter -> View : showErrorInView(message)
+  Interactor -> ErrorOutputData : new(ruleId, msg)
+  Interactor -> IPresenter : presentError(errData)
+  IPresenter -> Presenter : presentError(errData)
+  Presenter -> View : showErrorInView(msg)
   View -> View : deletingIds.delete(ruleId)
-else タブリロード失敗（部分的成功）
-  Interactor -> Presenter : present(outputData)
-  Interactor -> Presenter : presentError(errorOutputData)
+else タブリロード失敗
+  Interactor -> IPresenter : present(outData)
+  Interactor -> IPresenter : presentError(errData)
   View -> View : deletingIds.delete(ruleId)
 end
 
