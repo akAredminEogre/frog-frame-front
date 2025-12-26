@@ -1,6 +1,6 @@
 @startuml DeleteRule
 
-title ルール削除機能 シーケンス図
+title ルール削除機能
 
 box "Rules Page - UI" #LightBlue
   participant "DeleteButton" as DeleteBtn
@@ -91,19 +91,21 @@ else 削除確認
   Dialog --> View : onConfirm()
   deactivate Dialog
 
-note over View
-  **競合状態防止チェック**
-  deletingIds.has(ruleId) の場合は
-  早期リターン（連続操作防止）
-end note
+  alt deletingIds.has(ruleId) が true（処理中）
+    note over View
+      **競合状態防止**
+      既に削除処理中のため早期リターン
+    end note
+    View --> DeleteBtn : 何もしない（早期リターン）
+    deactivate View
+  else deletingIds.has(ruleId) が false（未処理）
+    View -> View : deletingIds.add(ruleId)
+    note right of View
+      処理中フラグを設定
+      DeleteButton.disabled = true
+    end note
 
-View -> View : deletingIds.add(ruleId)
-note right of View
-  処理中フラグを設定
-  DeleteButton.disabled = true
-end note
-
-View -> IController : deleteRule(ruleId)
+    View -> IController : deleteRule(ruleId)
 activate IController
 
 IController -> Controller : deleteRule(ruleId)
@@ -280,14 +282,16 @@ end note
 
 deactivate View
 
+  end
+
 end
 
 == エラーケース ==
 
 note over Interactor, Presenter
   エラー発生時のフロー
-  - ルール取得失敗: UIは変更なし
-  - ルール削除失敗: UIは変更なし
+  - ルール取得失敗: ルール一覧の変更なし（処理中フラグは解除）
+  - ルール削除失敗: ルール一覧の変更なし（処理中フラグは解除）
   - タブリロード失敗: DB削除は成功済みのため、
     UIはルール削除後の状態を表示（部分的成功）
 end note
@@ -325,10 +329,11 @@ alt ルール取得失敗 または ルール削除失敗
 
 else タブリロード失敗（部分的成功）
   note over Interactor
-    **順序保証**
-    present() は reloadMatchingTabs() の
-    前に同期的に呼び出されるため、
-    present() → presentError() の順序が保証される
+    **処理順序**
+    1. reloadMatchingTabs() でエラー発生
+    2. DB削除は成功済みなので present() を呼出
+    3. タブリロード失敗を presentError() で通知
+    ※ present() → presentError() の順序が保証される
   end note
 
   Interactor -> OutputData : new(deletedRuleId)

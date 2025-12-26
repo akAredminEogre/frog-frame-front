@@ -153,8 +153,8 @@
 
 | 層 | 責務 |
 |----|------|
-| Interactor | 例外をキャッチし、OutputDataにエラー情報を含める |
-| Presenter | エラー情報をViewに通知 |
+| Interactor | 例外をキャッチし、DeleteRuleErrorOutputDataを作成してPresenterに渡す |
+| Presenter | ErrorOutputDataをViewに通知 |
 | View | トースト通知でユーザーに表示 |
 
 ### Chrome拡張機能のコンテキスト分離
