@@ -110,12 +110,6 @@ tests/e2e/pages/rule-list/features/toggle-rule-active/
 
 ## テスト環境
 
-### Playwright設定
-
-- **ブラウザ**: Chromium（ヘッドレス）
-- **拡張機能**: ビルド済み拡張機能をロード
-- **タイムアウト**: 60000ms（拡張機能の初期化を考慮）
-
 ### テストページ
 
 | ページ | パス | 用途 |
