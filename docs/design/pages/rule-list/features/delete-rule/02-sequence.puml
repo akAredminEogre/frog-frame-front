@@ -86,12 +86,10 @@ alt キャンセル選択
   deactivate Dialog
   View --> DeleteBtn : 何もしない
   deactivate View
-end
 
-== 削除確認後 ==
-
-Dialog --> View : onConfirm()
-deactivate Dialog
+else 削除確認
+  Dialog --> View : onConfirm()
+  deactivate Dialog
 
 note over View
   **競合状態防止チェック**
@@ -282,6 +280,8 @@ end note
 
 deactivate View
 
+end
+
 == エラーケース ==
 
 note over Interactor, Presenter
@@ -315,13 +315,13 @@ alt ルール取得失敗 または ルール削除失敗
   Toast --> View : 表示
   deactivate Toast
 
+  View -> View : deletingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
+
   View --> Presenter : エラーメッセージ表示（状態変更なし）
   deactivate View
   deactivate Presenter
   deactivate IPresenter
-
-  View -> View : deletingIds.delete(ruleId)
-  note right of View : 処理中フラグを解除
 
 else タブリロード失敗（部分的成功）
   note over Interactor
@@ -364,13 +364,13 @@ else タブリロード失敗（部分的成功）
   Toast --> View : 表示
   deactivate Toast
 
+  View -> View : deletingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
+
   View --> Presenter : エラーメッセージ表示
   deactivate View
   deactivate Presenter
   deactivate IPresenter
-
-  View -> View : deletingIds.delete(ruleId)
-  note right of View : 処理中フラグを解除
 end
 
 @enduml

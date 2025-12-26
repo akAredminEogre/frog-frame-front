@@ -79,7 +79,7 @@ src/frameworks-and-drivers/
 │   ├── RewriteRuleProxyService.ts               ← IRewriteRuleProxyService 定義 + proxy-service（delete() 追加）
 │   ├── RewriteRuleProxyServiceImpl.ts           ← 実装注入パターン（ADR-002参照、delete() 追加）
 │   └── dto/                                     ← メッセージング用DTO（ADR-002、ADR-003参照）
-│       ├── RewriteRuleDTO.ts                    ← エンティティDTO
+│       ├── RewriteRuleDTO.ts                    ← メッセージング用ルールDTO
 │       └── request-dto/                         ← リクエストDTO
 │           ├── GetByIdRequestDTO.ts             ← ルール取得要求 { id }
 │           └── DeleteRuleRequestDTO.ts          ← 削除要求 { id }
