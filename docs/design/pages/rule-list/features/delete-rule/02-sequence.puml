@@ -341,7 +341,7 @@ else タブリロード失敗（部分的成功）
   note over Interactor
     **処理順序**
     1. reloadMatchingTabs()でエラー
-    2. DB削除成功→present()呼出
+    2. DB削除成功→present()呼び出し
     3. presentError()でエラー通知
   end note
 
