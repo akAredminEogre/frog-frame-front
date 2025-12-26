@@ -11,6 +11,8 @@ box "interface-adapters" #LightGreen
   participant "IDeleteRuleController\nFactory" as IFactory
   participant "DeleteRule\nController" as Controller
   participant "DeleteRule\nPresenter" as Presenter
+  participant "RewriteRule\nMapper" as Mapper
+  participant "IRewriteRule\nMessagingPort" as IMessagingPort
 end box
 
 box "application" #LightYellow
@@ -20,11 +22,15 @@ box "application" #LightYellow
 end box
 
 box "frameworks" #LightCyan
+  participant "ChromeRuntime\nRepository" as MessagingRepo
   participant "RewriteRule\nMessagingService" as MessagingService
+  participant "IRewriteRule\nProxyService" as IProxyService
 end box
 
 box "Background" #LightGray
-  participant "DexieRewriteRule\nRepository" as DexieRepo
+  participant "RewriteRule\nProxyService" as ProxyService
+  participant "ProxyServiceImpl" as ProxyServiceImpl
+  participant "DexieRepository" as DexieRepo
 end box
 
 box "domain" #LightPink
@@ -35,15 +41,10 @@ end box
 
 View -> IFactory : create(onSuccess, onError)
 IFactory --> View : controller
-note right: ADR-005: Factory パターン
 
 == 削除フロー ==
 
 View -> Dialog : show("削除しますか？")
-alt キャンセル
-  Dialog --> View : onCancel()
-end
-
 Dialog --> View : onConfirm()
 View -> View : deletingIds.add(ruleId)
 
@@ -51,17 +52,43 @@ View -> Controller : deleteRule(ruleId)
 Controller -> Interactor : execute(inputData)
 
 Interactor -> IRepository : getById(ruleId)
-IRepository -> MessagingService : getById(dto)
-MessagingService -> DexieRepo : getById(ruleId)
-DexieRepo --> MessagingService : DTO
-MessagingService --> IRepository : rule
+IRepository -> MessagingRepo : getById(ruleId)
+MessagingRepo -> Mapper : getById(ruleId)
+Mapper -> IMessagingPort : getById(dto)
+IMessagingPort -> MessagingService : getById(dto)
+MessagingService -> IProxyService : getById(dto)
+IProxyService -> ProxyService : getById(dto)
+ProxyService -> ProxyServiceImpl : getById(dto)
+ProxyServiceImpl -> DexieRepo : getById(ruleId)
+DexieRepo --> ProxyServiceImpl : DTO
+ProxyServiceImpl --> ProxyService : DTO
+ProxyService --> IProxyService : DTO
+IProxyService --> MessagingService : DTO
+MessagingService --> IMessagingPort : DTO
+IMessagingPort --> Mapper : DTO
+Mapper -> Entity : fromDTO(dto)
+Entity --> Mapper : rule
+Mapper --> MessagingRepo : rule
+MessagingRepo --> IRepository : rule
 IRepository --> Interactor : rule
 
 Interactor -> IRepository : delete(ruleId)
-IRepository -> MessagingService : delete(dto)
-MessagingService -> DexieRepo : delete(ruleId)
-DexieRepo --> MessagingService : void
-MessagingService --> IRepository : void
+IRepository -> MessagingRepo : delete(ruleId)
+MessagingRepo -> Mapper : delete(ruleId)
+Mapper -> IMessagingPort : delete(dto)
+IMessagingPort -> MessagingService : delete(dto)
+MessagingService -> IProxyService : delete(dto)
+IProxyService -> ProxyService : delete(dto)
+ProxyService -> ProxyServiceImpl : delete(dto)
+ProxyServiceImpl -> DexieRepo : delete(ruleId)
+DexieRepo --> ProxyServiceImpl : void
+ProxyServiceImpl --> ProxyService : void
+ProxyService --> IProxyService : void
+IProxyService --> MessagingService : void
+MessagingService --> IMessagingPort : void
+IMessagingPort --> Mapper : void
+Mapper --> MessagingRepo : void
+MessagingRepo --> IRepository : void
 IRepository --> Interactor : void
 
 Interactor -> ITabsGateway : reloadMatchingTabs(rule)
@@ -79,7 +106,6 @@ View -> View : deletingIds.delete(ruleId)
 alt 削除失敗
   Interactor -> Presenter : presentError(errorOutputData)
   Presenter -> View : showErrorInView(message)
-  note right: Toast通知表示
   View -> View : deletingIds.delete(ruleId)
 else タブリロード失敗（部分的成功）
   Interactor -> Presenter : present(outputData)
