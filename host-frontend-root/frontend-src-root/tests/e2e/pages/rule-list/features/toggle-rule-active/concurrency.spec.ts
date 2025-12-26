@@ -7,6 +7,7 @@ import {
   reloadAndWaitForTable,
   saveRule,
   setupConsoleErrorMonitoring,
+  waitForToggleState,
 } from 'tests/e2e/pages/rule-list/features/toggle-rule-active/helpers';
 
 /**
@@ -50,9 +51,9 @@ test.describe('ルールトグル機能 - 競合防止', () => {
 
     // 6. Assert: トグルが引き続き正常に動作すること（競合防止メカニズムの検証）
     // 連続クリック後も、単一クリックで状態が正しく反転することを確認
+    const expectedState = !persistedState;
     await clickToggle(rulesPage, 0);
-    const stateAfterClick = await getToggleState(rulesPage, 0);
-    expect(stateAfterClick).toBe(!persistedState);
+    await waitForToggleState(rulesPage, 0, expectedState);
 
     // 7. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
