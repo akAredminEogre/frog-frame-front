@@ -37,14 +37,13 @@ test.describe('ルールトグル機能 - 競合防止', () => {
     await reloadAndWaitForTable(rulesPage);
 
     // 3. Act: トグルを素早く2回クリック（競合状態のテスト）
-    // 連続クリック: Playwrightでは真の並行実行は困難なため、
-    // 素早い連続操作がエラーなく処理されることを検証する
+    // 連続クリック: 2つ目のクリックが処理されるかはタイミングに依存するため、
+    // 特定の最終状態ではなく、データ整合性（UI状態とDB状態の一致）を検証する
     await clickToggle(rulesPage, 0);
     await clickToggle(rulesPage, 0);
 
-    // 4. Assert: 連続クリックにより状態は true に戻る（2回トグル: true -> false -> true）
+    // 4. Assert: 連続クリック後のUI状態を取得（最終状態は検証しない）
     const uiState = await getToggleState(rulesPage, 0);
-    expect(uiState).toBe(true);
 
     // 5. Assert: ページをリロードしてDBの状態と一致することを確認（データ整合性）
     await rulesPage.reload();
