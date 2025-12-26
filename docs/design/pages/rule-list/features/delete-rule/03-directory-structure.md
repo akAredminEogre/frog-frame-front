@@ -43,8 +43,8 @@ src/interface-adapters/
 ├── presenters/                                  ← Presenter
 │   └── DeleteRulePresenter.ts
 ├── factories/                                   ← Factory（ADR-005参照）
-│   ├── IDeleteRuleControllerFactory.ts          ← Factoryインターフェース（Reactコールバック注入用）
-│   └── DeleteRuleControllerFactory.ts           ← Factory実装
+│   ├── IDeleteRuleControllerFactory.ts          ← Factoryインターフェース（Reactコールバック注入用、ADR-005参照）
+│   └── DeleteRuleControllerFactory.ts           ← Factory実装（ADR-005参照）
 ├── ports/                                       ← Port（Mapperが依存、ADR-002参照）
 │   └── IRewriteRuleMessagingPort.ts             ← delete() 追加
 └── mappers/                                     ← Mapper（ADR-002、ADR-003参照）

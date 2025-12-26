@@ -295,7 +295,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
 │  │ <<interface>>               │    │ <<interface>>               │        │
 │  │ IDeleteRuleController       │    │ IDeleteRuleController       │        │
-│  │ Factory                     │    │                             │        │
+│  │   Factory                   │    │                             │        │
 │  │ ─────────────────────────── │    │ ─────────────────────────── │        │
 │  │ + create(onSuccess,         │    │ + deleteRule(ruleId)        │        │
 │  │   onError): IDeleteRule...  │    └──────────▲──────────────────┘        │
@@ -303,7 +303,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │             │ implements                       │                           │
 │  ┌──────────┴──────────────────┐    ┌──────────┴──────────────────┐        │
 │  │ DeleteRuleController        │    │ DeleteRuleController        │        │
-│  │ Factory                     │    │ ─────────────────────────── │        │
+│  │   Factory                   │    │ ─────────────────────────── │        │
 │  │ ─────────────────────────── │    │ - useCase: IDeleteRule...   │        │
 │  │ - repository: IRewriteRule..│    │ ─────────────────────────── │        │
 │  │ - tabsGateway: ITabsGateway │    │ + deleteRule(ruleId)        │        │
