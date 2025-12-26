@@ -143,7 +143,7 @@ export async function reloadAndWaitForTable(rulesPage: Page): Promise<void> {
 // =============================================================================
 
 /**
- * テストヘルパー: ルールをポップアップから保存する
+ * ルールをポップアップから保存する
  *
  * @param popupPage - ポップアップページ
  * @param page - テスト用HTMLページ

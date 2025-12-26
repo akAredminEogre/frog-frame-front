@@ -38,7 +38,7 @@ const ELEMENT_VISIBILITY_TIMEOUT = 5000;
  * @param rulesPage - ルール一覧ページ
  * @param ruleIndex - ルールのインデックス
  * @param expectedState - 期待するトグル状態
- * @param timeout - タイムアウト（ms）。デフォルトは TOGGLE_STATE_TIMEOUT (10000ms)
+ * @param timeout - タイムアウト（ms）。デフォルトは TOGGLE_STATE_TIMEOUT
  */
 export async function waitForToggleState(
   rulesPage: Page,
@@ -53,7 +53,7 @@ export async function waitForToggleState(
 }
 
 /**
- * テストヘルパー: ToggleSwitchの状態を取得する
+ * ToggleSwitchの状態を取得する
  *
  * @param rulesPage - ルール一覧ページ
  * @param ruleIndex - ルールのインデックス（0始まり）
@@ -84,7 +84,7 @@ export async function getToggleState(
 }
 
 /**
- * テストヘルパー: ToggleSwitchをクリックする
+ * ToggleSwitchをクリックする
  *
  * トグルスイッチはlabel要素でラップされており、labelをクリックすることで
  * 内部のinputのchecked状態を切り替える。

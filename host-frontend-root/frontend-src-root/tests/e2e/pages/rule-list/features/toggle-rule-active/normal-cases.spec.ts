@@ -64,7 +64,7 @@ test.describe('ルールトグル機能 - 正常操作フロー', () => {
       // コンソールエラー監視をセットアップ
       const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
 
-      // 1. Arrange: ルールを保存（デフォルトでisActive=true）
+      // 1. Arrange: ルールを保存（デフォルトでisActive=true、後続処理で必要に応じて初期状態を設定）
       await saveRule(popupPage, page, {
         oldString: `テスト文字列${testDataId}`,
         newString: `置換後文字列${testDataId}`,
@@ -73,7 +73,7 @@ test.describe('ルールトグル機能 - 正常操作フロー', () => {
       // 2. Arrange: ルール一覧ページをリロード
       await reloadAndWaitForTable(rulesPage);
 
-      // 3. Arrange: 初期状態を設定（false→trueのテストでは先にOFFにする）
+      // 3. Arrange: 初期状態を設定（false→trueのテストでは事前に無効化する）
       if (!initialState) {
         await clickToggle(rulesPage, 0);
         await waitForToggleState(rulesPage, 0, false);
