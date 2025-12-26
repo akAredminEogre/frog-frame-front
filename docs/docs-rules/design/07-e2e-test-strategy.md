@@ -13,7 +13,7 @@ E2Eテストの設計意図と網羅性を可視化するドキュメント。
 
 E2Eテスト戦略書は、featureの `00-overview.md` と同じディレクトリに配置する。
 
-```
+```plaintext
 docs/design/pages/{page-name}/features/{feature-name}/
 ├── 00-overview.md
 ├── integration-test-strategy.md
@@ -100,7 +100,7 @@ E2Eテスト特有の検証観点:
 
 テスト分類ごとにファイルを分割して配置する:
 
-```
+```plaintext
 tests/e2e/pages/{page-name}/features/{feature-name}/
 ├── helpers.ts                  # 共通ヘルパー関数
 ├── normal-cases.spec.ts        # 正常操作フロー（DB永続化含む）

@@ -66,7 +66,7 @@ export async function getToggleState(
   const toggleElements = rulesPage.locator('[data-selected]');
   const count = await toggleElements.count();
 
-  if (ruleIndex >= count) {
+  if (ruleIndex < 0 || ruleIndex >= count) {
     throw new Error(`トグル要素が見つかりません: index=${ruleIndex}, 存在する要素数=${count}`);
   }
 
@@ -100,7 +100,7 @@ export async function clickToggle(
   const toggleLabels = rulesPage.locator('label:has([data-selected])');
   const count = await toggleLabels.count();
 
-  if (ruleIndex >= count) {
+  if (ruleIndex < 0 || ruleIndex >= count) {
     throw new Error(`トグルラベル要素が見つかりません: index=${ruleIndex}, 存在する要素数=${count}`);
   }
 
