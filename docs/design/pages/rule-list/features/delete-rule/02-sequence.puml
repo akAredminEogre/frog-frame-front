@@ -49,6 +49,7 @@ Dialog --> View : onConfirm()
 View -> View : deletingIds.add(ruleId)
 
 View -> Controller : deleteRule(ruleId)
+Controller -> Controller : inputData = new InputData(ruleId)
 Controller -> Interactor : execute(inputData)
 
 Interactor -> IRepository : getById(ruleId)
