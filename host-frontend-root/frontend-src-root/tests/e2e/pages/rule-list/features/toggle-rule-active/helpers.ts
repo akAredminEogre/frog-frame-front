@@ -6,7 +6,17 @@ import { expect } from 'tests/e2e/fixtures';
 // 定数
 // =============================================================================
 
-/** テストサーバーのベースURL */
+/**
+ * テストサーバーのベースURL
+ *
+ * 環境変数 `TEST_SERVER_URL` で設定可能。未設定の場合はデフォルト値を使用。
+ *
+ * @example
+ * // ローカル開発時
+ * TEST_SERVER_URL=http://localhost:8080 npm run e2e
+ *
+ * // CI環境では自動的にデフォルト値が使用される
+ */
 export const TEST_SERVER_URL = process.env.TEST_SERVER_URL || 'http://localhost:8080';
 
 /** ルールテーブル表示待機のタイムアウト（ms） */
@@ -24,6 +34,9 @@ export const DIALOG_TIMEOUT = 60000;
 
 /**
  * コンソールエラー監視をセットアップする
+ *
+ * 拡張機能のページ（popupPage, rulesPage）のコンソールエラーを監視する。
+ * 通常のページ（page）は拡張機能コンテキスト外のため監視対象外。
  *
  * @param popupPage - ポップアップページ
  * @param rulesPage - ルール一覧ページ
@@ -75,12 +88,14 @@ export async function clearAllRules(rulesPage: Page): Promise<void> {
         const db = request.result;
         const transaction = db.transaction(['rewriteRules'], 'readwrite');
         const store = transaction.objectStore('rewriteRules');
-        const clearRequest = store.clear();
-        clearRequest.onsuccess = () => {
+        store.clear();
+
+        // トランザクション完了を待ってからDBをクローズ
+        transaction.oncomplete = () => {
           db.close();
           resolve();
         };
-        clearRequest.onerror = () => {
+        transaction.onerror = () => {
           db.close();
           reject(new Error('Failed to clear rewriteRules'));
         };
@@ -112,7 +127,7 @@ export async function reloadAndWaitForTable(rulesPage: Page): Promise<void> {
  * @param rulesPage - ルール一覧ページ
  * @param ruleIndex - ルールのインデックス
  * @param expectedState - 期待するトグル状態
- * @param timeout - タイムアウト（ms）
+ * @param timeout - タイムアウト（ms）。デフォルトは TOGGLE_STATE_TIMEOUT (10000ms)
  */
 export async function waitForToggleState(
   rulesPage: Page,
@@ -132,6 +147,12 @@ export async function waitForToggleState(
 
 /**
  * テストヘルパー: ルールをポップアップから保存する
+ *
+ * @param popupPage - ポップアップページ
+ * @param page - テスト用HTMLページ
+ * @param options - ルール設定オプション
+ * @param options.oldString - 置換前の文字列
+ * @param options.newString - 置換後の文字列
  */
 export async function saveRule(
   popupPage: Page,
@@ -139,7 +160,6 @@ export async function saveRule(
   options: {
     oldString: string;
     newString: string;
-    urlPattern?: string;
   }
 ): Promise<void> {
   // ローカルHTTPサーバー経由でHTMLファイルに移動
@@ -161,8 +181,8 @@ export async function saveRule(
   await beforeInput.fill(options.oldString);
   await afterInput.fill(options.newString);
 
-  // 保存ボタンクリック
-  const saveButton = popupPage.locator('button:has-text("保存")');
+  // 保存ボタンクリック（正確なテキストマッチで「保存」ボタンを特定）
+  const saveButton = popupPage.getByRole('button', { name: '保存', exact: true });
   await expect(saveButton).toBeVisible({ timeout: RULES_TABLE_TIMEOUT });
   await expect(saveButton).toBeEnabled({ timeout: RULES_TABLE_TIMEOUT });
 
@@ -184,6 +204,9 @@ export async function saveRule(
 /**
  * テストヘルパー: ToggleSwitchの状態を取得する
  *
+ * @param rulesPage - ルール一覧ページ
+ * @param ruleIndex - ルールのインデックス（0始まり）
+ * @returns トグルの状態（true: 有効, false: 無効）
  * @throws Error - 指定されたインデックスのトグル要素が見つからない場合
  */
 export async function getToggleState(
@@ -214,6 +237,8 @@ export async function getToggleState(
  * トグルスイッチはlabel要素でラップされており、labelをクリックすることで
  * 内部のinputのchecked状態を切り替える。
  *
+ * @param rulesPage - ルール一覧ページ
+ * @param ruleIndex - ルールのインデックス（0始まり）
  * @throws Error - 指定されたインデックスのトグル要素が見つからない場合
  */
 export async function clickToggle(
