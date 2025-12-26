@@ -2,6 +2,7 @@ import { expect, test } from 'tests/e2e/fixtures';
 import {
   assertNoConsoleErrors,
   clearAllRules,
+  clickToggle,
   getToggleState,
   reloadAndWaitForTable,
   RULES_TABLE_TIMEOUT,
@@ -36,17 +37,14 @@ test.describe('ルールトグル機能 - 競合防止', () => {
     await reloadAndWaitForTable(rulesPage);
 
     // 3. Act: トグルを素早く2回クリック（競合状態のテスト）
-    const toggleDataSelected = rulesPage.locator('[data-selected]');
-    const toggleLabel = rulesPage.locator('label').filter({ has: toggleDataSelected }).nth(0);
-
     // 連続クリック: Playwrightでは真の並行実行は困難なため、
     // 素早い連続操作がエラーなく処理されることを検証する
-    await toggleLabel.click();
-    await toggleLabel.click();
+    await clickToggle(rulesPage, 0);
+    await clickToggle(rulesPage, 0);
 
-    // 4. Assert: 操作完了後、UIとDBの状態が一致することを確認
-    // 連続クリックにより状態は true に戻る（2回トグル: true -> false -> true）
+    // 4. Assert: 連続クリックにより状態は true に戻る（2回トグル: true -> false -> true）
     const uiState = await getToggleState(rulesPage, 0);
+    expect(uiState).toBe(true);
 
     // 5. Assert: ページをリロードしてDBの状態と一致することを確認（データ整合性）
     await rulesPage.reload();
