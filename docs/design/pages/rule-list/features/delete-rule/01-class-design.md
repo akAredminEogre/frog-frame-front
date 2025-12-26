@@ -292,25 +292,24 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                          interface-adapters/                                │
 │                                                                             │
-│  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
-│  │ <<interface>>               │    │ <<interface>>               │        │
-│  │ IDeleteRuleController       │    │ IDeleteRuleController       │        │
-│  │   Factory                   │    │                             │        │
-│  │ ─────────────────────────── │    │ ─────────────────────────── │        │
-│  │ + create(onSuccess,         │    │ + deleteRule(ruleId)        │        │
-│  │   onError): IDeleteRule...  │    └──────────▲──────────────────┘        │
-│  └──────────▲──────────────────┘               │ implements                │
+│  ┌───────────────────────────────┐  ┌─────────────────────────────┐        │
+│  │ <<interface>>                 │  │ <<interface>>               │        │
+│  │ IDeleteRuleControllerFactory  │  │ IDeleteRuleController       │        │
+│  │ ───────────────────────────── │  │ ─────────────────────────── │        │
+│  │ + create(onSuccess,           │  │ + deleteRule(ruleId)        │        │
+│  │   onError): IDeleteRule...    │  └──────────▲──────────────────┘        │
+│  └──────────▲────────────────────┘             │ implements                │
 │             │ implements                       │                           │
-│  ┌──────────┴──────────────────┐    ┌──────────┴──────────────────┐        │
-│  │ DeleteRuleController        │    │ DeleteRuleController        │        │
-│  │   Factory                   │    │ ─────────────────────────── │        │
-│  │ ─────────────────────────── │    │ - useCase: IDeleteRule...   │        │
-│  │ - repository: IRewriteRule..│    │ ─────────────────────────── │        │
-│  │ - tabsGateway: ITabsGateway │    │ + deleteRule(ruleId)        │        │
-│  │ ─────────────────────────── │    └─────────────────────────────┘        │
-│  │ + create(onSuccess,         │                                           │
-│  │   onError): IDeleteRule...  │    ┌─────────────────────────────┐        │
-│  └─────────────────────────────┘    │ DeleteRulePresenter         │        │
+│  ┌──────────┴────────────────────┐  ┌──────────┴──────────────────┐        │
+│  │ DeleteRuleControllerFactory   │  │ DeleteRuleController        │        │
+│  │ ───────────────────────────── │  │ ─────────────────────────── │        │
+│  │ - repository: IRewriteRule... │  │ - useCase: IDeleteRule...   │        │
+│  │ - tabsGateway: ITabsGateway   │  │ ─────────────────────────── │        │
+│  │ ───────────────────────────── │  │ + deleteRule(ruleId)        │        │
+│  │ + create(onSuccess,           │  └─────────────────────────────┘        │
+│  │   onError): IDeleteRule...    │                                         │
+│  └───────────────────────────────┘  ┌─────────────────────────────┐        │
+│                                     │ DeleteRulePresenter         │        │
 │                                     │ ─────────────────────────── │        │
 │                                     │ - removeRuleFromView: Func  │        │
 │                                     │ - showErrorInView: Func     │        │
