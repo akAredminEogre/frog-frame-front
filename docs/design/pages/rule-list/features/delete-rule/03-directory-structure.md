@@ -82,8 +82,8 @@ src/frameworks-and-drivers/
 │   └── dto/                                     ← メッセージング用DTO（ADR-002、ADR-003参照）
 │       ├── RewriteRuleDTO.ts                    ← メッセージング用ルールDTO
 │       └── request-dto/                         ← リクエストDTO
-│           ├── GetByIdRequestDTO.ts             ← ルール取得要求 { id }
-│           └── DeleteRuleRequestDTO.ts          ← 削除要求 { id }
+│           ├── GetByIdRequestDTO.ts             ← ルール取得要求 { ruleId }
+│           └── DeleteRuleRequestDTO.ts          ← 削除要求 { ruleId }
 ├── browser/                                     ← ブラウザ操作 Gateway 実装
 │   └── ChromeTabsGateway.ts
 └── di/                                          ← DI Container
