@@ -22,6 +22,8 @@
 
 ### 差分分類
 
+設計ドキュメント（理論）と現在の実装の差分を分類：
+
 | ファイル | 現在位置 | 理論位置 | 修正 | 分類 |
 |---------|---------|---------|------|------|
 | RewriteRule.ts | enterprise-business-rules/entities/ | enterprise-business-rules/entities/ | 不要 | D |
@@ -45,71 +47,119 @@
 - D: 既存・配置適切・ロジック変更なし（対応不要）
 - E: 既存・配置適切・ロジック変更あり（修正のみ）
 
-### 新規作成ファイル（分類A）
-
-| ファイル | 配置先 | 説明 |
-|---------|--------|------|
-| DeleteRuleInputData.ts | application-business-rules/dto/input/ | 入力DTO |
-| DeleteRuleOutputData.ts | application-business-rules/dto/output/ | 成功時出力DTO |
-| DeleteRuleErrorOutputData.ts | application-business-rules/dto/output/ | エラー出力DTO |
-| IDeleteRuleUseCase.ts | application-business-rules/ports/input/ | Input Port |
-| IDeleteRulePresenter.ts | application-business-rules/ports/output/ | Output Port |
-| DeleteRuleInteractor.ts | application-business-rules/interactors/ | UseCase実装 |
-| IDeleteRuleController.ts | interface-adapters/controllers/ | Controllerインターフェース |
-| DeleteRuleController.ts | interface-adapters/controllers/ | Controller実装 |
-| IDeleteRuleControllerFactory.ts | interface-adapters/factories/ | Factoryインターフェース |
-| DeleteRuleControllerFactory.ts | interface-adapters/factories/ | Factory実装 |
-| DeleteRulePresenter.ts | interface-adapters/presenters/ | Presenter実装 |
-| DeleteRuleRequestDTO.ts | frameworks-and-drivers/messaging/dto/request-dto/ | メッセージング用DTO |
-| DeleteButton.tsx | frameworks-and-drivers/ui/components/atoms/DeleteButton/ | ゴミ箱アイコンボタン |
-| ConfirmDialog.tsx | frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ | 確認ダイアログ |
-| ToastNotification.tsx | frameworks-and-drivers/ui/components/molecules/ToastNotification/ | トースト通知 |
-
-## 開発戦略
-
-### 前提タスク（分類Cファイルのディレクトリ移動のみ行う）
+### 分類C: 移行必須ファイルの影響分析
 
 なし（分類Cに該当するファイルなし）
 
-### ユーザーストーリー達成タスク
+### 分類B: 対応しない
 
-#### Phase 1: メッセージング基盤（既存ファイル修正）
+以下のファイルは配置不適切だがロジック変更不要のため、機能開発後にリファクタリング（または対応しない）：
 
-- [ ] DeleteRuleRequestDTO を作成
-- [ ] IRewriteRuleRepository に delete() メソッドを追加
-- [ ] IRewriteRuleMessagingPort に delete() メソッドを追加
-- [ ] RewriteRuleProxyService (IRewriteRuleProxyService) に deleteRule() メソッドを追加
-- [ ] RewriteRuleProxyServiceImpl に deleteRule() 実装を追加
-- [ ] RewriteRuleMessagingService に delete() 実装を追加
-- [ ] RewriteRuleMapper に delete() 実装を追加
-- [ ] DexieRewriteRuleRepository に delete() 実装を追加
-- [ ] ChromeRuntimeRewriteRuleRepository に delete() 実装を追加
+- `RuleTableRow.tsx` - components/molecules/ → frameworks-and-drivers/ui/components/molecules/ への移動のみ
 
-#### Phase 2: 削除ユースケース層（新規作成）
+## 開発戦略
 
-- [ ] DeleteRuleInputData を作成
-- [ ] DeleteRuleOutputData を作成
-- [ ] DeleteRuleErrorOutputData を作成
-- [ ] IDeleteRuleUseCase を作成
-- [ ] IDeleteRulePresenter を作成
-- [ ] DeleteRuleInteractor を作成
+### 方針: Parallel Change + Skeleton Pattern
 
-#### Phase 3: Controller/Presenter層（新規作成）
+既存コードを壊さずに新機能を追加するため、**Parallel Change**パターンと**Skeleton**パターンを採用する。
 
-- [ ] IDeleteRuleController を作成
-- [ ] DeleteRuleController を作成
-- [ ] IDeleteRuleControllerFactory を作成
-- [ ] DeleteRuleControllerFactory を作成
-- [ ] DeleteRulePresenter を作成
-- [ ] container.ts に DI 登録を追加
+```
+[前提タスク] 分類Cファイルのディレクトリ移動のみ（ロジック変更なし）→ なし
+[Phase 1] ディレクトリ構造の準備（必要に応じて新ディレクトリ作成）
+[Phase 2] Skeleton: インターフェース・スケルトンクラスを作成（コンパイル通る最小実装）
+[Phase 3] 実装: スケルトンに実際のロジックを追加
+[Phase 4] 統合（新旧並行稼働、UI統合）
+[Phase 5] 旧コード削除（このユーザーストーリーでは実施しない）
+```
 
-#### Phase 4: UIコンポーネント層（新規作成・修正）
+### 前提タスク: 分類Cファイルのディレクトリ移動
 
-- [ ] DeleteButton コンポーネントを作成
-- [ ] ConfirmDialog コンポーネントを作成
-- [ ] ToastNotification コンポーネントを作成
+なし（分類Cに該当するファイルなし）
+
+### Phase 1: ディレクトリ構造の準備
+
+- [ ] 新規ディレクトリを作成（既存のものは作成不要）
+  - `src/frameworks-and-drivers/ui/components/atoms/DeleteButton/`
+  - `src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/`
+  - `src/frameworks-and-drivers/ui/components/molecules/ToastNotification/`
+
+### Phase 2: Skeleton（インターフェース・スケルトンクラス作成）
+
+コンパイルが通る最小実装でスケルトンを作成（実際のロジックは空または NotImplementedError）：
+
+**第2層: application-business-rules**
+- [ ] DeleteRuleInputData（入力DTO）
+- [ ] DeleteRuleOutputData（成功時出力DTO）
+- [ ] DeleteRuleErrorOutputData（エラー出力DTO）
+- [ ] IDeleteRuleUseCase（Input Port インターフェース）
+- [ ] IDeleteRulePresenter（Output Port インターフェース）
+- [ ] DeleteRuleInteractor（スケルトン実装）
+- [ ] IRewriteRuleRepository に delete() メソッドシグネチャを追加
+
+**第3層: interface-adapters**
+- [ ] IDeleteRuleController（Controllerインターフェース）
+- [ ] DeleteRuleController（スケルトン実装）
+- [ ] IDeleteRuleControllerFactory（Factoryインターフェース、ADR-005参照）
+- [ ] DeleteRuleControllerFactory（スケルトン実装）
+- [ ] DeleteRulePresenter（スケルトン実装）
+- [ ] IRewriteRuleMessagingPort に delete() メソッドシグネチャを追加
+
+**第4層: frameworks-and-drivers**
+- [ ] DeleteRuleRequestDTO（メッセージング用DTO）
+- [ ] RewriteRuleProxyService (IRewriteRuleProxyService) に deleteRule() スケルトン追加
+- [ ] RewriteRuleProxyServiceImpl に deleteRule() スケルトン追加
+- [ ] RewriteRuleMessagingService に delete() スケルトン追加
+- [ ] RewriteRuleMapper に delete() スケルトン追加
+- [ ] DexieRewriteRuleRepository に delete() スケルトン追加
+- [ ] ChromeRuntimeRewriteRuleRepository に delete() スケルトン追加
+- [ ] DeleteButton UIコンポーネント（スケルトン）
+- [ ] ConfirmDialog UIコンポーネント（スケルトン）
+- [ ] ToastNotification UIコンポーネント（スケルトン）
+- [ ] container.ts にスケルトンクラスのDI登録を追加
+
+### Phase 3: 実装（スケルトンにロジック追加）
+
+スケルトンに実際のビジネスロジックを実装：
+
+**メッセージング基盤**
+- [ ] DeleteRuleRequestDTO の実装
+- [ ] RewriteRuleProxyService.deleteRule() の実装
+- [ ] RewriteRuleProxyServiceImpl.deleteRule() の実装
+- [ ] RewriteRuleMessagingService.delete() の実装
+- [ ] RewriteRuleMapper.delete() の実装（Entity ↔ DTO 変換 + MessagingPort経由通信）
+- [ ] DexieRewriteRuleRepository.delete() の実装（IndexedDB物理削除）
+- [ ] ChromeRuntimeRewriteRuleRepository.delete() の実装（Mapper委譲）
+
+**ユースケース層**
+- [ ] DeleteRuleInputData の実装
+- [ ] DeleteRuleOutputData の実装
+- [ ] DeleteRuleErrorOutputData の実装
+- [ ] DeleteRuleInteractor の実装（Repository削除 + TabsGatewayリロード）
+
+**Controller/Presenter層**
+- [ ] DeleteRuleController の実装
+- [ ] DeleteRuleControllerFactory の実装
+- [ ] DeleteRulePresenter の実装（成功時View更新、失敗時エラー通知）
+
+**UIコンポーネント層**
+- [ ] DeleteButton の実装（ゴミ箱アイコン表示、クリックイベント通知）
+- [ ] ConfirmDialog の実装（確認メッセージ、削除/キャンセルボタン）
+- [ ] ToastNotification の実装（エラー/成功メッセージ表示）
+
+### Phase 4: 統合（新旧並行稼働、UI統合）
+
 - [ ] RuleTableRow に DeleteButton を追加
-- [ ] RulesApp に削除処理を統合（deletingIds 管理、Controller 呼び出し、エラー表示）
+- [ ] RulesApp に削除処理を統合
+  - `deletingIds` による重複削除防止
+  - ConfirmDialog の表示制御
+  - DeleteRuleController の呼び出し
+  - ToastNotification によるエラー表示
+- [ ] container.ts の DI 登録を本実装に更新
+
+### Phase 5: 旧コード削除（このユーザーストーリーでは実施しない）
+
+以下は将来のリファクタリングタスクとして残す：
+- 分類Bファイルの理論的配置への移動（RuleTableRow.tsx）
 
 ### 対応しない（分類B）
 
@@ -120,16 +170,17 @@
 ### タスク網羅性チェック
 
 1. **差分分類で「修正:必須」としたすべてのファイルに対応するタスクがあるか**: ✓
-   - IRewriteRuleRepository, DexieRewriteRuleRepository, ChromeRuntimeRewriteRuleRepository → Phase 1
-   - RewriteRuleMapper, IRewriteRuleMessagingPort, RewriteRuleMessagingService → Phase 1
-   - RewriteRuleProxyService, RewriteRuleProxyServiceImpl → Phase 1
+   - IRewriteRuleRepository → Phase 2（シグネチャ追加）
+   - DexieRewriteRuleRepository, ChromeRuntimeRewriteRuleRepository → Phase 2, 3
+   - RewriteRuleMapper, IRewriteRuleMessagingPort, RewriteRuleMessagingService → Phase 2, 3
+   - RewriteRuleProxyService, RewriteRuleProxyServiceImpl → Phase 2, 3
    - RulesApp, RuleTableRow → Phase 4
 
 2. **01-class-design.md で新規作成とした全クラスに対応するタスクがあるか**: ✓
-   - DTO類 → Phase 1, 2
-   - UseCase類 → Phase 2
-   - Controller/Presenter類 → Phase 3
-   - UIコンポーネント類 → Phase 4
+   - DTO類 → Phase 2, 3
+   - UseCase類 → Phase 2, 3
+   - Controller/Presenter/Factory類 → Phase 2, 3
+   - UIコンポーネント類 → Phase 2, 3, 4
 
 3. **分類Cファイルの移動タスク（前提タスク）と修正タスク（達成タスク）が両方あるか**: N/A（分類Cなし）
 
@@ -140,4 +191,4 @@
 ## 関連ドキュメント
 
 - [User Story 001: ルールトグル機能](../completed/user-story-001/README.md) - 類似アーキテクチャの先行実装
-- [User Story 002: メッセージングを @webext-core に移行](./user-story-002/README.md) - メッセージング基盤
+- [User Story 002: メッセージングを @webext-core に移行](../user-story-002/README.md) - メッセージング基盤
