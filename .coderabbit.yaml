@@ -8,3 +8,94 @@ reviews:
     enabled: true
     base_branches:
       - ".*"
+
+  # ドキュメント整合性レビューの指示
+  instructions: |
+    ## ドキュメント整合性レビュー
+
+    PRをレビューする際、以下のドキュメント整合性を確認してください：
+
+    ### 1. ドキュメント同士の整合性
+
+    #### CLAUDE.md と .clinerules/ の整合性
+    - CLAUDE.mdに記載されているコマンドが.clinerules/内のワークフローと一致しているか
+    - コーディング規約の記述が両者で矛盾していないか
+
+    #### docs/docs-rules/ とドキュメントの整合性
+    - docs/docs-rules/に定義されたテンプレート・ルールに従ってドキュメントが作成されているか
+    - docs/design/内のテスト戦略書がdocs/docs-rules/design/05-test-strategy.mdの形式に従っているか
+
+    #### docs/issue-XXX/ ドキュメントの整合性
+    - ISSUE.md、PLAN.md、PULL_REQUEST.mdなどの内容が相互に矛盾していないか
+    - 完了したタスクがPROGRESS-XX.mdに正しく記録されているか
+
+    ### 2. ドキュメントとコードの整合性
+
+    #### CLAUDE.md とMakefile/package.jsonの整合性
+    - CLAUDE.mdに記載されているmakeコマンドがMakefileに存在するか
+    - npmスクリプトの説明が実際のpackage.jsonと一致しているか
+
+    #### テスト戦略書とテストコードの整合性
+    - docs/design/src/内のテスト戦略書で定義されたテストケースが実際のテストファイルに実装されているか
+    - テストファイルの構成がテスト戦略書の「テストファイル構成」セクションと一致しているか
+
+    #### コーディング規約とコードの整合性
+    - .clinerules/01-coding-standards.mdのルールがコードで守られているか
+    - インポートパスが絶対パス（src/から始まる）になっているか
+    - Clean Architectureのレイヤー依存関係が守られているか
+
+    #### ディレクトリ構造ドキュメントの整合性
+    - docs/DIRECTORY_STRUCTURE.mdが実際のディレクトリ構造と一致しているか
+    - 新しいディレクトリ/ファイルが追加された場合、ドキュメントの更新が必要か確認
+
+    ### 3. レビュー時の確認事項
+
+    ドキュメントが変更された場合：
+    - 関連するコードも更新が必要か確認
+    - 他の関連ドキュメントとの整合性を確認
+
+    コードが変更された場合：
+    - 関連するドキュメントの更新が必要か確認
+    - 特にpublicなAPIやコマンドの変更はドキュメント更新必須
+
+  # パス別の追加指示
+  path_instructions:
+    - path: "CLAUDE.md"
+      instructions: |
+        CLAUDE.mdはプロジェクトの主要なドキュメントです。変更時は以下を確認：
+        - Makefileに存在するコマンドのみを記載しているか
+        - .clinerules/内のワークフローと矛盾がないか
+        - ディレクトリ構造の説明が実際の構造と一致しているか
+
+    - path: "docs/**"
+      instructions: |
+        docsディレクトリ内のドキュメント変更時は以下を確認：
+        - docs/docs-rules/に定義されたフォーマットに従っているか
+        - 関連する他のドキュメントとの整合性があるか
+        - テスト戦略書の場合、対応するテストファイルとの整合性を確認
+
+    - path: ".clinerules/**"
+      instructions: |
+        .clinerules/の変更時は以下を確認：
+        - CLAUDE.mdの関連セクションも更新が必要か
+        - 他のワークフローファイルとの整合性があるか
+        - コーディング規約の変更は実際のコードへの影響を確認
+
+    - path: "src/**"
+      instructions: |
+        ソースコードの変更時は以下を確認：
+        - 新規クラス/メソッド追加時はdocs/design/に対応するテスト戦略書が必要
+        - publicなAPI変更時はCLAUDE.mdの更新が必要か確認
+        - Clean Architectureのレイヤー依存関係が守られているか
+
+    - path: "tests/**"
+      instructions: |
+        テストコードの変更時は以下を確認：
+        - 対応するdocs/design/内のテスト戦略書と整合性があるか
+        - テストファイルの構成がテスト戦略書の定義と一致しているか
+
+    - path: "Makefile"
+      instructions: |
+        Makefileの変更時は以下を確認：
+        - CLAUDE.mdの「Common Development Commands」セクションの更新が必要か
+        - 新規コマンド追加時はドキュメントへの記載を確認
