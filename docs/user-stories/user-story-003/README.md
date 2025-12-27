@@ -118,7 +118,6 @@
 - [ ] DeleteButton UIコンポーネント（スケルトン）
 - [ ] ConfirmDialog UIコンポーネント（スケルトン）
 - [ ] ToastNotification UIコンポーネント（スケルトン）
-- [ ] container.ts にスケルトンクラスのDI登録を追加
 
 #### テスト戦略書
 
@@ -174,7 +173,7 @@
   - ConfirmDialog の表示制御
   - DeleteRuleController の呼び出し
   - ToastNotification によるエラー表示
-- [ ] container.ts の DI 登録を本実装に更新
+- [ ] container.ts にDI登録を追加
 
 #### 結合テスト
 

@@ -107,13 +107,19 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 - 第1層 (enterprise-business-rules): エンティティにメソッドスケルトン追加
 - 第2層 (application-business-rules): Input/Output Port、Gateway Interface、DTO、Interactorスケルトン
 - 第3層 (interface-adapters): Controller、Presenter、Factory、Mapperスケルトン
-- 第4層 (frameworks-and-drivers): UIコンポーネント、Gateway実装、MessagingService、DI登録
+- 第4層 (frameworks-and-drivers): UIコンポーネント、Gateway実装、MessagingService
 
 ###### Skeletonの定義
 
 - コンパイルが通る最小実装
 - 実際のロジックは空または `throw new Error('Not implemented')` で仮実装
 - インターフェースは完全に定義する（メソッドシグネチャ、型定義）
+
+###### DI登録のタイミング
+
+- DI登録は原則としてPhase 4（統合）で行う
+- Phase 2でDI登録が必要な場合はコンパイルエラー回避のためのみ
+- Phase 4で本実装のDI登録を行う際、Phase 2で仮登録した場合は更新する
 
 ##### テスト戦略
 
