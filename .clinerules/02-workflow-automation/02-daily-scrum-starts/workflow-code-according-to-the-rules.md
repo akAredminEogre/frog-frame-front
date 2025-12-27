@@ -2,7 +2,7 @@ workflow-code-according-to-the-rules
 
 ```cline-instructions
 コーディングの際には
-.clinerules/01-coding-standards.md
+docs/coding-standards/（コーディング規約）
 .clinerules/03-test-standards.md
 .clinerules/03-test-coding-standards(ディレクトリ)
 .clinerules/05-project-specific-rules.md

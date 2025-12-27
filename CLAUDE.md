@@ -33,11 +33,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This project includes additional guidelines and automated workflows defined in the `.clinerules/` directory:
 
 ### Coding Standards
-- **`.clinerules/01-coding-standards.md`** - Core coding conventions including:
-  - Import path rules (absolute paths from `src`)
-  - Object-oriented design rules (ThoughtWorks Anthology 9 principles)
-  - Clean Architecture layer dependencies
-  - System design principles
+- **`docs/coding-standards/`** - Core coding conventions including:
+  - `src/` - Source code conventions (import paths, OO design rules, Clean Architecture)
+  - `tests/` - Test code conventions
+  - `make/` - Makefile conventions
+  - `scripts/` - Script conventions
 
 ### Test Standards
 - **`.clinerules/03-test-coding-standards.md`** - Test coding conventions
