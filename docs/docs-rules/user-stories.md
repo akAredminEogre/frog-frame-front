@@ -166,59 +166,6 @@ Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメ
 2. 01-class-design.md で新規作成とした全クラスに対応するタスクがあるか
 3. 分類Cファイルの移動タスク（前提タスク）と修正タスク（達成タスク）が両方あるか
 
-記述例
-```markdown
-## 開発戦略
-
-### 前提タスク（分類Cファイルのディレクトリ移動のみ行う）
-
-- [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移行（51ファイル）
-- [ ] container.ts を frameworks-and-drivers/di/ へ移行
-
-### Phase 1: ディレクトリ構造の準備
-
-- [ ] 新規ディレクトリを作成
-
-### Phase 2: Skeleton（インターフェース・スケルトンクラス作成）
-
-**第2層: application-business-rules**
-- [ ] IToggleRuleActiveUseCase（Input Port）
-- [ ] IToggleRuleActivePresenter（Output Port）
-- [ ] ToggleRuleActiveInputData / OutputData（DTO）
-- [ ] ToggleRuleActiveInteractor（スケルトン）
-
-**第3層: interface-adapters**
-- [ ] ToggleRuleActiveController（スケルトン）
-- [ ] ToggleRuleActivePresenter（スケルトン）
-
-**第4層: frameworks-and-drivers**
-- [ ] ToggleSwitch UIコンポーネント（スケルトン）
-- [ ] container.ts にスケルトンクラスのDI登録
-
-**テスト戦略書**
-- [ ] 単体テスト戦略書を作成（各メソッド用）
-- [ ] 結合テスト戦略書を作成（integration-test-strategy.md）
-- [ ] E2Eテスト戦略書を作成（e2e-test-strategy.md）
-
-### Phase 3: 実装（スケルトンにロジック追加）
-
-- [ ] RewriteRule.withActive() の実装（テスト済み）
-- [ ] ToggleRuleActiveInteractor の実装（テスト済み）
-- [ ] ToggleRuleActiveController の実装（テスト済み）
-- [ ] ToggleRuleActivePresenter の実装（テスト済み）
-- [ ] ToggleSwitch UIコンポーネントの実装
-
-### Phase 4: 統合（UI統合 + 結合テスト・E2Eテスト）
-
-- [ ] RulesApp にトグルUIを統合
-- [ ] 結合テストを実装
-- [ ] E2Eテストを実装
-
-### 対応しない（分類B）
-
-- IRewriteRuleRepository.ts - ロジック変更なしのため現行位置のまま
-```
-
 ### acceptance-criteria.md
 
 ユーザーストーリーを満たすかどうかを検証する条件を記載:
