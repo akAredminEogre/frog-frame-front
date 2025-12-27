@@ -20,7 +20,7 @@ src/application-business-rules/
 │   │   └── IDeleteRuleUseCase.ts
 │   ├── output/                                  ← Output Port (Interface)
 │   │   └── IDeleteRulePresenter.ts
-│   └── gateway/                                 ← Gateway Interface（Interactorが依存）
+│   └── gateway/                                 ← Gateway Interface (Interactorが依存)
 │       ├── IRewriteRuleRepository.ts            ← delete() 追加
 │       └── ITabsGateway.ts
 ├── interactors/                                 ← Use Case Interactor
