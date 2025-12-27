@@ -8,3 +8,33 @@ reviews:
     enabled: true
     base_branches:
       - ".*"
+
+  # パス別のレビュー指示
+  # 詳細は .AI/review-guidelines/ 配下の各ファイルを参照
+  path_instructions:
+    - path: "CLAUDE.md"
+      instructions: ".AI/review-guidelines/CLAUDE-md.md の観点でレビューしてください"
+
+    - path: "docs/**"
+      instructions: ".AI/review-guidelines/docs.md の観点でレビューしてください"
+
+    - path: ".clinerules/**"
+      instructions: ".AI/review-guidelines/clinerules.md の観点でレビューしてください"
+
+    - path: "src/**"
+      instructions: ".AI/review-guidelines/src.md の観点でレビューしてください"
+
+    - path: "tests/**"
+      instructions: ".AI/review-guidelines/tests.md の観点でレビューしてください"
+
+    - path: "Makefile"
+      instructions: ".AI/review-guidelines/Makefile.md の観点でレビューしてください"
+
+# コードガイドライン設定
+# .AI/review-guidelines/ 配下のファイルをレビューガイドラインとして使用
+knowledge_base:
+  opt_out: false
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - ".AI/review-guidelines/**/*.md"

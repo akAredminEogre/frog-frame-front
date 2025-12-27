@@ -33,23 +33,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This project includes additional guidelines and automated workflows defined in the `.clinerules/` directory:
 
 ### Coding Standards
-- **`.clinerules/01-coding-standards.md`** - Core coding conventions including:
-  - Import path rules (absolute paths from `src`)
-  - Object-oriented design rules (ThoughtWorks Anthology 9 principles)
-  - Clean Architecture layer dependencies
-  - System design principles
+- **`docs/coding-standards/`** - Core coding conventions including:
+  - `src/` - Source code conventions (import paths, OO design rules, Clean Architecture)
+  - `tests/` - Test code conventions
+  - `make/` - Makefile conventions
+  - `scripts/` - Script conventions
 
 ### Test Standards
-- **`.clinerules/03-test-coding-standards.md`** - Test coding conventions
-- **`.clinerules/03-test-coding-standards/`** - Detailed test guidelines:
-  - Common test rules (array-based tests, JSDoc requirements)
-  - E2E test rules (console error handling)
-
-### Project-Specific Configuration
-- **`.clinerules/05-project-specific-rules.md`** - Project-specific constraints:
-  - WXT framework requirements
-  - Repository information (branch strategy, PR process)
-  - Pre-completion checks (`testcheck` workflow)
+- **`docs/coding-standards/tests/`** - Test coding conventions (array-based tests, common rules, E2E rules)
 
 ### Workflow Automation
 The **`.clinerules/02-workflow-automation/`** directory contains automated workflow definitions:
@@ -121,6 +112,24 @@ make testlint
 This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
 
 **Note**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
+
+#### 通常環境（ターミナル版Claude Code）の場合
+
+1. **未使用コードチェックの実行**
+   ```bash
+   make testcheck
+   ```
+
+2. **チェック結果の確認**
+   - エラーや未使用コードが検出された場合は、必ず修正してから再度チェックを実行
+   - すべてのチェックが正常に完了した場合のみ、タスク完了可能
+
+3. **修正が必要な場合の手順**
+   - 検出された問題を修正
+   - 再度同じコマンドを実行してチェック
+   - エラーがなくなるまで修正とチェックを繰り返す
+
+**このチェックを実行せずにタスクを完了することは禁止されています。**
 
 ### Git Worktree (Parallel Development)
 For working on multiple branches simultaneously:
@@ -274,17 +283,7 @@ Path aliases configured in `tsconfig.json`:
 
 ## Object-Oriented Design Rules (ThoughtWorks Anthology)
 
-These 9 rules are strictly enforced:
-
-1. One level of indentation per method
-2. Don't use else clauses
-3. Wrap all primitives and strings (exceptions: test mocks, sendMessage parameters, catch error objects)
-4. One dot per line (exception: Chrome API calls)
-5. Don't abbreviate names
-6. Keep all entities small
-7. Maximum 2 instance variables per class
-8. Use first-class collections
-9. No getters/setters/properties
+See `docs/coding-standards/src/object-oriented-nine-rules.md` for the 9 rules and their ESLint implementations.
 
 **Method Design**:
 - Methods MUST use instance variables (exception: infrastructure layer)
