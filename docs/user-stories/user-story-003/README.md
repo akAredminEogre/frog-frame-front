@@ -87,7 +87,8 @@
 
 コンパイルが通る最小実装でスケルトンを作成（実際のロジックは空または NotImplementedError）：
 
-**第2層: application-business-rules**
+#### 第2層: application-business-rules
+
 - [ ] DeleteRuleInputData（入力DTO）
 - [ ] DeleteRuleOutputData（成功時出力DTO）
 - [ ] DeleteRuleErrorOutputData（エラー出力DTO）
@@ -96,7 +97,8 @@
 - [ ] DeleteRuleInteractor（スケルトン実装）
 - [ ] IRewriteRuleRepository に delete() メソッドシグネチャを追加
 
-**第3層: interface-adapters**
+#### 第3層: interface-adapters
+
 - [ ] IDeleteRuleController（Controllerインターフェース）
 - [ ] DeleteRuleController（スケルトン実装）
 - [ ] IDeleteRuleControllerFactory（Factoryインターフェース、ADR-005参照）
@@ -104,7 +106,8 @@
 - [ ] DeleteRulePresenter（スケルトン実装）
 - [ ] IRewriteRuleMessagingPort に delete() メソッドシグネチャを追加
 
-**第4層: frameworks-and-drivers**
+#### 第4層: frameworks-and-drivers
+
 - [ ] DeleteRuleRequestDTO（メッセージング用DTO）
 - [ ] RewriteRuleProxyService (IRewriteRuleProxyService) に deleteRule() スケルトン追加
 - [ ] RewriteRuleProxyServiceImpl に deleteRule() スケルトン追加
@@ -117,7 +120,8 @@
 - [ ] ToastNotification UIコンポーネント（スケルトン）
 - [ ] container.ts にスケルトンクラスのDI登録を追加
 
-**テスト戦略書**
+#### テスト戦略書
+
 - [ ] 結合テスト戦略書を作成（integration-test-strategy.md）
 - [ ] E2Eテスト戦略書を作成（e2e-test-strategy.md）
 
@@ -125,7 +129,8 @@
 
 スケルトンに実際のビジネスロジックを実装（各タスクは実装・テスト戦略書・単体テストを含む）：
 
-**メッセージング基盤**
+#### メッセージング基盤
+
 - [ ] DeleteRuleRequestDTO の実装、テスト戦略書・単体テスト
 - [ ] RewriteRuleProxyService.deleteRule() の実装、テスト戦略書・単体テスト
 - [ ] RewriteRuleProxyServiceImpl.deleteRule() の実装、テスト戦略書・単体テスト
@@ -134,25 +139,29 @@
 - [ ] DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
 - [ ] ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（Mapper委譲）
 
-**ユースケース層**
+#### ユースケース層
+
 - [ ] DeleteRuleInputData の実装、テスト戦略書・単体テスト
 - [ ] DeleteRuleOutputData の実装、テスト戦略書・単体テスト
 - [ ] DeleteRuleErrorOutputData の実装、テスト戦略書・単体テスト
 - [ ] DeleteRuleInteractor の実装、テスト戦略書・単体テスト（Repository削除 + TabsGatewayリロード）
 
-**Controller/Presenter層**
+#### Controller/Presenter層
+
 - [ ] DeleteRuleController の実装、テスト戦略書・単体テスト
 - [ ] DeleteRuleControllerFactory の実装、テスト戦略書・単体テスト
 - [ ] DeleteRulePresenter の実装、テスト戦略書・単体テスト（成功時View更新、失敗時エラー通知）
 
-**UIコンポーネント層**
+#### UIコンポーネント層
+
 - [ ] DeleteButton の実装、テスト戦略書・単体テスト（ゴミ箱アイコン表示、クリックイベント通知）
 - [ ] ConfirmDialog の実装、テスト戦略書・単体テスト（確認メッセージ、削除/キャンセルボタン）
 - [ ] ToastNotification の実装、テスト戦略書・単体テスト（エラー/成功メッセージ表示）
 
 ### Phase 4: 統合（新旧並行稼働、UI統合）
 
-**UI統合**
+#### UI統合
+
 - [ ] RuleTableRow に DeleteButton を追加
 - [ ] RulesApp に削除処理を統合
   - `deletingIds` による重複削除防止
@@ -161,14 +170,16 @@
   - ToastNotification によるエラー表示
 - [ ] container.ts の DI 登録を本実装に更新
 
-**結合テスト**
+#### 結合テスト
+
 - [ ] 正常系テスト（ルール削除 → DB永続化確認）
 - [ ] データ整合性テスト（他ルールへの影響なし）
 - [ ] Presenter出力テスト（コールバック検証）
 - [ ] エラー系テスト（存在しないルールID）
 - [ ] 部分的成功テスト（削除成功・タブリロード失敗）
 
-**E2Eテスト**
+#### E2Eテスト
+
 - [ ] 正常操作フロー（ゴミ箱クリック → 確認ダイアログ → 削除 → 一覧から消える）
 - [ ] キャンセル操作（確認ダイアログでキャンセル → 何も起こらない）
 - [ ] DB永続化（ページリロード後もルールが削除されている）

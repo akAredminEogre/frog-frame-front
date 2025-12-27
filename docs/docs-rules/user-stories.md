@@ -91,7 +91,7 @@ docs/user-stories/
 Clean Architectureに従った機能追加では、既存コードを壊さずに新機能を追加するため、
 **Parallel Change**パターンと**Skeleton**パターンを組み合わせて採用する。
 
-**Phase構成**
+###### Phase構成
 
 | Phase | 内容 | 説明 | テスト |
 |-------|------|------|--------|
@@ -102,14 +102,14 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 | Phase 4 | 統合 | 新旧並行稼働、UI統合 | 結合テスト・E2Eテスト実装 |
 | Phase 5 | 旧コード削除 | 通常は別ユーザーストーリーで対応 | - |
 
-**各層のPhase 2（Skeleton）記述ガイド**
+###### 各層のPhase 2（Skeleton）記述ガイド
 
-- **第1層 (enterprise-business-rules)**: エンティティにメソッドスケルトン追加
-- **第2層 (application-business-rules)**: Input/Output Port、Gateway Interface、DTO、Interactorスケルトン
-- **第3層 (interface-adapters)**: Controller、Presenter、Factory、Mapperスケルトン
-- **第4層 (frameworks-and-drivers)**: UIコンポーネント、Gateway実装、MessagingService、DI登録
+- 第1層 (enterprise-business-rules): エンティティにメソッドスケルトン追加
+- 第2層 (application-business-rules): Input/Output Port、Gateway Interface、DTO、Interactorスケルトン
+- 第3層 (interface-adapters): Controller、Presenter、Factory、Mapperスケルトン
+- 第4層 (frameworks-and-drivers): UIコンポーネント、Gateway実装、MessagingService、DI登録
 
-**Skeletonの定義**
+###### Skeletonの定義
 
 - コンパイルが通る最小実装
 - 実際のロジックは空または `throw new Error('Not implemented')` で仮実装
@@ -119,7 +119,7 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 
 各Phaseでのテスト関連タスク:
 
-**Phase 2: 結合・E2Eテスト戦略書の作成**
+###### Phase 2: 結合・E2Eテスト戦略書の作成
 
 Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメントに追加する:
 
@@ -128,7 +128,7 @@ Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメ
 | 結合テスト戦略書 | `docs/design/pages/{page}/features/{feature}/integration-test-strategy.md` | [06-integration-test-strategy.md](./design/06-integration-test-strategy.md) |
 | E2Eテスト戦略書 | `docs/design/pages/{page}/features/{feature}/e2e-test-strategy.md` | [07-e2e-test-strategy.md](./design/07-e2e-test-strategy.md) |
 
-**Phase 3: 実装・単体テスト戦略書・単体テスト**
+###### Phase 3: 実装・単体テスト戦略書・単体テスト
 
 各タスクは「実装」と「テスト」を1行にまとめて記載する:
 
@@ -141,7 +141,7 @@ Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメ
 - 参照: [05-test-strategy.md](./design/05-test-strategy.md)
 - 各タスク完了後にテストがパスすることを確認
 
-**Phase 4: 結合テスト・E2Eテストの実装**
+###### Phase 4: 結合テスト・E2Eテストの実装
 
 - UI統合後、結合テスト戦略書に基づいてテストを実装
 - E2Eテスト戦略書に基づいて実ブラウザでのテストを実装
