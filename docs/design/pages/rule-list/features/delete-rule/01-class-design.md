@@ -109,7 +109,7 @@
 | RewriteRuleProxyServiceImpl | IRewriteRuleProxyService の実装を生成。container 依存のため Background Script 専用（既存、delete追加、ADR-002 実装注入パターン） |
 | DexieRewriteRuleRepository | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、既存、delete追加、ADR-003参照） |
 | ChromeTabsGateway | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（既存、ADR-001参照） |
-| DeleteRuleRequestDTO | メッセージング用DTO。削除要求 `{ id }`（ADR-002、ADR-003参照） |
+| DeleteRuleRequestDTO | メッセージング用DTO。削除要求 `{ ruleId }`（ADR-002、ADR-003参照） |
 | DeleteButton | UIコンポーネント。ゴミ箱アイコンボタン。DeleteButtonコンポーネントの`disabled` propで操作制御 |
 | ConfirmDialog | UIコンポーネント。確認ダイアログ |
 | ToastNotification | UIコンポーネント。トースト通知 |
