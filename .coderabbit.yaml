@@ -58,6 +58,11 @@ reviews:
     - 関連するドキュメントの更新が必要か確認
     - 特にpublicなAPIやコマンドの変更はドキュメント更新必須
 
+    ### 4. レビュー不要な項目
+
+    以下の項目についてはレビューコメント不要です：
+    - Markdownのfenced code blockに言語識別子がない場合（markdownlintで対応済み）
+
   # パス別の追加指示
   path_instructions:
     - path: "CLAUDE.md"
