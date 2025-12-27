@@ -36,9 +36,7 @@
 
 **IMPORTANT: attempt_completionツールを使用する前に、必ず以下のプロジェクト固有チェックを実行すること。**
 
-#### Claude Code Web環境の場合
-makeコマンドはDocker内部で実行されるため、Claude Code Web環境では使用できません。
-テスト（ユニットテスト、E2Eテスト、lint等）はPRマージ時のCIで検証されるため、手動でのテスト実行はスキップしてください。
+**Note**: Claude Code Web環境では `make` コマンドが使用できません。詳細はCLAUDE.mdの「Claude Code Web専用ワークフロー」セクションを参照してください。
 
 #### 通常環境（ターミナル版Claude Code）の場合
 1. **未使用コードチェックの実行**
