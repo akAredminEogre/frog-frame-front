@@ -60,13 +60,14 @@ src/frameworks-and-drivers/
 │   │   ├── atoms/
 │   │   │   └── DeleteButton/
 │   │   │       └── DeleteButton.tsx
-│   │   └── molecules/
-│   │       ├── ConfirmDialog/
-│   │       │   └── ConfirmDialog.tsx
-│   │       ├── ToastNotification/
-│   │       │   └── ToastNotification.tsx
-│   │       └── RuleTableRow/
-│   │           └── RuleTableRow.tsx             ← DeleteButton 追加
+│   │   ├── molecules/
+│   │   │   ├── ToastNotification/
+│   │   │   │   └── ToastNotification.tsx
+│   │   │   └── RuleTableRow/
+│   │   │       └── RuleTableRow.tsx             ← DeleteButton 追加
+│   │   └── organisms/
+│   │       └── ConfirmDialog/
+│   │           └── ConfirmDialog.tsx            ← モーダルはorganisms
 │   └── pages/
 │       └── rules/
 │           └── RulesApp.tsx
