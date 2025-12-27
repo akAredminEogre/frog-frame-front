@@ -3,7 +3,6 @@ workflow-code-according-to-the-rules
 ```cline-instructions
 コーディングの際には
 docs/coding-standards/（コーディング規約）
-.clinerules/03-test-coding-standards/（E2Eテスト固有ルール）
 .clinerules/05-project-specific-rules.md
 を参照しながら進めてください。
 
