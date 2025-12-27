@@ -369,9 +369,10 @@ else ルール削除失敗
 else タブリロード失敗（部分的成功）
   note over Interactor
     **処理順序**
-    1. reloadMatchingTabs()でエラー
-    2. DB削除成功→present()呼び出し
-    3. presentError()でエラー通知
+    1. DB削除成功
+    2. reloadMatchingTabs()でエラー
+    3. present()でDB削除成功を通知
+    4. presentError()でタブリロード失敗を通知
   end note
 
   Interactor -> OutputData : new(deletedRuleId)
