@@ -96,7 +96,7 @@ else 削除確認
 
   alt deletingIds.has(ruleId) = true
     note over View
-      **競合状態防止**
+      **重複削除防止**
       既に削除処理中のため
       早期リターン
     end note
