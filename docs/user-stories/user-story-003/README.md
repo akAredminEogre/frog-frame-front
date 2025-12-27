@@ -135,7 +135,13 @@
 - [ ] RewriteRuleProxyService.deleteRule() の実装、テスト戦略書・単体テスト
 - [ ] RewriteRuleProxyServiceImpl.deleteRule() の実装、テスト戦略書・単体テスト
 - [ ] RewriteRuleMessagingService.delete() の実装、テスト戦略書・単体テスト
+
+#### Mapper層
+
 - [ ] RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト（Entity ↔ DTO 変換 + MessagingPort経由通信）
+
+#### Repository層
+
 - [ ] DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
 - [ ] ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（Mapper委譲）
 
