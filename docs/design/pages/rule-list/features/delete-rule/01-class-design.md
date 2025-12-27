@@ -47,9 +47,9 @@
 │  │ ※ Rules Pageコンテキストで実行                                     │   │
 │  │                                                                  │   │
 │  │ - InputDataからruleIdを取得                                       │   │
-│  │ - Repositoryからルール取得（messaging経由でBackground Scriptへ）    │   │
-│  │ - Repositoryで削除（messaging経由でBackground Scriptへ）           │   │
-│  │ - ITabsGatewayで該当タブをリロード（Rules Pageで直接実行）          │   │
+│  │ - Repositoryからルール取得(messaging経由でBackground Scriptへ)    │   │
+│  │ - Repositoryで削除(messaging経由でBackground Scriptへ)           │   │
+│  │ - ITabsGatewayで該当タブをリロード(Rules Pageで直接実行)          │   │
 │  │ - OutputDataを作成してPresenterに渡す                              │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────────────┘
@@ -61,7 +61,7 @@
 │  │ entities/RewriteRule/RewriteRule.ts                               │   │
 │  │                                                                  │   │
 │  │ - matchesUrl(): URLがルールのパターンに一致するか判定              │   │
-│  │   （削除後のタブリロード判定に使用）                                 │   │
+│  │   (削除後のタブリロード判定に使用)                                 │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
@@ -72,7 +72,7 @@
 
 | クラス | 責務 |
 |--------|------|
-| RewriteRule | ルールエンティティ。`matchesUrl()`でURLマッチング判定（既存、ADR-001参照） |
+| RewriteRule | ルールエンティティ。`matchesUrl()`でURLマッチング判定(既存、ADR-001参照) |
 
 ### application-business-rules (第2層)
 
@@ -84,38 +84,38 @@
 | IDeleteRuleUseCase | Input Port。削除処理のインターフェース |
 | IDeleteRulePresenter | Output Port。結果通知のインターフェース |
 | DeleteRuleInteractor | UseCase実装。削除処理を実行 |
-| IRewriteRuleRepository | Gateway Interface。ルール永続化（既存、delete()メソッド追加） |
-| ITabsGateway | Gateway Interface。タブ操作（既存インターフェース、reloadMatchingTabs()使用） |
+| IRewriteRuleRepository | Gateway Interface。ルール永続化(既存、delete()メソッド追加) |
+| ITabsGateway | Gateway Interface。タブ操作(既存インターフェース、reloadMatchingTabs()使用) |
 
 ### interface-adapters (第3層)
 
 | クラス | 責務 |
 |--------|------|
-| IDeleteRuleController | Controllerのインターフェース。Factoryの戻り値型として使用（ADR-005参照） |
+| IDeleteRuleController | Controllerのインターフェース。Factoryの戻り値型として使用(ADR-005参照) |
 | DeleteRuleController | IDeleteRuleControllerの実装。ユーザー入力をInputDataに変換 |
-| IDeleteRuleControllerFactory | Controllerを生成するFactoryのインターフェース。ReactコールバックをPresenterに注入（ADR-005参照） |
+| IDeleteRuleControllerFactory | Controllerを生成するFactoryのインターフェース。ReactコールバックをPresenterに注入(ADR-005参照) |
 | DeleteRuleControllerFactory | IDeleteRuleControllerFactoryの実装 |
-| DeleteRulePresenter | OutputDataをViewに通知（成功/エラー） |
-| RewriteRuleMapper | Entity ↔ DTO 変換（既存、delete操作追加） |
-| IRewriteRuleMessagingPort | MessagingService の抽象化（既存、delete操作追加） |
+| DeleteRulePresenter | OutputDataをViewに通知(成功/エラー) |
+| RewriteRuleMapper | Entity ↔ DTO 変換(既存、delete操作追加) |
+| IRewriteRuleMessagingPort | MessagingService の抽象化(既存、delete操作追加) |
 
 ### frameworks-and-drivers (第4層)
 
 | クラス | 責務 |
 |--------|------|
-| ChromeRuntimeRewriteRuleRepository | IRewriteRuleRepositoryの実装。Mapperへの委譲のみ（DTOを意識しない）（Rules Page用、既存、delete追加、ADR-002参照） |
-| RewriteRuleMessagingService | IRewriteRuleMessagingPort を実装。proxy-service 経由で DTO を送受信（既存、delete追加、ADR-002参照） |
-| IRewriteRuleProxyService | proxy-service のインターフェース。RewriteRuleProxyService.ts で定義（既存、delete追加、ADR-002参照） |
-| RewriteRuleProxyService | proxy-service として定義。defineProxyService() で register/get 関数を生成（既存、delete追加、ADR-002参照） |
-| RewriteRuleProxyServiceImpl | IRewriteRuleProxyService の実装を生成。container 依存のため Background Script 専用（既存、delete追加、ADR-002 実装注入パターン） |
-| DexieRewriteRuleRepository | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、既存、delete追加、ADR-003参照） |
-| ChromeTabsGateway | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（既存、ADR-001参照） |
-| DeleteRuleRequestDTO | メッセージング用DTO。削除要求 `{ ruleId }`（ADR-002、ADR-003参照） |
+| ChromeRuntimeRewriteRuleRepository | IRewriteRuleRepositoryの実装。Mapperへの委譲のみ(DTOを意識しない)(Rules Page用、既存、delete追加、ADR-002参照) |
+| RewriteRuleMessagingService | IRewriteRuleMessagingPort を実装。proxy-service 経由で DTO を送受信(既存、delete追加、ADR-002参照) |
+| IRewriteRuleProxyService | proxy-service のインターフェース。RewriteRuleProxyService.ts で定義(既存、delete追加、ADR-002参照) |
+| RewriteRuleProxyService | proxy-service として定義。defineProxyService() で register/get 関数を生成(既存、delete追加、ADR-002参照) |
+| RewriteRuleProxyServiceImpl | IRewriteRuleProxyService の実装を生成。container 依存のため Background Script 専用(既存、delete追加、ADR-002 実装注入パターン) |
+| DexieRewriteRuleRepository | IndexedDBデータアクセス。DTO ↔ DBレコード変換(Background Script用、既存、delete追加、ADR-003参照) |
+| ChromeTabsGateway | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード(既存、ADR-001参照) |
+| DeleteRuleRequestDTO | メッセージング用DTO。削除要求 `{ ruleId }`(ADR-002、ADR-003参照) |
 | DeleteButton | UIコンポーネント。ゴミ箱アイコンボタン。DeleteButtonコンポーネントの`disabled` propで操作制御 |
 | ConfirmDialog | UIコンポーネント。確認ダイアログ |
 | ToastNotification | UIコンポーネント。トースト通知 |
-| RulesApp | View。ルール一覧画面。`deletingIds` で競合状態防止を管理（既存、変更対象） |
-| RuleTableRow | Molecule。ルール行（既存、DeleteButton追加） |
+| RulesApp | View。ルール一覧画面。`deletingIds` で競合状態防止を管理(既存、変更対象) |
+| RuleTableRow | Molecule。ルール行(既存、DeleteButton追加) |
 
 ## アーキテクチャ補足
 
@@ -135,7 +135,7 @@
 
 ### 確認ダイアログの責務配置
 
-確認ダイアログはUI層（View）の責務とする：
+確認ダイアログはUI層(View)の責務とする：
 - ダイアログ表示はユーザーインタラクションの一部
 - Controller呼び出し前にViewで確認を取る
 - Interactorは確認済みの削除要求のみを受け取る
@@ -168,14 +168,14 @@ Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-
 
 また、ADR-002 に従い、メッセージングではドメインエンティティではなくDTOを送信する。
 Entity ↔ DTO の変換と MessagingService への通信は RewriteRuleMapper クラスが担当する。
-ChromeRuntimeRewriteRuleRepository は Mapper への委譲のみを行い、DTO を意識しない（ADR-002、ADR-003参照）。
+ChromeRuntimeRewriteRuleRepository は Mapper への委譲のみを行い、DTO を意識しない(ADR-002、ADR-003参照)。
 
 依存性逆転のため、Mapper は IRewriteRuleMessagingPort インターフェースに依存し、
 RewriteRuleMessagingService がこれを実装する。RewriteRuleMessagingService は内部で
-RewriteRuleProxyService（proxy-service）を使用して Background Script と通信する（ADR-002参照）。
+RewriteRuleProxyService(proxy-service)を使用して Background Script と通信する(ADR-002参照)。
 
 ADR-002 に従い、メッセージングには @webext-core/proxy-service を使用する。
-また、proxy-service は実装注入パターンを採用している（詳細は ADR-002 参照）。
+また、proxy-service は実装注入パターンを採用している(詳細は ADR-002 参照)。
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
@@ -183,7 +183,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │  ┌─────────────────────────────────────────────────────────────┐│
 │  │ RulesApp                                                     ││
 │  │   ↓ ゴミ箱クリック                                            ││
-│  │ ConfirmDialog（確認）                                         ││
+│  │ ConfirmDialog(確認)                                         ││
 │  │   ↓ 確認後                                                   ││
 │  │ DeleteRuleController → DeleteRuleInteractor                  ││
 │  │                              ↓                              ││
@@ -228,8 +228,8 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 
 | ロジック | 配置先 | 実装 |
 |---------|--------|------|
-| URLパターンマッチング判定 | `enterprise-business-rules` | `RewriteRule.matchesUrl()` （既存） |
-| タブ一覧取得・リロード | `frameworks-and-drivers` | `ChromeTabsGateway`（chrome.tabs API） |
+| URLパターンマッチング判定 | `enterprise-business-rules` | `RewriteRule.matchesUrl()` (既存) |
+| タブ一覧取得・リロード | `frameworks-and-drivers` | `ChromeTabsGateway`(chrome.tabs API) |
 | 削除処理 | `frameworks-and-drivers` | `DexieRewriteRuleRepository.delete()` |
 
 削除後のタブリロードは、削除前に取得したルールの `matchesUrl()` を使用して判定を行う。
@@ -278,7 +278,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │         ▲                        ▲                        ▲                │
 │         │                        │                        │                │
 │  Controller が生成         Interactor が生成        Interactor が生成       │
-│  （Interactor に渡す）     （Presenter に渡す）     （Presenter に渡す）     │
+│  (Interactor に渡す)     (Presenter に渡す)     (Presenter に渡す)     │
 │                                                                             │
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
 │  │ <<interface>>               │    │ <<interface>>               │        │

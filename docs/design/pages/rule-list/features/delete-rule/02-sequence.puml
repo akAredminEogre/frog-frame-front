@@ -49,7 +49,7 @@ box "enterprise-business-rules" #LightPink
   participant "RewriteRule" as Entity
 end box
 
-== 初期化（useMemo内） ==
+== 初期化(useMemo内) ==
 
 View -> IFactory : create(\n  onSuccess,\n  onError)
 activate IFactory
@@ -131,7 +131,7 @@ end note
 IUseCase -> Interactor : execute(inputData)
 activate Interactor
 
-== ルール取得（タブリロード用） ==
+== ルール取得(タブリロード用) ==
 
 Interactor -> IRepository : getById(ruleId)
 activate IRepository
@@ -266,7 +266,7 @@ deactivate TabsGateway
 ITabsGateway --> Interactor : void
 deactivate ITabsGateway
 
-== 結果通知（成功時） ==
+== 結果通知(成功時) ==
 
 Interactor -> OutputData : new(deletedRuleId)
 OutputData --> Interactor : outputData
@@ -303,14 +303,14 @@ end
 note over Interactor, Presenter
   エラー発生時のフロー
   - ルール取得失敗: 一覧変更なし
-    （処理中フラグは解除）
+    (処理中フラグは解除)
   - ルール削除失敗: 一覧変更なし
-    （処理中フラグは解除）
+    (処理中フラグは解除)
   - タブリロード失敗: DB削除成功済み
     UIはルール削除後の状態を表示
 
   ※ deletingIds.delete()は各alt/else分岐で
-  1回のみ実行される（重複解除なし）
+  1回のみ実行される(重複解除なし)
 end note
 
 alt ルール取得失敗
@@ -373,13 +373,13 @@ else ルール削除失敗
   deactivate Presenter
   deactivate IPresenter
 
-else タブリロード失敗（部分的成功）
+else タブリロード失敗(部分的成功)
   note over Interactor
     **処理順序**
     1. DB削除成功
     2. reloadMatchingTabs()でエラー
     3. present()でDB削除成功を通知
-    4. deletingIds.delete()で処理中フラグ解除（削除成功後）
+    4. deletingIds.delete()で処理中フラグ解除(削除成功後)
     5. presentError()でタブリロード失敗を通知
   end note
 
