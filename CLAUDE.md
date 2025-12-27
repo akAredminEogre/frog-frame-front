@@ -40,9 +40,8 @@ This project includes additional guidelines and automated workflows defined in t
   - `scripts/` - Script conventions
 
 ### Test Standards
-- **`.clinerules/03-test-coding-standards.md`** - Test coding conventions
-- **`.clinerules/03-test-coding-standards/`** - Detailed test guidelines:
-  - Common test rules (array-based tests, JSDoc requirements)
+- **`docs/coding-standards/tests/`** - Test coding conventions (array-based tests, common rules)
+- **`.clinerules/03-test-coding-standards/`** - Additional test guidelines:
   - E2E test rules (console error handling)
 
 ### Project-Specific Configuration
