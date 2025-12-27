@@ -240,6 +240,7 @@ README.mdの開発戦略セクションのタスクをもとに作成。
 
 ## 関連ドキュメント
 
+- **共通ルール（必読）**: [common.md](./common.md) - マークダウン記法、文体など全ドキュメント共通のルール
 - 設計ドキュメント: `docs/design/pages/{画面名}/features/{機能名}/`
 - ADR: `docs/adr/`
 - 基本ルール: [docs-rules.md](../docs-rules.md)
