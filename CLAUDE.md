@@ -40,9 +40,7 @@ This project includes additional guidelines and automated workflows defined in t
   - `scripts/` - Script conventions
 
 ### Test Standards
-- **`docs/coding-standards/tests/`** - Test coding conventions (array-based tests, common rules)
-- **`.clinerules/03-test-coding-standards/`** - Additional test guidelines:
-  - E2E test rules (console error handling)
+- **`docs/coding-standards/tests/`** - Test coding conventions (array-based tests, common rules, E2E rules)
 
 ### Project-Specific Configuration
 - **`.clinerules/05-project-specific-rules.md`** - Project-specific constraints:
