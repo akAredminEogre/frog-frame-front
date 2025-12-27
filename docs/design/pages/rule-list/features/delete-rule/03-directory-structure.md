@@ -67,7 +67,7 @@ src/frameworks-and-drivers/
 │   │   │       └── RuleTableRow.tsx             ← DeleteButton 追加
 │   │   └── organisms/
 │   │       └── ConfirmDialog/
-│   │           └── ConfirmDialog.tsx            ← モーダルはorganisms
+│   │           └── ConfirmDialog.tsx            ← 確認ダイアログ（モーダルUI、organisms層）
 │   └── pages/
 │       └── rules/
 │           └── RulesApp.tsx

@@ -269,13 +269,12 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 │  │ + execute(inputData): Promise<void>             │                       │
 │  └─────────────────────────────────────────────────┘                       │
 │                                                                             │
-│  ┌─────────────────────┐  ┌───────────────────┐  ┌───────────────────────┐ │
-│  │ DeleteRule          │  │ DeleteRule        │  │ DeleteRule            │ │
-│  │ InputData           │  │ OutputData        │  │ ErrorOutputData       │ │
-│  │ ─────────────────── │  │ ───────────────── │  │ ───────────────────── │ │
-│  │ + ruleId: number    │  │ + deletedRuleId:  │  │ + ruleId: number      │ │
-│  │                     │  │     number        │  │ + message: string     │ │
-│  └─────────────────────┘  └───────────────────┘  └───────────────────────┘ │
+│  ┌─────────────────────┐  ┌──────────────────────────┐  ┌───────────────────────┐ │
+│  │ DeleteRule          │  │ DeleteRule               │  │ DeleteRule            │ │
+│  │ InputData           │  │ OutputData               │  │ ErrorOutputData       │ │
+│  │ ─────────────────── │  │ ──────────────────────── │  │ ───────────────────── │ │
+│  │ + ruleId: number    │  │ + deletedRuleId: number  │  │ + ruleId: number      │ │
+│  └─────────────────────┘  └──────────────────────────┘  └───────────────────────┘ │
 │         ▲                        ▲                        ▲                │
 │         │                        │                        │                │
 │  Controller が生成         Interactor が生成        Interactor が生成       │
