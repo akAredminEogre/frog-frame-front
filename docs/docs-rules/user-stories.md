@@ -121,6 +121,15 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 - Phase 2でDI登録が必要な場合はコンパイルエラー回避のためのみ
 - Phase 4で本実装のDI登録を行う際、Phase 2で仮登録した場合は更新する
 
+###### Mapperの責務（ADR-002, ADR-003準拠）
+
+Mapperは以下の2つの責務を担当する:
+
+- Entity ↔ DTO 変換
+- IRewriteRuleMessagingPort経由の通信（依存性逆転によりPortを注入）
+
+この設計はContent Script ↔ Background Script間のメッセージング通信において、Repositoryがメッセージング/DTOの詳細を意識しないための抽象化層として機能する。
+
 ##### テスト戦略
 
 各Phaseでのテスト関連タスク:
