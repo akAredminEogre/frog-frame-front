@@ -123,45 +123,32 @@
 
 ### Phase 3: 実装（スケルトンにロジック追加）
 
-スケルトンに実際のビジネスロジックを実装：
+スケルトンに実際のビジネスロジックを実装（各タスクは実装・テスト戦略書・単体テストを含む）：
 
 **メッセージング基盤**
-- [ ] DeleteRuleRequestDTO の実装
-- [ ] RewriteRuleProxyService.deleteRule() の実装
-- [ ] RewriteRuleProxyServiceImpl.deleteRule() の実装
-- [ ] RewriteRuleMessagingService.delete() の実装
-- [ ] RewriteRuleMapper.delete() の実装（Entity ↔ DTO 変換 + MessagingPort経由通信）
-- [ ] DexieRewriteRuleRepository.delete() の実装（IndexedDB物理削除）
-- [ ] ChromeRuntimeRewriteRuleRepository.delete() の実装（Mapper委譲）
+- [ ] DeleteRuleRequestDTO の実装、テスト戦略書・単体テスト
+- [ ] RewriteRuleProxyService.deleteRule() の実装、テスト戦略書・単体テスト
+- [ ] RewriteRuleProxyServiceImpl.deleteRule() の実装、テスト戦略書・単体テスト
+- [ ] RewriteRuleMessagingService.delete() の実装、テスト戦略書・単体テスト
+- [ ] RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト（Entity ↔ DTO 変換 + MessagingPort経由通信）
+- [ ] DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
+- [ ] ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（Mapper委譲）
 
 **ユースケース層**
-- [ ] DeleteRuleInputData の実装
-- [ ] DeleteRuleOutputData の実装
-- [ ] DeleteRuleErrorOutputData の実装
-- [ ] DeleteRuleInteractor の実装（Repository削除 + TabsGatewayリロード）
+- [ ] DeleteRuleInputData の実装、テスト戦略書・単体テスト
+- [ ] DeleteRuleOutputData の実装、テスト戦略書・単体テスト
+- [ ] DeleteRuleErrorOutputData の実装、テスト戦略書・単体テスト
+- [ ] DeleteRuleInteractor の実装、テスト戦略書・単体テスト（Repository削除 + TabsGatewayリロード）
 
 **Controller/Presenter層**
-- [ ] DeleteRuleController の実装
-- [ ] DeleteRuleControllerFactory の実装
-- [ ] DeleteRulePresenter の実装（成功時View更新、失敗時エラー通知）
+- [ ] DeleteRuleController の実装、テスト戦略書・単体テスト
+- [ ] DeleteRuleControllerFactory の実装、テスト戦略書・単体テスト
+- [ ] DeleteRulePresenter の実装、テスト戦略書・単体テスト（成功時View更新、失敗時エラー通知）
 
 **UIコンポーネント層**
 - [ ] DeleteButton の実装（ゴミ箱アイコン表示、クリックイベント通知）
 - [ ] ConfirmDialog の実装（確認メッセージ、削除/キャンセルボタン）
 - [ ] ToastNotification の実装（エラー/成功メッセージ表示）
-
-**単体テスト戦略書・単体テスト**
-
-各メソッド実装時に、対応する単体テスト戦略書を作成し、テストを実装する:
-
-- [ ] DeleteRuleInputData のテスト戦略書・テスト
-- [ ] DeleteRuleOutputData のテスト戦略書・テスト
-- [ ] DeleteRuleErrorOutputData のテスト戦略書・テスト
-- [ ] DeleteRuleInteractor のテスト戦略書・テスト
-- [ ] DeleteRuleController のテスト戦略書・テスト
-- [ ] DeleteRulePresenter のテスト戦略書・テスト
-- [ ] DexieRewriteRuleRepository.delete() のテスト戦略書・テスト
-- [ ] RewriteRuleMapper.delete() のテスト戦略書・テスト
 
 ### Phase 4: 統合（新旧並行稼働、UI統合）
 
