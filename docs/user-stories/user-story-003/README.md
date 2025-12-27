@@ -169,6 +169,8 @@
 
 - [ ] RuleTableRow に DeleteButton を追加
 - [ ] RulesApp に削除処理を統合
+  - ConfirmDialog をRulesApp内でレンダリング（ページレベル）
+  - ToastNotification をRulesApp内でレンダリング（ページレベル）
   - `deletingIds` による重複削除防止
   - ConfirmDialog の表示制御
   - DeleteRuleController の呼び出し
