@@ -107,6 +107,10 @@ else 削除確認
     note right of View
       処理中フラグを設定
       DeleteButtonをdisabledにする
+
+      ※ JavaScriptはシングルスレッドのため
+      イベントハンドラは完了まで実行される
+      → check-and-addは事実上アトミック
     end note
 
     View -> IController : deleteRule(ruleId)
@@ -304,6 +308,9 @@ note over Interactor, Presenter
     （処理中フラグは解除）
   - タブリロード失敗: DB削除成功済み
     UIはルール削除後の状態を表示
+
+  ※ deletingIds.delete()は各alt/else分岐で
+  1回のみ実行される（重複解除なし）
 end note
 
 alt ルール取得失敗
