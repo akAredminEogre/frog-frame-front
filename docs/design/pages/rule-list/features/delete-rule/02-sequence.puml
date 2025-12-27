@@ -81,7 +81,7 @@ TableRow -> DeleteBtn : render
 DeleteBtn -> View : onDeleteClick(ruleId)
 activate View
 
-View -> Dialog : show(\n  "このルールを\n  削除しますか？")
+View -> Dialog : show("このルールを削除しますか？")
 activate Dialog
 
 alt キャンセル選択
@@ -106,7 +106,7 @@ else 削除確認
     View -> View : deletingIds.add(ruleId)
     note right of View
       処理中フラグを設定
-      DeleteButton.disabled = true
+      DeleteButtonをdisabledにする
     end note
 
     View -> IController : deleteRule(ruleId)
@@ -306,17 +306,46 @@ note over Interactor, Presenter
     UIはルール削除後の状態を表示
 end note
 
-alt ルール取得失敗 または ルール削除失敗
-  Interactor -> ErrorOutputData : new(\n  ruleId,\n  message)
+alt ルール取得失敗
+  note over Interactor
+    getById()でエラー発生
+    削除処理は実行されない
+  end note
+  Interactor -> ErrorOutputData : new(\n  ruleId, message)
   ErrorOutputData --> Interactor : errorOutputData
 
   Interactor -> IPresenter : presentError(\n  errorOutputData)
   activate IPresenter
-  note right of IPresenter
-    DeleteRuleErrorOutputData
-    - ruleId: 数値
-    - message: 文字列
+
+  IPresenter -> Presenter : presentError(\n  errorOutputData)
+  activate Presenter
+
+  Presenter -> View : showErrorInView(\n  ruleId, message)
+  activate View
+
+  View -> Toast : show(\n  "削除に失敗しました",\n  type: "error")
+  activate Toast
+  Toast --> View : 表示
+  deactivate Toast
+
+  View -> View : deletingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
+
+  View --> Presenter : エラー表示完了
+  deactivate View
+  deactivate Presenter
+  deactivate IPresenter
+
+else ルール削除失敗
+  note over Interactor
+    delete()でエラー発生
+    DBからの削除に失敗
   end note
+  Interactor -> ErrorOutputData : new(\n  ruleId, message)
+  ErrorOutputData --> Interactor : errorOutputData
+
+  Interactor -> IPresenter : presentError(\n  errorOutputData)
+  activate IPresenter
 
   IPresenter -> Presenter : presentError(\n  errorOutputData)
   activate Presenter
