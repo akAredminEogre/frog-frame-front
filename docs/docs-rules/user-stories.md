@@ -86,6 +86,37 @@ docs/user-stories/
 
 #### 開発戦略
 
+##### 開発パターン: Parallel Change + Skeleton Pattern
+
+Clean Architectureに従った機能追加では、既存コードを壊さずに新機能を追加するため、
+**Parallel Change**パターンと**Skeleton**パターンを組み合わせて採用する。
+
+**Phase構成**
+
+| Phase | 内容 | 説明 |
+|-------|------|------|
+| 前提タスク | 分類Cファイルのディレクトリ移動 | ロジック変更なし、配置のみ |
+| Phase 1 | ディレクトリ構造の準備 | 新ディレクトリ作成（空のまま） |
+| Phase 2 | Skeleton作成 | インターフェース・スケルトンクラス（コンパイル通る最小実装） |
+| Phase 3 | 実装 | スケルトンにロジック追加 |
+| Phase 4 | 統合 | 新旧並行稼働、UI統合 |
+| Phase 5 | 旧コード削除 | 通常は別ユーザーストーリーで対応 |
+
+**各層のPhase 2（Skeleton）記述ガイド**
+
+- **第1層 (enterprise-business-rules)**: エンティティにメソッドスケルトン追加
+- **第2層 (application-business-rules)**: Input/Output Port、Gateway Interface、DTO、Interactorスケルトン
+- **第3層 (interface-adapters)**: Controller、Presenter、Factory、Mapperスケルトン
+- **第4層 (frameworks-and-drivers)**: UIコンポーネント、Gateway実装、MessagingService、DI登録
+
+**Skeletonの定義**
+
+- コンパイルが通る最小実装
+- 実際のロジックは空または `throw new Error('Not implemented')` で仮実装
+- インターフェースは完全に定義する（メソッドシグネチャ、型定義）
+
+##### タスク記載ルール
+
 現状分析の結果とユーザーストーリー達成に必要なタスクを、1PR単位でチェックリスト形式で記載:
 
 - 各タスク = 1PR = 1チェックボックス（`- [ ]`）
