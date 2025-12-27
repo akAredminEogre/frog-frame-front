@@ -119,6 +119,24 @@ This command runs comprehensive checks including tests, unused code detection, a
 
 **Note**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
 
+#### 通常環境（ターミナル版Claude Code）の場合
+
+1. **未使用コードチェックの実行**
+   ```bash
+   make testcheck
+   ```
+
+2. **チェック結果の確認**
+   - エラーや未使用コードが検出された場合は、必ず修正してから再度チェックを実行
+   - すべてのチェックが正常に完了した場合のみ、タスク完了可能
+
+3. **修正が必要な場合の手順**
+   - 検出された問題を修正
+   - 再度同じコマンドを実行してチェック
+   - エラーがなくなるまで修正とチェックを繰り返す
+
+**このチェックを実行せずにタスクを完了することは禁止されています。**
+
 ### Git Worktree (Parallel Development)
 For working on multiple branches simultaneously:
 
