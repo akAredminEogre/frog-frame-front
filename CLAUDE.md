@@ -42,12 +42,6 @@ This project includes additional guidelines and automated workflows defined in t
 ### Test Standards
 - **`docs/coding-standards/tests/`** - Test coding conventions (array-based tests, common rules, E2E rules)
 
-### Project-Specific Configuration
-- **`.clinerules/05-project-specific-rules.md`** - Project-specific constraints:
-  - WXT framework requirements
-  - Repository information (branch strategy, PR process)
-  - Pre-completion checks (`testcheck` workflow)
-
 ### Workflow Automation
 The **`.clinerules/02-workflow-automation/`** directory contains automated workflow definitions:
 - **01-issue-launches/** - Issue and branch creation workflows
