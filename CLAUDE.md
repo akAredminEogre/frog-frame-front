@@ -273,17 +273,7 @@ Path aliases configured in `tsconfig.json`:
 
 ## Object-Oriented Design Rules (ThoughtWorks Anthology)
 
-These 9 rules are strictly enforced:
-
-1. One level of indentation per method
-2. Don't use else clauses
-3. Wrap all primitives and strings (exceptions: test mocks, sendMessage parameters, catch error objects)
-4. One dot per line (exception: Chrome API calls)
-5. Don't abbreviate names
-6. Keep all entities small
-7. Maximum 2 instance variables per class
-8. Use first-class collections
-9. No getters/setters/properties
+See `docs/coding-standards/src/object-oriented-nine-rules.md` for the 9 rules and their ESLint implementations.
 
 **Method Design**:
 - Methods MUST use instance variables (exception: infrastructure layer)
