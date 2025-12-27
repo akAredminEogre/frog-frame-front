@@ -10,46 +10,25 @@ reviews:
       - ".*"
 
   # パス別のレビュー指示
+  # 詳細は .AI/review-guidelines/ 配下の各ファイルを参照
   path_instructions:
     - path: "CLAUDE.md"
-      instructions: |
-        CLAUDE.mdはプロジェクトの主要なドキュメントです。変更時は以下を確認：
-        - Makefileに存在するコマンドのみを記載しているか
-        - .clinerules/内のワークフローと矛盾がないか
-        - ディレクトリ構造の説明が実際の構造と一致しているか
+      instructions: ".AI/review-guidelines/CLAUDE-md.md の観点でレビューしてください"
 
     - path: "docs/**"
-      instructions: |
-        docsディレクトリ内のドキュメント変更時は以下を確認：
-        - docs/docs-rules/に定義されたフォーマットに従っているか
-        - 関連する他のドキュメントとの整合性があるか
-        - テスト戦略書の場合、対応するテストファイルとの整合性を確認
+      instructions: ".AI/review-guidelines/docs.md の観点でレビューしてください"
 
     - path: ".clinerules/**"
-      instructions: |
-        .clinerules/の変更時は以下を確認：
-        - CLAUDE.mdの関連セクションも更新が必要か
-        - 他のワークフローファイルとの整合性があるか
-        - コーディング規約の変更は実際のコードへの影響を確認
+      instructions: ".AI/review-guidelines/clinerules.md の観点でレビューしてください"
 
     - path: "src/**"
-      instructions: |
-        ソースコードの変更時は以下を確認：
-        - 新規クラス/メソッド追加時はdocs/design/に対応するテスト戦略書が必要
-        - publicなAPI変更時はCLAUDE.mdの更新が必要か確認
-        - Clean Architectureのレイヤー依存関係が守られているか
+      instructions: ".AI/review-guidelines/src.md の観点でレビューしてください"
 
     - path: "tests/**"
-      instructions: |
-        テストコードの変更時は以下を確認：
-        - 対応するdocs/design/内のテスト戦略書と整合性があるか
-        - テストファイルの構成がテスト戦略書の定義と一致しているか
+      instructions: ".AI/review-guidelines/tests.md の観点でレビューしてください"
 
     - path: "Makefile"
-      instructions: |
-        Makefileの変更時は以下を確認：
-        - CLAUDE.mdの「Common Development Commands」セクションの更新が必要か
-        - 新規コマンド追加時はドキュメントへの記載を確認
+      instructions: ".AI/review-guidelines/Makefile.md の観点でレビューしてください"
 
 # コードガイドライン設定
 # .AI/review-guidelines/ 配下のファイルをレビューガイドラインとして使用
