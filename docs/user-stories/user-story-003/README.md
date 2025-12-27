@@ -38,7 +38,7 @@
 | RewriteRuleProxyService.ts | frameworks-and-drivers/messaging/ | frameworks-and-drivers/messaging/ | 必須 | E |
 | RewriteRuleProxyServiceImpl.ts | frameworks-and-drivers/messaging/ | frameworks-and-drivers/messaging/ | 必須 | E |
 | RulesApp.tsx | frameworks-and-drivers/ui/pages/rules/ | frameworks-and-drivers/ui/pages/rules/ | 必須 | E |
-| RuleTableRow.tsx | components/molecules/RuleTableRow/ | frameworks-and-drivers/ui/components/molecules/RuleTableRow/ | 必須 | B |
+| RuleTableRow.tsx | components/molecules/RuleTableRow/ | frameworks-and-drivers/ui/components/molecules/RuleTableRow/ | 不要 | B |
 
 **分類凡例**:
 - A: 新規作成
@@ -81,7 +81,7 @@
 - [ ] 新規ディレクトリを作成（既存のものは作成不要）
   - `src/frameworks-and-drivers/ui/components/atoms/DeleteButton/`
   - `src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/`
-  - `src/frameworks-and-drivers/ui/components/molecules/ToastNotification/`
+  - `src/frameworks-and-drivers/ui/components/atoms/ToastNotification/`
 
 ### Phase 2: Skeleton（インターフェース・スケルトンクラス作成）
 
@@ -146,9 +146,9 @@
 - [ ] DeleteRulePresenter の実装、テスト戦略書・単体テスト（成功時View更新、失敗時エラー通知）
 
 **UIコンポーネント層**
-- [ ] DeleteButton の実装（ゴミ箱アイコン表示、クリックイベント通知）
-- [ ] ConfirmDialog の実装（確認メッセージ、削除/キャンセルボタン）
-- [ ] ToastNotification の実装（エラー/成功メッセージ表示）
+- [ ] DeleteButton の実装、テスト戦略書・単体テスト（ゴミ箱アイコン表示、クリックイベント通知）
+- [ ] ConfirmDialog の実装、テスト戦略書・単体テスト（確認メッセージ、削除/キャンセルボタン）
+- [ ] ToastNotification の実装、テスト戦略書・単体テスト（エラー/成功メッセージ表示）
 
 ### Phase 4: 統合（新旧並行稼働、UI統合）
 
@@ -192,7 +192,7 @@
    - DexieRewriteRuleRepository, ChromeRuntimeRewriteRuleRepository → Phase 2, 3
    - RewriteRuleMapper, IRewriteRuleMessagingPort, RewriteRuleMessagingService → Phase 2, 3
    - RewriteRuleProxyService, RewriteRuleProxyServiceImpl → Phase 2, 3
-   - RulesApp, RuleTableRow → Phase 4
+   - RulesApp → Phase 4
 
 2. **01-class-design.md で新規作成とした全クラスに対応するタスクがあるか**: ✓
    - DTO類 → Phase 2, 3
