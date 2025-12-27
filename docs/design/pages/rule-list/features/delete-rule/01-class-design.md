@@ -84,7 +84,7 @@
 | IDeleteRulePresenter | Output Port。結果通知のインターフェース |
 | DeleteRuleInteractor | UseCase実装。削除処理を実行 |
 | IRewriteRuleRepository | Gateway Interface。ルール永続化（既存、delete()メソッド追加） |
-| ITabsGateway | Gateway Interface。タブ操作（既存） |
+| ITabsGateway | Gateway Interface。タブ操作（既存インターフェース、reloadMatchingTabs()使用） |
 
 ### interface-adapters (第3層)
 
@@ -110,7 +110,7 @@
 | DexieRewriteRuleRepository | IndexedDBデータアクセス。DTO ↔ DBレコード変換（Background Script用、既存、delete追加、ADR-003参照） |
 | ChromeTabsGateway | ITabsGatewayの実装。`rule.matchesUrl()`でマッチング判定後、chrome.tabs APIでリロード（既存、ADR-001参照） |
 | DeleteRuleRequestDTO | メッセージング用DTO。削除要求 `{ id }`（ADR-002、ADR-003参照） |
-| DeleteButton | UIコンポーネント。ゴミ箱アイコンボタン。`disabled` prop で操作制御 |
+| DeleteButton | UIコンポーネント。ゴミ箱アイコンボタン。DeleteButtonコンポーネントの`disabled` propで操作制御 |
 | ConfirmDialog | UIコンポーネント。確認ダイアログ |
 | ToastNotification | UIコンポーネント。トースト通知 |
 | RulesApp | View。ルール一覧画面。`deletingIds` で競合状態防止を管理（既存、変更対象） |
@@ -127,9 +127,9 @@
 | IRewriteRuleRepository | データ永続化のみ | タブリロード等の副作用を含まない |
 | ITabsGateway | タブ操作のみ | 永続化ロジックを含まない |
 | Interactor | ワークフロー調整 | Repository削除後にTabsGatewayを呼び出す |
-| View (RulesApp) | 確認ダイアログ表示 | ダイアログはUI層の責務 |
+| View (RulesApp) | 確認ダイアログ表示、`deletingIds`による競合状態防止 | ダイアログはUI層の責務、連続操作を防止 |
 
-これにより、messaging 経由の delete は純粋なDB操作のみを行い、
+これにより、Background Script 側の messaging 経由の delete は純粋なDB操作のみを行い、
 タブリロードは Interactor が ITabsGateway を通じて明示的に制御する。
 
 ### 確認ダイアログの責務配置
