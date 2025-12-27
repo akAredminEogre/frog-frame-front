@@ -97,8 +97,8 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 |-------|------|------|--------|
 | 前提タスク | 分類Cファイルのディレクトリ移動 | ロジック変更なし、配置のみ | - |
 | Phase 1 | ディレクトリ構造の準備 | 新ディレクトリ作成（空のまま） | - |
-| Phase 2 | Skeleton作成 | インターフェース・スケルトンクラス（コンパイル通る最小実装） | テスト戦略書作成 |
-| Phase 3 | 実装 | スケルトンにロジック追加 | 単体テスト実装 |
+| Phase 2 | Skeleton作成 | インターフェース・スケルトンクラス（コンパイル通る最小実装） | 結合・E2Eテスト戦略書作成 |
+| Phase 3 | 実装 | スケルトンにロジック追加 | 単体テスト戦略書作成・単体テスト実装 |
 | Phase 4 | 統合 | 新旧並行稼働、UI統合 | 結合テスト・E2Eテスト実装 |
 | Phase 5 | 旧コード削除 | 通常は別ユーザーストーリーで対応 | - |
 
@@ -119,20 +119,21 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 
 各Phaseでのテスト関連タスク:
 
-**Phase 2: テスト戦略書の作成**
+**Phase 2: 結合・E2Eテスト戦略書の作成**
 
 Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメントに追加する:
 
 | 戦略書 | 配置先 | 参照ルール |
 |-------|--------|-----------|
-| 単体テスト戦略書 | `docs/design/src/{layer}/.../{methodName}.md` | [05-test-strategy.md](./design/05-test-strategy.md) |
 | 結合テスト戦略書 | `docs/design/pages/{page}/features/{feature}/integration-test-strategy.md` | [06-integration-test-strategy.md](./design/06-integration-test-strategy.md) |
 | E2Eテスト戦略書 | `docs/design/pages/{page}/features/{feature}/e2e-test-strategy.md` | [07-e2e-test-strategy.md](./design/07-e2e-test-strategy.md) |
 
-**Phase 3: 単体テストの実装**
+**Phase 3: 単体テスト戦略書の作成・単体テストの実装**
 
-- スケルトンにロジックを追加する際、対応する単体テストも実装
-- 単体テスト戦略書に基づいてテストケースを作成
+- 各メソッド実装時に、対応する単体テスト戦略書を作成
+  - 配置先: `docs/design/src/{layer}/.../{methodName}.md`
+  - 参照: [05-test-strategy.md](./design/05-test-strategy.md)
+- 単体テスト戦略書に基づいてテストケースを作成・実装
 - 各メソッド実装後にテストがパスすることを確認
 
 **Phase 4: 結合テスト・E2Eテストの実装**

@@ -118,11 +118,6 @@
 - [ ] container.ts にスケルトンクラスのDI登録を追加
 
 **テスト戦略書**
-- [ ] 単体テスト戦略書を作成（各新規メソッド用）
-  - DeleteRuleInputData, DeleteRuleOutputData, DeleteRuleErrorOutputData
-  - DeleteRuleInteractor.execute()
-  - DeleteRuleController, DeleteRulePresenter
-  - DexieRewriteRuleRepository.delete(), RewriteRuleMapper.delete()
 - [ ] 結合テスト戦略書を作成（integration-test-strategy.md）
 - [ ] E2Eテスト戦略書を作成（e2e-test-strategy.md）
 
@@ -155,15 +150,18 @@
 - [ ] ConfirmDialog の実装（確認メッセージ、削除/キャンセルボタン）
 - [ ] ToastNotification の実装（エラー/成功メッセージ表示）
 
-**単体テスト**
-- [ ] DeleteRuleInputData のテスト
-- [ ] DeleteRuleOutputData のテスト
-- [ ] DeleteRuleErrorOutputData のテスト
-- [ ] DeleteRuleInteractor のテスト
-- [ ] DeleteRuleController のテスト
-- [ ] DeleteRulePresenter のテスト
-- [ ] DexieRewriteRuleRepository.delete() のテスト
-- [ ] RewriteRuleMapper.delete() のテスト
+**単体テスト戦略書・単体テスト**
+
+各メソッド実装時に、対応する単体テスト戦略書を作成し、テストを実装する:
+
+- [ ] DeleteRuleInputData のテスト戦略書・テスト
+- [ ] DeleteRuleOutputData のテスト戦略書・テスト
+- [ ] DeleteRuleErrorOutputData のテスト戦略書・テスト
+- [ ] DeleteRuleInteractor のテスト戦略書・テスト
+- [ ] DeleteRuleController のテスト戦略書・テスト
+- [ ] DeleteRulePresenter のテスト戦略書・テスト
+- [ ] DexieRewriteRuleRepository.delete() のテスト戦略書・テスト
+- [ ] RewriteRuleMapper.delete() のテスト戦略書・テスト
 
 ### Phase 4: 統合（新旧並行稼働、UI統合）
 
@@ -218,8 +216,8 @@
 3. **分類Cファイルの移動タスク（前提タスク）と修正タスク（達成タスク）が両方あるか**: N/A（分類Cなし）
 
 4. **テスト関連タスクが含まれているか**: ✓
-   - テスト戦略書（単体・結合・E2E） → Phase 2
-   - 単体テスト → Phase 3
+   - 結合・E2Eテスト戦略書 → Phase 2
+   - 単体テスト戦略書・単体テスト → Phase 3
    - 結合テスト・E2Eテスト → Phase 4
 
 ## 受け入れ条件
