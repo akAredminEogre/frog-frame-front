@@ -19,7 +19,7 @@
 │  │     - クリックイベントを親に通知                                      │ │
 │  └────────────────────────────────────────────────────────────────────┘ │
 │  ┌────────────────────────────────────────────────────────────────────┐ │
-│  │ ui/components/molecules/ConfirmDialog/ConfirmDialog.tsx            │ │
+│  │ ui/components/organisms/ConfirmDialog/ConfirmDialog.tsx            │ │
 │  │     - 確認メッセージを表示                                           │ │
 │  │     - 「削除」「キャンセル」ボタンを表示                               │ │
 │  │     - ユーザーの選択を親に通知                                        │ │
@@ -44,11 +44,12 @@
 │                   application-business-rules/ (第2層)                    │
 │  ┌──────────────────────────────────────────────────────────────────┐   │
 │  │ interactors/rule/DeleteRuleInteractor                            │   │
+│  │ ※ Rules Pageコンテキストで実行                                     │   │
 │  │                                                                  │   │
 │  │ - InputDataからruleIdを取得                                       │   │
-│  │ - Repositoryからルール取得（タブリロード用）                         │   │
-│  │ - Repositoryで削除                                                │   │
-│  │ - 該当タブをリロード                                               │   │
+│  │ - Repositoryからルール取得（messaging経由でBackground Scriptへ）    │   │
+│  │ - Repositoryで削除（messaging経由でBackground Scriptへ）           │   │
+│  │ - ITabsGatewayで該当タブをリロード（Rules Pageで直接実行）          │   │
 │  │ - OutputDataを作成してPresenterに渡す                              │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────────────┘
