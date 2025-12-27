@@ -372,7 +372,8 @@ else タブリロード失敗（部分的成功）
     1. DB削除成功
     2. reloadMatchingTabs()でエラー
     3. present()でDB削除成功を通知
-    4. presentError()でタブリロード失敗を通知
+    4. deletingIds.delete()で処理中フラグ解除
+    5. presentError()でタブリロード失敗を通知
   end note
 
   Interactor -> OutputData : new(deletedRuleId)
@@ -387,6 +388,10 @@ else タブリロード失敗（部分的成功）
 
   Presenter -> View : removeRuleFromView(\n  deletedRuleId)
   View -> View : ルール一覧から削除
+
+  View -> View : deletingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除（早期解除）
+
   deactivate Presenter
   deactivate IPresenter
 
@@ -395,7 +400,7 @@ else タブリロード失敗（部分的成功）
 
   Interactor -> IPresenter : presentError(\n  errorOutputData)
   activate IPresenter
-  note right of IPresenter : タブリロード失敗を通知
+  note right of IPresenter : タブリロード失敗を警告通知
 
   IPresenter -> Presenter : presentError(\n  errorOutputData)
   activate Presenter
@@ -403,15 +408,12 @@ else タブリロード失敗（部分的成功）
   Presenter -> View : showErrorInView(\n  ruleId, message)
   activate View
 
-  View -> Toast : show(\n  "タブリロード失敗",\n  type: "error")
+  View -> Toast : show(\n  "削除完了、タブ再読込失敗",\n  type: "warning")
   activate Toast
   Toast --> View : 表示
   deactivate Toast
 
-  View -> View : deletingIds.delete(ruleId)
-  note right of View : 処理中フラグを解除
-
-  View --> Presenter : エラー表示完了
+  View --> Presenter : 警告表示完了
   deactivate View
   deactivate Presenter
   deactivate IPresenter
