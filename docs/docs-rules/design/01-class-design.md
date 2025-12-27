@@ -18,6 +18,9 @@ Clean Architecture 4層に従った**理論的設計**を記載するドキュ�
 ### クラス一覧
 各層ごとにセクションを分け、下記の表に従って記載する:
 
+**記述ルール**:
+- クラス単位の責務の記述に留め、扱う値や型の詳細な記述はしない
+
 例：
 ```markdown
 ## クラス一覧
@@ -33,13 +36,13 @@ Clean Architecture 4層に従った**理論的設計**を記載するドキュ�
 
 **依存性ルール**: 内側の層は外側の層に依存してはならない
 
-インターフェースは「それを使用する層」に配置する（実装する層ではない）:
+インターフェースは「それを使用する層」に配置する(実装する層ではない):
 
 | インターフェース種別 | 配置層 | 理由 |
 |---------------------|--------|------|
-| Input Port（例: IToggleRuleActiveUseCase） | application-business-rules (第2層) | Controller (第3層) が依存 |
-| Output Port（例: IToggleRuleActivePresenter） | application-business-rules (第2層) | Interactor (第2層) が依存 |
-| Gateway Interface（例: IRewriteRuleRepository, ITabsGateway） | application-business-rules (第2層) | Interactor (第2層) が依存 |
+| Input Port(例: IToggleRuleActiveUseCase) | application-business-rules (第2層) | Controller (第3層) が依存 |
+| Output Port(例: IToggleRuleActivePresenter) | application-business-rules (第2層) | Interactor (第2層) が依存 |
+| Gateway Interface(例: IRewriteRuleRepository, ITabsGateway) | application-business-rules (第2層) | Interactor (第2層) が依存 |
 
 **誤りやすいパターン**:
 - ❌ Gateway Interface を interface-adapters (第3層) に配置 → Interactor が外側の層に依存してしまう
@@ -47,7 +50,7 @@ Clean Architecture 4層に従った**理論的設計**を記載するドキュ�
 
 ## 設計と実装の分離
 
-- **コード例は記載しない**（実装は実際のソースコードが正）
+- **コード例は記載しない**(実装は実際のソースコードが正)
 - 設計書は「構造」と「責務」を示す
 - 実装の詳細はソースコードを参照
 
