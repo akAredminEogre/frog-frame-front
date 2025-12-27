@@ -36,7 +36,7 @@ box "frameworks-and-drivers" #LightCyan
   participant "ChromeTabs\nGateway" as TabsGateway
   participant "RewriteRule\nMessaging\nService" as MessagingService
   participant "<<interface>>\nIRewriteRule\nProxyService" as IProxyService
-  participant "DeleteRule\nRequestDTO" as DeleteDTO
+  participant "DeleteRule\nRequestDTO" as RequestDTO
 end box
 
 box "Background" #LightGray
@@ -196,8 +196,8 @@ activate MessagingRepo
 MessagingRepo -> Mapper : delete(ruleId)
 activate Mapper
 
-Mapper -> DeleteDTO : new(ruleId)
-DeleteDTO --> Mapper : dto
+Mapper -> RequestDTO : new(ruleId)
+RequestDTO --> Mapper : dto
 
 Mapper -> IMessagingPort : delete(dto)
 activate IMessagingPort
@@ -372,7 +372,7 @@ else タブリロード失敗（部分的成功）
     1. DB削除成功
     2. reloadMatchingTabs()でエラー
     3. present()でDB削除成功を通知
-    4. deletingIds.delete()で処理中フラグ解除
+    4. deletingIds.delete()で処理中フラグ解除（削除成功後）
     5. presentError()でタブリロード失敗を通知
   end note
 
@@ -390,7 +390,7 @@ else タブリロード失敗（部分的成功）
   View -> View : ルール一覧から削除
 
   View -> View : deletingIds.delete(ruleId)
-  note right of View : 処理中フラグを解除（早期解除）
+  note right of View : 削除成功後の処理中フラグ解除
 
   deactivate Presenter
   deactivate IPresenter
