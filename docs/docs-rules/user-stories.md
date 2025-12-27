@@ -128,13 +128,18 @@ Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメ
 | 結合テスト戦略書 | `docs/design/pages/{page}/features/{feature}/integration-test-strategy.md` | [06-integration-test-strategy.md](./design/06-integration-test-strategy.md) |
 | E2Eテスト戦略書 | `docs/design/pages/{page}/features/{feature}/e2e-test-strategy.md` | [07-e2e-test-strategy.md](./design/07-e2e-test-strategy.md) |
 
-**Phase 3: 単体テスト戦略書の作成・単体テストの実装**
+**Phase 3: 実装・単体テスト戦略書・単体テスト**
 
-- 各メソッド実装時に、対応する単体テスト戦略書を作成
-  - 配置先: `docs/design/src/{layer}/.../{methodName}.md`
-  - 参照: [05-test-strategy.md](./design/05-test-strategy.md)
-- 単体テスト戦略書に基づいてテストケースを作成・実装
-- 各メソッド実装後にテストがパスすることを確認
+各タスクは「実装」と「テスト」を1行にまとめて記載する:
+
+```markdown
+- [ ] {コンポーネント名} の実装、テスト戦略書・単体テスト
+```
+
+- 実装とテストを分離せず、1タスク = 1コンポーネントの完成とする
+- 単体テスト戦略書の配置先: `docs/design/src/{layer}/.../{methodName}.md`
+- 参照: [05-test-strategy.md](./design/05-test-strategy.md)
+- 各タスク完了後にテストがパスすることを確認
 
 **Phase 4: 結合テスト・E2Eテストの実装**
 
