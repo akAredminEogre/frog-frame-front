@@ -93,14 +93,14 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 
 **Phase構成**
 
-| Phase | 内容 | 説明 |
-|-------|------|------|
-| 前提タスク | 分類Cファイルのディレクトリ移動 | ロジック変更なし、配置のみ |
-| Phase 1 | ディレクトリ構造の準備 | 新ディレクトリ作成（空のまま） |
-| Phase 2 | Skeleton作成 | インターフェース・スケルトンクラス（コンパイル通る最小実装） |
-| Phase 3 | 実装 | スケルトンにロジック追加 |
-| Phase 4 | 統合 | 新旧並行稼働、UI統合 |
-| Phase 5 | 旧コード削除 | 通常は別ユーザーストーリーで対応 |
+| Phase | 内容 | 説明 | テスト |
+|-------|------|------|--------|
+| 前提タスク | 分類Cファイルのディレクトリ移動 | ロジック変更なし、配置のみ | - |
+| Phase 1 | ディレクトリ構造の準備 | 新ディレクトリ作成（空のまま） | - |
+| Phase 2 | Skeleton作成 | インターフェース・スケルトンクラス（コンパイル通る最小実装） | テスト戦略書作成 |
+| Phase 3 | 実装 | スケルトンにロジック追加 | 単体テスト実装 |
+| Phase 4 | 統合 | 新旧並行稼働、UI統合 | 結合テスト・E2Eテスト実装 |
+| Phase 5 | 旧コード削除 | 通常は別ユーザーストーリーで対応 | - |
 
 **各層のPhase 2（Skeleton）記述ガイド**
 
@@ -114,6 +114,32 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 - コンパイルが通る最小実装
 - 実際のロジックは空または `throw new Error('Not implemented')` で仮実装
 - インターフェースは完全に定義する（メソッドシグネチャ、型定義）
+
+##### テスト戦略
+
+各Phaseでのテスト関連タスク:
+
+**Phase 2: テスト戦略書の作成**
+
+Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメントに追加する:
+
+| 戦略書 | 配置先 | 参照ルール |
+|-------|--------|-----------|
+| 単体テスト戦略書 | `docs/design/src/{layer}/.../{methodName}.md` | [05-test-strategy.md](./design/05-test-strategy.md) |
+| 結合テスト戦略書 | `docs/design/pages/{page}/features/{feature}/integration-test-strategy.md` | [06-integration-test-strategy.md](./design/06-integration-test-strategy.md) |
+| E2Eテスト戦略書 | `docs/design/pages/{page}/features/{feature}/e2e-test-strategy.md` | [07-e2e-test-strategy.md](./design/07-e2e-test-strategy.md) |
+
+**Phase 3: 単体テストの実装**
+
+- スケルトンにロジックを追加する際、対応する単体テストも実装
+- 単体テスト戦略書に基づいてテストケースを作成
+- 各メソッド実装後にテストがパスすることを確認
+
+**Phase 4: 結合テスト・E2Eテストの実装**
+
+- UI統合後、結合テスト戦略書に基づいてテストを実装
+- E2Eテスト戦略書に基づいて実ブラウザでのテストを実装
+- `make testcheck` がパスすることを確認
 
 ##### タスク記載ルール
 
@@ -149,13 +175,44 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 - [ ] RewriteRule.ts を enterprise-business-rules/entities/ へ移行（51ファイル）
 - [ ] container.ts を frameworks-and-drivers/di/ へ移行
 
-### ユーザーストーリー達成タスク
+### Phase 1: ディレクトリ構造の準備
 
-- [ ] RewriteRule に withActive() を追加
-- [ ] トグルスイッチUIコンポーネントを追加
-- [ ] トグル処理UseCaseを実装
-- [ ] container.ts にDI登録追加
-- [ ] RuleTableRowにトグルUIを統合
+- [ ] 新規ディレクトリを作成
+
+### Phase 2: Skeleton（インターフェース・スケルトンクラス作成）
+
+**第2層: application-business-rules**
+- [ ] IToggleRuleActiveUseCase（Input Port）
+- [ ] IToggleRuleActivePresenter（Output Port）
+- [ ] ToggleRuleActiveInputData / OutputData（DTO）
+- [ ] ToggleRuleActiveInteractor（スケルトン）
+
+**第3層: interface-adapters**
+- [ ] ToggleRuleActiveController（スケルトン）
+- [ ] ToggleRuleActivePresenter（スケルトン）
+
+**第4層: frameworks-and-drivers**
+- [ ] ToggleSwitch UIコンポーネント（スケルトン）
+- [ ] container.ts にスケルトンクラスのDI登録
+
+**テスト戦略書**
+- [ ] 単体テスト戦略書を作成（各メソッド用）
+- [ ] 結合テスト戦略書を作成（integration-test-strategy.md）
+- [ ] E2Eテスト戦略書を作成（e2e-test-strategy.md）
+
+### Phase 3: 実装（スケルトンにロジック追加）
+
+- [ ] RewriteRule.withActive() の実装（テスト済み）
+- [ ] ToggleRuleActiveInteractor の実装（テスト済み）
+- [ ] ToggleRuleActiveController の実装（テスト済み）
+- [ ] ToggleRuleActivePresenter の実装（テスト済み）
+- [ ] ToggleSwitch UIコンポーネントの実装
+
+### Phase 4: 統合（UI統合 + 結合テスト・E2Eテスト）
+
+- [ ] RulesApp にトグルUIを統合
+- [ ] 結合テストを実装
+- [ ] E2Eテストを実装
 
 ### 対応しない（分類B）
 

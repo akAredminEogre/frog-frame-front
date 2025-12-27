@@ -117,6 +117,15 @@
 - [ ] ToastNotification UIコンポーネント（スケルトン）
 - [ ] container.ts にスケルトンクラスのDI登録を追加
 
+**テスト戦略書**
+- [ ] 単体テスト戦略書を作成（各新規メソッド用）
+  - DeleteRuleInputData, DeleteRuleOutputData, DeleteRuleErrorOutputData
+  - DeleteRuleInteractor.execute()
+  - DeleteRuleController, DeleteRulePresenter
+  - DexieRewriteRuleRepository.delete(), RewriteRuleMapper.delete()
+- [ ] 結合テスト戦略書を作成（integration-test-strategy.md）
+- [ ] E2Eテスト戦略書を作成（e2e-test-strategy.md）
+
 ### Phase 3: 実装（スケルトンにロジック追加）
 
 スケルトンに実際のビジネスロジックを実装：
@@ -146,8 +155,19 @@
 - [ ] ConfirmDialog の実装（確認メッセージ、削除/キャンセルボタン）
 - [ ] ToastNotification の実装（エラー/成功メッセージ表示）
 
+**単体テスト**
+- [ ] DeleteRuleInputData のテスト
+- [ ] DeleteRuleOutputData のテスト
+- [ ] DeleteRuleErrorOutputData のテスト
+- [ ] DeleteRuleInteractor のテスト
+- [ ] DeleteRuleController のテスト
+- [ ] DeleteRulePresenter のテスト
+- [ ] DexieRewriteRuleRepository.delete() のテスト
+- [ ] RewriteRuleMapper.delete() のテスト
+
 ### Phase 4: 統合（新旧並行稼働、UI統合）
 
+**UI統合**
 - [ ] RuleTableRow に DeleteButton を追加
 - [ ] RulesApp に削除処理を統合
   - `deletingIds` による重複削除防止
@@ -155,6 +175,19 @@
   - DeleteRuleController の呼び出し
   - ToastNotification によるエラー表示
 - [ ] container.ts の DI 登録を本実装に更新
+
+**結合テスト**
+- [ ] 正常系テスト（ルール削除 → DB永続化確認）
+- [ ] データ整合性テスト（他ルールへの影響なし）
+- [ ] Presenter出力テスト（コールバック検証）
+- [ ] エラー系テスト（存在しないルールID）
+- [ ] 部分的成功テスト（削除成功・タブリロード失敗）
+
+**E2Eテスト**
+- [ ] 正常操作フロー（ゴミ箱クリック → 確認ダイアログ → 削除 → 一覧から消える）
+- [ ] キャンセル操作（確認ダイアログでキャンセル → 何も起こらない）
+- [ ] DB永続化（ページリロード後もルールが削除されている）
+- [ ] 複数ルール独立性（1つ削除しても他ルールに影響なし）
 
 ### Phase 5: 旧コード削除（このユーザーストーリーでは実施しない）
 
@@ -183,6 +216,11 @@
    - UIコンポーネント類 → Phase 2, 3, 4
 
 3. **分類Cファイルの移動タスク（前提タスク）と修正タスク（達成タスク）が両方あるか**: N/A（分類Cなし）
+
+4. **テスト関連タスクが含まれているか**: ✓
+   - テスト戦略書（単体・結合・E2E） → Phase 2
+   - 単体テスト → Phase 3
+   - 結合テスト・E2Eテスト → Phase 4
 
 ## 受け入れ条件
 
