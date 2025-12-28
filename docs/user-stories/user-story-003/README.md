@@ -40,7 +40,7 @@
 | RulesApp.tsx | frameworks-and-drivers/ui/pages/rules/ | frameworks-and-drivers/ui/pages/rules/ | 必須 | E |
 | RuleTableRow.tsx | components/molecules/RuleTableRow/ | frameworks-and-drivers/ui/components/molecules/RuleTableRow/ | 不要 | B |
 
-##### 分類凡例
+#### 分類凡例
 - A: 新規作成
 - B: 既存・配置不適切・ロジック変更なし
 - C: 既存・配置不適切・ロジック変更あり（前提タスクとして移行必須）
