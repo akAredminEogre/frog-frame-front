@@ -9,5 +9,6 @@ import { IRewriteRuleProxyService } from 'src/frameworks-and-drivers/messaging/R
 export const createMockRewriteRuleProxyService = (): IRewriteRuleProxyService => {
   return {
     getAllRules: vi.fn(),
+    deleteRule: vi.fn(),
   };
 };
