@@ -1,0 +1,103 @@
+@startuml user-story-003-network-diagram
+!theme plain
+title User Story 003: ルール削除機能 - タスク依存ネットワーク図
+
+' Phase 1: テスト戦略書
+rectangle "P1-T\nテスト戦略書\n（結合・E2E）" as testStrategy #lightgray
+
+' Phase 2: 実装 - メッセージング
+rectangle "P2-M1\nDeleteRule\nRequestDTO\n実装+テスト" as requestDtoImpl #orange
+rectangle "P2-M2\nProxyService\ndeleteRule()\n実装+テスト" as proxyImpl #orange
+rectangle "P2-M3\nProxyService\nImpl\n実装+テスト" as proxyImplImpl #orange
+rectangle "P2-M4\nMessaging\nService\n実装+テスト" as msgImpl #orange
+
+' Phase 2: 実装 - Mapper/Repository
+rectangle "P2-R1\nMapper\ndelete()\n実装+テスト" as mapperImpl #orange
+rectangle "P2-R2\nDexie\nRepository\n実装+テスト" as dexieImpl #orange
+rectangle "P2-R3\nChrome\nRepository\n実装+テスト" as chromeImpl #orange
+
+' Phase 2: 実装 - UseCase
+rectangle "P2-U1\nInputData\n実装+テスト" as inputImpl #orange
+rectangle "P2-U2\nOutputData\n実装+テスト" as outputImpl #orange
+rectangle "P2-U3\nErrorOutput\n実装+テスト" as errorImpl #orange
+rectangle "P2-U4\nInteractor\n実装+テスト" as interactorImpl #orange
+
+' Phase 2: 実装 - Controller/Presenter
+rectangle "P2-C1\nController\n実装+テスト" as controllerImpl #orange
+rectangle "P2-C2\nFactory\n実装+テスト" as factoryImpl #orange
+rectangle "P2-C3\nPresenter\n実装+テスト" as presenterImpl #orange
+
+' Phase 2: 実装 - UI
+rectangle "P2-UI1\nDeleteButton\n実装+テスト" as deleteBtnImpl #orange
+rectangle "P2-UI2\nConfirmDialog\n実装+テスト" as confirmImpl #orange
+rectangle "P2-UI3\nToast\n実装+テスト" as toastImpl #orange
+
+' Phase 3: 統合
+rectangle "P3-1\nRuleTableRow\nDeleteButton追加" as tableRowInteg #pink
+rectangle "P3-2\nRulesApp\n統合" as rulesAppInteg #pink
+rectangle "P3-3\nDI登録" as diReg #pink
+rectangle "P3-4\n結合テスト\n実装" as integrationTest #pink
+rectangle "P3-5\nE2Eテスト\n実装" as e2eTest #pink
+
+' 依存関係: Phase 2 内部
+requestDtoImpl --> proxyImpl
+proxyImpl --> proxyImplImpl
+msgImpl --> mapperImpl
+mapperImpl --> dexieImpl
+mapperImpl --> chromeImpl
+inputImpl --> interactorImpl
+outputImpl --> interactorImpl
+errorImpl --> interactorImpl
+interactorImpl --> controllerImpl
+presenterImpl --> controllerImpl
+controllerImpl --> factoryImpl
+
+' 依存関係: Phase 2 → Phase 3
+deleteBtnImpl --> tableRowInteg
+tableRowInteg --> rulesAppInteg
+confirmImpl --> rulesAppInteg
+toastImpl --> rulesAppInteg
+factoryImpl --> rulesAppInteg
+controllerImpl --> diReg
+presenterImpl --> diReg
+factoryImpl --> diReg
+interactorImpl --> diReg
+proxyImplImpl --> diReg
+msgImpl --> diReg
+mapperImpl --> diReg
+dexieImpl --> diReg
+chromeImpl --> diReg
+diReg --> rulesAppInteg
+
+' 依存関係: テスト
+testStrategy --> integrationTest
+testStrategy --> e2eTest
+rulesAppInteg --> integrationTest
+rulesAppInteg --> e2eTest
+
+' 凡例
+legend right
+  |= 色 |= Phase |
+  | <#lightgray> | Phase 1: テスト戦略書 |
+  | <#orange> | Phase 2: 実装+単体テスト |
+  | <#pink> | Phase 3: 統合 |
+endlegend
+
+note bottom
+**User Story 003: ルール削除機能**
+
+**前提（図に含まない）**:
+  - Phase 0: 分類Cファイル移動 → なし
+  - Phase 1: Skeleton作成（ディレクトリ作成、インターフェース修正、全スケルトンクラス）
+**本図の範囲**:
+  - Phase 2: 実装（ロジック追加）+ 単体テスト
+  - Phase 3: 統合（UI統合、DI登録、結合/E2Eテスト）
+**後続（このストーリーでは実施しない）**:
+  - Phase 4: 旧コード削除
+
+**アーキテクチャ**: Clean Architecture + Presenter Pattern
+**メッセージング**: @webext-core (ADR-002, ADR-003)
+**Factory**: ReactコールバックをPresenterに注入 (ADR-005)
+end note
+
+@enduml
