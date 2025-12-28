@@ -65,18 +65,21 @@
 
 ```text
 [Phase 0] 分類Cファイルのディレクトリ移動のみ（ロジック変更なし）→ なし
-[Phase 1] ディレクトリ構造の準備（必要に応じて新ディレクトリ作成）
-[Phase 2] Skeleton: インターフェース・スケルトンクラスを作成（コンパイル通る最小実装）
-[Phase 3] 実装: スケルトンに実際のロジックを追加
-[Phase 4] 統合（新旧並行稼働、UI統合）
-[Phase 5] 旧コード削除（このユーザーストーリーでは実施しない）
+[Phase 1] Skeleton: ディレクトリ作成、既存インターフェース修正、スケルトンクラス作成（コンパイル通る最小実装）
+[Phase 2] 実装: スケルトンに実際のロジックを追加
+[Phase 3] 統合（新旧並行稼働、UI統合）
+[Phase 4] 旧コード削除（このユーザーストーリーでは実施しない）
 ```
 
 ### Phase 0: 分類Cファイルのディレクトリ移動
 
 なし（分類Cに該当するファイルなし）
 
-### Phase 1: ディレクトリ構造の準備
+### Phase 1: Skeleton（ディレクトリ作成・インターフェース修正・スケルトンクラス作成）
+
+コンパイルが通る最小実装でスケルトンを作成（実際のロジックは空または NotImplementedError）：
+
+#### ディレクトリ作成・既存インターフェース修正
 
 - [ ] 新規ディレクトリを作成（既存のものは作成不要）
   - `src/frameworks-and-drivers/ui/components/atoms/DeleteButton/`
@@ -84,10 +87,6 @@
   - `src/frameworks-and-drivers/ui/components/atoms/ToastNotification/`
 - [ ] IRewriteRuleRepository に delete() メソッドシグネチャを追加
 - [ ] IRewriteRuleMessagingPort に delete() メソッドシグネチャを追加
-
-### Phase 2: Skeleton（インターフェース・スケルトンクラス作成）
-
-コンパイルが通る最小実装でスケルトンを作成（実際のロジックは空または NotImplementedError）：
 
 #### 第2層: application-business-rules
 
@@ -124,7 +123,7 @@
 - [ ] 結合テスト戦略書を作成（integration-test-strategy.md）
 - [ ] E2Eテスト戦略書を作成（e2e-test-strategy.md）
 
-### Phase 3: 実装（スケルトンにロジック追加）
+### Phase 2: 実装（スケルトンにロジック追加）
 
 スケルトンに実際のビジネスロジックを実装（各タスクは実装・テスト戦略書・単体テストを含む）：
 
@@ -163,7 +162,7 @@
 - [ ] ConfirmDialog の実装、テスト戦略書・単体テスト（確認メッセージ、削除/キャンセルボタン）
 - [ ] ToastNotification の実装、テスト戦略書・単体テスト（エラー/成功メッセージ表示）
 
-### Phase 4: 統合（新旧並行稼働、UI統合）
+### Phase 3: 統合（新旧並行稼働、UI統合）
 
 #### UI統合
 
@@ -192,7 +191,7 @@
 - [ ] DB永続化（ページリロード後もルールが削除されている）
 - [ ] 複数ルール独立性（1つ削除しても他ルールに影響なし）
 
-### Phase 5: 旧コード削除（このユーザーストーリーでは実施しない）
+### Phase 4: 旧コード削除（このユーザーストーリーでは実施しない）
 
 以下は将来のリファクタリングタスクとして残す：
 - 分類Bファイルの理論的配置への移動（RuleTableRow.tsx）
@@ -206,24 +205,24 @@
 ### タスク網羅性チェック
 
 1. **差分分類で「修正:必須」としたすべてのファイルに対応するタスクがあるか**: ✓
-   - IRewriteRuleRepository → Phase 2（シグネチャ追加）
-   - DexieRewriteRuleRepository, ChromeRuntimeRewriteRuleRepository → Phase 2, 3
-   - RewriteRuleMapper, IRewriteRuleMessagingPort, RewriteRuleMessagingService → Phase 2, 3
-   - RewriteRuleProxyService, RewriteRuleProxyServiceImpl → Phase 2, 3
-   - RulesApp → Phase 4
+   - IRewriteRuleRepository → Phase 1（シグネチャ追加）
+   - DexieRewriteRuleRepository, ChromeRuntimeRewriteRuleRepository → Phase 1, 2
+   - RewriteRuleMapper, IRewriteRuleMessagingPort, RewriteRuleMessagingService → Phase 1, 2
+   - RewriteRuleProxyService, RewriteRuleProxyServiceImpl → Phase 1, 2
+   - RulesApp → Phase 3
 
 2. **01-class-design.md で新規作成とした全クラスに対応するタスクがあるか**: ✓
-   - DTO類 → Phase 2, 3
-   - UseCase類 → Phase 2, 3
-   - Controller/Presenter/Factory類 → Phase 2, 3
-   - UIコンポーネント類 → Phase 2, 3, 4
+   - DTO類 → Phase 1, 2
+   - UseCase類 → Phase 1, 2
+   - Controller/Presenter/Factory類 → Phase 1, 2
+   - UIコンポーネント類 → Phase 1, 2, 3
 
 3. **分類Cファイルの移動タスク（前提タスク）と修正タスク（達成タスク）が両方あるか**: N/A（分類Cなし）
 
 4. **テスト関連タスクが含まれているか**: ✓
-   - 結合・E2Eテスト戦略書 → Phase 2
-   - 単体テスト戦略書・単体テスト → Phase 3
-   - 結合テスト・E2Eテスト → Phase 4
+   - 結合・E2Eテスト戦略書 → Phase 1
+   - 単体テスト戦略書・単体テスト → Phase 2
+   - 結合テスト・E2Eテスト → Phase 3
 
 ## 受け入れ条件
 
