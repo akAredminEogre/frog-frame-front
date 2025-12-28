@@ -86,4 +86,14 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
 
     return new RewriteRules(rulesObject);
   }
+
+  /**
+   * 指定されたIDのルールを削除する（スケルトン）
+   * Mapper経由でBackground Scriptに削除リクエストを委譲
+   * @param id 削除するルールのID
+   */
+  async delete(id: number): Promise<void> {
+    // Phase 2で実装予定: Mapper経由でBackground Scriptに削除を委譲
+    await this.mapper.delete(id);
+  }
 }

@@ -4,6 +4,7 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 export interface IRewriteRuleRepository {
   create(rule: RewriteRule): Promise<void>;
   update(rule: RewriteRule): Promise<void>;
+  delete(id: number): Promise<void>;
   getAll(): Promise<RewriteRules>;
   getById(id: number): Promise<RewriteRule>;
   getRulesMatchingUrl(currentUrl: string): Promise<RewriteRules>;
