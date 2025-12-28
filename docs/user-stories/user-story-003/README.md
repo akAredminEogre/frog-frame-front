@@ -82,6 +82,8 @@
   - `src/frameworks-and-drivers/ui/components/atoms/DeleteButton/`
   - `src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/`
   - `src/frameworks-and-drivers/ui/components/atoms/ToastNotification/`
+- [ ] IRewriteRuleRepository に delete() メソッドシグネチャを追加
+- [ ] IRewriteRuleMessagingPort に delete() メソッドシグネチャを追加
 
 ### Phase 2: Skeleton（インターフェース・スケルトンクラス作成）
 
@@ -95,7 +97,6 @@
 - [ ] IDeleteRuleUseCase（Input Port インターフェース）
 - [ ] IDeleteRulePresenter（Output Port インターフェース）
 - [ ] DeleteRuleInteractor（スケルトン実装）
-- [ ] IRewriteRuleRepository に delete() メソッドシグネチャを追加
 
 #### 第3層: interface-adapters
 
@@ -104,7 +105,6 @@
 - [ ] IDeleteRuleControllerFactory（Factoryインターフェース、ADR-005参照）
 - [ ] DeleteRuleControllerFactory（スケルトン実装）
 - [ ] DeleteRulePresenter（スケルトン実装）
-- [ ] IRewriteRuleMessagingPort に delete() メソッドシグネチャを追加
 
 #### 第4層: frameworks-and-drivers
 
