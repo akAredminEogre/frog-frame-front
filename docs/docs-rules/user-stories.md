@@ -2,7 +2,7 @@
 
 ## ディレクトリ構造
 
-```
+```text
 docs/user-stories/
 ├── user-story-{番号}/
 │   ├── README.md                 # 必須: ストーリー概要
