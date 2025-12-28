@@ -84,6 +84,8 @@ controllerImpl --> diReg
 presenterImpl --> diReg
 factoryImpl --> diReg
 interactorImpl --> diReg
+dexieImpl --> diReg
+chromeImpl --> diReg
 diReg --> rulesAppInteg
 
 ' 依存関係: テスト
