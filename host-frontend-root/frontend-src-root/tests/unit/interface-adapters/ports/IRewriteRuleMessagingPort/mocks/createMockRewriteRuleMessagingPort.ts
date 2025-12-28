@@ -11,5 +11,6 @@ export function createMockRewriteRuleMessagingPort(): IRewriteRuleMessagingPort 
     getAll: vi.fn(),
     getById: vi.fn(),
     updateActive: vi.fn(),
+    delete: vi.fn(),
   };
 }
