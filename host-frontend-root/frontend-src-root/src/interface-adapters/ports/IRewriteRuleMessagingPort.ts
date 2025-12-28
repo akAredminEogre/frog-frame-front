@@ -1,3 +1,4 @@
+import { DeleteRuleRequestDTO } from 'src/frameworks-and-drivers/messaging/dto/request-dto/DeleteRuleRequestDTO';
 import { GetByIdRequestDTO } from 'src/frameworks-and-drivers/messaging/dto/request-dto/GetByIdRequestDTO';
 import { UpdateRuleActiveRequestDTO } from 'src/frameworks-and-drivers/messaging/dto/request-dto/UpdateRuleActiveRequestDTO';
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
@@ -25,4 +26,10 @@ export interface IRewriteRuleMessagingPort {
    * @param dto 更新リクエストDTO
    */
   updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>;
+
+  /**
+   * ルールを削除する
+   * @param dto 削除リクエストDTO
+   */
+  delete(dto: DeleteRuleRequestDTO): Promise<void>;
 }
