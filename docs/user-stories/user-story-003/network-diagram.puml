@@ -1,0 +1,166 @@
+@startuml
+!theme plain
+title User Story 003: ルール削除機能 - タスク依存ネットワーク図
+
+' Phase 1: 準備
+rectangle "P1-1\nディレクトリ\n作成" as dir #lightblue
+rectangle "P1-2\nIRewriteRule\nRepository\ndelete()追加" as repoInterface #lightblue
+rectangle "P1-3\nIRewriteRule\nMessagingPort\ndelete()追加" as msgPortInterface #lightblue
+
+' Phase 2: Skeleton - 第2層
+rectangle "P2-2A\nDeleteRule\nInputData" as inputData #lightyellow
+rectangle "P2-2B\nDeleteRule\nOutputData" as outputData #lightyellow
+rectangle "P2-2C\nDeleteRule\nErrorOutputData" as errorOutputData #lightyellow
+rectangle "P2-2D\nIDeleteRule\nUseCase" as useCaseInterface #lightyellow
+rectangle "P2-2E\nIDeleteRule\nPresenter" as presenterInterface #lightyellow
+rectangle "P2-2F\nDeleteRule\nInteractor\n(skeleton)" as interactorSkel #lightyellow
+
+' Phase 2: Skeleton - 第3層
+rectangle "P2-3A\nIDeleteRule\nController" as controllerInterface #lightyellow
+rectangle "P2-3B\nDeleteRule\nController\n(skeleton)" as controllerSkel #lightyellow
+rectangle "P2-3C\nIDeleteRule\nControllerFactory" as factoryInterface #lightyellow
+rectangle "P2-3D\nDeleteRule\nControllerFactory\n(skeleton)" as factorySkel #lightyellow
+rectangle "P2-3E\nDeleteRule\nPresenter\n(skeleton)" as presenterSkel #lightyellow
+
+' Phase 2: Skeleton - 第4層
+rectangle "P2-4A\nDeleteRule\nRequestDTO" as requestDto #lightyellow
+rectangle "P2-4B\nProxy/Impl\ndeleteRule()\nskeleton" as proxySkel #lightyellow
+rectangle "P2-4C\nMessaging\nService\nskeleton" as msgSkel #lightyellow
+rectangle "P2-4D\nMapper\ndelete()\nskeleton" as mapperSkel #lightyellow
+rectangle "P2-4E\nDexie/Chrome\nRepository\nskeleton" as repoSkel #lightyellow
+rectangle "P2-4F\nDeleteButton\n(skeleton)" as deleteBtnSkel #lightyellow
+rectangle "P2-4G\nConfirmDialog\n(skeleton)" as confirmSkel #lightyellow
+rectangle "P2-4H\nToast\nNotification\n(skeleton)" as toastSkel #lightyellow
+
+' Phase 2: テスト戦略書
+rectangle "P2-T1\n結合テスト\n戦略書" as integrationStrategy #lightgray
+rectangle "P2-T2\nE2Eテスト\n戦略書" as e2eStrategy #lightgray
+
+' Phase 3: 実装 - メッセージング
+rectangle "P3-M1\nDeleteRule\nRequestDTO\n実装+テスト" as requestDtoImpl #orange
+rectangle "P3-M2\nProxyService\ndeleteRule()\n実装+テスト" as proxyImpl #orange
+rectangle "P3-M3\nProxyService\nImpl\n実装+テスト" as proxyImplImpl #orange
+rectangle "P3-M4\nMessaging\nService\n実装+テスト" as msgImpl #orange
+
+' Phase 3: 実装 - Mapper/Repository
+rectangle "P3-R1\nMapper\ndelete()\n実装+テスト" as mapperImpl #orange
+rectangle "P3-R2\nDexie\nRepository\n実装+テスト" as dexieImpl #orange
+rectangle "P3-R3\nChrome\nRepository\n実装+テスト" as chromeImpl #orange
+
+' Phase 3: 実装 - UseCase
+rectangle "P3-U1\nInputData\n実装+テスト" as inputImpl #orange
+rectangle "P3-U2\nOutputData\n実装+テスト" as outputImpl #orange
+rectangle "P3-U3\nErrorOutput\n実装+テスト" as errorImpl #orange
+rectangle "P3-U4\nInteractor\n実装+テスト" as interactorImpl #orange
+
+' Phase 3: 実装 - Controller/Presenter
+rectangle "P3-C1\nController\n実装+テスト" as controllerImpl #orange
+rectangle "P3-C2\nFactory\n実装+テスト" as factoryImpl #orange
+rectangle "P3-C3\nPresenter\n実装+テスト" as presenterImpl #orange
+
+' Phase 3: 実装 - UI
+rectangle "P3-UI1\nDeleteButton\n実装+テスト" as deleteBtnImpl #orange
+rectangle "P3-UI2\nConfirmDialog\n実装+テスト" as confirmImpl #orange
+rectangle "P3-UI3\nToast\n実装+テスト" as toastImpl #orange
+
+' Phase 4: 統合
+rectangle "P4-1\nRuleTableRow\nDeleteButton追加" as tableRowInteg #pink
+rectangle "P4-2\nRulesApp\n統合" as rulesAppInteg #pink
+rectangle "P4-3\nDI登録" as diReg #pink
+rectangle "P4-4\n結合テスト\n実装" as integrationTest #pink
+rectangle "P4-5\nE2Eテスト\n実装" as e2eTest #pink
+
+' 依存関係: Phase 1 → Phase 2
+dir --> deleteBtnSkel
+dir --> confirmSkel
+dir --> toastSkel
+repoInterface --> interactorSkel
+repoInterface --> repoSkel
+msgPortInterface --> mapperSkel
+
+' 依存関係: Phase 2 内部
+useCaseInterface --> interactorSkel
+presenterInterface --> interactorSkel
+inputData --> interactorSkel
+outputData --> presenterSkel
+errorOutputData --> presenterSkel
+controllerInterface --> controllerSkel
+factoryInterface --> factorySkel
+
+' 依存関係: Phase 2 → Phase 3
+interactorSkel --> interactorImpl
+controllerSkel --> controllerImpl
+factorySkel --> factoryImpl
+presenterSkel --> presenterImpl
+requestDto --> requestDtoImpl
+proxySkel --> proxyImpl
+proxySkel --> proxyImplImpl
+msgSkel --> msgImpl
+mapperSkel --> mapperImpl
+repoSkel --> dexieImpl
+repoSkel --> chromeImpl
+deleteBtnSkel --> deleteBtnImpl
+confirmSkel --> confirmImpl
+toastSkel --> toastImpl
+inputData --> inputImpl
+outputData --> outputImpl
+errorOutputData --> errorImpl
+
+' 依存関係: Phase 3 内部
+requestDtoImpl --> proxyImpl
+proxyImpl --> proxyImplImpl
+msgImpl --> mapperImpl
+mapperImpl --> dexieImpl
+mapperImpl --> chromeImpl
+inputImpl --> interactorImpl
+outputImpl --> interactorImpl
+errorImpl --> interactorImpl
+interactorImpl --> controllerImpl
+presenterImpl --> controllerImpl
+controllerImpl --> factoryImpl
+
+' 依存関係: Phase 3 → Phase 4
+deleteBtnImpl --> tableRowInteg
+tableRowInteg --> rulesAppInteg
+confirmImpl --> rulesAppInteg
+toastImpl --> rulesAppInteg
+factoryImpl --> rulesAppInteg
+controllerImpl --> diReg
+presenterImpl --> diReg
+factoryImpl --> diReg
+interactorImpl --> diReg
+diReg --> rulesAppInteg
+
+' 依存関係: テスト
+integrationStrategy --> integrationTest
+e2eStrategy --> e2eTest
+rulesAppInteg --> integrationTest
+rulesAppInteg --> e2eTest
+
+' 凡例
+legend right
+  |= 色 |= Phase |
+  | <#lightblue> | Phase 1: 準備 |
+  | <#lightyellow> | Phase 2: Skeleton |
+  | <#lightgray> | Phase 2: テスト戦略書 |
+  | <#orange> | Phase 3: 実装+単体テスト |
+  | <#pink> | Phase 4: 統合 |
+endlegend
+
+note bottom
+**User Story 003: ルール削除機能**
+
+**Phase 0**: 分類Cファイル移動 → なし
+
+**Phase 1**: 準備（ディレクトリ作成、既存インターフェース修正）
+**Phase 2**: Skeleton作成（コンパイル通る最小実装）+ テスト戦略書
+**Phase 3**: 実装（ロジック追加）+ 単体テスト
+**Phase 4**: 統合（UI統合、DI登録、結合/E2Eテスト）
+**Phase 5**: 旧コード削除（このストーリーでは実施しない）
+
+**アーキテクチャ**: Clean Architecture + Presenter Pattern
+**メッセージング**: @webext-core (ADR-002, ADR-003)
+**Factory**: ReactコールバックをPresenterに注入 (ADR-005)
+end note
+
+@enduml
