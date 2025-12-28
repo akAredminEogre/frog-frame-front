@@ -1,33 +1,31 @@
 import React from 'react';
 
+import { Button } from 'src/components/atoms/Button';
+
 /**
  * DeleteButtonコンポーネントのProps
  */
 export interface DeleteButtonProps {
   onClick: () => void;
   disabled?: boolean;
-  ariaLabel?: string;
 }
 
 /**
  * ルール削除用のゴミ箱アイコンボタン（スケルトン）
- * Phase 2で実装予定
+ * Phase 2で実装予定: ゴミ箱アイコンの表示、アクセシビリティ対応
+ *
+ * 既存のButtonコンポーネントをラップして一貫性を保つ
+ * (SaveButton, CancelButtonと同様のパターン)
  */
 export const DeleteButton: React.FC<DeleteButtonProps> = ({
   onClick,
   disabled = false,
-  ariaLabel = 'ルールを削除',
 }) => {
-  // Phase 2で実装予定: ゴミ箱アイコンの表示、クリックイベント通知
+  // Phase 2で実装予定: ゴミ箱アイコンの表示、aria-label対応
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      aria-label={ariaLabel}
-    >
-      {/* Phase 2でアイコンを追加 */}
-      Delete
-    </button>
+    <Button onClick={onClick} disabled={disabled} variant="secondary">
+      {/* Phase 2でゴミ箱アイコンを追加 */}
+      削除
+    </Button>
   );
 };
