@@ -75,7 +75,7 @@ Clean Architecture遵守のためのディレクトリ移動は影響範囲が�
 
 README.md の「開発戦略」セクションは、以下のいずれかの構成を採用できる:
 
-- **Phase構成（推奨）**: Phase 1〜Phase 5 の段階的構成
+- **Phase構成（推奨）**: Phase 0〜Phase 4 の段階的構成
 - **3セクション構成**: 「前提タスク」「ユーザーストーリー達成タスク」「対応しない（分類B）」
 
 新規作成時は、特に理由がない限りPhase構成を優先すること。
@@ -90,13 +90,12 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 | Phase | 内容 | 説明 | テスト |
 |-------|------|------|--------|
 | Phase 0 | 分類Cファイルのディレクトリ移動 | ロジック変更なし、配置のみ | - |
-| Phase 1 | 準備 | 新ディレクトリ作成、既存インターフェースへのメソッドシグネチャ追加 | - |
-| Phase 2 | Skeleton作成 | 新規インターフェース・スケルトンクラス（コンパイル通る最小実装） | 結合・E2Eテスト戦略書作成 |
-| Phase 3 | 実装 | スケルトンにロジック追加 | 単体テスト戦略書作成・単体テスト実装 |
-| Phase 4 | 統合 | 新旧並行稼働、UI統合 | 結合テスト・E2Eテスト実装 |
-| Phase 5 | 旧コード削除 | 通常は別ユーザーストーリーで対応 | - |
+| Phase 1 | Skeleton作成 | ディレクトリ作成、既存インターフェース修正、新規スケルトンクラス（コンパイル通る最小実装） | 結合・E2Eテスト戦略書作成 |
+| Phase 2 | 実装 | スケルトンにロジック追加 | 単体テスト戦略書作成・単体テスト実装 |
+| Phase 3 | 統合 | 新旧並行稼働、UI統合 | 結合テスト・E2Eテスト実装 |
+| Phase 4 | 旧コード削除 | 通常は別ユーザーストーリーで対応 | - |
 
-###### 各層のPhase 2（Skeleton）記述ガイド
+###### 各層のPhase 1（Skeleton）記述ガイド
 
 - 第1層 (enterprise-business-rules): エンティティにメソッドスケルトン追加
 - 第2層 (application-business-rules): Input/Output Port、Gateway Interface、DTO、Interactorスケルトン
@@ -111,10 +110,10 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 
 ###### DI登録のタイミング
 
-- DI登録は原則としてPhase 4（統合）で行う
-- Phase 2でDI登録が必要な場合はコンパイルエラー回避のためのみ（例: Skeleton実装が他モジュールから参照される場合）
-- Phase 4で本実装のDI登録を行う際、Phase 2で暫定登録した場合は実装に合わせて更新する
-- 例: `container.ts` での登録はPhase 4の実装完了時に行うのが基本（Phase 2での暫定登録は必要最小限に留める）
+- DI登録は原則としてPhase 3（統合）で行う
+- Phase 1でDI登録が必要な場合はコンパイルエラー回避のためのみ（例: Skeleton実装が他モジュールから参照される場合）
+- Phase 3で本実装のDI登録を行う際、Phase 1で暫定登録した場合は実装に合わせて更新する
+- 例: `container.ts` での登録はPhase 3の実装完了時に行うのが基本（Phase 1での暫定登録は必要最小限に留める）
 
 ###### Mapperの責務（ADR-002, ADR-003準拠）
 
@@ -129,7 +128,7 @@ Mapperは以下の2つの責務を担当する:
 
 各Phaseでのテスト関連タスク:
 
-###### Phase 2: 結合・E2Eテスト戦略書の作成
+###### Phase 1: 結合・E2Eテスト戦略書の作成
 
 Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメントに追加する:
 
@@ -138,7 +137,7 @@ Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメ
 | 結合テスト戦略書 | `docs/design/pages/{page}/features/{feature}/integration-test-strategy.md` | [06-integration-test-strategy.md](./design/06-integration-test-strategy.md) |
 | E2Eテスト戦略書 | `docs/design/pages/{page}/features/{feature}/e2e-test-strategy.md` | [07-e2e-test-strategy.md](./design/07-e2e-test-strategy.md) |
 
-###### Phase 3: 実装・単体テスト戦略書・単体テスト
+###### Phase 2: 実装・単体テスト戦略書・単体テスト
 
 各タスクは「実装」と「テスト」を1行にまとめて記載する:
 
@@ -154,12 +153,12 @@ Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメ
   - 異なる責務のタスクを1つのセクションにまとめない
   - 例: メッセージング基盤とRepository層は別セクションに分ける
 
-###### Phase 4: UI統合
+###### Phase 3: UI統合
 
 - 新規UIコンポーネントのレンダリング位置（どのViewコンポーネント内か）を明記すること
 - 例: 「ConfirmDialog をRulesApp内でレンダリング（ページレベル）」
 
-###### Phase 4: 結合テスト・E2Eテストの実装
+###### Phase 3: 結合テスト・E2Eテストの実装
 
 - UI統合後、結合テスト戦略書に基づいてテストを実装
 - E2Eテスト戦略書に基づいて実ブラウザでのテストを実装
