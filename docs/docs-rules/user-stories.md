@@ -260,7 +260,7 @@ README.mdの開発戦略セクションのタスクをもとに作成するア�
 | 矢印の例 | `Interactor実装 --> Controller実装` | `Controller --> Interactor` |
 | 解釈 | Interactor実装が完了してからController実装を開始 | ControllerがInteractorを参照する |
 
-**例: Clean Architectureにおける矢印の方向**
+##### 例: Clean Architectureにおける矢印の方向
 
 ```text
 タスク依存図:  interactorImpl --> controllerImpl  (Interactorを先に実装 → Controllerを後に実装)
