@@ -1,4 +1,4 @@
-@startuml
+@startuml user-story-003-network-diagram
 !theme plain
 title User Story 003: ルール削除機能 - タスク依存ネットワーク図
 
