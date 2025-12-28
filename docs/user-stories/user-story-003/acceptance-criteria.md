@@ -16,8 +16,5 @@
 - [ ] AC-9: 部分的成功時（削除成功・タブリロード失敗）はルールを一覧から削除し、トースト通知でエラーメッセージを表示
 - [ ] AC-10: ルールはDBから物理削除される（論理削除ではない）
 - [ ] AC-11: 削除処理中もブラウザや他タブの操作がブロックされない（非同期処理）
-- [ ] AC-12: Clean Architectureの層構造が遵守されている
-  - Interactorは IRewriteRuleRepository と ITabsGateway に依存（具象クラスに依存しない）
-  - PresenterはReactコールバックを受け取り、Viewの状態を更新
-  - Controllerは Factory 経由で生成される（ADR-005準拠）
+- [ ] AC-12: Clean Architectureの層構造が遵守されている（コードレビューで検証）
 - [ ] AC-13: make testcheck がパスする
