@@ -4,9 +4,11 @@
 
 ```text
 docs/user-stories/
-├── user-story-{番号}/
+├── user-story-{番号}/           # 作業中のユーザーストーリー
 │   ├── README.md                 # 必須: ストーリー概要
 │   └── acceptance-criteria.md    # 必須: 受け入れ条件
+└── completed/                    # 完了したユーザーストーリー
+    └── user-story-{番号}/
 ```
 
 ## 命名規則
@@ -66,27 +68,6 @@ docs/user-stories/
 ##### 注意
 
 Clean Architecture遵守のためのディレクトリ移動は影響範囲が広くなるため、特に注意して分析する
-
-記述例
-```markdown
-### 差分分類
-
-| ファイル | 現在位置 | 理論位置 | 修正 | 分類 |
-|---------|---------|---------|------|------|
-| RewriteRule.ts | domain/entities/ | enterprise-business-rules/entities/ | 必須 | C |
-| IRewriteRuleRepository.ts | application/ports/ | interface-adapters/gateways/ | 必須 | B |
-| DexieDatabase.ts | infrastructure/persistence/ | frameworks-and-drivers/persistence/ | 不要 | C |
-
-### 分類C: 移行必須ファイルの影響分析
-
-#### RewriteRule.ts（51ファイル影響）
-- 変更内容: enterprise-business-rules/entities/へ移動 + withActive()追加
-- 影響モジュール:
-  - application-business-rules/ (5ファイル)
-  - interface-adapters/ (8ファイル)
-  - frameworks-and-drivers/ (11ファイル)
-  - tests/ (27ファイル)
-```
 
 #### 開発戦略
 
