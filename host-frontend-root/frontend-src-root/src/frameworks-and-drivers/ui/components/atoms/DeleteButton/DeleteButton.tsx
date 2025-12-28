@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * DeleteButtonコンポーネントのProps
  */
-interface DeleteButtonProps {
+export interface DeleteButtonProps {
   onClick: () => void;
   disabled?: boolean;
   ariaLabel?: string;

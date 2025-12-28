@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * ConfirmDialogコンポーネントのProps
  */
-interface ConfirmDialogProps {
+export interface ConfirmDialogProps {
   isOpen: boolean;
   title: string;
   message: string;

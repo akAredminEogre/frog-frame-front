@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * ToastNotificationコンポーネントのProps
  */
-interface ToastNotificationProps {
+export interface ToastNotificationProps {
   message: string;
   type: 'success' | 'error';
   isVisible: boolean;

@@ -59,12 +59,9 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({ ... }) => {
 
 以下の既存コンポーネントは本ADR採用以前に作成されたため、Propsインターフェースがエクスポートされていない：
 
-| コンポーネント | 配置 |
-|---------------|------|
-| ToggleSwitch | `src/frameworks-and-drivers/ui/components/atoms/` |
-| DeleteButton | `src/frameworks-and-drivers/ui/components/atoms/DeleteButton/` |
-| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/` |
-| ToastNotification | `src/frameworks-and-drivers/ui/components/atoms/ToastNotification/` |
+| コンポーネント | 配置 | 状態 |
+|---------------|------|------|
+| ToggleSwitch | `src/frameworks-and-drivers/ui/components/atoms/` | 未対応 |
 
 これらは以下のいずれかのタイミングで対応する：
 
