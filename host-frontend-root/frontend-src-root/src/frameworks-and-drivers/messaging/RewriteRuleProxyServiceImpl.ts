@@ -18,5 +18,10 @@ export function createRewriteRuleProxyServiceImpl(): IRewriteRuleProxyService {
 
       return rules.toArray().map((rule) => RewriteRuleMapper.toDto(rule));
     },
+
+    async deleteRule(id: number) {
+      // Phase 2で実装予定
+      throw new Error(`Not implemented: deleteRule with id=${id}`);
+    },
   };
 }
