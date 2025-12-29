@@ -12,19 +12,19 @@ rectangle "P2-M3\nProxyService\nImpl\n実装+テスト" as proxyImplImpl #lightg
 rectangle "P2-M4\nMessaging\nService\n実装+テスト" as msgImpl #lightgreen
 
 ' Phase 2: 実装 - Mapper/Repository
-rectangle "P2-R1\nMapper\ndelete()\n実装+テスト" as mapperImpl #lightgreen
+rectangle "P2-R1\nMapper\ndelete()\n実装+テスト" as mapperImpl #orange
 rectangle "P2-R2\nDexie\nRepository\n実装+テスト" as dexieImpl #orange
-rectangle "P2-R3\nChrome\nRepository\n実装+テスト" as chromeImpl #lightgreen
+rectangle "P2-R3\nChrome\nRepository\n実装+テスト" as chromeImpl #orange
 
 ' Phase 2: 実装 - UseCase
-rectangle "P2-U1\nInputData\n実装+テスト" as inputImpl #lightgreen
-rectangle "P2-U2\nOutputData\n実装+テスト" as outputImpl #lightgreen
-rectangle "P2-U3\nErrorOutput\n実装+テスト" as errorImpl #lightgreen
+rectangle "P2-U1\nInputData\n実装+テスト" as inputImpl #orange
+rectangle "P2-U2\nOutputData\n実装+テスト" as outputImpl #orange
+rectangle "P2-U3\nErrorOutput\n実装+テスト" as errorImpl #orange
 rectangle "P2-U4\nInteractor\n実装+テスト" as interactorImpl #orange
 
 ' Phase 2: 実装 - Controller/Presenter
-rectangle "P2-C1\nController\n実装+テスト" as controllerImpl #lightgreen
-rectangle "P2-C2\nFactory\n実装+テスト" as factoryImpl #lightgreen
+rectangle "P2-C1\nController\n実装+テスト" as controllerImpl #orange
+rectangle "P2-C2\nFactory\n実装+テスト" as factoryImpl #orange
 rectangle "P2-C3\nPresenter\n実装+テスト" as presenterImpl #lightgreen
 
 ' Phase 2: 実装 - UI
