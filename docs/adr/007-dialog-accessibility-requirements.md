@@ -66,7 +66,44 @@ const MyDialog: React.FC<Props> = ({ ... }) => {
 |------|------|
 | 初期フォーカス | ダイアログが開いたとき、最初のフォーカス可能な要素にフォーカスを移動 |
 | フォーカストラップ | ダイアログが開いている間、Tab/Shift+Tabでフォーカスがダイアログ内に閉じ込められる |
-| 復帰フォーカス | ダイアログが閉じたとき、ダイアログを開いたトリガー要素にフォーカスを戻す |
+| 復帰フォーカス | ダイアログが閉じたとき **またはコンポーネントがアンマウントされたとき**、ダイアログを開いたトリガー要素にフォーカスを戻す |
+
+#### 2.1 useEffectクリーンアップでの副作用復元（必須）
+
+useEffectで行った副作用（背景スクロール無効化、フォーカス移動など）は、**すべてクリーンアップ関数で元に戻すこと**。
+
+**理由**:
+- `isOpen`がfalseになった場合だけでなく、コンポーネントがアンマウントされた場合にも副作用を復元する必要がある
+- 例：親コンポーネントが条件付きレンダリングでダイアログを完全に削除した場合
+
+**実装例**:
+
+```tsx
+useEffect(() => {
+  if (isOpen) {
+    // 副作用を適用
+    previousActiveElementRef.current = document.activeElement;
+    cancelButtonRef.current?.focus();
+    document.body.style.overflow = 'hidden';
+  } else {
+    // isOpen=falseで復元
+    document.body.style.overflow = '';
+    if (previousActiveElementRef.current instanceof HTMLElement) {
+      previousActiveElementRef.current.focus();
+    }
+  }
+
+  return () => {
+    // アンマウント時にも同様に復元（必須）
+    document.body.style.overflow = '';
+    if (previousActiveElementRef.current instanceof HTMLElement) {
+      previousActiveElementRef.current.focus();
+    }
+  };
+}, [isOpen]);
+```
+
+**原則**: セットアップで行った変更はすべてクリーンアップで元に戻す。
 
 #### 3. キーボードイベント処理
 
