@@ -17,9 +17,7 @@ export interface DeleteRuleRequestDTO {
 
 ### プロパティ名の設計判断
 
-クラス設計ドキュメントでは概念的に `{ ruleId }` と記載されているが、実装では `id` を採用。
-
-**理由**: 他のRequest DTOとの一貫性を優先
+他のRequest DTOとの一貫性を優先して `id` を採用。
 
 | DTO | プロパティ名 |
 |-----|------------|
