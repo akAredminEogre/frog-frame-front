@@ -71,6 +71,18 @@
 [Phase 4] 旧コード削除（このユーザーストーリーでは実施しない）
 ```
 
+### 実装順序の原則
+
+Phase 2以降では、以下の原則に従って実装順序を決定する:
+
+1. **呼び出される側（下位層）から先に実装する**
+   - proxy-serviceの場合: `ProxyServiceImpl` → `MessagingService` の順
+   - Repository層の場合: `DexieRepository`(Background) → `ChromeRuntimeRepository`(Content) の順
+
+2. **依存関係を明示する**
+   - 各タスクに `← depends on: [依存先]` を記載
+   - 依存先が未実装の場合、そのタスクは着手しない
+
 ### Phase 0: 分類Cファイルのディレクトリ移動
 
 なし（分類Cに該当するファイルなし）
@@ -129,19 +141,53 @@
 
 #### メッセージング基盤
 
-- [ ] DeleteRuleRequestDTO の実装、テスト戦略書・単体テスト
-- [ ] RewriteRuleProxyService.deleteRule() の実装、テスト戦略書・単体テスト
-- [ ] RewriteRuleProxyServiceImpl.deleteRule() の実装、テスト戦略書・単体テスト
-- [ ] RewriteRuleMessagingService.delete() の実装、テスト戦略書・単体テスト
+**タスク依存関係図**:
+```text
+DeleteRuleRequestDTO (P2-M1)
+        │
+        ▼
+RewriteRuleProxyService.deleteRule() (P2-M2) ← インターフェース定義
+        │
+        ▼
+RewriteRuleProxyServiceImpl.deleteRule() (P2-M3) ← 実装（Background Script）
+        │
+        ▼
+RewriteRuleMessagingService.delete() (P2-M4) ← 実装（Content Script側から呼び出す）
+```
+
+- [ ] P2-M1: DeleteRuleRequestDTO の実装、テスト戦略書・単体テスト
+- [ ] P2-M2: RewriteRuleProxyService.deleteRule() の実装、テスト戦略書・単体テスト ← depends on: P2-M1
+- [ ] P2-M3: RewriteRuleProxyServiceImpl.deleteRule() の実装、テスト戦略書・単体テスト ← depends on: P2-M2
+- [ ] P2-M4: RewriteRuleMessagingService.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M3
 
 #### Mapper層
 
-- [ ] RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト（Entity ↔ DTO 変換 + MessagingPort経由通信）
+**タスク依存関係図**:
+```text
+RewriteRuleMessagingService.delete() (P2-M4)
+        │
+        ▼
+RewriteRuleMapper.delete() (P2-MAP1) ← MessagingPort経由で通信
+```
+
+- [ ] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
 
 #### Repository層
 
-- [ ] DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
-- [ ] ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（Mapper委譲）
+**タスク依存関係図**:
+```text
+DexieRewriteRuleRepository.delete() (P2-R1) ← Background Script用、直接DB操作
+        │
+        ├─────────────────────────────┐
+        ▼                             ▼
+RewriteRuleMapper.delete()    RewriteRuleProxyServiceImpl.deleteRule()
+        │                             │
+        ▼                             │
+ChromeRuntimeRewriteRuleRepository.delete() (P2-R2) ← Content Script用
+```
+
+- [ ] P2-R1: DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
+- [ ] P2-R2: ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-MAP1
 
 #### ユースケース層
 
