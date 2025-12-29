@@ -58,20 +58,9 @@ tests/unit/[layer]/[category]/[service-name]/
 
 - テストファイル1つにつき、配列化テストケースは1つまでとし、その他のテストケースは別ファイルに切り出すこと
 
-## mocks/ ディレクトリ未配置モック一覧
+## mocks/ ディレクトリ未配置モック
 
-以下のモックファクトリは `mocks/` ディレクトリに配置されておらず、規約に準拠していない。
-[user-story-004](../../../user-stories/user-story-004/README.md) で対応予定。
-
-| 現在のパス | 理論的配置 |
-|-----------|-----------|
-| `tests/unit/application/ports/IChromeTabsService/createMockTabsService.ts` | `tests/unit/application/ports/IChromeTabsService/mocks/` |
-| `tests/unit/application/ports/ICurrentUrlService/createMockCurrentUrlService.ts` | `tests/unit/application/ports/ICurrentUrlService/mocks/` |
-| `tests/unit/application/ports/IPopupService/createMockPopupService.ts` | `tests/unit/application/ports/IPopupService/mocks/` |
-| `tests/unit/application/ports/ISelectedPageTextRepository/createMockSelectedPageTextRepository.ts` | `tests/unit/application/ports/ISelectedPageTextRepository/mocks/` |
-| `tests/unit/domain/ports/IDomRootChecker/createMockDomRootChecker.ts` | `tests/unit/domain/ports/IDomRootChecker/mocks/` |
-| `tests/unit/domain/ports/IElementFactory/createMockElementFactory.ts` | `tests/unit/domain/ports/IElementFactory/mocks/` |
-| `tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts` | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/` |
+規約に準拠していないモックファクトリは [user-story-004](../../../user-stories/user-story-004/README.md) で対応予定。
 
 **注意**: 新規モック作成時は必ず `mocks/` ディレクトリに配置すること。
 
