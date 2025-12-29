@@ -2,7 +2,7 @@
  * ToggleRuleActiveInteractor.execute - 部分的成功テスト
  * 1. tabsGateway.reloadMatchingTabsでエラーが発生した場合、presentが先に呼び出された後presentErrorが呼び出される
  */
-import { createMockRewriteRuleRepository as createMockRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
+import { createMockRewriteRuleRepository as createMockRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
 import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockPresenter';
 import { createMockTabsGateway } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
