@@ -13,6 +13,9 @@
   /* 後方互換用: 汎用ボーダーホバー色のトークンはトグル用ホバー色を参照する */
   --color-border-hover: var(--color-toggle-track-hover);
   --color-hover: #0e7fcd;
+  /* 削除・エラー用の色 */
+  --color-danger: #dc3545;
+  --color-danger-bg: rgba(220, 53, 69, 0.1);
 }
 
 /* シャドウ */
