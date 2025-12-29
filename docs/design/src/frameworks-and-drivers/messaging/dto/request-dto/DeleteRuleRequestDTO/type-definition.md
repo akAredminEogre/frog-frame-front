@@ -52,9 +52,9 @@ export interface DeleteRuleRequestDTO {
 
 ## 関連ドキュメント
 
-- [クラス設計](../../../../../pages/rule-list/features/delete-rule/01-class-design.md)
-- [ADR-002: メッセージングに @webext-core を採用](../../../../../adr/002-messaging-with-webext-core.md)
-- [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../../adr/003-unified-db-access-via-messaging.md)
+- [クラス設計](../../../../../../pages/rule-list/features/delete-rule/01-class-design.md)
+- [ADR-002: メッセージングに @webext-core を採用](../../../../../../adr/002-messaging-with-webext-core.md)
+- [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../../../adr/003-unified-db-access-via-messaging.md)
 
 ## 使用箇所
 
