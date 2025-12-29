@@ -28,6 +28,33 @@ tests/unit/[layer]/[category]/[ServiceName]/
     └── createMockDependency.ts
 ```
 
+---
+
+## モックライフサイクル管理
+
+### 規約
+
+- `beforeEach` では `vi.clearAllMocks()` を使用する
+- `afterEach` では `vi.resetAllMocks()` を使用する
+
+### clearAllMocks vs resetAllMocks の違い
+
+| 関数 | 呼び出し履歴 | モック実装 |
+|------|-------------|-----------|
+| `clearAllMocks()` | クリア | 維持 |
+| `resetAllMocks()` | クリア | リセット |
+
+### 理由
+
+- `beforeEach` では呼び出し履歴のみクリアし、モック実装は維持する（各テストで同じモック実装を再利用）
+- `afterEach` ではモック実装もリセットし、次のテストファイルへの影響を防ぐ
+
+### eslint-rule
+
+ESLint化不可（beforeEach/afterEach内での特定関数呼び出しを強制するルールは存在しない。PRレビューで確認）
+
+---
+
 # Clean Architecture用ルール
 
 Clean Architectureの各層に特化したテスト規約です。
