@@ -13,14 +13,14 @@ rectangle "P2-M4\nMessaging\nService\n実装+テスト" as msgImpl #lightgreen
 
 ' Phase 2: 実装 - Mapper/Repository
 rectangle "P2-R1\nMapper\ndelete()\n実装+テスト" as mapperImpl #lightgreen
-rectangle "P2-R2\nDexie\nRepository\n実装+テスト" as dexieImpl #lightgreen
+rectangle "P2-R2\nDexie\nRepository\n実装+テスト" as dexieImpl #orange
 rectangle "P2-R3\nChrome\nRepository\n実装+テスト" as chromeImpl #lightgreen
 
 ' Phase 2: 実装 - UseCase
 rectangle "P2-U1\nInputData\n実装+テスト" as inputImpl #lightgreen
 rectangle "P2-U2\nOutputData\n実装+テスト" as outputImpl #lightgreen
 rectangle "P2-U3\nErrorOutput\n実装+テスト" as errorImpl #lightgreen
-rectangle "P2-U4\nInteractor\n実装+テスト" as interactorImpl #lightgreen
+rectangle "P2-U4\nInteractor\n実装+テスト" as interactorImpl #orange
 
 ' Phase 2: 実装 - Controller/Presenter
 rectangle "P2-C1\nController\n実装+テスト" as controllerImpl #lightgreen
@@ -29,8 +29,8 @@ rectangle "P2-C3\nPresenter\n実装+テスト" as presenterImpl #lightgreen
 
 ' Phase 2: 実装 - UI
 rectangle "P2-UI1\nDeleteButton\n実装+テスト" as deleteBtnImpl #lightgreen
-rectangle "P2-UI2\nConfirmDialog\n実装+テスト" as confirmImpl #lightgreen
-rectangle "P2-UI3\nToast\n実装+テスト" as toastImpl #lightgreen
+rectangle "P2-UI2\nConfirmDialog\n実装+テスト" as confirmImpl #orange
+rectangle "P2-UI3\nToast\n実装+テスト" as toastImpl #orange
 
 ' Phase 3: 統合
 rectangle "P3-1\nRuleTableRow\nDeleteButton追加" as tableRowInteg #pink
@@ -77,10 +77,10 @@ rulesAppInteg --> e2eTest
 
 ' 凡例
 legend right
-  |= 色 |= Phase |= 状態 |
-  | <#lightgreen> | Phase 1: テスト戦略書 | 完了 |
-  | <#lightgreen> | Phase 2: 実装+単体テスト | 完了 |
-  | <#pink> | Phase 3: 統合 | 未着手 |
+  |= 色 |= 状態 |
+  | <#lightgreen> | 完了 |
+  | <#orange> | 未完了（スケルトン） |
+  | <#pink> | Phase 3: 統合（未着手） |
 endlegend
 
 note bottom

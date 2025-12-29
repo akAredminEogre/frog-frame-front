@@ -154,7 +154,7 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### Repository層
 
-- [x] P2-R1: DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
+- [ ] P2-R1: DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
 - [x] P2-R2: ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-MAP1
 
 #### ユースケース層
@@ -162,7 +162,7 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 - [x] DeleteRuleInputData の実装、テスト戦略書・単体テスト
 - [x] DeleteRuleOutputData の実装、テスト戦略書・単体テスト
 - [x] DeleteRuleErrorOutputData の実装、テスト戦略書・単体テスト
-- [x] DeleteRuleInteractor の実装、テスト戦略書・単体テスト（Repository削除 + TabsGatewayリロード）
+- [ ] DeleteRuleInteractor の実装、テスト戦略書・単体テスト（Repository削除 + TabsGatewayリロード）
 
 #### Controller/Presenter層
 
@@ -173,8 +173,8 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 #### UIコンポーネント層
 
 - [x] DeleteButton の実装、テスト戦略書・単体テスト（ゴミ箱アイコン表示、クリックイベント通知）
-- [x] ConfirmDialog の実装、テスト戦略書・単体テスト（確認メッセージ、削除/キャンセルボタン）
-- [x] ToastNotification の実装、テスト戦略書・単体テスト（エラー/成功メッセージ表示）
+- [ ] ConfirmDialog の実装、テスト戦略書・単体テスト（確認メッセージ、削除/キャンセルボタン）
+- [ ] ToastNotification の実装、テスト戦略書・単体テスト（エラー/成功メッセージ表示）
 
 ### Phase 3: 統合（新旧並行稼働、UI統合）
 
