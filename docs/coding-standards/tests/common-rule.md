@@ -44,15 +44,40 @@
 |------------------|---------------------|
 | `src/frameworks-and-drivers/browser/ChromeTabsGateway/` | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/` |
 | `src/infrastructure/persistence/indexeddb/` | `tests/infrastructure/persistence/indexeddb/` |
+| `src/application-business-rules/ports/gateway/ITabsGateway.ts` | `tests/unit/application-business-rules/ports/gateway/ITabsGateway/mocks/` |
 
 ### 禁止事項
 
 - テスト固有のディレクトリ（例: `tests/integration/{feature}/mocks/`）にモックを配置すること
 - モック対象クラスのディレクトリ構造と異なる場所に配置すること
+- **同一インターフェースのモックを複数箇所に作成すること**（重複モックの禁止）
 
 ### 許可事項
 
 - 複数のテストから共有されるモックは、モック対象クラスに対応するtestsディレクトリに配置
+
+### モック作成前の確認手順（必須）
+
+新規モックファクトリ作成前に、以下を確認すること：
+
+1. **既存モックの検索**
+   ```bash
+   # 同一インターフェースのモックを検索（例：ITabsGateway）
+   grep -r "createMockTabsGateway" tests/
+   # または
+   find tests/ -name "createMock*.ts" | xargs grep -l "ITabsGateway"
+   ```
+
+2. **検索結果の判断**
+   - 既存モックが見つかった場合 → **既存モックをインポートして使用**
+   - 見つからなかった場合 → モック対象クラスのtestsディレクトリに新規作成
+
+3. **共有モックの配置先**
+   - ポート/インターフェースレベルのモック → `tests/unit/{layer}/ports/{category}/{InterfaceName}/mocks/`
+   - 例：`ITabsGateway` → `tests/unit/application-business-rules/ports/gateway/ITabsGateway/mocks/`
+   - 例：`IRewriteRuleRepository` → `tests/unit/application/ports/IRewriteRuleRepository/mocks/`
+
+**重要**: この手順を省略すると、PRレビューで重複モックの指摘を受けます。
 
 ## eslint-rule
 
