@@ -143,7 +143,7 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 **タスク依存関係図**: [network-diagram.puml](./network-diagram.puml) を参照
 
-- [ ] P2-M1: DeleteRuleRequestDTO の実装、テスト戦略書・単体テスト
+- [x] P2-M1: DeleteRuleRequestDTO の実装、テスト戦略書・単体テスト
 - [ ] P2-M2: RewriteRuleProxyService.deleteRule() の実装、テスト戦略書・単体テスト ← depends on: P2-M1
 - [x] P2-M3: RewriteRuleProxyServiceImpl.deleteRule() の実装、テスト戦略書・単体テスト ← depends on: P2-M2
 - [x] P2-M4: RewriteRuleMessagingService.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M3
