@@ -25,6 +25,41 @@ WAI-ARIA Authoring Practices（Dialog Modal Pattern）に準拠したアクセ�
 | aria-labelledby | ○ | タイトル要素のIDを参照 |
 | aria-describedby | △ | 説明文要素のIDを参照（オプション） |
 
+#### 1.1 ID生成にuseId()を使用（必須）
+
+`aria-labelledby`や`aria-describedby`で参照するIDは、**必ずReactの`useId()`フックを使用して生成すること**。
+
+**理由**:
+- ハードコードされたID（例: `confirm-dialog-title`）は、同一ページ内で複数のダイアログが同時にレンダリングされた場合にID競合を引き起こす
+- `useId()`はReact 18で導入されたフックで、サーバーサイドレンダリングでも安全に一意のIDを生成する
+- 将来的な拡張性を確保し、コンポーネントの再利用性を高める
+
+**実装例**:
+
+```tsx
+import { useId } from 'react';
+
+const MyDialog: React.FC<Props> = ({ ... }) => {
+  const uniqueId = useId();
+  const titleId = `dialog-title-${uniqueId}`;
+  const descriptionId = `dialog-description-${uniqueId}`;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      aria-describedby={descriptionId}
+    >
+      <h2 id={titleId}>タイトル</h2>
+      <p id={descriptionId}>説明文</p>
+    </div>
+  );
+};
+```
+
+**注意**: IDの接頭辞（例: `dialog-title-`）は、デバッグ時の可読性のために付与することを推奨する。
+
 #### 2. フォーカス管理
 
 | 要件 | 説明 |
@@ -81,13 +116,13 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 3. **一貫性**: WAI-ARIA標準に従うことで、ユーザーの期待通りの動作を提供
 4. **メンテナンス性**: 標準パターンに従うことで、将来の変更が容易
 
-### 適用待ちの箇所
+### 適用済みの箇所
 
-以下のコンポーネントは本ADR採用以前に作成されたため、要件を満たしていない：
+以下のコンポーネントは本ADRの要件を満たしている：
 
 | コンポーネント | 配置 | 状態 |
 |---------------|------|------|
-| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | スケルトン（Phase 2で対応） |
+| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | ADR-007準拠（useId使用） |
 
 ## 影響ドキュメント
 

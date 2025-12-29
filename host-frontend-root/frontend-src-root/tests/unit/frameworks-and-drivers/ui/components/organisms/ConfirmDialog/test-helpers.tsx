@@ -121,17 +121,21 @@ export class ConfirmDialogTestHelper {
   }
 
   /**
-   * タイトル要素を取得
+   * タイトル要素を取得（ダイアログ内のh2要素）
+   * useId()により動的なIDが生成されるため、タグで検索
    */
-  getTitleElement(): Element | null {
-    return document.getElementById('confirm-dialog-title');
+  getTitleElement(): HTMLHeadingElement | null {
+    const dialog = this.getDialogElement();
+    return dialog?.querySelector('h2') ?? null;
   }
 
   /**
-   * メッセージ要素を取得
+   * メッセージ要素を取得（ダイアログ内のp要素）
+   * useId()により動的なIDが生成されるため、タグで検索
    */
-  getMessageElement(): Element | null {
-    return document.getElementById('confirm-dialog-message');
+  getMessageElement(): HTMLParagraphElement | null {
+    const dialog = this.getDialogElement();
+    return dialog?.querySelector('p') ?? null;
   }
 
   /**
