@@ -53,8 +53,8 @@ src/frameworks-and-drivers/ui/components/
 | 現在の配置 | 移行先 |
 |-----------|--------|
 | `src/components/atoms/Button/` | `src/frameworks-and-drivers/ui/components/atoms/Button/` |
-| `src/components/atoms/SaveButton/` | `src/frameworks-and-drivers/ui/components/atoms/SaveButton/` |
-| `src/components/atoms/CancelButton/` | `src/frameworks-and-drivers/ui/components/atoms/CancelButton/` |
+| `src/components/molecules/SaveButton/` | `src/frameworks-and-drivers/ui/components/atoms/SaveButton/` |
+| `src/components/molecules/CancelButton/` | `src/frameworks-and-drivers/ui/components/atoms/CancelButton/` |
 | `src/components/molecules/RuleCard/` | `src/frameworks-and-drivers/ui/components/molecules/RuleCard/` |
 | その他 | 同様のパターンで移行 |
 
