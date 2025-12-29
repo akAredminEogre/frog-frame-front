@@ -90,29 +90,50 @@ Repository、TabsGateway、Presenterの連携動作を検証する。
 
 ```plaintext
 tests/integration/delete-rule/
-├── normal-cases.test.ts       # 正常系テスト
-├── data-integrity.test.ts     # データ整合性テスト
-├── presenter-output.test.ts   # Presenter出力テスト
-├── error-cases.test.ts        # エラー系テスト
-└── partial-success.test.ts    # 部分的成功テスト
+├── helpers/
+│   └── createTestRule.ts          # テストデータ生成ヘルパー
+├── normal-cases.test.ts           # 正常系テスト
+├── data-integrity.test.ts         # データ整合性テスト
+├── presenter-output.test.ts       # Presenter出力テスト
+├── error-cases.test.ts            # エラー系テスト
+└── partial-success.test.ts        # 部分的成功テスト
 ```
 
 ## モック戦略
 
 ### モック対象
 
-- TabsGateway: ブラウザタブ操作のモック（リロード成功/失敗をシミュレート）
-- Presenter: コールバック呼び出しを検証するためのモック
+| 対象 | モック方法 | 理由 |
+|------|-----------|------|
+| TabsGateway | 共有モックを使用 | ブラウザタブ操作のモック（リロード成功/失敗をシミュレート） |
+| Presenter | `vi.fn()` で直接生成 | コールバック呼び出しを検証するため |
 
 ### モックしない対象
 
-- Repository: 実際のインメモリDBまたはテスト用DBを使用して結合動作を検証
+- Repository: 実際のインメモリDB（fake-indexeddb）を使用して結合動作を検証
 
-### モックファイル構成
+### モック実装方針
+
+#### TabsGateway
+
+既存の共有モックを使用する:
 
 ```plaintext
-tests/integration/delete-rule/
-└── mocks/
-    ├── createMockTabsGateway.ts     # TabsGatewayモック
-    └── createMockPresenter.ts       # Presenterモック
+tests/frameworks-and-drivers/browser/ChromeTabsGateway/
+└── createMockTabsGateway.ts
 ```
+
+統合テストからは上記の共有モックをimportして使用する。
+
+#### Presenter
+
+モックファイルは作成せず、テストコード内で `vi.fn()` を使用してコールバックを直接生成する:
+
+| コールバック | 用途 |
+|-------------|------|
+| `present = vi.fn()` | 成功時の通知検証 |
+| `presentError = vi.fn()` | エラー時の通知検証 |
+
+#### テストヘルパー
+
+テストデータ生成などの共有ユーティリティは `helpers/` サブディレクトリに配置する。
