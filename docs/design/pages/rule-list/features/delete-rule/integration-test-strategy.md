@@ -5,6 +5,36 @@
 DeleteRuleInteractorを中心とした、ルール削除機能の結合テストを定義する。
 Repository、TabsGateway、Presenterの連携動作を検証する。
 
+## テストスコープ
+
+### 対象レイヤー
+
+```
+入力: ruleId
+  ↓
+DeleteRuleInteractor.execute(inputData)
+  ├→ Repository.getById(ruleId)          # URLパターン取得
+  ├→ Repository.delete(ruleId)           # ルール削除
+  ├→ [TabsGateway.reloadMatchingTabs() - モック]
+  └→ Presenter.present(outputData)
+       ↓
+出力: callback(deletedRuleId)
+```
+
+### 実コンポーネント（モックしない）
+
+| レイヤー | コンポーネント | 理由 |
+|---------|---------------|------|
+| Application | DeleteRuleInteractor | 結合テストの中心、ビジネスロジックの連携を検証 |
+| Infrastructure | RewriteRuleRepository | 実際のDB操作（fake-indexeddb）で永続化を検証 |
+
+### モック対象
+
+| コンポーネント | 理由 |
+|---------------|------|
+| TabsGateway | Chrome API依存、テスト環境で動作不可 |
+| Presenter | コールバック呼び出しを検証するため`vi.fn()`で直接生成 |
+
 ## テスト分類
 
 ### 1. 正常系テスト
@@ -61,22 +91,6 @@ Repository、TabsGateway、Presenterの連携動作を検証する。
 
 **対応テスト**: `partial-success.test.ts`
 
-## 機能要件トレーサビリティ
-
-### エラーハンドリング要件
-
-| 機能要件（00-overview.md） | UIの状態 | テストケース | テストファイル |
-|---------------------------|---------|-------------|---------------|
-| ルール取得失敗（存在しないID） | 変更なし | 存在しないIDでエラー | error-cases.test.ts |
-| Repository削除失敗 | 変更なし | Repository例外時 | error-cases.test.ts |
-| タブリロード失敗 | ルールは削除済み | TabsGatewayエラー時 | partial-success.test.ts |
-
-### 部分的成功の取り扱い
-
-| シナリオ | 期待動作 | テストケース | テストファイル |
-|---------|---------|-------------|---------------|
-| ルール削除成功 + タブリロード失敗 | ルールは一覧から削除、エラー通知表示 | 削除成功+リロード失敗 | partial-success.test.ts |
-
 ## 網羅性チェック
 
 - [x] 正常系（削除成功）
@@ -112,7 +126,7 @@ tests/integration/delete-rule/
 
 - Repository: 実際のインメモリDB（fake-indexeddb）を使用して結合動作を検証
 
-### モック実装方針
+### モックの実装方針
 
 #### TabsGateway
 
@@ -137,3 +151,31 @@ tests/frameworks-and-drivers/browser/ChromeTabsGateway/
 #### テストヘルパー
 
 テストデータ生成などの共有ユーティリティは `helpers/` サブディレクトリに配置する。
+
+## テストデータ設計
+
+### 初期データ
+
+削除対象ルール:
+
+| プロパティ | 値 | 説明 |
+|-----------|-----|------|
+| id | `rule-to-delete` | 削除対象のルールID |
+| urlPattern | `https://example.com/*` | URLパターン |
+| isActive | `true` | 有効状態 |
+
+他ルール（整合性検証用）:
+
+| プロパティ | 値 | 説明 |
+|-----------|-----|------|
+| id | `other-rule` | 削除されないルールID |
+| urlPattern | `https://other.com/*` | URLパターン |
+| isActive | `true` | 有効状態 |
+
+### 期待結果
+
+| 入力 | 操作後の状態 | DB状態 | コールバック引数 |
+|------|-------------|--------|-----------------|
+| `rule-to-delete` | 削除完了 | getById で取得失敗 | `{ ruleId: 'rule-to-delete' }` |
+| `non-existent-id` | エラー | 変更なし | `presentError()` が呼ばれる |
+| 削除 + TabsGateway失敗 | 削除完了 + エラー通知 | getById で取得失敗 | `presentError()` でリロード失敗を通知 |
