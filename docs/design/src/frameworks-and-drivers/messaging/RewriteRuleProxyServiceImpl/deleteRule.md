@@ -48,24 +48,26 @@ tests/unit/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl/
 ## モック戦略
 
 > **重要**: [basic-rule.md](../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従う。
+> 既存のモックファクトリがある場合は再利用し、重複を避けること。
 
 ### モック対象
 
 - **container.resolve()**: DIコンテナからリポジトリを取得する部分をモック化
-- **IRewriteRuleRepository**: delete()メソッドをモック設定
+- **IRewriteRuleRepository**: delete()メソッドをモック設定（既存モックファクトリを使用）
 
 ### モックファイル構成
 
-```
-tests/unit/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl/
-└── mocks/
-    └── createMockRewriteRuleRepository.ts    # モックファクトリ
+既存のモックファクトリを使用:
+
+```text
+tests/unit/application/ports/IRewriteRuleRepository/
+└── createMockRewriteRuleRepository.ts    # 既存モックファクトリ（再利用）
 ```
 
 ### モック方法
 
 ```typescript
-import { createMockRewriteRuleRepository } from 'tests/unit/.../mocks/createMockRewriteRuleRepository';
+import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
 
 // container.resolveのモック
 vi.mock('src/frameworks-and-drivers/di/container', () => ({
