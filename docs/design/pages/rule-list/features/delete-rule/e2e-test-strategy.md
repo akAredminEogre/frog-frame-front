@@ -90,7 +90,7 @@
 
 ## テストファイル構成
 
-```
+```plaintext
 tests/e2e/delete-rule/
 ├── normal-flow.spec.ts        # 正常操作フロー
 ├── cancel-operation.spec.ts   # キャンセル操作

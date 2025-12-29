@@ -88,7 +88,7 @@ Repository、TabsGateway、Presenterの連携動作を検証する。
 
 ## テストファイル構成
 
-```
+```plaintext
 tests/integration/delete-rule/
 ├── normal-cases.test.ts       # 正常系テスト
 ├── data-integrity.test.ts     # データ整合性テスト
@@ -110,7 +110,7 @@ tests/integration/delete-rule/
 
 ### モックファイル構成
 
-```
+```plaintext
 tests/integration/delete-rule/
 └── mocks/
     ├── createMockTabsGateway.ts     # TabsGatewayモック
