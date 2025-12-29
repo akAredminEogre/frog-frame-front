@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useId, useRef } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import styles from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog.module.css';
@@ -34,10 +34,27 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const previousActiveElementRef = useRef<Element | null>(null);
 
+  // 連続クリック防止用の状態
+  const [isProcessing, setIsProcessing] = useState(false);
+
   // useIdで一意のIDを生成（複数ダイアログの同時レンダリング対応）
   const uniqueId = useId();
   const titleId = `confirm-dialog-title-${uniqueId}`;
   const messageId = `confirm-dialog-message-${uniqueId}`;
+
+  // 連続クリック防止付きの確認ボタンハンドラ
+  const handleConfirm = useCallback(() => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+    onConfirm();
+  }, [isProcessing, onConfirm]);
+
+  // 連続クリック防止付きのキャンセルボタンハンドラ
+  const handleCancel = useCallback(() => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+    onCancel();
+  }, [isProcessing, onCancel]);
 
   // 初期フォーカスと復帰フォーカスの管理
   useEffect(() => {
@@ -70,7 +87,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onCancel();
+        handleCancel();
         return;
       }
 
@@ -100,7 +117,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         }
       }
     },
-    [onCancel]
+    [handleCancel]
   );
 
   // オーバーレイクリック処理
@@ -110,9 +127,9 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       if (dialogRef.current?.contains(event.target as Node)) {
         return;
       }
-      onCancel();
+      handleCancel();
     },
-    [onCancel]
+    [handleCancel]
   );
 
   if (!isOpen) {
@@ -146,7 +163,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             ref={cancelButtonRef}
             type="button"
             className={`${styles.button} ${styles.cancelButton}`}
-            onClick={onCancel}
+            onClick={handleCancel}
             data-testid="confirm-dialog-cancel-button"
           >
             {cancelLabel}
@@ -155,7 +172,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             ref={confirmButtonRef}
             type="button"
             className={`${styles.button} ${styles.confirmButton}`}
-            onClick={onConfirm}
+            onClick={handleConfirm}
             data-testid="confirm-dialog-confirm-button"
           >
             {confirmLabel}

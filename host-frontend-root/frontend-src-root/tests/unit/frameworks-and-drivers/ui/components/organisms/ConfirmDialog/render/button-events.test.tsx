@@ -3,6 +3,7 @@
  * ユーザーアクションに対するコールバック呼び出しをテスト
  * - 確認ボタンクリック: onConfirmが呼ばれる
  * - キャンセルボタンクリック: onCancelが呼ばれる
+ * - 連続クリック防止: 1回のクリックで1回だけ呼ばれる
  */
 import {
   ConfirmDialogTestHelper,
@@ -81,5 +82,39 @@ describe('ConfirmDialog - ボタンクリックイベント', () => {
     // Assert
     expect(onCancel).toHaveBeenCalledTimes(1);
     expect(onConfirm).not.toHaveBeenCalled();
+  });
+
+  it('確認ボタンを連続クリックしてもonConfirmは1回だけ呼ばれる', async () => {
+    // Arrange
+    const onConfirm = vi.fn();
+    await helper.render({ onConfirm });
+
+    // Act - 連続クリック
+    const confirmButton = helper.getConfirmButton();
+    expect(confirmButton).not.toBeNull();
+    confirmButton?.click();
+    confirmButton?.click();
+    confirmButton?.click();
+    await flushPromises();
+
+    // Assert - 1回だけ呼ばれる
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  it('キャンセルボタンを連続クリックしてもonCancelは1回だけ呼ばれる', async () => {
+    // Arrange
+    const onCancel = vi.fn();
+    await helper.render({ onCancel });
+
+    // Act - 連続クリック
+    const cancelButton = helper.getCancelButton();
+    expect(cancelButton).not.toBeNull();
+    cancelButton?.click();
+    cancelButton?.click();
+    cancelButton?.click();
+    await flushPromises();
+
+    // Assert - 1回だけ呼ばれる
+    expect(onCancel).toHaveBeenCalledTimes(1);
   });
 });
