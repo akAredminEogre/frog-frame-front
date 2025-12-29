@@ -1,4 +1,4 @@
-# DeleteRuleRequestDTO 型定義 テスト戦略
+# DeleteRuleRequestDTO 型定義テスト戦略
 
 ## 目的
 
