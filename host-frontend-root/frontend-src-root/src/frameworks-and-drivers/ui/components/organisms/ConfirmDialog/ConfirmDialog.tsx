@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import styles from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog.module.css';
@@ -33,6 +33,11 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const previousActiveElementRef = useRef<Element | null>(null);
+
+  // useIdで一意のIDを生成（複数ダイアログの同時レンダリング対応）
+  const uniqueId = useId();
+  const titleId = `confirm-dialog-title-${uniqueId}`;
+  const messageId = `confirm-dialog-message-${uniqueId}`;
 
   // 初期フォーカスと復帰フォーカスの管理
   useEffect(() => {
@@ -122,14 +127,14 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         className={styles.dialog}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-message"
+        aria-labelledby={titleId}
+        aria-describedby={messageId}
         data-testid="confirm-dialog"
       >
-        <h2 id="confirm-dialog-title" className={styles.title}>
+        <h2 id={titleId} className={styles.title}>
           {title}
         </h2>
-        <p id="confirm-dialog-message" className={styles.message}>
+        <p id={messageId} className={styles.message}>
           {message}
         </p>
         <div className={styles.buttonContainer}>
