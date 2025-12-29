@@ -1,10 +1,17 @@
 import React from 'react';
 
 /**
+ * TrashIconコンポーネントのProps
+ */
+interface TrashIconProps {
+  className?: string;
+}
+
+/**
  * ゴミ箱アイコンSVGコンポーネント
  * シンプルなゴミ箱のアウトラインアイコン
  */
-export const TrashIcon: React.FC<{ className?: string }> = ({ className }) => (
+export const TrashIcon: React.FC<TrashIconProps> = ({ className }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
