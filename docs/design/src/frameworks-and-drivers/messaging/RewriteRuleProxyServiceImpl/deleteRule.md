@@ -61,13 +61,14 @@ tests/unit/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl/
 
 ```text
 tests/unit/application/ports/IRewriteRuleRepository/
-└── createMockRewriteRuleRepository.ts    # 既存モックファクトリ（再利用）
+└── mocks/
+    └── createMockRewriteRuleRepository.ts    # 既存モックファクトリ（再利用）
 ```
 
 ### モック方法
 
 ```typescript
-import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
+import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
 
 // container.resolveのモック
 vi.mock('src/frameworks-and-drivers/di/container', () => ({
