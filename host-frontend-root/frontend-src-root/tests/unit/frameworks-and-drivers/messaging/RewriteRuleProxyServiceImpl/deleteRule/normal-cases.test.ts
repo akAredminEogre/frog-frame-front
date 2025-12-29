@@ -9,7 +9,7 @@ import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gat
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { createRewriteRuleProxyServiceImpl } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl';
 
-import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
+import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
 
 // container.resolveのモック
 vi.mock('src/frameworks-and-drivers/di/container', () => ({
