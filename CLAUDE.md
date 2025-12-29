@@ -34,12 +34,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### ADRを作成・編集する場合
 
-1. [ ] **ADRルールを確認**: `docs/docs-rules/adr.md`
-   - 実装コード例は記述しない
-   - 決定事項・判断理由のみ記述
-   - 必須セクション: ステータス、コンテキスト、決定、理由、影響ドキュメント
-2. [ ] ADRを作成・編集
-3. [ ] 関連ドキュメントがあれば相互参照を追加
+→ [.AI/adr.md](.AI/adr.md) を参照
 
 ---
 
