@@ -142,17 +142,19 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 #### メッセージング基盤
 
 **タスク依存関係図**:
-```text
-DeleteRuleRequestDTO (P2-M1)
-        │
-        ▼
-RewriteRuleProxyService.deleteRule() (P2-M2) ← インターフェース定義
-        │
-        ▼
-RewriteRuleProxyServiceImpl.deleteRule() (P2-M3) ← 実装（Background Script）
-        │
-        ▼
-RewriteRuleMessagingService.delete() (P2-M4) ← 実装（Content Script側から呼び出す）
+```mermaid
+flowchart TD
+    classDef completed fill:#90EE90,stroke:#228B22,color:#000
+    classDef pending fill:#FFE4B5,stroke:#FFA500,color:#000
+
+    P2_M1["DeleteRuleRequestDTO (P2-M1)"]:::completed
+    P2_M2["RewriteRuleProxyService.deleteRule() (P2-M2)<br/>← インターフェース定義"]:::completed
+    P2_M3["RewriteRuleProxyServiceImpl.deleteRule() (P2-M3)<br/>← 実装（Background Script）"]:::completed
+    P2_M4["RewriteRuleMessagingService.delete() (P2-M4)<br/>← 実装（Content Script側から呼び出す）"]:::completed
+
+    P2_M1 --> P2_M2
+    P2_M2 --> P2_M3
+    P2_M3 --> P2_M4
 ```
 
 - [x] P2-M1: DeleteRuleRequestDTO の実装、テスト戦略書・単体テスト
@@ -163,11 +165,14 @@ RewriteRuleMessagingService.delete() (P2-M4) ← 実装（Content Script側か�
 #### Mapper層
 
 **タスク依存関係図**:
-```text
-RewriteRuleMessagingService.delete() (P2-M4)
-        │
-        ▼
-RewriteRuleMapper.delete() (P2-MAP1) ← MessagingPort経由で通信
+```mermaid
+flowchart TD
+    classDef completed fill:#90EE90,stroke:#228B22,color:#000
+
+    P2_M4["RewriteRuleMessagingService.delete() (P2-M4)"]:::completed
+    P2_MAP1["RewriteRuleMapper.delete() (P2-MAP1)<br/>← MessagingPort経由で通信"]:::completed
+
+    P2_M4 --> P2_MAP1
 ```
 
 - [x] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
@@ -175,15 +180,18 @@ RewriteRuleMapper.delete() (P2-MAP1) ← MessagingPort経由で通信
 #### Repository層
 
 **タスク依存関係図**:
-```text
-DexieRewriteRuleRepository.delete() (P2-R1) ← Background Script用、直接DB操作
-        │
-        ├─────────────────────────────┐
-        ▼                             ▼
-RewriteRuleMapper.delete()    RewriteRuleProxyServiceImpl.deleteRule()
-        │                             │
-        ▼                             │
-ChromeRuntimeRewriteRuleRepository.delete() (P2-R2) ← Content Script用
+```mermaid
+flowchart TD
+    classDef completed fill:#90EE90,stroke:#228B22,color:#000
+
+    P2_R1["DexieRewriteRuleRepository.delete() (P2-R1)<br/>← Background Script用、直接DB操作"]:::completed
+    Mapper["RewriteRuleMapper.delete()"]:::completed
+    Proxy["RewriteRuleProxyServiceImpl.deleteRule()"]:::completed
+    P2_R2["ChromeRuntimeRewriteRuleRepository.delete() (P2-R2)<br/>← Content Script用"]:::completed
+
+    P2_R1 --> Mapper
+    P2_R1 --> Proxy
+    Mapper --> P2_R2
 ```
 
 - [x] P2-R1: DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
