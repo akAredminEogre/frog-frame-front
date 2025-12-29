@@ -28,7 +28,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### ADRを作成・編集する場合
 
-→ [.AI/adr.md](.AI/adr.md) を参照
+→ [.AI/docs.md](.AI/docs.md) を参照
 
 ---
 
