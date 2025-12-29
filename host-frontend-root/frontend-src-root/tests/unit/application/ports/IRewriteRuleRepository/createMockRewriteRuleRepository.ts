@@ -9,6 +9,7 @@ export function createMockRewriteRuleRepository(): IRewriteRuleRepository {
   return {
     create: vi.fn(),
     update: vi.fn(),
+    delete: vi.fn(),
     getAll: vi.fn(),
     getById: vi.fn(),
     getRulesMatchingUrl: vi.fn(),

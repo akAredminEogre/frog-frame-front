@@ -94,6 +94,15 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
   }
 
   /**
+   * 指定されたIDのルールを削除する（スケルトン）
+   * @param id 削除するルールのID
+   */
+  async delete(id: number): Promise<void> {
+    // Phase 2で実装予定: IndexedDBから物理削除
+    throw new Error(`Not implemented: delete with id=${id}`);
+  }
+
+  /**
    * RewriteRuleをRewriteRuleSchemaに変換する（新規作成用）
    * @param rule 変換元のRewriteRule
    * @returns 変換されたRewriteRuleSchema（idフィールドなし - DB側で自動採番）

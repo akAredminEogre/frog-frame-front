@@ -1,3 +1,4 @@
+import { DeleteRuleRequestDTO } from 'src/frameworks-and-drivers/messaging/dto/request-dto/DeleteRuleRequestDTO';
 import { GetByIdRequestDTO } from 'src/frameworks-and-drivers/messaging/dto/request-dto/GetByIdRequestDTO';
 import { UpdateRuleActiveRequestDTO } from 'src/frameworks-and-drivers/messaging/dto/request-dto/UpdateRuleActiveRequestDTO';
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
@@ -35,5 +36,14 @@ export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
    */
   async updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void> {
     throw new Error(`Not implemented: updateActive with id=${dto.id}, isActive=${dto.isActive}`);
+  }
+
+  /**
+   * ルールを削除する（スケルトン）
+   * @param dto 削除リクエストDTO
+   */
+  async delete(dto: DeleteRuleRequestDTO): Promise<void> {
+    // Phase 2で実装予定
+    throw new Error(`Not implemented: delete with id=${dto.id}`);
   }
 }

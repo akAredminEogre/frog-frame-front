@@ -13,6 +13,12 @@ export interface IRewriteRuleProxyService {
    * @returns RewriteRuleDTO配列
    */
   getAllRules(): Promise<RewriteRuleDTO[]>;
+
+  /**
+   * ルールを削除する
+   * @param id 削除するルールのID
+   */
+  deleteRule(id: number): Promise<void>;
 }
 
 /**

@@ -84,6 +84,22 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 - 実際のロジックは空または `throw new Error('Not implemented')` で仮実装
 - インターフェースは完全に定義する（メソッドシグネチャ、型定義）
 
+##### ESLint未使用エラーの回避
+
+スケルトン実装でインポートや引数が未使用になる場合、エラーメッセージ内で参照することでESLintエラーを回避する:
+
+```typescript
+// ✅ インポートと引数をエラーメッセージで使用
+import { SomeOutputData } from 'src/application-business-rules/dto/output/SomeOutputData';
+
+execute(input: SomeInputData): void {
+  throw new Error(`Not implemented: ${SomeOutputData.name}, input: ${JSON.stringify(input)}`);
+}
+
+// ❌ 未使用のまま放置（ESLintエラー）
+throw new Error('Not implemented');
+```
+
 #### DI登録のタイミング
 
 - DI登録は原則としてPhase 3（統合）で行う

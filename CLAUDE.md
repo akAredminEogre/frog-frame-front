@@ -22,6 +22,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. [ ] 該当ディレクトリのルールを確認（例: `docs/docs-rules/user-stories.md`）
 3. [ ] ドキュメントを作成・編集
 
+### docs/design/ 配下の設計ドキュメントを作成・編集する場合
+
+→ [.AI/docs.md](.AI/docs.md) を参照
+
+### ADRを作成・編集する場合
+
+→ [.AI/docs.md](.AI/docs.md) を参照
+
 ---
 
 ## Project Overview

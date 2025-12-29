@@ -40,3 +40,4 @@ Atoms内でのエンティティ/値オブジェクトのimportを禁止。プ�
 ## 関連ドキュメント
 
 - [ADR-001: Clean Architecture with Presenter Pattern](../../../../adr/001-clean-architecture-with-presenter-pattern.md)
+- [ADR-008: UIコンポーネント配置の段階的移行](../../../../adr/008-ui-component-directory-migration.md)
