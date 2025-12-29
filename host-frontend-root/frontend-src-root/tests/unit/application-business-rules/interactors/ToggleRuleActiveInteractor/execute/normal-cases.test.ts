@@ -3,8 +3,8 @@
  * 1. isActive=true のルールを false に切り替え
  * 2. isActive=false のルールを true に切り替え
  */
-import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockPresenter';
 import { createMockRewriteRuleRepository as createMockRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
+import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockPresenter';
 import { createMockTabsGateway } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
