@@ -8,20 +8,6 @@
 
 ReactのUIコンポーネントでは、Propsの型定義（インターフェース）をエクスポートするかどうかの選択肢がある。
 
-```typescript
-// エクスポートしない場合
-interface ButtonProps {
-  onClick: () => void;
-}
-export const Button: React.FC<ButtonProps> = ...
-
-// エクスポートする場合
-export interface ButtonProps {
-  onClick: () => void;
-}
-export const Button: React.FC<ButtonProps> = ...
-```
-
 ### 検討した観点
 
 1. **エクスポートする利点**
@@ -42,26 +28,17 @@ export const Button: React.FC<ButtonProps> = ...
 
 **今後作成するUIコンポーネントでは、Propsインターフェースをエクスポートする。**
 
-```typescript
-// 推奨パターン
-export interface DeleteButtonProps {
-  onClick: () => void;
-  disabled?: boolean;
-  ariaLabel?: string;
-}
-
-export const DeleteButton: React.FC<DeleteButtonProps> = ({ ... }) => {
-  ...
-};
-```
-
-### 既存コンポーネントの対応
+### 適用待ちの箇所
 
 以下の既存コンポーネントは本ADR採用以前に作成されたため、Propsインターフェースがエクスポートされていない：
 
 | コンポーネント | 配置 | 状態 |
 |---------------|------|------|
 | ToggleSwitch | `src/frameworks-and-drivers/ui/components/atoms/` | 未対応 |
+| Button | `src/components/atoms/` | 未対応 |
+| SaveButton | `src/components/atoms/` | 未対応 |
+| CancelButton | `src/components/atoms/` | 未対応 |
+| RuleCard | `src/components/molecules/` | 未対応 |
 
 これらは以下のいずれかのタイミングで対応する：
 
@@ -83,4 +60,4 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({ ... }) => {
 
 ## 関連ドキュメント
 
-- なし
+- [UIコンポーネント コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/components.md)
