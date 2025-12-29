@@ -58,6 +58,36 @@ tests/unit/[layer]/[category]/[service-name]/
 
 - テストファイル1つにつき、配列化テストケースは1つまでとし、その他のテストケースは別ファイルに切り出すこと
 
+### 冗長なアサーションの回避
+
+#### 規約
+
+- 「例外がスローされないこと」のテストには `.resolves.not.toThrow()` を使用しないこと
+- async関数が正常終了すれば、テストフレームワークは成功と判定する
+- 例外がスローされた場合、テストは自動的に失敗する
+
+#### 禁止事項
+
+```typescript
+// ❌ 冗長 - .resolves.not.toThrow() は不要
+await expect(repository.delete(id)).resolves.not.toThrow();
+```
+
+#### 許可事項
+
+```typescript
+// ✅ シンプル - 例外時は自動失敗
+await repository.delete(id);
+
+// Assert - 副作用で状態を検証
+const remainingRules = await repository.getAll();
+expect(remainingRules.toArray()).toHaveLength(1);
+```
+
+#### eslint-rule
+
+**ESLintルール化**: 不可（PRレビューで確認）
+
 ## mocks/ ディレクトリ未配置モック
 
 規約に準拠していないモックファクトリは [user-story-004](../../../user-stories/user-story-004/README.md) で対応予定。

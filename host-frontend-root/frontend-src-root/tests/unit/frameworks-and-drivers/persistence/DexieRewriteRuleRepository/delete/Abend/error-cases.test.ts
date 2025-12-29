@@ -31,10 +31,10 @@ describe('DexieRewriteRuleRepository.delete - 異常系', () => {
 
     const nonExistentId = 99999;
 
-    // Act & Assert
-    await expect(repository.delete(nonExistentId)).resolves.not.toThrow();
+    // Act
+    await repository.delete(nonExistentId);
 
-    // Verify original rule still exists
+    // Assert - original rule still exists
     const remainingRules = await repository.getAll();
     expect(remainingRules.toArray()).toHaveLength(1);
   });
@@ -42,10 +42,10 @@ describe('DexieRewriteRuleRepository.delete - 異常系', () => {
   it('should not throw an error when deleting from an empty database', async () => {
     // Arrange - DB is already empty from beforeEach
 
-    // Act & Assert
-    await expect(repository.delete(1)).resolves.not.toThrow();
+    // Act
+    await repository.delete(1);
 
-    // Verify DB is still empty
+    // Assert - DB is still empty
     const remainingRules = await repository.getAll();
     expect(remainingRules.toArray()).toHaveLength(0);
   });
