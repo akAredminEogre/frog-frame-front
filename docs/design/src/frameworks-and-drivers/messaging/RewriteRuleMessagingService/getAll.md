@@ -78,23 +78,6 @@ export const createMockRewriteRuleProxyService = (): IRewriteRuleProxyService =>
 };
 ```
 
-### モック方法
-
-```typescript
-import { createMockRewriteRuleProxyService } from 'tests/unit/.../mocks/createMockRewriteRuleProxyService';
-
-// モジュールレベルのモック設定（vi.mock()はファイルトップレベルで呼び出す必要がある）
-vi.mock('src/frameworks-and-drivers/messaging/RewriteRuleProxyService', () => ({
-  getRewriteRuleProxyService: vi.fn(),
-}));
-
-beforeEach(() => {
-  vi.clearAllMocks();
-  const mockProxyService = createMockRewriteRuleProxyService();
-  (getRewriteRuleProxyService as ReturnType<typeof vi.fn>).mockReturnValue(mockProxyService);
-});
-```
-
 ### モック対象の理由
 
 - getRewriteRuleProxyService: @webext-core/proxy-serviceはChrome拡張機能のランタイム通信に依存するため、単体テストではモック化が必須
