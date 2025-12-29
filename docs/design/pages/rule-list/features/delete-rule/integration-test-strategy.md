@@ -104,6 +104,7 @@ DeleteRuleInteractor.execute(inputData)
 
 ```plaintext
 tests/integration/delete-rule/
+├── setup.ts                       # fake-indexeddbセットアップ
 ├── helpers/
 │   └── createTestRule.ts          # テストデータ生成ヘルパー
 ├── normal-cases.test.ts           # 正常系テスト
