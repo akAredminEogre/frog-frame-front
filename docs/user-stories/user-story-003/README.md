@@ -93,47 +93,47 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### ディレクトリ作成・既存インターフェース修正
 
-- [ ] 新規ディレクトリを作成（既存のものは作成不要）
+- [x] 新規ディレクトリを作成（既存のものは作成不要）
   - `src/frameworks-and-drivers/ui/components/atoms/DeleteButton/`
   - `src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/`
   - `src/frameworks-and-drivers/ui/components/atoms/ToastNotification/`
-- [ ] IRewriteRuleRepository に delete() メソッドシグネチャを追加
-- [ ] IRewriteRuleMessagingPort に delete() メソッドシグネチャを追加
+- [x] IRewriteRuleRepository に delete() メソッドシグネチャを追加
+- [x] IRewriteRuleMessagingPort に delete() メソッドシグネチャを追加
 
 #### 第2層: application-business-rules
 
-- [ ] DeleteRuleInputData（入力DTO）
-- [ ] DeleteRuleOutputData（成功時出力DTO）
-- [ ] DeleteRuleErrorOutputData（エラー出力DTO）
-- [ ] IDeleteRuleUseCase（Input Port インターフェース）
-- [ ] IDeleteRulePresenter（Output Port インターフェース）
-- [ ] DeleteRuleInteractor（スケルトン実装）
+- [x] DeleteRuleInputData（入力DTO）
+- [x] DeleteRuleOutputData（成功時出力DTO）
+- [x] DeleteRuleErrorOutputData（エラー出力DTO）
+- [x] IDeleteRuleUseCase（Input Port インターフェース）
+- [x] IDeleteRulePresenter（Output Port インターフェース）
+- [x] DeleteRuleInteractor（スケルトン実装）
 
 #### 第3層: interface-adapters
 
-- [ ] IDeleteRuleController（Controllerインターフェース）
-- [ ] DeleteRuleController（スケルトン実装）
-- [ ] IDeleteRuleControllerFactory（Factoryインターフェース、ADR-005参照）
-- [ ] DeleteRuleControllerFactory（スケルトン実装）
-- [ ] DeleteRulePresenter（スケルトン実装）
+- [x] IDeleteRuleController（Controllerインターフェース）
+- [x] DeleteRuleController（スケルトン実装）
+- [x] IDeleteRuleControllerFactory（Factoryインターフェース、ADR-005参照）
+- [x] DeleteRuleControllerFactory（スケルトン実装）
+- [x] DeleteRulePresenter（スケルトン実装）
 
 #### 第4層: frameworks-and-drivers
 
-- [ ] DeleteRuleRequestDTO（メッセージング用DTO）
-- [ ] RewriteRuleProxyService (IRewriteRuleProxyService) に deleteRule() スケルトン追加
-- [ ] RewriteRuleProxyServiceImpl に deleteRule() スケルトン追加
-- [ ] RewriteRuleMessagingService に delete() スケルトン追加
-- [ ] RewriteRuleMapper に delete() スケルトン追加
-- [ ] DexieRewriteRuleRepository に delete() スケルトン追加
-- [ ] ChromeRuntimeRewriteRuleRepository に delete() スケルトン追加
-- [ ] DeleteButton UIコンポーネント（スケルトン）
-- [ ] ConfirmDialog UIコンポーネント（スケルトン）
-- [ ] ToastNotification UIコンポーネント（スケルトン）
+- [x] DeleteRuleRequestDTO（メッセージング用DTO）
+- [x] RewriteRuleProxyService (IRewriteRuleProxyService) に deleteRule() スケルトン追加
+- [x] RewriteRuleProxyServiceImpl に deleteRule() スケルトン追加
+- [x] RewriteRuleMessagingService に delete() スケルトン追加
+- [x] RewriteRuleMapper に delete() スケルトン追加
+- [x] DexieRewriteRuleRepository に delete() スケルトン追加
+- [x] ChromeRuntimeRewriteRuleRepository に delete() スケルトン追加
+- [x] DeleteButton UIコンポーネント（スケルトン）
+- [x] ConfirmDialog UIコンポーネント（スケルトン）
+- [x] ToastNotification UIコンポーネント（スケルトン）
 
 #### テスト戦略書
 
-- [ ] 結合テスト戦略書を作成（integration-test-strategy.md）
-- [ ] E2Eテスト戦略書を作成（e2e-test-strategy.md）
+- [x] 結合テスト戦略書を作成（integration-test-strategy.md）
+- [x] E2Eテスト戦略書を作成（e2e-test-strategy.md）
 
 ### Phase 2: 実装（スケルトンにロジック追加）
 
@@ -155,10 +155,10 @@ RewriteRuleProxyServiceImpl.deleteRule() (P2-M3) ← 実装（Background Script�
 RewriteRuleMessagingService.delete() (P2-M4) ← 実装（Content Script側から呼び出す）
 ```
 
-- [ ] P2-M1: DeleteRuleRequestDTO の実装、テスト戦略書・単体テスト
-- [ ] P2-M2: RewriteRuleProxyService.deleteRule() の実装、テスト戦略書・単体テスト ← depends on: P2-M1
-- [ ] P2-M3: RewriteRuleProxyServiceImpl.deleteRule() の実装、テスト戦略書・単体テスト ← depends on: P2-M2
-- [ ] P2-M4: RewriteRuleMessagingService.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M3
+- [x] P2-M1: DeleteRuleRequestDTO の実装、テスト戦略書・単体テスト
+- [x] P2-M2: RewriteRuleProxyService.deleteRule() の実装、テスト戦略書・単体テスト ← depends on: P2-M1
+- [x] P2-M3: RewriteRuleProxyServiceImpl.deleteRule() の実装、テスト戦略書・単体テスト ← depends on: P2-M2
+- [x] P2-M4: RewriteRuleMessagingService.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M3
 
 #### Mapper層
 
@@ -170,7 +170,7 @@ RewriteRuleMessagingService.delete() (P2-M4)
 RewriteRuleMapper.delete() (P2-MAP1) ← MessagingPort経由で通信
 ```
 
-- [ ] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
+- [x] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
 
 #### Repository層
 
@@ -186,27 +186,27 @@ RewriteRuleMapper.delete()    RewriteRuleProxyServiceImpl.deleteRule()
 ChromeRuntimeRewriteRuleRepository.delete() (P2-R2) ← Content Script用
 ```
 
-- [ ] P2-R1: DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
-- [ ] P2-R2: ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-MAP1
+- [x] P2-R1: DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
+- [x] P2-R2: ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-MAP1
 
 #### ユースケース層
 
-- [ ] DeleteRuleInputData の実装、テスト戦略書・単体テスト
-- [ ] DeleteRuleOutputData の実装、テスト戦略書・単体テスト
-- [ ] DeleteRuleErrorOutputData の実装、テスト戦略書・単体テスト
-- [ ] DeleteRuleInteractor の実装、テスト戦略書・単体テスト（Repository削除 + TabsGatewayリロード）
+- [x] DeleteRuleInputData の実装、テスト戦略書・単体テスト
+- [x] DeleteRuleOutputData の実装、テスト戦略書・単体テスト
+- [x] DeleteRuleErrorOutputData の実装、テスト戦略書・単体テスト
+- [x] DeleteRuleInteractor の実装、テスト戦略書・単体テスト（Repository削除 + TabsGatewayリロード）
 
 #### Controller/Presenter層
 
-- [ ] DeleteRuleController の実装、テスト戦略書・単体テスト
-- [ ] DeleteRuleControllerFactory の実装、テスト戦略書・単体テスト
-- [ ] DeleteRulePresenter の実装、テスト戦略書・単体テスト（成功時View更新、失敗時エラー通知）
+- [x] DeleteRuleController の実装、テスト戦略書・単体テスト
+- [x] DeleteRuleControllerFactory の実装、テスト戦略書・単体テスト
+- [x] DeleteRulePresenter の実装、テスト戦略書・単体テスト（成功時View更新、失敗時エラー通知）
 
 #### UIコンポーネント層
 
-- [ ] DeleteButton の実装、テスト戦略書・単体テスト（ゴミ箱アイコン表示、クリックイベント通知）
-- [ ] ConfirmDialog の実装、テスト戦略書・単体テスト（確認メッセージ、削除/キャンセルボタン）
-- [ ] ToastNotification の実装、テスト戦略書・単体テスト（エラー/成功メッセージ表示）
+- [x] DeleteButton の実装、テスト戦略書・単体テスト（ゴミ箱アイコン表示、クリックイベント通知）
+- [x] ConfirmDialog の実装、テスト戦略書・単体テスト（確認メッセージ、削除/キャンセルボタン）
+- [x] ToastNotification の実装、テスト戦略書・単体テスト（エラー/成功メッセージ表示）
 
 ### Phase 3: 統合（新旧並行稼働、UI統合）
 
