@@ -65,25 +65,6 @@ tests/unit/application/ports/IRewriteRuleRepository/
     └── createMockRewriteRuleRepository.ts    # 既存モックファクトリ（再利用）
 ```
 
-### モック方法
-
-```typescript
-import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
-
-// container.resolveのモック
-vi.mock('src/frameworks-and-drivers/di/container', () => ({
-  container: {
-    resolve: vi.fn(),
-  },
-}));
-
-beforeEach(() => {
-  vi.clearAllMocks();
-  const mockRepository = createMockRewriteRuleRepository();
-  (container.resolve as ReturnType<typeof vi.fn>).mockReturnValue(mockRepository);
-});
-```
-
 ### モック対象の理由
 
 - container.resolve: DIコンテナはtsyringeに依存し、実際のリポジトリ実装（DexieRewriteRuleRepository等）を返すため、単体テストではモック化が必須
