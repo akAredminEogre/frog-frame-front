@@ -3,7 +3,7 @@
  * 1. tabsGateway.reloadMatchingTabsでエラーが発生した場合、presentが先に呼び出された後presentErrorが呼び出される
  */
 import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockPresenter';
-import { createMockRepository } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockRepository';
+import { createMockRewriteRuleRepository as createMockRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
 import { createMockTabsGateway } from 'tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
