@@ -24,7 +24,9 @@ export class DeleteRuleInteractor implements IDeleteRuleUseCase {
       // 2. ルールを削除
       // 3. 成功を通知
       // 4. 該当タブをリロード
-      throw new Error('Not implemented: DeleteRuleInteractor.execute');
+      throw new Error(
+        `Not implemented: DeleteRuleInteractor.execute, output: ${DeleteRuleOutputData.name}`
+      );
     } catch (error) {
       const errorData = new DeleteRuleErrorOutputData(inputData.ruleId, error);
       this.presenter.presentError(errorData);
