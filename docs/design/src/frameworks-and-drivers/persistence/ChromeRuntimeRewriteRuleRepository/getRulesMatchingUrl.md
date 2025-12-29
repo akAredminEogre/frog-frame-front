@@ -47,30 +47,6 @@ tests/unit/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository
   - `getAll()`: テストケースごとに異なるDTO配列を返すようモック設定
   - `getById()`, `updateActive()`: インターフェース準拠のためダミー定義
 
-### モック方法
-
-インターフェース配下のモックファクトリからインポートし、`beforeEach`で初期化（コンストラクタインジェクション）:
-
-```typescript
-import { createMockRewriteRuleMessagingPort } from 'tests/unit/interface-adapters/ports/IRewriteRuleMessagingPort/mocks/createMockRewriteRuleMessagingPort';
-
-let mockMessagingPort: IRewriteRuleMessagingPort;
-
-beforeEach(() => {
-  vi.clearAllMocks();
-  mockMessagingPort = createMockRewriteRuleMessagingPort();
-});
-
-afterEach(() => {
-  vi.resetAllMocks();
-});
-
-// 各テストケース内
-(mockMessagingPort.getAll as ReturnType<typeof vi.fn>).mockResolvedValue(mockRules as RewriteRuleDTO[]);
-const mapper = new RewriteRuleMapper(mockMessagingPort);
-repository = new ChromeRuntimeRewriteRuleRepository(mapper);
-```
-
 ### モックファイル構成
 
 インターフェース配下にモックファクトリを配置（複数テストで共有）:
