@@ -8,7 +8,6 @@ import { IDeleteRulePresenter } from 'src/application-business-rules/ports/outpu
 
 /**
  * ルールを削除するInteractor
- * スケルトン実装 - Phase 2で実際のロジックを追加
  */
 export class DeleteRuleInteractor implements IDeleteRuleUseCase {
   constructor(
@@ -18,16 +17,15 @@ export class DeleteRuleInteractor implements IDeleteRuleUseCase {
   ) {}
 
   async execute(inputData: DeleteRuleInputData): Promise<void> {
-    // Phase 2で実装予定:
-    // 1. ルールを取得（URLパターン取得のため）
-    // 2. ルールを削除
-    // 3. 成功を通知
-    // 4. 該当タブをリロード
-    throw new Error(
-      `Not implemented: DeleteRuleInteractor.execute, ` +
-        `input: ${inputData.constructor.name}, ` +
-        `output: ${DeleteRuleOutputData.name}, ` +
-        `errorOutput: ${DeleteRuleErrorOutputData.name}`
-    );
+    try {
+      const rule = await this.repository.getById(inputData.ruleId);
+      await this.repository.delete(inputData.ruleId);
+      const outputData = new DeleteRuleOutputData(inputData.ruleId);
+      this.presenter.present(outputData);
+      await this.tabsGateway.reloadMatchingTabs(rule);
+    } catch (error) {
+      const errorData = new DeleteRuleErrorOutputData(inputData.ruleId, error);
+      this.presenter.presentError(errorData);
+    }
   }
 }
