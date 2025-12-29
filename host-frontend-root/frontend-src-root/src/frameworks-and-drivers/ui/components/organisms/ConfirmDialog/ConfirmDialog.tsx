@@ -123,7 +123,6 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     <div
       className={styles.overlay}
       onClick={handleOverlayClick}
-      onKeyDown={handleKeyDown}
       data-testid="confirm-dialog-overlay"
     >
       <div
@@ -133,6 +132,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={messageId}
+        onKeyDown={handleKeyDown}
         data-testid="confirm-dialog"
       >
         <h2 id={titleId} className={styles.title}>

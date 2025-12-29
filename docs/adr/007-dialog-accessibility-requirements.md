@@ -115,6 +115,32 @@ useEffect(() => {
 | Tab | 次のフォーカス可能な要素に移動（最後の要素から最初の要素にループ） |
 | Shift + Tab | 前のフォーカス可能な要素に移動（最初の要素から最後の要素にループ） |
 
+**重要**: `onKeyDown`ハンドラは、フォーカス可能な要素を含む**ダイアログ要素**（`role="dialog"`を持つ要素）に配置すること。オーバーレイ要素はフォーカス可能ではないため、オーバーレイに配置するとキーボードイベントが発火しない。
+
+```tsx
+// ✅ 正しい実装: ダイアログ要素にonKeyDownを配置
+<div className={styles.overlay} onClick={handleOverlayClick}>
+  <div
+    role="dialog"
+    aria-modal="true"
+    onKeyDown={handleKeyDown}  // ダイアログ要素に配置
+  >
+    {/* ダイアログコンテンツ */}
+  </div>
+</div>
+
+// ❌ 誤った実装: オーバーレイ要素にonKeyDownを配置
+<div
+  className={styles.overlay}
+  onClick={handleOverlayClick}
+  onKeyDown={handleKeyDown}  // オーバーレイはフォーカス不可、イベントが発火しない
+>
+  <div role="dialog" aria-modal="true">
+    {/* ダイアログコンテンツ */}
+  </div>
+</div>
+```
+
 #### 4. 外側クリックでのクローズ
 
 ダイアログの背景（オーバーレイ）をクリックした場合、ダイアログを閉じる。
