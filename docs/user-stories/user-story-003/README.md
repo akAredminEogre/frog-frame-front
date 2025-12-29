@@ -160,8 +160,8 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 #### ユースケース層
 
 - [ ] DeleteRuleInputData の実装、テスト戦略書・単体テスト
-- [ ] DeleteRuleOutputData の実装、テスト戦略書・単体テスト
-- [ ] DeleteRuleErrorOutputData の実装、テスト戦略書・単体テスト
+- [x] DeleteRuleOutputData の実装、テスト戦略書・単体テスト
+- [x] DeleteRuleErrorOutputData の実装、テスト戦略書・単体テスト
 - [ ] DeleteRuleInteractor の実装、テスト戦略書・単体テスト（Repository削除 + TabsGatewayリロード）
 
 #### Controller/Presenter層
