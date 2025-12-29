@@ -18,18 +18,16 @@ export class DeleteRuleInteractor implements IDeleteRuleUseCase {
   ) {}
 
   async execute(inputData: DeleteRuleInputData): Promise<void> {
-    try {
-      // Phase 2で実装予定:
-      // 1. ルールを取得（URLパターン取得のため）
-      // 2. ルールを削除
-      // 3. 成功を通知
-      // 4. 該当タブをリロード
-      throw new Error(
-        `Not implemented: DeleteRuleInteractor.execute, output: ${DeleteRuleOutputData.name}`
-      );
-    } catch (error) {
-      const errorData = new DeleteRuleErrorOutputData(inputData.ruleId, error);
-      this.presenter.presentError(errorData);
-    }
+    // Phase 2で実装予定:
+    // 1. ルールを取得（URLパターン取得のため）
+    // 2. ルールを削除
+    // 3. 成功を通知
+    // 4. 該当タブをリロード
+    throw new Error(
+      `Not implemented: DeleteRuleInteractor.execute, ` +
+        `input: ${inputData.constructor.name}, ` +
+        `output: ${DeleteRuleOutputData.name}, ` +
+        `errorOutput: ${DeleteRuleErrorOutputData.name}`
+    );
   }
 }
