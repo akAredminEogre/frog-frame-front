@@ -6,8 +6,8 @@ title User Story 003: ルール削除機能 - タスク依存ネットワーク�
 rectangle "P1-T\nテスト戦略書\n（結合・E2E）" as testStrategy #lightgreen
 
 ' Phase 2: 実装 - メッセージング
-rectangle "P2-M1\nDeleteRule\nRequestDTO\n実装+テスト" as requestDtoImpl #lightgreen
-rectangle "P2-M2\nProxyService\ndeleteRule()\n実装+テスト" as proxyImpl #lightgreen
+rectangle "P2-M1\nDeleteRule\nRequestDTO\n実装+テスト" as requestDtoImpl #orange
+rectangle "P2-M2\nProxyService\ndeleteRule()\n実装+テスト" as proxyImpl #orange
 rectangle "P2-M3\nProxyService\nImpl\n実装+テスト" as proxyImplImpl #lightgreen
 rectangle "P2-M4\nMessaging\nService\n実装+テスト" as msgImpl #lightgreen
 
