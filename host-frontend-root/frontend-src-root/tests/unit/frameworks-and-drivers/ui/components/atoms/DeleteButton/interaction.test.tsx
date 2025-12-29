@@ -4,9 +4,8 @@
  * - クリック: onClickが呼ばれる
  * - disabled時クリック: onClickが呼ばれない
  */
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { DeleteButtonTestHelper, flushPromises } from 'tests/unit/frameworks-and-drivers/ui/components/atoms/DeleteButton/test-helpers';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('DeleteButton - インタラクション', () => {
   const helper = new DeleteButtonTestHelper();
