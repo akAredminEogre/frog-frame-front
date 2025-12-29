@@ -75,19 +75,19 @@
 }
 
 .cancelButton:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--color-surface-hover);
 }
 
 /* 確認ボタン（削除 - 危険なアクション） */
 .confirmButton {
-  background-color: #dc3545;
-  color: #fff;
-  border-color: #dc3545;
+  background-color: var(--color-danger);
+  color: var(--color-danger-contrast);
+  border-color: var(--color-danger);
 }
 
 .confirmButton:hover {
-  background-color: #c82333;
-  border-color: #c82333;
+  background-color: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
 }
 
 @media (prefers-reduced-motion: reduce) {

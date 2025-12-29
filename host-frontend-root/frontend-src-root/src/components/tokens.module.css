@@ -3,9 +3,12 @@
 /* カラーパレット（既存App.tsxのスタイルを参考） */
 :root {
   --color-primary: #1ea7fd;
+  --color-primary-hover: #0e7fcd;
+  --color-primary-contrast: #fff;
   --color-secondary: #666;
   --color-text: #333;
   --color-text-light: #666;
+  --color-text-primary: var(--color-text);
   --color-background: #fff;
   --color-border: rgba(0, 0, 0, 0.15);
   /* トグルスイッチのトラック用ホバー色 */
@@ -13,6 +16,11 @@
   /* 後方互換用: 汎用ボーダーホバー色のトークンはトグル用ホバー色を参照する */
   --color-border-hover: var(--color-toggle-track-hover);
   --color-hover: #0e7fcd;
+  --color-surface-hover: rgba(0, 0, 0, 0.05);
+  /* 危険なアクション用（削除、警告など） */
+  --color-danger: #dc3545;
+  --color-danger-hover: #c82333;
+  --color-danger-contrast: #fff;
 }
 
 /* シャドウ */
