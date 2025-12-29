@@ -70,6 +70,8 @@ const MyDialog: React.FC<Props> = ({ ... }) => {
 
 #### 2.1 useEffectクリーンアップでの副作用復元（必須）
 
+> **参照**: [React Hooks コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/react-hooks.md) - 汎用的なuseEffectの副作用管理ルール
+
 useEffectで行った副作用（背景スクロール無効化、フォーカス移動など）は、**すべてクリーンアップ関数で元に戻すこと**。
 
 **理由**:
@@ -171,3 +173,4 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 - [WAI-ARIA Authoring Practices - Dialog Modal](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
 - [React Aria useDialog](https://react-spectrum.adobe.com/react-aria/useDialog.html)
+- [React Hooks コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/react-hooks.md) - useEffectの副作用管理ルール
