@@ -28,10 +28,10 @@ describe('ConfirmDialog - キーボードイベント（ADR-007）', () => {
     await helper.render({ onCancel });
 
     // Act
-    const overlay = helper.getOverlayElement();
-    expect(overlay).not.toBeNull();
+    const dialog = helper.getDialogElement();
+    expect(dialog).not.toBeNull();
     const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });
-    overlay?.dispatchEvent(event);
+    dialog?.dispatchEvent(event);
     await flushPromises();
 
     // Assert
@@ -51,9 +51,9 @@ describe('ConfirmDialog - キーボードイベント（ADR-007）', () => {
     expect(document.activeElement).toBe(confirmButton);
 
     // Act
-    const overlay = helper.getOverlayElement();
+    const dialog = helper.getDialogElement();
     const event = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true });
-    overlay?.dispatchEvent(event);
+    dialog?.dispatchEvent(event);
     await flushPromises();
 
     // Assert - フォーカスがキャンセルボタン（最初の要素）に移動
@@ -73,9 +73,9 @@ describe('ConfirmDialog - キーボードイベント（ADR-007）', () => {
     expect(document.activeElement).toBe(cancelButton);
 
     // Act
-    const overlay = helper.getOverlayElement();
+    const dialog = helper.getDialogElement();
     const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true });
-    overlay?.dispatchEvent(event);
+    dialog?.dispatchEvent(event);
     await flushPromises();
 
     // Assert - フォーカスが確認ボタン（最後の要素）に移動
@@ -88,9 +88,9 @@ describe('ConfirmDialog - キーボードイベント（ADR-007）', () => {
     await helper.render({ onCancel });
 
     // Act
-    const overlay = helper.getOverlayElement();
+    const dialog = helper.getDialogElement();
     const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
-    overlay?.dispatchEvent(event);
+    dialog?.dispatchEvent(event);
     await flushPromises();
 
     // Assert
