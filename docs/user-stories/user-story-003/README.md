@@ -150,24 +150,24 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### Mapper層
 
-- [x] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
+- [ ] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
 
 #### Repository層
 
 - [ ] P2-R1: DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
-- [x] P2-R2: ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-MAP1
+- [ ] P2-R2: ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-MAP1
 
 #### ユースケース層
 
-- [x] DeleteRuleInputData の実装、テスト戦略書・単体テスト
-- [x] DeleteRuleOutputData の実装、テスト戦略書・単体テスト
-- [x] DeleteRuleErrorOutputData の実装、テスト戦略書・単体テスト
+- [ ] DeleteRuleInputData の実装、テスト戦略書・単体テスト
+- [ ] DeleteRuleOutputData の実装、テスト戦略書・単体テスト
+- [ ] DeleteRuleErrorOutputData の実装、テスト戦略書・単体テスト
 - [ ] DeleteRuleInteractor の実装、テスト戦略書・単体テスト（Repository削除 + TabsGatewayリロード）
 
 #### Controller/Presenter層
 
-- [x] DeleteRuleController の実装、テスト戦略書・単体テスト
-- [x] DeleteRuleControllerFactory の実装、テスト戦略書・単体テスト
+- [ ] DeleteRuleController の実装、テスト戦略書・単体テスト
+- [ ] DeleteRuleControllerFactory の実装、テスト戦略書・単体テスト
 - [x] DeleteRulePresenter の実装、テスト戦略書・単体テスト（成功時View更新、失敗時エラー通知）
 
 #### UIコンポーネント層
