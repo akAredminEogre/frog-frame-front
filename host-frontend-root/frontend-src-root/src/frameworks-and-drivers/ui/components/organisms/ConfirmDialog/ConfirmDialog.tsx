@@ -58,7 +58,11 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     }
 
     return () => {
+      // コンポーネントがアンマウントされた場合にも背景スクロールとフォーカスを復元
       document.body.style.overflow = '';
+      if (previousActiveElementRef.current instanceof HTMLElement) {
+        previousActiveElementRef.current.focus();
+      }
     };
   }, [isOpen]);
 
