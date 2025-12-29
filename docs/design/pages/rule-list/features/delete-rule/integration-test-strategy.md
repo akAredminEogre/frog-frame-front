@@ -161,7 +161,7 @@ tests/frameworks-and-drivers/browser/ChromeTabsGateway/
 
 | プロパティ | 値 | 説明 |
 |-----------|-----|------|
-| id | `rule-to-delete` | 削除対象のルールID |
+| id | `1` | 削除対象のルールID |
 | urlPattern | `https://example.com/*` | URLパターン |
 | isActive | `true` | 有効状態 |
 
@@ -169,7 +169,7 @@ tests/frameworks-and-drivers/browser/ChromeTabsGateway/
 
 | プロパティ | 値 | 説明 |
 |-----------|-----|------|
-| id | `other-rule` | 削除されないルールID |
+| id | `2` | 削除されないルールID |
 | urlPattern | `https://other.com/*` | URLパターン |
 | isActive | `true` | 有効状態 |
 
@@ -177,6 +177,6 @@ tests/frameworks-and-drivers/browser/ChromeTabsGateway/
 
 | 入力 | 操作後の状態 | DB状態 | コールバック引数 |
 |------|-------------|--------|-----------------|
-| `rule-to-delete` | 削除完了 | getById で取得失敗 | `{ ruleId: 'rule-to-delete' }` |
-| `non-existent-id` | エラー | 変更なし | `presentError()` が呼ばれる |
+| `1` | 削除完了 | getById で取得失敗 | `{ deletedRuleId: 1 }` |
+| `999` | エラー | 変更なし | `presentError()` が呼ばれる |
 | 削除 + TabsGateway失敗 | 削除完了 + エラー通知 | getById で取得失敗 | `presentError()` でリロード失敗を通知 |
