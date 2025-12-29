@@ -72,6 +72,6 @@ export interface DeleteRuleRequestDTO {
 
 > **注記**: 以下の使用箇所は設計上の計画です。現在はスケルトン実装（Phase 1）であり、実際の処理はPhase 2以降で実装されます。
 
-- `RewriteRuleMapper`: Entity → DTO 変換時に生成（P2-M5で実装予定）
+- `RewriteRuleMapper`: 削除リクエストDTO `{ id }` を生成してMessagingServiceに渡す（P2-M5で実装予定）
 - `RewriteRuleMessagingService`: proxy-service経由でBackground Scriptに送信（P2-M4で実装予定）
 - `DexieRewriteRuleRepository`: Background Script側で受信し、削除処理を実行（P2-R1で実装予定）
