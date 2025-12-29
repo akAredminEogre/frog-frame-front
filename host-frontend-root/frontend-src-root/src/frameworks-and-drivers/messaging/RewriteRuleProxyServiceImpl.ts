@@ -20,8 +20,8 @@ export function createRewriteRuleProxyServiceImpl(): IRewriteRuleProxyService {
     },
 
     async deleteRule(id: number) {
-      // Phase 2で実装予定
-      throw new Error(`Not implemented: deleteRule with id=${id}`);
+      const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+      await repository.delete(id);
     },
   };
 }
