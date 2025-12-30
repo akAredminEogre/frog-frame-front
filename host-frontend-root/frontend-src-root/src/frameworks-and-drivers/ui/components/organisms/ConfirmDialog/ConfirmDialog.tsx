@@ -34,14 +34,17 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const previousActiveElementRef = useRef<Element | null>(null);
 
-  // 連続クリック防止用の状態
+  // 連続クリック防止用の状態（視覚的フィードバック用）
   const [isProcessing, setIsProcessing] = useState(false);
+  // 連続クリック防止用のref（即座に更新される、同期的なクリックガード用）
+  const isProcessingRef = useRef(false);
 
   // ダイアログが開かれたときにisProcessingをリセット
   // （コンポーネントがアンマウントされずに再利用される場合の対策）
   useEffect(() => {
     if (isOpen) {
       setIsProcessing(false);
+      isProcessingRef.current = false;
     }
   }, [isOpen]);
 
@@ -52,17 +55,19 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   // 連続クリック防止付きの確認ボタンハンドラ
   const handleConfirm = useCallback(() => {
-    if (isProcessing) return;
+    if (isProcessingRef.current) return;
+    isProcessingRef.current = true;
     setIsProcessing(true);
     onConfirm();
-  }, [isProcessing, onConfirm]);
+  }, [onConfirm]);
 
   // 連続クリック防止付きのキャンセルボタンハンドラ
   const handleCancel = useCallback(() => {
-    if (isProcessing) return;
+    if (isProcessingRef.current) return;
+    isProcessingRef.current = true;
     setIsProcessing(true);
     onCancel();
-  }, [isProcessing, onCancel]);
+  }, [onCancel]);
 
   // 初期フォーカスと復帰フォーカスの管理
   useEffect(() => {
