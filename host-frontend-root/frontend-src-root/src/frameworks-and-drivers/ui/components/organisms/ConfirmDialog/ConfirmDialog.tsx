@@ -90,7 +90,8 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     return () => {
       // コンポーネントがアンマウントされた場合にも背景スクロールとフォーカスを復元
       document.body.style.overflow = '';
-      if (previousActiveElementRef.current instanceof HTMLElement) {
+      // ダイアログが一度も開かれていない場合（refが未設定）はフォーカス復帰をスキップ
+      if (previousActiveElementRef.current && previousActiveElementRef.current instanceof HTMLElement) {
         previousActiveElementRef.current.focus();
       }
     };
