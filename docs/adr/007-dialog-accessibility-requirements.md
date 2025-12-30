@@ -157,7 +157,7 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 | コンポーネント | 配置 | 状態 |
 |---------------|------|------|
-| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | React Aria採用（useDialog, FocusScope, useOverlay, usePreventScroll, useModal） |
+| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | React Aria採用（useDialog, FocusScope, usePreventScroll） |
 
 ## 影響ドキュメント
 
