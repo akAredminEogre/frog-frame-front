@@ -1,10 +1,11 @@
-import { useDialog } from '@react-aria/dialog';
-import { FocusScope } from '@react-aria/focus';
-import { usePreventScroll } from '@react-aria/overlays';
-import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import React from 'react';
 
+import { ModalDialogBase } from 'src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase';
 import styles from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog.module.css';
+import {
+  useInitialFocus,
+  useProcessingGuard,
+} from 'src/frameworks-and-drivers/ui/hooks';
 
 /**
  * ConfirmDialogコンポーネントのProps
@@ -21,8 +22,10 @@ export interface ConfirmDialogProps {
 
 /**
  * 確認ダイアログコンポーネント
- * React Aria (@react-aria/dialog, @react-aria/focus, @react-aria/overlays) を使用した
- * WAI-ARIA Dialog Modal Patternに準拠したアクセシビリティ実装（ADR-007）
+ *
+ * ModalDialogBaseを使用したWAI-ARIA Dialog Modal Patternに準拠した実装（ADR-007）。
+ * ダイアログの共通機能（ARIA属性、フォーカス管理、キーボード操作等）は
+ * ModalDialogBaseに委譲し、確認ダイアログ固有のUI（ボタン配置）のみを実装。
  */
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   isOpen,
@@ -33,140 +36,42 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   confirmLabel = '削除',
   cancelLabel = 'キャンセル',
 }) => {
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const cancelButtonRef = useRef<HTMLButtonElement>(null);
+  // 連続クリック防止
+  const { isProcessing, guardedHandler } = useProcessingGuard(isOpen);
 
-  // 連続クリック防止用の状態（視覚的フィードバック用）
-  const [isProcessing, setIsProcessing] = useState(false);
-  // 連続クリック防止用のref（即座に更新される、同期的なクリックガード用）
-  const isProcessingRef = useRef(false);
+  // 初期フォーカス設定（キャンセルボタンにフォーカス）
+  const cancelButtonRef = useInitialFocus<HTMLButtonElement>(isOpen);
 
-  // ダイアログが開かれたときにisProcessingをリセット
-  // （コンポーネントがアンマウントされずに再利用される場合の対策）
-  useEffect(() => {
-    if (isOpen) {
-      setIsProcessing(false);
-      isProcessingRef.current = false;
-    }
-  }, [isOpen]);
-
-  // useIdで一意のIDを生成（複数ダイアログの同時レンダリング対応）
-  const uniqueId = useId();
-  const titleId = `confirm-dialog-title-${uniqueId}`;
-  const messageId = `confirm-dialog-message-${uniqueId}`;
-
-  // 連続クリック防止付きの確認ボタンハンドラ
-  const handleConfirm = useCallback(() => {
-    if (isProcessingRef.current) return;
-    isProcessingRef.current = true;
-    setIsProcessing(true);
-    onConfirm();
-  }, [onConfirm]);
-
-  // 連続クリック防止付きのキャンセルハンドラ
-  const handleCancel = useCallback(() => {
-    if (isProcessingRef.current) return;
-    isProcessingRef.current = true;
-    setIsProcessing(true);
-    onCancel();
-  }, [onCancel]);
-
-  // React Aria: usePreventScroll - 背景スクロールを無効化
-  usePreventScroll({ isDisabled: !isOpen });
-
-  // React Aria: useDialog - ダイアログのセマンティクス
-  const { dialogProps } = useDialog(
-    {
-      'aria-labelledby': titleId,
-      'aria-describedby': messageId,
-      role: 'dialog',
-    },
-    dialogRef
-  );
-
-  // キーボードイベント処理（Escape キー）
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        handleCancel();
-      }
-    },
-    [handleCancel]
-  );
-
-  // オーバーレイクリック処理
-  const handleOverlayClick = useCallback(
-    (event: React.MouseEvent) => {
-      // ダイアログ本体をクリックした場合は何もしない
-      if (dialogRef.current?.contains(event.target as Node)) {
-        return;
-      }
-      handleCancel();
-    },
-    [handleCancel]
-  );
-
-  // 初期フォーカスの設定
-  // FocusScopeのautoFocusを使わず手動で設定（テスト環境との互換性のため）
-  useEffect(() => {
-    if (isOpen && cancelButtonRef.current) {
-      cancelButtonRef.current.focus();
-    }
-  }, [isOpen]);
-
-  if (!isOpen) {
-    return null;
-  }
-
-  const dialogContent = (
-    <div
-      className={styles.overlay}
-      onClick={handleOverlayClick}
-      data-testid="confirm-dialog-overlay"
+  return (
+    <ModalDialogBase
+      isOpen={isOpen}
+      onClose={guardedHandler(onCancel)}
+      title={title}
+      description={message}
+      idPrefix="confirm-dialog"
+      testId="confirm-dialog"
     >
-      <FocusScope contain restoreFocus>
-        <div
-          {...dialogProps}
-          ref={dialogRef}
-          className={styles.dialog}
-          onKeyDown={handleKeyDown}
-          aria-modal="true"
-          tabIndex={-1}
-          data-testid="confirm-dialog"
+      <div className={styles.buttonContainer}>
+        <button
+          ref={cancelButtonRef}
+          type="button"
+          className={`${styles.button} ${styles.cancelButton}`}
+          onClick={guardedHandler(onCancel)}
+          disabled={isProcessing}
+          data-testid="confirm-dialog-cancel-button"
         >
-          <h2 id={titleId} className={styles.title}>
-            {title}
-          </h2>
-          <p id={messageId} className={styles.message}>
-            {message}
-          </p>
-          <div className={styles.buttonContainer}>
-            <button
-              ref={cancelButtonRef}
-              type="button"
-              className={`${styles.button} ${styles.cancelButton}`}
-              onClick={handleCancel}
-              disabled={isProcessing}
-              data-testid="confirm-dialog-cancel-button"
-            >
-              {cancelLabel}
-            </button>
-            <button
-              type="button"
-              className={`${styles.button} ${styles.confirmButton}`}
-              onClick={handleConfirm}
-              disabled={isProcessing}
-              data-testid="confirm-dialog-confirm-button"
-            >
-              {confirmLabel}
-            </button>
-          </div>
-        </div>
-      </FocusScope>
-    </div>
+          {cancelLabel}
+        </button>
+        <button
+          type="button"
+          className={`${styles.button} ${styles.confirmButton}`}
+          onClick={guardedHandler(onConfirm)}
+          disabled={isProcessing}
+          data-testid="confirm-dialog-confirm-button"
+        >
+          {confirmLabel}
+        </button>
+      </div>
+    </ModalDialogBase>
   );
-
-  // ポータルでdocument.bodyにレンダリング
-  return createPortal(dialogContent, document.body);
 };
