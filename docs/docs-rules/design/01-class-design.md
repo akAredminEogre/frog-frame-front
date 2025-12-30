@@ -64,3 +64,4 @@ Clean Architecture 4層に従った**理論的設計**を記載するドキュ�
 
 `01-class-design.md` が変更された際には、以下のドキュメントも更新が必要：
 - `02-sequence.puml`
+- `03-directory-structure.md`（DTO定義やクラス配置が含まれる場合）

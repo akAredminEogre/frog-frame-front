@@ -94,12 +94,13 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
   }
 
   /**
-   * 指定されたIDのルールを削除する（スケルトン）
+   * 指定されたIDのルールを削除する（物理削除）
    * @param id 削除するルールのID
+   *
+   * 注意: Dexie.jsのdelete()は存在しないIDでも例外をスローしない（冪等性）
    */
   async delete(id: number): Promise<void> {
-    // Phase 2で実装予定: IndexedDBから物理削除
-    throw new Error(`Not implemented: delete with id=${id}`);
+    await this.database.rewriteRules.delete(id);
   }
 
   /**

@@ -58,6 +58,83 @@ tests/unit/[layer]/[category]/[service-name]/
 
 - テストファイル1つにつき、配列化テストケースは1つまでとし、その他のテストケースは別ファイルに切り出すこと
 
+### 冗長なアサーションの回避
+
+#### 規約
+
+- 「例外がスローされないこと」のテストには `.resolves.not.toThrow()` を使用しないこと
+- async関数が正常終了すれば、テストフレームワークは成功と判定する
+- 例外がスローされた場合、テストは自動的に失敗する
+
+#### 禁止事項
+
+```typescript
+// ❌ 冗長 - .resolves.not.toThrow() は不要
+await expect(repository.delete(id)).resolves.not.toThrow();
+```
+
+#### 許可事項
+
+```typescript
+// ✅ シンプル - 例外時は自動失敗
+await repository.delete(id);
+
+// Assert - 副作用で状態を検証
+const remainingRules = await repository.getAll();
+expect(remainingRules.toArray()).toHaveLength(1);
+```
+
+#### eslint-rule
+
+**ESLintルール化**: 不可（PRレビューで確認）
+
+### テストデータ作成時のファクトリーメソッド活用
+
+#### 規約
+
+- 位置引数が多いコンストラクタ（4つ以上）を直接呼び出さないこと
+- ファクトリーメソッド（`fromParams()` 等）が提供されている場合は、それを使用すること
+- 名前付きプロパティにより、各引数の意図が明確になる
+
+#### 背景
+
+位置引数が多いコンストラクタは、引数の順序を間違えやすく、コードレビューでも発見しにくい。
+特にboolean型の引数が複数ある場合、`false, true` のような記述では意図が不明瞭になる。
+
+#### 禁止事項
+
+```typescript
+// ❌ 位置引数では意図が不明瞭
+const rule = new RewriteRule(1, 'old', 'new', 'https://example.com', false);
+// 5番目の false は isRegex? isActive?
+
+// ❌ 全引数を指定しても可読性が低い
+const rule = new RewriteRule(1, 'old', 'new', 'https://example.com', false, true);
+```
+
+#### 許可事項
+
+```typescript
+// ✅ ファクトリーメソッドで意図を明確に
+const rule = RewriteRule.fromParams(1, {
+  oldString: 'old',
+  newString: 'new',
+  urlPattern: 'https://example.com',
+  isRegex: false,
+  isActive: true,
+});
+```
+
+#### eslint-rule
+
+**ESLintルール化**: 不可（PRレビューで確認）
+
+#### 既存コードへの適用
+
+規約に準拠していない既存テストコードは [user-story-005](../../../user-stories/user-story-005/README.md) で対応予定。
+
+**注意**: 新規テスト作成時は必ずファクトリーメソッドを使用すること。
+
 ## mocks/ ディレクトリ未配置モック
 
 規約に準拠していないモックファクトリは [user-story-004](../../../user-stories/user-story-004/README.md) で対応予定。
