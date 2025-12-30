@@ -175,9 +175,9 @@ tests/unit/[path]/[methodName]/
 
 新規モック作成前に、同一インターフェースの既存モックを確認すること。
 
-- [ ] `grep -r "createMock[InterfaceName]" tests/` で既存モックを検索した
-- [ ] 既存モックが見つかった場合 → 既存モックをインポートして使用
-- [ ] 見つからなかった場合 → モック対象クラスのtestsディレクトリに新規作成
+- [ ] `grep -r "createMock[InterfaceName]" tests/` で既存モックを検索した → 既存モック使用 (`実際のパスを記載`) or 新規作成
+
+**重要**: 既存モックが見つかった場合、**使用するモックの実際のパスを必ず記載すること**。パスが明記されていない場合、レビューで差し戻しとなる。
 
 > **参照**: [common-rule.md](../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
 
