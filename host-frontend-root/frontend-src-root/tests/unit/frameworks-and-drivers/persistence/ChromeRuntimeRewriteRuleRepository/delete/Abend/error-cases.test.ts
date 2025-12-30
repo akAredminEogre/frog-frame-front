@@ -8,40 +8,45 @@ import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewrite
 /**
  * ChromeRuntimeRewriteRuleRepository.delete - 異常系テスト
  * 1. Mapperがエラーをスローした場合、そのエラーが伝播する
+ * 2. 異なるエラーメッセージでも正しく伝播する
  *
  * ADR-002, ADR-003に準拠: IRewriteRuleMessagingPort → Mapper → Repository
  */
 describe('ChromeRuntimeRewriteRuleRepository.delete - 異常系', () => {
-  let repository: ChromeRuntimeRewriteRuleRepository;
   let mockMessagingPort: IRewriteRuleMessagingPort;
-  let mapper: RewriteRuleMapper;
 
   beforeEach(() => {
     vi.clearAllMocks();
     mockMessagingPort = createMockRewriteRuleMessagingPort();
-    mapper = new RewriteRuleMapper(mockMessagingPort);
-    repository = new ChromeRuntimeRewriteRuleRepository(mapper);
   });
 
   afterEach(() => {
     vi.resetAllMocks();
   });
 
-  it('Mapperがエラーをスローした場合、そのエラーが伝播する', async () => {
-    // Arrange - IRewriteRuleMessagingPort の delete がエラーをスローするようモック
-    const expectedError = new Error('Delete failed: Network error');
-    (mockMessagingPort.delete as ReturnType<typeof vi.fn>).mockRejectedValue(expectedError);
+  const testCases = [
+    {
+      description: 'Mapperがエラーをスローした場合、そのエラーが伝播する',
+      id: 1,
+      errorMessage: 'Delete failed: Network error',
+    },
+    {
+      description: '異なるエラーメッセージでも正しく伝播する',
+      id: 42,
+      errorMessage: 'Connection timeout',
+    },
+  ];
 
-    // Act & Assert - エラーが伝播することを確認
-    await expect(repository.delete(1)).rejects.toThrow(expectedError);
-  });
+  testCases.forEach(({ description, id, errorMessage }) => {
+    it(description, async () => {
+      // Arrange - IRewriteRuleMessagingPort の delete がエラーをスローするようモック
+      const expectedError = new Error(errorMessage);
+      (mockMessagingPort.delete as ReturnType<typeof vi.fn>).mockRejectedValue(expectedError);
+      const mapper = new RewriteRuleMapper(mockMessagingPort);
+      const repository = new ChromeRuntimeRewriteRuleRepository(mapper);
 
-  it('異なるエラーメッセージでも正しく伝播する', async () => {
-    // Arrange
-    const expectedError = new Error('Connection timeout');
-    (mockMessagingPort.delete as ReturnType<typeof vi.fn>).mockRejectedValue(expectedError);
-
-    // Act & Assert
-    await expect(repository.delete(42)).rejects.toThrow('Connection timeout');
+      // Act & Assert - エラーが伝播することを確認
+      await expect(repository.delete(id)).rejects.toThrow(errorMessage);
+    });
   });
 });
