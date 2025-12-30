@@ -102,25 +102,36 @@ Interactorの3つの依存関係をモック化してテストする。
 > - モックファクトリは `createMock[ClassName].ts` の形式で命名
 > - **モック方法に具体的な実装コードを記載しないこと**（実装はテストコードを参照）
 
+### 既存モック確認チェック（必須）
+
+新規モック作成前に、同一インターフェースの既存モックを確認すること。
+
+- [x] `grep -r "createMockRewriteRuleRepository" tests/` で既存モックを検索した → 既存モック使用
+- [x] `grep -r "createMockTabsGateway" tests/` で既存モックを検索した → **既存モック発見、再利用すべき**
+- [x] `grep -r "createMockPresenter" tests/` で既存モックを検索した → IDeleteRulePresenter用は新規作成
+
+> **参照**: [common-rule.md](../../../../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
+
 ### モック対象
 
-| 依存関係 | モック方法 | 理由 |
-|---------|-----------|------|
-| IRewriteRuleRepository | vi.fn()でメソッドをモック | DB/メッセージング層を分離 |
-| ITabsGateway | vi.fn()でメソッドをモック | Chrome API層を分離 |
-| IDeleteRulePresenter | vi.fn()でメソッドをモック | View層を分離 |
+| 依存関係 | モック方法 | 理由 | 既存モック |
+|---------|-----------|------|-----------|
+| IRewriteRuleRepository | vi.fn()でメソッドをモック | DB/メッセージング層を分離 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/` ✓ |
+| ITabsGateway | vi.fn()でメソッドをモック | Chrome API層を分離 | `tests/unit/.../ToggleRuleActiveInteractor/mocks/` ✓ |
+| IDeleteRulePresenter | vi.fn()でメソッドをモック | View層を分離 | 新規作成（IDeleteRulePresenter固有） |
 
 ### モックファイル構成
 
 ```
 tests/unit/application-business-rules/interactors/DeleteRuleInteractor/
 └── mocks/
-    ├── createMockPresenter.ts     # IDeleteRulePresenterのモック生成
-    └── createMockTabsGateway.ts   # ITabsGatewayのモック生成
+    ├── createMockPresenter.ts     # IDeleteRulePresenterのモック生成（新規）
+    └── createMockTabsGateway.ts   # 既存モックを再エクスポート
 ```
 
-注: IRewriteRuleRepositoryのモックは既存の共通モックを使用:
-`tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository.ts`
+注:
+- IRewriteRuleRepositoryのモックは既存の共通モックを使用
+- ITabsGatewayのモックは既存の`ToggleRuleActiveInteractor/mocks/createMockTabsGateway.ts`を再エクスポートすべき
 
 ### テストデータ
 
