@@ -62,7 +62,7 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
   }
 
   /**
-   * IDで指定されたルールを取定取得する
+   * IDで指定されたルールを取得する
    * Content Scriptでは個別取得は使用しないため、エラーをthrow
    * @param id 検索するルールのID
    */
