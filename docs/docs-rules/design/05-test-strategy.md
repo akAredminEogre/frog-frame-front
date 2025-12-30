@@ -216,6 +216,24 @@ tests/unit/[path]/[methodName]/
 **対応テスト**: `normal-cases.test.ts`
 ```
 
+### ファイルパスの記載
+
+テスト戦略書でファイルパスを記載する際:
+
+- `src/` および `tests/` からの相対パスを使用する
+- `host-frontend-root/frontend-src-root/` は省略する
+- これはテストコードのimportパスと一致させるため
+
+```text
+# ✅ 正しい記載
+tests/unit/interface-adapters/mappers/RewriteRuleMapper/delete/
+└── normal-cases.test.ts
+
+# ❌ 誤った記載（冗長）
+host-frontend-root/frontend-src-root/tests/unit/interface-adapters/mappers/RewriteRuleMapper/delete/
+└── normal-cases.test.ts
+```
+
 ## コードとの関係
 
 > **参照**: [JSDoc-rule.md](../../coding-standards/tests/unit/common-rule/JSDoc-rule.md)
