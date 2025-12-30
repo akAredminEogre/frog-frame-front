@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useDialog } from '@react-aria/dialog';
+import { FocusScope } from '@react-aria/focus';
+import { usePreventScroll, useOverlay, useModal } from '@react-aria/overlays';
+
 import styles from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog.module.css';
 
 /**
@@ -18,7 +22,8 @@ export interface ConfirmDialogProps {
 
 /**
  * 確認ダイアログコンポーネント
- * WAI-ARIA Dialog Modal Patternに準拠したアクセシビリティを実装（ADR-007）
+ * React Aria (@react-aria/dialog, @react-aria/overlays) を使用した
+ * WAI-ARIA Dialog Modal Patternに準拠したアクセシビリティ実装（ADR-007）
  */
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   isOpen,
@@ -31,8 +36,6 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
-  const confirmButtonRef = useRef<HTMLButtonElement>(null);
-  const previousActiveElementRef = useRef<Element | null>(null);
 
   // 連続クリック防止用の状態（視覚的フィードバック用）
   const [isProcessing, setIsProcessing] = useState(false);
@@ -61,7 +64,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     onConfirm();
   }, [onConfirm]);
 
-  // 連続クリック防止付きのキャンセルボタンハンドラ
+  // 連続クリック防止付きのキャンセルハンドラ
   const handleCancel = useCallback(() => {
     if (isProcessingRef.current) return;
     isProcessingRef.current = true;
@@ -69,82 +72,40 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     onCancel();
   }, [onCancel]);
 
-  // 初期フォーカスと復帰フォーカスの管理
+  // React Aria: usePreventScroll - 背景スクロールを無効化
+  usePreventScroll({ isDisabled: !isOpen });
+
+  // React Aria: useOverlay - オーバーレイクリックとEscapeキーの処理
+  const { overlayProps } = useOverlay(
+    {
+      isOpen,
+      onClose: handleCancel,
+      isDismissable: true,
+      shouldCloseOnBlur: false,
+    },
+    dialogRef
+  );
+
+  // React Aria: useModal - aria-hiddenの管理
+  const { modalProps } = useModal();
+
+  // React Aria: useDialog - ダイアログのセマンティクス
+  const { dialogProps } = useDialog(
+    {
+      'aria-labelledby': titleId,
+      'aria-describedby': messageId,
+      role: 'dialog',
+    },
+    dialogRef
+  );
+
+  // 初期フォーカスの設定
   useEffect(() => {
-    if (isOpen) {
-      // 現在のフォーカス要素を保存
-      previousActiveElementRef.current = document.activeElement;
-      // キャンセルボタン（最初のフォーカス可能要素）にフォーカス
-      cancelButtonRef.current?.focus();
-      // 背景スクロールを無効化
-      document.body.style.overflow = 'hidden';
-    } else {
-      // 背景スクロールを復元
-      document.body.style.overflow = '';
-      // フォーカスを元の要素に戻す
-      if (previousActiveElementRef.current instanceof HTMLElement) {
-        previousActiveElementRef.current.focus();
-      }
+    if (isOpen && cancelButtonRef.current) {
+      // FocusScopeのautoFocusが効かない場合のフォールバック
+      cancelButtonRef.current.focus();
     }
-
-    return () => {
-      // コンポーネントがアンマウントされた場合にも背景スクロールとフォーカスを復元
-      document.body.style.overflow = '';
-      // ダイアログが一度も開かれていない場合（refが未設定）はフォーカス復帰をスキップ
-      if (previousActiveElementRef.current && previousActiveElementRef.current instanceof HTMLElement) {
-        previousActiveElementRef.current.focus();
-      }
-    };
   }, [isOpen]);
-
-  // キーボードイベント処理
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        handleCancel();
-        return;
-      }
-
-      // フォーカストラップの実装
-      if (event.key === 'Tab') {
-        const focusableElements = [cancelButtonRef.current, confirmButtonRef.current].filter(
-          (el): el is HTMLButtonElement => el !== null
-        );
-
-        if (focusableElements.length === 0) return;
-
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
-
-        if (event.shiftKey) {
-          // Shift+Tab: 最初の要素から最後の要素へ
-          if (document.activeElement === firstElement) {
-            event.preventDefault();
-            lastElement.focus();
-          }
-        } else {
-          // Tab: 最後の要素から最初の要素へ
-          if (document.activeElement === lastElement) {
-            event.preventDefault();
-            firstElement.focus();
-          }
-        }
-      }
-    },
-    [handleCancel]
-  );
-
-  // オーバーレイクリック処理
-  const handleOverlayClick = useCallback(
-    (event: React.MouseEvent) => {
-      // ダイアログ本体をクリックした場合は何もしない
-      if (dialogRef.current?.contains(event.target as Node)) {
-        return;
-      }
-      handleCancel();
-    },
-    [handleCancel]
-  );
 
   if (!isOpen) {
     return null;
@@ -153,49 +114,46 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   const dialogContent = (
     <div
       className={styles.overlay}
-      onClick={handleOverlayClick}
       data-testid="confirm-dialog-overlay"
     >
-      <div
-        ref={dialogRef}
-        className={styles.dialog}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        aria-describedby={messageId}
-        tabIndex={-1}
-        onKeyDown={handleKeyDown}
-        data-testid="confirm-dialog"
-      >
-        <h2 id={titleId} className={styles.title}>
-          {title}
-        </h2>
-        <p id={messageId} className={styles.message}>
-          {message}
-        </p>
-        <div className={styles.buttonContainer}>
-          <button
-            ref={cancelButtonRef}
-            type="button"
-            className={`${styles.button} ${styles.cancelButton}`}
-            onClick={handleCancel}
-            disabled={isProcessing}
-            data-testid="confirm-dialog-cancel-button"
-          >
-            {cancelLabel}
-          </button>
-          <button
-            ref={confirmButtonRef}
-            type="button"
-            className={`${styles.button} ${styles.confirmButton}`}
-            onClick={handleConfirm}
-            disabled={isProcessing}
-            data-testid="confirm-dialog-confirm-button"
-          >
-            {confirmLabel}
-          </button>
+      <FocusScope contain restoreFocus autoFocus>
+        <div
+          {...overlayProps}
+          {...dialogProps}
+          {...modalProps}
+          ref={dialogRef}
+          className={styles.dialog}
+          data-testid="confirm-dialog"
+        >
+          <h2 id={titleId} className={styles.title}>
+            {title}
+          </h2>
+          <p id={messageId} className={styles.message}>
+            {message}
+          </p>
+          <div className={styles.buttonContainer}>
+            <button
+              ref={cancelButtonRef}
+              type="button"
+              className={`${styles.button} ${styles.cancelButton}`}
+              onClick={handleCancel}
+              disabled={isProcessing}
+              data-testid="confirm-dialog-cancel-button"
+            >
+              {cancelLabel}
+            </button>
+            <button
+              type="button"
+              className={`${styles.button} ${styles.confirmButton}`}
+              onClick={handleConfirm}
+              disabled={isProcessing}
+              data-testid="confirm-dialog-confirm-button"
+            >
+              {confirmLabel}
+            </button>
+          </div>
         </div>
-      </div>
+      </FocusScope>
     </div>
   );
 
