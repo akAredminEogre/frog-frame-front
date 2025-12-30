@@ -66,13 +66,13 @@ UI コンポーネントの CSS スタイリングに関する規約。
 - オンラインツール（WebAIM Contrast Checker等）でコントラスト比を確認
 - 新しい `--color-*` と `--color-*-contrast` の組み合わせを追加する際は必ず検証
 
-### eslint-rule
+### コントラスト比検証のESLint化について
 
 ESLint化不可（色のコントラスト比は静的解析で検証困難。PRレビューで確認）
 
 ---
 
-## eslint-rule
+## デザイントークン使用のESLint化について
 
 ESLint 化不可（CSS ファイル内の色値検出は stylelint の領域。stylelint 未導入のため PR レビューで確認）
 
