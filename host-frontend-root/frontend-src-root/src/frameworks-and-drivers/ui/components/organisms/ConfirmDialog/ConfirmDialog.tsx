@@ -172,6 +172,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             type="button"
             className={`${styles.button} ${styles.cancelButton}`}
             onClick={handleCancel}
+            disabled={isProcessing}
             data-testid="confirm-dialog-cancel-button"
           >
             {cancelLabel}
@@ -181,6 +182,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             type="button"
             className={`${styles.button} ${styles.confirmButton}`}
             onClick={handleConfirm}
+            disabled={isProcessing}
             data-testid="confirm-dialog-confirm-button"
           >
             {confirmLabel}
