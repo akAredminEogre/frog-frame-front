@@ -26,7 +26,13 @@ describe('DexieRewriteRuleRepository.delete - 異常系', () => {
 
   it('should not throw an error when deleting a non-existent ID', async () => {
     // Arrange
-    const rule = new RewriteRule(1, 'pattern', 'replacement', '', false);
+    const rule = RewriteRule.fromParams(1, {
+      oldString: 'pattern',
+      newString: 'replacement',
+      urlPattern: '',
+      isRegex: false,
+      isActive: true,
+    });
     await repository.create(rule);
 
     const nonExistentId = 99999;
