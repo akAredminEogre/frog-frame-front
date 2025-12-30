@@ -75,9 +75,15 @@
 3. **共有モックの配置先**
    - ポート/インターフェースレベルのモック → `tests/unit/{layer}/ports/{category}/{InterfaceName}/mocks/`
    - 例：`ITabsGateway` → `tests/unit/application-business-rules/ports/gateway/ITabsGateway/mocks/`
-   - 例：`IRewriteRuleRepository` → `tests/unit/application/ports/IRewriteRuleRepository/mocks/`
+   - 例：`IRewriteRuleRepository` → `tests/unit/application-business-rules/ports/gateway/IRewriteRuleRepository/mocks/`
 
 **重要**: この手順を省略すると、PRレビューで重複モックの指摘を受けます。
+
+#### 既存コードへの適用
+
+本規約に準拠していない既存コードは [user-story-159](../../user-stories/user-story-159/README.md) で対応予定。
+
+**注意**: 新規作成時は必ず本規約に従うこと。
 
 ## eslint-rule
 
