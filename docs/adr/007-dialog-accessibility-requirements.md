@@ -24,6 +24,9 @@ WAI-ARIA Authoring Practices（Dialog Modal Pattern）に準拠したアクセ�
 | aria-modal="true" | ○ | モーダルダイアログであることを示す |
 | aria-labelledby | ○ | タイトル要素のIDを参照 |
 | aria-describedby | △ | 説明文要素のIDを参照（オプション） |
+| tabIndex={-1} | ○ | プログラム的なフォーカス設定を可能にする |
+
+**tabIndex={-1}について**: ダイアログコンテナに`tabIndex={-1}`を設定することで、JavaScriptからプログラム的にフォーカスを設定可能になる。これはWAI-ARIA Dialog Modal Patternのベストプラクティスであり、より堅牢なフォーカス管理を実現する。
 
 #### 1.1 ID生成にuseId()を使用（必須）
 
@@ -50,6 +53,7 @@ const MyDialog: React.FC<Props> = ({ ... }) => {
       aria-modal="true"
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
+      tabIndex={-1}
     >
       <h2 id={titleId}>タイトル</h2>
       <p id={descriptionId}>説明文</p>
@@ -123,6 +127,7 @@ useEffect(() => {
   <div
     role="dialog"
     aria-modal="true"
+    tabIndex={-1}
     onKeyDown={handleKeyDown}  // ダイアログ要素に配置
   >
     {/* ダイアログコンテンツ */}
@@ -135,7 +140,7 @@ useEffect(() => {
   onClick={handleOverlayClick}
   onKeyDown={handleKeyDown}  // オーバーレイはフォーカス不可、イベントが発火しない
 >
-  <div role="dialog" aria-modal="true">
+  <div role="dialog" aria-modal="true" tabIndex={-1}>
     {/* ダイアログコンテンツ */}
   </div>
 </div>

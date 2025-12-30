@@ -163,6 +163,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={messageId}
+        tabIndex={-1}
         onKeyDown={handleKeyDown}
         data-testid="confirm-dialog"
       >
