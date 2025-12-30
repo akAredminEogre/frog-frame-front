@@ -4,9 +4,9 @@
  */
 import React, { act } from 'react';
 import ReactDOM from 'react-dom/client';
-import { vi } from 'vitest';
 
 import { SSRProvider } from '@react-aria/ssr';
+import { vi } from 'vitest';
 
 import { ConfirmDialog, ConfirmDialogProps } from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog';
 
