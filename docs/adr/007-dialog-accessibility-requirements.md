@@ -87,19 +87,19 @@ React Ariaを使用する場合、以下の機能が自動化される：
 
 #### 3. キーボードイベント処理
 
-| キー | 動作 | React Ariaでの実現 |
-|------|------|-------------------|
-| Escape | ダイアログを閉じる | `useOverlay` (isDismissable: true) |
+| キー | 動作 | 実現方法 |
+|------|------|---------|
+| Escape | ダイアログを閉じる | 手動ハンドラ（onKeyDown） |
 | Tab | 次のフォーカス可能な要素に移動（ループ） | `FocusScope` (contain) |
 | Shift + Tab | 前のフォーカス可能な要素に移動（ループ） | `FocusScope` (contain) |
 
-React Ariaを使用する場合、キーボードイベント処理は自動化される。
+フォーカストラップはReact Ariaの`FocusScope`で自動化。Escapeキーは手動ハンドラで処理。
 
 #### 4. 外側クリックでのクローズ
 
 ダイアログの背景（オーバーレイ）をクリックした場合、ダイアログを閉じる。
 
-React Ariaでは`useOverlay`の`isDismissable: true`オプションで自動処理される。
+オーバーレイのonClickハンドラで手動処理（ダイアログ内クリックとの判別が必要）。
 
 #### 5. ポータルレンダリング
 
@@ -111,18 +111,22 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 ### 推奨ライブラリ（採用済み）
 
-本プロジェクトでは**React Aria**を採用している。以下のパッケージを使用：
+本プロジェクトでは**React Aria**を採用している（ハイブリッドアプローチ）。以下のパッケージを使用：
 
 | パッケージ | 用途 |
 |-----------|------|
 | `@react-aria/dialog` | ダイアログのセマンティクス（useDialog） |
-| `@react-aria/overlays` | オーバーレイ管理、スクロール防止（useOverlay, usePreventScroll, useModal） |
+| `@react-aria/overlays` | スクロール防止（usePreventScroll） |
 | `@react-aria/focus` | フォーカストラップ、フォーカス復元（FocusScope） |
 
-**React Ariaの利点**:
-- WAI-ARIA Dialog Modal Patternに完全準拠
-- フォーカス管理、スクロール防止、キーボード操作が自動化
-- 手動実装と比較してバグが少なく、メンテナンスコストが低い
+**ハイブリッドアプローチ**:
+- React Ariaで自動化: フォーカストラップ、フォーカス復元、スクロール防止、aria属性
+- 手動実装: Escapeキー処理、オーバーレイクリック処理
+
+**この選択の理由**:
+- テスト環境（happy-dom）との互換性を確保
+- `useOverlay`はテスト環境で問題が発生する可能性がある
+- 必要な機能は維持しつつ、堅牢性を優先
 
 **代替ライブラリ**（参考）:
 
