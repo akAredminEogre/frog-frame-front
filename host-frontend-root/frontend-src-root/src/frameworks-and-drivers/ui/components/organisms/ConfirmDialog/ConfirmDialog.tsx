@@ -133,6 +133,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           className={styles.dialog}
           onKeyDown={handleKeyDown}
           aria-modal="true"
+          tabIndex={-1}
           data-testid="confirm-dialog"
         >
           <h2 id={titleId} className={styles.title}>
