@@ -84,6 +84,29 @@ Clean Architectureに従った機能追加では、既存コードを壊さず�
 - 実際のロジックは空または `throw new Error('Not implemented')` で仮実装
 - インターフェースは完全に定義する（メソッドシグネチャ、型定義）
 
+#### Interface定義タスクの扱い
+
+TypeScript `interface` の定義タスクは、以下のルールに従う:
+
+1. **Phase 1（Skeleton）に含める**: interface定義は実装ロジックを持たないため、Phase 2（実装）ではなくPhase 1（Skeleton）のタスクとして扱う
+2. **テスト戦略書・単体テストは不要**: interfaceはコンパイル時のみ存在し、ランタイムには残らないため、テストは不要
+3. **タスク記載の簡略化**: Phase 2で個別タスクとして記載せず、Phase 1のスケルトン作成タスクに含める
+
+**例:**
+
+```markdown
+#### Phase 1: Skeleton
+
+- [x] IRewriteRuleRepository に delete() メソッドシグネチャを追加
+- [x] RewriteRuleProxyService (IRewriteRuleProxyService) に deleteRule() スケルトン追加
+- [x] DeleteRuleRequestDTO（メッセージング用DTO）← interfaceとして定義
+```
+
+**Phase 2でinterfaceを個別タスクとしない理由:**
+- interfaceは型定義のみで実装ロジックがない
+- TypeScriptコンパイラが型チェックを担当するため、ランタイムテストは無意味
+- Phase 1で「シグネチャ追加」として完了すれば十分
+
 ##### ESLint未使用エラーの回避
 
 スケルトン実装でインポートや引数が未使用になる場合、エラーメッセージ内で参照することでESLintエラーを回避する:
