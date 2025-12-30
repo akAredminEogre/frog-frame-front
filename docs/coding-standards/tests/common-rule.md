@@ -86,7 +86,7 @@
 
 #### 既存コードへの適用
 
-本規約に準拠していない既存コードは [user-story-159](../../user-stories/user-story-159/README.md) で対応予定。
+本規約に準拠していない既存コードは [user-story-006](../../user-stories/user-story-006/README.md) で対応予定。
 
 **注意**: 新規作成時は必ず本規約に従うこと。
 
