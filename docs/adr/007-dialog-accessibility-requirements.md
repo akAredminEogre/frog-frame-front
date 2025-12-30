@@ -76,14 +76,16 @@ const MyDialog: React.FC<Props> = ({ ... }) => {
 
 React Ariaを使用する場合、以下の機能が自動化される：
 
-| 機能 | React Aria Hook/Component |
-|------|--------------------------|
-| フォーカストラップ | `FocusScope` (contain) |
-| 初期フォーカス | `FocusScope` (autoFocus) |
-| 復帰フォーカス | `FocusScope` (restoreFocus) |
-| 背景スクロール無効化 | `usePreventScroll` |
+| 機能 | React Aria Hook/Component | 備考 |
+|------|--------------------------|------|
+| フォーカストラップ | `FocusScope` (contain) | |
+| 初期フォーカス | 手動useEffect | `autoFocus`は使用しない（テスト環境互換性のため） |
+| 復帰フォーカス | `FocusScope` (restoreFocus) | |
+| 背景スクロール無効化 | `usePreventScroll` | |
 
-手動実装が必要な場合は、[React Hooks コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/react-hooks.md)を参照。
+**注意**: `FocusScope`の`autoFocus`属性と手動useEffectを併用すると競合が発生するため、初期フォーカスは手動useEffectのみで設定する。
+
+詳細は[React Hooks コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/react-hooks.md)を参照。
 
 #### 3. キーボードイベント処理
 
@@ -124,7 +126,7 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 #### フォーカス管理
 
-- [ ] 初期フォーカス設定（`FocusScope autoFocus` または手動）
+- [ ] 初期フォーカス設定（手動useEffect推奨、テスト環境との互換性のため）
 - [ ] フォーカストラップ（`FocusScope contain`）
 - [ ] 復帰フォーカス（`FocusScope restoreFocus`）
 

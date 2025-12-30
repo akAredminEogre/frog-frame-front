@@ -108,9 +108,9 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   );
 
   // 初期フォーカスの設定
+  // FocusScopeのautoFocusを使わず手動で設定（テスト環境との互換性のため）
   useEffect(() => {
     if (isOpen && cancelButtonRef.current) {
-      // FocusScopeのautoFocusが効かない場合のフォールバック
       cancelButtonRef.current.focus();
     }
   }, [isOpen]);
@@ -125,7 +125,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       onClick={handleOverlayClick}
       data-testid="confirm-dialog-overlay"
     >
-      <FocusScope contain restoreFocus autoFocus>
+      <FocusScope contain restoreFocus>
         <div
           {...dialogProps}
           ref={dialogRef}
