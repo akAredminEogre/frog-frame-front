@@ -19,7 +19,7 @@ import { RefObject, useEffect, useRef } from 'react';
  */
 export const useInitialFocus = <T extends HTMLElement>(
   isActive: boolean
-): RefObject<T | null> => {
+): RefObject<T> => {
   const ref = useRef<T>(null);
 
   useEffect(() => {
@@ -28,5 +28,5 @@ export const useInitialFocus = <T extends HTMLElement>(
     }
   }, [isActive]);
 
-  return ref;
+  return ref as RefObject<T>;
 };
