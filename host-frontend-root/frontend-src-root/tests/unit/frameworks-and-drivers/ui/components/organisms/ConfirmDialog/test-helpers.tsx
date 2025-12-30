@@ -2,10 +2,9 @@
  * ConfirmDialog コンポーネント テストヘルパー
  * テストファイル間で共通のセットアップ・ヘルパー関数を提供
  */
+import { SSRProvider } from '@react-aria/ssr';
 import React, { act } from 'react';
 import ReactDOM from 'react-dom/client';
-
-import { SSRProvider } from '@react-aria/ssr';
 import { vi } from 'vitest';
 
 import { ConfirmDialog, ConfirmDialogProps } from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog';
