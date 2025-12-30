@@ -72,83 +72,34 @@ const MyDialog: React.FC<Props> = ({ ... }) => {
 | フォーカストラップ | ダイアログが開いている間、Tab/Shift+Tabでフォーカスがダイアログ内に閉じ込められる |
 | 復帰フォーカス | ダイアログが閉じたとき **またはコンポーネントがアンマウントされたとき**、ダイアログを開いたトリガー要素にフォーカスを戻す |
 
-#### 2.1 useEffectクリーンアップでの副作用復元（必須）
+#### 2.1 React Ariaによる自動管理
 
-> **参照**: [React Hooks コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/react-hooks.md) - 汎用的なuseEffectの副作用管理ルール
+React Ariaを使用する場合、以下の機能が自動化される：
 
-useEffectで行った副作用（背景スクロール無効化、フォーカス移動など）は、**すべてクリーンアップ関数で元に戻すこと**。
+| 機能 | React Aria Hook/Component |
+|------|--------------------------|
+| フォーカストラップ | `FocusScope` (contain) |
+| 初期フォーカス | `FocusScope` (autoFocus) |
+| 復帰フォーカス | `FocusScope` (restoreFocus) |
+| 背景スクロール無効化 | `usePreventScroll` |
 
-**理由**:
-- `isOpen`がfalseになった場合だけでなく、コンポーネントがアンマウントされた場合にも副作用を復元する必要がある
-- 例：親コンポーネントが条件付きレンダリングでダイアログを完全に削除した場合
-
-**実装例**:
-
-```tsx
-useEffect(() => {
-  if (isOpen) {
-    // 副作用を適用
-    previousActiveElementRef.current = document.activeElement;
-    cancelButtonRef.current?.focus();
-    document.body.style.overflow = 'hidden';
-  } else {
-    // isOpen=falseで復元
-    document.body.style.overflow = '';
-    if (previousActiveElementRef.current instanceof HTMLElement) {
-      previousActiveElementRef.current.focus();
-    }
-  }
-
-  return () => {
-    // アンマウント時にも同様に復元（必須）
-    document.body.style.overflow = '';
-    if (previousActiveElementRef.current instanceof HTMLElement) {
-      previousActiveElementRef.current.focus();
-    }
-  };
-}, [isOpen]);
-```
-
-**原則**: セットアップで行った変更はすべてクリーンアップで元に戻す。
+手動実装が必要な場合は、[React Hooks コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/react-hooks.md)を参照。
 
 #### 3. キーボードイベント処理
 
-| キー | 動作 |
-|------|------|
-| Escape | ダイアログを閉じる |
-| Tab | 次のフォーカス可能な要素に移動（最後の要素から最初の要素にループ） |
-| Shift + Tab | 前のフォーカス可能な要素に移動（最初の要素から最後の要素にループ） |
+| キー | 動作 | React Ariaでの実現 |
+|------|------|-------------------|
+| Escape | ダイアログを閉じる | `useOverlay` (isDismissable: true) |
+| Tab | 次のフォーカス可能な要素に移動（ループ） | `FocusScope` (contain) |
+| Shift + Tab | 前のフォーカス可能な要素に移動（ループ） | `FocusScope` (contain) |
 
-**重要**: `onKeyDown`ハンドラは、フォーカス可能な要素を含む**ダイアログ要素**（`role="dialog"`を持つ要素）に配置すること。オーバーレイ要素はフォーカス可能ではないため、オーバーレイに配置するとキーボードイベントが発火しない。
-
-```tsx
-// ✅ 正しい実装: ダイアログ要素にonKeyDownを配置
-<div className={styles.overlay} onClick={handleOverlayClick}>
-  <div
-    role="dialog"
-    aria-modal="true"
-    tabIndex={-1}
-    onKeyDown={handleKeyDown}  // ダイアログ要素に配置
-  >
-    {/* ダイアログコンテンツ */}
-  </div>
-</div>
-
-// ❌ 誤った実装: オーバーレイ要素にonKeyDownを配置
-<div
-  className={styles.overlay}
-  onClick={handleOverlayClick}
-  onKeyDown={handleKeyDown}  // オーバーレイはフォーカス不可、イベントが発火しない
->
-  <div role="dialog" aria-modal="true" tabIndex={-1}>
-    {/* ダイアログコンテンツ */}
-  </div>
-</div>
-```
+React Ariaを使用する場合、キーボードイベント処理は自動化される。
 
 #### 4. 外側クリックでのクローズ
 
 ダイアログの背景（オーバーレイ）をクリックした場合、ダイアログを閉じる。
+
+React Ariaでは`useOverlay`の`isDismissable: true`オプションで自動処理される。
 
 #### 5. ポータルレンダリング
 
@@ -158,17 +109,27 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 ダイアログが開いている間、背景のスクロールを無効化する。
 
-### 推奨ライブラリ
+### 推奨ライブラリ（採用済み）
 
-上記要件を手動で実装する代わりに、以下のライブラリの使用を推奨する：
+本プロジェクトでは**React Aria**を採用している。以下のパッケージを使用：
+
+| パッケージ | 用途 |
+|-----------|------|
+| `@react-aria/dialog` | ダイアログのセマンティクス（useDialog） |
+| `@react-aria/overlays` | オーバーレイ管理、スクロール防止（useOverlay, usePreventScroll, useModal） |
+| `@react-aria/focus` | フォーカストラップ、フォーカス復元（FocusScope） |
+
+**React Ariaの利点**:
+- WAI-ARIA Dialog Modal Patternに完全準拠
+- フォーカス管理、スクロール防止、キーボード操作が自動化
+- 手動実装と比較してバグが少なく、メンテナンスコストが低い
+
+**代替ライブラリ**（参考）:
 
 | ライブラリ | 特徴 |
 |-----------|------|
-| React Aria (useDialog) | Adobe製、アクセシビリティ完備、スタイル非依存 |
 | Radix UI (Dialog) | ヘッドレスUI、アクセシビリティ完備 |
 | Headless UI (Dialog) | Tailwind Labs製、アクセシビリティ完備 |
-
-本プロジェクトでは既にReact Aria（ToggleSwitchで使用）を採用しているため、`@react-aria/dialog` の使用を推奨する。
 
 ### ビジュアルスタイリング要件
 
@@ -192,7 +153,7 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 | コンポーネント | 配置 | 状態 |
 |---------------|------|------|
-| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | ADR-007準拠（useId使用） |
+| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | React Aria採用（useDialog, FocusScope, useOverlay, usePreventScroll, useModal） |
 
 ## 影響ドキュメント
 
