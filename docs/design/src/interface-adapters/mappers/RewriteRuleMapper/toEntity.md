@@ -42,17 +42,6 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/toEntity/
   - `toEntity()` は MessagingPort を使用しないため、呼び出しは発生しない
   - インターフェース準拠のため `getAll()`, `getById()`, `updateActive()` をダミー定義
 
-### モック方法
-
-インターフェース配下のモックファクトリからインポートし、インスタンス生成時に注入:
-
-```typescript
-import { createMockRewriteRuleMessagingPort } from 'tests/unit/interface-adapters/ports/IRewriteRuleMessagingPort/mocks/createMockRewriteRuleMessagingPort';
-
-const mockMessagingPort = createMockRewriteRuleMessagingPort();
-const mapper = new RewriteRuleMapper(mockMessagingPort);
-```
-
 ### モックファイル構成
 
 インターフェース配下にモックファクトリを配置（複数テストで共有）:

@@ -21,6 +21,7 @@
   --color-danger: #dc3545;
   --color-danger-hover: #c82333;
   --color-danger-contrast: #fff;
+  --color-danger-bg: rgba(220, 53, 69, 0.1);
 }
 
 /* シャドウ */
