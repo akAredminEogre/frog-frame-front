@@ -115,16 +115,16 @@ WAI-ARIA Dialog Patternに必要な属性をテストする。
 ## テストファイル構成
 
 ```
-tests/unit/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/render/
-├── visibility.test.tsx           # 表示/非表示
-├── props.test.tsx                # Props反映
-├── accessibility.test.tsx        # アクセシビリティ属性
-├── button-events.test.tsx        # ボタンクリックイベント
-├── keyboard-events.test.tsx      # キーボード操作
-├── overlay-events.test.tsx       # オーバーレイクリック
-├── focus-management.test.tsx     # フォーカス管理
-└── mocks/
-    └── createMockDialogProps.ts  # モックファクトリ
+tests/unit/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/
+├── test-helpers.tsx              # 共通ヘルパー（モックファクトリ含む）
+└── render/
+    ├── visibility.test.tsx           # 表示/非表示
+    ├── props.test.tsx                # Props反映
+    ├── accessibility.test.tsx        # アクセシビリティ属性
+    ├── button-events.test.tsx        # ボタンクリックイベント
+    ├── keyboard-events.test.tsx      # キーボード操作
+    ├── overlay-events.test.tsx       # オーバーレイクリック
+    └── focus-management.test.tsx     # フォーカス管理
 ```
 
 ## モック戦略
@@ -138,10 +138,9 @@ Reactコンポーネントのテストなので、コールバック関数をモ
 - `onConfirm`: 確認ボタンのクリックハンドラ
 - `onCancel`: キャンセルボタン/オーバーレイ/Escapeキーのハンドラ
 
-### モックファイル構成
+### ヘルパーファイル
 
 ```
-tests/unit/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/render/
-└── mocks/
-    └── createMockDialogProps.ts    # Props用モックファクトリ
+tests/unit/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/
+└── test-helpers.tsx    # createDefaultProps関数、ConfirmDialogTestHelperクラス
 ```
