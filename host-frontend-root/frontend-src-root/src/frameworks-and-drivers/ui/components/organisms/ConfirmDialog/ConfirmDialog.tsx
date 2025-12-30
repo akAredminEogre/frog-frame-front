@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 
 import { useDialog } from '@react-aria/dialog';
 import { FocusScope } from '@react-aria/focus';
-import { usePreventScroll, useOverlay, useModal } from '@react-aria/overlays';
+import { usePreventScroll } from '@react-aria/overlays';
 
 import styles from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog.module.css';
 
@@ -22,7 +22,7 @@ export interface ConfirmDialogProps {
 
 /**
  * 確認ダイアログコンポーネント
- * React Aria (@react-aria/dialog, @react-aria/overlays) を使用した
+ * React Aria (@react-aria/dialog, @react-aria/focus, @react-aria/overlays) を使用した
  * WAI-ARIA Dialog Modal Patternに準拠したアクセシビリティ実装（ADR-007）
  */
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
@@ -75,20 +75,6 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   // React Aria: usePreventScroll - 背景スクロールを無効化
   usePreventScroll({ isDisabled: !isOpen });
 
-  // React Aria: useOverlay - オーバーレイクリックとEscapeキーの処理
-  const { overlayProps } = useOverlay(
-    {
-      isOpen,
-      onClose: handleCancel,
-      isDismissable: true,
-      shouldCloseOnBlur: false,
-    },
-    dialogRef
-  );
-
-  // React Aria: useModal - aria-hiddenの管理
-  const { modalProps } = useModal();
-
   // React Aria: useDialog - ダイアログのセマンティクス
   const { dialogProps } = useDialog(
     {
@@ -97,6 +83,29 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       role: 'dialog',
     },
     dialogRef
+  );
+
+  // キーボードイベント処理（Escape キー）
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        handleCancel();
+      }
+    },
+    [handleCancel]
+  );
+
+  // オーバーレイクリック処理
+  const handleOverlayClick = useCallback(
+    (event: React.MouseEvent) => {
+      // ダイアログ本体をクリックした場合は何もしない
+      if (dialogRef.current?.contains(event.target as Node)) {
+        return;
+      }
+      handleCancel();
+    },
+    [handleCancel]
   );
 
   // 初期フォーカスの設定
@@ -114,15 +123,16 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   const dialogContent = (
     <div
       className={styles.overlay}
+      onClick={handleOverlayClick}
       data-testid="confirm-dialog-overlay"
     >
       <FocusScope contain restoreFocus autoFocus>
         <div
-          {...overlayProps}
           {...dialogProps}
-          {...modalProps}
           ref={dialogRef}
           className={styles.dialog}
+          onKeyDown={handleKeyDown}
+          aria-modal="true"
           data-testid="confirm-dialog"
         >
           <h2 id={titleId} className={styles.title}>

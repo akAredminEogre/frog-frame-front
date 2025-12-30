@@ -6,6 +6,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { vi } from 'vitest';
 
+import { SSRProvider } from '@react-aria/ssr';
+
 import { ConfirmDialog, ConfirmDialogProps } from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog';
 
 /**
@@ -83,12 +85,17 @@ export class ConfirmDialogTestHelper {
 
   /**
    * コンポーネントをレンダリング
+   * React AriaのSSRProviderでラップしてテスト環境での動作を保証
    * @param props ConfirmDialogProps
    */
   async render(props: Partial<ConfirmDialogProps> = {}): Promise<void> {
     this.ensureSetup();
     const fullProps = createDefaultProps(props);
-    this.root!.render(<ConfirmDialog {...fullProps} />);
+    this.root!.render(
+      <SSRProvider>
+        <ConfirmDialog {...fullProps} />
+      </SSRProvider>
+    );
     await flushPromises();
   }
 
