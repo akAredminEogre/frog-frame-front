@@ -173,20 +173,22 @@ React Ariaのコンポーネント/フックが特定の機能を管理してい
 
 | FocusScope属性 | 管理する機能 | 手動useEffectでの実装 |
 |---------------|-------------|---------------------|
-| `autoFocus` | 初期フォーカス設定 | フォールバックのみ可（クリーンアップ不要） |
+| `autoFocus` | 初期フォーカス設定 | **使用しない**（手動useEffectで代替、テスト環境互換性のため） |
 | `restoreFocus` | フォーカス復元 | **実装しない**（競合防止） |
 | `contain` | フォーカストラップ | **実装しない** |
+
+**注意**: `autoFocus`と手動useEffectを併用すると競合が発生する。どちらか一方のみを使用すること。テスト環境（happy-dom）との互換性を考慮し、手動useEffectでの初期フォーカス設定を推奨する。
 
 ### 例: FocusScopeとuseEffectの併用
 
 ```tsx
-// ✅ 良い例: FocusScopeのautoFocusが効かない場合のフォールバック
+// ✅ 良い例: autoFocusを使わず、手動useEffectで初期フォーカスを設定
 // restoreFocusはFocusScopeに任せるため、クリーンアップでのフォーカス復元は不要
-<FocusScope contain restoreFocus autoFocus>
+<FocusScope contain restoreFocus>
   <Dialog ref={dialogRef}>...</Dialog>
 </FocusScope>
 
-// フォールバック用のuseEffect（初期フォーカスのみ）
+// 手動での初期フォーカス設定
 useEffect(() => {
   if (isOpen && buttonRef.current) {
     buttonRef.current.focus();
@@ -197,8 +199,21 @@ useEffect(() => {
 ```
 
 ```tsx
-// ❌ 悪い例: FocusScopeのrestoreFocusと重複
+// ❌ 悪い例1: autoFocusと手動useEffectを併用（競合）
 <FocusScope contain restoreFocus autoFocus>
+  <Dialog>...</Dialog>
+</FocusScope>
+
+useEffect(() => {
+  if (isOpen && buttonRef.current) {
+    buttonRef.current.focus(); // autoFocusと競合する
+  }
+}, [isOpen]);
+```
+
+```tsx
+// ❌ 悪い例2: FocusScopeのrestoreFocusと重複
+<FocusScope contain restoreFocus>
   <Dialog>...</Dialog>
 </FocusScope>
 
