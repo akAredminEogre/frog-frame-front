@@ -54,7 +54,8 @@ useEffect(() => {
     document.body.style.overflow = 'hidden';
   } else {
     document.body.style.overflow = '';
-    if (previousElement.current instanceof HTMLElement) {
+    // refが設定されている（ダイアログが開かれた）場合のみフォーカス復帰
+    if (previousElement.current && previousElement.current instanceof HTMLElement) {
       previousElement.current.focus();
     }
   }
@@ -62,12 +63,20 @@ useEffect(() => {
   return () => {
     // アンマウント時にも同様に復元
     document.body.style.overflow = '';
-    if (previousElement.current instanceof HTMLElement) {
+    // refが設定されている（ダイアログが開かれた）場合のみフォーカス復帰
+    if (previousElement.current && previousElement.current instanceof HTMLElement) {
       previousElement.current.focus();
     }
   };
 }, [isOpen]);
 ```
+
+#### refの防御的チェック
+
+クリーンアップ関数でrefの値を使用する際、refが実際に設定されているか明示的にチェックすること。
+
+- コンポーネントがマウントされたが、refを設定する条件が一度も満たされなかった場合（例: ダイアログが一度も開かれずにアンマウント）、refは初期値（通常`null`）のままである
+- `null instanceof HTMLElement`は`false`を返すため技術的には安全だが、明示的なチェックにより意図が明確になる
 
 ### なぜクリーンアップが重要か
 
