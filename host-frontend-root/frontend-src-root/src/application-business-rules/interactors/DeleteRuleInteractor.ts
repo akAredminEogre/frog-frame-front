@@ -21,6 +21,8 @@ export class DeleteRuleInteractor implements IDeleteRuleUseCase {
       const rule = await this.repository.getById(inputData.ruleId);
       await this.repository.delete(inputData.ruleId);
       const outputData = new DeleteRuleOutputData(inputData.ruleId);
+      // 部分的成功パターン: 副次操作（タブリロード）の前にpresentを呼び出すことで、
+      // 副次操作が失敗しても主要操作（削除）の成功をUIに反映する
       this.presenter.present(outputData);
       await this.tabsGateway.reloadMatchingTabs(rule);
     } catch (error) {
