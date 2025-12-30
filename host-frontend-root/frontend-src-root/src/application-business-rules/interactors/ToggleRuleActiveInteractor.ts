@@ -22,6 +22,8 @@ export class ToggleRuleActiveInteractor implements IToggleRuleActiveUseCase {
       const toggledRule = rule.withActive(!rule.isActive);
       await this.repository.update(toggledRule);
       const outputData = new ToggleRuleActiveOutputData(toggledRule);
+      // 部分的成功パターン: 副次操作（タブリロード）の前にpresentを呼び出すことで、
+      // 副次操作が失敗しても主要操作（更新）の成功をUIに反映する
       this.presenter.present(outputData);
       await this.tabsGateway.reloadMatchingTabs(toggledRule);
     } catch (error) {
