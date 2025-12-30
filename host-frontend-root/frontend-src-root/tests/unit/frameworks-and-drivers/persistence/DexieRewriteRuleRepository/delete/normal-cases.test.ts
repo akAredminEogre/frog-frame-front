@@ -27,13 +27,13 @@ describe('DexieRewriteRuleRepository.delete - 正常系', () => {
 
   it('should delete the rule with the specified ID', async () => {
     // Arrange
-    const rule = new RewriteRule(
-      1,
-      'pattern-to-delete',
-      'replacement',
-      'https://example.com',
-      false
-    );
+    const rule = RewriteRule.fromParams(1, {
+      oldString: 'pattern-to-delete',
+      newString: 'replacement',
+      urlPattern: 'https://example.com',
+      isRegex: false,
+      isActive: true,
+    });
     await repository.create(rule);
 
     const createdRules = await repository.getAll();
@@ -49,9 +49,27 @@ describe('DexieRewriteRuleRepository.delete - 正常系', () => {
 
   it('should delete only the specified rule when multiple rules exist', async () => {
     // Arrange
-    const rule1 = new RewriteRule(1, 'pattern1', 'replacement1', '', false);
-    const rule2 = new RewriteRule(2, 'pattern2', 'replacement2', '', false);
-    const rule3 = new RewriteRule(3, 'pattern3', 'replacement3', '', false);
+    const rule1 = RewriteRule.fromParams(1, {
+      oldString: 'pattern1',
+      newString: 'replacement1',
+      urlPattern: '',
+      isRegex: false,
+      isActive: true,
+    });
+    const rule2 = RewriteRule.fromParams(2, {
+      oldString: 'pattern2',
+      newString: 'replacement2',
+      urlPattern: '',
+      isRegex: false,
+      isActive: true,
+    });
+    const rule3 = RewriteRule.fromParams(3, {
+      oldString: 'pattern3',
+      newString: 'replacement3',
+      urlPattern: '',
+      isRegex: false,
+      isActive: true,
+    });
 
     await repository.create(rule1);
     await repository.create(rule2);
@@ -75,22 +93,20 @@ describe('DexieRewriteRuleRepository.delete - 正常系', () => {
 
   it('should preserve all properties of remaining rules after deletion', async () => {
     // Arrange
-    const rule1 = new RewriteRule(
-      1,
-      'pattern1',
-      'replacement1',
-      'https://site1.com',
-      true,
-      false
-    );
-    const rule2 = new RewriteRule(
-      2,
-      'pattern2',
-      'replacement2',
-      'https://site2.com',
-      false,
-      true
-    );
+    const rule1 = RewriteRule.fromParams(1, {
+      oldString: 'pattern1',
+      newString: 'replacement1',
+      urlPattern: 'https://site1.com',
+      isRegex: true,
+      isActive: false,
+    });
+    const rule2 = RewriteRule.fromParams(2, {
+      oldString: 'pattern2',
+      newString: 'replacement2',
+      urlPattern: 'https://site2.com',
+      isRegex: false,
+      isActive: true,
+    });
 
     await repository.create(rule1);
     await repository.create(rule2);

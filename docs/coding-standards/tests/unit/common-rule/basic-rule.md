@@ -88,6 +88,47 @@ expect(remainingRules.toArray()).toHaveLength(1);
 
 **ESLintルール化**: 不可（PRレビューで確認）
 
+### テストデータ作成時のファクトリーメソッド活用
+
+#### 規約
+
+- 位置引数が多いコンストラクタ（4つ以上）を直接呼び出さないこと
+- ファクトリーメソッド（`fromParams()` 等）が提供されている場合は、それを使用すること
+- 名前付きプロパティにより、各引数の意図が明確になる
+
+#### 背景
+
+位置引数が多いコンストラクタは、引数の順序を間違えやすく、コードレビューでも発見しにくい。
+特にboolean型の引数が複数ある場合、`false, true` のような記述では意図が不明瞭になる。
+
+#### 禁止事項
+
+```typescript
+// ❌ 位置引数では意図が不明瞭
+const rule = new RewriteRule(1, 'old', 'new', 'https://example.com', false);
+// 5番目の false は isRegex? isActive?
+
+// ❌ 全引数を指定しても可読性が低い
+const rule = new RewriteRule(1, 'old', 'new', 'https://example.com', false, true);
+```
+
+#### 許可事項
+
+```typescript
+// ✅ ファクトリーメソッドで意図を明確に
+const rule = RewriteRule.fromParams(1, {
+  oldString: 'old',
+  newString: 'new',
+  urlPattern: 'https://example.com',
+  isRegex: false,
+  isActive: true,
+});
+```
+
+#### eslint-rule
+
+**ESLintルール化**: 不可（PRレビューで確認）
+
 ## mocks/ ディレクトリ未配置モック
 
 規約に準拠していないモックファクトリは [user-story-004](../../../user-stories/user-story-004/README.md) で対応予定。
