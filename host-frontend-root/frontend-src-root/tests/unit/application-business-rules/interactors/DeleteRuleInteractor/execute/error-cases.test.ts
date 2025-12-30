@@ -5,7 +5,7 @@
  */
 import { createMockRewriteRuleRepository as createMockRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
 import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/DeleteRuleInteractor/mocks/createMockPresenter';
-import { createMockTabsGateway } from 'tests/unit/application-business-rules/interactors/DeleteRuleInteractor/mocks/createMockTabsGateway';
+import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DeleteRuleInputData } from 'src/application-business-rules/dto/input/DeleteRuleInputData';

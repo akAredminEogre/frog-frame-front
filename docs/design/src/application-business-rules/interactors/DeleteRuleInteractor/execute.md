@@ -117,7 +117,7 @@ Interactorの3つの依存関係をモック化してテストする。
 | 依存関係 | モック方法 | 理由 | 既存モック |
 |---------|-----------|------|-----------|
 | IRewriteRuleRepository | vi.fn()でメソッドをモック | DB/メッセージング層を分離 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/` ✓ |
-| ITabsGateway | vi.fn()でメソッドをモック | Chrome API層を分離 | `tests/unit/.../ToggleRuleActiveInteractor/mocks/` ✓ |
+| ITabsGateway | vi.fn()でメソッドをモック | Chrome API層を分離 | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/` ✓ |
 | IDeleteRulePresenter | vi.fn()でメソッドをモック | View層を分離 | 新規作成（IDeleteRulePresenter固有） |
 
 ### モックファイル構成
@@ -125,13 +125,12 @@ Interactorの3つの依存関係をモック化してテストする。
 ```
 tests/unit/application-business-rules/interactors/DeleteRuleInteractor/
 └── mocks/
-    ├── createMockPresenter.ts     # IDeleteRulePresenterのモック生成（新規）
-    └── createMockTabsGateway.ts   # 既存モックを再エクスポート
+    └── createMockPresenter.ts     # IDeleteRulePresenterのモック生成（新規）
 ```
 
 注:
-- IRewriteRuleRepositoryのモックは既存の共通モックを使用
-- ITabsGatewayのモックは既存の`ToggleRuleActiveInteractor/mocks/createMockTabsGateway.ts`を再エクスポートすべき
+- IRewriteRuleRepositoryのモックは既存の共通モック（`tests/unit/application/ports/IRewriteRuleRepository/mocks/`）から直接インポート
+- ITabsGatewayのモックは既存の共通モック（`tests/frameworks-and-drivers/browser/ChromeTabsGateway/`）から直接インポート
 
 ### テストデータ
 
