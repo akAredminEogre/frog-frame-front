@@ -27,7 +27,7 @@ MessagingPortに正しいDTOを渡して削除リクエストを送信できる�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/interface-adapters/mappers/RewriteRuleMapper/delete/
 └── normal-cases.test.ts       # MessagingPort連携（2ケース）
 ```
@@ -46,7 +46,7 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/delete/
 
 インターフェース配下にモックファクトリを配置（複数テストで共有）:
 
-```
+```text
 tests/unit/interface-adapters/ports/IRewriteRuleMessagingPort/mocks/
 └── createMockRewriteRuleMessagingPort.ts    # モックファクトリ（既存）
 ```
