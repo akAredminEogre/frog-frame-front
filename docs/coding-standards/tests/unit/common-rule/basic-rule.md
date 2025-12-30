@@ -51,7 +51,14 @@ tests/unit/[layer]/[category]/[ServiceName]/
 
 ### eslint-rule
 
-ESLint化不可（beforeEach/afterEach内での特定関数呼び出しを強制するルールは存在しない。PRレビューで確認）
+ESLint化不可（beforeEach/afterEach内での特定関数呼び出しを強制するルールは存在しない）
+
+### 遵守方法
+
+1. **コードレビュー時の確認**: PR作成時に以下を確認
+   - `beforeEach`で`vi.clearAllMocks()`が使用されているか
+   - `afterEach`で`vi.resetAllMocks()`が使用されているか
+2. **既存テストファイルの参照**: 同プロジェクト内の既存テストファイルを参考にすること
 
 ---
 
