@@ -37,6 +37,14 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   // 連続クリック防止用の状態
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // ダイアログが開かれたときにisProcessingをリセット
+  // （コンポーネントがアンマウントされずに再利用される場合の対策）
+  useEffect(() => {
+    if (isOpen) {
+      setIsProcessing(false);
+    }
+  }, [isOpen]);
+
   // useIdで一意のIDを生成（複数ダイアログの同時レンダリング対応）
   const uniqueId = useId();
   const titleId = `confirm-dialog-title-${uniqueId}`;
