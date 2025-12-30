@@ -150,7 +150,7 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### Mapper層
 
-- [ ] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
+- [x] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
 
 #### Repository層
 
