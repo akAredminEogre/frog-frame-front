@@ -39,11 +39,12 @@ export class RewriteRuleMessagingService implements IRewriteRuleMessagingPort {
   }
 
   /**
-   * ルールを削除する（スケルトン）
+   * ルールを削除する
+   * @webext-core/proxy-service 経由でBackground Scriptに削除を依頼
    * @param dto 削除リクエストDTO
    */
   async delete(dto: DeleteRuleRequestDTO): Promise<void> {
-    // Phase 2で実装予定
-    throw new Error(`Not implemented: delete with id=${dto.id}`);
+    const proxyService = getRewriteRuleProxyService();
+    await proxyService.deleteRule(dto.id);
   }
 }
