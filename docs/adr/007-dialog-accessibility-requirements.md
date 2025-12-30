@@ -167,6 +167,69 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 | Radix UI (Dialog) | ヘッドレスUI、アクセシビリティ完備 |
 | Headless UI (Dialog) | Tailwind Labs製、アクセシビリティ完備 |
 
+### ベースコンポーネント（推奨）
+
+本ADRの要件を満たすベースコンポーネントとカスタムフックを提供している。
+新しいダイアログコンポーネントを実装する際は、これらを使用すること。
+
+#### ModalDialogBase
+
+ADR-007の全要件を満たすベースコンポーネント。
+
+**配置**: `src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase/`
+
+**提供する機能**:
+- ARIA属性（role, aria-modal, aria-labelledby, aria-describedby, tabIndex）
+- フォーカストラップ（FocusScope contain）
+- フォーカス復元（FocusScope restoreFocus）
+- 背景スクロール無効化（usePreventScroll）
+- Escapeキーでダイアログを閉じる
+- オーバーレイクリックでダイアログを閉じる
+- ポータルレンダリング（createPortal）
+- useId()によるID自動生成
+
+**使用例**:
+
+```tsx
+import { ModalDialogBase } from 'src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase';
+
+<ModalDialogBase
+  isOpen={isOpen}
+  onClose={handleClose}
+  title="確認"
+  description="本当に削除しますか？"
+  idPrefix="confirm-dialog"
+  testId="confirm-dialog"
+>
+  {/* ダイアログ固有のコンテンツ */}
+  <button onClick={handleCancel}>キャンセル</button>
+  <button onClick={handleConfirm}>削除</button>
+</ModalDialogBase>
+```
+
+#### カスタムフック
+
+**配置**: `src/frameworks-and-drivers/ui/hooks/`
+
+| フック | 用途 |
+|--------|------|
+| `useProcessingGuard` | 連続クリック防止 |
+| `useDialogIds` | ARIA用ID生成（useId()ベース） |
+| `useInitialFocus` | 初期フォーカス設定 |
+
+**使用例**:
+
+```tsx
+import { useProcessingGuard, useInitialFocus } from 'src/frameworks-and-drivers/ui/hooks';
+
+const { isProcessing, guardedHandler } = useProcessingGuard(isOpen);
+const focusRef = useInitialFocus<HTMLButtonElement>(isOpen);
+
+<button ref={focusRef} onClick={guardedHandler(onCancel)} disabled={isProcessing}>
+  キャンセル
+</button>
+```
+
 ### ビジュアルスタイリング要件
 
 | 要素 | 要件 |
@@ -189,7 +252,8 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 | コンポーネント | 配置 | 状態 |
 |---------------|------|------|
-| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | React Aria採用（useDialog, FocusScope, usePreventScroll） |
+| ModalDialogBase | `src/frameworks-and-drivers/ui/components/molecules/` | ベースコンポーネント（ADR-007全要件を実装） |
+| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | ModalDialogBaseを使用 |
 
 ## 影響ドキュメント
 
