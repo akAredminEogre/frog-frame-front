@@ -8,20 +8,16 @@ import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewrite
 /**
  * ChromeRuntimeRewriteRuleRepository.delete - 正常系テスト
  * 1. 指定されたIDでMapperのdeleteが呼ばれる
- * 2. Promiseが正常に解決される
+ * 2. 別のIDでもMapperのdeleteが正しく呼ばれる
  *
  * ADR-002, ADR-003に準拠: IRewriteRuleMessagingPort → Mapper → Repository
  */
 describe('ChromeRuntimeRewriteRuleRepository.delete - 正常系', () => {
-  let repository: ChromeRuntimeRewriteRuleRepository;
   let mockMessagingPort: IRewriteRuleMessagingPort;
-  let mapper: RewriteRuleMapper;
 
   beforeEach(() => {
     vi.clearAllMocks();
     mockMessagingPort = createMockRewriteRuleMessagingPort();
-    mapper = new RewriteRuleMapper(mockMessagingPort);
-    repository = new ChromeRuntimeRewriteRuleRepository(mapper);
   });
 
   afterEach(() => {
@@ -43,6 +39,8 @@ describe('ChromeRuntimeRewriteRuleRepository.delete - 正常系', () => {
     it(description, async () => {
       // Arrange - IRewriteRuleMessagingPort の delete をモック
       (mockMessagingPort.delete as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
+      const mapper = new RewriteRuleMapper(mockMessagingPort);
+      const repository = new ChromeRuntimeRewriteRuleRepository(mapper);
 
       // Act
       await repository.delete(id);
@@ -51,13 +49,5 @@ describe('ChromeRuntimeRewriteRuleRepository.delete - 正常系', () => {
       expect(mockMessagingPort.delete).toHaveBeenCalledWith({ id });
       expect(mockMessagingPort.delete).toHaveBeenCalledTimes(1);
     });
-  });
-
-  it('Promiseが正常に解決される', async () => {
-    // Arrange
-    (mockMessagingPort.delete as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
-
-    // Act & Assert - エラーなく完了することを確認
-    await expect(repository.delete(1)).resolves.toBeUndefined();
   });
 });
