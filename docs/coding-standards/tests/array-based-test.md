@@ -105,6 +105,70 @@ testCases.forEach(({ name, testDataId, initialState, expectedState }) => {
 
 ---
 
+## テストケースの重複・冗長性回避
+
+### 規約
+
+1. **入力値の一意性**: 配列内で同じ入力値を持つテストケースを作成しないこと
+   - 異なる観点をテストする場合でも、入力値が同じなら1つのテストケースに統合する
+   - 複数の観点を1つのテストケースで検証することで、テストの意図が明確になる
+
+2. **forEach外での重複禁止**: forEachループ内で既に検証しているアサーションを、別の独立したテストで重複させないこと
+   - 全テストケースで共通して行う検証はforEach内に含める
+   - 独立したテストが必要な場合は、forEachで検証していない観点に限定する
+
+### 禁止事項
+
+```typescript
+// ❌ 同じ入力値で複数のテストケースを作成
+const testCases = [
+  { description: 'ケース1', inputId: 1, expectedDto: { id: 1 } },
+  { description: 'ケース2', inputId: 999, expectedDto: { id: 999 } },
+  { description: 'ケース3', inputId: 1, expectedDto: { id: 1 } }, // inputId: 1 が重複
+];
+
+// ❌ forEachで検証済みの内容を別テストで重複
+testCases.forEach(({ inputId, expectedDto }) => {
+  it('...', async () => {
+    await mapper.delete(inputId);
+    expect(mock.delete).toHaveBeenCalledWith(expectedDto);
+    expect(mock.delete).toHaveBeenCalledTimes(1); // ここで検証済み
+  });
+});
+
+it('呼び出し回数の検証', async () => {
+  await mapper.delete(42);
+  expect(mock.delete).toHaveBeenCalledTimes(1); // 上記と重複
+});
+```
+
+### 許可事項
+
+```typescript
+// ✅ 各テストケースの入力値が一意
+const testCases = [
+  { description: 'ID=1: 最小IDで正しくDTOが構築される', inputId: 1, expectedDto: { id: 1 } },
+  { description: 'ID=999: 大きなIDでも正しくDTOが構築される', inputId: 999, expectedDto: { id: 999 } },
+];
+
+// ✅ 共通の検証はforEach内に統合
+testCases.forEach(({ description, inputId, expectedDto }) => {
+  it(description, async () => {
+    await mapper.delete(inputId);
+    expect(mock.delete).toHaveBeenCalledWith(expectedDto);
+    expect(mock.delete).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+### チェックポイント
+
+テストケース配列を作成する際:
+- [ ] 各テストケースの入力値が一意か?
+- [ ] forEachループ外に、ループ内と重複する検証がないか?
+
+---
+
 ## eslint-rule
 
 ESLint化不可（配列ベースかどうかは静的解析で判定困難。PRレビューで確認）
