@@ -2,7 +2,7 @@
  * ConfirmDialog コンポーネント テストヘルパー
  * テストファイル間で共通のセットアップ・ヘルパー関数を提供
  */
-import React from 'react';
+import React, { act } from 'react';
 import ReactDOM from 'react-dom/client';
 import { vi } from 'vitest';
 
@@ -86,16 +86,19 @@ export class ConfirmDialogTestHelper {
   /**
    * コンポーネントをレンダリング
    * React AriaのSSRProviderでラップしてテスト環境での動作を保証
+   * act()でラップしてReact 18の非同期レンダリングを適切に処理
    * @param props ConfirmDialogProps
    */
   async render(props: Partial<ConfirmDialogProps> = {}): Promise<void> {
     this.ensureSetup();
     const fullProps = createDefaultProps(props);
-    this.root!.render(
-      <SSRProvider>
-        <ConfirmDialog {...fullProps} />
-      </SSRProvider>
-    );
+    await act(async () => {
+      this.root!.render(
+        <SSRProvider>
+          <ConfirmDialog {...fullProps} />
+        </SSRProvider>
+      );
+    });
     await flushPromises();
   }
 
