@@ -129,6 +129,12 @@ const rule = RewriteRule.fromParams(1, {
 
 **ESLintルール化**: 不可（PRレビューで確認）
 
+#### 既存コードへの適用
+
+規約に準拠していない既存テストコードは [user-story-005](../../../user-stories/user-story-005/README.md) で対応予定。
+
+**注意**: 新規テスト作成時は必ずファクトリーメソッドを使用すること。
+
 ## mocks/ ディレクトリ未配置モック
 
 規約に準拠していないモックファクトリは [user-story-004](../../../user-stories/user-story-004/README.md) で対応予定。
