@@ -106,9 +106,9 @@ Interactorの3つの依存関係をモック化してテストする。
 
 新規モック作成前に、同一インターフェースの既存モックを確認すること。
 
-- [x] `grep -r "createMockRewriteRuleRepository" tests/` で既存モックを検索した → 既存モック使用
-- [x] `grep -r "createMockTabsGateway" tests/` で既存モックを検索した → **既存モック発見、再利用すべき**
-- [x] `grep -r "createMockPresenter" tests/` で既存モックを検索した → IDeleteRulePresenter用は新規作成
+- [x] `grep -r "createMockRewriteRuleRepository" tests/` で既存モックを検索した → 既存モック使用 (`tests/unit/application/ports/IRewriteRuleRepository/mocks/`)
+- [x] `grep -r "createMockTabsGateway" tests/` で既存モックを検索した → 既存モック使用 (`tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`)
+- [x] `grep -r "createMockPresenter" tests/` で既存モックを検索した → 新規作成（IDeleteRulePresenter固有）
 
 > **参照**: [common-rule.md](../../../../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
 
