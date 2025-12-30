@@ -3,13 +3,13 @@
 title User Story 003: ルール削除機能 - タスク依存ネットワーク図
 
 ' Phase 1: テスト戦略書
-rectangle "P1-T\nテスト戦略書\n（結合・E2E）" as testStrategy #lightgray
+rectangle "P1-T\nテスト戦略書\n（結合・E2E）" as testStrategy #lightgreen
 
 ' Phase 2: 実装 - メッセージング
-rectangle "P2-M1\nDeleteRule\nRequestDTO\n実装+テスト" as requestDtoImpl #orange
-rectangle "P2-M2\nProxyService\ndeleteRule()\n実装+テスト" as proxyImpl #orange
-rectangle "P2-M3\nProxyService\nImpl\n実装+テスト" as proxyImplImpl #orange
-rectangle "P2-M4\nMessaging\nService\n実装+テスト" as msgImpl #orange
+rectangle "P2-M1\nDeleteRule\nRequestDTO\n実装+テスト" as requestDtoImpl #lightgreen
+rectangle "P2-M2\nProxyService\ndeleteRule()\n実装+テスト" as proxyImpl #lightgreen
+rectangle "P2-M3\nProxyService\nImpl\n実装+テスト" as proxyImplImpl #lightgreen
+rectangle "P2-M4\nMessaging\nService\n実装+テスト" as msgImpl #lightgreen
 
 ' Phase 2: 実装 - Mapper/Repository
 rectangle "P2-R1\nMapper\ndelete()\n実装+テスト" as mapperImpl #orange
@@ -17,18 +17,18 @@ rectangle "P2-R2\nDexie\nRepository\n実装+テスト" as dexieImpl #orange
 rectangle "P2-R3\nChrome\nRepository\n実装+テスト" as chromeImpl #orange
 
 ' Phase 2: 実装 - UseCase
-rectangle "P2-U1\nInputData\n実装+テスト" as inputImpl #orange
-rectangle "P2-U2\nOutputData\n実装+テスト" as outputImpl #orange
-rectangle "P2-U3\nErrorOutput\n実装+テスト" as errorImpl #orange
+rectangle "P2-U1\nInputData\n実装+テスト" as inputImpl #lightgreen
+rectangle "P2-U2\nOutputData\n実装+テスト" as outputImpl #lightgreen
+rectangle "P2-U3\nErrorOutput\n実装+テスト" as errorImpl #lightgreen
 rectangle "P2-U4\nInteractor\n実装+テスト" as interactorImpl #orange
 
 ' Phase 2: 実装 - Controller/Presenter
 rectangle "P2-C1\nController\n実装+テスト" as controllerImpl #orange
 rectangle "P2-C2\nFactory\n実装+テスト" as factoryImpl #orange
-rectangle "P2-C3\nPresenter\n実装+テスト" as presenterImpl #orange
+rectangle "P2-C3\nPresenter\n実装+テスト" as presenterImpl #lightgreen
 
 ' Phase 2: 実装 - UI
-rectangle "P2-UI1\nDeleteButton\n実装+テスト" as deleteBtnImpl #orange
+rectangle "P2-UI1\nDeleteButton\n実装+テスト" as deleteBtnImpl #lightgreen
 rectangle "P2-UI2\nConfirmDialog\n実装+テスト" as confirmImpl #orange
 rectangle "P2-UI3\nToast\n実装+テスト" as toastImpl #orange
 
@@ -77,10 +77,10 @@ rulesAppInteg --> e2eTest
 
 ' 凡例
 legend right
-  |= 色 |= Phase |
-  | <#lightgray> | Phase 1: テスト戦略書 |
-  | <#orange> | Phase 2: 実装+単体テスト |
-  | <#pink> | Phase 3: 統合 |
+  |= 色 |= 状態 |
+  | <#lightgreen> | 完了 |
+  | <#orange> | 未完了（スケルトン） |
+  | <#pink> | Phase 3: 統合（未着手） |
 endlegend
 
 note bottom
