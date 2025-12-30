@@ -65,6 +65,23 @@ await this.tabsGateway.reloadMatchingTabs(rule);
 - presentを副次操作の後に呼び出すこと（部分的成功が実現できない）
 - 部分的成功パターンを使用する際にコメントを省略すること
 
+### テスト要件
+
+部分的成功パターンのテストでは、以下を必ず検証すること：
+
+1. **呼び出し回数**: `present`と`presentError`が両方1回ずつ呼ばれること
+2. **呼び出し順序**: `present`が`presentError`より**先に**呼ばれること
+
+順序検証のコード例：
+```typescript
+// invocationCallOrderを使用して呼び出し順序を検証
+const presentOrder = (mockPresenter.present as ReturnType<typeof vi.fn>).mock.invocationCallOrder[0];
+const presentErrorOrder = (mockPresenter.presentError as ReturnType<typeof vi.fn>).mock.invocationCallOrder[0];
+expect(presentOrder).toBeLessThan(presentErrorOrder);
+```
+
+**重要**: 順序検証を省略すると、部分的成功パターンの正しい動作が保証されない。
+
 ### 適用例
 
 - `ToggleRuleActiveInteractor.execute()` - ルール更新 → present → タブリロード

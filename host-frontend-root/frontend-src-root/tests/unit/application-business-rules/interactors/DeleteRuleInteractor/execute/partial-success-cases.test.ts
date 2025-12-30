@@ -80,6 +80,13 @@ describe('DeleteRuleInteractor.execute - 部分的成功', () => {
         .calls[0][0] as DeleteRuleErrorOutputData;
       expect(errorData.ruleId).toBe(testCase.input.ruleId);
       expect(errorData.message).toBe(testCase.expectedErrorMessage);
+
+      // 呼び出し順序の検証: presentがpresentErrorより先に呼ばれること
+      const presentOrder = (mockPresenter.present as ReturnType<typeof vi.fn>).mock
+        .invocationCallOrder[0];
+      const presentErrorOrder = (mockPresenter.presentError as ReturnType<typeof vi.fn>).mock
+        .invocationCallOrder[0];
+      expect(presentOrder).toBeLessThan(presentErrorOrder);
     });
   });
 });
