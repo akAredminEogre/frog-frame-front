@@ -13,9 +13,8 @@ MessagingPortに正しいDTOを渡して削除リクエストを送信できる�
 
 | 分類 | テストケース | 根拠 |
 |------|-------------|------|
-| 単一ID指定 | 指定したIDでmessagingPort.delete()が呼ばれる | 基本パターン |
-| ID値の検証 | DeleteRuleRequestDTOに正しいIDが設定される | DTO構築の正確性 |
-| 呼び出し回数 | messagingPort.delete()が1回だけ呼ばれる | 重複呼び出し防止 |
+| ID=1 | 最小IDで正しくDTOが構築され、messagingPort.delete()が1回呼ばれる | 基本パターン + 境界値（最小ID） |
+| ID=999 | 大きなIDでも正しくDTOが構築される | 大きな値での動作確認 |
 
 **対応テスト**: `normal-cases.test.ts`
 
@@ -30,7 +29,7 @@ MessagingPortに正しいDTOを渡して削除リクエストを送信できる�
 
 ```
 tests/unit/interface-adapters/mappers/RewriteRuleMapper/delete/
-└── normal-cases.test.ts       # MessagingPort連携（3ケース）
+└── normal-cases.test.ts       # MessagingPort連携（2ケース）
 ```
 
 ## モック戦略
