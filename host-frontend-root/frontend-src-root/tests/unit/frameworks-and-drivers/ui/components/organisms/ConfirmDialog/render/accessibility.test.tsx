@@ -97,7 +97,7 @@ describe('ConfirmDialog - アクセシビリティ属性（ADR-007）', () => {
       expect(message).not.toBeNull();
       // useIdは":r0:"のような形式のIDを生成するため、IDが存在し空でないことを確認
       expect(message?.id).toBeTruthy();
-      expect(message?.id).toContain('confirm-dialog-message-');
+      expect(message?.id).toContain('confirm-dialog-description-');
     });
   });
 });
