@@ -223,6 +223,10 @@ ADR-007の全要件を満たすベースコンポーネント。
 | ModalDialogBase | `src/frameworks-and-drivers/ui/components/molecules/` | ベースコンポーネント（ADR-007全要件を実装） |
 | ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | ModalDialogBaseを使用 |
 
+### 適用待ちの箇所
+
+該当なし（本プロジェクトのダイアログコンポーネントはすべて上記の「適用済みの箇所」に記載されている）
+
 ## 影響ドキュメント
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
