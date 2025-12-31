@@ -83,7 +83,7 @@ describe('ConfirmDialog - アクセシビリティ属性（ADR-007）', () => {
       // Assert
       const title = helper.getTitleElement();
       expect(title).not.toBeNull();
-      // useIdは":r0:"のような形式のIDを生成するため、IDが存在し空でないことを確認
+      // useIdで動的に生成されるため、IDの形式は実装依存だがプレフィックスは確認可能
       expect(title?.id).toBeTruthy();
       expect(title?.id).toContain('confirm-dialog-title-');
     });
@@ -95,7 +95,7 @@ describe('ConfirmDialog - アクセシビリティ属性（ADR-007）', () => {
       // Assert
       const message = helper.getMessageElement();
       expect(message).not.toBeNull();
-      // useIdは":r0:"のような形式のIDを生成するため、IDが存在し空でないことを確認
+      // useIdで動的に生成されるため、IDの形式は実装依存だがプレフィックスは確認可能
       expect(message?.id).toBeTruthy();
       expect(message?.id).toContain('confirm-dialog-description-');
     });
