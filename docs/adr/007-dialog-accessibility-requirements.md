@@ -188,25 +188,6 @@ ADR-007の全要件を満たすベースコンポーネント。
 - ポータルレンダリング（createPortal）
 - useId()によるID自動生成
 
-**使用例**:
-
-```tsx
-import { ModalDialogBase } from 'src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase';
-
-<ModalDialogBase
-  isOpen={isOpen}
-  onClose={handleClose}
-  title="確認"
-  description="本当に削除しますか？"
-  idPrefix="confirm-dialog"
-  testId="confirm-dialog"
->
-  {/* ダイアログ固有のコンテンツ */}
-  <button onClick={handleCancel}>キャンセル</button>
-  <button onClick={handleConfirm}>削除</button>
-</ModalDialogBase>
-```
-
 #### カスタムフック
 
 **配置**: `src/frameworks-and-drivers/ui/hooks/`
@@ -216,19 +197,6 @@ import { ModalDialogBase } from 'src/frameworks-and-drivers/ui/components/molecu
 | `useProcessingGuard` | 連続クリック防止 |
 | `useDialogIds` | ARIA用ID生成（useId()ベース） |
 | `useInitialFocus` | 初期フォーカス設定 |
-
-**使用例**:
-
-```tsx
-import { useProcessingGuard, useInitialFocus } from 'src/frameworks-and-drivers/ui/hooks';
-
-const { isProcessing, guardedHandler } = useProcessingGuard(isOpen);
-const focusRef = useInitialFocus<HTMLButtonElement>(isOpen);
-
-<button ref={focusRef} onClick={guardedHandler(onCancel)} disabled={isProcessing}>
-  キャンセル
-</button>
-```
 
 ### ビジュアルスタイリング要件
 
