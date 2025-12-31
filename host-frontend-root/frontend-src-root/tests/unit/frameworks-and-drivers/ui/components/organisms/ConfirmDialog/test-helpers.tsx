@@ -63,7 +63,7 @@ export class ConfirmDialogTestHelper {
   /**
    * テスト後のクリーンアップ
    * afterEach 内で呼び出す
-   * setup()が呼ばれていない場合は何もせず早期リターン（カスケード障害を防ぐ）
+   * setup()が呼ばれていない場合は何もせず早期リターン（他のテストケースへの影響を防ぐため）
    */
   cleanup(): void {
     if (!this.container || !this.root) {
