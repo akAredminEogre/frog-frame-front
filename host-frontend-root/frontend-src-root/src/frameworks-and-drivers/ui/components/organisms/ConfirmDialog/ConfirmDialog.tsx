@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { ModalDialogBase } from 'src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase';
 import styles from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog.module.css';
@@ -42,10 +42,20 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   // 初期フォーカス設定（キャンセルボタンにフォーカス）
   const cancelButtonRef = useInitialFocus<HTMLButtonElement>(isOpen);
 
+  // ガード済みハンドラをメモ化（レンダリングごとの再生成を防止）
+  const handleCancel = useMemo(
+    () => guardedHandler(onCancel),
+    [guardedHandler, onCancel]
+  );
+  const handleConfirm = useMemo(
+    () => guardedHandler(onConfirm),
+    [guardedHandler, onConfirm]
+  );
+
   return (
     <ModalDialogBase
       isOpen={isOpen}
-      onClose={guardedHandler(onCancel)}
+      onClose={handleCancel}
       title={title}
       description={message}
       idPrefix="confirm-dialog"
@@ -56,7 +66,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           ref={cancelButtonRef}
           type="button"
           className={`${styles.button} ${styles.cancelButton}`}
-          onClick={guardedHandler(onCancel)}
+          onClick={handleCancel}
           disabled={isProcessing}
           data-testid="confirm-dialog-cancel-button"
         >
@@ -65,7 +75,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <button
           type="button"
           className={`${styles.button} ${styles.confirmButton}`}
-          onClick={guardedHandler(onConfirm)}
+          onClick={handleConfirm}
           disabled={isProcessing}
           data-testid="confirm-dialog-confirm-button"
         >
