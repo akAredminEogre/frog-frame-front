@@ -10,17 +10,3 @@
   text-align: center;
   vertical-align: middle;
 }
-
-.editButton {
-  background-color: var(--colors-primary);
-  color: var(--colors-white);
-  border: none;
-  padding: var(--spacing-xs) var(--spacing-s);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-size: var(--font-size-small);
-}
-
-.editButton:hover {
-  background-color: var(--colors-primary-dark);
-}
