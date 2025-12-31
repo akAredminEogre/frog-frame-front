@@ -28,5 +28,5 @@ export const useInitialFocus = <T extends HTMLElement>(
     }
   }, [isActive]);
 
-  return ref as RefObject<T>;
+  return ref;
 };
