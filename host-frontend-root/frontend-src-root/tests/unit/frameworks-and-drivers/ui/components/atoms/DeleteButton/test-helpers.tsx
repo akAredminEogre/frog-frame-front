@@ -30,7 +30,7 @@ export class DeleteButtonTestHelper {
    */
   private ensureSetup(): void {
     if (!this.container || !this.root) {
-      throw new Error('DeleteButtonTestHelper.setup() must be called before using other methods. Add helper.setup() to beforeEach().');
+      throw new Error('他のメソッドを使用する前に DeleteButtonTestHelper.setup() を呼び出す必要があります。beforeEach() 内で helper.setup() を呼び出してください。');
     }
   }
 
