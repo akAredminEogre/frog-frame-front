@@ -1,10 +1,8 @@
 import { useDialog } from '@react-aria/dialog';
-import { FocusScope } from '@react-aria/focus';
 import { usePreventScroll } from '@react-aria/overlays';
 import React, { ReactNode, useCallback, useRef } from 'react';
-import { createPortal } from 'react-dom';
 
-import styles from 'src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase/ModalDialogBase.module.css';
+import { ModalDialogBaseUI } from 'src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase/ModalDialogBase.ui';
 import { useDialogIds } from 'src/frameworks-and-drivers/ui/hooks';
 
 /**
@@ -30,7 +28,10 @@ export interface ModalDialogBaseProps {
 }
 
 /**
- * ADR-007準拠のモーダルダイアログベースコンポーネント
+ * ADR-007準拠のモーダルダイアログベースコンポーネント（Container層）
+ *
+ * ADR-009に基づきContainer/UI分離を適用。
+ * このContainerはReact Ariaフックの管理とイベントハンドラの作成を担当する。
  *
  * WAI-ARIA Dialog Modal Patternに準拠した以下の機能を提供：
  * - ARIA属性（role="dialog", aria-modal, aria-labelledby, aria-describedby, tabIndex={-1}）
@@ -109,36 +110,20 @@ export const ModalDialogBase: React.FC<ModalDialogBaseProps> = ({
     return null;
   }
 
-  const dialogContent = (
-    <div
-      className={styles.overlay}
-      onClick={handleOverlayClick}
-      data-testid={`${testId}-overlay`}
+  return (
+    <ModalDialogBaseUI
+      title={title}
+      description={description}
+      titleId={titleId}
+      descriptionId={descriptionId}
+      dialogRef={dialogRef}
+      dialogProps={dialogProps}
+      onKeyDown={handleKeyDown}
+      onOverlayClick={handleOverlayClick}
+      dialogClassName={dialogClassName}
+      testId={testId}
     >
-      <FocusScope contain restoreFocus>
-        <div
-          {...dialogProps}
-          ref={dialogRef}
-          className={`${styles.dialog} ${dialogClassName || ''}`}
-          onKeyDown={handleKeyDown}
-          aria-modal="true"
-          tabIndex={-1}
-          data-testid={testId}
-        >
-          <h2 id={titleId} className={styles.title}>
-            {title}
-          </h2>
-          {description && (
-            <p id={descriptionId} className={styles.description}>
-              {description}
-            </p>
-          )}
-          {children}
-        </div>
-      </FocusScope>
-    </div>
+      {children}
+    </ModalDialogBaseUI>
   );
-
-  // ポータルでdocument.bodyにレンダリング
-  return createPortal(dialogContent, document.body);
 };
