@@ -43,7 +43,7 @@ Atomic DesignはすべてFrameworks & Drivers層内のUIコンポーネントの
 
 ### ディレクトリ構成
 
-```
+```text
 src/
 ├── domain/                          # Enterprise Business Rules
 │   ├── entities/
