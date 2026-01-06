@@ -19,7 +19,7 @@ export interface ModalDialogBaseUIProps {
   /** 説明文要素のID（aria-describedby用） */
   descriptionId: string;
   /** ダイアログ要素のref */
-  dialogRef: RefObject<HTMLDivElement | null>;
+  dialogRef: RefObject<HTMLDivElement>;
   /** useDialogから取得したprops */
   dialogProps: React.HTMLAttributes<HTMLElement>;
   /** キーボードイベントハンドラ */

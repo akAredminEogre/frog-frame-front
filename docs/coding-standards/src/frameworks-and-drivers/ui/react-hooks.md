@@ -345,24 +345,24 @@ return ref as RefObject<T>;  // 不要なキャスト
 
 ### Propsで受け取るRefの型
 
-`useRef<T>(null)`で作成したrefを子コンポーネントにpropsで渡す場合、受け取る側の型定義にも`null`を含める必要がある。
+`useRef<T>(null)`で作成したrefを子コンポーネントにpropsで渡す場合、受け取る側の型定義は`RefObject<T>`とする（`| null`は不要）。
 
 ```typescript
-// ✅ 正しい型定義: nullを含める
-interface ChildProps {
-  dialogRef: RefObject<HTMLDivElement | null>;
-}
-
-// ❌ 誤った型定義: nullを含めていない
+// ✅ 正しい型定義
 interface ChildProps {
   dialogRef: RefObject<HTMLDivElement>;
+}
+
+// ❌ 誤った型定義: | null は不要（DOM要素のref属性と互換性がなくなる）
+interface ChildProps {
+  dialogRef: RefObject<HTMLDivElement | null>;
 }
 ```
 
 **理由**:
-- `useRef<HTMLDivElement>(null)`は`RefObject<HTMLDivElement | null>`を返す（`current`が`null`になりうる）
-- 子コンポーネントの型定義もこれに合わせる必要がある
-- 型が一致しないとTypeScriptエラーになる場合がある
+- `RefObject<T>`は既に`{ readonly current: T | null }`という型を持つ
+- 型パラメータに`| null`を追加すると`RefObject<HTMLDivElement | null>`となり、DOM要素の`ref`属性（`LegacyRef<HTMLDivElement>`）と互換性がなくなる
+- `useRef<HTMLDivElement>(null)`は`RefObject<HTMLDivElement>`を返すので、そのまま使用する
 
 ### eslint-rule
 
