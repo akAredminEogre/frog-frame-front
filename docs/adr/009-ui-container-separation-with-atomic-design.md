@@ -179,4 +179,5 @@ UI層がビジネスロジックを持たないため、Storybookでの見た目
 
 - [ADR-001: Clean Architecture with Presenter Pattern](./001-clean-architecture-with-presenter-pattern.md)
 - [ADR-005: Factory Pattern for React Callback Injection](./005-factory-pattern-for-react-callback-injection.md)
+- [ADR-007: ダイアログコンポーネントのアクセシビリティ要件](./007-dialog-accessibility-requirements.md)
 - [ADR-008: UI Component Directory Migration](./008-ui-component-directory-migration.md)
