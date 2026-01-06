@@ -47,11 +47,11 @@ Atomic DesignはすべてFrameworks & Drivers層内のUIコンポーネントの
 src/
 ├── domain/                          # Enterprise Business Rules
 │   ├── entities/
-│   ├── valueObjects/
+│   ├── value-objects/
 │   └── services/
 │
 ├── application/                     # Application Business Rules
-│   └── useCases/
+│   └── usecases/
 │       └── [useCaseName]/
 │           ├── I[UseCaseName]UseCase.ts    # InputPort
 │           ├── [UseCaseName]Interactor.ts
@@ -59,7 +59,7 @@ src/
 │           ├── [UseCaseName]OutputData.ts
 │           └── I[UseCaseName]Presenter.ts  # OutputPort
 │
-├── adapters/                        # Interface Adapters
+├── interface-adapters/              # Interface Adapters
 │   ├── controllers/
 │   ├── presenters/
 │   ├── factories/
@@ -68,17 +68,20 @@ src/
 │   ├── dtos/
 │   └── viewModels/
 │
-├── di/                              # 依存性注入設定
-│   └── container.ts
+├── infrastructure/
+│   └── di/                          # 依存性注入設定
+│       └── container.ts
 │
-└── frameworks/                      # Frameworks & Drivers
-    └── react/
+└── frameworks-and-drivers/          # Frameworks & Drivers
+    └── ui/
         ├── components/              # Atomic Design適用
         │   ├── atoms/
         │   ├── molecules/
         │   └── organisms/
         │
         ├── templates/               # ページレイアウト
+        │
+        ├── hooks/                   # 共通カスタムフック
         │
         └── pages/                   # ページ単位（Container + Composition）
             └── [PageName]/
@@ -98,8 +101,8 @@ src/
 |----|-------------|
 | domain/ | なし |
 | application/ | domain/ のみ |
-| adapters/ | domain/, application/ |
-| frameworks/ | domain/, application/, adapters/ |
+| interface-adapters/ | domain/, application/ |
+| frameworks-and-drivers/ | domain/, application/, interface-adapters/ |
 
 #### Container（.container.tsx）の責務
 
@@ -143,9 +146,9 @@ src/
 |----|-----------|-----------|
 | domain/ | Entity, ValueObject, DomainService | 単体テスト |
 | application/ | Interactor | 単体テスト（Repository/Gateway/Presenterをモック） |
-| adapters/ | Controller, Presenter, Repository | 単体テスト + 統合テスト |
-| frameworks/ UI層 | Presentational Component | Storybook + VRT |
-| frameworks/ Container層 | Container Component | 統合テスト（Controllerをモック） |
+| interface-adapters/ | Controller, Presenter, Repository | 単体テスト + 統合テスト |
+| frameworks-and-drivers/ UI層 | Presentational Component | Storybook + VRT |
+| frameworks-and-drivers/ Container層 | Container Component | 統合テスト（Controllerをモック） |
 
 UI層がビジネスロジックを持たないため、Storybookでの見た目確認が容易になる。
 
