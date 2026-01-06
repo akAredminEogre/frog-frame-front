@@ -165,7 +165,9 @@ UI層がビジネスロジックを持たないため、Storybookでの見た目
 
 ### 適用済みの箇所
 
-該当なし（新規採用）
+| コンポーネント | 配置 | 備考 |
+|---------------|------|------|
+| ModalDialogBase | `src/frameworks-and-drivers/ui/components/molecules/` | Container/UI分離適用済み |
 
 ### 適用待ちの箇所
 
