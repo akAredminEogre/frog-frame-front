@@ -134,6 +134,10 @@ src/
 - Atomic Designの階層には含めない
 - これによりorganismsの肥大化を防ぐ
 
+**Compositionルール適用**:
+- ページ固有コンポーネントもContainer/UI分離パターンを適用する
+- ページContainer層でページ固有コンポーネントをcompositionし、ページUI層ではReactNodeで受け取る
+
 #### Compositionルール
 
 - UI層は子コンポーネントを直接importしない
