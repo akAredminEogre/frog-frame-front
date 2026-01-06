@@ -343,6 +343,27 @@ return ref as RefObject<T>;  // 不要なキャスト
 - [ ] 戻り値の型を明示する場合、`RefObject<T>`で十分か（`RefObject<T | null>`は冗長）
 - [ ] 不要な`as RefObject<T>`キャストを追加していないか
 
+### Propsで受け取るRefの型
+
+`useRef<T>(null)`で作成したrefを子コンポーネントにpropsで渡す場合、受け取る側の型定義にも`null`を含める必要がある。
+
+```typescript
+// ✅ 正しい型定義: nullを含める
+interface ChildProps {
+  dialogRef: RefObject<HTMLDivElement | null>;
+}
+
+// ❌ 誤った型定義: nullを含めていない
+interface ChildProps {
+  dialogRef: RefObject<HTMLDivElement>;
+}
+```
+
+**理由**:
+- `useRef<HTMLDivElement>(null)`は`RefObject<HTMLDivElement | null>`を返す（`current`が`null`になりうる）
+- 子コンポーネントの型定義もこれに合わせる必要がある
+- 型が一致しないとTypeScriptエラーになる場合がある
+
 ### eslint-rule
 
 ESLint化不可（型キャストの必要性は文脈依存であり、静的解析で正誤を判断できない。PRレビューで確認）
