@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Button } from 'src/components/atoms/Button';
+import { TruncatedText } from 'src/components/atoms/TruncatedText';
 import styles from 'src/components/molecules/RuleTableRow/RuleTableRow.module.css';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
@@ -23,22 +25,10 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit, onToggle, isT
         />
       </td>
       <td>
-        {/* TODO: <button>のatomsへの分離 */}
-        <button
-          className={styles.editButton}
-          onClick={() => onEdit(rule.id)}
-          type="button"
-        >
-          編集
-        </button>
+        <Button onClick={() => onEdit(rule.id)}>編集</Button>
       </td>
       <td title={rule.urlPattern || ''} className="rule-url-pattern">
-        {/* TODO: URLPattern moleculeへの分離、表示ビジネスロジックの分離 */}
-        {rule.urlPattern
-          ? (rule.urlPattern.length > 30
-             ? rule.urlPattern.substring(0, 30) + '...'
-             : rule.urlPattern)
-          : '-'}
+        <TruncatedText text={rule.urlPattern} maxLength={30} />
       </td>
       <td title={rule.oldString} className="rule-old-string">
         {rule.oldString}
