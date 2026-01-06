@@ -37,32 +37,7 @@ WAI-ARIA Authoring Practices（Dialog Modal Pattern）に準拠したアクセ�
 - `useId()`はReact 18で導入されたフックで、サーバーサイドレンダリングでも安全に一意のIDを生成する
 - 将来的な拡張性を確保し、コンポーネントの再利用性を高める
 
-**実装例**:
-
-```tsx
-import { useId } from 'react';
-
-const MyDialog: React.FC<Props> = ({ ... }) => {
-  const uniqueId = useId();
-  const titleId = `dialog-title-${uniqueId}`;
-  const descriptionId = `dialog-description-${uniqueId}`;
-
-  return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      aria-describedby={descriptionId}
-      tabIndex={-1}
-    >
-      <h2 id={titleId}>タイトル</h2>
-      <p id={descriptionId}>説明文</p>
-    </div>
-  );
-};
-```
-
-**注意**: IDの接頭辞（例: `dialog-title-`）は、デバッグ時の可読性のために付与することを推奨する。
+**実装方法**: `useDialogIds`フックを使用する（「カスタムフック」セクション参照）
 
 #### 2. フォーカス管理
 
