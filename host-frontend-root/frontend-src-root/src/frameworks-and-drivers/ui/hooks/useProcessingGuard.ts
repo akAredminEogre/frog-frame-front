@@ -19,8 +19,8 @@ export interface UseProcessingGuardResult {
  * @example
  * ```tsx
  * const { isProcessing, guardedHandler } = useProcessingGuard(isOpen);
- * const handleConfirm = guardedHandler(onConfirm);
- * const handleCancel = guardedHandler(onCancel);
+ * const handleConfirm = useMemo(() => guardedHandler(onConfirm), [guardedHandler, onConfirm]);
+ * const handleCancel = useMemo(() => guardedHandler(onCancel), [guardedHandler, onCancel]);
  *
  * <button onClick={handleConfirm} disabled={isProcessing}>確認</button>
  * ```
