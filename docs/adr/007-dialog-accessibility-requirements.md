@@ -86,36 +86,6 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 ダイアログが開いている間、背景のスクロールを無効化する。
 
-### 実装チェックリスト
-
-ダイアログコンポーネントを実装する際、以下のチェックリストを使用して必須要件の漏れを防ぐこと。
-
-#### ARIA属性
-
-- [ ] `role="dialog"`
-- [ ] `aria-modal="true"`
-- [ ] `aria-labelledby`（タイトル要素のIDを参照）
-- [ ] `aria-describedby`（説明文がある場合）
-- [ ] `tabIndex={-1}`（プログラム的フォーカス設定用）
-- [ ] IDは`useId()`で生成
-
-#### フォーカス管理
-
-- [ ] 初期フォーカス設定（手動useEffect推奨、テスト環境との互換性のため）
-- [ ] フォーカストラップ（`FocusScope contain`）
-- [ ] 復帰フォーカス（`FocusScope restoreFocus`）
-
-#### キーボード操作
-
-- [ ] Escapeキーでダイアログを閉じる
-- [ ] Tab/Shift+Tabでフォーカスがループする
-
-#### その他
-
-- [ ] オーバーレイクリックでダイアログを閉じる
-- [ ] 背景スクロール無効化（`usePreventScroll`）
-- [ ] ポータルレンダリング（`createPortal`）
-
 ### 推奨ライブラリ（採用済み）
 
 本プロジェクトでは**React Aria**を採用している（ハイブリッドアプローチ）。以下のパッケージを使用：
@@ -206,10 +176,11 @@ ADR-007の全要件を満たすベースコンポーネント。
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
 
-- なし
+- [アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)
 
 ## 関連ドキュメント
 
 - [WAI-ARIA Authoring Practices - Dialog Modal](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
 - [React Aria useDialog](https://react-spectrum.adobe.com/react-aria/useDialog.html)
 - [React Hooks コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/react-hooks.md) - useEffectの副作用管理ルール
+- [アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md) - 実装チェックリスト
