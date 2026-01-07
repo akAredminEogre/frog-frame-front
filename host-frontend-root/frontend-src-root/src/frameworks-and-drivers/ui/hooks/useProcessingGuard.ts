@@ -19,14 +19,12 @@ export interface UseProcessingGuardResult {
  * 連続クリック防止のためのカスタムフック
  *
  * @remarks
- * このフックは以下の使用パターンを前提としている:
- * - isActiveはモーダルダイアログの開閉状態を表す
- * - ガード対象のハンドラはダイアログを閉じる処理を含む
- * - 処理状態はダイアログ再オープン時（isActiveがtrueになったとき）にリセットされる
- * - ハンドラが同期的に完了する、またはダイアログを即座に閉じる
+ * 処理状態は以下のタイミングでリセットされる:
+ * - ハンドラの完了時（正常終了・エラー問わずtry-finallyでリセット）
+ * - isActiveがtrueになったとき（コンポーネント再利用時の安全策）
  *
- * 上記の前提が満たされない場合（例: バリデーションエラーでダイアログを開いたまま、
- * 非同期処理の完了を待つ必要がある等）、このフックは適切に機能しない。
+ * 制約: 同期ハンドラのみサポート。非同期ハンドラを渡した場合、
+ * Promiseの完了を待たずに処理完了と見なされる。
  *
  * @param isActive - trueになったときに処理状態をリセット（例: ダイアログのisOpen）
  * @returns isProcessing状態とガード付きハンドラを生成する関数
@@ -53,7 +51,12 @@ export const useProcessingGuard = (isActive: boolean): UseProcessingGuardResult 
         if (isProcessingRef.current) return;
         isProcessingRef.current = true;
         setIsProcessing(true);
-        handler();
+        try {
+          handler();
+        } finally {
+          isProcessingRef.current = false;
+          setIsProcessing(false);
+        }
       };
     },
     []
