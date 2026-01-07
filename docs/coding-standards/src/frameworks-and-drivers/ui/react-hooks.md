@@ -554,12 +554,48 @@ ESLint化不可（JSDocの内容の適切さは文脈依存であり、静的解
 
 ### 概要
 
-処理中フラグやロック機構を実装する際、状態のリセット漏れを防ぐためのルール。
+処理中フラグやロック機構を実装する際、エラー時の状態リセット漏れを防ぐためのルール。
 
-### 原則: try-finallyで確実にリセットする
+### 原則: エラー時は必ず状態をリセットする
 
-状態をtrueに設定して処理をブロックする場合、処理完了後に必ずfalseにリセットすること。
-エラー発生時もリセットされるよう、try-finallyを使用する。
+ハンドラ内でエラーが発生した場合、状態が永続化してUIが操作不能になることを防ぐため、エラー時は状態をリセットすること。
+
+### パターン1: 処理完了後に即座にリセットする場合（try-finally）
+
+単発の処理で、完了後すぐにリセットして次の操作を受け付ける場合。
+
+```typescript
+const handleSubmit = () => {
+  if (isProcessing) return;
+  isProcessing = true;
+  try {
+    submitData();
+  } finally {
+    isProcessing = false; // 正常・エラー問わずリセット
+  }
+};
+```
+
+### パターン2: 別の条件でリセットする場合（try-catch）
+
+連続クリック防止など、正常完了時は状態を維持し、別の条件（ダイアログ再オープン等）でリセットする場合。
+
+```typescript
+const guardedHandler = (handler) => {
+  return () => {
+    if (isProcessing) return;
+    isProcessing = true;
+    try {
+      handler();
+      // 正常完了時はリセットしない（連続クリック防止）
+      // 別の条件（isActive=true等）でリセットされる
+    } catch (error) {
+      isProcessing = false; // エラー時のみリセット
+      throw error;
+    }
+  };
+};
+```
 
 ### 悪い例
 
@@ -575,34 +611,19 @@ const guardedHandler = (handler) => {
 
 → handlerがエラーをスローすると、isProcessingが永続化してボタンが操作不能になる
 
-### 良い例
+### パターンの選択基準
 
-```typescript
-const guardedHandler = (handler) => {
-  return () => {
-    if (isProcessing) return;
-    isProcessing = true;
-    try {
-      handler();
-    } finally {
-      isProcessing = false; // エラー時も確実にリセット
-    }
-  };
-};
-```
-
-### なぜ必要か
-
-- ハンドラ内でエラーが発生する可能性は常にある
-- 状態が永続化すると、UIが操作不能になる重大なバグになる
-- try-finallyのコストは低く、防御的プログラミングとして有効
+| 要件 | パターン |
+|-----|---------|
+| 処理完了後すぐに次の操作を受け付ける | try-finally |
+| 連続クリック防止（正常完了時は状態維持） | try-catch（エラー時のみリセット） |
 
 ### チェックリスト
 
 状態ガード/ロックを実装する際は、以下を確認すること:
 
-- [ ] 処理完了後に状態をリセットしているか
-- [ ] エラー発生時もリセットされるようtry-finallyを使用しているか
+- [ ] エラー発生時に状態がリセットされるか
+- [ ] 正常完了時のリセットタイミングは適切か（即座 or 別条件）
 - [ ] 非同期処理の場合、Promiseの完了を待ってからリセットしているか
 
 ### eslint-rule
