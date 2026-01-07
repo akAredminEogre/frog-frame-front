@@ -548,6 +548,67 @@ const guardedClick = useMemo(
 
 ESLint化不可（JSDocの内容の適切さは文脈依存であり、静的解析で判断できない。PRレビューで確認）
 
+---
+
+## 状態ガード/ロックの実装ルール
+
+### 概要
+
+処理中フラグやロック機構を実装する際、状態のリセット漏れを防ぐためのルール。
+
+### 原則: try-finallyで確実にリセットする
+
+状態をtrueに設定して処理をブロックする場合、処理完了後に必ずfalseにリセットすること。
+エラー発生時もリセットされるよう、try-finallyを使用する。
+
+### 悪い例
+
+```typescript
+const guardedHandler = (handler) => {
+  return () => {
+    if (isProcessing) return;
+    isProcessing = true;
+    handler(); // エラー時にisProcessingがtrueのまま
+  };
+};
+```
+
+→ handlerがエラーをスローすると、isProcessingが永続化してボタンが操作不能になる
+
+### 良い例
+
+```typescript
+const guardedHandler = (handler) => {
+  return () => {
+    if (isProcessing) return;
+    isProcessing = true;
+    try {
+      handler();
+    } finally {
+      isProcessing = false; // エラー時も確実にリセット
+    }
+  };
+};
+```
+
+### なぜ必要か
+
+- ハンドラ内でエラーが発生する可能性は常にある
+- 状態が永続化すると、UIが操作不能になる重大なバグになる
+- try-finallyのコストは低く、防御的プログラミングとして有効
+
+### チェックリスト
+
+状態ガード/ロックを実装する際は、以下を確認すること:
+
+- [ ] 処理完了後に状態をリセットしているか
+- [ ] エラー発生時もリセットされるようtry-finallyを使用しているか
+- [ ] 非同期処理の場合、Promiseの完了を待ってからリセットしているか
+
+### eslint-rule
+
+ESLint化不可（状態管理のパターンは文脈依存であり、静的解析で正誤を判断できない。PRレビューで確認）
+
 ## 関連ドキュメント
 
 - [ADR-007: ダイアログコンポーネントのアクセシビリティ要件](../../../../adr/007-dialog-accessibility-requirements.md) - ダイアログ固有のuseEffect実装例
