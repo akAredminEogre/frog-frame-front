@@ -110,31 +110,7 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 本ADRの要件を満たすベースコンポーネントとカスタムフックを提供している。
 新しいダイアログコンポーネントを実装する際は、これらを使用すること。
 
-#### ModalDialogBase
-
-ADR-007の全要件を満たすベースコンポーネント。
-
-**配置**: `src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase/`
-
-**提供する機能**:
-- ARIA属性（role, aria-modal, aria-labelledby, aria-describedby, tabIndex）
-- フォーカストラップ（FocusScope contain）
-- フォーカス復元（FocusScope restoreFocus）
-- 背景スクロール無効化（usePreventScroll）
-- Escapeキーでダイアログを閉じる
-- オーバーレイクリックでダイアログを閉じる
-- ポータルレンダリング（createPortal）
-- useId()によるID自動生成
-
-#### カスタムフック
-
-**配置**: `src/frameworks-and-drivers/ui/hooks/`
-
-| フック | 用途 |
-|--------|------|
-| `useProcessingGuard` | 連続クリック防止 |
-| `useDialogIds` | ARIA用ID生成（useId()ベース） |
-| `useInitialFocus` | 初期フォーカス設定 |
+詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)を参照。
 
 ### ビジュアルスタイリング要件
 
