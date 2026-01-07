@@ -20,8 +20,12 @@ export interface UseProcessingGuardResult {
  *
  * @remarks
  * 処理状態は以下のタイミングでリセットされる:
- * - ハンドラの完了時（正常終了・エラー問わずtry-finallyでリセット）
- * - isActiveがtrueになったとき（コンポーネント再利用時の安全策）
+ * - ハンドラ内でエラーが発生した場合（エラーは再スローされる）
+ * - isActiveがtrueになったとき（ダイアログ再オープン時）
+ *
+ * 正常完了時は状態をリセットしない（連続クリック防止のため）。
+ * ダイアログを閉じる処理がハンドラに含まれることを前提とし、
+ * ダイアログ再オープン時にisActiveがtrueになることで状態がリセットされる。
  *
  * 制約: 同期ハンドラのみサポート。非同期ハンドラを渡した場合、
  * Promiseの完了を待たずに処理完了と見なされる。
@@ -53,9 +57,13 @@ export const useProcessingGuard = (isActive: boolean): UseProcessingGuardResult 
         setIsProcessing(true);
         try {
           handler();
-        } finally {
+          // 正常完了時は状態をリセットしない（連続クリック防止のため）
+          // ダイアログ再オープン時（isActive=true）にリセットされる
+        } catch (error) {
+          // エラー時は状態をリセットして再試行可能にする
           isProcessingRef.current = false;
           setIsProcessing(false);
+          throw error;
         }
       };
     },
