@@ -6,12 +6,19 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 export interface UseProcessingGuardResult {
   /** 処理中かどうか（視覚的フィードバック用） */
   isProcessing: boolean;
-  /** ハンドラをガードでラップする関数 */
+  /**
+   * ハンドラをガードでラップする関数
+   *
+   * 注意: 同期ハンドラのみサポート。非同期ハンドラ（async関数）を渡した場合、
+   * Promiseの完了を待たずに処理完了と見なされる。
+   */
   guardedHandler: <T extends () => void>(handler: T) => () => void;
 }
 
 /**
  * 連続クリック防止のためのカスタムフック
+ *
+ * 制約: 同期ハンドラのみサポート。非同期ハンドラが必要な場合は別途実装が必要。
  *
  * @param isActive - trueになったときに処理状態をリセット（例: ダイアログのisOpen）
  * @returns isProcessing状態とガード付きハンドラを生成する関数
