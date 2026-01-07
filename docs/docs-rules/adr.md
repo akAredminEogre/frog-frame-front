@@ -22,20 +22,39 @@ await service.getById(id);
 
 #### hooksやベースコンポーネントに切り出した場合
 
-機能をhooksやベースコンポーネントに切り出した場合、実装例は**特に不要**となる。代わりに、切り出したhooks/コンポーネントを参照する形で記述する。
+機能をhooksやベースコンポーネントに切り出した場合、ADRには**参照のみ**を記載する。以下の詳細はコーディング規約に委譲すること:
+
+- コンポーネント/フックの配置パス
+- 提供する機能の一覧
+- 個々のhooksの用途テーブル
 
 ```markdown
-## 悪い例（hooksに切り出し済みなのにコード例を記載）
+## 悪い例（詳細を列挙）
 
-**実装例**:
-```tsx
-const uniqueId = useId();
-const titleId = `dialog-title-${uniqueId}`;
-```
+#### ModalDialogBase
 
-## 良い例（hooksへの参照のみ）
+**配置**: `src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase/`
 
-**実装方法**: `useDialogIds`フックを使用する（「カスタムフック」セクション参照）
+**提供する機能**:
+- ARIA属性（role, aria-modal, ...）
+- フォーカストラップ
+- ...
+
+#### カスタムフック
+
+| フック | 用途 |
+|--------|------|
+| useProcessingGuard | 連続クリック防止 |
+| useDialogIds | ARIA用ID生成 |
+
+## 良い例（参照のみ）
+
+### ベースコンポーネント（推奨）
+
+本ADRの要件を満たすベースコンポーネントとカスタムフックを提供している。
+新しいダイアログコンポーネントを実装する際は、これらを使用すること。
+
+詳細は[アクセシブルモーダルコンポーネント規約](path/to/coding-standard.md)を参照。
 ```
 
 ### 決定事項・判断理由のみ記述
