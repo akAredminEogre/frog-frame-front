@@ -134,8 +134,8 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 | コンポーネント | 配置 | 状態 |
 |---------------|------|------|
-| ModalDialogBase | `src/frameworks-and-drivers/ui/components/molecules/` | ベースコンポーネント（ADR-007全要件を実装） |
-| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | ModalDialogBaseを使用 |
+| ModalDialogBase | `src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase/` | ベースコンポーネント（ADR-007全要件を実装） |
+| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/` | ModalDialogBaseを使用 |
 
 ### 適用待ちの箇所
 
