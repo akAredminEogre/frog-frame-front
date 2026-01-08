@@ -54,7 +54,7 @@ await service.getById(id);
 本ADRの要件を満たすベースコンポーネントとカスタムフックを提供している。
 新しいダイアログコンポーネントを実装する際は、これらを使用すること。
 
-詳細は[アクセシブルモーダルコンポーネント規約](path/to/coding-standard.md)を参照。
+詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)を参照。
 ```
 
 ### 決定事項・判断理由のみ記述
