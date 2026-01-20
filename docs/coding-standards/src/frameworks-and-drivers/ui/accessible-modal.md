@@ -84,7 +84,7 @@ React Ariaを使用する場合、以下の責任分担を遵守すること：
 - `autoFocus`はReact Ariaの内部タイミングで動作し、テスト環境（happy-dom）との互換性に問題が生じる可能性がある
 - 初期フォーカスは手動useEffectのみで設定し、Reactのライフサイクルに沿った同期的な動作を保証すること
 
-詳細は[React Hooks コーディング規約](./react-hooks.md)の「React Ariaコンポーネントとの責任分担」セクションを参照。
+詳細は[React Ariaコンポーネントとの責任分担](./react-hooks/react-aria-integration.md)を参照。
 
 ## eslint-rule
 
@@ -94,4 +94,4 @@ ESLint化不可（モーダルの実装パターンは文脈依存であり、�
 
 - [ADR-007: ダイアログコンポーネントのアクセシビリティ要件](../../../../adr/007-dialog-accessibility-requirements.md)
 - [WAI-ARIA Authoring Practices - Dialog Modal](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
-- [React Hooks コーディング規約](./react-hooks.md)
+- [React Hooks コーディング規約](./react-hooks/index.md)

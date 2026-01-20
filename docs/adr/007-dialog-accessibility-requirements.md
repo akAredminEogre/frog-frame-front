@@ -60,7 +60,7 @@ React Ariaを使用する場合、以下の機能が自動化される：
 
 **注意**: `FocusScope`の`autoFocus`属性と手動useEffectを併用すると競合が発生するため、初期フォーカスは手動useEffectのみで設定する。
 
-詳細は[React Hooks コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/react-hooks.md)を参照。
+詳細は[React Ariaコンポーネントとの責任分担](../coding-standards/src/frameworks-and-drivers/ui/react-hooks/react-aria-integration.md)を参照。
 
 #### 3. キーボードイベント処理
 
@@ -151,5 +151,5 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 - [WAI-ARIA Authoring Practices - Dialog Modal](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
 - [React Aria useDialog](https://react-spectrum.adobe.com/react-aria/useDialog.html)
-- [React Hooks コーディング規約](../coding-standards/src/frameworks-and-drivers/ui/react-hooks.md) - useEffectの副作用管理ルール
+- [useEffectの副作用管理ルール](../coding-standards/src/frameworks-and-drivers/ui/react-hooks/useEffect-side-effects.md)
 - [アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md) - 実装チェックリスト
