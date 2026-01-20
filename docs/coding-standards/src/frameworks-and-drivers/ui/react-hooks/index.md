@@ -4,7 +4,7 @@
 
 React Hooksを使用する際の規約。副作用管理、状態管理、型定義、パフォーマンス最適化について定める。
 
-## 規約一覧
+## 一般規約
 
 | 規約 | 概要 |
 |-----|------|
@@ -15,6 +15,14 @@ React Hooksを使用する際の規約。副作用管理、状態管理、型定
 | [コールバックのメモ化](./callback-memoization.md) | useMemo/useCallbackの適切な使用 |
 | [カスタムフックのJSDoc記述ルール](./jsdoc-rules.md) | 設計上の前提条件と制約の記載 |
 | [状態ガード/ロックの実装ルール](./state-guard.md) | エラー時の状態リセット |
+
+## プロジェクト提供カスタムフック
+
+| フック | 概要 |
+|-------|------|
+| [useDialogIds](./useDialogIds.md) | aria-labelledby/aria-describedby用のID生成 |
+| [useInitialFocus](./useInitialFocus.md) | ダイアログの初期フォーカス設定 |
+| [useProcessingGuard](./useProcessingGuard.md) | 連続クリック防止・多重実行の回避 |
 
 ## 関連ドキュメント
 
