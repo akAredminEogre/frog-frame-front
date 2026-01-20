@@ -19,14 +19,7 @@ GLOBIS Tech Blog記事で紹介されているUI/Container分離パターンと�
 
 ### 統合の前提
 
-#### 層の位置づけ
-
-| Clean Architecture層 | 含まれる要素 |
-|---------------------|-------------|
-| Enterprise Business Rules | Entity, ValueObject, DomainService |
-| Application Business Rules | UseCase(Interactor), InputData/OutputData, InputPort/OutputPort |
-| Interface Adapters | Controller, Presenter, Repository実装, Gateway実装, Factory, DTO, ViewModel |
-| Frameworks & Drivers | React Components, Custom Hooks(UI状態管理), DIコンテナ設定 |
+Clean Architectureの層構成は[ADR-001](./001-clean-architecture-with-presenter-pattern.md)を参照。本ADRでは、Frameworks & Drivers層内のUI設計に焦点を当てる。
 
 #### UI/Container分離の位置づけ
 
@@ -43,66 +36,32 @@ Atomic DesignはすべてFrameworks & Drivers層内のUIコンポーネントの
 
 ### ディレクトリ構成
 
+他層のディレクトリ構成は[ADR-001](./001-clean-architecture-with-presenter-pattern.md)を参照。以下はFrameworks & Drivers層のUI部分のみ記載。
+
 ```text
-src/
-├── domain/                          # Enterprise Business Rules
-│   ├── entities/
-│   ├── value-objects/
-│   └── services/
+src/frameworks-and-drivers/ui/
+├── components/              # Atomic Design適用
+│   ├── atoms/
+│   ├── molecules/
+│   └── organisms/
 │
-├── application/                     # Application Business Rules
-│   └── usecases/
-│       └── [useCaseName]/
-│           ├── I[UseCaseName]UseCase.ts    # InputPort
-│           ├── [UseCaseName]Interactor.ts
-│           ├── [UseCaseName]InputData.ts
-│           ├── [UseCaseName]OutputData.ts
-│           └── I[UseCaseName]Presenter.ts  # OutputPort
+├── templates/               # ページレイアウト
 │
-├── interface-adapters/              # Interface Adapters
-│   ├── controllers/
-│   ├── presenters/
-│   ├── factories/
-│   ├── repositories/
-│   ├── gateways/
-│   ├── dtos/
-│   └── viewModels/
+├── hooks/                   # 共通カスタムフック
 │
-├── infrastructure/
-│   └── di/                          # 依存性注入設定
-│       └── container.ts
-│
-└── frameworks-and-drivers/          # Frameworks & Drivers
-    └── ui/
-        ├── components/              # Atomic Design適用
-        │   ├── atoms/
-        │   ├── molecules/
-        │   └── organisms/
-        │
-        ├── templates/               # ページレイアウト
-        │
-        ├── hooks/                   # 共通カスタムフック
-        │
-        └── pages/                   # ページ単位（Container + Composition）
-            └── [PageName]/
-                ├── index.tsx                    # エントリーポイント
-                ├── [PageName].container.tsx     # Container（Controller呼び出し）
-                ├── [PageName].ui.tsx            # Presentational Component
-                ├── hooks/
-                │   └── use[PageName]State.ts    # ページ固有のUI状態管理
-                └── components/                  # ページ固有コンポーネント
+└── pages/                   # ページ単位（Container + Composition）
+    └── [PageName]/
+        ├── index.tsx                    # エントリーポイント
+        ├── [PageName].container.tsx     # Container（Controller呼び出し）
+        ├── [PageName].ui.tsx            # Presentational Component
+        ├── hooks/
+        │   └── use[PageName]State.ts    # ページ固有のUI状態管理
+        └── components/                  # ページ固有コンポーネント
 ```
 
 ### 設計ルール
 
-#### 依存関係ルール
-
-| 層 | 依存できる層 |
-|----|-------------|
-| domain/ | なし |
-| application/ | domain/ のみ |
-| interface-adapters/ | domain/, application/ |
-| frameworks-and-drivers/ | domain/, application/, interface-adapters/ |
+依存関係ルールは[ADR-001](./001-clean-architecture-with-presenter-pattern.md)を参照。
 
 #### Container（.container.tsx）の責務
 
@@ -146,13 +105,12 @@ src/
 
 ### テスト戦略
 
-| 層 | テスト対象 | テスト手法 |
-|----|-----------|-----------|
-| domain/ | Entity, ValueObject, DomainService | 単体テスト |
-| application/ | Interactor | 単体テスト（Repository/Gateway/Presenterをモック） |
-| interface-adapters/ | Controller, Presenter, Repository | 単体テスト + 統合テスト |
-| frameworks-and-drivers/ UI層 | Presentational Component | Storybook + VRT |
-| frameworks-and-drivers/ Container層 | Container Component | 統合テスト（Controllerをモック） |
+他層のテスト戦略は[ADR-001](./001-clean-architecture-with-presenter-pattern.md)を参照。UI/Container分離に関連するテスト戦略は以下の通り。
+
+| 対象 | テスト手法 |
+|-----|-----------|
+| UI層（.ui.tsx） | Storybook + VRT |
+| Container層（.container.tsx） | 統合テスト（Controllerをモック） |
 
 UI層がビジネスロジックを持たないため、Storybookでの見た目確認が容易になる。
 
