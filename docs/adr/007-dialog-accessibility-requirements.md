@@ -145,11 +145,10 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
 
-- [アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)
+- [アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md) - 実装チェックリスト
 
 ## 関連ドキュメント
 
 - [WAI-ARIA Authoring Practices - Dialog Modal](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
 - [React Aria useDialog](https://react-spectrum.adobe.com/react-aria/useDialog.html)
 - [useEffectの副作用管理ルール](../coding-standards/src/frameworks-and-drivers/ui/react-hooks/useEffect-side-effects.md)
-- [アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md) - 実装チェックリスト
