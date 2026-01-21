@@ -6,16 +6,13 @@ import { SSRProvider } from '@react-aria/ssr';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
+import { flushPromises } from 'tests/unit/frameworks-and-drivers/ui/test-utils';
 import { vi } from 'vitest';
 
 import { ConfirmDialog, ConfirmDialogProps } from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog';
 
-/**
- * React更新をフラッシュするためのユーティリティ
- */
-export const flushPromises = (): Promise<void> => {
-  return new Promise<void>((resolve) => setTimeout(resolve, 0));
-};
+// 後方互換性のため再エクスポート
+export { flushPromises };
 
 /**
  * デフォルトのProps値を作成
@@ -92,14 +89,16 @@ export class ConfirmDialogTestHelper {
   async render(props: Partial<ConfirmDialogProps> = {}): Promise<void> {
     this.ensureSetup();
     const fullProps = createDefaultProps(props);
+    // flushPromisesをact内に入れて更新を確実に同期
+    // （act外で非同期更新が完了するとReact警告が発生する可能性があるため）
     await act(async () => {
       this.root!.render(
         <SSRProvider>
           <ConfirmDialog {...fullProps} />
         </SSRProvider>
       );
+      await flushPromises();
     });
-    await flushPromises();
   }
 
   /**
