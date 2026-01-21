@@ -39,7 +39,9 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   // 連続クリック防止
   const { isProcessing, guardedHandler } = useProcessingGuard(isOpen);
 
-  // 初期フォーカス設定（キャンセルボタンにフォーカス）
+  // 初期フォーカス設定
+  // WAI-ARIAベストプラクティス: 破壊的アクションを伴うダイアログでは
+  // 安全な選択肢（キャンセルボタン）に初期フォーカスを設定
   const cancelButtonRef = useInitialFocus<HTMLButtonElement>(isOpen);
 
   // ガード済みハンドラをメモ化（レンダリングごとの再生成を防止）
