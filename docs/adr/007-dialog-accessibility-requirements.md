@@ -88,22 +88,9 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 ### 推奨ライブラリ（採用済み）
 
-本プロジェクトでは**React Aria**を採用している（ハイブリッドアプローチ）。以下のパッケージを使用：
+本プロジェクトでは**React Aria**を採用（理由: テスト環境互換性と堅牢性）。
 
-| パッケージ | 用途 |
-|-----------|------|
-| `@react-aria/dialog` | ダイアログのセマンティクス（useDialog） |
-| `@react-aria/overlays` | スクロール防止（usePreventScroll） |
-| `@react-aria/focus` | フォーカストラップ、フォーカス復元（FocusScope） |
-
-**ハイブリッドアプローチ**:
-- React Ariaで自動化: フォーカストラップ、フォーカス復元、スクロール防止、aria属性
-- 手動実装: Escapeキー処理、オーバーレイクリック処理
-
-**この選択の理由**:
-- テスト環境（happy-dom）との互換性を確保
-- `useOverlay`はテスト環境で問題が発生する可能性がある
-- 必要な機能は維持しつつ、堅牢性を優先
+詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)を参照。
 
 ### ベースコンポーネント（推奨）
 
@@ -130,16 +117,11 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 ### 適用済みの箇所
 
-以下のコンポーネントは本ADRの要件を満たしている：
-
-| コンポーネント | 配置 | 状態 |
-|---------------|------|------|
-| ModalDialogBase | `src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase/` | ベースコンポーネント（ADR-007全要件を実装） |
-| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/` | ModalDialogBaseを使用 |
+適用済みコンポーネントの詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)を参照。
 
 ### 適用待ちの箇所
 
-該当なし（本プロジェクトのダイアログコンポーネントはすべて上記の「適用済みの箇所」に記載されている）
+該当なし
 
 ## 影響ドキュメント
 
