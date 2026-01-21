@@ -37,7 +37,7 @@ WAI-ARIA Authoring Practices（Dialog Modal Pattern）に準拠したアクセ�
 - `useId()`はReact 18で導入されたフックで、サーバーサイドレンダリングでも安全に一意のIDを生成する
 - 将来的な拡張性を確保し、コンポーネントの再利用性を高める
 
-**実装方法**: `useDialogIds`フックを使用する（「カスタムフック」セクション参照）
+**実装方法**: [`useDialogIds`フック](../coding-standards/src/frameworks-and-drivers/ui/react-hooks/useDialogIds.md)を使用する。
 
 #### 2. フォーカス管理
 
