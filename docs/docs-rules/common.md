@@ -16,6 +16,10 @@
   - JavaScript（❌ Javascript, javascript）
   - GitHub（❌ Github, github）
   - npm（❌ NPM, Npm）
+- コードフェンス言語識別子は小文字を使用
+  - ` ```typescript `（❌ ` ```Typescript `）
+  - ` ```javascript `（❌ ` ```Javascript `）
+  - これは業界標準の慣例であり、製品名の表記ルールとは別
 
 ## 文体
 
