@@ -167,7 +167,7 @@ docs/adr/
 
 ### 適用済みの箇所
 
-適用済みコンポーネントの詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/.../accessible-modal.md)を参照。
+適用済みコンポーネントの詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)を参照。
 ```
 
 **例外**: コーディング規約がまだ存在しない場合は、ADRに詳細を記載してもよい。その際はパスを正確に記載すること（コンポーネント自身のディレクトリまで含める）。
