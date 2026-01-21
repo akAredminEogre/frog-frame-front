@@ -4,18 +4,15 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { flushPromises } from 'tests/unit/frameworks-and-drivers/ui/test-utils';
 import { vi } from 'vitest';
 
 import { DeleteButton } from 'src/frameworks-and-drivers/ui/components/atoms/DeleteButton/DeleteButton';
 
 type DeleteButtonProps = React.ComponentProps<typeof DeleteButton>;
 
-/**
- * React更新をフラッシュするためのユーティリティ
- */
-export const flushPromises = (): Promise<void> => {
-  return new Promise<void>((resolve) => setTimeout(resolve, 0));
-};
+// 後方互換性のため再エクスポート
+export { flushPromises };
 
 /**
  * テスト用コンテナとReactルートを管理するクラス
@@ -48,7 +45,7 @@ export class DeleteButtonTestHelper {
   /**
    * テスト後のクリーンアップ
    * afterEach 内で呼び出す
-   * setup()が呼ばれていない場合は何もせず早期リターン（カスケード障害を防ぐ）
+   * setup()が呼ばれていない場合は何もせず早期リターン（他のテストケースへの影響を防ぐため）
    */
   cleanup(): void {
     if (!this.container || !this.root) {

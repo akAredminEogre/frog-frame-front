@@ -214,3 +214,72 @@ React 18.3.1以降では`act`が`react`パッケージから直接エクスポ�
 
 ESLint化不可（インポート元の正確性は静的解析で判断困難。PRレビューで確認）
 
+---
+
+## 共通テストユーティリティの配置
+
+### 規約
+
+複数のテストヘルパーで使用される汎用ユーティリティは、共通ファイルに配置すること。
+
+- **配置場所**: `tests/unit/frameworks-and-drivers/ui/test-utils.ts`（UIコンポーネント用）
+- **再エクスポート**: 各test-helpersファイルでは後方互換性のため再エクスポートする
+
+### 背景
+
+同一の実装が複数のtest-helpersファイルに重複すると、修正時に漏れが発生するリスクがある。
+
+### 例
+
+```typescript
+// tests/unit/frameworks-and-drivers/ui/test-utils.ts（共通ユーティリティ）
+export const flushPromises = (): Promise<void> => {
+  return new Promise<void>((resolve) => setTimeout(resolve, 0));
+};
+
+// tests/unit/.../ComponentName/test-helpers.tsx（各コンポーネント用）
+import { flushPromises } from 'tests/unit/frameworks-and-drivers/ui/test-utils';
+export { flushPromises }; // 後方互換性のため再エクスポート
+```
+
+### eslint-rule
+
+ESLint化不可（PRレビューで確認）
+
+---
+
+## flushPromisesはact()内で使用する
+
+### 規約
+
+`flushPromises`などの非同期更新待機処理は、`act()`の内部で実行すること。
+
+### 理由
+
+- `act()`外で非同期更新が完了すると、React警告が発生する可能性がある
+- Reactの状態更新を確実に同期するため
+
+### 禁止事項
+
+```typescript
+// ❌ act()の外でflushPromises
+await act(async () => {
+  root.render(<Component />);
+});
+await flushPromises();
+```
+
+### 許可事項
+
+```typescript
+// ✅ act()の中でflushPromises
+await act(async () => {
+  root.render(<Component />);
+  await flushPromises();
+});
+```
+
+### eslint-rule
+
+ESLint化不可（PRレビューで確認）
+
