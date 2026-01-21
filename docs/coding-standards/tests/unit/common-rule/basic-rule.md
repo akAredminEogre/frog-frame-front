@@ -204,7 +204,7 @@ import { act } from 'react-dom/test-utils';
 
 ### 補足
 
-React 18.3以降では`act`が`react`パッケージから直接エクスポートされるようになったが、以下の理由で`react-dom/test-utils`からのインポートを標準とする：
+React 18.3.1以降では`act`が`react`パッケージから直接エクスポートされるようになったが、以下の理由で`react-dom/test-utils`からのインポートを標準とする：
 
 - Reactの公式ドキュメントで長年推奨されてきたパターン
 - 多くのリンターやツールが`react-dom/test-utils`を想定している
