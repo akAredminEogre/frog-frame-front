@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { act } from 'react-dom/test-utils';
 import { flushPromises } from 'tests/unit/frameworks-and-drivers/ui/test-utils';
 import { vi } from 'vitest';
 
@@ -60,6 +61,7 @@ export class DeleteButtonTestHelper {
 
   /**
    * コンポーネントをレンダリング
+   * act()でラップしてReact 18の非同期レンダリングを適切に処理
    * @param props DeleteButtonProps。onClickを省略した場合はvi.fn()がデフォルト値として使用される
    */
   async render(props?: Partial<DeleteButtonProps>): Promise<void> {
@@ -68,8 +70,10 @@ export class DeleteButtonTestHelper {
       onClick: vi.fn(),
       ...props,
     };
-    this.root!.render(<DeleteButton {...defaultProps} />);
-    await flushPromises();
+    await act(async () => {
+      this.root!.render(<DeleteButton {...defaultProps} />);
+      await flushPromises();
+    });
   }
 
   /**
