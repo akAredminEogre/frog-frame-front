@@ -86,6 +86,32 @@ React Ariaを使用する場合、以下の責任分担を遵守すること：
 
 詳細は[React Ariaコンポーネントとの責任分担](./react-hooks/react-aria-integration.md)を参照。
 
+## 適用済みコンポーネント
+
+本規約を満たすコンポーネント：
+
+| コンポーネント | 配置 | 説明 |
+|---------------|------|------|
+| ModalDialogBase | `src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase/` | ベースコンポーネント（ADR-007全要件を実装） |
+| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/` | ModalDialogBaseを使用 |
+
+## 採用ライブラリ
+
+本プロジェクトでは**React Aria**を採用している。
+
+| パッケージ | 用途 |
+|-----------|------|
+| `@react-aria/focus` | フォーカストラップ、フォーカス復元（FocusScope） |
+| `@react-aria/overlays` | 背景スクロール無効化（usePreventScroll） |
+
+**採用理由**:
+- テスト環境（happy-dom）との互換性を確保
+- 必要な機能は維持しつつ、堅牢性を優先
+
+**ハイブリッドアプローチ**:
+- React Ariaで自動化: フォーカストラップ、フォーカス復元、スクロール防止
+- 手動実装: Escapeキー処理、オーバーレイクリック処理
+
 ## eslint-rule
 
 ESLint化不可（モーダルの実装パターンは文脈依存であり、静的解析で正誤を判断できない。PRレビューで確認）
