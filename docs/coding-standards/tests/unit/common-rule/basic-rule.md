@@ -181,34 +181,34 @@ const rule = RewriteRule.fromParams(1, {
 
 ### 規約
 
-`act`などのReactテストユーティリティは、適切なパッケージからインポートすること。
+`act`などのReactテストユーティリティは、`react`パッケージからインポートすること。
 
 | ユーティリティ | インポート元 | 備考 |
 |--------------|-------------|------|
-| `act` | `react-dom/test-utils` | 本プロジェクトの標準 |
+| `act` | `react` | React 18.3以降の標準 |
 
 ### 禁止事項
 
 ```typescript
-// ❌ reactパッケージから直接インポートしない
-import React, { act } from 'react';
+// ❌ react-dom/test-utilsは非推奨（React 18.3以降）
+import { act } from 'react-dom/test-utils';
 ```
 
 ### 許可事項
 
 ```typescript
-// ✅ react-dom/test-utilsからインポート
-import React from 'react';
-import { act } from 'react-dom/test-utils';
+// ✅ reactパッケージからインポート
+import React, { act } from 'react';
+
+// または
+import { act } from 'react';
 ```
 
-### 補足
+### 背景
 
-React 18.3.1以降では`act`が`react`パッケージから直接エクスポートされるようになったが、以下の理由で`react-dom/test-utils`からのインポートを標準とする：
-
-- Reactの公式ドキュメントで長年推奨されてきたパターン
-- 多くのリンターやツールが`react-dom/test-utils`を想定している
-- コードベース全体での一貫性を維持
+- React 18.3.0で`react-dom/test-utils`の非推奨警告が追加された
+- React 18.3.1以降、`act`は`react`パッケージから直接エクスポートされている
+- 将来のReactバージョンで`react-dom/test-utils`が削除される可能性がある
 
 ### eslint-rule
 
