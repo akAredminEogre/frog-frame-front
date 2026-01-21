@@ -2,9 +2,8 @@
  * ToggleSwitch コンポーネント テストヘルパー
  * 3つのテストファイル間で共通のセットアップ・ヘルパー関数を提供
  */
-import React from 'react';
+import React, { act } from 'react';
 import ReactDOM from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
 import { flushPromises } from 'tests/unit/frameworks-and-drivers/ui/test-utils';
 import { vi } from 'vitest';
 
