@@ -175,3 +175,42 @@ const rule = RewriteRule.fromParams(1, {
 
 **注意**: 新規モック作成時は必ず `mocks/` ディレクトリに配置すること。
 
+---
+
+## Reactテストユーティリティのインポート
+
+### 規約
+
+`act`などのReactテストユーティリティは、適切なパッケージからインポートすること。
+
+| ユーティリティ | インポート元 | 備考 |
+|--------------|-------------|------|
+| `act` | `react-dom/test-utils` | 本プロジェクトの標準 |
+
+### 禁止事項
+
+```typescript
+// ❌ reactパッケージから直接インポートしない
+import React, { act } from 'react';
+```
+
+### 許可事項
+
+```typescript
+// ✅ react-dom/test-utilsからインポート
+import React from 'react';
+import { act } from 'react-dom/test-utils';
+```
+
+### 補足
+
+React 18.3以降では`act`が`react`パッケージから直接エクスポートされるようになったが、以下の理由で`react-dom/test-utils`からのインポートを標準とする：
+
+- Reactの公式ドキュメントで長年推奨されてきたパターン
+- 多くのリンターやツールが`react-dom/test-utils`を想定している
+- コードベース全体での一貫性を維持
+
+### eslint-rule
+
+ESLint化不可（インポート元の正確性は静的解析で判断困難。PRレビューで確認）
+
