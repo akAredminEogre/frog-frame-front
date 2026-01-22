@@ -126,3 +126,16 @@ jobs:
 
       - name: Run E2E tests
         run: npm run test:e2e
+
+  verify-links:
+    name: Verify Documentation Links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify links in documentation
+        run: ./scripts/ci/verify-links/main.sh docs
+        # Note: continue-on-error is true while existing broken links are being fixed
+        continue-on-error: true
