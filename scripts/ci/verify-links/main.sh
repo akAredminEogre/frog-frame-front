@@ -53,6 +53,9 @@ while IFS= read -r md_file; do
     # Extract just the path part from [text](path)
     link=$(echo "${full_link}" | sed -E 's/\[[^]]*\]\(([^)]+)\)/\1/')
 
+    # Remove optional title part (e.g., "title" or 'title') from links like [text](path "title")
+    link="${link%%[[:space:]]*}"
+
     # Skip external links (http, https, mailto)
     [[ "${link}" =~ ^https?:// ]] && continue
     [[ "${link}" =~ ^mailto: ]] && continue
