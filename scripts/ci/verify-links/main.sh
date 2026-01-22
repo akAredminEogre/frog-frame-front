@@ -3,6 +3,17 @@
 # Verify internal links in markdown files
 # This script checks that all relative links in markdown files point to existing files.
 #
+# 対応するMarkdownリンク構文:
+#   [text](path)
+#   [text](path#anchor)
+#   [text](path "title")
+#   [text](path 'title')
+#
+# スキップされるリンク:
+#   - 外部リンク (http://, https://, mailto:)
+#   - アンカーのみ (#section)
+#   - プレースホルダー (XXX, path/to/, <...>)
+#
 # 使用例:
 #   ./scripts/ci/verify-links/main.sh [directory]
 #   ./scripts/ci/verify-links/main.sh           # Default: docs/
