@@ -2,10 +2,7 @@ import React, { useMemo } from 'react';
 
 import { ModalDialogBase } from 'src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase';
 import styles from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog.module.css';
-import {
-  useInitialFocus,
-  useProcessingGuard,
-} from 'src/frameworks-and-drivers/ui/hooks';
+import { useProcessingGuard } from 'src/frameworks-and-drivers/ui/hooks';
 
 /**
  * ConfirmDialogコンポーネントのProps
@@ -39,11 +36,6 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   // 連続クリック防止
   const { isProcessing, guardedHandler } = useProcessingGuard(isOpen);
 
-  // 初期フォーカス設定
-  // WAI-ARIAベストプラクティス: 破壊的アクションを伴うダイアログでは
-  // 安全な選択肢（キャンセルボタン）に初期フォーカスを設定
-  const cancelButtonRef = useInitialFocus<HTMLButtonElement>(isOpen);
-
   // ガード済みハンドラをメモ化（レンダリングごとの再生成を防止）
   const handleCancel = useMemo(
     () => guardedHandler(onCancel),
@@ -64,13 +56,15 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       testId="confirm-dialog"
     >
       <div className={styles.buttonContainer}>
+        {/* WAI-ARIAベストプラクティス: 破壊的アクションを伴うダイアログでは
+            安全な選択肢（キャンセルボタン）に初期フォーカスを設定 */}
         <button
-          ref={cancelButtonRef}
           type="button"
           className={`${styles.button} ${styles.cancelButton}`}
           onClick={handleCancel}
           disabled={isProcessing}
           data-testid="confirm-dialog-cancel-button"
+          autoFocus
         >
           {cancelLabel}
         </button>

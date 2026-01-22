@@ -30,15 +30,8 @@ function useRef<T = undefined>(): MutableRefObject<T | undefined>;
 
 ```typescript
 // ✅ 良い例: 型キャスト不要
-const useInitialFocus = <T extends HTMLElement>(isActive: boolean): RefObject<T> => {
+const useElementRef = <T extends HTMLElement>(): RefObject<T> => {
   const ref = useRef<T>(null);  // RefObject<T>を返す
-
-  useEffect(() => {
-    if (isActive && ref.current) {
-      ref.current.focus();
-    }
-  }, [isActive]);
-
   return ref;  // 型キャスト不要
 };
 ```
