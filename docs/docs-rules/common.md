@@ -88,7 +88,7 @@
 
 ## 良い例（実在する参照）
 
-詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)を参照。
+適用シナリオの記載例は[アクセシブルモーダルコンポーネント規約の適用シナリオ](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md#適用シナリオ)を参照。
 **実在する良い例**: [adr.md](./adr.md) の「## 悪い例（詳細を列挙）」のようにスコープを含める
 ```
 
