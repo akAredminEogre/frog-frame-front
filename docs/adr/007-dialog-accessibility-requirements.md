@@ -54,11 +54,11 @@ React Ariaを使用する場合、以下の機能が自動化される：
 | 機能 | React Aria Hook/Component | 備考 |
 |------|--------------------------|------|
 | フォーカストラップ | `FocusScope` (contain) | |
-| 初期フォーカス | 手動useEffect | `autoFocus`は使用しない（テスト環境互換性のため） |
+| 初期フォーカス | 要素の`autoFocus`属性 | FocusScopeの`autoFocus`プロパティは使用しない |
 | 復帰フォーカス | `FocusScope` (restoreFocus) | |
 | 背景スクロール無効化 | `usePreventScroll` | |
 
-**注意**: `FocusScope`の`autoFocus`属性と手動useEffectを併用すると競合が発生するため、初期フォーカスは手動useEffectのみで設定する。
+**注意**: FocusScopeの`autoFocus`プロパティは最初のフォーカス可能な要素にフォーカスするため、フォーカス対象を指定できない。フォーカスしたい要素に直接`autoFocus`属性を付けること（例: `<button autoFocus>`）。
 
 詳細は[React Ariaコンポーネントとの責任分担](../coding-standards/src/frameworks-and-drivers/ui/react-hooks/react-aria-integration.md)を参照。
 

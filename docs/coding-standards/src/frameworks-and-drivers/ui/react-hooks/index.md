@@ -21,7 +21,6 @@ React Hooksを使用する際の規約。副作用管理、状態管理、型定
 | フック | 概要 |
 |-------|------|
 | [useDialogIds](./useDialogIds.md) | aria-labelledby/aria-describedby用のID生成 |
-| [useInitialFocus](./useInitialFocus.md) | ダイアログの初期フォーカス設定 |
 | [useProcessingGuard](./useProcessingGuard.md) | 連続クリック防止・多重実行の回避 |
 
 ## 関連ドキュメント

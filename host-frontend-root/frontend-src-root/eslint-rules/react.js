@@ -18,7 +18,7 @@ export default {
         selector:
           "JSXOpeningElement[name.name='FocusScope'] > JSXAttribute[name.name='autoFocus']",
         message:
-          'FocusScopeのautoFocusは使用しないでください。手動useEffectで初期フォーカスを設定してください。詳細: docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/react-aria-integration.md',
+          'FocusScopeのautoFocusプロパティは使用しないでください。フォーカスしたい要素に直接autoFocus属性を付けてください（例: <button autoFocus>）。詳細: docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/react-aria-integration.md',
       },
     ],
   },

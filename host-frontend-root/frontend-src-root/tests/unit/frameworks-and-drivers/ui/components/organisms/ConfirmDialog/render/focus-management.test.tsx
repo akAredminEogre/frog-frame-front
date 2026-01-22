@@ -1,7 +1,7 @@
 /**
  * ConfirmDialog コンポーネント - フォーカス管理テスト
  * フォーカスの自動移動をテスト（ADR-007準拠）
- * - 初期フォーカス: ダイアログ内の最初のボタンにフォーカス
+ * - 初期フォーカス: キャンセルボタン（autoFocus属性で設定）
  */
 import {
   ConfirmDialogTestHelper,
