@@ -120,4 +120,21 @@ React Ariaコンポーネント/フックを使用する際は、以下を確認
 
 ## eslint-rule
 
-ESLint化不可（React Ariaとの責任分担は文脈依存であり、静的解析で正誤を判断できない。PRレビューで確認）
+**部分的にESLint化**:
+
+| ルール | ESLint化 | 設定ファイル |
+|-------|---------|-------------|
+| FocusScopeのautoFocus禁止 | ✅ 可能 | `eslint-rules/react.js` |
+| restoreFocusとの重複実装禁止 | ❌ 不可 | PRレビューで確認 |
+| usePreventScrollとの重複実装禁止 | ❌ 不可 | PRレビューで確認 |
+
+```javascript
+// eslint-rules/react.js
+'no-restricted-syntax': [
+  'error',
+  {
+    selector: "JSXOpeningElement[name.name='FocusScope'] > JSXAttribute[name.name='autoFocus']",
+    message: 'FocusScopeのautoFocusは使用しないでください。...',
+  },
+],
+```
