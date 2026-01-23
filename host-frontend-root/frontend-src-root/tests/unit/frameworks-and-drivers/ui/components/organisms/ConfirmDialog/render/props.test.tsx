@@ -41,41 +41,54 @@ describe('ConfirmDialog - Props反映', () => {
     });
   });
 
-  describe('ボタンラベル', () => {
-    const buttonLabelTestCases = [
+  describe('確認ボタンラベル', () => {
+    const confirmButtonTestCases = [
       {
         description: 'カスタム確認ボタンラベルが表示される',
         input: { confirmLabel: '実行する' },
-        expected: { button: 'confirm', label: '実行する' },
-      },
-      {
-        description: 'カスタムキャンセルボタンラベルが表示される',
-        input: { cancelLabel: '戻る' },
-        expected: { button: 'cancel', label: '戻る' },
+        expected: '実行する',
       },
       {
         description: 'confirmLabel未指定の場合、デフォルト値「削除」が使用される',
         input: {},
-        expected: { button: 'confirm', label: '削除' },
-      },
-      {
-        description: 'cancelLabel未指定の場合、デフォルト値「キャンセル」が使用される',
-        input: {},
-        expected: { button: 'cancel', label: 'キャンセル' },
+        expected: '削除',
       },
     ];
 
-    buttonLabelTestCases.forEach((testCase) => {
+    confirmButtonTestCases.forEach((testCase) => {
       it(testCase.description, async () => {
         // Arrange & Act
         await helper.render(testCase.input);
 
         // Assert
-        const button =
-          testCase.expected.button === 'confirm'
-            ? helper.getConfirmButton()
-            : helper.getCancelButton();
-        expect(button?.textContent).toBe(testCase.expected.label);
+        const button = helper.getConfirmButton();
+        expect(button?.textContent).toBe(testCase.expected);
+      });
+    });
+  });
+
+  describe('キャンセルボタンラベル', () => {
+    const cancelButtonTestCases = [
+      {
+        description: 'カスタムキャンセルボタンラベルが表示される',
+        input: { cancelLabel: '戻る' },
+        expected: '戻る',
+      },
+      {
+        description: 'cancelLabel未指定の場合、デフォルト値「キャンセル」が使用される',
+        input: {},
+        expected: 'キャンセル',
+      },
+    ];
+
+    cancelButtonTestCases.forEach((testCase) => {
+      it(testCase.description, async () => {
+        // Arrange & Act
+        await helper.render(testCase.input);
+
+        // Assert
+        const button = helper.getCancelButton();
+        expect(button?.textContent).toBe(testCase.expected);
       });
     });
   });
