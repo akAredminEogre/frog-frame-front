@@ -10,7 +10,13 @@
 
 ## 対象ファイル
 
-（別途調査）
+以下の重複モックが確認されている:
+
+| 重複モック | 正しい共有モック |
+|-----------|-----------------|
+| `tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/mocks/createMockTabsGateway.ts` | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts` |
+
+その他の対象ファイルは別途調査が必要。
 
 ## タスク
 
