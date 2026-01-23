@@ -23,6 +23,12 @@
   --color-danger-hover: #a52828;
   --color-danger-contrast: #fff;
   --color-danger-bg: rgba(220, 53, 69, 0.1);
+  /* 成功アクション用（完了、保存など） */
+  /* WCAG AA準拠: #2f855a + #fff = 約4.58:1 (基準4.5:1以上) */
+  --color-success: #2f855a;
+  --color-success-hover: #276749;
+  --color-success-contrast: #fff;
+  --color-success-bg: rgba(47, 133, 90, 0.1);
 }
 
 /* シャドウ */
