@@ -8,6 +8,8 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary';
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  'data-testid'?: string;
+  'aria-label'?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -15,7 +17,9 @@ export const Button: React.FC<ButtonProps> = ({
   onClick,
   variant = 'primary',
   disabled = false,
-  type = 'button'
+  type = 'button',
+  'data-testid': dataTestId,
+  'aria-label': ariaLabel,
 }) => {
   return (
     <button
@@ -23,6 +27,8 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       type={type}
+      data-testid={dataTestId}
+      aria-label={ariaLabel}
     >
       {children}
     </button>

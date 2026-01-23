@@ -12,6 +12,12 @@ const meta: Meta<typeof RulesTable> = {
   tags: ['autodocs'],
   argTypes: {
     onEdit: { action: 'edited' },
+    onToggle: { action: 'toggled' },
+    onDelete: { action: 'deleted' },
+  },
+  args: {
+    togglingIds: new Set<number>(),
+    deletingIds: new Set<number>(),
   },
 };
 
@@ -119,5 +125,19 @@ export const InactiveRules: Story = {
       new RewriteRule(2, 'inactive', 'replacement2', 'https://example.com', false, false),
       new RewriteRule(3, 'active2', 'replacement3', 'https://example.com', false, true),
     ],
+  },
+};
+
+export const WithDeletingRule: Story = {
+  args: {
+    rules: sampleRules,
+    deletingIds: new Set<number>([2]),
+  },
+};
+
+export const WithTogglingRule: Story = {
+  args: {
+    rules: sampleRules,
+    togglingIds: new Set<number>([1]),
   },
 };

@@ -4,19 +4,29 @@ import { Button } from 'src/components/atoms/Button';
 import { TruncatedText } from 'src/components/atoms/TruncatedText';
 import styles from 'src/components/molecules/RuleTableRow/RuleTableRow.module.css';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { DeleteButton } from 'src/frameworks-and-drivers/ui/components/atoms/DeleteButton';
 import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
 
 interface RuleTableRowProps {
   rule: RewriteRule;
   onEdit: (ruleId: string | number) => void;
   onToggle: (ruleId: number) => void;
+  onDelete: (ruleId: number) => void;
   isToggling: boolean;
+  isDeleting: boolean;
 }
 
-const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit, onToggle, isToggling }) => {
+const RuleTableRow: React.FC<RuleTableRowProps> = ({
+  rule,
+  onEdit,
+  onToggle,
+  onDelete,
+  isToggling,
+  isDeleting,
+}) => {
   return (
     <tr className={styles.ruleRow}>
-      <td className={styles.toggleCell}>
+      <td className={styles.actionCell}>
         <ToggleSwitch
           checked={rule.isActive}
           onChange={() => onToggle(rule.id)}
@@ -25,7 +35,16 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({ rule, onEdit, onToggle, isT
         />
       </td>
       <td>
-        <Button onClick={() => onEdit(rule.id)}>編集</Button>
+        <Button
+          onClick={() => onEdit(rule.id)}
+          data-testid="edit-button"
+          aria-label={`ルール ${rule.id} を編集`}
+        >
+          編集
+        </Button>
+      </td>
+      <td className={styles.actionCell}>
+        <DeleteButton onClick={() => onDelete(rule.id)} disabled={isDeleting} />
       </td>
       <td title={rule.urlPattern || ''} className="rule-url-pattern">
         <TruncatedText text={rule.urlPattern} maxLength={30} />
