@@ -114,7 +114,7 @@ content.ts
 
 これにより、Content Script は ProxyService定義を import しても `container.ts` がロードされない。
 
-**実装の詳細**: [RewriteRuleProxyService.ts](../../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/messaging/RewriteRuleProxyService.ts)、[RewriteRuleProxyServiceImpl.ts](../../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl.ts) を参照
+**実装の詳細**: [RewriteRuleProxyService.ts](../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/messaging/RewriteRuleProxyService.ts)、[RewriteRuleProxyServiceImpl.ts](../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl.ts) を参照
 
 この分離により以下を実現する：
 - **依存性逆転**: interface-adapters → frameworks-and-drivers の直接依存を回避
