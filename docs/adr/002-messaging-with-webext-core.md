@@ -100,8 +100,8 @@ content.ts
 
 ### 実装注入パターンの構成
 
-| ファイル | 責務 | container.ts の import |
-|---------|------|----------------------|
+| コンポーネント | 責務 | container.ts の import |
+|--------------|------|----------------------|
 | ProxyService定義 | サービスインターフェース定義、`defineProxyService` 呼び出し | なし |
 | ProxyServiceImpl | 実際の実装（DI コンテナ経由で Repository 取得） | あり |
 | background.ts | 実装を注入し、サービスを登録 | なし（Impl を import） |
