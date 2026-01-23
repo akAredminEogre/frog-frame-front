@@ -20,13 +20,13 @@
 
 | ファイル | シナリオ形式 |
 |---------|-------------|
-| `src/frameworks-and-drivers/ui/accessible-modal.md` | 「適用シナリオ」セクション（確認ダイアログ、フォーム入力モーダル） |
-| `src/frameworks-and-drivers/ui/css-styling.md` | 「具体例」セクション（デザイントークン追加の判断フロー） |
-| `src/application-business-rules/interactors.md` | 「典型的なユースケース」と「適用例」 |
-| `src/frameworks-and-drivers/ui/components.md` | 「適用場面」テーブル |
-| `src/frameworks-and-drivers/ui/react-hooks/props-dependent-state.md` | 「適用場面」テーブル |
-| `src/frameworks-and-drivers/ui/react-hooks/callback-memoization.md` | 「メモ化が必要なケース」テーブル |
-| `src/frameworks-and-drivers/ui/react-hooks/state-guard.md` | 「パターンの選択基準」テーブル |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md` | 「適用シナリオ」セクション（確認ダイアログ、フォーム入力モーダル） |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/css-styling.md` | 「具体例」セクション（デザイントークン追加の判断フロー） |
+| `docs/coding-standards/src/application-business-rules/interactors.md` | 「典型的なユースケース」と「適用例」 |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/components.md` | 「適用場面」テーブル |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/props-dependent-state.md` | 「適用場面」テーブル |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/callback-memoization.md` | 「メモ化が必要なケース」テーブル |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/state-guard.md` | 「パターンの選択基準」テーブル |
 
 ## 対象ファイル
 
@@ -34,41 +34,41 @@
 
 | ファイル | 現状 | 追加すべき内容 |
 |---------|------|---------------|
-| `src/coding-standards.md` | 言語ガイドラインのみ | JSDoc、エラーメッセージ、コメントの適用シナリオ |
-| `src/object-oriented-nine-rules.md` | ルール一覧と除外パターン | 各ルールの適用シナリオ（プロジェクト固有の判断事例） |
-| `src/object-oriented-coding-standards.md` | 除外パターンのみ | メソッド設計の適用シナリオ |
-| `src/application-business-rules/dto.md` | 命名規則のみ | Input/Output DTOの使い分けシナリオ |
-| `src/frameworks-and-drivers/messaging.md` | 命名規約のみ | メッセージングクラスの選択シナリオ |
-| `src/frameworks-and-drivers/ui/react-hooks/useEffect-side-effects.md` | コード例のみ | どのような副作用に適用するかの判断事例 |
-| `src/frameworks-and-drivers/ui/react-hooks/react-aria-integration.md` | チェックリストのみ | React Aria使用/不使用の判断シナリオ |
-| `src/frameworks-and-drivers/ui/react-hooks/useRef-types.md` | 型の説明のみ | RefObject/MutableRefObjectの使い分けシナリオ |
-| `src/frameworks-and-drivers/ui/react-hooks/jsdoc-rules.md` | 記載すべき情報のみ | JSDoc記載が必要なカスタムフックの判断事例 |
+| `docs/coding-standards/src/coding-standards.md` | 言語ガイドラインのみ | JSDoc、エラーメッセージ、コメントの適用シナリオ |
+| `docs/coding-standards/src/object-oriented-nine-rules.md` | ルール一覧と除外パターン | 各ルールの適用シナリオ（プロジェクト固有の判断事例） |
+| `docs/coding-standards/src/object-oriented-coding-standards.md` | 除外パターンのみ | メソッド設計の適用シナリオ |
+| `docs/coding-standards/src/application-business-rules/dto.md` | 命名規則のみ | Input/Output DTOの使い分けシナリオ |
+| `docs/coding-standards/src/frameworks-and-drivers/messaging.md` | 命名規約のみ | メッセージングクラスの選択シナリオ |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/useEffect-side-effects.md` | コード例のみ | どのような副作用に適用するかの判断事例 |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/react-aria-integration.md` | チェックリストのみ | React Aria使用/不使用の判断シナリオ |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/useRef-types.md` | 型の説明のみ | RefObject/MutableRefObjectの使い分けシナリオ |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/jsdoc-rules.md` | 記載すべき情報のみ | JSDoc記載が必要なカスタムフックの判断事例 |
 
 ### 優先度中: testsディレクトリ
 
 | ファイル | 現状 | 追加すべき内容 |
 |---------|------|---------------|
-| `tests/common-rule.md` | 規約のみ | インポートパス、モック配置、型注釈の適用シナリオ |
-| `tests/array-based-test.md` | 手順とコード例のみ | 配列ベーステストを採用すべき場合の判断事例 |
-| `tests/e2e/common-rule.md` | 実装例のみ | E2Eテストでコンソールエラー検知を追加する判断事例 |
-| `tests/integration/common-rule.md` | 規約のみ | fake-indexeddb、モック管理の適用シナリオ |
-| `tests/unit/common-rule/basic-rule.md` | 規約のみ | モック分離、ライフサイクル管理の適用シナリオ |
-| `tests/unit/common-rule/test-strategy.md` | 規約のみ | バリデーションテストの適用シナリオ |
-| `tests/unit/common-rule/JSDoc-rule.md` | 規約のみ | JSDoc更新が必要な場合の判断事例 |
-| `tests/unit/infrastructure.md` | 簡潔な規約のみ | infrastructure層テストの適用シナリオ |
+| `docs/coding-standards/tests/common-rule.md` | 規約のみ | インポートパス、モック配置、型注釈の適用シナリオ |
+| `docs/coding-standards/tests/array-based-test.md` | 手順とコード例のみ | 配列ベーステストを採用すべき場合の判断事例 |
+| `docs/coding-standards/tests/e2e/common-rule.md` | 実装例のみ | E2Eテストでコンソールエラー検知を追加する判断事例 |
+| `docs/coding-standards/tests/integration/common-rule.md` | 規約のみ | fake-indexeddb、モック管理の適用シナリオ |
+| `docs/coding-standards/tests/unit/common-rule/basic-rule.md` | 規約のみ | モック分離、ライフサイクル管理の適用シナリオ |
+| `docs/coding-standards/tests/unit/common-rule/test-strategy.md` | 規約のみ | バリデーションテストの適用シナリオ |
+| `docs/coding-standards/tests/unit/common-rule/JSDoc-rule.md` | 規約のみ | JSDoc更新が必要な場合の判断事例 |
+| `docs/coding-standards/tests/unit/infrastructure.md` | 簡潔な規約のみ | infrastructure層テストの適用シナリオ |
 
 ### 優先度低: make/scriptsディレクトリ
 
 | ファイル | 現状 | 追加すべき内容 |
 |---------|------|---------------|
-| `make/entire-standards.md` | ルール一覧のみ | Makefileでの適用シナリオ |
-| `scripts/entire-standards.md` | ルール一覧のみ | シェルスクリプトでの適用シナリオ |
+| `docs/coding-standards/make/entire-standards.md` | ルール一覧のみ | Makefileでの適用シナリオ |
+| `docs/coding-standards/scripts/entire-standards.md` | ルール一覧のみ | シェルスクリプトでの適用シナリオ |
 
 ### 対象外
 
 | ファイル | 理由 |
 |---------|------|
-| `src/frameworks-and-drivers/ui/react-hooks/index.md` | インデックスファイルのため適用シナリオ不要 |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/index.md` | インデックスファイルのため適用シナリオ不要 |
 
 ## タスク
 
