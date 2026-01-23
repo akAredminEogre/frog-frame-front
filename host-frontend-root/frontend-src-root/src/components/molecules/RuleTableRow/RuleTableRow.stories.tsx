@@ -12,16 +12,24 @@ const meta: Meta<typeof RuleTableRow> = {
   tags: ['autodocs'],
   argTypes: {
     onEdit: { action: 'edited' },
+    onToggle: { action: 'toggled' },
+    onDelete: { action: 'deleted' },
+  },
+  args: {
+    isToggling: false,
+    isDeleting: false,
   },
   decorators: [
     (Story) => (
       <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
         <thead>
           <tr>
-            <th style={{ width: '60px' }}>操作</th>
+            <th style={{ width: '60px' }}>有効</th>
+            <th style={{ width: '60px' }}>編集</th>
+            <th style={{ width: '60px' }}>削除</th>
             <th style={{ width: '200px' }}>URLパターン</th>
-            <th style={{ width: 'calc((100% - 260px) / 2)' }}>置換前</th>
-            <th style={{ width: 'calc((100% - 260px) / 2)' }}>置換後</th>
+            <th style={{ width: 'calc((100% - 380px) / 2)' }}>置換前</th>
+            <th style={{ width: 'calc((100% - 380px) / 2)' }}>置換後</th>
           </tr>
         </thead>
         <tbody>
@@ -123,5 +131,33 @@ export const InactiveRule: Story = {
       false,
       false
     ),
+  },
+};
+
+export const Deleting: Story = {
+  args: {
+    rule: new RewriteRule(
+      8,
+      'deleting',
+      'rule',
+      'https://example.com',
+      false,
+      true
+    ),
+    isDeleting: true,
+  },
+};
+
+export const Toggling: Story = {
+  args: {
+    rule: new RewriteRule(
+      9,
+      'toggling',
+      'rule',
+      'https://example.com',
+      false,
+      true
+    ),
+    isToggling: true,
   },
 };

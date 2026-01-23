@@ -8,17 +8,27 @@ interface RulesTableProps {
   rules: RewriteRule[];
   onEdit: (ruleId: string | number) => void;
   onToggle: (ruleId: number) => void;
+  onDelete: (ruleId: number) => void;
   togglingIds: Set<number>;
+  deletingIds: Set<number>;
 }
 
-const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onToggle, togglingIds }) => {
+const RulesTable: React.FC<RulesTableProps> = ({
+  rules,
+  onEdit,
+  onToggle,
+  onDelete,
+  togglingIds,
+  deletingIds,
+}) => {
   return (
     <div className={styles.rulesTableContainer} data-testid="rules-table-container">
       <table className={styles.rulesTable} data-testid="rules-table">
         <thead>
           <tr>
             <th>有効</th>
-            <th>操作</th>
+            <th>編集</th>
+            <th>削除</th>
             <th>URLパターン</th>
             <th>置換前</th>
             <th>置換後</th>
@@ -31,7 +41,9 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onToggle, toggli
               rule={rule}
               onEdit={onEdit}
               onToggle={onToggle}
+              onDelete={onDelete}
               isToggling={togglingIds.has(rule.id)}
+              isDeleting={deletingIds.has(rule.id)}
             />
           ))}
         </tbody>
