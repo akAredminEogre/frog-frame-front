@@ -85,7 +85,12 @@ React Ariaを使用する場合、以下の責任分担を遵守すること：
 
 ## eslint-rule
 
-ESLint化不可（モーダルの実装パターンは文脈依存であり、静的解析で正誤を判断できない。PRレビューで確認）
+**部分的にESLint化**:
+
+| ルール | ESLint化 | 設定ファイル |
+|-------|---------|-------------|
+| FocusScopeのautoFocus禁止 | ✅ 可能 | [host-frontend-root/frontend-src-root/eslint-rules/react.js](../../../../../../host-frontend-root/frontend-src-root/eslint-rules/react.js) |
+| その他のモーダル実装パターン | ❌ 不可 | PRレビューで確認 |
 
 ## 関連ドキュメント
 
