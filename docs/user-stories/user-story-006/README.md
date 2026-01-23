@@ -10,20 +10,31 @@
 
 ## 対象ファイル
 
-（別途調査）
+調査の結果、以下のADRがTypeScriptコード例を含んでいる:
 
-以下のADRがコード例を含んでいる可能性がある:
-- docs/adr/001-clean-architecture-with-presenter-pattern.md
-- docs/adr/002-messaging-with-webext-core.md
-- docs/adr/004-tabs-collection-layer-placement.md
-- docs/adr/005-factory-pattern-for-react-callback-injection.md
-- docs/adr/008-ui-component-directory-migration.md
-- docs/adr/009-ui-container-separation-with-atomic-design.md
+| ADR | コード例の内容 | 行番号 |
+|-----|--------------|--------|
+| [ADR-002](../../adr/002-messaging-with-webext-core.md) | proxy-service実装パターン | 100-139行目 |
+| [ADR-004](../../adr/004-tabs-collection-layer-placement.md) | Tabsクラス実装 | 75-97行目 |
+| [ADR-004](../../adr/004-tabs-collection-layer-placement.md) | アンチパターン例 | 119-145行目 |
+| [ADR-004](../../adr/004-tabs-collection-layer-placement.md) | 正しいアプローチ例 | 210-225行目 |
+
+以下のADRはコード例を含んでいない（対応不要）:
+- ADR-001: アスキーアート図のみ
+- ADR-005: アスキーアート図のみ
+- ADR-008: ディレクトリ構造のみ
+- ADR-009: ディレクトリ構造のみ
 
 ## タスク
 
-（別途策定）
+1. ADR-002からTypeScriptコード例を削除
+   - 実装注入パターンの説明をテキストベースに変更
+   - 必要に応じて実装ファイルへの参照を追加
+2. ADR-004からTypeScriptコード例を削除
+   - Tabsクラスの実装例をテキストベースの説明に変更
+   - アンチパターン/正しいアプローチの説明を図表形式に変更
+   - 実装ファイルへの参照を追加
 
 ## 受け入れ条件
 
-（別途策定）
+[acceptance-criteria.md](./acceptance-criteria.md) を参照
