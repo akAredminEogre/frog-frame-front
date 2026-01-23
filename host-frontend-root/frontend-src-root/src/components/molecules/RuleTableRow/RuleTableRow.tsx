@@ -35,7 +35,11 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({
         />
       </td>
       <td>
-        <Button onClick={() => onEdit(rule.id)} data-testid="edit-button">
+        <Button
+          onClick={() => onEdit(rule.id)}
+          data-testid="edit-button"
+          aria-label={`ルール ${rule.id} を編集`}
+        >
           編集
         </Button>
       </td>
