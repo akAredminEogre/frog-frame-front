@@ -166,8 +166,8 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### Controller/Presenter層
 
-- [ ] DeleteRuleController の実装、テスト戦略書・単体テスト
-- [ ] DeleteRuleControllerFactory の実装、テスト戦略書・単体テスト
+- [x] DeleteRuleController の実装、テスト戦略書・単体テスト
+- [x] DeleteRuleControllerFactory の実装、テスト戦略書・単体テスト
 - [x] DeleteRulePresenter の実装、テスト戦略書・単体テスト（成功時View更新、失敗時エラー通知）
 
 #### UIコンポーネント層
