@@ -154,6 +154,11 @@ This command runs comprehensive checks including tests, unused code detection, a
 
 **このチェックを実行せずにタスクを完了することは禁止されています。**
 
+### Git Utility Commands
+```bash
+make git-list-unmerged  # List all branches not merged into develop
+```
+
 ### Git Worktree (Parallel Development)
 For working on multiple branches simultaneously:
 

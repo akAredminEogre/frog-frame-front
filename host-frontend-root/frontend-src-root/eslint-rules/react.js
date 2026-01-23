@@ -10,5 +10,16 @@ export default {
     // React Hooks rules
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+
+    // React Aria rules
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector:
+          "JSXOpeningElement[name.name='FocusScope'] > JSXAttribute[name.name='autoFocus']",
+        message:
+          'FocusScopeのautoFocusプロパティは使用しないでください。フォーカスしたい要素に直接autoFocus属性を付けてください（例: <button autoFocus>）。詳細: docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/react-aria-integration.md',
+      },
+    ],
   },
 };

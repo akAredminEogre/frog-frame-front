@@ -56,12 +56,11 @@ export class RewriteRuleMapper {
   }
 
   /**
-   * ルールを削除する（スケルトン）
+   * ルールを削除する
    * IRewriteRuleMessagingPort経由で削除リクエストを送信
    * @param id 削除するルールのID
    */
   async delete(id: number): Promise<void> {
-    // Phase 2で実装予定
     await this.messagingPort.delete({ id });
   }
 }

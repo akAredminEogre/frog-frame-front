@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+
+import { ModalDialogBase } from 'src/frameworks-and-drivers/ui/components/molecules/ModalDialogBase';
+import styles from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/ConfirmDialog.module.css';
+import { useProcessingGuard } from 'src/frameworks-and-drivers/ui/hooks';
 
 /**
  * ConfirmDialogコンポーネントのProps
@@ -14,8 +18,11 @@ export interface ConfirmDialogProps {
 }
 
 /**
- * 確認ダイアログコンポーネント（スケルトン）
- * Phase 2で実装予定
+ * 確認ダイアログコンポーネント
+ *
+ * ModalDialogBaseを使用したWAI-ARIA Dialog Modal Patternに準拠した実装（ADR-007）。
+ * ダイアログの共通機能（ARIA属性、フォーカス管理、キーボード操作等）は
+ * ModalDialogBaseに委譲し、確認ダイアログ固有のUI（ボタン配置）のみを実装。
  */
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   isOpen,
@@ -26,23 +33,51 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   confirmLabel = '削除',
   cancelLabel = 'キャンセル',
 }) => {
-  // Phase 2で実装予定: モーダルダイアログの表示、アクセシビリティ対応
-  if (!isOpen) {
-    return null;
-  }
+  // 連続クリック防止
+  const { isProcessing, guardedHandler } = useProcessingGuard(isOpen);
+
+  // ガード済みハンドラをメモ化（レンダリングごとの再生成を防止）
+  const handleCancel = useMemo(
+    () => guardedHandler(onCancel),
+    [guardedHandler, onCancel]
+  );
+  const handleConfirm = useMemo(
+    () => guardedHandler(onConfirm),
+    [guardedHandler, onConfirm]
+  );
 
   return (
-    <div role="dialog" aria-modal="true" aria-labelledby="confirm-dialog-title">
-      <h2 id="confirm-dialog-title">{title}</h2>
-      <p>{message}</p>
-      <div>
-        <button type="button" onClick={onCancel}>
+    <ModalDialogBase
+      isOpen={isOpen}
+      onClose={handleCancel}
+      title={title}
+      description={message}
+      idPrefix="confirm-dialog"
+      testId="confirm-dialog"
+    >
+      <div className={styles.buttonContainer}>
+        {/* WAI-ARIAベストプラクティス: 破壊的アクションを伴うダイアログでは
+            安全な選択肢（キャンセルボタン）に初期フォーカスを設定 */}
+        <button
+          type="button"
+          className={`${styles.button} ${styles.cancelButton}`}
+          onClick={handleCancel}
+          disabled={isProcessing}
+          data-testid="confirm-dialog-cancel-button"
+          autoFocus
+        >
           {cancelLabel}
         </button>
-        <button type="button" onClick={onConfirm}>
+        <button
+          type="button"
+          className={`${styles.button} ${styles.confirmButton}`}
+          onClick={handleConfirm}
+          disabled={isProcessing}
+          data-testid="confirm-dialog-confirm-button"
+        >
           {confirmLabel}
         </button>
       </div>
-    </div>
+    </ModalDialogBase>
   );
 };

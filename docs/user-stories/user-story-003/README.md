@@ -150,12 +150,12 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### Mapper層
 
-- [ ] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
+- [x] P2-MAP1: RewriteRuleMapper.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-M4
 
 #### Repository層
 
-- [ ] P2-R1: DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
-- [ ] P2-R2: ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-MAP1
+- [x] P2-R1: DexieRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト（IndexedDB物理削除）
+- [x] P2-R2: ChromeRuntimeRewriteRuleRepository.delete() の実装、テスト戦略書・単体テスト ← depends on: P2-MAP1
 
 #### ユースケース層
 

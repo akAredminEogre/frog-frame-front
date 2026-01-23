@@ -24,6 +24,20 @@ WAI-ARIA Authoring Practices（Dialog Modal Pattern）に準拠したアクセ�
 | aria-modal="true" | ○ | モーダルダイアログであることを示す |
 | aria-labelledby | ○ | タイトル要素のIDを参照 |
 | aria-describedby | △ | 説明文要素のIDを参照（オプション） |
+| tabIndex={-1} | ○ | プログラム的なフォーカス設定を可能にする |
+
+**tabIndex={-1}について**: ダイアログコンテナに`tabIndex={-1}`を設定することで、JavaScriptからプログラム的にフォーカスを設定可能になる。これはWAI-ARIA Dialog Modal Patternのベストプラクティスであり、より堅牢なフォーカス管理を実現する。
+
+#### 1.1 ID生成にuseId()を使用（必須）
+
+`aria-labelledby`や`aria-describedby`で参照するIDは、**必ずReactの`useId()`フックを使用して生成すること**。
+
+**理由**:
+- ハードコードされたID（例: `confirm-dialog-title`）は、同一ページ内で複数のダイアログが同時にレンダリングされた場合にID競合を引き起こす
+- `useId()`はReact 18で導入されたフックで、サーバーサイドレンダリングでも安全に一意のIDを生成する
+- 将来的な拡張性を確保し、コンポーネントの再利用性を高める
+
+**実装方法**: [`useDialogIds`フック](../coding-standards/src/frameworks-and-drivers/ui/react-hooks/useDialogIds.md)を使用する。
 
 #### 2. フォーカス管理
 
@@ -31,19 +45,38 @@ WAI-ARIA Authoring Practices（Dialog Modal Pattern）に準拠したアクセ�
 |------|------|
 | 初期フォーカス | ダイアログが開いたとき、最初のフォーカス可能な要素にフォーカスを移動 |
 | フォーカストラップ | ダイアログが開いている間、Tab/Shift+Tabでフォーカスがダイアログ内に閉じ込められる |
-| 復帰フォーカス | ダイアログが閉じたとき、ダイアログを開いたトリガー要素にフォーカスを戻す |
+| 復帰フォーカス | ダイアログが閉じたとき **またはコンポーネントがアンマウントされたとき**、可能な場合はトリガー要素にフォーカスを戻す |
+
+#### 2.1 React Ariaによる自動管理
+
+React Ariaを使用する場合、以下の機能が自動化される：
+
+| 機能 | React Aria Hook/Component | 備考 |
+|------|--------------------------|------|
+| フォーカストラップ | `FocusScope` (contain) | |
+| 初期フォーカス | 要素の`autoFocus`属性 | FocusScopeの`autoFocus`プロパティは使用しない |
+| 復帰フォーカス | `FocusScope` (restoreFocus) | |
+| 背景スクロール無効化 | `usePreventScroll` | |
+
+**注意**: FocusScopeの`autoFocus`プロパティは最初のフォーカス可能な要素にフォーカスするため、フォーカス対象を指定できない。フォーカスしたい要素に直接`autoFocus`属性を付けること（例: `<button autoFocus>`）。
+
+詳細は[React Ariaコンポーネントとの責任分担](../coding-standards/src/frameworks-and-drivers/ui/react-hooks/react-aria-integration.md)を参照。
 
 #### 3. キーボードイベント処理
 
-| キー | 動作 |
-|------|------|
-| Escape | ダイアログを閉じる |
-| Tab | 次のフォーカス可能な要素に移動（最後の要素から最初の要素にループ） |
-| Shift + Tab | 前のフォーカス可能な要素に移動（最初の要素から最後の要素にループ） |
+| キー | 動作 | 実現方法 |
+|------|------|---------|
+| Escape | ダイアログを閉じる | 手動ハンドラ（onKeyDown） |
+| Tab | 次のフォーカス可能な要素に移動（ループ） | `FocusScope` (contain) |
+| Shift + Tab | 前のフォーカス可能な要素に移動（ループ） | `FocusScope` (contain) |
+
+フォーカストラップはReact Ariaの`FocusScope`で自動化。Escapeキーは手動ハンドラで処理。
 
 #### 4. 外側クリックでのクローズ
 
 ダイアログの背景（オーバーレイ）をクリックした場合、ダイアログを閉じる。
+
+オーバーレイのonClickハンドラで手動処理（ダイアログ内クリックとの判別が必要）。
 
 #### 5. ポータルレンダリング
 
@@ -53,17 +86,18 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 
 ダイアログが開いている間、背景のスクロールを無効化する。
 
-### 推奨ライブラリ
+### 推奨ライブラリ（採用済み）
 
-上記要件を手動で実装する代わりに、以下のライブラリの使用を推奨する：
+本プロジェクトでは**React Aria**を採用（理由: テスト環境互換性と堅牢性）。
 
-| ライブラリ | 特徴 |
-|-----------|------|
-| React Aria (useDialog) | Adobe製、アクセシビリティ完備、スタイル非依存 |
-| Radix UI (Dialog) | ヘッドレスUI、アクセシビリティ完備 |
-| Headless UI (Dialog) | Tailwind Labs製、アクセシビリティ完備 |
+詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)を参照。
 
-本プロジェクトでは既にReact Aria（ToggleSwitchで使用）を採用しているため、`@react-aria/dialog` の使用を推奨する。
+### ベースコンポーネント（推奨）
+
+本ADRの要件を満たすベースコンポーネントとカスタムフックを提供している。
+新しいダイアログコンポーネントを実装する際は、これらを使用すること。
+
+詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)を参照。
 
 ### ビジュアルスタイリング要件
 
@@ -81,21 +115,22 @@ z-indexの問題を回避し、DOMツリーの最上位にダイアログをレ�
 3. **一貫性**: WAI-ARIA標準に従うことで、ユーザーの期待通りの動作を提供
 4. **メンテナンス性**: 標準パターンに従うことで、将来の変更が容易
 
+### 適用済みの箇所
+
+適用済みコンポーネントの詳細は[アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md)を参照。
+
 ### 適用待ちの箇所
 
-以下のコンポーネントは本ADR採用以前に作成されたため、要件を満たしていない：
-
-| コンポーネント | 配置 | 状態 |
-|---------------|------|------|
-| ConfirmDialog | `src/frameworks-and-drivers/ui/components/organisms/` | スケルトン（Phase 2で対応） |
+該当なし
 
 ## 影響ドキュメント
 
 このADRが変更された場合、以下のドキュメントも更新が必要：
 
-- なし
+- [アクセシブルモーダルコンポーネント規約](../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md) - 実装チェックリスト
 
 ## 関連ドキュメント
 
 - [WAI-ARIA Authoring Practices - Dialog Modal](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
 - [React Aria useDialog](https://react-spectrum.adobe.com/react-aria/useDialog.html)
+- [useEffectの副作用管理ルール](../coding-standards/src/frameworks-and-drivers/ui/react-hooks/useEffect-side-effects.md)
