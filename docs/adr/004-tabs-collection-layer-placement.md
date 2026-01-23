@@ -79,7 +79,7 @@ ADR-001「ドメインロジックの配置原則」に従う:
 | `filterByRule` | `rule.matchesUrl()` を呼び出してフィルタリング | ドメインロジックの**呼び出し** |
 | `reloadAll` | `chrome.tabs.reload()` を実行 | 技術的出力 |
 
-**実装の詳細**: [Tabs.ts](../../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/browser/Tabs.ts) を参照
+**実装の詳細**: [Tabs.ts](../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/browser/Tabs.ts) を参照
 
 ## 比較: Value Object との違い
 
@@ -166,7 +166,7 @@ ADR-001 の明確な指針:
 
 **ポイント**: `Tabs.filterByRule()` はドメインロジック（`matchesUrl`）を**呼び出す**だけであり、ドメインロジック自体を**実装**しているわけではない。
 
-**実装の詳細**: [Tabs.ts](../../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/browser/Tabs.ts)、[RewriteRule.ts](../../../host-frontend-root/frontend-src-root/src/enterprise-business-rules/entities/RewriteRule/RewriteRule.ts) を参照
+**実装の詳細**: [Tabs.ts](../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/browser/Tabs.ts)、[RewriteRule.ts](../../host-frontend-root/frontend-src-root/src/enterprise-business-rules/entities/RewriteRule/RewriteRule.ts) を参照
 
 ## 理由
 
