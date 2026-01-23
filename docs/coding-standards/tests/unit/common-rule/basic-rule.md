@@ -28,6 +28,40 @@ tests/unit/[layer]/[category]/[ServiceName]/
     └── createMockDependency.ts
 ```
 
+---
+
+## モックライフサイクル管理
+
+### 規約
+
+- `beforeEach` では `vi.clearAllMocks()` を使用する
+- `afterEach` では `vi.resetAllMocks()` を使用する
+
+### clearAllMocks vs resetAllMocks の違い
+
+| 関数 | 呼び出し履歴 | モック実装 |
+|------|-------------|-----------|
+| `clearAllMocks()` | クリア | 維持 |
+| `resetAllMocks()` | クリア | リセット |
+
+### 理由
+
+- `beforeEach` では呼び出し履歴のみクリアし、モック実装は維持する（各テストで同じモック実装を再利用）
+- `afterEach` ではモック実装もリセットし、次のテストファイルへの影響を防ぐ
+
+### eslint-rule
+
+ESLint化不可（beforeEach/afterEach内での特定関数呼び出しを強制するルールは存在しない）
+
+### 遵守方法
+
+1. **コードレビュー時の確認**: PR作成時に以下を確認
+   - `beforeEach`で`vi.clearAllMocks()`が使用されているか
+   - `afterEach`で`vi.resetAllMocks()`が使用されているか
+2. **既存テストファイルの参照**: 同プロジェクト内の既存テストファイルを参考にすること
+
+---
+
 # Clean Architecture用ルール
 
 Clean Architectureの各層に特化したテスト規約です。
@@ -140,4 +174,112 @@ const rule = RewriteRule.fromParams(1, {
 規約に準拠していないモックファクトリは [user-story-004](../../../user-stories/user-story-004/README.md) で対応予定。
 
 **注意**: 新規モック作成時は必ず `mocks/` ディレクトリに配置すること。
+
+---
+
+## Reactテストユーティリティのインポート
+
+### 規約
+
+`act`などのReactテストユーティリティは、`react`パッケージからインポートすること。
+
+| ユーティリティ | インポート元 | 備考 |
+|--------------|-------------|------|
+| `act` | `react` | React 18.3以降の標準 |
+
+### 禁止事項
+
+```typescript
+// ❌ react-dom/test-utilsは非推奨（React 18.3以降）
+import { act } from 'react-dom/test-utils';
+```
+
+### 許可事項
+
+```typescript
+// ✅ reactパッケージからインポート
+import React, { act } from 'react';
+
+// または
+import { act } from 'react';
+```
+
+### 背景
+
+- React 18.3.0で`react-dom/test-utils`の非推奨警告が追加された
+- React 18.3.1以降、`act`は`react`パッケージから直接エクスポートされている
+- 将来のReactバージョンで`react-dom/test-utils`が削除される可能性がある
+
+### eslint-rule
+
+ESLint化不可（インポート元の正確性は静的解析で判断困難。PRレビューで確認）
+
+---
+
+## 共通テストユーティリティの配置
+
+### 規約
+
+複数のテストヘルパーで使用される汎用ユーティリティは、共通ファイルに配置すること。
+
+- **配置場所**: `tests/unit/frameworks-and-drivers/ui/test-utils.ts`（UIコンポーネント用）
+- **再エクスポート**: 各test-helpersファイルでは後方互換性のため再エクスポートする
+
+### 背景
+
+同一の実装が複数のtest-helpersファイルに重複すると、修正時に漏れが発生するリスクがある。
+
+### 例
+
+```typescript
+// tests/unit/frameworks-and-drivers/ui/test-utils.ts（共通ユーティリティ）
+export const flushPromises = (): Promise<void> => {
+  return new Promise<void>((resolve) => setTimeout(resolve, 0));
+};
+
+// tests/unit/.../ComponentName/test-helpers.tsx（各コンポーネント用）
+import { flushPromises } from 'tests/unit/frameworks-and-drivers/ui/test-utils';
+export { flushPromises }; // 後方互換性のため再エクスポート
+```
+
+### eslint-rule
+
+ESLint化不可（PRレビューで確認）
+
+---
+
+## flushPromisesはact()内で使用する
+
+### 規約
+
+`flushPromises`などの非同期更新待機処理は、`act()`の内部で実行すること。
+
+### 理由
+
+- `act()`外で非同期更新が完了すると、React警告が発生する可能性がある
+- Reactの状態更新を確実に同期するため
+
+### 禁止事項
+
+```typescript
+// ❌ act()の外でflushPromises
+await act(async () => {
+  root.render(<Component />);
+});
+await flushPromises();
+```
+
+### 許可事項
+
+```typescript
+// ✅ act()の中でflushPromises
+await act(async () => {
+  root.render(<Component />);
+  await flushPromises();
+});
+```
+
+### eslint-rule
+
+ESLint化不可（PRレビューで確認）
 
