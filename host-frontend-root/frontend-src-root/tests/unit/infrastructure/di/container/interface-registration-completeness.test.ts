@@ -83,6 +83,11 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
       expected: { implementationName: 'ToggleRuleActiveControllerFactory' }
     },
     {
+      description: 'IDeleteRuleControllerFactoryをDeleteRuleControllerFactoryに解決できること',
+      input: { interfaceToken: 'IDeleteRuleControllerFactory' as const },
+      expected: { implementationName: 'DeleteRuleControllerFactory' }
+    },
+    {
       description: 'ITabsGatewayをChromeTabsGatewayに解決できること',
       input: { interfaceToken: 'ITabsGateway' as const },
       expected: { implementationName: 'ChromeTabsGateway' }
