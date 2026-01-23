@@ -25,6 +25,8 @@ import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsSer
 import { ChromeWindowService } from 'src/infrastructure/browser/window/ChromeWindowService';
 import { SelectedPageTextRepository } from 'src/infrastructure/persistence/storage/SelectedPageTextRepository';
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
+import { DeleteRuleControllerFactory } from 'src/interface-adapters/factories/DeleteRuleControllerFactory';
+import { IDeleteRuleControllerFactory } from 'src/interface-adapters/factories/IDeleteRuleControllerFactory';
 import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
@@ -71,6 +73,10 @@ const toggleRuleActiveControllerFactory = new ToggleRuleActiveControllerFactory(
   rewriteRuleRepository,
   chromeTabsGateway
 );
+const deleteRuleControllerFactory = new DeleteRuleControllerFactory(
+  rewriteRuleRepository,
+  chromeTabsGateway
+);
 // NOTE: Background contextでは DexieRewriteRuleRepository を直接使用するため、
 // RewriteRuleMessagingService の getAll() は呼ばれない（Mapper 経由の getAllRules は未使用）
 const rewriteRuleMessagingService = new RewriteRuleMessagingService();
@@ -105,7 +111,10 @@ awilixContainer.register({
   toggleRuleActiveControllerFactory: asValue(toggleRuleActiveControllerFactory),
   rewriteRuleMapper: asValue(rewriteRuleMapper),
   chromeTabsGateway: asValue(chromeTabsGateway),
-  rewriteRuleMessagingService: asValue(rewriteRuleMessagingService)
+  rewriteRuleMessagingService: asValue(rewriteRuleMessagingService),
+
+  // Delete Rule feature
+  deleteRuleControllerFactory: asValue(deleteRuleControllerFactory)
 });
 
 // Type definitions for container resolution
@@ -138,6 +147,9 @@ interface ContainerCradle {
   rewriteRuleMapper: RewriteRuleMapper;
   chromeTabsGateway: ChromeTabsGateway;
   rewriteRuleMessagingService: RewriteRuleMessagingService;
+
+  // Delete Rule feature
+  deleteRuleControllerFactory: IDeleteRuleControllerFactory;
 }
 
 // Token mappings for interface-based resolution (legacy compatibility)
@@ -151,6 +163,7 @@ type InterfaceToken =
   | 'IChromeRuntimeService'
   | 'IGetSelectionService'
   | 'IToggleRuleActiveControllerFactory'
+  | 'IDeleteRuleControllerFactory'
   | 'ITabsGateway'
   | 'IRewriteRuleMessagingPort';
 
@@ -164,6 +177,7 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeRuntimeService': 'chromeRuntimeService',
   'IGetSelectionService': 'getSelectionService',
   'IToggleRuleActiveControllerFactory': 'toggleRuleActiveControllerFactory',
+  'IDeleteRuleControllerFactory': 'deleteRuleControllerFactory',
   'ITabsGateway': 'chromeTabsGateway',
   'IRewriteRuleMessagingPort': 'rewriteRuleMessagingService'
 };
@@ -181,6 +195,7 @@ const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [ChromeTabsService, 'chromeTabsService'],
   [ChromeCurrentTabService, 'chromeCurrentTabService'],
   [ToggleRuleActiveControllerFactory, 'toggleRuleActiveControllerFactory'],
+  [DeleteRuleControllerFactory, 'deleteRuleControllerFactory'],
   [RewriteRuleMapper, 'rewriteRuleMapper'],
   [ChromeTabsGateway, 'chromeTabsGateway'],
   [RewriteRuleMessagingService, 'rewriteRuleMessagingService']
@@ -199,6 +214,7 @@ interface Container {
   resolve(token: typeof ChromeTabsService): ChromeTabsService;
   resolve(token: typeof ChromeCurrentTabService): ChromeCurrentTabService;
   resolve(token: typeof ToggleRuleActiveControllerFactory): ToggleRuleActiveControllerFactory;
+  resolve(token: typeof DeleteRuleControllerFactory): DeleteRuleControllerFactory;
   resolve(token: typeof RewriteRuleMapper): RewriteRuleMapper;
   resolve(token: typeof ChromeTabsGateway): ChromeTabsGateway;
   resolve(token: typeof RewriteRuleMessagingService): RewriteRuleMessagingService;
