@@ -100,8 +100,8 @@ ADR-001「ドメインロジックの配置原則」に従う:
 
 | 層 | 配置されるもの | 問題点 |
 |----|--------------|--------|
-| enterprise-business-rules | `ITab`（インターフェース）、`Tabs`（コレクション） | 技術概念がドメイン層に侵入 |
-| frameworks-and-drivers | `ChromeTab`（`ITab` の実装） | 実装クラスのみ |
+| enterprise-business-rules | `ITab`(インターフェース)、`Tabs`(コレクション) | 技術概念がドメイン層に侵入 |
+| frameworks-and-drivers | `ChromeTab`(`ITab` の実装) | 実装クラスのみ |
 
 このアプローチでは、`ITab` という抽象化を導入してドメイン層に配置し、`ChromeTab` という実装を frameworks-and-drivers 層で提供する。
 
@@ -139,8 +139,8 @@ Clean Architecture における抽象化（インターフェース）の目的:
 
 | パターン | enterprise-business-rules 層 | frameworks-and-drivers 層 |
 |---------|---------------------------|--------------------------|
-| ❌ アンチパターン | `ITab`, `Tabs`（技術概念が侵入） | `ChromeTab`（実装のみ） |
-| ✅ 正しいアプローチ | `RewriteRule`（純粋なドメインロジック） | `Tabs`, `ChromeTabsGateway`（技術的詳細） |
+| ❌ アンチパターン | `ITab`, `Tabs`(技術概念が侵入) | `ChromeTab`(実装のみ) |
+| ✅ 正しいアプローチ | `RewriteRule`(純粋なドメインロジック) | `Tabs`, `ChromeTabsGateway`(技術的詳細) |
 
 抽象化によるドメイン層への引き上げは:
 - 不要なインターフェース（`ITab`）を生む
@@ -161,8 +161,8 @@ ADR-001 の明確な指針:
 
 | 層 | クラス | 責務 |
 |----|-------|------|
-| enterprise-business-rules | `RewriteRule` | `matchesUrl()` でURLパターンマッチング判定（ドメインロジック） |
-| frameworks-and-drivers | `Tabs` | `filterByRule()` でドメインロジックを**呼び出す**（実装はしない） |
+| enterprise-business-rules | `RewriteRule` | `matchesUrl()` でURLパターンマッチング判定(ドメインロジック) |
+| frameworks-and-drivers | `Tabs` | `filterByRule()` でドメインロジックを**呼び出す**(実装はしない) |
 
 **ポイント**: `Tabs.filterByRule()` はドメインロジック（`matchesUrl`）を**呼び出す**だけであり、ドメインロジック自体を**実装**しているわけではない。
 
