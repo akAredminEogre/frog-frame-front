@@ -13,6 +13,7 @@ import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messagin
 import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
+import { DeleteRuleControllerFactory } from 'src/interface-adapters/factories/DeleteRuleControllerFactory';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
@@ -96,6 +97,11 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
       description: 'ToggleRuleActiveControllerFactoryを解決できること',
       input: { classToken: ToggleRuleActiveControllerFactory },
       expected: { className: 'ToggleRuleActiveControllerFactory' }
+    },
+    {
+      description: 'DeleteRuleControllerFactoryを解決できること',
+      input: { classToken: DeleteRuleControllerFactory },
+      expected: { className: 'DeleteRuleControllerFactory' }
     },
     {
       description: 'RewriteRuleMapperを解決できること',
