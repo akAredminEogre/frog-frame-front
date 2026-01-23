@@ -19,6 +19,7 @@ function RulesApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
+  const [deletingIds] = useState<Set<number>>(new Set());
   const [toggleError, setToggleError] = useState<{ ruleId: number; message: string } | null>(null);
 
   const toggleController = useMemo(() => {
@@ -111,6 +112,11 @@ function RulesApp() {
     });
   };
 
+  const handleDelete = (_ruleId: number) => {
+    // TODO: P3-2で削除処理を実装
+    void _ruleId;
+  };
+
   return (
     <div className="container">
       <h1>保存されたルール一覧</h1>
@@ -124,7 +130,14 @@ function RulesApp() {
       {rules.length === 0 ? (
         <EmptyStateMessage />
       ) : (
-        <RulesTable rules={rules} onEdit={handleEdit} onToggle={handleToggle} togglingIds={togglingIds} />
+        <RulesTable
+          rules={rules}
+          onEdit={handleEdit}
+          onToggle={handleToggle}
+          onDelete={handleDelete}
+          togglingIds={togglingIds}
+          deletingIds={deletingIds}
+        />
       )}
 
       <div className="footer">
