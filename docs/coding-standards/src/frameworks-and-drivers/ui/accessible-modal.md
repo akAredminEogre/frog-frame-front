@@ -36,35 +36,7 @@ ModalDialogBaseは以下の機能を自動的に提供する：
 
 ## 実装チェックリスト
 
-ModalDialogBaseを使用せず、独自にモーダルコンポーネントを実装する場合は、以下のチェックリストを使用して必須要件の漏れを防ぐこと。
-
-### ARIA属性
-
-- [ ] `role="dialog"`
-- [ ] `aria-modal="true"`
-- [ ] `aria-labelledby`（タイトル要素のIDを参照）
-- [ ] `aria-describedby`（説明文がある場合）
-- [ ] `tabIndex={-1}`（プログラム的フォーカス設定用）
-- [ ] IDは`useId()`で生成（ID競合を防ぐため）
-
-### フォーカス管理
-
-- [ ] 初期フォーカス設定
-  - 要素の`autoFocus`属性を推奨（`FocusScope`の`autoFocus`プロパティは使用しない）
-  - 理由: `FocusScope`の`autoFocus`は最初のフォーカス可能な要素にフォーカスするため、フォーカス対象を指定できない
-- [ ] フォーカストラップ（`FocusScope contain`）
-- [ ] 復帰フォーカス（`FocusScope restoreFocus`）
-
-### キーボード操作
-
-- [ ] Escapeキーでダイアログを閉じる
-- [ ] Tab/Shift+Tabでフォーカスがループする
-
-### その他
-
-- [ ] オーバーレイクリックでダイアログを閉じる
-- [ ] 背景スクロール無効化（`usePreventScroll`）
-- [ ] ポータルレンダリング（`createPortal`）
+ModalDialogBaseを使用せず、独自にモーダルコンポーネントを実装する場合は、[ADR-007: ダイアログコンポーネントのアクセシビリティ要件](../../../../adr/007-dialog-accessibility-requirements.md)の「必須要件」セクションを参照し、漏れがないことを確認すること。
 
 ## React Ariaとの責任分担
 
