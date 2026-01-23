@@ -81,12 +81,6 @@ ADR-001「ドメインロジックの配置原則」に従う:
 
 **実装の詳細**: [Tabs.ts](../../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/browser/Tabs.ts) を参照
 
-| 責務 | 種別 |
-|------|------|
-| URLが存在するタブのみを保持 | 技術的フィルタリング |
-| `rule.matchesUrl()` の呼び出し | ドメインロジックの**呼び出し** |
-| `chrome.tabs.reload()` の実行 | 技術的出力 |
-
 ## 比較: Value Object との違い
 
 | 観点 | RewriteRules (Value Object) | Tabs (技術的ヘルパー) |
