@@ -64,12 +64,16 @@
 新規モックファクトリ作成前に、以下を確認すること：
 
 1. **既存モックの検索**
+
+   以下のコマンドは `host-frontend-root/frontend-src-root/` ディレクトリで実行すること:
    ```bash
    # 同一インターフェースのモックを検索（例：ITabsGateway）
    grep -r "createMockTabsGateway" tests/
    # または
    find tests/ -name "createMock*.ts" | xargs grep -l "ITabsGateway"
    ```
+
+   リポジトリルートから実行する場合は `host-frontend-root/frontend-src-root/tests/` を指定すること。
 
 2. **検索結果の判断**
    - 既存モックが見つかった場合 → **共有モックから直接インポートして使用**
