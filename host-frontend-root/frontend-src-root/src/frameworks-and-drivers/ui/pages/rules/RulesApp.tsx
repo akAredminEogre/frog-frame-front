@@ -114,6 +114,7 @@ function RulesApp() {
 
   const handleDelete = (_ruleId: number) => {
     // TODO: P3-2で削除処理を実装
+    void _ruleId;
   };
 
   return (
