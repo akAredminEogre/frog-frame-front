@@ -7,9 +7,9 @@
  * 1. 編集ボタンクリックでonEditが呼ばれる
  * 2. トグルスイッチ操作でonToggleが呼ばれる
  */
-import { act } from 'react';
 import { createMockRewriteRule } from 'tests/unit/components/molecules/RuleTableRow/mocks/createMockRewriteRule';
 import {
+  act,
   flushPromises,
   RuleTableRowTestHelper,
 } from 'tests/unit/components/molecules/RuleTableRow/test-helpers';
