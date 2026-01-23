@@ -165,23 +165,45 @@ tests/unit/[path]/[methodName]/
 
 [モックを使用する理由と対象を記述]
 
-> **重要**: モック作成は [basic-rule.md](../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
+> **重要**: モック作成は [basic-rule.md](../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
 > - モック作成は、別のクラスファイルに切り出し、それをインポートして使用すること
 > - テストコード内で直接モックを定義しないこと
 > - モックファクトリは `createMock[ClassName].ts` の形式で命名
 > - **モック方法に具体的な実装コードを記載しないこと**（実装はテストコードを参照）
 
+### 既存モック確認チェック（必須）
+
+新規モック作成前に、同一インターフェースの既存モックを確認すること。
+
+以下のコマンドは `host-frontend-root/frontend-src-root/` ディレクトリで実行:
+```bash
+grep -r "createMock[InterfaceName]" tests/
+# または
+find tests/ -name "createMock*.ts" | xargs grep -l "[InterfaceName]"
+```
+
+**判断基準**:
+- 既存モックが見つかった場合 → **必ず既存モックを使用**（新規作成禁止）
+- 見つからなかった場合のみ → 新規作成可
+
+**チェックリスト記入例**:
+- [x] `grep -r "createMockTabsGateway" tests/` で検索 → 既存モック使用 (`tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`)
+- [x] `grep -r "createMockPresenter" tests/` で検索 → 新規作成（該当なし）
+
+> **参照**: [common-rule.md](../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
+
 ### モック対象
 
-- [モック対象1]: [モックする理由]
-- [モック対象2]: [モックする理由]
+| 依存関係 | モック理由 | 既存モック |
+|---------|-----------|-----------|
+| [インターフェース名] | [モックする理由] | `[パス]` ✓ or 新規作成 |
 
 ### モックファイル構成
 
 \`\`\`
 tests/unit/[path]/[methodName]/
 └── mocks/
-    └── createMock[ClassName].ts    # モックファクトリ
+    └── createMock[ClassName].ts    # モックファクトリ（既存モックがない場合のみ新規作成）
 \`\`\`
 ```
 
