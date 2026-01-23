@@ -11,7 +11,8 @@ import RuleTableRow from 'src/components/molecules/RuleTableRow/RuleTableRow';
 
 type RuleTableRowProps = React.ComponentProps<typeof RuleTableRow>;
 
-// 後方互換性のため再エクスポート
+// テストファイルで使用するユーティリティを再エクスポート
+export { act } from 'react';
 export { flushPromises };
 
 /**
