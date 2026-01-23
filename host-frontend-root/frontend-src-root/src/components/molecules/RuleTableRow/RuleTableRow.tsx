@@ -26,7 +26,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({
 }) => {
   return (
     <tr className={styles.ruleRow}>
-      <td className={styles.toggleCell}>
+      <td className={styles.actionCell}>
         <ToggleSwitch
           checked={rule.isActive}
           onChange={() => onToggle(rule.id)}
@@ -37,7 +37,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({
       <td>
         <Button onClick={() => onEdit(rule.id)}>編集</Button>
       </td>
-      <td className={styles.deleteCell}>
+      <td className={styles.actionCell}>
         <DeleteButton onClick={() => onDelete(rule.id)} disabled={isDeleting} />
       </td>
       <td title={rule.urlPattern || ''} className="rule-url-pattern">
