@@ -96,10 +96,10 @@ export class RuleTableRowTestHelper {
    */
   getEditButton(): HTMLButtonElement | null {
     this.ensureSetup();
-    const buttons = this.container!.querySelectorAll('button');
+    const buttons = Array.from(this.container!.querySelectorAll('button'));
     for (const button of buttons) {
       if (button.textContent === '編集') {
-        return button as HTMLButtonElement;
+        return button;
       }
     }
     return null;
