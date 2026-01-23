@@ -7,8 +7,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 新規メソッド/クラスを追加する場合
 
 1. [ ] **テスト戦略書を先に作成**（`docs/design/src/[layer]/.../[methodName].md`）
+   - テンプレート: `docs/docs-rules/design/05-test-strategy.md`
+   - **既存モック確認チェック**セクションを必ず記載すること
 2. [ ] 実装コードを作成
-3. [ ] テストコードを実装
+3. [ ] **既存モック検索を実行**（テストコード実装前）
+   ```bash
+   grep -r "createMock[InterfaceName]" tests/
+   ```
+   - 既存モックが見つかった場合 → インポートして使用
+   - 見つからなかった場合 → 共有ディレクトリに新規作成
+   - 参照: `docs/coding-standards/tests/common-rule.md`
+4. [ ] テストコードを実装
 
 ### 既存メソッドを修正する場合
 
