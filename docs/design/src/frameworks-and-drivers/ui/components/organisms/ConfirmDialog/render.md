@@ -29,7 +29,7 @@ ConfirmDialogコンポーネントのレンダリングとユーザーインタ�
 | cancelLabel | カスタムキャンセルボタンラベル | デフォルト「キャンセル」のオーバーライド |
 | デフォルトラベル | デフォルト値が使用される | Propsが省略された場合のフォールバック |
 
-**対応テスト**: `props.test.tsx`
+**対応テスト**: `title-message.test.tsx`、`confirm-button-labels.test.tsx`、`cancel-button-labels.test.tsx`
 
 ### 3. アクセシビリティ属性（ADR-007準拠）
 
@@ -53,7 +53,7 @@ WAI-ARIA Dialog Patternに必要な属性をテストする。
 
 **注意**: IDは`useId()`フックで動的に生成されるため、テストではハードコードされた値ではなく、aria属性と対応要素のIDが一致することを検証する。
 
-**対応テスト**: `accessibility.test.tsx`
+**対応テスト**: `aria-attributes.test.tsx`、`dynamic-id.test.tsx`
 
 ### 4. ボタンクリックイベント
 
@@ -122,8 +122,11 @@ tests/unit/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/
 ├── test-helpers.tsx              # 共通ヘルパー（モックファクトリ含む）
 └── render/
     ├── visibility.test.tsx           # 表示/非表示
-    ├── props.test.tsx                # Props反映
-    ├── accessibility.test.tsx        # アクセシビリティ属性
+    ├── title-message.test.tsx        # タイトル・メッセージProps反映
+    ├── confirm-button-labels.test.tsx # 確認ボタンラベル（配列ベース）
+    ├── cancel-button-labels.test.tsx  # キャンセルボタンラベル（配列ベース）
+    ├── aria-attributes.test.tsx      # 基本ARIA属性（配列ベース）
+    ├── dynamic-id.test.tsx           # useIdによる動的ID連携
     ├── button-events.test.tsx        # ボタンクリックイベント
     ├── keyboard-events.test.tsx      # キーボード操作
     ├── overlay-events.test.tsx       # オーバーレイクリック
