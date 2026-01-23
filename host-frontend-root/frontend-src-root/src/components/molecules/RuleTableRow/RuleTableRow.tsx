@@ -35,7 +35,9 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({
         />
       </td>
       <td>
-        <Button onClick={() => onEdit(rule.id)}>編集</Button>
+        <Button onClick={() => onEdit(rule.id)} data-testid="edit-button">
+          編集
+        </Button>
       </td>
       <td className={styles.actionCell}>
         <DeleteButton onClick={() => onDelete(rule.id)} disabled={isDeleting} />
