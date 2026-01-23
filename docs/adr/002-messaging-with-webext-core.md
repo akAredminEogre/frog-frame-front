@@ -103,14 +103,14 @@ content.ts
 | コンポーネント | 責務 | container.ts の import |
 |--------------|------|----------------------|
 | ProxyService定義 | サービスインターフェース定義、`defineProxyService` 呼び出し | なし |
-| ProxyServiceImpl | 実際の実装（DI コンテナ経由で Repository 取得） | あり |
-| background.ts | 実装を注入し、サービスを登録 | なし（Impl を import） |
+| ProxyServiceImpl | 実際の実装(DI コンテナ経由で Repository 取得) | あり |
+| background.ts | 実装を注入し、サービスを登録 | なし(Impl を import) |
 
 ### 動作フロー
 
 1. **ProxyService定義**: `setXxxImpl()` で実装を受け取る setter を公開
 2. **background.ts**: Impl を import し、`setXxxImpl()` で注入後、`registerXxxService()` を呼び出し
-3. **Content Script**: ProxyService定義のみを import（container.ts はロードされない）
+3. **Content Script**: ProxyService定義のみを import(container.ts はロードされない)
 
 これにより、Content Script は ProxyService定義を import しても `container.ts` がロードされない。
 
