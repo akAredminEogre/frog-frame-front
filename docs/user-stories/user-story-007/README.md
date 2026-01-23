@@ -8,14 +8,77 @@
 
 [coding-standards.md](../../docs-rules/coding-standards.md) の「適用シナリオは記載する」規約に準拠していない既存コーディング規約を更新する。
 
+## 適用シナリオの要件
+
+[coding-standards.md](../../docs-rules/coding-standards.md) および [common.md](../../docs-rules/common.md) より:
+
+- 適用シナリオや判断事例を1-2個記載すること
+- 「実装例」（コードスニペット）ではなく「適用シナリオ」（いつ・どこで適用するかの判断事例）を記載
+- 良い例: 「ユーザーが入力中に背景コンテンツへ移動すると操作が中断されるため、フォーカストラップが必要」
+
+## 適用シナリオがあるファイル（良い例）
+
+| ファイル | シナリオ形式 |
+|---------|-------------|
+| `src/frameworks-and-drivers/ui/accessible-modal.md` | 「適用シナリオ」セクション（確認ダイアログ、フォーム入力モーダル） |
+| `src/frameworks-and-drivers/ui/css-styling.md` | 「具体例」セクション（デザイントークン追加の判断フロー） |
+| `src/application-business-rules/interactors.md` | 「典型的なユースケース」と「適用例」 |
+| `src/frameworks-and-drivers/ui/components.md` | 「適用場面」テーブル |
+| `src/frameworks-and-drivers/ui/react-hooks/props-dependent-state.md` | 「適用場面」テーブル |
+| `src/frameworks-and-drivers/ui/react-hooks/callback-memoization.md` | 「メモ化が必要なケース」テーブル |
+| `src/frameworks-and-drivers/ui/react-hooks/state-guard.md` | 「パターンの選択基準」テーブル |
+
 ## 対象ファイル
 
-（別途調査）
+### 優先度高: srcディレクトリ（9ファイル）
+
+| ファイル | 現状 | 追加すべき内容 |
+|---------|------|---------------|
+| `src/coding-standards.md` | 言語ガイドラインのみ | JSDoc、エラーメッセージ、コメントの適用シナリオ |
+| `src/object-oriented-nine-rules.md` | ルール一覧と除外パターン | 各ルールの適用シナリオ（プロジェクト固有の判断事例） |
+| `src/object-oriented-coding-standards.md` | 除外パターンのみ | メソッド設計の適用シナリオ |
+| `src/application-business-rules/dto.md` | 命名規則のみ | Input/Output DTOの使い分けシナリオ |
+| `src/frameworks-and-drivers/messaging.md` | 命名規約のみ | メッセージングクラスの選択シナリオ |
+| `src/frameworks-and-drivers/ui/react-hooks/useEffect-side-effects.md` | コード例のみ | どのような副作用に適用するかの判断事例 |
+| `src/frameworks-and-drivers/ui/react-hooks/react-aria-integration.md` | チェックリストのみ | React Aria使用/不使用の判断シナリオ |
+| `src/frameworks-and-drivers/ui/react-hooks/useRef-types.md` | 型の説明のみ | RefObject/MutableRefObjectの使い分けシナリオ |
+| `src/frameworks-and-drivers/ui/react-hooks/jsdoc-rules.md` | 記載すべき情報のみ | JSDoc記載が必要なカスタムフックの判断事例 |
+
+### 優先度中: testsディレクトリ（8ファイル）
+
+| ファイル | 現状 | 追加すべき内容 |
+|---------|------|---------------|
+| `tests/common-rule.md` | 規約のみ | インポートパス、モック配置、型注釈の適用シナリオ |
+| `tests/array-based-test.md` | 手順とコード例のみ | 配列ベーステストを採用すべき場合の判断事例 |
+| `tests/e2e/common-rule.md` | 実装例のみ | E2Eテストでコンソールエラー検知を追加する判断事例 |
+| `tests/integration/common-rule.md` | 規約のみ | fake-indexeddb、モック管理の適用シナリオ |
+| `tests/unit/common-rule/basic-rule.md` | 規約のみ | モック分離、ライフサイクル管理の適用シナリオ |
+| `tests/unit/common-rule/test-strategy.md` | 規約のみ | バリデーションテストの適用シナリオ |
+| `tests/unit/common-rule/JSDoc-rule.md` | 規約のみ | JSDoc更新が必要な場合の判断事例 |
+| `tests/unit/infrastructure.md` | 簡潔な規約のみ | infrastructure層テストの適用シナリオ |
+
+### 優先度低: make/scriptsディレクトリ（2ファイル）
+
+| ファイル | 現状 | 追加すべき内容 |
+|---------|------|---------------|
+| `make/entire-standards.md` | ルール一覧のみ | Makefileでの適用シナリオ |
+| `scripts/entire-standards.md` | ルール一覧のみ | シェルスクリプトでの適用シナリオ |
+
+### 対象外
+
+| ファイル | 理由 |
+|---------|------|
+| `src/frameworks-and-drivers/ui/react-hooks/index.md` | インデックスファイルのため適用シナリオ不要 |
 
 ## タスク
 
-（別途策定）
+1. 優先度高のファイル（9ファイル）に適用シナリオを追加
+2. 優先度中のファイル（8ファイル）に適用シナリオを追加
+3. 優先度低のファイル（2ファイル）に適用シナリオを追加
 
 ## 受け入れ条件
 
-（別途策定）
+- [ ] 対象ファイルすべてに「適用シナリオ」または「適用場面」セクションが追加されている
+- [ ] 各ファイルに1-2個の具体的な判断事例が記載されている
+- [ ] 適用シナリオは「いつ・どこで適用するか」の判断を助ける内容になっている
+- [ ] コードスニペットではなく、シナリオ/事例の形式で記載されている
