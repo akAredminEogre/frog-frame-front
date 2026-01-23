@@ -50,8 +50,8 @@ ModalDialogBaseを使用せず、独自にモーダルコンポーネントを�
 ### フォーカス管理
 
 - [ ] 初期フォーカス設定
-  - 手動useEffectを推奨（`FocusScope`の`autoFocus`は使用しない）
-  - 理由: `autoFocus`はReact Ariaの内部タイミングでフォーカスを設定するため、テスト環境（happy-dom）でのライフサイクルと競合する可能性がある。手動useEffectを使用することで、Reactのライフサイクルに沿った同期的なフォーカス設定が可能になり、テスト環境との互換性が保たれる
+  - 要素の`autoFocus`属性を推奨（`FocusScope`の`autoFocus`プロパティは使用しない）
+  - 理由: `FocusScope`の`autoFocus`は最初のフォーカス可能な要素にフォーカスするため、フォーカス対象を指定できない
 - [ ] フォーカストラップ（`FocusScope contain`）
 - [ ] 復帰フォーカス（`FocusScope restoreFocus`）
 
@@ -73,16 +73,15 @@ React Ariaを使用する場合、以下の責任分担を遵守すること：
 | 機能 | React Aria | 手動実装 |
 |------|-----------|---------|
 | フォーカストラップ | `FocusScope` (contain) | - |
-| 初期フォーカス | - | useEffect（autoFocusは使用しない） |
+| 初期フォーカス | - | 要素の`autoFocus`属性 |
 | 復帰フォーカス | `FocusScope` (restoreFocus) | - |
 | 背景スクロール無効化 | `usePreventScroll` | - |
 | Escapeキー処理 | - | onKeyDownハンドラ |
 | オーバーレイクリック | - | onClickハンドラ |
 
-**注意**: `FocusScope`の`autoFocus`属性は使用しない。
-- `autoFocus`と手動useEffectを併用するとフォーカス設定が競合する
-- `autoFocus`はReact Ariaの内部タイミングで動作し、テスト環境（happy-dom）との互換性に問題が生じる可能性がある
-- 初期フォーカスは手動useEffectのみで設定し、Reactのライフサイクルに沿った同期的な動作を保証すること
+**注意**: `FocusScope`の`autoFocus`プロパティは使用しない。
+- `FocusScope`の`autoFocus`は最初のフォーカス可能な要素にフォーカスするため、フォーカス対象を指定できない
+- 代わりに、フォーカスしたい要素に直接`autoFocus`属性を付ける（例: `<button autoFocus>`）
 
 詳細は[React Ariaコンポーネントとの責任分担](./react-hooks/react-aria-integration.md)を参照。
 
