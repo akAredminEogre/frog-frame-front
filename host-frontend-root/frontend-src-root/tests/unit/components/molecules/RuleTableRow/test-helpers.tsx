@@ -93,16 +93,13 @@ export class RuleTableRowTestHelper {
 
   /**
    * 編集ボタンを取得
+   * data-testidで識別
    */
   getEditButton(): HTMLButtonElement | null {
     this.ensureSetup();
-    const buttons = Array.from(this.container!.querySelectorAll('button'));
-    for (const button of buttons) {
-      if (button.textContent === '編集') {
-        return button;
-      }
-    }
-    return null;
+    return this.container!.querySelector(
+      'button[data-testid="edit-button"]'
+    ) as HTMLButtonElement | null;
   }
 
   /**
