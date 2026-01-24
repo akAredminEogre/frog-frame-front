@@ -1,4 +1,4 @@
-@import '../tokens.module.css';
+@import 'src/components/tokens.module.css';
 
 .title {
   font-family: var(--font-family);
