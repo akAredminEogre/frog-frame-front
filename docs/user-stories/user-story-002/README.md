@@ -246,14 +246,84 @@ src/
 - `infrastructure/` と `frameworks-and-drivers/` の責務が混在している
 - メッセージング関連コードを `frameworks-and-drivers/messaging/` に集約することで一貫性を向上
 
-**移管対象**:
+#### 移管対象ファイル（5ファイル）
 
-| 現在の場所 | 移管先 |
-|-----------|--------|
-| `infrastructure/browser/handlers/background/` | `frameworks-and-drivers/messaging/handlers/background/` |
-| `infrastructure/browser/handlers/content/` | `frameworks-and-drivers/messaging/handlers/content/` |
-| `infrastructure/browser/background/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` |
-| `infrastructure/browser/content/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` |
+| 現在のパス | 移管先 | 役割 |
+|-----------|--------|------|
+| `infrastructure/browser/handlers/background/applyAllRulesHandler.ts` | `frameworks-and-drivers/messaging/handlers/background/` | Popup→Background→Content転送 |
+| `infrastructure/browser/handlers/content/applyAllRulesHandler.ts` | `frameworks-and-drivers/messaging/handlers/content/` | ルール適用処理 |
+| `infrastructure/browser/handlers/content/getElementSelectionHandler.ts` | `frameworks-and-drivers/messaging/handlers/content/` | 要素選択取得 |
+| `infrastructure/browser/background/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` | Backgroundハンドラー登録 |
+| `infrastructure/browser/content/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` | Contentハンドラー登録 |
+
+#### 依存関係
+
+```
+entrypoints/background.ts
+  └─ infrastructure/browser/background/runtime/onMessageReceived.ts
+       └─ infrastructure/browser/handlers/background/applyAllRulesHandler.ts
+            └─ frameworks-and-drivers/di/container.ts
+            └─ infrastructure/browser/tabs/ChromeTabsService.ts
+
+entrypoints/content.ts
+  └─ infrastructure/browser/content/runtime/onMessageReceived.ts
+       ├─ infrastructure/browser/handlers/content/applyAllRulesHandler.ts
+       │    └─ infrastructure/browser/content/instance/domMutationUseCaseInstance.ts
+       │    └─ infrastructure/browser/content/observer/onMutate.ts
+       └─ infrastructure/browser/handlers/content/getElementSelectionHandler.ts
+            └─ frameworks-and-drivers/di/contentContainer.ts
+```
+
+#### 移管後のディレクトリ構成
+
+```
+src/frameworks-and-drivers/messaging/
+├── handlers/
+│   ├── background/
+│   │   └── applyAllRulesHandler.ts
+│   └── content/
+│       ├── applyAllRulesHandler.ts
+│       └── getElementSelectionHandler.ts
+├── onBackgroundMessageReceived.ts  （名称変更案）
+├── onContentMessageReceived.ts     （名称変更案）
+├── messaging.ts                    （既存）
+├── RewriteRuleProxyService.ts      （既存）
+├── RewriteRuleProxyServiceImpl.ts  （既存）
+├── RewriteRuleMessagingService.ts  （既存）
+└── dto/                            （既存）
+```
+
+#### 必要な作業
+
+1. **ディレクトリ作成**
+   - `src/frameworks-and-drivers/messaging/handlers/background/`
+   - `src/frameworks-and-drivers/messaging/handlers/content/`
+
+2. **ファイル移動**（5ファイル）
+   - handlers 3ファイル
+   - onMessageReceived 2ファイル
+
+3. **インポートパス更新**（entrypoints）
+   - `src/entrypoints/background.ts:8`
+   - `src/entrypoints/content.ts:2`
+
+4. **内部インポートパス更新**
+   - 移動したファイル内の相互参照を更新
+
+#### 影響範囲
+
+| 項目 | 詳細 |
+|------|------|
+| 変更ファイル数 | 約7ファイル（移動5 + entrypoints2） |
+| テストへの影響 | テストファイルのインポートパス更新が必要な可能性あり |
+| 機能への影響 | なし（リファクタリングのみ） |
+| 破壊的変更 | なし |
+
+#### 実装の注意点
+
+1. **段階的移行推奨**: 全ファイルを一度に移動せず、background/contentを順次移行
+2. **E2Eテスト必須**: 移行後にメッセージング動作を確認
+3. **既存messaging.tsとの整合性**: 同一ディレクトリに集約されることで一貫性向上
 
 **確認項目**:
 - [ ] 全 E2E テストが通る
