@@ -108,9 +108,9 @@ content.ts
 
 ### 動作フロー
 
-1. **ProxyService定義**: `setXxxImpl()` で実装を受け取る setter を公開
-2. **background.ts**: Impl を import し、`setXxxImpl()` で注入後、`registerXxxService()` を呼び出し
-3. **Content Script**: ProxyService定義のみを import(container.ts はロードされない)
+1. **ProxyService定義**: `setXxxImpl()` で実装を受け取る setter を公開する
+2. **background.ts**: Impl を import し、`setXxxImpl()` で注入後、`registerXxxService()` を呼び出す
+3. **Content Script**: ProxyService定義のみを import する(container.ts はロードされない)
 
 これにより、Content Script は ProxyService定義を import しても `container.ts` がロードされない。
 
