@@ -176,6 +176,37 @@
 
 **良い例**: [css-styling.md](../coding-standards/src/frameworks-and-drivers/ui/css-styling.md) の「具体例」セクションでは、デザイントークン追加時の判断フローやWCAG AA準拠のための色修正事例を記載している
 
+### ディレクトリ・ファイル構成例の実在性明示
+
+ドキュメント内でディレクトリ構成やファイル一覧を例示する際は、**著者が記載時に**それが実在するものか形式例かを明示すること。
+
+```markdown
+## 悪い例（実在性が不明）
+
+css-styling/
+├── index.md
+├── import-paths.md
+└── design-tokens.md
+
+## 良い例（実在構成であることを明示）
+
+（※実在するディレクトリ構成）
+css-styling/
+├── index.md
+├── import-paths.md
+└── design-tokens.md
+
+## 良い例（形式例であることを明示）
+
+（※説明用の形式例）
+feature-name/
+├── index.md
+├── overview.md
+└── details.md
+```
+
+**理由**: 読者が例示を見たとき、実際のファイルを確認すべきか判断できるようにするため。
+
 ### 責任の所在を明示する
 
 ルールを記述する際、**誰が・いつ**その責任を負うかを明示すること。
@@ -456,6 +487,7 @@ expect(id).toContain('dialog-');
 
 ### 具体例
 
+（※実在するディレクトリ構成の例）
 ```text
 css-styling/
 ├── index.md              # 概要
