@@ -29,5 +29,5 @@
 
 ## 完了条件
 
-- [ ] `make testcheck` が成功する
+- [x] `make testcheck` が成功する
 - [x] 対象ADR内にTypeScriptコードブロックが存在しない
