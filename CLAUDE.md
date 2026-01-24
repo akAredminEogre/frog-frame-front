@@ -31,6 +31,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. [ ] 該当ディレクトリのルールを確認（例: `docs/docs-rules/user-stories.md`）
 3. [ ] ドキュメントを作成・編集
 
+### User Story READMEのタスク進捗を更新する場合
+
+1. [ ] タスクを `- [ ]` から `- [x]` に変更
+2. [ ] **network-diagram.pumlの同期更新**（存在する場合）
+   - 対応ノードの色を `#lightgreen`（完了状態）に変更
+   - 参照: `docs/docs-rules/user-stories/readme-guide.md`「タスク進捗更新時のネットワーク図同期」
+3. [ ] 同一コミットでREADME.mdとnetwork-diagram.pumlを更新
+
 ### docs/design/ 配下の設計ドキュメントを作成・編集する場合
 
 → [.AI/docs.md](.AI/docs.md) を参照

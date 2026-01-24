@@ -30,7 +30,7 @@ rectangle "P2-C3\nPresenter\n実装+テスト" as presenterImpl #lightgreen
 ' Phase 2: 実装 - UI
 rectangle "P2-UI1\nDeleteButton\n実装+テスト" as deleteBtnImpl #lightgreen
 rectangle "P2-UI2\nConfirmDialog\n実装+テスト" as confirmImpl #lightgreen
-rectangle "P2-UI3\nToast\n実装+テスト" as toastImpl #orange
+rectangle "P2-UI3\nToast\n実装+テスト" as toastImpl #lightgreen
 
 ' Phase 3: 統合
 rectangle "P3-1\nRuleTableRow\nDeleteButton追加" as tableRowInteg #pink
