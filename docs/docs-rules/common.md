@@ -47,7 +47,7 @@
 
 #### 既存ADRへの適用
 
-本規約に準拠していない既存ADRは [user-story-006](../user-stories/user-story-006/README.md) で対応予定。
+本規約に準拠していない既存ADRは [user-story-006](../user-stories/completed/user-story-006/README.md) で対応済み。
 
 **注意**: 新規ADR作成時は必ず本規約に従うこと。
 
