@@ -1,5 +1,5 @@
-import { createMockDomRootChecker } from 'tests/unit/domain/ports/IDomRootChecker/createMockDomRootChecker';
-import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
+import { createMockDomRootChecker } from 'tests/unit/domain/ports/IDomRootChecker/mocks/createMockDomRootChecker';
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/mocks/createMockElementFactory';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ApplyRulesOnDomMutationUseCase } from 'src/application/usecases/contentOnMessageReceived/ApplyRulesOnDomMutationUseCase';

@@ -8,7 +8,7 @@
  */
 import 'tests/integration/toggle-rule-active/setup';
 
-import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway';
+import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/createMockTabsGateway';
 import { createTestRule } from 'tests/integration/toggle-rule-active/helpers/createTestRule';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 

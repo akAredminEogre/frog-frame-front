@@ -26,28 +26,28 @@
 
 各モックファクトリを `mocks/` サブディレクトリに移動する。
 
-- [ ] `createMockTabsService.ts` を移動
-- [ ] `createMockCurrentUrlService.ts` を移動
-- [ ] `createMockPopupService.ts` を移動
-- [ ] `createMockSelectedPageTextRepository.ts` を移動
-- [ ] `createMockDomRootChecker.ts` を移動
-- [ ] `createMockElementFactory.ts` を移動
-- [ ] `createMockTabsGateway.ts` を移動
+- [x] `createMockTabsService.ts` を移動
+- [x] `createMockCurrentUrlService.ts` を移動
+- [x] `createMockPopupService.ts` を移動
+- [x] `createMockSelectedPageTextRepository.ts` を移動
+- [x] `createMockDomRootChecker.ts` を移動
+- [x] `createMockElementFactory.ts` を移動
+- [x] `createMockTabsGateway.ts` を移動
 
 ### Phase 2: インポートパスの更新
 
 各モックファクトリを参照しているテストファイルのインポートパスを更新する。
 
-- [ ] 各モックファクトリの参照箇所を特定
-- [ ] インポートパスを新しいパスに更新
-- [ ] テストが正常に動作することを確認
+- [x] 各モックファクトリの参照箇所を特定
+- [x] インポートパスを新しいパスに更新
+- [x] テストが正常に動作することを確認
 
 ### Phase 3: ドキュメント更新
 
-- [ ] `basic-rule.md` から未対応モック一覧を削除（すべて対応完了後）
+- [x] `basic-rule.md` から未対応モック一覧を削除（すべて対応完了後）
 
 ## 受け入れ条件
 
-- すべてのモックファクトリが `mocks/` ディレクトリに配置されている
-- すべてのテストが正常に動作する
-- `basic-rule.md` の未対応モック一覧が空になっている
+- [x] すべてのモックファクトリが `mocks/` ディレクトリに配置されている
+- [x] すべてのテストが正常に動作する
+- [x] `basic-rule.md` の未対応モック一覧が空になっている
