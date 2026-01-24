@@ -10,7 +10,7 @@
 
 ## 背景
 
-[css-styling.md](../../coding-standards/src/frameworks-and-drivers/ui/css-styling.md) で定義されている以下の規約は、現在ESLint化不可としてPRレビューで確認している:
+[css-styling/](../../coding-standards/src/frameworks-and-drivers/ui/css-styling/index.md) で定義されている以下の規約は、現在ESLint化不可としてPRレビューで確認している:
 
 - CSSインポートパスのルール（絶対パス使用）
 - デザイントークンの使用（ハードコード色値の禁止）
