@@ -6,7 +6,7 @@
 
 ## 概要
 
-現在、一部のモックファクトリが `mocks/` ディレクトリに配置されておらず、[basic-rule.md](../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に準拠していない。これらを規約に準拠した配置に移動し、参照しているテストファイルのインポートパスを更新する。
+これまで一部のモックファクトリが `mocks/` ディレクトリに配置されておらず、[basic-rule.md](../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に準拠していなかったが、規約に準拠した配置へ移動し、参照しているテストファイルのインポートパスを更新した。
 
 ## 対象ファイル
 
