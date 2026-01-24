@@ -73,34 +73,13 @@ ADR-001「ドメインロジックの配置原則」に従う:
 
 ### Tabs クラスの責務
 
-```typescript
-// src/frameworks-and-drivers/browser/Tabs.ts
-export class Tabs {
-  private readonly tabs: chrome.tabs.Tab[];
+| メソッド | 責務 | 種別 |
+|---------|------|------|
+| `constructor` | URLとIDが存在するタブのみを保持 | 技術的フィルタリング |
+| `filterByRule` | `rule.matchesUrl()` を呼び出してフィルタリング | ドメインロジックの**呼び出し** |
+| `reloadAll` | `chrome.tabs.reload()` を実行 | 技術的出力 |
 
-  constructor(chromeTabs: chrome.tabs.Tab[]) {
-    // URLとIDが存在するタブのみを保持（技術的フィルタリング）
-    this.tabs = chromeTabs.filter((tab) => tab.url !== undefined && tab.id !== undefined);
-  }
-
-  filterByRule(rule: RewriteRule): Tabs {
-    // ドメインロジック（matchesUrl）の呼び出し
-    const filtered = tabsArray.filter((tab) => rule.matchesUrl(tab.url!));
-    return new Tabs(filtered);
-  }
-
-  async reloadAll(): Promise<void> {
-    // 技術的出力（Chrome API）
-    // ...
-  }
-}
-```
-
-| 責務 | 種別 |
-|------|------|
-| URLが存在するタブのみを保持 | 技術的フィルタリング |
-| `rule.matchesUrl()` の呼び出し | ドメインロジックの**呼び出し** |
-| `chrome.tabs.reload()` の実行 | 技術的出力 |
+**実装の詳細**: [Tabs.ts](../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/browser/Tabs.ts) を参照
 
 ## 比較: Value Object との違い
 
@@ -115,34 +94,16 @@ export class Tabs {
 
 ### 陥りがちな誤った設計
 
-「インターフェースで抽象化すれば、タブをドメイン層に配置できるのではないか」という考え方がある:
+「インターフェースで抽象化すれば、タブをドメイン層に配置できるのではないか」という考え方がある。
 
-```typescript
-// ❌ アンチパターン: enterprise-business-rules層に配置
+#### アンチパターンの構造
 
-// 抽象化されたタブインターフェース
-interface ITab {
-  readonly url: string;
-  readonly id: number;
-}
+| 層 | 配置されるもの | 問題点 |
+|----|--------------|--------|
+| enterprise-business-rules | `ITab`(インターフェース)、`Tabs`(コレクション) | 技術概念がドメイン層に侵入 |
+| frameworks-and-drivers | `ChromeTab`(`ITab` の実装) | 実装クラスのみ |
 
-// 抽象化されたタブコレクション
-class Tabs {
-  constructor(private readonly tabs: ITab[]) {}
-
-  filterByRule(rule: RewriteRule): Tabs {
-    const filtered = this.tabs.filter((tab) => rule.matchesUrl(tab.url));
-    return new Tabs(filtered);
-  }
-}
-
-// frameworks-and-drivers層でChrome実装を提供
-class ChromeTab implements ITab {
-  constructor(private readonly chromeTab: chrome.tabs.Tab) {}
-  get url() { return this.chromeTab.url!; }
-  get id() { return this.chromeTab.id!; }
-}
-```
+このアプローチでは、`ITab` という抽象化を導入してドメイン層に配置し、`ChromeTab` という実装を frameworks-and-drivers 層で提供する。
 
 ### なぜこれがアンチパターンなのか
 
@@ -176,19 +137,10 @@ Clean Architecture における抽象化（インターフェース）の目的:
 
 #### 3. 過度な抽象化による複雑さの増加
 
-```
-❌ アンチパターンの層構造:
-enterprise-business-rules/
-  └── ITab, Tabs           ← 技術概念がドメイン層に侵入
-frameworks-and-drivers/
-  └── ChromeTab            ← 実装クラス
-
-✅ 正しい層構造:
-enterprise-business-rules/
-  └── RewriteRule          ← 純粋なドメインロジックのみ
-frameworks-and-drivers/
-  └── Tabs, ChromeTabsGateway  ← 技術的詳細はここに閉じ込める
-```
+| パターン | enterprise-business-rules 層 | frameworks-and-drivers 層 |
+|---------|---------------------------|--------------------------|
+| ❌ アンチパターン | `ITab`, `Tabs`(技術概念が侵入) | `ChromeTab`(実装のみ) |
+| ✅ 正しいアプローチ | `RewriteRule`(純粋なドメインロジック) | `Tabs`, `ChromeTabsGateway`(技術的詳細) |
 
 抽象化によるドメイン層への引き上げは:
 - 不要なインターフェース（`ITab`）を生む
@@ -205,26 +157,16 @@ ADR-001 の明確な指針:
 
 ### 正しいアプローチ
 
-技術的概念は `frameworks-and-drivers` 層に留め、ドメインロジックのみをドメイン層に配置する:
+技術的概念は `frameworks-and-drivers` 層に留め、ドメインロジックのみをドメイン層に配置する。
 
-```typescript
-// ✅ 正しいアプローチ
-
-// enterprise-business-rules層: ドメインロジックのみ
-class RewriteRule {
-  matchesUrl(url: string): boolean { /* ドメイン判定 */ }
-}
-
-// frameworks-and-drivers層: 技術的詳細
-class Tabs {
-  filterByRule(rule: RewriteRule): Tabs {
-    // ドメインロジックを「呼び出す」だけ
-    return new Tabs(this.tabs.filter(tab => rule.matchesUrl(tab.url)));
-  }
-}
-```
+| 層 | クラス | 責務 |
+|----|-------|------|
+| enterprise-business-rules | `RewriteRule` | `matchesUrl()` でURLパターンマッチング判定(ドメインロジック) |
+| frameworks-and-drivers | `Tabs` | `filterByRule()` でドメインロジックを**呼び出す**(実装はしない) |
 
 **ポイント**: `Tabs.filterByRule()` はドメインロジック（`matchesUrl`）を**呼び出す**だけであり、ドメインロジック自体を**実装**しているわけではない。
+
+**実装の詳細**: [Tabs.ts](../../host-frontend-root/frontend-src-root/src/frameworks-and-drivers/browser/Tabs.ts)、[RewriteRule.ts](../../host-frontend-root/frontend-src-root/src/enterprise-business-rules/entities/RewriteRule/RewriteRule.ts) を参照
 
 ## 理由
 
