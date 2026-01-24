@@ -12,4 +12,7 @@ frog-frame-front/docs/issue-000/PULL_REQUEST.md
 
 保存先：
 docs/issue-nnn/PULL_REQUEST.md
+
+作成後のチェック：
+- [ ] PR説明文で数値を使っている場合、本文の項目数と一致しているか確認（例: 「6ファイル」と書いて実際は7ファイルなど）
 ```
