@@ -4,7 +4,7 @@
  * 2. 削除成功時にonSuccessコールバックが呼ばれる
  * 3. 削除失敗時にonErrorコールバックが呼ばれる
  */
-import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway';
+import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/createMockTabsGateway';
 import { createMockRewriteRuleRepository as createMockRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

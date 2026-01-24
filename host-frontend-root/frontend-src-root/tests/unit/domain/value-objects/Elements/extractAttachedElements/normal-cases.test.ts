@@ -1,4 +1,4 @@
-import { createMockDomRootChecker } from 'tests/unit/domain/ports/IDomRootChecker/createMockDomRootChecker';
+import { createMockDomRootChecker } from 'tests/unit/domain/ports/IDomRootChecker/mocks/createMockDomRootChecker';
 import { describe, expect, it } from 'vitest';
 
 import { Elements } from 'src/domain/value-objects/Elements/Elements';
