@@ -1,4 +1,4 @@
-import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
+import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/mocks/createMockTabsService';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';

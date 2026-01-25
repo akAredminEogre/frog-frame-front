@@ -1,6 +1,6 @@
-import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
-import { createMockPopupService } from 'tests/unit/application/ports/IPopupService/createMockPopupService';
-import { createMockSelectedPageTextRepository } from 'tests/unit/application/ports/ISelectedPageTextRepository/createMockSelectedPageTextRepository';
+import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/mocks/createMockTabsService';
+import { createMockPopupService } from 'tests/unit/application/ports/IPopupService/mocks/createMockPopupService';
+import { createMockSelectedPageTextRepository } from 'tests/unit/application/ports/ISelectedPageTextRepository/mocks/createMockSelectedPageTextRepository';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';

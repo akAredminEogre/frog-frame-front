@@ -3,7 +3,7 @@
  * 1. repository.getByIdでエラーが発生した場合、presentErrorが呼び出される
  * 2. repository.deleteでエラーが発生した場合、presentErrorが呼び出される
  */
-import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway';
+import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/createMockTabsGateway';
 import { createMockRewriteRuleRepository as createMockRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
 import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/DeleteRuleInteractor/mocks/createMockPresenter';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
