@@ -278,14 +278,16 @@ entrypoints/content.ts
 
 ```
 src/frameworks-and-drivers/messaging/
+├── background/
+│   └── onMessageReceived.ts        （移動元から名称維持、サブディレクトリで分離）
+├── content/
+│   └── onMessageReceived.ts        （移動元から名称維持、サブディレクトリで分離）
 ├── handlers/
 │   ├── background/
 │   │   └── applyAllRulesHandler.ts
 │   └── content/
 │       ├── applyAllRulesHandler.ts
 │       └── getElementSelectionHandler.ts
-├── onMessageReceived.ts            （background用、移動元から名称維持）
-├── onMessageReceived.ts            （content用、移動元から名称維持）
 ├── messaging.ts                    （既存）
 ├── RewriteRuleProxyService.ts      （既存）
 ├── RewriteRuleProxyServiceImpl.ts  （既存）
@@ -293,19 +295,17 @@ src/frameworks-and-drivers/messaging/
 └── dto/                            （既存）
 ```
 
-**注意**: background用とcontent用で同名ファイルが存在するため、以下のいずれかの対応が必要:
-- サブディレクトリで分離: `background/onMessageReceived.ts`, `content/onMessageReceived.ts`
-- 名称変更: `onBackgroundMessageReceived.ts`, `onContentMessageReceived.ts`（要検討）
-
 #### 必要な作業
 
 1. **ディレクトリ作成**
+   - `src/frameworks-and-drivers/messaging/background/`
+   - `src/frameworks-and-drivers/messaging/content/`
    - `src/frameworks-and-drivers/messaging/handlers/background/`
    - `src/frameworks-and-drivers/messaging/handlers/content/`
 
 2. **ファイル移動**
    - handlers 3ファイル
-   - onMessageReceived.ts 2ファイル（名称変更またはサブディレクトリ分離は実装時に決定）
+   - onMessageReceived.ts 2ファイル（サブディレクトリで分離）
 
 3. **インポートパス更新**（entrypoints）
    - `src/entrypoints/background.ts:8`
