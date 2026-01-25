@@ -2,23 +2,23 @@
 export default {
   extends: ['stylelint-config-standard'],
   rules: {
-    // CSS Modules support: allow :global and :local pseudo-selectors
+    // CSS Modules の :global と :local 擬似セレクタを許可
     'selector-pseudo-class-no-unknown': [
       true,
       {
         ignorePseudoClasses: ['global', 'local'],
       },
     ],
-    // Allow CSS custom properties (CSS variables)
+    // CSS Modules の `composes` を許可（他のモジュールのスタイル合成に必要）
     'property-no-unknown': [
       true,
       {
         ignoreProperties: ['composes'],
       },
     ],
-    // Disable rules that conflict with CSS Modules patterns
+    // CSS Modules のクラス名パターンを許可（camelCase等）
     'selector-class-pattern': null,
-    // Allow empty source files
+    // 空のソースファイルを許可
     'no-empty-source': null,
   },
 };
