@@ -180,15 +180,15 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### UI統合
 
-- [ ] RuleTableRow に DeleteButton を追加
-- [ ] RulesApp に削除処理を統合
+- [x] RuleTableRow に DeleteButton を追加
+- [x] RulesApp に削除処理を統合
   - ConfirmDialog をRulesApp内でレンダリング（ページレベル）
   - ToastNotification をRulesApp内でレンダリング（ページレベル）
   - `deletingIds` による重複削除防止
   - ConfirmDialog の表示制御
   - DeleteRuleController の呼び出し
   - ToastNotification によるエラー表示
-- [ ] container.ts にDI登録を追加
+- [x] container.ts にDI登録を追加
 
 #### 結合テスト
 
@@ -204,6 +204,21 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 - [ ] キャンセル操作（確認ダイアログでキャンセル → 何も起こらない）
 - [ ] DB永続化（ページリロード後もルールが削除されている）
 - [ ] 複数ルール独立性（1つ削除しても他ルールに影響なし）
+
+#### リファクタリング（テスト実装後）
+
+RulesApp が削除機能の詳細を知りすぎている問題を解消する：
+
+- [ ] `useDeleteRule` カスタムフックへのロジック切り出し
+  - State: `deletingIds`, `deleteTargetId`, `deleteError`
+  - ロジック: `deleteController`, `handleDelete`, `confirmDelete`, `cancelDelete`
+- [ ] `DeleteRuleUI` コンポーネントへのUI切り出し
+  - ConfirmDialog と ToastNotification をまとめる
+
+**期待される効果**:
+- RulesApp の責務軽減
+- 削除ロジックの再利用可能性向上
+- Toggle 機能も同様に切り出すことで一貫性確保
 
 ### Phase 4: 旧コード削除（このユーザーストーリーでは実施しない）
 

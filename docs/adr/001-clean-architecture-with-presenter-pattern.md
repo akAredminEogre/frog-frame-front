@@ -210,6 +210,51 @@ src/
 - **再利用性**: 同じ判定ロジックを複数の Gateway で使用可能
 - **移植性**: ブラウザ変更時（Firefox対応等）もドメインロジックは変更不要
 
+### 7. エラーハンドリングの責務
+
+**エラーハンドリングは Interactor の責務とし、View（UIコンポーネント）では直接エラーハンドリングを行わない。**
+
+#### 制御の流れ
+
+```
+【正常系】
+View → Controller → Interactor → Presenter.present(OutputData) → View
+
+【エラー系】
+View → Controller → Interactor → (try-catch) → Presenter.presentError(ErrorOutputData) → View
+```
+
+#### 責務の分離
+
+| 層 | 責務 |
+|----|------|
+| Interactor | try-catch でエラーを捕捉し、ErrorOutputData を作成して Presenter に渡す |
+| Presenter | ErrorOutputData を View に通知（onError コールバック等） |
+| View | エラー状態を表示するのみ（エラーハンドリングロジックは持たない） |
+
+#### View からの呼び出しパターン
+
+View は非同期処理を fire-and-forget で呼び出す。エラーは Interactor → Presenter 経由で通知されるため、View での `.catch` は不要。
+
+```tsx
+// ✅ 正しいパターン
+onConfirm={() => {
+  void confirmDelete();  // fire-and-forget（エラーは Presenter 経由で通知）
+}}
+
+// ❌ 誤ったパターン（View でエラーハンドリング）
+onConfirm={() => {
+  void confirmDelete().catch((e) => setError(e.message));
+}}
+```
+
+#### メリット
+
+- **責務の明確化**: エラーハンドリングロジックが Interactor に集約される
+- **一貫性**: 全ての UseCase で同じエラー処理パターンを適用
+- **テスト容易性**: Interactor のエラーハンドリングを単体テストで検証可能
+- **View のシンプル化**: View は表示に専念し、ビジネスロジックを持たない
+
 ## 理由
 - Clean Architectureの導入により、下記のメリットを得る
   - Chrome拡張機能特有の技術的詳細からドメインロジックを分離し、保守性と拡張性を向上させる
