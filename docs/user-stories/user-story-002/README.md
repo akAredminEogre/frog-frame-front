@@ -250,7 +250,7 @@ src/
 
 | 現在のパス | 移管先 | 役割 |
 |-----------|--------|------|
-| `infrastructure/browser/handlers/background/applyAllRulesHandler.ts` | `frameworks-and-drivers/messaging/handlers/background/` | Popup→Background→Content転送 |
+| `infrastructure/browser/handlers/background/applyAllRulesHandler.ts` | `frameworks-and-drivers/messaging/handlers/background/` | Popup → Background → Content Script 転送 |
 | `infrastructure/browser/handlers/content/applyAllRulesHandler.ts` | `frameworks-and-drivers/messaging/handlers/content/` | ルール適用処理 |
 | `infrastructure/browser/handlers/content/getElementSelectionHandler.ts` | `frameworks-and-drivers/messaging/handlers/content/` | 要素選択取得 |
 | `infrastructure/browser/background/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/background/` | Backgroundハンドラー登録 |
