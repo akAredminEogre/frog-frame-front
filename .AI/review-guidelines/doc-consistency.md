@@ -8,9 +8,9 @@ PRをレビューする際、以下のドキュメント整合性を確認して
 - CLAUDE.mdに記載されているコマンドが.clinerules/内のワークフローと一致しているか
 - コーディング規約の記述が両者で矛盾していないか
 
-### docs/docs-rules/ とドキュメントの整合性
-- docs/docs-rules/に定義されたテンプレート・ルールに従ってドキュメントが作成されているか
-- docs/design/内のテスト戦略書がdocs/docs-rules/design/05-test-strategy.mdの形式に従っているか
+### docs-rules/ とドキュメントの整合性
+- docs-rules/に定義されたテンプレート・ルールに従ってドキュメントが作成されているか
+- docs/design/内のテスト戦略書がdocs-rules/design/05-test-strategy.mdの形式に従っているか
 
 ### docs/issue-XXX/ ドキュメントの整合性
 - ISSUE.md、PLAN.md、PULL_REQUEST.mdなどの内容が相互に矛盾していないか
