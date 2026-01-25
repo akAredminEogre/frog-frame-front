@@ -13,4 +13,4 @@
 | [code-comments.md](./code-comments.md) | コード内コメントの記述原則 |
 | [markdown.md](./markdown.md) | Markdown記法のルール |
 | [document-consistency/](./document-consistency/index.md) | 関連ドキュメント間の一貫性、ドキュメント内整合性 |
-| [rule-management.md](./rule-management.md) | 新規ルール追加、適用待ちの箇所、ユーザーストーリー連携 |
+| [rule-management/](./rule-management/index.md) | 新規ルール追加、適用待ちの箇所、ユーザーストーリー連携 |
