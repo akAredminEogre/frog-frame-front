@@ -10,7 +10,7 @@
 
 ## 技術要件
 
-- [ ] AC-6: markdownlint-cli2 が devDependencies に追加されている
+- [ ] AC-6: `markdownlint-cli2` が `devDependencies` に追加されている
 - [ ] AC-7: `.markdownlint.jsonc` に MD001、MD040 ルールが設定されている
 - [ ] AC-8: `allowed_languages` に `docs/docs-rules/common/markdown.md` で定義された言語識別子のみ指定されている
-- [ ] AC-9: Makefile に markdownlint 実行コマンドが追加されている
+- [ ] AC-9: `Makefile` に markdownlint 実行コマンドが追加されている
