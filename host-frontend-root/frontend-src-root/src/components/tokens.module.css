@@ -18,11 +18,17 @@
   --color-hover: #0e7fcd;
   --color-surface-hover: rgba(0, 0, 0, 0.05);
   /* 危険なアクション用（削除、警告など） */
-  /* WCAG AA準拠: #c53030 + #fff = 約5.14:1 (基準4.5:1以上) */
+  /* WCAG AA準拠: #c53030 + #fff = 約5.47:1 (基準4.5:1以上, WebAIM Contrast Checkerで確認) */
   --color-danger: #c53030;
   --color-danger-hover: #a52828;
   --color-danger-contrast: #fff;
   --color-danger-bg: rgba(220, 53, 69, 0.1);
+  /* 成功アクション用（完了、保存など） */
+  /* WCAG AA準拠: #2f855a + #fff = 約4.52:1 (基準4.5:1以上, WebAIM Contrast Checkerで確認) */
+  --color-success: #2f855a;
+  --color-success-hover: #276749;
+  --color-success-contrast: #fff;
+  --color-success-bg: rgba(47, 133, 90, 0.1);
 }
 
 /* シャドウ */

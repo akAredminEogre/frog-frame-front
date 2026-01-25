@@ -6,7 +6,7 @@
 
 ## 概要
 
-[docs/docs-rules/common.md](../../docs-rules/common.md) の「コード例の記載ルール」に準拠していない既存ADRを更新する。
+[docs/docs-rules/common/code-examples.md](../../docs-rules/common/code-examples.md) の「コード例の記載ルール」に準拠していない既存ADRを更新する。
 
 ## 対象ファイル
 

@@ -10,7 +10,7 @@
 
 ## 適用シナリオの要件
 
-[coding-standards.md](../../docs-rules/coding-standards.md) および [common.md](../../docs-rules/common.md) より:
+[coding-standards.md](../../docs-rules/coding-standards.md) および [common/rule-writing-principles/](../../docs-rules/common/rule-writing-principles/index.md) より:
 
 - 適用シナリオや判断事例を1-2個記載すること
 - 「実装例」（コードスニペット）ではなく「適用シナリオ」（いつ・どこで適用するかの判断事例）を記載
@@ -21,7 +21,7 @@
 | ファイル | シナリオ形式 |
 |---------|-------------|
 | `docs/coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md` | 「適用シナリオ」セクション（確認ダイアログ、フォーム入力モーダル） |
-| `docs/coding-standards/src/frameworks-and-drivers/ui/css-styling.md` | 「具体例」セクション（デザイントークン追加の判断フロー） |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/css-styling/design-tokens.md` | 「具体例」セクション（トークン選定手順と色修正事例） |
 | `docs/coding-standards/src/application-business-rules/interactors.md` | 「典型的なユースケース」と「適用例」 |
 | `docs/coding-standards/src/frameworks-and-drivers/ui/components.md` | 「適用場面」テーブル |
 | `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/props-dependent-state.md` | 「適用場面」テーブル |

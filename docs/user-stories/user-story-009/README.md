@@ -12,7 +12,7 @@
 
 | テストファイル | 作成するドキュメント |
 |--------------|-------------------|
-| `host-frontend-root/frontend-src-root/tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts` | `docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md` |
+| `tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts` | `docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md` |
 
 ## タスク
 
