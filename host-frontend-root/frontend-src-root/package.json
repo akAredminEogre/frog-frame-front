@@ -5,7 +5,8 @@
   "version": "0.1.1.1",
   "type": "module",
   "imports": {
-    "#eslint-rules/*": "./eslint-rules/*"
+    "#eslint-rules/*": "./eslint-rules/*",
+    "#stylelint-rules/*": "./stylelint-rules/*"
   },
   "scripts": {
     "dev": "wxt",
