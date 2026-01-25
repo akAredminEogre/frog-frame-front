@@ -109,7 +109,8 @@
 各タスクでは以下の作業を行う：
 1. `new RewriteRule(...)` を `RewriteRule.fromParams(id, {...})` に置換
 2. `RewriteRule.fromParams` に渡す `params` オブジェクトでは、`RewriteRuleParams` 型に従い `isRegex` を必ず明示する（元コードで `isRegex` が省略されていた箇所は `isRegex: false` など、元の挙動に対応する値を指定する）
-3. テストが正常にパスすることを確認
+3. `RewriteRuleParams` の `isActive` はデフォルトで `true` となるため、元コードで `new RewriteRule(..., ..., isActive=false)` のように `isActive` が明示されている場合は、`params` オブジェクトにも同じ値（例: `isActive: false`）を必ず指定する
+4. テストが正常にパスすることを確認
 
 | # | タスク | 対象ファイル数 | 状態 |
 |---|--------|---------------|------|
