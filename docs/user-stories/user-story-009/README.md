@@ -6,7 +6,7 @@
 
 ## 概要
 
-現在、一部の既存テストファイルにはテスト戦略ドキュメント（`docs/design/src/.../*.md`）が存在しない。[CLAUDE.md](../../../CLAUDE.md) および [05-test-strategy.md](../../docs-rules/design/05-test-strategy.md) の規約に従い、テスト戦略ドキュメントを作成する。
+現在、一部の既存テストファイルにはテスト戦略ドキュメント（`docs/design/src/.../*.md`）が存在しない。[CLAUDE.md](../../../CLAUDE.md) および [05-test-strategy.md](../../../docs-rules/design/05-test-strategy.md) の規約に従い、テスト戦略ドキュメントを作成する。
 
 ## 対象ファイル
 
@@ -28,4 +28,4 @@
 ## 受け入れ条件
 
 - [ ] 対象テストファイルに対応するテスト戦略ドキュメントが存在する
-- [ ] ドキュメントが [05-test-strategy.md](../../docs-rules/design/05-test-strategy.md) テンプレートに準拠している
+- [ ] ドキュメントが [05-test-strategy.md](../../../docs-rules/design/05-test-strategy.md) テンプレートに準拠している
