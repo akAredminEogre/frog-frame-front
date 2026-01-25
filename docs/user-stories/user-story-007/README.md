@@ -6,11 +6,11 @@
 
 ## 概要
 
-[coding-standards.md](../../docs-rules/coding-standards.md) の「適用シナリオは記載する」規約に準拠していない既存コーディング規約を更新する。
+[coding-standards.md](../../../docs-rules/coding-standards.md) の「適用シナリオは記載する」規約に準拠していない既存コーディング規約を更新する。
 
 ## 適用シナリオの要件
 
-[coding-standards.md](../../docs-rules/coding-standards.md) および [common/rule-writing-principles/](../../docs-rules/common/rule-writing-principles/index.md) より:
+[coding-standards.md](../../../docs-rules/coding-standards.md) および [common/rule-writing-principles/](../../../docs-rules/common/rule-writing-principles/index.md) より:
 
 - 適用シナリオや判断事例を1-2個記載すること
 - 「実装例」（コードスニペット）ではなく「適用シナリオ」（いつ・どこで適用するかの判断事例）を記載

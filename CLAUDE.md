@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 新規メソッド/クラスを追加する場合
 
 1. [ ] **テスト戦略書を先に作成**（`docs/design/src/[layer]/.../[methodName].md`）
-   - テンプレート: `docs/docs-rules/design/05-test-strategy.md`
+   - テンプレート: `docs-rules/design/05-test-strategy.md`
    - **既存モック確認チェック**セクションを必ず記載すること
 2. [ ] 実装コードを作成
 3. [ ] **既存モック検索を実行**（テストコード実装前）
@@ -27,21 +27,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### docs/ 配下のドキュメントを作成・編集する場合
 
-1. [ ] **共通ルールを確認**: `docs/docs-rules/common/index.md`（マークダウン記法、文体など全ドキュメント共通）
-2. [ ] 該当ディレクトリのルールを確認（例: `docs/docs-rules/user-stories.md`）
-3. [ ] ドキュメントを作成・編集
+→ [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
 ### User Story READMEのタスク進捗を更新する場合
 
-→ `docs/docs-rules/user-stories/readme-guide.md`「タスク進捗更新時のネットワーク図同期」を参照
+→ `docs-rules/user-stories/readme-guide.md`「タスク進捗更新時のネットワーク図同期」を参照
 
 ### docs/design/ 配下の設計ドキュメントを作成・編集する場合
 
-→ [.AI/docs.md](.AI/docs.md) を参照
+→ [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
 ### ADRを作成・編集する場合
 
-→ [.AI/docs.md](.AI/docs.md) を参照
+→ [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
 ---
 
@@ -329,7 +327,7 @@ See `docs/coding-standards/src/object-oriented-nine-rules.md` for the 9 rules an
 
 ### Test Strategy Document (Required)
 
-**CRITICAL**: Before writing any test code, create a test strategy document following `docs/docs-rules/design/05-test-strategy.md`.
+**CRITICAL**: Before writing any test code, create a test strategy document following `docs-rules/design/05-test-strategy.md`.
 
 - **Location**: `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md` (mirrors src/ structure)
 - **Required sections**: 目的、テスト分類、網羅性チェック、テストファイル構成

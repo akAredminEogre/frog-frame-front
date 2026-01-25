@@ -10,7 +10,7 @@
 
 ## 背景
 
-[docs/docs-rules/common/](../../docs-rules/common/index.md) で定義されている以下の規約は、現在PRレビューで確認している:
+[docs-rules/common/](../../../docs-rules/common/index.md) で定義されている以下の規約は、現在PRレビューで確認している:
 
 | 規約 | markdownlintルール | 備考 |
 |-----|-------------------|------|
@@ -23,8 +23,8 @@ markdownlintを導入することで、これらを自動検証可能にする�
 
 ## 関連規約
 
-- [language-and-style.md](../../docs-rules/common/language-and-style.md) - コードフェンス言語識別子
-- [markdown.md](../../docs-rules/common/markdown.md) - Markdown記法ルール
+- [language-and-style.md](../../../docs-rules/common/language-and-style.md) - コードフェンス言語識別子
+- [markdown.md](../../../docs-rules/common/markdown.md) - Markdown記法ルール
 
 ## タスク
 
