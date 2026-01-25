@@ -33,11 +33,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### User Story READMEのタスク進捗を更新する場合
 
-1. [ ] タスクを `- [ ]` から `- [x]` に変更
-2. [ ] **network-diagram.pumlの同期更新**（存在する場合）
-   - 対応ノードの色を `#lightgreen`（完了状態）に変更
-   - 参照: `docs/docs-rules/user-stories/readme-guide.md`「タスク進捗更新時のネットワーク図同期」
-3. [ ] 同一コミットでREADME.mdとnetwork-diagram.pumlを更新
+→ `docs/docs-rules/user-stories/readme-guide.md`「タスク進捗更新時のネットワーク図同期」を参照
 
 ### docs/design/ 配下の設計ドキュメントを作成・編集する場合
 
