@@ -16,7 +16,7 @@
 
 ## 3. テスト戦略との関係
 
-> **参照**: [05-test-strategy.md](../../../../docs-rules/design/05-test-strategy.md)
+> **参照**: [05-test-strategy.md](../../../../../docs-rules/design/05-test-strategy.md)
 
 JSDocとテスト戦略書は補完関係にある:
 
