@@ -10,7 +10,7 @@
 
 ## 適用シナリオの要件
 
-[coding-standards.md](../../docs-rules/coding-standards.md) および [common.md](../../docs-rules/common.md) より:
+[coding-standards.md](../../docs-rules/coding-standards.md) および [common/rule-writing-principles.md](../../docs-rules/common/rule-writing-principles.md) より:
 
 - 適用シナリオや判断事例を1-2個記載すること
 - 「実装例」（コードスニペット）ではなく「適用シナリオ」（いつ・どこで適用するかの判断事例）を記載
