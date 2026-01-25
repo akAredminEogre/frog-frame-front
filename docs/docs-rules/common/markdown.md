@@ -41,8 +41,25 @@ Markdownのコードブロックに言語指定を行うこと:
 
 | 規約 | markdownlintルール | 備考 |
 |-----|-------------------|------|
-| コードブロックの言語指定 | MD040 (fenced-code-language) | ✅ 検証可能 |
+| コードブロックの言語指定必須 | MD040 (fenced-code-language) | ✅ 検証可能 |
+| 許可する言語識別子の制限 | MD040 + `allowed_languages` | ✅ 設定で制限可能 |
 | 見出しレベルの階層スキップ禁止 | MD001 (heading-increment) | ✅ 検証可能 |
 | スコープの明示 | - | PRレビューで確認 |
+
+### markdownlint設定例
+
+```json
+{
+  "MD040": {
+    "allowed_languages": [
+      "typescript", "javascript", "tsx", "jsx",
+      "css", "scss",
+      "bash", "sh",
+      "json", "yaml",
+      "markdown", "text"
+    ]
+  }
+}
+```
 
 → [User Story 011: markdownlint導入](../../user-stories/user-story-011/README.md)
