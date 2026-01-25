@@ -256,7 +256,7 @@ src/
 | `infrastructure/browser/background/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/background/` | Backgroundハンドラー登録 |
 | `infrastructure/browser/content/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/content/` | Contentハンドラー登録 |
 
-#### 依存関係
+#### 依存関係（現在・移管前）
 
 ```
 entrypoints/background.ts
