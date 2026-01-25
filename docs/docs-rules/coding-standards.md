@@ -4,7 +4,7 @@
 
 `docs/coding-standards/` 配下に配置するコーディング規約ドキュメントの記述ルール。
 
-**前提**: [common.md](./common.md) の一般原則に加え、コーディング規約固有のルールを以下に定義する。
+**前提**: [common/index.md](./common/index.md) の一般原則に加え、コーディング規約固有のルールを以下に定義する。
 
 ## 記述ルール
 
@@ -42,7 +42,7 @@
 
 ### 適用シナリオは記載する
 
-[common.md](./common.md) の「規約・ルール記述時の原則」に従い、**適用シナリオや判断事例**は1-2個記載すること。
+[common/rule-writing-principles/](./common/rule-writing-principles/index.md) の「規約・ルール記述時の原則」に従い、**適用シナリオや判断事例**は1-2個記載すること。
 
 **「実装例」と「適用シナリオ」の違い**:
 

@@ -27,9 +27,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### docs/ 配下のドキュメントを作成・編集する場合
 
-1. [ ] **共通ルールを確認**: `docs/docs-rules/common.md`（マークダウン記法、文体など全ドキュメント共通）
+1. [ ] **共通ルールを確認**: `docs/docs-rules/common/index.md`（マークダウン記法、文体など全ドキュメント共通）
 2. [ ] 該当ディレクトリのルールを確認（例: `docs/docs-rules/user-stories.md`）
 3. [ ] ドキュメントを作成・編集
+
+### User Story READMEのタスク進捗を更新する場合
+
+→ `docs/docs-rules/user-stories/readme-guide.md`「タスク進捗更新時のネットワーク図同期」を参照
 
 ### docs/design/ 配下の設計ドキュメントを作成・編集する場合
 

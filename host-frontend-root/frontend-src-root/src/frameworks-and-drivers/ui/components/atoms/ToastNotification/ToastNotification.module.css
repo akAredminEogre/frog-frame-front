@@ -1,0 +1,73 @@
+@import 'src/components/tokens.module.css';
+
+/* トーストコンテナ - 画面下部に固定 */
+.toast {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+  max-width: 90%;
+  min-width: 200px;
+}
+
+/* 成功トースト */
+.success {
+  background-color: var(--color-success);
+  color: var(--color-success-contrast);
+}
+
+/* エラートースト */
+.error {
+  background-color: var(--color-danger);
+  color: var(--color-danger-contrast);
+}
+
+/* メッセージテキスト */
+.message {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* 閉じるボタン */
+.closeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.closeButton:hover {
+  opacity: 1;
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast,
+  .closeButton {
+    transition: none;
+  }
+}
