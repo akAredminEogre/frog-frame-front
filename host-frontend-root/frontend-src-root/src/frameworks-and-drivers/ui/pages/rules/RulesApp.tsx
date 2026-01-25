@@ -191,7 +191,15 @@ function RulesApp() {
         title="ルールの削除"
         message="このルールを削除しますか？"
         onConfirm={() => {
-          void confirmDelete();
+          const targetId = deleteTargetId;
+          void confirmDelete().catch((err) => {
+            if (targetId !== null) {
+              setDeleteError({
+                ruleId: targetId,
+                message: err instanceof Error ? err.message : String(err),
+              });
+            }
+          });
         }}
         onCancel={cancelDelete}
         confirmLabel="削除"
