@@ -1,6 +1,6 @@
-import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
+import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/mocks/createMockTabsService';
 import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
@@ -20,6 +20,8 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
   let mockChromeTabsService: IChromeTabsService;
 
   beforeEach(() => {
+    vi.clearAllMocks();
+
     // モックリポジトリの初期化
     mockRepository = createMockRewriteRuleRepository();
 
@@ -29,6 +31,10 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
 
     // テスト対象の初期化
     useCase = new UpdateRewriteRuleUseCase(mockRepository, mockChromeTabsService);
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
   });
 
   it.each([

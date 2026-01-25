@@ -2,7 +2,7 @@
  * RewriteRules.applyRulesWithDomDiffer - エッジケーステスト
  * 空のRewriteRulesでもエラーが発生しない
  */
-import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/createMockElementFactory';
+import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/mocks/createMockElementFactory';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';

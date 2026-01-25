@@ -2,7 +2,7 @@
  * DeleteRuleInteractor.execute - 正常系テスト
  * 1. ルールIDを指定して削除が実行される
  */
-import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway';
+import { createMockTabsGateway } from 'tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/createMockTabsGateway';
 import { createMockRewriteRuleRepository as createMockRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
 import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/DeleteRuleInteractor/mocks/createMockPresenter';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
