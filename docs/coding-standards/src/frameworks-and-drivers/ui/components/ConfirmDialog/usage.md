@@ -46,23 +46,41 @@ import { ConfirmDialog } from 'src/frameworks-and-drivers/ui/components/organism
 
 #### ✅ 正しいパターン（非同期処理が必要な場合）
 
-同期関数を渡し、内部で非同期処理を fire-and-forget で呼び出す:
+同期関数を渡し、内部で非同期処理を fire-and-forget で呼び出す。
+
+**パターン1: Interactor が try-catch でエラーを吸収する場合**
+
+Interactor 内で全てのエラーを catch し、Presenter 経由で通知する設計の場合、`.catch` は不要:
 
 ```tsx
-const confirmDelete = async () => {
-  await deleteController.deleteRule(ruleId);
-};
+// Interactor が try-catch でエラーを吸収 → Presenter → onError コールバック
+const deleteController = factory.create(
+  (ruleId) => { /* onSuccess */ },
+  (ruleId, message) => { setDeleteError({ ruleId, message }); }  // onError
+);
 
 <ConfirmDialog
-  isOpen={deleteTargetId !== null}
+  onConfirm={() => {
+    void confirmDelete();  // .catch 不要（エラーは Presenter 経由で通知される）
+  }}
+/>
+```
+
+**パターン2: エラーが漏れる可能性がある場合**
+
+Interactor が try-catch していない、または Controller 外でエラーが発生する可能性がある場合は `.catch` が必要:
+
+```tsx
+<ConfirmDialog
   onConfirm={() => {
     void confirmDelete().catch((e) => {
       setError(e.message);
     });
   }}
-  onCancel={() => setDeleteTargetId(null)}
 />
 ```
+
+**判断基準**: 呼び出す関数のエラー処理設計を確認し、Interactor が確実にエラーを吸収するなら `.catch` は不要。不明な場合は `.catch` を追加する。
 
 #### ❌ 誤ったパターン
 
