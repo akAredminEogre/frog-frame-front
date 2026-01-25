@@ -199,7 +199,7 @@ function RulesApp() {
       />
 
       <ToastNotification
-        message={deleteError ? `ルール ${deleteError.ruleId} の削除に失敗しました: ${deleteError.message}` : ''}
+        message={deleteError ? `ルール ${deleteError.ruleId} の削除処理中にエラーが発生しました: ${deleteError.message}` : ''}
         type="error"
         isVisible={deleteError !== null}
         onClose={() => setDeleteError(null)}
