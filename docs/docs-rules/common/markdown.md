@@ -12,6 +12,8 @@ Markdownのコードブロックに言語指定を行うこと:
 - Markdownテンプレート: `markdown`
 - その他プレーンテキスト: `text`
 
+> **Lint化**: これらの言語識別子はmarkdownlintの`MD040`ルール + `allowed_languages`設定で検証可能。詳細は[Lint化について](#lint化について)を参照。
+
 ## 見出しの記述ルール
 
 ### 見出し構文を使用する
