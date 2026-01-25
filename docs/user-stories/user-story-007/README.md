@@ -21,7 +21,7 @@
 | ファイル | シナリオ形式 |
 |---------|-------------|
 | `docs/coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md` | 「適用シナリオ」セクション（確認ダイアログ、フォーム入力モーダル） |
-| `docs/coding-standards/src/frameworks-and-drivers/ui/css-styling.md` | 「具体例」セクション（デザイントークン追加の判断フロー） |
+| `docs/coding-standards/src/frameworks-and-drivers/ui/css-styling/design-tokens.md` | 「具体例」セクション（デザイントークン追加の判断フロー） |
 | `docs/coding-standards/src/application-business-rules/interactors.md` | 「典型的なユースケース」と「適用例」 |
 | `docs/coding-standards/src/frameworks-and-drivers/ui/components.md` | 「適用場面」テーブル |
 | `docs/coding-standards/src/frameworks-and-drivers/ui/react-hooks/props-dependent-state.md` | 「適用場面」テーブル |
