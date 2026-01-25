@@ -20,4 +20,4 @@ PRレビューで発覚した問題がPRの範囲外の場合、新規ユーザ�
 
 ユーザーストーリー完了時は、概要セクションを過去形に更新し、タスクチェックリストを完了状態にすること。
 
-詳細: [docs/docs-rules/user-stories/readme-guide.md](../docs-rules/user-stories/readme-guide.md) の「完了時の更新」セクション
+詳細: [docs/docs-rules/user-stories/readme-guide.md](../../docs/docs-rules/user-stories/readme-guide.md) の「完了時の更新」セクション
