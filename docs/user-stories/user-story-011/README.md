@@ -10,7 +10,7 @@
 
 ## 背景
 
-[docs/docs-rules/common/](../../../docs-rules/common/index.md) で定義されている以下の規約は、現在PRレビューで確認している:
+[docs-rules/common/](../../../docs-rules/common/index.md) で定義されている以下の規約は、現在PRレビューで確認している:
 
 | 規約 | markdownlintルール | 備考 |
 |-----|-------------------|------|
