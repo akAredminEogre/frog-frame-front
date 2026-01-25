@@ -16,8 +16,9 @@
 ## チェックリスト
 
 1. [ ] **共通ルールを確認**: `docs-rules/common/index.md`（マークダウン記法、文体など全ドキュメント共通）
-2. [ ] **該当ディレクトリのルールを確認**: `docs-rules/[category]/` 配下で対応するガイドラインを探す
-   - 例: `docs-rules/user-stories.md`、`docs-rules/design.md`
+2. [ ] **該当カテゴリのルールを確認**:
+   - カテゴリ概要: `docs-rules/[category].md`（例: `user-stories.md`、`design.md`）
+   - 詳細ルール: `docs-rules/[category]/` ディレクトリ内
 3. [ ] **必須セクションを確認**: 該当ガイドライン内の「必須セクション」表を参照
    - 例: `docs-rules/design/06-integration-test-strategy.md` の「必須セクション」セクション
 4. [ ] **配置ルールを確認**: ファイルの配置場所がガイドラインに準拠していることを確認
