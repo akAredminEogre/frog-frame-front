@@ -190,7 +190,9 @@ function RulesApp() {
         isOpen={deleteTargetId !== null}
         title="ルールの削除"
         message="このルールを削除しますか？"
-        onConfirm={confirmDelete}
+        onConfirm={() => {
+          void confirmDelete();
+        }}
         onCancel={cancelDelete}
         confirmLabel="削除"
         cancelLabel="キャンセル"
