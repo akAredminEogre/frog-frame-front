@@ -10,7 +10,7 @@
 
 例: `docs/design/pages/rule-list/features/delete-rule/integration-test-strategy.md` を作成する場合
 
-1. `docs/docs-rules/common.md` （共通ルール）
+1. `docs/docs-rules/common/index.md` （共通ルール）
 2. `docs/docs-rules/design/` 配下の該当ガイドライン（例: `06-integration-test-strategy.md`）
 
 ## チェックリスト
