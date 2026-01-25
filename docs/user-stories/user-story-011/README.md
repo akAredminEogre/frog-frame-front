@@ -58,6 +58,10 @@ markdownlintを導入することで、これらを自動検証可能にする�
 - [ ] pre-commit フックへの追加検討
 - [ ] GitHub Actions への追加検討
 
+### 対象外
+
+- コードフェンス言語識別子の小文字使用: カスタムルール実装が必要なため、本ユーザーストーリーでは対象外とする(将来の拡張として別ユーザーストーリーで対応)
+
 ## 受け入れ条件
 
 [acceptance-criteria.md](./acceptance-criteria.md) を参照
