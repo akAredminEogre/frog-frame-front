@@ -35,8 +35,8 @@ markdownlintを導入することで、これらを自動検証可能にする�
 - markdownlint 関連パッケージ: 未インストール
 - 設定ファイル(.markdownlint.jsonc): 未作成
 - 除外ファイル(.markdownlintignore): 未作成
-- 対象 Markdown ファイル: 約 1,246 ファイル(83,505 行) ※ 2026-01-25 時点、以下のようなコマンドで集計
-  `find . -name '*.md' -print0 | xargs -0 wc -l`
+- 対象 Markdown ファイル(`docs/` 配下): 約 1,247 ファイル(83,555 行) ※ 2026-01-25 時点、以下のようなコマンドで集計
+  `find docs -name '*.md' -print0 | xargs -0 wc -l`
 
 ## 開発戦略
 
