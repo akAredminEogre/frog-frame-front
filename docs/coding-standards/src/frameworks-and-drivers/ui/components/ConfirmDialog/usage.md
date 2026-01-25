@@ -103,25 +103,7 @@ async 関数を直接渡す:
 
 詳細: [useProcessingGuard](../../react-hooks/useProcessingGuard.md)
 
-## キーボード操作
-
-| キー | 動作 |
-|-----|------|
-| `Escape` | ダイアログを閉じる（onCancel呼び出し） |
-| `Tab` | フォーカスがダイアログ内でループ |
-| `Shift+Tab` | 逆方向にフォーカスがループ |
-
-## アクセシビリティ
-
-- `role="dialog"` と `aria-modal="true"` を設定
-- `aria-labelledby` でタイトルを参照
-- `aria-describedby` でメッセージを参照
-- 初期フォーカスはキャンセルボタン（破壊的アクションのため安全な選択肢）
-
-詳細: [ADR-007: ダイアログのアクセシビリティ要件](../../../../../../adr/007-dialog-accessibility-requirements.md)
-
 ## 関連ドキュメント
 
 - [useProcessingGuard](../../react-hooks/useProcessingGuard.md) - 連続クリック防止フック
-- [ADR-007: ダイアログのアクセシビリティ要件](../../../../../../adr/007-dialog-accessibility-requirements.md)
 - [ConfirmDialog テスト戦略](../../../../../../design/src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/render.md)
