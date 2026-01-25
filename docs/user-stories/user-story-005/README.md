@@ -21,7 +21,7 @@
 2. **コンストラクタテスト（コンストラクタ自体の動作をテストするため直接呼び出しが必要）**
    - `tests/unit/domain/entities/RewriteRule/constructor/normal-cases.test.ts`
 
-### 修正対象ファイル一覧（34ファイル）
+### 修正対象ファイル一覧（41ファイル）
 
 #### 1. interface-adapters層（3ファイル）
 
