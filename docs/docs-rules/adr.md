@@ -132,7 +132,7 @@ docs/adr/
 | 決定 | ○ | 何を決定したか |
 | 理由 | ○ | なぜその決定をしたか |
 | 適用済みの箇所 | △ | 既にこのADRの要件を満たしているコンポーネント・ファイル |
-| 適用待ちの箇所 | ○ | 新しい規約に適合していない既存コード。該当なしでも明記すること（技術的負債の可視化）。詳細は[common/rule-management.md](./common/rule-management.md)を参照 |
+| 適用待ちの箇所 | ○ | 新しい規約に適合していない既存コード。該当なしでも明記すること（技術的負債の可視化）。詳細は[common/rule-management/pending-application.md](./common/rule-management/pending-application.md)を参照 |
 | 影響ドキュメント | ○ | このドキュメントが変更されたときに、変更する必要があるドキュメント |
 | 関連ドキュメント | △ | 関連する ADR や設計ドキュメント |
 
