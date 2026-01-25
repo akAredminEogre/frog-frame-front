@@ -253,8 +253,8 @@ src/
 | `infrastructure/browser/handlers/background/applyAllRulesHandler.ts` | `frameworks-and-drivers/messaging/handlers/background/` | Popup→Background→Content転送 |
 | `infrastructure/browser/handlers/content/applyAllRulesHandler.ts` | `frameworks-and-drivers/messaging/handlers/content/` | ルール適用処理 |
 | `infrastructure/browser/handlers/content/getElementSelectionHandler.ts` | `frameworks-and-drivers/messaging/handlers/content/` | 要素選択取得 |
-| `infrastructure/browser/background/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` | Backgroundハンドラー登録 |
-| `infrastructure/browser/content/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/` | Contentハンドラー登録 |
+| `infrastructure/browser/background/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/background/` | Backgroundハンドラー登録 |
+| `infrastructure/browser/content/runtime/onMessageReceived.ts` | `frameworks-and-drivers/messaging/content/` | Contentハンドラー登録 |
 
 #### 依存関係
 
