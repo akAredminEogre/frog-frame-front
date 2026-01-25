@@ -44,7 +44,7 @@ markdownlintを導入することで、これらを自動検証可能にする�
 - [ ] markdownlint-cli2 パッケージのインストール
 - [ ] `.markdownlint.jsonc` 設定ファイルの作成(MD001, MD040 + allowed_languages)
 - [ ] `.markdownlintignore` 除外ファイルの作成
-- [ ] `package.json` へのスクリプト追加(`lint:md`, `lint:md:fix`)
+- [ ] `host-frontend-root/frontend-src-root/package.json` へのスクリプト追加(`lint:md`, `lint:md:fix`)
 - [ ] `Makefile` へのコマンド追加
 
 ### Phase 2: 既存ドキュメント修正
