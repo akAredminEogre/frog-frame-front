@@ -33,27 +33,27 @@ markdownlintを導入することで、これらを自動検証可能にする�
 ### 現状
 
 - markdownlint 関連パッケージ: 未インストール
-- 設定ファイル（.markdownlint.jsonc）: 未作成
-- 除外ファイル（.markdownlintignore）: 未作成
-- 対象 Markdown ファイル: 約 1,246 ファイル（83,505 行）
+- 設定ファイル(.markdownlint.jsonc): 未作成
+- 除外ファイル(.markdownlintignore): 未作成
+- 対象 Markdown ファイル: 約 1,246 ファイル(83,505 行)
 
 ## 開発戦略
 
 ### Phase 1: 基盤構築
 
 - [ ] markdownlint-cli2 パッケージのインストール
-- [ ] `.markdownlint.jsonc` 設定ファイルの作成（MD001, MD040 + allowed_languages）
+- [ ] `.markdownlint.jsonc` 設定ファイルの作成(MD001, MD040 + allowed_languages)
 - [ ] `.markdownlintignore` 除外ファイルの作成
-- [ ] `package.json` へのスクリプト追加（`lint:md`, `lint:md:fix`）
+- [ ] `package.json` へのスクリプト追加(`lint:md`, `lint:md:fix`)
 - [ ] Makefile へのコマンド追加
 
 ### Phase 2: 既存ドキュメント修正
 
-- [ ] 違反箇所の検出（`npm run lint:md` 実行）
-- [ ] MD001（見出しレベル階層スキップ）違反の修正
-- [ ] MD040（言語指定なし/許可外言語）違反の修正
+- [ ] 違反箇所の検出(`npm run lint:md` 実行)
+- [ ] MD001(見出しレベル階層スキップ)違反の修正
+- [ ] MD040(言語指定なし/許可外言語)違反の修正
 
-### Phase 3: CI統合（任意）
+### Phase 3: CI統合(任意)
 
 - [ ] pre-commit フックへの追加検討
 - [ ] GitHub Actions への追加検討
