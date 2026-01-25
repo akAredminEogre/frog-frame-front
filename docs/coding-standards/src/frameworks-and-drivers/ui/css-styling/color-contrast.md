@@ -23,4 +23,4 @@
 
 ESLint化不可（色のコントラスト比は静的解析で検証困難。PRレビューで確認）
 
-→ [User Story 009: stylelint導入](../../../../user-stories/user-story-009/README.md)
+→ [User Story 010: stylelint導入](../../../../user-stories/user-story-010/README.md)
