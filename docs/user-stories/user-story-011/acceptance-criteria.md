@@ -14,3 +14,4 @@
 - [ ] AC-7: `.markdownlint.jsonc` に MD001、MD040 ルールが設定されている
 - [ ] AC-8: `allowed_languages` に `docs/docs-rules/common/markdown.md` で定義された言語識別子のみ指定されている
 - [ ] AC-9: `Makefile` に markdownlint 実行コマンドが追加されている
+- [ ] AC-10: `.markdownlintignore` が作成されており、除外すべきファイル/ディレクトリが設定されている
