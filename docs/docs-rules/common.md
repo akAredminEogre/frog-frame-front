@@ -207,18 +207,28 @@
 ```markdown
 ## 悪い例（実在性が不明）
 
-css-styling/
+feature-docs/
 ├── index.md
-├── import-paths.md
-└── design-tokens.md
+├── setup.md
+└── usage.md
 
-## 良い例（実在構成であることを明示）
+## 良い例（実在構成であることを明示 - 全ファイル記載）
 
 （※実在するディレクトリ構成）
 css-styling/
 ├── index.md
 ├── import-paths.md
-└── design-tokens.md
+├── design-tokens.md
+├── color-contrast.md
+└── touch-target-size.md
+
+## 良い例（実在構成の一部を抜粋）
+
+（※実在するディレクトリ構成より抜粋）
+src/components/
+├── atoms/
+│   └── ...（他のコンポーネント）
+└── molecules/
 
 ## 良い例（形式例であることを明示）
 
@@ -230,6 +240,8 @@ feature-name/
 ```
 
 **理由**: 読者が例示を見たとき、実際のファイルを確認すべきか判断できるようにするため。
+
+**注意**: 実在構成を示す場合は、全ファイルを記載するか「抜粋」であることを明示すること。
 
 ### 実在例の同期更新
 
