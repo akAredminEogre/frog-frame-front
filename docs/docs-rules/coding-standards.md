@@ -42,7 +42,7 @@
 
 ### 適用シナリオは記載する
 
-[common/rule-writing-principles.md](./common/rule-writing-principles.md) の「規約・ルール記述時の原則」に従い、**適用シナリオや判断事例**は1-2個記載すること。
+[common/rule-writing-principles/](./common/rule-writing-principles/index.md) の「規約・ルール記述時の原則」に従い、**適用シナリオや判断事例**は1-2個記載すること。
 
 **「実装例」と「適用シナリオ」の違い**:
 

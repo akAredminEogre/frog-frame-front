@@ -8,7 +8,7 @@
 |---------|------|
 | [language-and-style.md](./language-and-style.md) | 使用言語、文体、括弧のルール |
 | [code-examples.md](./code-examples.md) | コード例の記載ルール、参照ルール |
-| [rule-writing-principles.md](./rule-writing-principles.md) | 規約・ルール記述時の原則（具体例、責任の所在など） |
+| [rule-writing-principles/](./rule-writing-principles/index.md) | 規約・ルール記述時の原則（具体例、責任の所在など） |
 | [technical-verification.md](./technical-verification.md) | 推奨事項の理由記述、数値・技術的主張の検証 |
 | [code-comments.md](./code-comments.md) | コード内コメントの記述原則 |
 | [markdown.md](./markdown.md) | Markdown記法のルール |
