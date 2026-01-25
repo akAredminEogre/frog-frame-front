@@ -102,7 +102,7 @@ test.describe('ルール削除機能 - キャンセル操作', () => {
     await waitForConfirmDialogClosed(rulesPage);
 
     // 4. Assert: ルールが残っている
-    let count = await getRuleCount(rulesPage);
+    const count = await getRuleCount(rulesPage);
     expect(count).toBe(1);
 
     // 5. Act: 2回目の削除操作 - 再度ダイアログを開く
