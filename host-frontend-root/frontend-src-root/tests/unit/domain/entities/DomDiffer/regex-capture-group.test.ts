@@ -1,5 +1,5 @@
 import { createMockElementFactory } from 'tests/unit/domain/ports/IElementFactory/mocks/createMockElementFactory';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DomDiffer } from 'src/domain/entities/DomDiffer';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
@@ -14,12 +14,14 @@ describe('DomDiffer - 正規表現キャプチャグループ置換', () => {
   let container: HTMLElement;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     container = document.createElement('div');
     document.body.appendChild(container);
   });
 
   afterEach(() => {
     document.body.removeChild(container);
+    vi.resetAllMocks();
   });
 
   // テスト用定数
