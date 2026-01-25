@@ -26,10 +26,43 @@ markdownlintを導入することで、これらを自動検証可能にする�
 - [language-and-style.md](../../../docs-rules/common/language-and-style.md) - コードフェンス言語識別子
 - [markdown.md](../../../docs-rules/common/markdown.md) - Markdown記法ルール
 
-## タスク
+## 現状分析
 
-（別途策定）
+このユーザーストーリーはツール導入と開発環境設定の変更が中心であり、既存アプリケーションロジックの修正は発生しない。そのため分類A〜Eの差分分析は対象外とする。
+
+### 現状
+
+- markdownlint 関連パッケージ: 未インストール
+- 設定ファイル(.markdownlint.jsonc): 未作成
+- 除外ファイル(.markdownlintignore): 未作成
+- 対象 Markdown ファイル(`docs/` 配下): 約 1,247 ファイル(83,555 行) ※ 2026-01-25 時点、以下のようなコマンドで集計
+  `find docs -name '*.md' -print0 | xargs -0 wc -l`
+
+## 開発戦略
+
+### Phase 1: 基盤構築
+
+- [ ] markdownlint-cli2 パッケージのインストール
+- [ ] `.markdownlint.jsonc` 設定ファイルの作成(MD001, MD040 + allowed_languages)
+- [ ] `.markdownlintignore` 除外ファイルの作成
+- [ ] `host-frontend-root/frontend-src-root/package.json` へのスクリプト追加(`lint:md`, `lint:md:fix`)
+- [ ] `Makefile` へのコマンド追加
+
+### Phase 2: 既存ドキュメント修正
+
+- [ ] 違反箇所の検出(`make lint:md` 実行; フロントエンドコンテナ内での `npm run lint:md` をラップ)
+- [ ] MD001(見出しレベル階層スキップ)違反の修正
+- [ ] MD040(言語指定なし/許可外言語)違反の修正
+
+### Phase 3: CI統合(任意)
+
+- [ ] pre-commit フックへの追加検討
+- [ ] GitHub Actions への追加検討
+
+### 対象外
+
+- コードフェンス言語識別子の小文字使用: カスタムルール実装が必要なため、本ユーザーストーリーでは対象外とする(将来の拡張として別ユーザーストーリーで対応)
 
 ## 受け入れ条件
 
-（別途策定）
+[acceptance-criteria.md](./acceptance-criteria.md) を参照
