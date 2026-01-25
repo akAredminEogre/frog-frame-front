@@ -1,28 +1,31 @@
-# User Story 009: stylelint導入
+# User Story 009: 既存テストへのテスト戦略ドキュメント追加
 
 ## ストーリー
 
-> CSSファイルのコーディング規約をstylelintで自動検証できる
+> テストコードの設計意図を明確化するため、テスト戦略ドキュメントが不足している既存テストに対してドキュメントを追加する
 
 ## 概要
 
-現在手動でPRレビュー時に確認しているCSSコーディング規約を、stylelintにより自動検証可能にする。これにより規約違反を早期に検出し、レビュー負荷を軽減する。
+現在、一部の既存テストファイルにはテスト戦略ドキュメント（`docs/design/src/.../*.md`）が存在しない。[CLAUDE.md](../../../CLAUDE.md) および [05-test-strategy.md](../../docs-rules/design/05-test-strategy.md) の規約に従い、テスト戦略ドキュメントを作成する。
 
-## 背景
+## 対象ファイル
 
-[css-styling/](../../coding-standards/src/frameworks-and-drivers/ui/css-styling/index.md) で定義されている以下の規約は、現在ESLint化不可としてPRレビューで確認している:
-
-- CSSインポートパスのルール（絶対パス使用）
-- デザイントークンの使用（ハードコード色値の禁止）
-- タッチターゲットサイズ（最小44x44px）
-- 色コントラスト比（WCAG AA基準）
-
-stylelintを導入することで、これらの一部または全部を自動検証可能にする。
+| テストファイル | 作成するドキュメント |
+|--------------|-------------------|
+| `tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts` | `docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md` |
 
 ## タスク
 
-（別途策定）
+### Phase 1: テスト戦略ドキュメントの作成
+
+- [ ] `UpdateRewriteRuleUseCase.execute` のテスト戦略ドキュメントを作成
+  - 目的
+  - テスト分類（正常系、異常系など観点ごと）
+  - 網羅性チェック
+  - テストファイル構成
+  - モック戦略
 
 ## 受け入れ条件
 
-（別途策定）
+- [ ] 対象テストファイルに対応するテスト戦略ドキュメントが存在する
+- [ ] ドキュメントが [05-test-strategy.md](../../docs-rules/design/05-test-strategy.md) テンプレートに準拠している

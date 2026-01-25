@@ -41,4 +41,4 @@
 
 ESLint化不可（CSSファイル内のサイズ値検証はstylelintの領域。stylelint未導入のためPRレビューで確認）
 
-→ [User Story 009: stylelint導入](../../../../user-stories/user-story-009/README.md)
+→ [User Story 010: stylelint導入](../../../../user-stories/user-story-010/README.md)
