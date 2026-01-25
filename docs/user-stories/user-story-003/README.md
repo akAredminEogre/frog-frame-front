@@ -180,15 +180,15 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### UI統合
 
-- [ ] RuleTableRow に DeleteButton を追加
-- [ ] RulesApp に削除処理を統合
+- [x] RuleTableRow に DeleteButton を追加
+- [x] RulesApp に削除処理を統合
   - ConfirmDialog をRulesApp内でレンダリング（ページレベル）
   - ToastNotification をRulesApp内でレンダリング（ページレベル）
   - `deletingIds` による重複削除防止
   - ConfirmDialog の表示制御
   - DeleteRuleController の呼び出し
   - ToastNotification によるエラー表示
-- [ ] container.ts にDI登録を追加
+- [x] container.ts にDI登録を追加
 
 #### 結合テスト
 
