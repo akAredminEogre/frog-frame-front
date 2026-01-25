@@ -27,9 +27,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### docs/ 配下のドキュメントを作成・編集する場合
 
-1. [ ] **共通ルールを確認**: `docs-rules/common/index.md`（マークダウン記法、文体など全ドキュメント共通）
-2. [ ] 該当ディレクトリのルールを確認（例: `docs-rules/user-stories.md`）
-3. [ ] ドキュメントを作成・編集
+→ [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
 ### User Story READMEのタスク進捗を更新する場合
 
@@ -37,11 +35,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### docs/design/ 配下の設計ドキュメントを作成・編集する場合
 
-→ [.AI/docs.md](.AI/docs.md) を参照
+→ [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
 ### ADRを作成・編集する場合
 
-→ [.AI/docs.md](.AI/docs.md) を参照
+→ [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
 ---
 
