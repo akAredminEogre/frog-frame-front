@@ -95,22 +95,8 @@ UIコンポーネントのテストで使用する外部依存はないため、
 
 ### テストヘルパー
 
-共通のセットアップ・クリーンアップロジックを`ToastNotificationTestHelper`クラスに集約:
+共通のセットアップ・クリーンアップロジックを集約したテストヘルパー:
 
-```typescript
-import { ToastNotificationTestHelper } from 'tests/unit/.../test-helpers';
-
-const helper = new ToastNotificationTestHelper();
-
-beforeEach(() => helper.setup());
-afterEach(() => helper.cleanup());
-
-// レンダリング
-await helper.render({ message: 'テスト', type: 'success', isVisible: true, onClose: mockOnClose });
-
-// 要素取得
-const container = helper.getAlertElement();
-const closeButton = helper.getCloseButton();
-```
+**参照**: `tests/unit/frameworks-and-drivers/ui/components/atoms/ToastNotification/test-helpers.tsx`
 
 外部依存（CSSモジュール）はVitestの設定で自動処理されるため、明示的なモックは不要。
