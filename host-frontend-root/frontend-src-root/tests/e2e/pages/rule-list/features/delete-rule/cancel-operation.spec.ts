@@ -317,7 +317,7 @@ test.describe('ルール削除機能 - キャンセル操作', () => {
     await reloadAndWaitForTable(rulesPage);
 
     // 3. Assert: ダイアログ表示前はhtml要素にoverflow:hiddenがない
-    // React Ariaのus ePreventScrollはdocument.documentElementにスタイルを適用する
+    // React AriaのusePreventScrollはdocument.documentElementにスタイルを適用する
     const htmlOverflowBefore = await rulesPage.evaluate(() => {
       return window.getComputedStyle(document.documentElement).overflow;
     });
