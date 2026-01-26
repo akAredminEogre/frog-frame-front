@@ -56,11 +56,20 @@
 | 再クリック可能性 | キャンセル後も削除ボタンを再度クリックできる | 状態がリセットされることを確認 |
 | Escapeキー操作 | Escapeキーでダイアログを閉じるとルールが残る | キーボード操作でのキャンセルを確認（ADR-007準拠） |
 | オーバーレイクリック | オーバーレイクリックでダイアログを閉じるとルールが残る | マウス操作でのキャンセルを確認（ADR-007準拠） |
+
+**対応テスト**: `cancel-operation.spec.ts`
+
+### 2.1. アクセシビリティ
+
+WAI-ARIA Dialog Modal Pattern（ADR-007）に準拠したアクセシビリティ機能
+
+| 分類 | テストケース | 根拠 |
+|------|-------------|------|
 | フォーカストラップ(Tab) | Tabキーでフォーカスがダイアログ内でループする | アクセシビリティ要件（ADR-007準拠） |
 | フォーカストラップ(Shift+Tab) | Shift+Tabキーでフォーカスが逆方向にループする | アクセシビリティ要件（ADR-007準拠） |
 | 背景スクロール無効化 | ダイアログ表示中は背景スクロールが無効化される | アクセシビリティ要件（ADR-007準拠） |
 
-**対応テスト**: `cancel-operation.spec.ts`
+**対応テスト**: `accessibility.spec.ts`
 
 ### 3. DB永続化
 
@@ -134,9 +143,13 @@
 
 ```plaintext
 tests/e2e/pages/rule-list/features/delete-rule/
-├── helpers.ts                 # 共有ヘルパー関数
+├── helpers.ts                 # 共有ヘルパー関数（再エクスポート）
+├── constants.ts               # 削除機能固有の定数
+├── dialog-operations.ts       # ダイアログ操作ヘルパー
+├── rule-operations.ts         # ルールテーブル操作ヘルパー
 ├── normal-flow.spec.ts        # 正常操作フロー
 ├── cancel-operation.spec.ts   # キャンセル操作
+├── accessibility.spec.ts      # アクセシビリティ（ADR-007準拠）
 ├── persistence.spec.ts        # DB永続化
 └── independence.spec.ts       # 複数ルール独立性
 ```
