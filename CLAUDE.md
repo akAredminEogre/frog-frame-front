@@ -320,6 +320,8 @@ Path aliases configured in `tsconfig.json`:
 - `tests/*` → `./tests/*`
 - `entrypoints/*` → `./src/entrypoints/*`
 
+詳細は `docs/coding-standards/tests/common-rule.md` を参照してください。
+
 ## Object-Oriented Design Rules (ThoughtWorks Anthology)
 
 See `docs/coding-standards/src/object-oriented-nine-rules.md` for the 9 rules and their ESLint implementations.
