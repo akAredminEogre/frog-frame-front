@@ -53,6 +53,24 @@ grep -r "\[.*\](.*旧ファイル名.*)" docs/ docs-rules/
 1. **分割の観点を明確化**: なぜ分割するのか（形式/動作、概念/手順など）を明確にする
 2. **相互参照を追加**: 分割後のファイル間で「参考」セクションを設け、関連ファイルをリンク
 3. **元ファイルの削除**: 分割後は元ファイルを削除し、参照をすべて更新
+4. **ディレクトリリンクの対応**: 新しいディレクトリへの参照を更新する際、以下のいずれかを選択：
+   - ディレクトリに `index.md` を作成してディレクトリパスでリンク
+   - 具体的なファイル（例：`format-guideline.md`）にリンク
+
+### ディレクトリリンクのルール
+
+GitHubなどのMarkdownレンダラでは、`index.md`や`README.md`がないディレクトリへのリンクは正常に表示されない。
+
+```markdown
+❌ 悪い例：index.mdがないディレクトリへのリンク
+[07-e2e-test-strategy/](../design/07-e2e-test-strategy/)
+
+✅ 良い例：具体的なファイルへのリンク
+[07-e2e-test-strategy/format-guideline.md](../design/07-e2e-test-strategy/format-guideline.md)
+
+✅ 良い例：index.mdがあるディレクトリへのリンク
+[07-e2e-test-strategy/](../design/07-e2e-test-strategy/)  # index.mdが存在する場合
+```
 
 ## 統合時の追加ルール
 

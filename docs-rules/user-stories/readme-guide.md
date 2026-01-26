@@ -150,7 +150,7 @@ Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメ
 | 戦略書 | 配置先 | 参照ルール |
 |-------|--------|-----------|
 | 結合テスト戦略書 | `docs/design/pages/{page}/features/{feature}/integration-test-strategy.md` | [06-integration-test-strategy.md](../design/06-integration-test-strategy.md) |
-| E2Eテスト戦略書 | `docs/design/pages/{page}/features/{feature}/e2e-test-strategy.md` | [07-e2e-test-strategy/](../design/07-e2e-test-strategy/) |
+| E2Eテスト戦略書 | `docs/design/pages/{page}/features/{feature}/e2e-test-strategy.md` | [07-e2e-test-strategy/format-guideline.md](../design/07-e2e-test-strategy/format-guideline.md) |
 
 #### Phase 2: 実装・単体テスト戦略書・単体テスト
 
