@@ -49,7 +49,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({
       <td title={rule.urlPattern || ''} className="rule-url-pattern">
         <TruncatedText text={rule.urlPattern} maxLength={30} />
       </td>
-      <td title={rule.oldString} className="rule-old-string">
+      <td title={rule.oldString} className="rule-old-string" data-testid="rule-old-string">
         {rule.oldString}
       </td>
       <td title={rule.newString} className="rule-new-string">

@@ -33,7 +33,7 @@ export async function getRuleOldString(
 ): Promise<string> {
   const rows = rulesPage.locator('[data-testid="rules-table"] tbody tr');
   const row = rows.nth(ruleIndex);
-  const oldStringCell = row.locator('.rule-old-string');
+  const oldStringCell = row.locator('[data-testid="rule-old-string"]');
   await expect(oldStringCell).toBeVisible({ timeout: ELEMENT_VISIBILITY_TIMEOUT });
   return await oldStringCell.textContent() || '';
 }
