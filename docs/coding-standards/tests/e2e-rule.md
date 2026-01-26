@@ -126,3 +126,31 @@ import { DEFAULT_TIMEOUT } from 'tests/e2e/helpers';
 ### eslint-rule
 
 ESLint化不可（定数の意味的な重複はコード静的解析では判定困難。PRレビューで確認）
+
+---
+
+## 4. getByRole使用時の厳密マッチ
+
+### 規約
+
+- `getByRole`でボタンやリンクを取得する際は、`exact: true`オプションを使用すること
+- 部分一致マッチはラベル拡張時に意図しない要素を取得するリスクがある
+
+### 禁止事項
+
+- `exact: true`なしの`getByRole`（部分一致マッチ）
+  - 将来のラベル変更で意図しない要素を取得する可能性がある
+
+### 例
+
+```typescript
+// ❌ 悪い例：部分一致（ラベル変更で壊れやすい）
+const deleteButton = page.getByRole('button', { name: 'ルールを削除' });
+
+// ✅ 良い例：厳密マッチ
+const deleteButton = page.getByRole('button', { name: 'ルールを削除', exact: true });
+```
+
+### eslint-rule
+
+ESLint化不可（Playwrightのオプション使用はコード静的解析では判定困難。PRレビューで確認）

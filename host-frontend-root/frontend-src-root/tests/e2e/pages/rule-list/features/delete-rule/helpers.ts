@@ -56,7 +56,7 @@ export async function clickDeleteButton(
   rulesPage: Page,
   ruleIndex: number
 ): Promise<void> {
-  const deleteButtons = rulesPage.getByRole('button', { name: 'ルールを削除' });
+  const deleteButtons = rulesPage.getByRole('button', { name: 'ルールを削除', exact: true });
   const count = await deleteButtons.count();
 
   if (ruleIndex < 0 || ruleIndex >= count) {
