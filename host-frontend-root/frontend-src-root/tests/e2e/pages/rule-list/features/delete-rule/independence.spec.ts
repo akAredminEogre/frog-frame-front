@@ -113,7 +113,7 @@ test.describe('ルール削除機能 - 複数ルール独立性', () => {
     expect(await getRuleCount(rulesPage)).toBe(3);
 
     // 4. Assert: フッターに「合計 3 件」と表示される
-    const footer = rulesPage.locator('.footer');
+    const footer = rulesPage.locator('[data-testid="rules-footer"]');
     await expect(footer).toContainText('合計 3 件');
 
     // 5. Act: 1つ削除
