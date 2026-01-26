@@ -99,31 +99,6 @@ export async function waitForRuleCount(
 }
 
 /**
- * トースト通知が表示されているか確認する
- *
- * @param rulesPage - ルール一覧ページ
- * @returns トーストが表示されていればtrue
- */
-export async function isToastVisible(rulesPage: Page): Promise<boolean> {
-  const toast = rulesPage.locator('[role="alert"]');
-  return await toast.isVisible();
-}
-
-/**
- * エラートースト通知が表示されるまで待機する
- *
- * @param rulesPage - ルール一覧ページ
- * @param timeout - タイムアウト（ms）
- */
-export async function waitForErrorToast(
-  rulesPage: Page,
-  timeout: number = DELETE_COMPLETE_TIMEOUT
-): Promise<void> {
-  const toast = rulesPage.locator('[role="alert"][data-type="error"]');
-  await expect(toast).toBeVisible({ timeout });
-}
-
-/**
  * ページをリロードして空状態メッセージが表示されるまで待機する
  *
  * ルールが0件の場合、rules-tableは表示されず空状態メッセージが表示される。
