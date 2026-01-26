@@ -98,11 +98,9 @@ test.describe('ルール削除機能 - DB永続化', () => {
     await waitForRuleCount(rulesPage, 0);
 
     // 4. Act & Assert: 複数回リロードして状態を確認（ルール0件なので空状態メッセージを待機）
+    // reloadAndWaitForEmptyStateがdata-testid="empty-state"の表示を検証済み
     for (let i = 0; i < 3; i++) {
       await reloadAndWaitForEmptyState(rulesPage);
-      // 空状態メッセージが表示されていることで、ルールが存在しないことを確認
-      const emptyMessage = rulesPage.getByText('保存されたルールがありません');
-      await expect(emptyMessage).toBeVisible();
     }
 
     // 5. Assert: コンソールエラーが発生していないことを確認
