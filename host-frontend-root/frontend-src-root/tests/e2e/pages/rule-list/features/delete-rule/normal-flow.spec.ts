@@ -133,9 +133,9 @@ test.describe('ルール削除機能 - 正常操作フロー', () => {
     await waitForRuleCount(rulesPage, 0);
 
     // 5. Assert: 空状態メッセージが表示される
-    // EmptyStateMessageコンポーネントの表示を確認
-    const emptyMessage = rulesPage.getByText('保存されたルールがありません');
-    await expect(emptyMessage).toBeVisible();
+    // EmptyStateMessageコンポーネントの表示をdata-testidで確認
+    const emptyState = rulesPage.locator('[data-testid="empty-state"]');
+    await expect(emptyState).toBeVisible();
 
     // 6. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
