@@ -13,6 +13,8 @@ E2Eテスト戦略書を作成・編集する際の動作ガイドライン。
 
 テストファイルを分割・統合した場合、対応するテスト戦略書を必ず更新すること。
 
+> **Note**: ドキュメントファイル自体のリファクタリング（ファイル名変更・分割・統合）を行う場合は、[ドキュメントリファクタリング時の同期ルール](../../common/document-consistency/document-refactoring.md)に従うこと。
+
 **チェックリスト**:
 - [ ] テスト戦略書の「対応テスト」欄が実際のファイル構成と一致しているか
 - [ ] 分割した場合は複数ファイルを列挙しているか
@@ -37,3 +39,4 @@ E2Eテスト戦略書を作成・編集する際の動作ガイドライン。
 ## 参考
 
 - フォーマットガイドライン: [format-guideline.md](./format-guideline.md)
+- ドキュメントリファクタリング: [document-refactoring.md](../../common/document-consistency/document-refactoring.md)
