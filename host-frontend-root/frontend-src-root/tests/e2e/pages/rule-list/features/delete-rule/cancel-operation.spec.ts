@@ -105,19 +105,16 @@ test.describe('ルール削除機能 - キャンセル操作', () => {
     const count = await getRuleCount(rulesPage);
     expect(count).toBe(1);
 
-    // 5. Act: 2回目の削除操作 - 再度ダイアログを開く
+    // 5. Act & Assert: 2回目の削除操作 - 再度ダイアログを開く
+    // waitForConfirmDialogが可視性検証を含むため、2回目も正常表示されることを確認
     await clickDeleteButton(rulesPage, 0);
     await waitForConfirmDialog(rulesPage);
 
-    // 6. Assert: 2回目も確認ダイアログが正常に表示される
-    const dialog = rulesPage.locator('[data-testid="confirm-dialog"]');
-    await expect(dialog).toBeVisible();
-
-    // 7. Cleanup: キャンセルして終了
+    // 6. Cleanup: キャンセルして終了
     await clickCancelButton(rulesPage);
     await waitForConfirmDialogClosed(rulesPage);
 
-    // 8. Assert: コンソールエラーが発生していないことを確認
+    // 7. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
 
