@@ -17,9 +17,6 @@ export {
   TEST_SERVER_URL,
 } from 'tests/e2e/helpers';
 
-/** ページロード待機のタイムアウト（ms） */
-export const PAGE_LOAD_TIMEOUT = 60000;
-
 // =============================================================================
 // 削除機能固有の定数
 // =============================================================================
@@ -231,11 +228,11 @@ export async function waitForErrorToast(
  * 削除後のリロードテストで使用する。
  *
  * @param rulesPage - ルール一覧ページ
- * @param timeout - タイムアウト（ms）。デフォルトは PAGE_LOAD_TIMEOUT
+ * @param timeout - タイムアウト（ms）。デフォルトは DEFAULT_TIMEOUT
  */
 export async function reloadAndWaitForEmptyState(
   rulesPage: Page,
-  timeout: number = PAGE_LOAD_TIMEOUT
+  timeout: number = DEFAULT_TIMEOUT
 ): Promise<void> {
   await rulesPage.reload();
   const emptyState = rulesPage.locator('[data-testid="empty-state"]');
