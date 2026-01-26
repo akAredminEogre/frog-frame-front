@@ -17,6 +17,9 @@ export {
   TEST_SERVER_URL,
 } from 'tests/e2e/helpers';
 
+/** ページロード待機のタイムアウト（ms） */
+export const PAGE_LOAD_TIMEOUT = 60000;
+
 // =============================================================================
 // 削除機能固有の定数
 // =============================================================================
@@ -219,4 +222,22 @@ export async function waitForErrorToast(
 ): Promise<void> {
   const toast = rulesPage.locator('[role="alert"][data-type="error"]');
   await expect(toast).toBeVisible({ timeout });
+}
+
+/**
+ * ページをリロードして空状態メッセージが表示されるまで待機する
+ *
+ * ルールが0件の場合、rules-tableは表示されず空状態メッセージが表示される。
+ * 削除後のリロードテストで使用する。
+ *
+ * @param rulesPage - ルール一覧ページ
+ * @param timeout - タイムアウト（ms）。デフォルトは PAGE_LOAD_TIMEOUT
+ */
+export async function reloadAndWaitForEmptyState(
+  rulesPage: Page,
+  timeout: number = PAGE_LOAD_TIMEOUT
+): Promise<void> {
+  await rulesPage.reload();
+  const emptyMessage = rulesPage.getByText('保存されたルールがありません');
+  await expect(emptyMessage).toBeVisible({ timeout });
 }

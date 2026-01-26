@@ -6,6 +6,7 @@ import {
   clickDeleteButton,
   getRuleCount,
   hasRuleWithOldString,
+  reloadAndWaitForEmptyState,
   reloadAndWaitForTable,
   saveRule,
   setupConsoleErrorMonitoring,
@@ -60,18 +61,15 @@ test.describe('ルール削除機能 - DB永続化', () => {
     // 5. Assert: 削除直後は0件
     await waitForRuleCount(rulesPage, 0);
 
-    // 6. Act: ページをリロード
-    await reloadAndWaitForTable(rulesPage);
+    // 6. Act: ページをリロード（ルール0件なので空状態メッセージを待機）
+    await reloadAndWaitForEmptyState(rulesPage);
 
-    // 7. Assert: リロード後もルールが存在しない（DBに永続化されている）
-    const finalCount = await getRuleCount(rulesPage);
-    expect(finalCount).toBe(0);
+    // 7. Assert: リロード後も空状態が表示される（DBに永続化されている）
+    // 空状態メッセージが表示されていることで、ルールが存在しないことを確認
+    const emptyMessage = rulesPage.getByText('保存されたルールがありません');
+    await expect(emptyMessage).toBeVisible();
 
-    // 8. Assert: 削除したルールが存在しない
-    const ruleExists = await hasRuleWithOldString(rulesPage, testOldString);
-    expect(ruleExists).toBe(false);
-
-    // 9. Assert: コンソールエラーが発生していないことを確認
+    // 8. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
 
@@ -99,11 +97,12 @@ test.describe('ルール削除機能 - DB永続化', () => {
     await waitForConfirmDialogClosed(rulesPage);
     await waitForRuleCount(rulesPage, 0);
 
-    // 4. Act & Assert: 複数回リロードして状態を確認
+    // 4. Act & Assert: 複数回リロードして状態を確認（ルール0件なので空状態メッセージを待機）
     for (let i = 0; i < 3; i++) {
-      await reloadAndWaitForTable(rulesPage);
-      const count = await getRuleCount(rulesPage);
-      expect(count).toBe(0);
+      await reloadAndWaitForEmptyState(rulesPage);
+      // 空状態メッセージが表示されていることで、ルールが存在しないことを確認
+      const emptyMessage = rulesPage.getByText('保存されたルールがありません');
+      await expect(emptyMessage).toBeVisible();
     }
 
     // 5. Assert: コンソールエラーが発生していないことを確認
