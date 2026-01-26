@@ -183,11 +183,7 @@ test.describe('ルール削除機能 - 複数ルール独立性', () => {
     await waitForConfirmDialogClosed(rulesPage);
     await waitForRuleCount(rulesPage, 0);
 
-    // 7. Assert: すべて削除された
-    const finalCount = await getRuleCount(rulesPage);
-    expect(finalCount).toBe(0);
-
-    // 8. Assert: コンソールエラーが発生していないことを確認
+    // 7. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
 
