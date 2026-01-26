@@ -214,6 +214,7 @@ test.describe('ルール削除機能 - 複数ルール独立性', () => {
 
     // 3. Act: 削除対象のルールを削除
     const deleteIndex = await getRuleIndexByOldString(rulesPage, deletedOldString);
+    expect(deleteIndex).toBeGreaterThanOrEqual(0);
     await clickDeleteButton(rulesPage, deleteIndex);
     await waitForConfirmDialog(rulesPage);
     await clickConfirmDeleteButton(rulesPage);
