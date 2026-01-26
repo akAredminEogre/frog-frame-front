@@ -202,4 +202,147 @@ test.describe('ルール削除機能 - キャンセル操作', () => {
     // 8. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
+
+  test('Tabキーでフォーカスがダイアログ内でループする', async ({
+    page,
+    popupPage,
+    rulesPage,
+  }) => {
+    // コンソールエラー監視をセットアップ
+    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
+
+    // 1. Arrange: ルールを保存
+    await saveRule(popupPage, page, {
+      oldString: 'フォーカストラップテスト',
+      newString: '置換後',
+    });
+
+    // 2. Arrange: ルール一覧ページをリロード
+    await reloadAndWaitForTable(rulesPage);
+
+    // 3. Act: ゴミ箱アイコンをクリック
+    await clickDeleteButton(rulesPage, 0);
+    await waitForConfirmDialog(rulesPage);
+
+    // 4. Assert: ダイアログ内のボタンを取得
+    const cancelButton = rulesPage.locator('[data-testid="confirm-dialog-cancel-button"]');
+    const confirmButton = rulesPage.locator('[data-testid="confirm-dialog-confirm-button"]');
+
+    // 5. Assert: 初期フォーカスはキャンセルボタン（安全な選択肢）にある
+    await expect(cancelButton).toBeFocused();
+
+    // 6. Act: Tabキーを押してフォーカスを移動
+    await rulesPage.keyboard.press('Tab');
+
+    // 7. Assert: フォーカスが確認ボタンに移動
+    await expect(confirmButton).toBeFocused();
+
+    // 8. Act: もう一度Tabキーを押す
+    await rulesPage.keyboard.press('Tab');
+
+    // 9. Assert: フォーカスがキャンセルボタンにループして戻る（フォーカストラップ）
+    await expect(cancelButton).toBeFocused();
+
+    // 10. Cleanup: ダイアログを閉じる
+    await clickCancelButton(rulesPage);
+    await waitForConfirmDialogClosed(rulesPage);
+
+    // 11. Assert: コンソールエラーが発生していないことを確認
+    assertNoConsoleErrors(consoleMessages);
+  });
+
+  test('Shift+Tabキーでフォーカスが逆方向にループする', async ({
+    page,
+    popupPage,
+    rulesPage,
+  }) => {
+    // コンソールエラー監視をセットアップ
+    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
+
+    // 1. Arrange: ルールを保存
+    await saveRule(popupPage, page, {
+      oldString: '逆方向フォーカステスト',
+      newString: '置換後',
+    });
+
+    // 2. Arrange: ルール一覧ページをリロード
+    await reloadAndWaitForTable(rulesPage);
+
+    // 3. Act: ゴミ箱アイコンをクリック
+    await clickDeleteButton(rulesPage, 0);
+    await waitForConfirmDialog(rulesPage);
+
+    // 4. Assert: ダイアログ内のボタンを取得
+    const cancelButton = rulesPage.locator('[data-testid="confirm-dialog-cancel-button"]');
+    const confirmButton = rulesPage.locator('[data-testid="confirm-dialog-confirm-button"]');
+
+    // 5. Assert: 初期フォーカスはキャンセルボタンにある
+    await expect(cancelButton).toBeFocused();
+
+    // 6. Act: Shift+Tabキーを押してフォーカスを逆方向に移動
+    await rulesPage.keyboard.press('Shift+Tab');
+
+    // 7. Assert: フォーカスが確認ボタンにループして移動（逆方向フォーカストラップ）
+    await expect(confirmButton).toBeFocused();
+
+    // 8. Act: もう一度Shift+Tabキーを押す
+    await rulesPage.keyboard.press('Shift+Tab');
+
+    // 9. Assert: フォーカスがキャンセルボタンに戻る
+    await expect(cancelButton).toBeFocused();
+
+    // 10. Cleanup: ダイアログを閉じる
+    await clickCancelButton(rulesPage);
+    await waitForConfirmDialogClosed(rulesPage);
+
+    // 11. Assert: コンソールエラーが発生していないことを確認
+    assertNoConsoleErrors(consoleMessages);
+  });
+
+  test('ダイアログ表示中は背景スクロールが無効化される', async ({
+    page,
+    popupPage,
+    rulesPage,
+  }) => {
+    // コンソールエラー監視をセットアップ
+    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
+
+    // 1. Arrange: ルールを保存
+    await saveRule(popupPage, page, {
+      oldString: '背景スクロールテスト',
+      newString: '置換後',
+    });
+
+    // 2. Arrange: ルール一覧ページをリロード
+    await reloadAndWaitForTable(rulesPage);
+
+    // 3. Assert: ダイアログ表示前はbodyにoverflow:hiddenがない
+    const bodyOverflowBefore = await rulesPage.evaluate(() => {
+      return window.getComputedStyle(document.body).overflow;
+    });
+    expect(bodyOverflowBefore).not.toBe('hidden');
+
+    // 4. Act: ゴミ箱アイコンをクリック
+    await clickDeleteButton(rulesPage, 0);
+    await waitForConfirmDialog(rulesPage);
+
+    // 5. Assert: ダイアログ表示中はbodyにoverflow:hiddenが設定される
+    const bodyOverflowDuring = await rulesPage.evaluate(() => {
+      return window.getComputedStyle(document.body).overflow;
+    });
+    expect(bodyOverflowDuring).toBe('hidden');
+
+    // 6. Act: ダイアログを閉じる
+    await clickCancelButton(rulesPage);
+    await waitForConfirmDialogClosed(rulesPage);
+
+    // 7. Assert: ダイアログを閉じた後はoverflow:hiddenが解除される
+    const bodyOverflowAfter = await rulesPage.evaluate(() => {
+      return window.getComputedStyle(document.body).overflow;
+    });
+    expect(bodyOverflowAfter).not.toBe('hidden');
+
+    // 8. Assert: コンソールエラーが発生していないことを確認
+    assertNoConsoleErrors(consoleMessages);
+  });
 });
