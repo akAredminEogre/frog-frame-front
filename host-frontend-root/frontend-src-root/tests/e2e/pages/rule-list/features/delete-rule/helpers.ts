@@ -46,8 +46,6 @@ export {
   getRuleIndexByOldString,
   getRuleOldString,
   hasRuleWithOldString,
-  isToastVisible,
   reloadAndWaitForEmptyState,
-  waitForErrorToast,
   waitForRuleCount,
 } from 'tests/e2e/pages/rule-list/features/delete-rule/rule-operations';
