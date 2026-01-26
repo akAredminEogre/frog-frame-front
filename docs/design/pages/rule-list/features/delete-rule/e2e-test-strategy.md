@@ -87,7 +87,9 @@
 | エラートースト | 削除失敗時にエラーメッセージがトースト表示される | ユーザーへのエラー通知を確認 |
 | トースト自動消去 | トースト通知が一定時間後に自動で消える | UI/UXが正しいことを確認 |
 
-**対応テスト**: `error-notification.spec.ts`
+**対応テスト**: (E2E検証困難、結合テストでカバー)
+
+> **Note**: E2Eテストでエラーを発生させるにはAPIモックが必要だが、E2Eでは実際の環境を使用するため技術的に困難。結合テストでカバーする。
 
 ## 受け入れ条件トレーサビリティ
 
@@ -98,10 +100,10 @@
 | AC-3: 削除実行 | 「削除」選択でルール削除 | normal-flow.spec.ts |
 | AC-4: キャンセル動作 | 「キャンセル」で何も起こらない | cancel-operation.spec.ts |
 | AC-5: 一覧から削除 | 削除されたルールが一覧から消える | normal-flow.spec.ts |
-| AC-6: エラー通知 | 失敗時にトースト表示 | error-notification.spec.ts |
+| AC-6: エラー通知 | 失敗時にトースト表示 | (E2E検証困難、結合テストでカバー) |
 | AC-7: タブリロード | 該当タブがリロードされる | (E2E検証困難、結合テストでカバー) |
 | AC-8: 重複削除防止 | 削除処理中はボタン無効化 | (Phase 2で実装後に追加) |
-| AC-9: 部分的成功 | 削除成功+リロード失敗時の動作 | error-notification.spec.ts |
+| AC-9: 部分的成功 | 削除成功+リロード失敗時の動作 | (E2E検証困難、結合テストでカバー) |
 | AC-10: 物理削除 | DBから物理削除 | persistence.spec.ts |
 | AC-11: 非同期処理 | 操作がブロックされない | (Phase 2で実装後に追加) |
 
@@ -111,20 +113,22 @@
 - [x] キャンセル操作
 - [x] DB永続化
 - [x] 複数ルール独立性
-- [x] エラー通知
+- [ ] エラー通知 → E2E検証困難、結合テストでカバー
 - [ ] 重複削除防止 → Phase 2で実装後に追加
 - [ ] 非同期処理 → Phase 2で実装後に追加
 
 ## テストファイル構成
 
 ```plaintext
-tests/e2e/delete-rule/
+tests/e2e/pages/rule-list/features/delete-rule/
+├── helpers.ts                 # 共有ヘルパー関数
 ├── normal-flow.spec.ts        # 正常操作フロー
 ├── cancel-operation.spec.ts   # キャンセル操作
 ├── persistence.spec.ts        # DB永続化
-├── independence.spec.ts       # 複数ルール独立性
-└── error-notification.spec.ts # エラー通知
+└── independence.spec.ts       # 複数ルール独立性
 ```
+
+> **Note**: エラー通知（error-notification.spec.ts）はE2E検証困難のため、結合テストでカバーする。
 
 ## テスト環境
 
