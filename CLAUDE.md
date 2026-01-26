@@ -41,7 +41,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - 単体テスト戦略書: `docs-rules/design/05-test-strategy.md`
 - 結合テスト戦略書: `docs-rules/design/06-integration-test-strategy.md`
-- E2Eテスト戦略書: `docs-rules/design/07-e2e-test-strategy.md`
+- E2Eテスト戦略書: `docs-rules/design/07-e2e-test-strategy/`
 
 ### ADRを作成・編集する場合
 
