@@ -238,6 +238,6 @@ export async function reloadAndWaitForEmptyState(
   timeout: number = PAGE_LOAD_TIMEOUT
 ): Promise<void> {
   await rulesPage.reload();
-  const emptyMessage = rulesPage.getByText('保存されたルールがありません');
-  await expect(emptyMessage).toBeVisible({ timeout });
+  const emptyState = rulesPage.locator('[data-testid="empty-state"]');
+  await expect(emptyState).toBeVisible({ timeout });
 }
