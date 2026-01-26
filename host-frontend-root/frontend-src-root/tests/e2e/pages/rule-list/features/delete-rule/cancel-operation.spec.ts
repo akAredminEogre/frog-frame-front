@@ -316,32 +316,38 @@ test.describe('ルール削除機能 - キャンセル操作', () => {
     // 2. Arrange: ルール一覧ページをリロード
     await reloadAndWaitForTable(rulesPage);
 
-    // 3. Assert: ダイアログ表示前はhtml要素にoverflow:hiddenがない
-    // React AriaのusePreventScrollはdocument.documentElementにスタイルを適用する
-    const htmlOverflowBefore = await rulesPage.evaluate(() => {
-      return window.getComputedStyle(document.documentElement).overflow;
+    // 3. Assert: ダイアログ表示前はスクロール防止が適用されていない
+    // usePreventScrollは環境によってhtmlまたはbodyにスタイルを適用するため両方チェック
+    const overflowBefore = await rulesPage.evaluate(() => {
+      const htmlOverflow = window.getComputedStyle(document.documentElement).overflow;
+      const bodyOverflow = window.getComputedStyle(document.body).overflow;
+      return { html: htmlOverflow, body: bodyOverflow };
     });
-    expect(htmlOverflowBefore).not.toBe('hidden');
+    expect(overflowBefore.html === 'hidden' || overflowBefore.body === 'hidden').toBe(false);
 
     // 4. Act: ゴミ箱アイコンをクリック
     await clickDeleteButton(rulesPage, 0);
     await waitForConfirmDialog(rulesPage);
 
-    // 5. Assert: ダイアログ表示中はhtml要素にoverflow:hiddenが設定される
-    const htmlOverflowDuring = await rulesPage.evaluate(() => {
-      return window.getComputedStyle(document.documentElement).overflow;
+    // 5. Assert: ダイアログ表示中はスクロール防止が適用される
+    const overflowDuring = await rulesPage.evaluate(() => {
+      const htmlOverflow = window.getComputedStyle(document.documentElement).overflow;
+      const bodyOverflow = window.getComputedStyle(document.body).overflow;
+      return { html: htmlOverflow, body: bodyOverflow };
     });
-    expect(htmlOverflowDuring).toBe('hidden');
+    expect(overflowDuring.html === 'hidden' || overflowDuring.body === 'hidden').toBe(true);
 
     // 6. Act: ダイアログを閉じる
     await clickCancelButton(rulesPage);
     await waitForConfirmDialogClosed(rulesPage);
 
-    // 7. Assert: ダイアログを閉じた後はoverflow:hiddenが解除される
-    const htmlOverflowAfter = await rulesPage.evaluate(() => {
-      return window.getComputedStyle(document.documentElement).overflow;
+    // 7. Assert: ダイアログを閉じた後はスクロール防止が解除される
+    const overflowAfter = await rulesPage.evaluate(() => {
+      const htmlOverflow = window.getComputedStyle(document.documentElement).overflow;
+      const bodyOverflow = window.getComputedStyle(document.body).overflow;
+      return { html: htmlOverflow, body: bodyOverflow };
     });
-    expect(htmlOverflowAfter).not.toBe('hidden');
+    expect(overflowAfter.html === 'hidden' || overflowAfter.body === 'hidden').toBe(false);
 
     // 8. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
