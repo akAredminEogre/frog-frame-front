@@ -316,31 +316,32 @@ test.describe('ルール削除機能 - キャンセル操作', () => {
     // 2. Arrange: ルール一覧ページをリロード
     await reloadAndWaitForTable(rulesPage);
 
-    // 3. Assert: ダイアログ表示前はbodyにoverflow:hiddenがない
-    const bodyOverflowBefore = await rulesPage.evaluate(() => {
-      return window.getComputedStyle(document.body).overflow;
+    // 3. Assert: ダイアログ表示前はhtml要素にoverflow:hiddenがない
+    // React Ariaのus ePreventScrollはdocument.documentElementにスタイルを適用する
+    const htmlOverflowBefore = await rulesPage.evaluate(() => {
+      return window.getComputedStyle(document.documentElement).overflow;
     });
-    expect(bodyOverflowBefore).not.toBe('hidden');
+    expect(htmlOverflowBefore).not.toBe('hidden');
 
     // 4. Act: ゴミ箱アイコンをクリック
     await clickDeleteButton(rulesPage, 0);
     await waitForConfirmDialog(rulesPage);
 
-    // 5. Assert: ダイアログ表示中はbodyにoverflow:hiddenが設定される
-    const bodyOverflowDuring = await rulesPage.evaluate(() => {
-      return window.getComputedStyle(document.body).overflow;
+    // 5. Assert: ダイアログ表示中はhtml要素にoverflow:hiddenが設定される
+    const htmlOverflowDuring = await rulesPage.evaluate(() => {
+      return window.getComputedStyle(document.documentElement).overflow;
     });
-    expect(bodyOverflowDuring).toBe('hidden');
+    expect(htmlOverflowDuring).toBe('hidden');
 
     // 6. Act: ダイアログを閉じる
     await clickCancelButton(rulesPage);
     await waitForConfirmDialogClosed(rulesPage);
 
     // 7. Assert: ダイアログを閉じた後はoverflow:hiddenが解除される
-    const bodyOverflowAfter = await rulesPage.evaluate(() => {
-      return window.getComputedStyle(document.body).overflow;
+    const htmlOverflowAfter = await rulesPage.evaluate(() => {
+      return window.getComputedStyle(document.documentElement).overflow;
     });
-    expect(bodyOverflowAfter).not.toBe('hidden');
+    expect(htmlOverflowAfter).not.toBe('hidden');
 
     // 8. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
