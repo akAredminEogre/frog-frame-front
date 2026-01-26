@@ -74,3 +74,55 @@ data-testid="btn1"            // 意味不明な名前
 ### eslint-rule
 
 ESLint化不可（HTMLテンプレート内の属性値の命名規則チェックは困難。PRレビューで確認）
+
+---
+
+## 3. 共通定数・ヘルパーの再利用
+
+### 規約
+
+- E2Eテスト用の共通定数・ヘルパー関数は `tests/e2e/helpers.ts` に定義されている
+- 新規ファイル作成時は、まず既存の共通定数を確認し再利用すること
+- 同じ値・用途の定数を複数ファイルで重複定義しないこと
+
+### 確認手順（必須）
+
+新規E2Eテストファイル作成前に以下を確認：
+
+```bash
+# 既存の定数・ヘルパーを確認
+cat tests/e2e/helpers.ts
+```
+
+### 既存の共通定数
+
+| 定数名 | 値 | 用途 |
+|--------|-----|------|
+| `DEFAULT_TIMEOUT` | 60000 | 要素の表示・入力待機 |
+| `RULES_TABLE_TIMEOUT` | 60000 | ルールテーブル表示待機 |
+| `DIALOG_TIMEOUT` | 60000 | ダイアログ待機 |
+| `TEST_SERVER_URL` | 環境変数または既定値 | テストサーバーのベースURL |
+
+### 既存の共通ヘルパー関数
+
+| 関数名 | 用途 |
+|--------|------|
+| `setupConsoleErrorMonitoring` | コンソールエラー監視のセットアップ |
+| `assertNoConsoleErrors` | コンソールエラーがないことの確認 |
+| `clearAllRules` | 全ルール削除（テストデータクリーンアップ） |
+| `reloadAndWaitForTable` | ページリロードしてテーブル表示を待機 |
+| `saveRule` | ポップアップからルールを保存 |
+
+### 例
+
+```typescript
+// ❌ 悪い例：既存定数と同じ値を重複定義
+export const PAGE_LOAD_TIMEOUT = 60000;  // DEFAULT_TIMEOUTと重複
+
+// ✅ 良い例：既存定数をインポートして使用
+import { DEFAULT_TIMEOUT } from 'tests/e2e/helpers';
+```
+
+### eslint-rule
+
+ESLint化不可（定数の意味的な重複はコード静的解析では判定困難。PRレビューで確認）
