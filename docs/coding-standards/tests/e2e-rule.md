@@ -83,20 +83,38 @@ ESLint化不可（HTMLテンプレート内の属性値の命名規則チェッ�
 
 ### 規約
 
-- E2Eテスト用の共通定数・ヘルパー関数は `tests/e2e/helpers.ts` に定義されている
-- 新規ファイル作成時は、まず既存の共通定数を確認し再利用すること
-- 同じ値・用途の定数を複数ファイルで重複定義しないこと
+E2Eテストのヘルパー・定数は**2層構造**で管理する：
+
+1. **グローバル共通** (`tests/e2e/helpers.ts`)
+   - 全E2Eテストで使用する汎用的な定数・ヘルパー
+   - 例: タイムアウト値、ルール保存、テーブル待機など
+
+2. **機能固有** (`tests/e2e/pages/{page}/features/{feature}/`)
+   - 特定機能のテストでのみ使用する定数・ヘルパー
+   - 例: 削除機能固有のダイアログ操作、ルール件数取得など
+
+### ヘルパー配置の判断基準
+
+| 条件 | 配置先 |
+|------|--------|
+| 複数の機能テストで使用される | `tests/e2e/helpers.ts` |
+| 単一機能のテストでのみ使用される | 機能ディレクトリ内 |
+| ページ共通だが機能横断的 | `tests/e2e/pages/{page}/helpers.ts`（必要に応じて作成） |
 
 ### 確認手順（必須）
 
 新規E2Eテストファイル作成前に以下を確認：
 
 ```bash
-# 既存の定数・ヘルパーを確認
+# 1. グローバル共通ヘルパーを確認
 cat tests/e2e/helpers.ts
+
+# 2. 該当機能のヘルパーを確認（機能ディレクトリが存在する場合）
+ls tests/e2e/pages/{page}/features/{feature}/
+cat tests/e2e/pages/{page}/features/{feature}/helpers.ts  # 存在する場合
 ```
 
-### 既存の共通定数
+### グローバル共通定数（tests/e2e/helpers.ts）
 
 | 定数名 | 値 | 用途 |
 |--------|-----|------|
@@ -105,7 +123,7 @@ cat tests/e2e/helpers.ts
 | `DIALOG_TIMEOUT` | 60000 | ダイアログ待機 |
 | `TEST_SERVER_URL` | 環境変数または既定値 | テストサーバーのベースURL |
 
-### 既存の共通ヘルパー関数
+### グローバル共通ヘルパー関数（tests/e2e/helpers.ts）
 
 | 関数名 | 用途 |
 |--------|------|
@@ -115,14 +133,33 @@ cat tests/e2e/helpers.ts
 | `reloadAndWaitForTable` | ページリロードしてテーブル表示を待機 |
 | `saveRule` | ポップアップからルールを保存 |
 
+### 機能固有ヘルパーの構成例
+
+```plaintext
+tests/e2e/pages/rule-list/features/delete-rule/
+├── helpers.ts              # 再エクスポートモジュール（import経路の一本化）
+├── constants.ts            # 機能固有の定数
+├── dialog-operations.ts    # ダイアログ操作ヘルパー
+└── rule-operations.ts      # ルールテーブル操作ヘルパー
+```
+
+機能固有ヘルパーが複数ファイルに分割される場合、`helpers.ts`で再エクスポートしてimport経路を一本化する。
+
 ### 例
 
 ```typescript
-// ❌ 悪い例：既存定数と同じ値を重複定義
+// ❌ 悪い例：グローバル共通定数と同じ値を重複定義
 export const PAGE_LOAD_TIMEOUT = 60000;  // DEFAULT_TIMEOUTと重複
 
-// ✅ 良い例：既存定数をインポートして使用
+// ✅ 良い例：グローバル共通定数をインポートして使用
 import { DEFAULT_TIMEOUT } from 'tests/e2e/helpers';
+
+// ✅ 良い例：機能固有ヘルパーは機能ディレクトリの helpers.ts からインポート
+import {
+  clickDeleteButton,
+  waitForConfirmDialog,
+  CONFIRM_DIALOG_TIMEOUT,
+} from 'tests/e2e/pages/rule-list/features/delete-rule/helpers';
 ```
 
 ### eslint-rule
