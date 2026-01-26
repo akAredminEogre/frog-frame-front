@@ -61,15 +61,12 @@ test.describe('ルール削除機能 - DB永続化', () => {
     // 5. Assert: 削除直後は0件
     await waitForRuleCount(rulesPage, 0);
 
-    // 6. Act: ページをリロード（ルール0件なので空状態メッセージを待機）
+    // 6. Act & Assert: ページをリロード（ルール0件なので空状態メッセージを待機）
+    // reloadAndWaitForEmptyStateがdata-testid="empty-state"の表示を検証済み
+    // これによりDBに永続化されていることを確認
     await reloadAndWaitForEmptyState(rulesPage);
 
-    // 7. Assert: リロード後も空状態が表示される（DBに永続化されている）
-    // 空状態メッセージが表示されていることで、ルールが存在しないことを確認
-    const emptyMessage = rulesPage.getByText('保存されたルールがありません');
-    await expect(emptyMessage).toBeVisible();
-
-    // 8. Assert: コンソールエラーが発生していないことを確認
+    // 7. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
 
