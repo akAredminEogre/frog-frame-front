@@ -156,3 +156,33 @@ const deleteButton = page.getByRole('button', { name: 'ルールを削除', exac
 ### eslint-rule
 
 ESLint化不可（Playwrightのオプション使用はコード静的解析では判定困難。PRレビューで確認）
+
+---
+
+## 5. ヘルパー関数使用時の重複アサーション禁止
+
+### 規約
+
+- アサーションを含むヘルパー関数を使用した後、同じ検証を重複して行わないこと
+- ヘルパー関数の内部実装を信頼する
+
+### 禁止事項
+
+- ヘルパー関数が既に行っている検証と同じ内容を再度アサーションすること
+  - テストコードが冗長になり、保守性が低下する
+
+### 例
+
+```typescript
+// ❌ 悪い例：waitForRuleCountが既にカウント検証を含むのに重複
+await waitForRuleCount(rulesPage, 0);
+const finalCount = await getRuleCount(rulesPage);
+expect(finalCount).toBe(0);  // 冗長
+
+// ✅ 良い例：ヘルパー関数に検証を委譲
+await waitForRuleCount(rulesPage, 0);
+```
+
+### eslint-rule
+
+ESLint化不可（ヘルパー関数の内部実装との重複はコード静的解析では判定困難。PRレビューで確認）
