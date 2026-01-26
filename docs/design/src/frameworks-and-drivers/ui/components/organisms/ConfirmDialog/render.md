@@ -112,8 +112,8 @@ WAI-ARIA Dialog Patternに必要な属性をテストする。
 - [x] オーバーレイクリック（2パターン）- ADR-007必須
 - [x] フォーカス管理（1パターン）- ADR-007必須
 - [ ] ポータルレンダリング → スタイリングのみ、ユニットテストでは検証困難
-- [ ] 背景スクロール無効化 → E2Eテストで検証
-- [ ] フォーカストラップ（Tab/Shift+Tab）→ E2Eテストで検証（React Aria FocusScope）
+- [x] 背景スクロール無効化 → E2Eテストで検証（delete-rule/cancel-operation.spec.ts）
+- [x] フォーカストラップ（Tab/Shift+Tab）→ E2Eテストで検証（delete-rule/cancel-operation.spec.ts）
 
 ## テストファイル構成
 
