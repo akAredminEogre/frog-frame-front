@@ -299,22 +299,6 @@ tests/
 - **ソースコード (`src/` 配下)**: `src/*` 起点
 - **テストコード (`tests/` 配下)**: `tests/*` 起点
 
-```typescript
-// ✅ Correct - ソースコード内
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-
-// ✅ Correct - テストコード内
-import { expect, test } from 'tests/e2e/fixtures';
-import { clearAllRules } from 'tests/e2e/helpers';
-
-// ❌ Wrong - 相対パス
-import { RewriteRule } from '../domain/entities/RewriteRule/RewriteRule';
-
-// ❌ Wrong - @エイリアス（非推奨）
-import { RewriteRule } from '@/domain/entities/RewriteRule/RewriteRule';
-```
-
 Path aliases configured in `tsconfig.json`:
 - `src/*` → `./src/*`
 - `tests/*` → `./tests/*`
