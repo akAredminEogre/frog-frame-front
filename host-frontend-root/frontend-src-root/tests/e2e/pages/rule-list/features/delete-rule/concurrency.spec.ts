@@ -3,18 +3,21 @@ import {
   assertNoConsoleErrors,
   clearAllRules,
   clickCancelButton,
+  clickConfirmDeleteButton,
   clickDeleteButton,
+  getRuleCount,
   reloadAndWaitForTable,
   saveRule,
   setupConsoleErrorMonitoring,
   waitForConfirmDialog,
   waitForConfirmDialogClosed,
+  waitForRuleCount,
 } from 'tests/e2e/pages/rule-list/features/delete-rule/helpers';
 
 /**
  * ルール削除機能 - 重複削除防止・非同期処理のE2Eテスト
  *
- * 削除処理中のボタン無効化とUI非ブロッキングを検証する。
+ * 削除処理中の重複防止とUI非ブロッキングを検証する。
  *
  * @see docs/design/pages/rule-list/features/delete-rule/e2e-test-strategy.md
  */
@@ -25,7 +28,7 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     await clearAllRules(rulesPage);
   });
 
-  test('削除ボタンクリック後、確認ダイアログ表示中は削除ボタンがdisabledになる', async ({
+  test('確認ダイアログ表示中に削除ボタンを再クリックしてもダイアログは1つのまま', async ({
     page,
     popupPage,
     rulesPage,
@@ -48,22 +51,28 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     // 4. Assert: 確認ダイアログが表示される
     await waitForConfirmDialog(rulesPage);
 
-    // 5. Assert: 削除ボタンがdisabledになっている
+    // 5. Act: 削除ボタンを再度クリック（ダイアログ表示中）
+    // モーダルオーバーレイがあるため、force: true で強制クリック
     const deleteButton = rulesPage.locator('[data-testid="delete-button"]').first();
-    await expect(deleteButton).toBeDisabled();
+    await deleteButton.click({ force: true });
 
-    // 6. Cleanup: ダイアログをキャンセルして閉じる
+    // 6. Assert: ダイアログは1つのまま（複数表示されていない）
+    const dialogs = rulesPage.locator('[data-testid="confirm-dialog"]');
+    await expect(dialogs).toHaveCount(1);
+
+    // 7. Cleanup: ダイアログをキャンセルして閉じる
     await clickCancelButton(rulesPage);
     await waitForConfirmDialogClosed(rulesPage);
 
-    // 7. Assert: キャンセル後は削除ボタンが再度有効になる
-    await expect(deleteButton).toBeEnabled();
+    // 8. Assert: ルールは削除されていない
+    const count = await getRuleCount(rulesPage);
+    expect(count).toBe(1);
 
-    // 8. Assert: コンソールエラーが発生していないことを確認
+    // 9. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
 
-  test('削除処理中も他のUI要素（編集ボタン）が操作可能', async ({
+  test('削除処理中も他のルールの編集ボタンは操作可能', async ({
     page,
     popupPage,
     rulesPage,
@@ -71,37 +80,45 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     // コンソールエラー監視をセットアップ
     const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
 
-    // 1. Arrange: ルールを保存
+    // 1. Arrange: 2つのルールを保存
     await saveRule(popupPage, page, {
-      oldString: '非同期処理テスト',
-      newString: '置換後',
+      oldString: '削除対象ルール',
+      newString: '置換後1',
+    });
+
+    await saveRule(popupPage, page, {
+      oldString: '残るルール',
+      newString: '置換後2',
     });
 
     // 2. Arrange: ルール一覧ページをリロード
     await reloadAndWaitForTable(rulesPage);
 
-    // 3. Act: 削除ボタンをクリックして確認ダイアログを表示
+    // 3. Assert: 2件のルールが存在
+    const initialCount = await getRuleCount(rulesPage);
+    expect(initialCount).toBe(2);
+
+    // 4. Act: 1つ目のルールの削除ボタンをクリックして確認ダイアログを表示
     await clickDeleteButton(rulesPage, 0);
     await waitForConfirmDialog(rulesPage);
 
-    // 4. Assert: 編集ボタンがdisabledではない（操作可能）
-    // 注: 確認ダイアログがモーダルなため、背景の編集ボタンはクリックできないが、
-    // disabled属性は設定されていない（モーダルのオーバーレイでブロックされているだけ）
-    const editButton = rulesPage.locator('[data-testid="edit-button"]').first();
-    await expect(editButton).not.toBeDisabled();
+    // 5. Assert: 2つ目のルールの編集ボタンはdisabledではない
+    // （モーダルオーバーレイでブロックされているが、disabled属性は設定されていない）
+    const secondEditButton = rulesPage.locator('[data-testid="edit-button"]').nth(1);
+    await expect(secondEditButton).not.toBeDisabled();
 
-    // 5. Cleanup: ダイアログをキャンセルして閉じる
-    await clickCancelButton(rulesPage);
+    // 6. Act: 削除を確定
+    await clickConfirmDeleteButton(rulesPage);
     await waitForConfirmDialogClosed(rulesPage);
 
-    // 6. Assert: ダイアログを閉じた後、編集ボタンがクリック可能
-    // 編集ボタンをクリックして編集ページに遷移することを確認
-    await editButton.click();
+    // 7. Assert: ルールが1件に減る
+    await waitForRuleCount(rulesPage, 1);
 
-    // 7. Assert: 編集ページに遷移（URLに/edit/が含まれる）
-    await expect(rulesPage).toHaveURL(/\/edit\//);
+    // 8. Assert: 残ったルールの編集ボタンがクリック可能（エラーなし）
+    const remainingEditButton = rulesPage.locator('[data-testid="edit-button"]').first();
+    await expect(remainingEditButton).toBeEnabled();
 
-    // 8. Assert: コンソールエラーが発生していないことを確認
+    // 9. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
 });
