@@ -117,28 +117,30 @@ focusTrapCases.forEach(({ name, oldString, keySequence, expectedFocusOrder }) =>
 
 ### 配列化テストファイルの純粋性
 
-**重要**: 配列化テストを使用するファイルには、配列化テスト以外のテストコードを混在させてはならない。
+**重要**: 
+1. 配列化テストを使用するファイルには、配列化テスト以外のテストコードを混在させてはならない
+2. 1つのファイルに含められる配列化テストは1つまで
 
 #### 理由
 
 - **一貫性**: ファイル内のテスト構造を統一
 - **可読性**: テストの意図が明確になる
 - **保守性**: パターンの混在による混乱を防ぐ
+- **責務の明確化**: 1ファイル1目的の原則を維持
 
 #### 実装方法
 
 ```typescript
-// ✅ 良い例: focus-trap.spec.ts（配列化テストのみ）
+// ✅ 良い例: focus-trap.spec.ts（1つの配列化テストのみ）
 test.describe('フォーカストラップ', () => {
-  const testCases = [...];
-  testCases.forEach(({ name, ... }) => {
+  const focusTrapCases = [...];
+  focusTrapCases.forEach(({ name, ... }) => {
     test(name, async () => { ... });
   });
 });
 
-// ❌ 悪い例: 配列化テストと個別テストの混在
+// ❌ 悪い例1: 配列化テストと個別テストの混在
 test.describe('機能テスト', () => {
-  // 配列化テスト
   const testCases = [...];
   testCases.forEach(({ name, ... }) => {
     test(name, async () => { ... });
@@ -146,6 +148,21 @@ test.describe('機能テスト', () => {
   
   // 個別テスト（禁止）
   test('別のテスト', async () => { ... });
+});
+
+// ❌ 悪い例2: 複数の配列化テスト
+test.describe('機能テスト', () => {
+  // 1つ目の配列化テスト
+  const testCases1 = [...];
+  testCases1.forEach(({ name, ... }) => {
+    test(name, async () => { ... });
+  });
+  
+  // 2つ目の配列化テスト（禁止）
+  const testCases2 = [...];
+  testCases2.forEach(({ name, ... }) => {
+    test(name, async () => { ... });
+  });
 });
 ```
 
