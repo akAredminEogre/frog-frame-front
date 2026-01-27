@@ -28,20 +28,18 @@ describe('DexieRewriteRuleRepository.getById - 正常系', () => {
 
   it('should return RewriteRule instance when rule with specified ID exists', async () => {
     // Arrange
-    const rule1 = new RewriteRule(
-      1,
-      'pattern1',
-      'replacement1',
-      '',
-      false
-    );
-    const rule2 = new RewriteRule(
-      2,
-      'pattern2',
-      'replacement2',
-      'https://example.com',
-      true
-    );
+    const rule1 = RewriteRule.fromParams(1, {
+      oldString: 'pattern1',
+      newString: 'replacement1',
+      urlPattern: '',
+      isRegex: false,
+    });
+    const rule2 = RewriteRule.fromParams(2, {
+      oldString: 'pattern2',
+      newString: 'replacement2',
+      urlPattern: 'https://example.com',
+      isRegex: true,
+    });
 
     await repository.create(rule1);
     await repository.create(rule2);
@@ -66,14 +64,13 @@ describe('DexieRewriteRuleRepository.getById - 正常系', () => {
 
   it('should correctly retrieve rule with all properties', async () => {
     // Arrange
-    const ruleWithAllProps = new RewriteRule(
-      3,
-      'old',
-      'new',
-      'https://test.com/*',
-      true,
-      false
-    );
+    const ruleWithAllProps = RewriteRule.fromParams(3, {
+      oldString: 'old',
+      newString: 'new',
+      urlPattern: 'https://test.com/*',
+      isRegex: true,
+      isActive: false,
+    });
 
     await repository.create(ruleWithAllProps);
 

@@ -40,13 +40,12 @@ describe('Tab.matchesRule - 正常系', () => {
   testCases.forEach((testCase) => {
     it(testCase.description, () => {
       const tab = new Tab(1, testCase.input.tabUrl);
-      const rule = new RewriteRule(
-        1,
-        'oldText',
-        'newText',
-        testCase.input.urlPattern,
-        false
-      );
+      const rule = RewriteRule.fromParams(1, {
+        oldString: 'oldText',
+        newString: 'newText',
+        urlPattern: testCase.input.urlPattern,
+        isRegex: false,
+      });
 
       const result = tab.matchesRule(rule);
       expect(result).toBe(testCase.expected.result);

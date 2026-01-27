@@ -47,13 +47,12 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         urlPattern: 'https://example.com',
         isRegex: false
       },
-      expectedRule: new RewriteRule(
-        1,
-        'oldText',
-        'newText',
-        'https://example.com',
-        false
-      ),
+      expectedRule: RewriteRule.fromParams(1, {
+        oldString: 'oldText',
+        newString: 'newText',
+        urlPattern: 'https://example.com',
+        isRegex: false,
+      }),
     },
     {
       description: '正規表現を含むルールが正常に更新できる',
@@ -64,13 +63,12 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         urlPattern: 'https://example.com',
         isRegex: true
       },
-      expectedRule: new RewriteRule(
-        2,
-        '\\d{4}-\\d{13}',
-        '<a href="https://example.com/$1">$1</a>',
-        'https://example.com',
-        true
-      ),
+      expectedRule: RewriteRule.fromParams(2, {
+        oldString: '\\d{4}-\\d{13}',
+        newString: '<a href="https://example.com/$1">$1</a>',
+        urlPattern: 'https://example.com',
+        isRegex: true,
+      }),
     },
     {
       description: 'URLパターンを持つルールが正常に更新できる',
@@ -81,13 +79,12 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         urlPattern: 'https://.*\\.example\\.com/.*',
         isRegex: false
       },
-      expectedRule: new RewriteRule(
-        3,
-        'search',
-        'replace',
-        'https://.*\\.example\\.com/.*',
-        false
-      ),
+      expectedRule: RewriteRule.fromParams(3, {
+        oldString: 'search',
+        newString: 'replace',
+        urlPattern: 'https://.*\\.example\\.com/.*',
+        isRegex: false,
+      }),
     },
   ])('$description', async ({ id, params, expectedRule }) => {
     // Arrange

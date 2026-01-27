@@ -30,7 +30,7 @@ describe('DomDiffer - DOM Structure Preservation', () => {
       // Store reference to preserved element
       const preservedElement = container.querySelector('#keep-me');
 
-      const rule = new RewriteRule(1, '<div>Replace me</div>', '<span>Replaced!</span>', '');
+      const rule = RewriteRule.fromParams(1, { oldString: '<div>Replace me</div>', newString: '<span>Replaced!</span>', urlPattern: '', isRegex: false });
       const domDiffer = new DomDiffer(container, rule);
       domDiffer.applyRule(mockElementFactory);
 

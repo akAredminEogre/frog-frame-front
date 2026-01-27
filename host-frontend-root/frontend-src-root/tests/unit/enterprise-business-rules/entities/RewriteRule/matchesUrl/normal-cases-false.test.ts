@@ -52,12 +52,12 @@ describe('RewriteRule.matchesUrl - 正常系 (falseを返すケース)', () => {
       const oldKeyword = 'old';
       const newKeyword = 'new';
 
-      const rule = new RewriteRule(
-        ruleId,
-        oldKeyword,
-        newKeyword,
-        testCase.input.urlPattern
-      );
+      const rule = RewriteRule.fromParams(ruleId, {
+        oldString: oldKeyword,
+        newString: newKeyword,
+        urlPattern: testCase.input.urlPattern,
+        isRegex: false,
+      });
 
       // このファイルは全てfalseを期待するテスト
       const expectedResult = false;

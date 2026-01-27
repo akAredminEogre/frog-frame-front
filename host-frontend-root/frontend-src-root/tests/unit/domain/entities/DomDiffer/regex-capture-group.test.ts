@@ -83,7 +83,7 @@ describe('DomDiffer - 正規表現キャプチャグループ置換', () => {
     it(description, () => {
       // Arrange
       container.innerHTML = input.initialHtml;
-      const rule = new RewriteRule(1, input.oldString, input.newString, '', true);
+      const rule = RewriteRule.fromParams(1, { oldString: input.oldString, newString: input.newString, urlPattern: '', isRegex: true });
 
       // Act
       const domDiffer = new DomDiffer(container, rule);

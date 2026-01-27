@@ -69,7 +69,7 @@ describe('DomDiffer - Basic Replacement', () => {
     it(description, () => {
       container.innerHTML = input.initialHtml;
 
-      const rule = new RewriteRule(1, input.oldString, input.newString, '');
+      const rule = RewriteRule.fromParams(1, { oldString: input.oldString, newString: input.newString, urlPattern: '', isRegex: false });
       const domDiffer = new DomDiffer(container, rule);
       domDiffer.applyRule(mockElementFactory);
 

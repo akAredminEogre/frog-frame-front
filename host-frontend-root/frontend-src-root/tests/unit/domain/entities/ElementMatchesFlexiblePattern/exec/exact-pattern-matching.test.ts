@@ -178,13 +178,12 @@ describe('ElementMatchesFlexiblePattern.exec() - Exact Pattern Matching (isRegex
       container.innerHTML = testCase.input.elementHTML;
       const element = container.firstElementChild!;
       
-      const rule = new RewriteRule(
-        1,
-        testCase.input.rule.oldString,
-        testCase.input.rule.newString,
-        testCase.input.rule.urlPattern,
-        testCase.input.rule.isRegex
-      );
+      const rule = RewriteRule.fromParams(1, {
+        oldString: testCase.input.rule.oldString,
+        newString: testCase.input.rule.newString,
+        urlPattern: testCase.input.rule.urlPattern,
+        isRegex: testCase.input.rule.isRegex,
+      });
       const matcher = new ElementMatchesFlexiblePattern(element, rule);
       
       // Act
