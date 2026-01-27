@@ -9,3 +9,4 @@
 | [cross-document-consistency.md](./cross-document-consistency.md) | 関連ドキュメント間の一貫性 |
 | [internal-consistency.md](./internal-consistency.md) | ドキュメント内整合性チェック |
 | [directory-diagrams.md](./directory-diagrams.md) | ディレクトリ構成図のルール |
+| [document-refactoring.md](./document-refactoring.md) | ファイル名変更・分割・統合時の同期ルール |

@@ -182,7 +182,7 @@ function RulesApp() {
         />
       )}
 
-      <div className="footer">
+      <div className="footer" data-testid="rules-footer">
         <p>合計 {rules.length} 件のルールが保存されています</p>
       </div>
 

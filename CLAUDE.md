@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 新規メソッド/クラスを追加する場合
 
 1. [ ] **テスト戦略書を先に作成**（`docs/design/src/[layer]/.../[methodName].md`）
-   - テンプレート: `docs-rules/design/05-test-strategy.md`
+   - テンプレートは「docs/design/ 配下の設計ドキュメントを作成・編集する場合」セクションを参照
    - **既存モック確認チェック**セクションを必ず記載すること
 2. [ ] 実装コードを作成
 3. [ ] **既存モック検索を実行**（テストコード実装前）
@@ -36,6 +36,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### docs/design/ 配下の設計ドキュメントを作成・編集する場合
 
 → [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
+
+**テンプレート**: `docs-rules/design/` 配下の各ルールファイルに従うこと
+
+- 単体テスト戦略書: `docs-rules/design/05-test-strategy.md`
+- 結合テスト戦略書: `docs-rules/design/06-integration-test-strategy.md`
+- E2Eテスト戦略書: `docs-rules/design/07-e2e-test-strategy/`
+
+### E2E specファイルを分割・統合・リネームする場合
+
+→ [.AI/tests/e2e/consistency-maintenance-guideline.md](.AI/tests/e2e/consistency-maintenance-guideline.md) を参照
 
 ### ADRを作成・編集する場合
 
@@ -296,22 +306,17 @@ tests/
 
 ## Import Path Rules
 
-**CRITICAL**: All imports MUST use absolute paths starting from `src`:
+**CRITICAL**: All imports MUST use absolute paths with configured aliases:
 
-```typescript
-// ✅ Correct
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-
-// ❌ Wrong
-import { RewriteRule } from '../domain/entities/RewriteRule/RewriteRule';
-import { RewriteRule } from '@/domain/entities/RewriteRule/RewriteRule';
-```
+- **ソースコード (`src/` 配下)**: `src/*` 起点
+- **テストコード (`tests/` 配下)**: `tests/*` 起点
 
 Path aliases configured in `tsconfig.json`:
 - `src/*` → `./src/*`
 - `tests/*` → `./tests/*`
 - `entrypoints/*` → `./src/entrypoints/*`
+
+詳細は `docs/coding-standards/tests/common-rule.md` を参照してください。
 
 ## Object-Oriented Design Rules (ThoughtWorks Anthology)
 
@@ -329,10 +334,10 @@ See `docs/coding-standards/src/object-oriented-nine-rules.md` for the 9 rules an
 
 ### Test Strategy Document (Required)
 
-**CRITICAL**: Before writing any test code, create a test strategy document following `docs-rules/design/05-test-strategy.md`.
+**CRITICAL**: Before writing any test code, create a test strategy document following the templates in `docs-rules/design/`.
 
 - **Location**: `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md` (mirrors src/ structure)
-- **Required sections**: 目的、テスト分類、網羅性チェック、テストファイル構成
+- **Templates**: 「docs/design/ 配下の設計ドキュメントを作成・編集する場合」セクションを参照
 - **Workflow**: テスト戦略書作成 → テストコード実装
 
 ### テストを伴う実装時のTodoWrite使用

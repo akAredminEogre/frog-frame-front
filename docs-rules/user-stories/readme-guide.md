@@ -150,7 +150,7 @@ Skeleton作成と並行して、以下のテスト戦略書を設計ドキュメ
 | 戦略書 | 配置先 | 参照ルール |
 |-------|--------|-----------|
 | 結合テスト戦略書 | `docs/design/pages/{page}/features/{feature}/integration-test-strategy.md` | [06-integration-test-strategy.md](../design/06-integration-test-strategy.md) |
-| E2Eテスト戦略書 | `docs/design/pages/{page}/features/{feature}/e2e-test-strategy.md` | [07-e2e-test-strategy.md](../design/07-e2e-test-strategy.md) |
+| E2Eテスト戦略書 | `docs/design/pages/{page}/features/{feature}/e2e-test-strategy.md` | [07-e2e-test-strategy/format-guideline.md](../design/07-e2e-test-strategy/format-guideline.md) |
 
 #### Phase 2: 実装・単体テスト戦略書・単体テスト
 
@@ -238,6 +238,30 @@ README.mdのタスクチェックリストに進捗があった場合、`network
 - タスクの依存関係と進捗状況を視覚的に把握できる
 - ドキュメント間の整合性を維持する
 - プロジェクト全体の進捗を一目で確認できる
+
+### 結合テスト・E2Eテスト実装時の戦略書リンク記載
+
+結合テスト・E2Eテストを実装する際は、README.mdにチェックリストを直接記載するのではなく、該当するテスト戦略書へのリンクを記載すること。
+
+#### 記載方法
+
+```markdown
+#### 結合テスト
+
+- [ ] 結合テスト戦略書に基づくテスト実装完了
+  - 詳細: [integration-test-strategy.md](../../design/pages/{page}/features/{feature}/integration-test-strategy.md)
+
+#### E2Eテスト
+
+- [x] E2Eテスト戦略書に基づくテスト実装完了
+  - 詳細: [e2e-test-strategy.md](../../design/pages/{page}/features/{feature}/e2e-test-strategy.md)
+```
+
+#### 理由
+
+- WET（Write Everything Twice）を避けられる
+- テスト戦略書との整合性チェックが不要になる
+- テストケースの管理が一元化される
 
 ## 完了時の更新
 
