@@ -71,7 +71,7 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     assertNoConsoleErrors(consoleMessages);
   });
 
-  test('削除処理中も他のルールの編集ボタンは操作可能', async ({
+  test('削除確認ダイアログ表示中も他のルールの編集ボタンはdisabledにならない', async ({
     page,
     popupPage,
     rulesPage,
