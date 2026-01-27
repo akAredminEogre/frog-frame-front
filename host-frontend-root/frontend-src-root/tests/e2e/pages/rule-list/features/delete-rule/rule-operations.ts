@@ -29,12 +29,19 @@ export async function getRuleCount(rulesPage: Page): Promise<number> {
  * @param rulesPage - ルール一覧ページ
  * @param ruleIndex - ルールのインデックス（0始まり）
  * @returns ルールのoldString値（前後の空白を除去済み）
+ * @throws Error - 指定されたインデックスの行が見つからない場合
  */
 export async function getRuleOldString(
   rulesPage: Page,
   ruleIndex: number
 ): Promise<string> {
   const rows = rulesPage.locator('[data-testid="rules-table"] tbody tr');
+  const count = await rows.count();
+
+  if (ruleIndex < 0 || ruleIndex >= count) {
+    throw new Error(`ルール行が見つかりません: index=${ruleIndex}, 存在する行数=${count}`);
+  }
+
   const row = rows.nth(ruleIndex);
   const oldStringCell = row.locator('[data-testid="rule-old-string"]');
   await expect(oldStringCell).toBeVisible({ timeout: ELEMENT_VISIBILITY_TIMEOUT });
