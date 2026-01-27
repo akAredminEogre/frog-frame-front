@@ -43,6 +43,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 結合テスト戦略書: `docs-rules/design/06-integration-test-strategy.md`
 - E2Eテスト戦略書: `docs-rules/design/07-e2e-test-strategy/`
 
+### E2E specファイルを分割・統合・リネームする場合
+
+→ [.AI/tests/e2e/consistency-maintenance-guideline.md](.AI/tests/e2e/consistency-maintenance-guideline.md) を参照
+
 ### ADRを作成・編集する場合
 
 → [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照

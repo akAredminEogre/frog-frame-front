@@ -13,7 +13,7 @@ E2Eテスト（Playwright）に適用されるルール。
 | [interaction-rules.md](./interaction-rules.md) | click()とdispatchEvent()の使い分け、連続クリックテスト |
 | [text-extraction-rules.md](./text-extraction-rules.md) | textContent()のtrim()正規化、innerText()との違い |
 | [array-based-test-guideline.md](./array-based-test-guideline.md) | 配列ベーステストの判断基準、実装パターン、注意事項 |
-| [consistency-maintenance-guideline.md](../../../../docs-rules/coding-standards/tests/e2e/consistency-maintenance-guideline.md) | ルール追加時の一貫性維持、specファイル変更時の戦略書同期 |
+| [consistency-maintenance-guideline.md](../../../../docs-rules/coding-standards/tests/e2e/consistency-maintenance-guideline.md) | ルール追加時の一貫性維持 |
 
 ## 概要
 
@@ -26,6 +26,7 @@ E2Eテストコードを書く際は、以下の観点でルールに従うこ�
 5. **インタラクション**: 連続クリックテストには`dispatchEvent`を使用
 6. **テキスト取得**: `textContent()`は`trim()`で正規化
 7. **配列ベーステスト**: 類似テストケースは配列化して実装
-8. **一貫性維持**: 新ルール追加時は同じPR内で適用、specファイル変更時は戦略書同期
+8. **一貫性維持**: 新ルール追加時は同じPR内で適用
 
 詳細なガイドラインは [consistency-maintenance-guideline.md](../../../../docs-rules/coding-standards/tests/e2e/consistency-maintenance-guideline.md) を参照。
+specファイル変更時のテスト戦略書同期は [.AI/tests/e2e/consistency-maintenance-guideline.md](../../../../.AI/tests/e2e/consistency-maintenance-guideline.md) を参照。
