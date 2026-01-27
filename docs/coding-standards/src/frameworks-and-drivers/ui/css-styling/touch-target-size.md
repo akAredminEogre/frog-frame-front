@@ -37,8 +37,9 @@
 }
 ```
 
-## ESLint化について
+## stylelint について
 
-ESLint化不可（CSSファイル内のサイズ値検証はstylelintの領域。stylelint未導入のためPRレビューで確認）
+`min-width`/`min-height` の値が 44px 以上かを検証する stylelint 標準ルールは存在しない。
+カスタムプラグインの開発で対応可能だが、現時点ではコスト対効果の観点から見送り。
 
-→ [User Story 010: stylelint導入](../../../../user-stories/user-story-010/README.md)
+現時点では PR レビューで確認する。
