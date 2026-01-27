@@ -11,22 +11,26 @@ import {
 /**
  * 指定インデックスのルールの削除ボタンをクリックする
  *
+ * 行にスコープしてから削除ボタンを取得することで、
+ * 将来同名ボタンが増えた場合の誤取得を防ぐ。
+ *
  * @param rulesPage - ルール一覧ページ
  * @param ruleIndex - ルールのインデックス（0始まり）
- * @throws Error - 指定されたインデックスの削除ボタンが見つからない場合
+ * @throws Error - 指定されたインデックスの行が見つからない場合
  */
 export async function clickDeleteButton(
   rulesPage: Page,
   ruleIndex: number
 ): Promise<void> {
-  const deleteButtons = rulesPage.getByRole('button', { name: 'ルールを削除', exact: true });
-  const count = await deleteButtons.count();
+  const rows = rulesPage.locator('[data-testid="rules-table"] tbody tr');
+  const count = await rows.count();
 
   if (ruleIndex < 0 || ruleIndex >= count) {
-    throw new Error(`削除ボタンが見つかりません: index=${ruleIndex}, 存在する要素数=${count}`);
+    throw new Error(`ルール行が見つかりません: index=${ruleIndex}, 存在する行数=${count}`);
   }
 
-  const deleteButton = deleteButtons.nth(ruleIndex);
+  const row = rows.nth(ruleIndex);
+  const deleteButton = row.locator('[data-testid="delete-button"]');
   await expect(deleteButton).toBeVisible({ timeout: ELEMENT_VISIBILITY_TIMEOUT });
   await deleteButton.click();
 }
