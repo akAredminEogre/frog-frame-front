@@ -29,12 +29,12 @@ describe('DexieRewriteRuleRepository.create - 異常系', () => {
 
   it('should throw error when trying to add record with existing ID', async () => {
     // Arrange
-    const firstRule = new RewriteRule(
-      1,
-      'pattern1',
-      'replacement1',
-      ''
-    );
+    const firstRule = RewriteRule.fromParams(1, {
+      oldString: 'pattern1',
+      newString: 'replacement1',
+      urlPattern: '',
+      isRegex: false,
+    });
 
     // 最初のルールを作成してIDを取得
     await repository.create(firstRule);

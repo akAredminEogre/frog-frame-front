@@ -15,14 +15,13 @@ describe('RewriteRule.withActive - プロパティ維持', () => {
     const isRegex = true;
     const initialIsActive = true;
 
-    const originalRule = new RewriteRule(
-      ruleId,
+    const originalRule = RewriteRule.fromParams(ruleId, {
       oldString,
       newString,
       urlPattern,
       isRegex,
-      initialIsActive
-    );
+      isActive: initialIsActive,
+    });
 
     const newRule = originalRule.withActive(false);
 

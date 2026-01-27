@@ -32,12 +32,12 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
     await dexieDatabase.rewriteRules.clear();
 
     repository = new DexieRewriteRuleRepository();
-    testRule = new RewriteRule(
-      1,
-      'test-pattern',
-      'test-replacement',
-      ''
-    );
+    testRule = RewriteRule.fromParams(1, {
+      oldString: 'test-pattern',
+      newString: 'test-replacement',
+      urlPattern: '',
+      isRegex: false,
+    });
   });
 
   afterEach(async () => {
@@ -46,13 +46,12 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
 
   it('should correctly add new rule to existing rules and return Promise', async () => {
     // Arrange
-    const existingRule = new RewriteRule(
-      2,
-      'existing-pattern',
-      'existing-replacement',
-      '',
-      false
-    );
+    const existingRule = RewriteRule.fromParams(2, {
+      oldString: 'existing-pattern',
+      newString: 'existing-replacement',
+      urlPattern: '',
+      isRegex: false,
+    });
 
     // 既存データを追加
     await repository.create(existingRule);
@@ -99,14 +98,13 @@ describe('DexieRewriteRuleRepository.create - 正常系', () => {
 
   it('should correctly create rule with all properties', async () => {
     // Arrange
-    const ruleWithAllProps = new RewriteRule(
-      3,
-      'old',
-      'new',
-      'https://test.com/*',
-      true,
-      false
-    );
+    const ruleWithAllProps = RewriteRule.fromParams(3, {
+      oldString: 'old',
+      newString: 'new',
+      urlPattern: 'https://test.com/*',
+      isRegex: true,
+      isActive: false,
+    });
 
     // Act
     await repository.create(ruleWithAllProps);

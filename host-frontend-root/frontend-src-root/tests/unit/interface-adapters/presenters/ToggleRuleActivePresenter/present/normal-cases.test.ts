@@ -41,14 +41,13 @@ describe('ToggleRuleActivePresenter.present - 正常系（コールバック呼�
       const urlPattern = 'https://example.com';
       const isRegex = false;
 
-      const toggledRule = new RewriteRule(
-        ruleId,
+      const toggledRule = RewriteRule.fromParams(ruleId, {
         oldString,
         newString,
         urlPattern,
         isRegex,
-        testCase.input.isActive
-      );
+        isActive: testCase.input.isActive,
+      });
       const outputData = new ToggleRuleActiveOutputData(toggledRule);
       const mockUpdateRuleInView = vi.fn();
       const mockShowErrorInView = vi.fn();
