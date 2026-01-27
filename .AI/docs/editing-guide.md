@@ -2,7 +2,10 @@
 
 ## 基本原則
 
-`docs/` 配下のドキュメントを作成・編集する際は、対応する `docs-rules/` 配下のガイドラインに従うこと。
+`docs/` 配下のドキュメントを作成・編集する際は、以下の2種類のガイドラインに従うこと：
+
+1. **全ドキュメント共通のガイドライン**: `docs-rules/` 直下に定められているルール（`docs-rules/common/index.md` 等）
+2. **カテゴリ固有のガイドライン**: 作成・編集するディレクトリに対応する `docs-rules/` 以下のディレクトリに定められているルール（例: `docs/coding-standards/` → `docs-rules/coding-standards.md` および `docs-rules/coding-standards/`）
 
 ### ガイドラインの階層
 
