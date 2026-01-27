@@ -129,7 +129,7 @@ WAI-ARIA Dialog Modal Pattern（ADR-007）に準拠したアクセシビリテ�
 | AC-5: 一覧から削除 | 削除されたルールが一覧から消える | normal-flow.spec.ts |
 | AC-6: エラー通知 | 失敗時にトースト表示 | 結合: `tests/integration/delete-rule/error-cases.test.ts` |
 | AC-7: タブリロード | 該当タブがリロードされる | 結合: `tests/integration/delete-rule/normal-cases.test.ts` |
-| AC-8: 重複削除防止 | 削除処理中はボタン無効化 | concurrency.spec.ts |
+| AC-8: 重複削除防止 | 確認ダイアログ表示中の再クリックでもダイアログは1つのまま | concurrency.spec.ts |
 | AC-9: 部分的成功 | 削除成功+リロード失敗時の動作 | 結合: `tests/integration/delete-rule/partial-success.test.ts` |
 | AC-10: 物理削除 | DBから物理削除 | persistence.spec.ts |
 | AC-11: 非同期処理 | 操作がブロックされない | concurrency.spec.ts |
