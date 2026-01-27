@@ -46,9 +46,11 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     await reloadAndWaitForTable(rulesPage);
 
     // 3. Act: 削除ボタンを素早く2回クリック（ダイアログ表示を待たずに）
+    // dispatchEventを使用することで、actionabilityチェックを回避し
+    // オーバーレイ表示前に複数クリックをシミュレートする
     const deleteButton = rulesPage.locator('[data-testid="delete-button"]').first();
-    await deleteButton.click();
-    await deleteButton.click();
+    await deleteButton.dispatchEvent('click');
+    await deleteButton.dispatchEvent('click');
 
     // 4. Assert: 確認ダイアログが表示される
     await waitForConfirmDialog(rulesPage);
