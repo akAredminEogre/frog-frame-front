@@ -23,8 +23,9 @@
 @import 'src/components/tokens.module.css';
 ```
 
-## ESLint化について
+## stylelint ルールファイル
 
-ESLint化不可（CSSファイル内のインポートパス検証はstylelintの領域。stylelint未導入のためPRレビューで確認）
+`stylelint-rules/import-paths.js`
 
-→ [User Story 010: stylelint導入](../../../../user-stories/user-story-010/README.md)
+stylelint の標準ルールセットには `@import` パスの検証ルールがないため、
+現時点では PR レビューで確認する。将来的にカスタムルールやプラグインで自動検証を検討。

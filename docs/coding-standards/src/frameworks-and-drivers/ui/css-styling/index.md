@@ -16,4 +16,7 @@ UI コンポーネントの CSS スタイリングに関する規約。
 ## 関連ドキュメント
 
 - `src/components/tokens.module.css` - デザイントークン定義ファイル
-- [User Story 010: stylelint導入](../../../../user-stories/user-story-010/README.md) - stylelintによる自動検証
+- `stylelint-rules/` - stylelint ルール設定ディレクトリ
+  - `base.js` - 基本設定（stylelint-config-standard 拡張）
+  - `css-modules.js` - CSS Modules 対応ルール
+  - `import-paths.js` - インポートパスルール（ドキュメント紐づけ）
