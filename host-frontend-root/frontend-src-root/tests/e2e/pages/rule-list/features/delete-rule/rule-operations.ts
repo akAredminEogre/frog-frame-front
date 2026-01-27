@@ -23,9 +23,12 @@ export async function getRuleCount(rulesPage: Page): Promise<number> {
 /**
  * 指定インデックスのルールのoldString値を取得する
  *
+ * textContent()はReactのレンダリングで生じる改行・インデントを含む可能性があるため、
+ * trim()で正規化して返す。
+ *
  * @param rulesPage - ルール一覧ページ
  * @param ruleIndex - ルールのインデックス（0始まり）
- * @returns ルールのoldString値
+ * @returns ルールのoldString値（前後の空白を除去済み）
  */
 export async function getRuleOldString(
   rulesPage: Page,
@@ -35,7 +38,8 @@ export async function getRuleOldString(
   const row = rows.nth(ruleIndex);
   const oldStringCell = row.locator('[data-testid="rule-old-string"]');
   await expect(oldStringCell).toBeVisible({ timeout: ELEMENT_VISIBILITY_TIMEOUT });
-  return await oldStringCell.textContent() || '';
+  const text = await oldStringCell.textContent();
+  return (text || '').trim();
 }
 
 /**
