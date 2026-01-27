@@ -104,3 +104,62 @@ const deleteButton = page.getByRole('button', { name: 'ルールを削除', exac
 ### eslint-rule
 
 ESLint化不可（Playwrightのオプション使用はコード静的解析では判定困難。PRレビューで確認）
+
+---
+
+## 4. data-testid追加時のヘルパー更新
+
+### 規約
+
+コンポーネントに`data-testid`を追加した場合、**関連するE2Eヘルパー関数のセレクタも更新すること**。
+
+### 理由
+
+- `data-testid`を追加しても、ヘルパーが古いセレクタ（`getByRole`等）を使用していると、優先順位ルールに違反する
+- 新旧セレクタの混在は保守性を下げる
+
+### チェックリスト
+
+コンポーネントに`data-testid`を追加したら：
+
+- [ ] 該当要素を使用するE2Eヘルパー関数を検索（`grep -r "getByRole.*該当ボタン名"` 等）
+- [ ] ヘルパー関数のセレクタを`data-testid`に更新
+- [ ] テストが引き続きパスすることを確認
+
+### 例
+
+```typescript
+// コンポーネントに data-testid="delete-button" を追加した場合
+
+// ❌ ヘルパーが古いセレクタのまま
+const deleteButtons = page.getByRole('button', { name: 'ルールを削除', exact: true });
+
+// ✅ ヘルパーも data-testid を使用するよう更新
+const deleteButton = row.locator('[data-testid="delete-button"]');
+```
+
+---
+
+## 5. テーブル行のスコープ指定
+
+### 規約
+
+テーブル内の要素を取得する際は、**行（row）にスコープしてから要素を取得すること**。
+
+### 理由
+
+- 将来同名のボタンや要素が追加された場合の誤取得を防ぐ
+- インデックス指定が明確になり、デバッグが容易になる
+
+### 例
+
+```typescript
+// ❌ 悪い例：全ボタンから nth で取得（他のボタンが追加されると壊れる）
+const deleteButtons = page.locator('[data-testid="delete-button"]');
+const deleteButton = deleteButtons.nth(ruleIndex);
+
+// ✅ 良い例：行にスコープしてから取得
+const rows = page.locator('[data-testid="rules-table"] tbody tr');
+const row = rows.nth(ruleIndex);
+const deleteButton = row.locator('[data-testid="delete-button"]');
+```
