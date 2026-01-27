@@ -27,6 +27,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       aria-label="ルールを削除"
+      data-testid="delete-button"
     >
       <TrashIcon className={styles.icon} />
     </button>
