@@ -123,6 +123,8 @@ make sortimports  # Sort imports in all files
 docker compose exec frontend npm run compile        # TypeScript compilation check
 docker compose exec frontend npm run lint           # Run ESLint
 docker compose exec frontend npm run lint:fix       # Auto-fix ESLint issues
+docker compose exec frontend npm run stylelint      # Run stylelint for CSS files
+docker compose exec frontend npm run stylelint:fix  # Auto-fix stylelint issues
 
 # Unused code detection and cleanup
 docker compose exec frontend npm run unused:complete    # Remove unused code
