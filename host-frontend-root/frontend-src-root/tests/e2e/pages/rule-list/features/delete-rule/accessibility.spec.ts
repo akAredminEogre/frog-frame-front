@@ -52,18 +52,22 @@ test.describe('ルール削除機能 - アクセシビリティ', () => {
     const confirmButton = rulesPage.locator('[data-testid="confirm-dialog-confirm-button"]');
 
     // 5. Assert: 初期フォーカスはキャンセルボタン（安全な選択肢）にある
+    // フォーカス検証前に可視性を確認（描画タイミング差による失敗を切り分けやすくする）
+    await expect(cancelButton).toBeVisible();
     await expect(cancelButton).toBeFocused();
 
     // 6. Act: Tabキーを押してフォーカスを移動
     await rulesPage.keyboard.press('Tab');
 
     // 7. Assert: フォーカスが確認ボタンに移動
+    await expect(confirmButton).toBeVisible();
     await expect(confirmButton).toBeFocused();
 
     // 8. Act: もう一度Tabキーを押す
     await rulesPage.keyboard.press('Tab');
 
     // 9. Assert: フォーカスがキャンセルボタンにループして戻る（フォーカストラップ）
+    await expect(cancelButton).toBeVisible();
     await expect(cancelButton).toBeFocused();
 
     // 10. Cleanup: ダイアログを閉じる
@@ -100,18 +104,22 @@ test.describe('ルール削除機能 - アクセシビリティ', () => {
     const confirmButton = rulesPage.locator('[data-testid="confirm-dialog-confirm-button"]');
 
     // 5. Assert: 初期フォーカスはキャンセルボタンにある
+    // フォーカス検証前に可視性を確認（描画タイミング差による失敗を切り分けやすくする）
+    await expect(cancelButton).toBeVisible();
     await expect(cancelButton).toBeFocused();
 
     // 6. Act: Shift+Tabキーを押してフォーカスを逆方向に移動
     await rulesPage.keyboard.press('Shift+Tab');
 
     // 7. Assert: フォーカスが確認ボタンにループして移動（逆方向フォーカストラップ）
+    await expect(confirmButton).toBeVisible();
     await expect(confirmButton).toBeFocused();
 
     // 8. Act: もう一度Shift+Tabキーを押す
     await rulesPage.keyboard.press('Shift+Tab');
 
     // 9. Assert: フォーカスがキャンセルボタンに戻る
+    await expect(cancelButton).toBeVisible();
     await expect(cancelButton).toBeFocused();
 
     // 10. Cleanup: ダイアログを閉じる
