@@ -49,6 +49,7 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     // dispatchEventを使用することで、actionabilityチェックを回避し
     // オーバーレイ表示前に複数クリックをシミュレートする
     const deleteButton = rulesPage.locator('[data-testid="delete-button"]').first();
+    await expect(deleteButton).toBeVisible();
     await deleteButton.dispatchEvent('click');
     await deleteButton.dispatchEvent('click');
 
