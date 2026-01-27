@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from 'tests/e2e/fixtures';
 import {
   assertNoConsoleErrors,
@@ -118,86 +119,64 @@ test.describe('ルール削除機能 - キャンセル操作', () => {
     assertNoConsoleErrors(consoleMessages);
   });
 
-  test('Escapeキーでダイアログを閉じるとルールが残る', async ({
-    page,
-    popupPage,
-    rulesPage,
-  }) => {
-    // コンソールエラー監視をセットアップ
-    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
+  const dismissMethods = [
+    {
+      name: 'Escapeキー',
+      dismiss: async (rulesPage: Page) => {
+        await rulesPage.keyboard.press('Escape');
+      },
+    },
+    {
+      name: 'オーバーレイクリック',
+      dismiss: async (rulesPage: Page) => {
+        const overlay = rulesPage.locator(
+          '[data-testid="confirm-dialog-overlay"]'
+        );
+        await expect(overlay).toBeVisible();
+        await overlay.click({ position: { x: 10, y: 10 } });
+      },
+    },
+  ];
 
-    // 1. Arrange: ルールを保存
-    const testOldString = 'Escapeキーテスト';
-    await saveRule(popupPage, page, {
-      oldString: testOldString,
-      newString: '置換後',
+  for (const { name, dismiss } of dismissMethods) {
+    test(`${name}でダイアログを閉じるとルールが残る`, async ({
+      page,
+      popupPage,
+      rulesPage,
+    }) => {
+      // コンソールエラー監視をセットアップ
+      const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
+
+      // 1. Arrange: ルールを保存
+      const testOldString = `${name}テスト`;
+      await saveRule(popupPage, page, {
+        oldString: testOldString,
+        newString: '置換後',
+      });
+
+      // 2. Arrange: ルール一覧ページをリロード
+      await reloadAndWaitForTable(rulesPage);
+
+      // 3. Act: ゴミ箱アイコンをクリック
+      await clickDeleteButton(rulesPage, 0);
+      await waitForConfirmDialog(rulesPage);
+
+      // 4. Act: ダイアログを閉じる
+      await dismiss(rulesPage);
+
+      // 5. Assert: ダイアログが閉じる
+      await waitForConfirmDialogClosed(rulesPage);
+
+      // 6. Assert: ルールが残っている
+      const count = await getRuleCount(rulesPage);
+      expect(count).toBe(1);
+
+      // 7. Assert: ルールの内容が変わっていない
+      const oldString = await getRuleOldString(rulesPage, 0);
+      expect(oldString).toBe(testOldString);
+
+      // 8. Assert: コンソールエラーが発生していないことを確認
+      assertNoConsoleErrors(consoleMessages);
     });
-
-    // 2. Arrange: ルール一覧ページをリロード
-    await reloadAndWaitForTable(rulesPage);
-
-    // 3. Act: ゴミ箱アイコンをクリック
-    await clickDeleteButton(rulesPage, 0);
-    await waitForConfirmDialog(rulesPage);
-
-    // 4. Act: Escapeキーを押す
-    await rulesPage.keyboard.press('Escape');
-
-    // 5. Assert: ダイアログが閉じる
-    await waitForConfirmDialogClosed(rulesPage);
-
-    // 6. Assert: ルールが残っている
-    const count = await getRuleCount(rulesPage);
-    expect(count).toBe(1);
-
-    // 7. Assert: ルールの内容が変わっていない
-    const oldString = await getRuleOldString(rulesPage, 0);
-    expect(oldString).toBe(testOldString);
-
-    // 8. Assert: コンソールエラーが発生していないことを確認
-    assertNoConsoleErrors(consoleMessages);
-  });
-
-  test('オーバーレイクリックでダイアログを閉じるとルールが残る', async ({
-    page,
-    popupPage,
-    rulesPage,
-  }) => {
-    // コンソールエラー監視をセットアップ
-    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
-
-    // 1. Arrange: ルールを保存
-    const testOldString = 'オーバーレイクリックテスト';
-    await saveRule(popupPage, page, {
-      oldString: testOldString,
-      newString: '置換後',
-    });
-
-    // 2. Arrange: ルール一覧ページをリロード
-    await reloadAndWaitForTable(rulesPage);
-
-    // 3. Act: ゴミ箱アイコンをクリック
-    await clickDeleteButton(rulesPage, 0);
-    await waitForConfirmDialog(rulesPage);
-
-    // 4. Act: オーバーレイ（ダイアログ外側）をクリック
-    // ConfirmDialogのオーバーレイはdata-testid="confirm-dialog-overlay"を持つ
-    const overlay = rulesPage.locator('[data-testid="confirm-dialog-overlay"]');
-    await expect(overlay).toBeVisible();
-    await overlay.click({ position: { x: 10, y: 10 } });
-
-    // 5. Assert: ダイアログが閉じる
-    await waitForConfirmDialogClosed(rulesPage);
-
-    // 6. Assert: ルールが残っている
-    const count = await getRuleCount(rulesPage);
-    expect(count).toBe(1);
-
-    // 7. Assert: ルールの内容が変わっていない
-    const oldString = await getRuleOldString(rulesPage, 0);
-    expect(oldString).toBe(testOldString);
-
-    // 8. Assert: コンソールエラーが発生していないことを確認
-    assertNoConsoleErrors(consoleMessages);
-  });
+  }
 });
