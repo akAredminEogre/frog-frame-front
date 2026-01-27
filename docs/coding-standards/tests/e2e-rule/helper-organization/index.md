@@ -6,7 +6,8 @@ E2Eテストの共通定数・ヘルパー関数の配置ルール。
 
 | ファイル | 内容 |
 |---------|------|
-| [placement-rules.md](./placement-rules.md) | 2層構造（グローバル/機能固有）、配置判断基準、確認手順 |
+| [placement-conditions.md](./placement-conditions.md) | 2層構造（グローバル/機能固有）、配置判断基準 |
+| [placement-procedures.md](./placement-procedures.md) | 確認手順、グローバル共通定数・ヘルパー一覧、機能固有構成例 |
 | [error-handling.md](./error-handling.md) | インデックス指定ヘルパーの範囲チェック、エラー処理の一貫性 |
 | [logic-delegation.md](./logic-delegation.md) | 探索ロジックの集約、exists系→index系への委譲 |
 | [loop-optimization.md](./loop-optimization.md) | ループ内DOMアクセスの最適化、ヘルパー呼び出しのインライン化 |
