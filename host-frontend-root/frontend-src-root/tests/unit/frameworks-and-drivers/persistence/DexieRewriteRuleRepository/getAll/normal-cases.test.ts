@@ -30,20 +30,18 @@ describe('DexieRewriteRuleRepository.getAll - 正常系', () => {
 
   it('should return RewriteRules instance with stored data and return Promise', async () => {
     // Arrange
-    const rule1 = new RewriteRule(
-      1,
-      'pattern1',
-      'replacement1',
-      '',
-      false
-    );
-    const rule2 = new RewriteRule(
-      2,
-      'pattern2',
-      'replacement2',
-      '',
-      false
-    );
+    const rule1 = RewriteRule.fromParams(1, {
+      oldString: 'pattern1',
+      newString: 'replacement1',
+      urlPattern: '',
+      isRegex: false,
+    });
+    const rule2 = RewriteRule.fromParams(2, {
+      oldString: 'pattern2',
+      newString: 'replacement2',
+      urlPattern: '',
+      isRegex: false,
+    });
 
     await repository.create(rule1);
     await repository.create(rule2);

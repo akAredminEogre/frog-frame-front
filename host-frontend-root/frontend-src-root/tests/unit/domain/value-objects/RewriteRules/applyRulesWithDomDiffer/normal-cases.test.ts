@@ -27,9 +27,9 @@ describe('RewriteRules.applyRulesWithDomDiffer - 正常系', () => {
   it('全てのルールがDOMに適用される', () => {
     // Arrange
     const rulesObject: Record<string, RewriteRule> = {
-      1: new RewriteRule(1, '<p>Hello</p>', '<p>Hi</p>', 'https://example.com'),
-      2: new RewriteRule(2, '<span>World</span>', '<span>Universe</span>', 'https://example.com'),
-      3: new RewriteRule(3, '<div>Keep</div>', '<div>Changed</div>', 'https://other.com'),
+      1: RewriteRule.fromParams(1, { oldString: '<p>Hello</p>', newString: '<p>Hi</p>', urlPattern: 'https://example.com', isRegex: false }),
+      2: RewriteRule.fromParams(2, { oldString: '<span>World</span>', newString: '<span>Universe</span>', urlPattern: 'https://example.com', isRegex: false }),
+      3: RewriteRule.fromParams(3, { oldString: '<div>Keep</div>', newString: '<div>Changed</div>', urlPattern: 'https://other.com', isRegex: false }),
     };
     const rewriteRules = new RewriteRules(rulesObject);
     container.innerHTML = '<p>Hello</p><span>World</span><div>Keep</div>';

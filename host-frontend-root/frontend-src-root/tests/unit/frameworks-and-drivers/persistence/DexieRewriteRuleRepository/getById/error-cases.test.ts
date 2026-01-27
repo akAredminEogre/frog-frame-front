@@ -27,13 +27,12 @@ describe('DexieRewriteRuleRepository.getById - 異常系', () => {
 
   it('should throw RewriteRuleNotFoundError when rule with specified ID does not exist', async () => {
     // Arrange
-    const rule1 = new RewriteRule(
-      1,
-      'pattern1',
-      'replacement1',
-      '',
-      false
-    );
+    const rule1 = RewriteRule.fromParams(1, {
+      oldString: 'pattern1',
+      newString: 'replacement1',
+      urlPattern: '',
+      isRegex: false,
+    });
 
     await repository.create(rule1);
 

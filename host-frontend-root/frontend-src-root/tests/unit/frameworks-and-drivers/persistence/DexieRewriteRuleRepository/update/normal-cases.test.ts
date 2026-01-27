@@ -29,20 +29,18 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
 
   it('should update existing rule with new values', async () => {
     // Arrange
-    const rule1 = new RewriteRule(
-      1,
-      'old-pattern',
-      'old-replacement',
-      '',
-      false
-    );
-    const rule2 = new RewriteRule(
-      2,
-      'pattern2',
-      'replacement2',
-      '',
-      false
-    );
+    const rule1 = RewriteRule.fromParams(1, {
+      oldString: 'old-pattern',
+      newString: 'old-replacement',
+      urlPattern: '',
+      isRegex: false,
+    });
+    const rule2 = RewriteRule.fromParams(2, {
+      oldString: 'pattern2',
+      newString: 'replacement2',
+      urlPattern: '',
+      isRegex: false,
+    });
 
     await repository.create(rule1);
     await repository.create(rule2);
@@ -52,14 +50,13 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
     const createdRulesArray = createdRules.toArray();
     const rule1InDb = createdRulesArray.find(r => r.oldString === 'old-pattern')!;
 
-    const updatedRule = new RewriteRule(
-      rule1InDb.id,
-      'new-pattern',
-      'new-replacement',
-      'https://example.com',
-      true,
-      false
-    );
+    const updatedRule = RewriteRule.fromParams(rule1InDb.id, {
+      oldString: 'new-pattern',
+      newString: 'new-replacement',
+      urlPattern: 'https://example.com',
+      isRegex: true,
+      isActive: false,
+    });
 
     // Act
     await repository.update(updatedRule);
@@ -84,13 +81,12 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
 
   it('should update only specified properties while preserving others', async () => {
     // Arrange
-    const existingRule = new RewriteRule(
-      3,
-      'pattern',
-      'replacement',
-      'https://old.com',
-      false
-    );
+    const existingRule = RewriteRule.fromParams(3, {
+      oldString: 'pattern',
+      newString: 'replacement',
+      urlPattern: 'https://old.com',
+      isRegex: false,
+    });
 
     await repository.create(existingRule);
 
@@ -99,13 +95,12 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
     const createdRulesArray = createdRules.toArray();
     const ruleInDb = createdRulesArray[0];
 
-    const updatedRule = new RewriteRule(
-      ruleInDb.id,
-      'new-pattern',
-      'replacement',
-      'https://old.com',
-      false
-    );
+    const updatedRule = RewriteRule.fromParams(ruleInDb.id, {
+      oldString: 'new-pattern',
+      newString: 'replacement',
+      urlPattern: 'https://old.com',
+      isRegex: false,
+    });
 
     // Act
     await repository.update(updatedRule);
@@ -122,27 +117,24 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
 
   it('should preserve all rules when updating one rule', async () => {
     // Arrange
-    const rule1 = new RewriteRule(
-      4,
-      'pattern1',
-      'replacement1',
-      '',
-      false
-    );
-    const rule2 = new RewriteRule(
-      5,
-      'pattern2',
-      'replacement2',
-      '',
-      false
-    );
-    const rule3 = new RewriteRule(
-      6,
-      'pattern3',
-      'replacement3',
-      '',
-      false
-    );
+    const rule1 = RewriteRule.fromParams(4, {
+      oldString: 'pattern1',
+      newString: 'replacement1',
+      urlPattern: '',
+      isRegex: false,
+    });
+    const rule2 = RewriteRule.fromParams(5, {
+      oldString: 'pattern2',
+      newString: 'replacement2',
+      urlPattern: '',
+      isRegex: false,
+    });
+    const rule3 = RewriteRule.fromParams(6, {
+      oldString: 'pattern3',
+      newString: 'replacement3',
+      urlPattern: '',
+      isRegex: false,
+    });
 
     await repository.create(rule1);
     await repository.create(rule2);
@@ -153,13 +145,12 @@ describe('DexieRewriteRuleRepository.update - 正常系', () => {
     const createdRulesArray = createdRules.toArray();
     const rule2InDb = createdRulesArray.find(r => r.oldString === 'pattern2')!;
 
-    const updatedRule = new RewriteRule(
-      rule2InDb.id,
-      'updated-pattern2',
-      'updated-replacement2',
-      '',
-      false
-    );
+    const updatedRule = RewriteRule.fromParams(rule2InDb.id, {
+      oldString: 'updated-pattern2',
+      newString: 'updated-replacement2',
+      urlPattern: '',
+      isRegex: false,
+    });
 
     // Act
     await repository.update(updatedRule);

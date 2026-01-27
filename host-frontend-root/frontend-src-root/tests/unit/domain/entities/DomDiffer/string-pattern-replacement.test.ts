@@ -102,7 +102,7 @@ describe('DomDiffer - 通常文字列での置換の回帰テスト', () => {
     it(description, () => {
       // Arrange
       container.innerHTML = input.initialHtml;
-      const rule = new RewriteRule(1, input.oldString, input.newString, '', false); // isRegex = false
+      const rule = RewriteRule.fromParams(1, { oldString: input.oldString, newString: input.newString, urlPattern: '', isRegex: false });
 
       // Act
       const domDiffer = new DomDiffer(container, rule);

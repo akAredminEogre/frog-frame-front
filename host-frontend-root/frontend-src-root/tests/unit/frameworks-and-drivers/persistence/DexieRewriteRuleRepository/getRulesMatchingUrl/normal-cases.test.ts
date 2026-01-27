@@ -61,13 +61,12 @@ describe('DexieRewriteRuleRepository.getRulesMatchingUrl - 正常系', () => {
     it(description, async () => {
       // Arrange
       for (const ruleData of rulesToCreate) {
-        const rule = new RewriteRule(
-          ruleData.id,
-          ruleData.oldString,
-          ruleData.newString,
-          ruleData.urlPattern,
-          ruleData.isRegex
-        );
+        const rule = RewriteRule.fromParams(ruleData.id, {
+          oldString: ruleData.oldString,
+          newString: ruleData.newString,
+          urlPattern: ruleData.urlPattern,
+          isRegex: ruleData.isRegex,
+        });
         await repository.create(rule);
       }
 

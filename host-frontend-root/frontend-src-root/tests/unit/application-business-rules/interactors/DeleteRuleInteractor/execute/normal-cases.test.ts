@@ -40,14 +40,13 @@ describe('DeleteRuleInteractor.execute - 正常系', () => {
 
   testCases.forEach((testCase) => {
     it(testCase.description, async () => {
-      const rule = new RewriteRule(
-        testCase.input.ruleId,
-        'oldString',
-        'newString',
-        'https://example.com',
-        false,
-        true
-      );
+      const rule = RewriteRule.fromParams(testCase.input.ruleId, {
+        oldString: 'oldString',
+        newString: 'newString',
+        urlPattern: 'https://example.com',
+        isRegex: false,
+        isActive: true,
+      });
       (mockRepository.getById as ReturnType<typeof vi.fn>).mockResolvedValue(rule);
 
       const interactor = new DeleteRuleInteractor(

@@ -46,7 +46,13 @@ describe('DeleteRuleControllerFactory.create - 正常系', () => {
 
   it('削除成功時にonSuccessコールバックが呼ばれる', async () => {
     const ruleId = 1;
-    const rule = new RewriteRule(ruleId, 'oldString', 'newString', 'https://example.com', false, true);
+    const rule = RewriteRule.fromParams(ruleId, {
+      oldString: 'oldString',
+      newString: 'newString',
+      urlPattern: 'https://example.com',
+      isRegex: false,
+      isActive: true,
+    });
     (mockRepository.getById as ReturnType<typeof vi.fn>).mockResolvedValue(rule);
     (mockRepository.delete as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
 
