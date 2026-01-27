@@ -47,7 +47,7 @@ E2Eテストコードを書く際は、以下の観点でルールに従うこ�
 
 specファイルの**分割・統合・リネーム**を行った場合、対応するテスト戦略書を必ず更新すること。
 
-詳細は [E2Eテスト戦略書 ワークフローガイドライン - テストファイルリファクタリング時の同期](../../../docs-rules/design/07-e2e-test-strategy/workflow-guideline.md) を参照。
+詳細は [E2Eテスト戦略書 ワークフローガイドライン - テストファイルリファクタリング時の同期](../../../../docs-rules/design/07-e2e-test-strategy/workflow-guideline.md) を参照。
 
 ### チェックリスト
 
