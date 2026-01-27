@@ -69,7 +69,9 @@ WAI-ARIA Dialog Modal Pattern（ADR-007）に準拠したアクセシビリテ�
 | フォーカストラップ(Shift+Tab) | Shift+Tabキーでフォーカスが逆方向にループする | アクセシビリティ要件（ADR-007準拠） |
 | 背景スクロール無効化 | ダイアログ表示中は背景スクロールが無効化される | アクセシビリティ要件（ADR-007準拠） |
 
-**対応テスト**: `accessibility.spec.ts`
+**対応テスト**: 
+- フォーカストラップ: `focus-trap.spec.ts`（配列ベーステストで実装）
+- 背景スクロール: `accessibility.spec.ts`
 
 ### 3. DB永続化
 
@@ -163,7 +165,8 @@ tests/e2e/pages/rule-list/features/delete-rule/
 ├── normal-flow.spec.ts        # 正常操作フロー
 ├── cancel-operation.spec.ts   # キャンセル操作（キャンセルボタン）
 ├── dismiss-dialog.spec.ts     # ダイアログ閉じ操作（Escapeキー・オーバーレイクリック）
-├── accessibility.spec.ts      # アクセシビリティ（ADR-007準拠）
+├── focus-trap.spec.ts         # フォーカストラップ（配列ベーステスト）
+├── accessibility.spec.ts      # アクセシビリティ（背景スクロール無効化）
 ├── persistence.spec.ts        # DB永続化
 ├── independence.spec.ts       # 複数ルール独立性
 └── concurrency.spec.ts        # 重複削除防止・非同期処理
