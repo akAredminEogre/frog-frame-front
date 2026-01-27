@@ -12,7 +12,7 @@ E2Eテスト（Playwright）に適用されるルール。
 | [assertion-rules.md](./assertion-rules.md) | 重複アサーション禁止、前提条件検証 |
 | [interaction-rules.md](./interaction-rules.md) | click()とdispatchEvent()の使い分け、連続クリックテスト |
 | [text-extraction-rules.md](./text-extraction-rules.md) | textContent()のtrim()正規化、innerText()との違い |
-| [array-based-test-guideline.md](./array-based-test-guideline.md) | 配列ベーステストの判断基準、実装パターン、注意事項 |
+| [array-based-test-guideline.md](./array-based-test-guideline.md) | E2E固有の配列ベーステスト補足（1ファイル1配列の原則） |
 | [consistency-maintenance-guideline.md](../../../../docs-rules/coding-standards/tests/e2e/consistency-maintenance-guideline.md) | ルール追加時の一貫性維持 |
 
 ## 概要
