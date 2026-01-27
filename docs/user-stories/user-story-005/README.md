@@ -31,7 +31,7 @@
 |---|-------------|------|
 | 1 | `tests/unit/interface-adapters/factories/DeleteRuleControllerFactory/create/normal-cases.test.ts` | ⬜ 未着手 |
 | 2 | `tests/unit/interface-adapters/presenters/ToggleRuleActivePresenter/present/normal-cases.test.ts` | ⬜ 未着手 |
-| 3 | `tests/unit/interface-adapters/mappers/RewriteRuleMapper/toDto/normal-cases.test.ts` | ⬜ 未着手 |
+| 3 | `tests/unit/interface-adapters/mappers/RewriteRuleMapper/toDto/normal-cases.test.ts` | ✅ 完了 |
 
 #### 2. application-business-rules層（7ファイル）
 
