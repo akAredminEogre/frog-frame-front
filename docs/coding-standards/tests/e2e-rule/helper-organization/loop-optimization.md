@@ -1,0 +1,64 @@
+# ループ内のDOMアクセス最適化
+
+ヘルパー関数をループ内で呼び出す際のDOMアクセス最小化ルール。
+
+## 規約
+
+ループ内でヘルパー関数を呼び出す場合、**ヘルパー関数内で毎回実行されるDOMクエリ（rows取得・count計算など）がループ外で1回だけ実行されるよう最適化すること**。
+
+## 理由
+
+- ヘルパー関数は単体で安全に使えるよう範囲チェック等を内包しているが、ループ内で呼ぶと毎回同じDOMクエリが繰り返される
+- E2Eテストではブラウザとの往復通信が発生するため、不要なDOMアクセスは実行時間に直結する
+- ルール件数が増えると、O(n)のDOMクエリがO(n²)に膨れ上がる
+
+## パターン：ループ内でのヘルパー呼び出し回避
+
+```typescript
+// ❌ 悪い例：ループ内でヘルパーを呼び出し、毎回rows.count()が実行される
+export async function getRuleIndexByOldString(page: Page, oldString: string): Promise<number> {
+  const count = await getRuleCount(page);
+  for (let i = 0; i < count; i++) {
+    // getRuleOldString内でrows取得+count()が毎回実行される
+    const ruleOldString = await getRuleOldString(page, i);
+    if (ruleOldString === oldString) return i;
+  }
+  return -1;
+}
+
+// ✅ 良い例：rows/countをループ外で1回取得し、ループ内はnth+textContentのみ
+export async function getRuleIndexByOldString(page: Page, oldString: string): Promise<number> {
+  const rows = page.locator('[data-testid="rules-table"] tbody tr');
+  const count = await rows.count();
+  for (let i = 0; i < count; i++) {
+    const row = rows.nth(i);
+    const oldStringCell = row.locator('[data-testid="rule-old-string"]');
+    const text = await oldStringCell.textContent();
+    const trimmed = (text || '').trim();
+    if (trimmed === oldString) return i;
+  }
+  return -1;
+}
+```
+
+## 判断基準
+
+| 状況 | 対応 |
+|------|------|
+| ループ外から単発で呼ぶ | ヘルパー関数をそのまま使う（範囲チェック等の恩恵を受ける） |
+| ループ内で繰り返し呼ぶ | ロジックをインライン化し、共通のDOMクエリをループ外に出す |
+
+## 注意事項
+
+- インライン化した場合、ヘルパー関数の範囲チェックは不要になる（ループ変数がcountで制御されるため）
+- ヘルパー関数の`trim()`等の正規化処理を忘れずにインライン化すること
+- JSDocにインライン化の理由を明記すること
+
+## チェックリスト
+
+ヘルパー関数をループ内で使用する場合：
+
+- [ ] ヘルパー関数内にループ外で実行可能なDOMクエリがないか確認
+- [ ] ある場合はDOMクエリをループ外に移動し、ロジックをインライン化
+- [ ] インライン化時にヘルパー関数の正規化処理（trim等）を漏れなく移植
+- [ ] JSDocにインライン化の理由を記載
