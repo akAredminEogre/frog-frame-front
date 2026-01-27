@@ -36,22 +36,15 @@ E2Eテストのヘルパー・定数は**2層構造**で管理する：
 - 今は1機能でしか使わなくても、将来的に汎用化が見込まれる場合はグローバルに配置
 - 機能固有のUI要素（確認ダイアログ、トグルボタン等）に関するものは機能ディレクトリに配置
 
-## 例
+## 禁止事項
 
-```typescript
-// ❌ 悪い例：グローバル共通定数と同じ値を重複定義
-export const PAGE_LOAD_TIMEOUT = 60000;  // DEFAULT_TIMEOUTと重複
+- グローバル共通定数と同じ値を機能固有ディレクトリで重複定義すること
+  - グローバル定数をインポートして使用する
 
-// ✅ 良い例：グローバル共通定数をインポートして使用
-import { DEFAULT_TIMEOUT } from 'tests/e2e/helpers';
+## 適用シナリオ
 
-// ✅ 良い例：機能固有ヘルパーは機能ディレクトリの helpers.ts からインポート
-import {
-  clickDeleteButton,
-  waitForConfirmDialog,
-  CONFIRM_DIALOG_TIMEOUT,
-} from 'tests/e2e/pages/rule-list/features/delete-rule/helpers';
-```
+- ページロード待機のタイムアウトとして`60000`を機能固有ファイルで定義するのではなく、グローバル共通の`DEFAULT_TIMEOUT`をインポートする
+- 機能固有ヘルパーが複数ファイルに分割される場合、`helpers.ts`で再エクスポートしてimport経路を一本化する
 
 ## eslint-rule
 

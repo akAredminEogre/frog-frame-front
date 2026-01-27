@@ -16,41 +16,10 @@
 
 「存在確認」関数は「インデックス取得」関数に委譲する。
 
-```typescript
-// ❌ 悪い例：探索ロジックが重複
-export async function hasRuleWithOldString(page: Page, oldString: string): Promise<boolean> {
-  const count = await getRuleCount(page);
-  for (let i = 0; i < count; i++) {
-    const ruleOldString = await getRuleOldString(page, i);  // 毎回DOMクエリ + 範囲チェック
-    if (ruleOldString === oldString) return true;
-  }
-  return false;
-}
+### 適用シナリオ
 
-export async function getRuleIndexByOldString(page: Page, oldString: string): Promise<number> {
-  const count = await getRuleCount(page);
-  for (let i = 0; i < count; i++) {
-    const ruleOldString = await getRuleOldString(page, i);  // 同じ探索ロジック
-    if (ruleOldString === oldString) return i;
-  }
-  return -1;
-}
-
-// ✅ 良い例：基本関数に委譲
-export async function getRuleIndexByOldString(page: Page, oldString: string): Promise<number> {
-  const count = await getRuleCount(page);
-  for (let i = 0; i < count; i++) {
-    const ruleOldString = await getRuleOldString(page, i);
-    if (ruleOldString === oldString) return i;
-  }
-  return -1;
-}
-
-export async function hasRuleWithOldString(page: Page, oldString: string): Promise<boolean> {
-  const index = await getRuleIndexByOldString(page, oldString);
-  return index >= 0;  // 委譲
-}
-```
+- 「特定のoldStringを持つルールが存在するか」を返す関数と「そのルールのインデックスを返す」関数がある場合、両方に同じ走査ロジックを書くのではなく、存在確認関数はインデックス取得関数を呼び出し`index >= 0`で判定する
+- 「特定の要素を返す」関数も同様に、インデックス取得関数に委譲して`nth(index)`で要素を返す
 
 ## 委譲の方向性
 
@@ -67,3 +36,7 @@ export async function hasRuleWithOldString(page: Page, oldString: string): Promi
 - [ ] 同じモジュール内に類似の探索ロジックを持つ関数がないか確認
 - [ ] ある場合は基本関数に委譲する形で実装
 - [ ] JSDocに「〜に委譲」と明記
+
+## eslint-rule
+
+ESLint化不可（関数間のロジック重複はコード静的解析では判定困難。PRレビューで確認）

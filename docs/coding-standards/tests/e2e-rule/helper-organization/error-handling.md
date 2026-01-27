@@ -15,27 +15,10 @@
 
 インデックスを引数に取るヘルパー関数は、操作前に範囲チェックを行い、範囲外の場合は明示的な例外を投げること。
 
-```typescript
-// ✅ 良い例：範囲チェックあり
-export async function getRuleOldString(page: Page, ruleIndex: number): Promise<string> {
-  const rows = page.locator('[data-testid="rules-table"] tbody tr');
-  const count = await rows.count();
+### 適用シナリオ
 
-  if (ruleIndex < 0 || ruleIndex >= count) {
-    throw new Error(`ルール行が見つかりません: index=${ruleIndex}, 存在する行数=${count}`);
-  }
-
-  const row = rows.nth(ruleIndex);
-  // ...
-}
-
-// ❌ 悪い例：範囲チェックなし（タイムアウトで原因不明）
-export async function getRuleOldString(page: Page, ruleIndex: number): Promise<string> {
-  const rows = page.locator('[data-testid="rules-table"] tbody tr');
-  const row = rows.nth(ruleIndex);  // 範囲外でも即座にエラーにならない
-  // ...
-}
-```
+- テーブルの特定行のセルテキストを返すヘルパー関数で、指定されたインデックスが行数以上の場合、`rows.nth(index)`はタイムアウトまで無言で待機するため、事前に`rows.count()`で範囲チェックし`index=${index}, 存在する行数=${count}`形式のエラーメッセージで例外を投げる
+- 同一モジュールに「削除ボタンクリック」と「セルテキスト取得」の2つのインデックス指定ヘルパーがある場合、片方だけに範囲チェックがあると不整合になるため、両方に同じパターンで範囲チェックを実装する
 
 ## チェックリスト
 
@@ -44,3 +27,7 @@ export async function getRuleOldString(page: Page, ruleIndex: number): Promise<s
 - [ ] 全てのヘルパーで範囲チェックパターンが統一されているか
 - [ ] エラーメッセージのフォーマットが統一されているか（`index=${index}, 存在する行数=${count}`）
 - [ ] JSDocに`@throws`を記載しているか
+
+## eslint-rule
+
+ESLint化不可（範囲チェックの一貫性はコード静的解析では判定困難。PRレビューで確認）

@@ -16,17 +16,10 @@ E2Eテストでのアサーション（検証）に関するルール。
 - ヘルパー関数が既に行っている検証と同じ内容を再度アサーションすること
   - テストコードが冗長になり、保守性が低下する
 
-### 例
+### 適用シナリオ
 
-```typescript
-// ❌ 悪い例：waitForRuleCountが既にカウント検証を含むのに重複
-await waitForRuleCount(rulesPage, 0);
-const finalCount = await getRuleCount(rulesPage);
-expect(finalCount).toBe(0);  // 冗長
-
-// ✅ 良い例：ヘルパー関数に検証を委譲
-await waitForRuleCount(rulesPage, 0);
-```
+- ルール件数を検証するヘルパー関数（例: `waitForRuleCount`）を呼び出した後に、同じ件数を再度`getRuleCount` + `expect`で検証するのは冗長であるため行わない
+- ダイアログ待機ヘルパーが内部で可視性検証を行っている場合、呼び出し後に再度`toBeVisible()`を実行しない
 
 ### eslint-rule
 
@@ -49,18 +42,10 @@ ESLint化不可（ヘルパー関数の内部実装との重複はコード静�
 | nullable値（null/undefinedが失敗を示す） | `expect(value).toBeDefined()` または `expect(value).not.toBeNull()` |
 | 配列（空が失敗を示す） | `expect(array.length).toBeGreaterThan(0)` |
 
-### 例
+### 適用シナリオ
 
-```typescript
-// ❌ 悪い例：検索結果を検証せずに使用（失敗時に原因不明のエラー）
-const deleteIndex = await getRuleIndexByOldString(rulesPage, targetOldString);
-await clickDeleteButton(rulesPage, deleteIndex);  // deleteIndexが-1だと不明瞭なエラー
-
-// ✅ 良い例：前提条件を明示的に検証
-const deleteIndex = await getRuleIndexByOldString(rulesPage, targetOldString);
-expect(deleteIndex).toBeGreaterThanOrEqual(0);  // 失敗時「期待: >= 0、実際: -1」と明確
-await clickDeleteButton(rulesPage, deleteIndex);
-```
+- 特定のoldStringを持つルールのインデックスを取得した後、そのインデックスを使って削除ボタンをクリックする場合、インデックスが`-1`でないことを事前に検証する。検証しないと、`-1`が渡されたときに「行が見つからない」原因が不明瞭になる
+- 要素検索ヘルパーの戻り値をそのまま次の操作に渡す場合、失敗時のエラーメッセージが「期待: >= 0、実際: -1」のように原因を示すよう前提条件を検証する
 
 ### eslint-rule
 
@@ -88,22 +73,11 @@ ESLint化不可（ヘルパー関数の戻り値の意味はコード静的解�
 | `toBeChecked()` | `toBeVisible()` |
 | `toHaveValue()` | `toBeVisible()` |
 
-### 例
+### 適用シナリオ
 
-```typescript
-// ❌ 悪い例：可視性検証なし（描画タイミング差で失敗時に原因不明）
-await waitForConfirmDialog(rulesPage);
-const cancelButton = rulesPage.locator('[data-testid="cancel-button"]');
-await expect(cancelButton).toBeFocused();  // 失敗時「なぜ？」
-
-// ✅ 良い例：可視性を先に検証
-await waitForConfirmDialog(rulesPage);
-const cancelButton = rulesPage.locator('[data-testid="cancel-button"]');
-await expect(cancelButton).toBeVisible();  // 描画確認
-await expect(cancelButton).toBeFocused();  // 状態確認
-```
+- 確認ダイアログのキャンセルボタンにフォーカスが当たることを検証する場合、先に`toBeVisible()`でボタンの描画完了を確認してから`toBeFocused()`を検証する。描画タイミングの差で失敗した場合に原因を切り分けやすくなる
+- フォーカストラップのテストでTab/Shift+Tab後のフォーカス位置を検証する場合も、対象要素の可視性を先に確認する
 
 ### eslint-rule
 
 ESLint化不可（アサーションの前提条件はコード静的解析では判定困難。PRレビューで確認）
-

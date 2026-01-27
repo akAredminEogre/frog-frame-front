@@ -12,34 +12,10 @@
 - E2Eテストではブラウザとの往復通信が発生するため、不要なDOMアクセスは実行時間に直結する
 - ルール件数が増えると、O(n)のDOMクエリがO(n²)に膨れ上がる
 
-## パターン：ループ内でのヘルパー呼び出し回避
+## 適用シナリオ
 
-```typescript
-// ❌ 悪い例：ループ内でヘルパーを呼び出し、毎回rows.count()が実行される
-export async function getRuleIndexByOldString(page: Page, oldString: string): Promise<number> {
-  const count = await getRuleCount(page);
-  for (let i = 0; i < count; i++) {
-    // getRuleOldString内でrows取得+count()が毎回実行される
-    const ruleOldString = await getRuleOldString(page, i);
-    if (ruleOldString === oldString) return i;
-  }
-  return -1;
-}
-
-// ✅ 良い例：rows/countをループ外で1回取得し、ループ内はnth+textContentのみ
-export async function getRuleIndexByOldString(page: Page, oldString: string): Promise<number> {
-  const rows = page.locator('[data-testid="rules-table"] tbody tr');
-  const count = await rows.count();
-  for (let i = 0; i < count; i++) {
-    const row = rows.nth(i);
-    const oldStringCell = row.locator('[data-testid="rule-old-string"]');
-    const text = await oldStringCell.textContent();
-    const trimmed = (text || '').trim();
-    if (trimmed === oldString) return i;
-  }
-  return -1;
-}
-```
+- テーブル内の全行を走査して特定の値を持つ行を探す場合、行数カウントとrowsロケータ取得はループ外で1回だけ行い、ループ内では`nth(i)`とセル値取得のみにする
+- 範囲チェック付きのヘルパー関数（例: 指定インデックスのセルテキストを返す関数）をループ内で呼ぶと、毎反復で`rows.count()`が再実行されるため、ロジックをインライン化して共通DOMクエリをループ外に移動する
 
 ## 判断基準
 
@@ -62,3 +38,7 @@ export async function getRuleIndexByOldString(page: Page, oldString: string): Pr
 - [ ] ある場合はDOMクエリをループ外に移動し、ロジックをインライン化
 - [ ] インライン化時にヘルパー関数の正規化処理（trim等）を漏れなく移植
 - [ ] JSDocにインライン化の理由を記載
+
+## eslint-rule
+
+ESLint化不可（ループ内のDOMアクセスパターンはコード静的解析では判定困難。PRレビューで確認）

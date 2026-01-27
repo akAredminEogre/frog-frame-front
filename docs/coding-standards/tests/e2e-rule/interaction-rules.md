@@ -8,11 +8,6 @@ Playwrightの`click()`と`dispatchEvent('click')`は異なる挙動をする。�
 
 ### click() - 通常のクリック操作
 
-```typescript
-await button.click();
-```
-
-**特徴**:
 - Actionabilityチェック（要素が表示・有効・クリック可能になるまで待機）
 - オーバーレイやモーダルによるブロックを検知
 - 実際のユーザー操作に近い挙動
@@ -21,11 +16,6 @@ await button.click();
 
 ### dispatchEvent('click') - 即時イベント発火
 
-```typescript
-await button.dispatchEvent('click');
-```
-
-**特徴**:
 - Actionabilityチェックなし（即座にイベント発火）
 - オーバーレイやモーダルの影響を受けない
 - 要素が存在すれば即座にクリックイベントを発火
@@ -36,51 +26,19 @@ await button.dispatchEvent('click');
 
 重複防止機能（例：ダイアログの多重表示防止）をテストする場合、`dispatchEvent`を使用する。
 
-### NG例：click()を使用
+### 適用シナリオ
 
-```typescript
-// ❌ 最初のクリックでダイアログが開くと、
-// オーバーレイが2回目のクリックをブロックしてタイムアウトする
-const deleteButton = page.locator('[data-testid="delete-button"]');
-await deleteButton.click();
-await deleteButton.click();  // タイムアウト
-```
-
-### OK例：dispatchEvent()を使用（前提条件検証あり）
-
-```typescript
-// ✅ 前提条件を検証してから、Actionabilityチェックをバイパス
-const deleteButton = page.locator('[data-testid="delete-button"]');
-await expect(deleteButton).toBeVisible();  // 前提条件検証
-await deleteButton.dispatchEvent('click');
-await deleteButton.dispatchEvent('click');
-```
+- 削除ボタンを素早く2回クリックしてダイアログが1つしか開かないことを検証する場合、`click()`では最初のクリックでオーバーレイが表示され2回目のクリックがブロックされてタイムアウトするため、`dispatchEvent('click')`で即時にイベントを2回発火する
+- レースコンディションのテストでは、Actionabilityチェックの待機がテスト意図と矛盾するため、`dispatchEvent`でタイミング制御を行う
 
 ## dispatchEvent使用時の前提条件検証
 
-**重要**: `dispatchEvent`はActionabilityチェックを行わないため、要素が存在しない場合に分かりにくいエラーが発生する。**必ず事前に要素の存在を検証すること**。
+**重要**: `dispatchEvent`はActionabilityチェックを行わないため、要素が存在しない場合に分かりにくいエラーが発生する。**必ず事前に`toBeVisible()`で要素の存在を検証すること**。
 
-### NG例：前提条件検証なし
+### 適用シナリオ
 
-```typescript
-// ❌ 要素が存在しない場合、分かりにくいエラーになる
-const deleteButton = page.locator('[data-testid="delete-button"]').first();
-await deleteButton.dispatchEvent('click');  // 要素がなければ謎のエラー
-```
-
-### OK例：前提条件検証あり
-
-```typescript
-// ✅ 要素の存在を明示的に検証してからdispatchEvent
-const deleteButton = page.locator('[data-testid="delete-button"]').first();
-await expect(deleteButton).toBeVisible();  // 前提条件検証
-await deleteButton.dispatchEvent('click');
-```
-
-**理由**:
-- `click()`は要素が表示されるまで自動で待機するが、`dispatchEvent`は待機しない
-- 要素が存在しない場合のエラーメッセージが不明瞭になる
-- 前提条件を明示することでデバッグが容易になる
+- `dispatchEvent('click')`で削除ボタンをクリックする前に、`toBeVisible()`でボタンが描画済みであることを確認する。確認しないと、要素が存在しない場合に原因不明のエラーとなる
+- `click()`は要素が表示されるまで自動で待機するが、`dispatchEvent`は待機しないため、前提条件の明示が必要
 
 ## 非明示的要素のクリック前検証
 
@@ -99,18 +57,10 @@ await deleteButton.dispatchEvent('click');
 | 動的生成要素 | トースト通知、ドロップダウンメニュー |
 | 条件付き表示要素 | ローディング完了後に表示されるボタン |
 
-### 例
+### 適用シナリオ
 
-```typescript
-// ❌ 悪い例：オーバーレイクリック時に可視性検証なし
-const overlay = page.locator('[data-testid="confirm-dialog-overlay"]');
-await overlay.click({ position: { x: 10, y: 10 } });  // 失敗時に原因不明
-
-// ✅ 良い例：可視性を明示的に検証
-const overlay = page.locator('[data-testid="confirm-dialog-overlay"]');
-await expect(overlay).toBeVisible();  // セレクタ/描画の問題を切り分け
-await overlay.click({ position: { x: 10, y: 10 } });
-```
+- 確認ダイアログのオーバーレイ部分をクリックしてダイアログを閉じるテストでは、オーバーレイが描画完了していることを`toBeVisible()`で確認してから`click()`を実行する
+- 動的に生成されるトースト通知をクリックする場合も、表示アニメーション完了を確認してからクリックする
 
 ## 使い分けの判断基準
 
@@ -122,3 +72,7 @@ await overlay.click({ position: { x: 10, y: 10 } });
 | ダブルクリック | `dblclick()` | Playwright組み込みメソッド |
 | 素早い操作のレースコンディションテスト | `dispatchEvent('click')` | タイミング制御が必要 |
 | オーバーレイ/動的要素クリック | `toBeVisible()` + `click()` | デバッグ容易性向上 |
+
+## eslint-rule
+
+ESLint化不可（クリック手法の使い分けはテストシナリオに依存し、コード静的解析では判定困難。PRレビューで確認）
