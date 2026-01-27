@@ -26,108 +26,74 @@ test.describe('ルール削除機能 - アクセシビリティ', () => {
     await clearAllRules(rulesPage);
   });
 
-  test('Tabキーでフォーカスがダイアログ内でループする', async ({
-    page,
-    popupPage,
-    rulesPage,
-  }) => {
-    // コンソールエラー監視をセットアップ
-    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
-
-    // 1. Arrange: ルールを保存
-    await saveRule(popupPage, page, {
+  // フォーカストラップのテストケース定義
+  const focusTrapCases = [
+    {
+      name: 'Tabキーでフォーカスがダイアログ内でループする',
       oldString: 'フォーカストラップテスト',
-      newString: '置換後',
-    });
-
-    // 2. Arrange: ルール一覧ページをリロード
-    await reloadAndWaitForTable(rulesPage);
-
-    // 3. Act: ゴミ箱アイコンをクリック
-    await clickDeleteButton(rulesPage, 0);
-    await waitForConfirmDialog(rulesPage);
-
-    // 4. Assert: ダイアログ内のボタンを取得
-    const cancelButton = rulesPage.locator('[data-testid="confirm-dialog-cancel-button"]');
-    const confirmButton = rulesPage.locator('[data-testid="confirm-dialog-confirm-button"]');
-
-    // 5. Assert: 初期フォーカスはキャンセルボタン（安全な選択肢）にある
-    // フォーカス検証前に可視性を確認（描画タイミング差による失敗を切り分けやすくする）
-    await expect(cancelButton).toBeVisible();
-    await expect(cancelButton).toBeFocused();
-
-    // 6. Act: Tabキーを押してフォーカスを移動
-    await rulesPage.keyboard.press('Tab');
-
-    // 7. Assert: フォーカスが確認ボタンに移動
-    await expect(confirmButton).toBeVisible();
-    await expect(confirmButton).toBeFocused();
-
-    // 8. Act: もう一度Tabキーを押す
-    await rulesPage.keyboard.press('Tab');
-
-    // 9. Assert: フォーカスがキャンセルボタンにループして戻る（フォーカストラップ）
-    await expect(cancelButton).toBeVisible();
-    await expect(cancelButton).toBeFocused();
-
-    // 10. Cleanup: ダイアログを閉じる
-    await clickCancelButton(rulesPage);
-    await waitForConfirmDialogClosed(rulesPage);
-
-    // 11. Assert: コンソールエラーが発生していないことを確認
-    assertNoConsoleErrors(consoleMessages);
-  });
-
-  test('Shift+Tabキーでフォーカスが逆方向にループする', async ({
-    page,
-    popupPage,
-    rulesPage,
-  }) => {
-    // コンソールエラー監視をセットアップ
-    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
-
-    // 1. Arrange: ルールを保存
-    await saveRule(popupPage, page, {
+      keySequence: ['Tab', 'Tab'],
+      expectedFocusOrder: [
+        'confirm-dialog-confirm-button', // 1回目のTab
+        'confirm-dialog-cancel-button', // 2回目のTab（ループ）
+      ],
+    },
+    {
+      name: 'Shift+Tabキーでフォーカスが逆方向にループする',
       oldString: '逆方向フォーカステスト',
-      newString: '置換後',
+      keySequence: ['Shift+Tab', 'Shift+Tab'],
+      expectedFocusOrder: [
+        'confirm-dialog-confirm-button', // 1回目のShift+Tab（逆方向）
+        'confirm-dialog-cancel-button', // 2回目のShift+Tab（ループして戻る）
+      ],
+    },
+  ];
+
+  focusTrapCases.forEach(({ name, oldString, keySequence, expectedFocusOrder }) => {
+    test(name, async ({ page, popupPage, rulesPage }) => {
+      // コンソールエラー監視をセットアップ
+      const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
+
+      // 1. Arrange: ルールを保存
+      await saveRule(popupPage, page, {
+        oldString,
+        newString: '置換後',
+      });
+
+      // 2. Arrange: ルール一覧ページをリロード
+      await reloadAndWaitForTable(rulesPage);
+
+      // 3. Act: ゴミ箱アイコンをクリック
+      await clickDeleteButton(rulesPage, 0);
+      await waitForConfirmDialog(rulesPage);
+
+      // 4. Assert: キャンセルボタンを取得
+      const cancelButton = rulesPage.locator('[data-testid="confirm-dialog-cancel-button"]');
+
+      // 5. Assert: 初期フォーカスはキャンセルボタン（安全な選択肢）にある
+      // フォーカス検証前に可視性を確認（描画タイミング差による失敗を切り分けやすくする）
+      await expect(cancelButton).toBeVisible();
+      await expect(cancelButton).toBeFocused();
+
+      // 6. Act & Assert: キー操作によるフォーカス移動を検証
+      for (let i = 0; i < keySequence.length; i++) {
+        // Act: キーを押してフォーカスを移動
+        await rulesPage.keyboard.press(keySequence[i]);
+
+        // Assert: 期待される要素にフォーカスが移動
+        const expectedElement = rulesPage.locator(
+          `[data-testid="${expectedFocusOrder[i]}"]`,
+        );
+        await expect(expectedElement).toBeVisible();
+        await expect(expectedElement).toBeFocused();
+      }
+
+      // 7. Cleanup: ダイアログを閉じる
+      await clickCancelButton(rulesPage);
+      await waitForConfirmDialogClosed(rulesPage);
+
+      // 8. Assert: コンソールエラーが発生していないことを確認
+      assertNoConsoleErrors(consoleMessages);
     });
-
-    // 2. Arrange: ルール一覧ページをリロード
-    await reloadAndWaitForTable(rulesPage);
-
-    // 3. Act: ゴミ箱アイコンをクリック
-    await clickDeleteButton(rulesPage, 0);
-    await waitForConfirmDialog(rulesPage);
-
-    // 4. Assert: ダイアログ内のボタンを取得
-    const cancelButton = rulesPage.locator('[data-testid="confirm-dialog-cancel-button"]');
-    const confirmButton = rulesPage.locator('[data-testid="confirm-dialog-confirm-button"]');
-
-    // 5. Assert: 初期フォーカスはキャンセルボタンにある
-    // フォーカス検証前に可視性を確認（描画タイミング差による失敗を切り分けやすくする）
-    await expect(cancelButton).toBeVisible();
-    await expect(cancelButton).toBeFocused();
-
-    // 6. Act: Shift+Tabキーを押してフォーカスを逆方向に移動
-    await rulesPage.keyboard.press('Shift+Tab');
-
-    // 7. Assert: フォーカスが確認ボタンにループして移動（逆方向フォーカストラップ）
-    await expect(confirmButton).toBeVisible();
-    await expect(confirmButton).toBeFocused();
-
-    // 8. Act: もう一度Shift+Tabキーを押す
-    await rulesPage.keyboard.press('Shift+Tab');
-
-    // 9. Assert: フォーカスがキャンセルボタンに戻る
-    await expect(cancelButton).toBeVisible();
-    await expect(cancelButton).toBeFocused();
-
-    // 10. Cleanup: ダイアログを閉じる
-    await clickCancelButton(rulesPage);
-    await waitForConfirmDialogClosed(rulesPage);
-
-    // 11. Assert: コンソールエラーが発生していないことを確認
-    assertNoConsoleErrors(consoleMessages);
   });
 
   test('ダイアログ表示中は背景スクロールが無効化される', async ({
