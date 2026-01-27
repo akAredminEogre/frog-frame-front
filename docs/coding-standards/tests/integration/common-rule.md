@@ -4,6 +4,11 @@
 
 **参照**: インポートパスのルールは [import-paths.md](../common-rule/import-paths.md) を参照。
 
+## 適用シナリオ
+
+1. **IndexedDBを使用するリポジトリの結合テストを作成する場合**: `import 'fake-indexeddb/auto';`のみでセットアップし、`globalThis.indexedDB`の手動代入は行わない。autoインポートと手動セットアップを併用すると予期しない挙動になる
+2. **複数の結合テストファイルで共通のモックを使う場合**: `beforeEach`で`vi.clearAllMocks()`を使用し、`afterEach`でのモッククリア/リセットは行わない。セットアップ順序はモッククリア → DBクリア → 依存オブジェクト初期化 → コールバック初期化の順で統一する
+
 ---
 
 ## 1. fake-indexeddb のセットアップ
