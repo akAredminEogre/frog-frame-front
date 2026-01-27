@@ -19,8 +19,9 @@
 - オンラインツール（WebAIM Contrast Checker等）でコントラスト比を確認
 - 新しい `--color-*` と `--color-*-contrast` の組み合わせを追加する際は必ず検証
 
-## ESLint化について
+## stylelint について
 
-ESLint化不可（色のコントラスト比は静的解析で検証困難。PRレビューで確認）
+色のコントラスト比は、背景色と前景色の組み合わせから計算が必要であり、
+stylelint の静的解析では検証困難。
 
-→ [User Story 010: stylelint導入](../../../../user-stories/user-story-010/README.md)
+現時点では PR レビューで確認する。
