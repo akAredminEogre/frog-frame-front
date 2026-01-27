@@ -52,6 +52,8 @@ export async function getRuleOldString(
 /**
  * 特定のoldStringを持つルールが存在するか確認する
  *
+ * getRuleIndexByOldStringに委譲し、探索ロジックの重複を避ける。
+ *
  * @param rulesPage - ルール一覧ページ
  * @param oldString - 検索するoldString値
  * @returns ルールが存在すればtrue
@@ -60,14 +62,8 @@ export async function hasRuleWithOldString(
   rulesPage: Page,
   oldString: string
 ): Promise<boolean> {
-  const count = await getRuleCount(rulesPage);
-  for (let i = 0; i < count; i++) {
-    const ruleOldString = await getRuleOldString(rulesPage, i);
-    if (ruleOldString === oldString) {
-      return true;
-    }
-  }
-  return false;
+  const index = await getRuleIndexByOldString(rulesPage, oldString);
+  return index >= 0;
 }
 
 /**
