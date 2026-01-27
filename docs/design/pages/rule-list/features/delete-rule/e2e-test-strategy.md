@@ -127,10 +127,10 @@ WAI-ARIA Dialog Modal Pattern（ADR-007）に準拠したアクセシビリテ�
 | AC-3: 削除実行 | 「削除」選択でルール削除 | normal-flow.spec.ts |
 | AC-4: キャンセル動作 | 「キャンセル」で何も起こらない | cancel-operation.spec.ts |
 | AC-5: 一覧から削除 | 削除されたルールが一覧から消える | normal-flow.spec.ts |
-| AC-6: エラー通知 | 失敗時にトースト表示 | (E2E検証困難、結合テストでカバー) |
-| AC-7: タブリロード | 該当タブがリロードされる | (E2E検証困難、結合テストでカバー) |
+| AC-6: エラー通知 | 失敗時にトースト表示 | 結合: `tests/integration/delete-rule/error-cases.test.ts` |
+| AC-7: タブリロード | 該当タブがリロードされる | 結合: `tests/integration/delete-rule/normal-cases.test.ts` |
 | AC-8: 重複削除防止 | 削除処理中はボタン無効化 | concurrency.spec.ts |
-| AC-9: 部分的成功 | 削除成功+リロード失敗時の動作 | (E2E検証困難、結合テストでカバー) |
+| AC-9: 部分的成功 | 削除成功+リロード失敗時の動作 | 結合: `tests/integration/delete-rule/partial-success.test.ts` |
 | AC-10: 物理削除 | DBから物理削除 | persistence.spec.ts |
 | AC-11: 非同期処理 | 操作がブロックされない | concurrency.spec.ts |
 
@@ -148,7 +148,7 @@ WAI-ARIA Dialog Modal Pattern（ADR-007）に準拠したアクセシビリテ�
 - [x] キャンセル操作
 - [x] DB永続化
 - [x] 複数ルール独立性
-- [ ] エラー通知 → E2E検証困難、結合テストでカバー
+- [ ] エラー通知 → E2E検証困難、結合テストでカバー (`tests/integration/delete-rule/error-cases.test.ts`)
 - [x] 重複削除防止
 - [x] 非同期処理
 
