@@ -145,5 +145,5 @@ tests/e2e/pages/{page-name}/features/{feature-name}/
 
 - 単体テスト戦略書: [05-test-strategy.md](../05-test-strategy.md)
 - 結合テスト戦略書: [06-integration-test-strategy.md](../06-integration-test-strategy.md)
-- E2Eテストルール: `docs/coding-standards/tests/e2e-rule.md`
+- E2Eテストルール: `docs/coding-standards/tests/e2e-rule/`
 - ワークフローガイドライン: [workflow-guideline.md](./workflow-guideline.md)
