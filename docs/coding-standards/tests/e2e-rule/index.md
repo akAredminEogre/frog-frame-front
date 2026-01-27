@@ -8,7 +8,7 @@ E2Eテスト（Playwright）に適用されるルール。
 |---------|------|
 | [naming-rules.md](./naming-rules.md) | テスト名は検証内容を正確に記述、曖昧表現の回避 |
 | [selector-rules.md](./selector-rules.md) | 要素セレクタの優先順位、data-testid命名規則、ヘルパー更新、行スコープ |
-| [helper-organization.md](./helper-organization.md) | 共通定数・ヘルパーの2層構造、配置判断基準 |
+| [helper-organization/](./helper-organization/index.md) | 2層構造、配置判断基準、エラー処理パターン |
 | [assertion-rules.md](./assertion-rules.md) | 重複アサーション禁止、前提条件検証 |
 | [interaction-rules.md](./interaction-rules.md) | click()とdispatchEvent()の使い分け、連続クリックテスト |
 | [text-extraction-rules.md](./text-extraction-rules.md) | textContent()のtrim()正規化、innerText()との違い |

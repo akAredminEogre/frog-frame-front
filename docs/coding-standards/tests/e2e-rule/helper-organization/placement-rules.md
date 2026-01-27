@@ -2,11 +2,7 @@
 
 E2Eテストの共通定数・ヘルパー関数の配置ルール。
 
----
-
-## 共通定数・ヘルパーの再利用
-
-### 規約
+## 2層構造
 
 E2Eテストのヘルパー・定数は**2層構造**で管理する：
 
@@ -18,7 +14,7 @@ E2Eテストのヘルパー・定数は**2層構造**で管理する：
    - 特定機能のテストでのみ使用する定数・ヘルパー
    - 例: 削除機能固有のダイアログ操作、ルール件数取得など
 
-### ヘルパー配置の判断基準
+## ヘルパー配置の判断基準
 
 | 条件 | 配置先 |
 |------|--------|
@@ -26,7 +22,7 @@ E2Eテストのヘルパー・定数は**2層構造**で管理する：
 | 単一機能のテストでのみ使用される | 機能ディレクトリ内 |
 | ページ共通だが機能横断的 | `tests/e2e/pages/{page}/helpers.ts`（必要に応じて作成） |
 
-#### 具体例：なぜその配置先なのか
+### 具体例：なぜその配置先なのか
 
 | 定数名 | 配置先 | 理由 |
 |--------|--------|------|
@@ -40,7 +36,7 @@ E2Eテストのヘルパー・定数は**2層構造**で管理する：
 - 今は1機能でしか使わなくても、将来的に汎用化が見込まれる場合はグローバルに配置
 - 機能固有のUI要素（確認ダイアログ、トグルボタン等）に関するものは機能ディレクトリに配置
 
-### 確認手順（必須）
+## 確認手順（必須）
 
 新規E2Eテストファイル作成前に以下を確認：
 
@@ -53,7 +49,7 @@ ls tests/e2e/pages/{page}/features/{feature}/
 cat tests/e2e/pages/{page}/features/{feature}/helpers.ts  # 存在する場合
 ```
 
-### グローバル共通定数（tests/e2e/helpers.ts）
+## グローバル共通定数（tests/e2e/helpers.ts）
 
 | 定数名 | 値 | 用途 |
 |--------|-----|------|
@@ -62,7 +58,7 @@ cat tests/e2e/pages/{page}/features/{feature}/helpers.ts  # 存在する場合
 | `DIALOG_TIMEOUT` | 60000 | ダイアログ待機 |
 | `TEST_SERVER_URL` | 環境変数または既定値 | テストサーバーのベースURL |
 
-### グローバル共通ヘルパー関数（tests/e2e/helpers.ts）
+## グローバル共通ヘルパー関数（tests/e2e/helpers.ts）
 
 | 関数名 | 用途 |
 |--------|------|
@@ -72,7 +68,7 @@ cat tests/e2e/pages/{page}/features/{feature}/helpers.ts  # 存在する場合
 | `reloadAndWaitForTable` | ページリロードしてテーブル表示を待機 |
 | `saveRule` | ポップアップからルールを保存 |
 
-### 機能固有ヘルパーの構成例
+## 機能固有ヘルパーの構成例
 
 ```plaintext
 tests/e2e/pages/rule-list/features/delete-rule/
@@ -84,7 +80,7 @@ tests/e2e/pages/rule-list/features/delete-rule/
 
 機能固有ヘルパーが複数ファイルに分割される場合、`helpers.ts`で再エクスポートしてimport経路を一本化する。
 
-### 例
+## 例
 
 ```typescript
 // ❌ 悪い例：グローバル共通定数と同じ値を重複定義
@@ -101,53 +97,6 @@ import {
 } from 'tests/e2e/pages/rule-list/features/delete-rule/helpers';
 ```
 
-### eslint-rule
+## eslint-rule
 
 ESLint化不可（定数の意味的な重複はコード静的解析では判定困難。PRレビューで確認）
-
----
-
-## ヘルパー関数のエラー処理パターン
-
-### 規約
-
-同一モジュール内のヘルパー関数は**一貫したエラー処理パターン**を使用すること。
-
-### 理由
-
-- インデックス指定で要素を取得する関数が、範囲外の場合にタイムアウトエラーになると原因が分かりにくい
-- 同一モジュール内で一部の関数だけ範囲チェックがあると、開発者が混乱する
-
-### パターン：インデックス指定ヘルパーの範囲チェック
-
-インデックスを引数に取るヘルパー関数は、操作前に範囲チェックを行い、範囲外の場合は明示的な例外を投げること。
-
-```typescript
-// ✅ 良い例：範囲チェックあり
-export async function getRuleOldString(page: Page, ruleIndex: number): Promise<string> {
-  const rows = page.locator('[data-testid="rules-table"] tbody tr');
-  const count = await rows.count();
-
-  if (ruleIndex < 0 || ruleIndex >= count) {
-    throw new Error(`ルール行が見つかりません: index=${ruleIndex}, 存在する行数=${count}`);
-  }
-
-  const row = rows.nth(ruleIndex);
-  // ...
-}
-
-// ❌ 悪い例：範囲チェックなし（タイムアウトで原因不明）
-export async function getRuleOldString(page: Page, ruleIndex: number): Promise<string> {
-  const rows = page.locator('[data-testid="rules-table"] tbody tr');
-  const row = rows.nth(ruleIndex);  // 範囲外でも即座にエラーにならない
-  // ...
-}
-```
-
-### チェックリスト
-
-同一モジュール内に複数のインデックス指定ヘルパーがある場合：
-
-- [ ] 全てのヘルパーで範囲チェックパターンが統一されているか
-- [ ] エラーメッセージのフォーマットが統一されているか（`index=${index}, 存在する行数=${count}`）
-- [ ] JSDocに`@throws`を記載しているか
