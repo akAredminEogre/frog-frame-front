@@ -57,7 +57,7 @@
 | Escapeキー操作 | Escapeキーでダイアログを閉じるとルールが残る | キーボード操作でのキャンセルを確認（ADR-007準拠） |
 | オーバーレイクリック | オーバーレイクリックでダイアログを閉じるとルールが残る | マウス操作でのキャンセルを確認（ADR-007準拠） |
 
-**対応テスト**: `cancel-operation.spec.ts`
+**対応テスト**: `cancel-operation.spec.ts`, `dismiss-dialog.spec.ts`
 
 ### 2.1. アクセシビリティ
 
