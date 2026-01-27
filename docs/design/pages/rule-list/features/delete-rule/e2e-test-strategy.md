@@ -107,6 +107,17 @@ WAI-ARIA Dialog Modal Pattern（ADR-007）に準拠したアクセシビリテ�
 
 > **Note**: E2Eテストでエラーを発生させるにはAPIモックが必要だが、E2Eでは実際の環境を使用するため技術的に困難。結合テストでカバーする。
 
+### 6. 重複削除防止・非同期処理
+
+削除処理中のボタン無効化とUI非ブロッキング
+
+| 分類 | テストケース | 根拠 |
+|------|-------------|------|
+| ボタン無効化 | 削除ボタンクリック後、確認ダイアログ表示中は削除ボタンがdisabledになる | 重複削除を防止（AC-8） |
+| UI非ブロッキング | 削除処理中も他のUI要素（編集ボタン等）が操作可能 | 非同期処理でUIがブロックされないことを確認（AC-11） |
+
+**対応テスト**: `concurrency.spec.ts`
+
 ## ユーザーストーリートレーサビリティ
 
 | 受け入れ条件（acceptance-criteria.md） | テストケース | テストファイル |
@@ -118,10 +129,10 @@ WAI-ARIA Dialog Modal Pattern（ADR-007）に準拠したアクセシビリテ�
 | AC-5: 一覧から削除 | 削除されたルールが一覧から消える | normal-flow.spec.ts |
 | AC-6: エラー通知 | 失敗時にトースト表示 | (E2E検証困難、結合テストでカバー) |
 | AC-7: タブリロード | 該当タブがリロードされる | (E2E検証困難、結合テストでカバー) |
-| AC-8: 重複削除防止 | 削除処理中はボタン無効化 | (Phase 2で実装後に追加) |
+| AC-8: 重複削除防止 | 削除処理中はボタン無効化 | concurrency.spec.ts |
 | AC-9: 部分的成功 | 削除成功+リロード失敗時の動作 | (E2E検証困難、結合テストでカバー) |
 | AC-10: 物理削除 | DBから物理削除 | persistence.spec.ts |
-| AC-11: 非同期処理 | 操作がブロックされない | (Phase 2で実装後に追加) |
+| AC-11: 非同期処理 | 操作がブロックされない | concurrency.spec.ts |
 
 ### E2E検証困難な項目の理由
 
@@ -138,8 +149,8 @@ WAI-ARIA Dialog Modal Pattern（ADR-007）に準拠したアクセシビリテ�
 - [x] DB永続化
 - [x] 複数ルール独立性
 - [ ] エラー通知 → E2E検証困難、結合テストでカバー
-- [ ] 重複削除防止 → Phase 2で実装後に追加
-- [ ] 非同期処理 → Phase 2で実装後に追加
+- [x] 重複削除防止
+- [x] 非同期処理
 
 ## テストファイル構成
 
@@ -153,7 +164,8 @@ tests/e2e/pages/rule-list/features/delete-rule/
 ├── cancel-operation.spec.ts   # キャンセル操作
 ├── accessibility.spec.ts      # アクセシビリティ（ADR-007準拠）
 ├── persistence.spec.ts        # DB永続化
-└── independence.spec.ts       # 複数ルール独立性
+├── independence.spec.ts       # 複数ルール独立性
+└── concurrency.spec.ts        # 重複削除防止・非同期処理
 ```
 
 > **Note**: エラー通知（error-notification.spec.ts）はE2E検証困難のため、結合テストでカバーする。
