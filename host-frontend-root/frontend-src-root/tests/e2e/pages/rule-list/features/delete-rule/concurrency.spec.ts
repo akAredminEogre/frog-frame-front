@@ -28,7 +28,7 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     await clearAllRules(rulesPage);
   });
 
-  test('確認ダイアログ表示中に削除ボタンを再クリックしてもダイアログは1つのまま', async ({
+  test('削除ボタンを素早く連続クリックしてもダイアログは1つだけ表示される', async ({
     page,
     popupPage,
     rulesPage,
@@ -45,30 +45,27 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     // 2. Arrange: ルール一覧ページをリロード
     await reloadAndWaitForTable(rulesPage);
 
-    // 3. Act: 削除ボタンをクリック
-    await clickDeleteButton(rulesPage, 0);
+    // 3. Act: 削除ボタンを素早く2回クリック（ダイアログ表示を待たずに）
+    const deleteButton = rulesPage.locator('[data-testid="delete-button"]').first();
+    await deleteButton.click();
+    await deleteButton.click();
 
     // 4. Assert: 確認ダイアログが表示される
     await waitForConfirmDialog(rulesPage);
 
-    // 5. Act: 削除ボタンを再度クリック（ダイアログ表示中）
-    // モーダルオーバーレイがあるため、force: true で強制クリック
-    const deleteButton = rulesPage.locator('[data-testid="delete-button"]').first();
-    await deleteButton.click({ force: true });
-
-    // 6. Assert: ダイアログは1つのまま（複数表示されていない）
+    // 5. Assert: ダイアログは1つのみ（複数表示されていない）
     const dialogs = rulesPage.locator('[data-testid="confirm-dialog"]');
     await expect(dialogs).toHaveCount(1);
 
-    // 7. Cleanup: ダイアログをキャンセルして閉じる
+    // 6. Cleanup: ダイアログをキャンセルして閉じる
     await clickCancelButton(rulesPage);
     await waitForConfirmDialogClosed(rulesPage);
 
-    // 8. Assert: ルールは削除されていない
+    // 7. Assert: ルールは削除されていない
     const count = await getRuleCount(rulesPage);
     expect(count).toBe(1);
 
-    // 9. Assert: コンソールエラーが発生していないことを確認
+    // 8. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
 
