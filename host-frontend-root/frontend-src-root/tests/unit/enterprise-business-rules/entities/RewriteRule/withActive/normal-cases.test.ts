@@ -49,14 +49,13 @@ describe('RewriteRule.withActive - 正常系（isActive状態変更）', () => {
       const urlPattern = 'https://example.com';
       const isRegex = false;
 
-      const originalRule = new RewriteRule(
-        ruleId,
+      const originalRule = RewriteRule.fromParams(ruleId, {
         oldString,
         newString,
         urlPattern,
         isRegex,
-        testCase.input.initialIsActive
-      );
+        isActive: testCase.input.initialIsActive,
+      });
 
       const newRule = originalRule.withActive(testCase.input.newIsActive);
 

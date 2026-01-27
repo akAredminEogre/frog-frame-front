@@ -30,14 +30,13 @@ describe('ToggleRuleActiveOutputData.constructor - 正常系', () => {
       const urlPattern = 'https://example.com';
       const isRegex = false;
 
-      const rule = new RewriteRule(
-        ruleId,
+      const rule = RewriteRule.fromParams(ruleId, {
         oldString,
         newString,
         urlPattern,
         isRegex,
-        testCase.input.isActive
-      );
+        isActive: testCase.input.isActive,
+      });
 
       const outputData = new ToggleRuleActiveOutputData(rule);
 

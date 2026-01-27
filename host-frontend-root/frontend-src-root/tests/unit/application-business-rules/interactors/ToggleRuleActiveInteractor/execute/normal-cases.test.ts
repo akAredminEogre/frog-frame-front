@@ -49,14 +49,13 @@ describe('ToggleRuleActiveInteractor.execute - 正常系', () => {
 
   testCases.forEach((testCase) => {
     it(testCase.description, async () => {
-      const originalRule = new RewriteRule(
-        testCase.input.ruleId,
-        'oldString',
-        'newString',
-        'https://example.com',
-        false,
-        testCase.initialIsActive
-      );
+      const originalRule = RewriteRule.fromParams(testCase.input.ruleId, {
+        oldString: 'oldString',
+        newString: 'newString',
+        urlPattern: 'https://example.com',
+        isRegex: false,
+        isActive: testCase.initialIsActive,
+      });
       (mockRepository.getById as ReturnType<typeof vi.fn>).mockResolvedValue(originalRule);
 
       const interactor = new ToggleRuleActiveInteractor(

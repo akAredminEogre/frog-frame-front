@@ -10,14 +10,13 @@ import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMap
 describe('RewriteRuleMapper.toDto - 正常系', () => {
   it('全プロパティを持つエンティティからDTOに変換できる', () => {
     // 静的メソッドなのでインスタンス不要
-    const entity = new RewriteRule(
-      1,
-      'old text',
-      'new text',
-      'https://example.com',
-      false,
-      true
-    );
+    const entity = RewriteRule.fromParams(1, {
+      oldString: 'old text',
+      newString: 'new text',
+      urlPattern: 'https://example.com',
+      isRegex: false,
+      isActive: true,
+    });
 
     const result = RewriteRuleMapper.toDto(entity);
 

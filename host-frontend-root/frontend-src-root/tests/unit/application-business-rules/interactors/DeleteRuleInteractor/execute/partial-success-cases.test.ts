@@ -43,14 +43,13 @@ describe('DeleteRuleInteractor.execute - 部分的成功', () => {
 
   testCases.forEach((testCase) => {
     it(testCase.description, async () => {
-      const rule = new RewriteRule(
-        testCase.input.ruleId,
-        'old',
-        'new',
-        'https://example.com',
-        false,
-        true
-      );
+      const rule = RewriteRule.fromParams(testCase.input.ruleId, {
+        oldString: 'old',
+        newString: 'new',
+        urlPattern: 'https://example.com',
+        isRegex: false,
+        isActive: true,
+      });
       (mockRepository.getById as ReturnType<typeof vi.fn>).mockResolvedValue(rule);
       (mockRepository.delete as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
       (mockTabsGateway.reloadMatchingTabs as ReturnType<typeof vi.fn>).mockRejectedValue(

@@ -15,14 +15,13 @@ describe('RewriteRule.withActive - イミュータブル性', () => {
     const isRegex = false;
     const initialIsActive = true;
 
-    const originalRule = new RewriteRule(
-      ruleId,
+    const originalRule = RewriteRule.fromParams(ruleId, {
       oldString,
       newString,
       urlPattern,
       isRegex,
-      initialIsActive
-    );
+      isActive: initialIsActive,
+    });
 
     originalRule.withActive(false);
 

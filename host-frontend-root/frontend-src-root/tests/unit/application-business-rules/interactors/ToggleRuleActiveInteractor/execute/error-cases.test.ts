@@ -47,7 +47,13 @@ describe('ToggleRuleActiveInteractor.execute - 異常系', () => {
       description: 'repository.updateでエラーが発生した場合、presentErrorが呼び出される',
       input: { ruleId: 2 },
       setupMocks: (repository: IRewriteRuleRepository) => {
-        const rule = new RewriteRule(2, 'old', 'new', 'https://example.com', false, true);
+        const rule = RewriteRule.fromParams(2, {
+          oldString: 'old',
+          newString: 'new',
+          urlPattern: 'https://example.com',
+          isRegex: false,
+          isActive: true,
+        });
         (repository.getById as ReturnType<typeof vi.fn>).mockResolvedValue(rule);
         (repository.update as ReturnType<typeof vi.fn>).mockRejectedValue(
           new Error('更新に失敗しました')

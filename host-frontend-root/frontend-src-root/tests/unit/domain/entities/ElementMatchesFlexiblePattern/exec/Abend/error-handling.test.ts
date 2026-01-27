@@ -20,7 +20,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Error Handling', () => {
       container.innerHTML = '<div>Test</div>';
       const element = container.firstElementChild!;
       
-      const rule = new RewriteRule(1, '', '<span>Replaced!</span>', '');
+      const rule = RewriteRule.fromParams(1, { oldString: '', newString: '<span>Replaced!</span>', urlPattern: '', isRegex: false });
       const matcher = new ElementMatchesFlexiblePattern(element, rule);
       
       expect(matcher.exec()).toBe(false);
@@ -30,7 +30,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Error Handling', () => {
       container.innerHTML = '<div>Test</div>';
       const element = container.firstElementChild!;
       
-      const rule = new RewriteRule(1, '<div>Unclosed tag', '<span>Replaced!</span>', '');
+      const rule = RewriteRule.fromParams(1, { oldString: '<div>Unclosed tag', newString: '<span>Replaced!</span>', urlPattern: '', isRegex: false });
       const matcher = new ElementMatchesFlexiblePattern(element, rule);
       
       expect(matcher.exec()).toBe(false);
@@ -40,7 +40,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Error Handling', () => {
       container.innerHTML = '<div>Test</div>';
       const element = container.firstElementChild!;
       
-      const rule = new RewriteRule(1, 'Just text with no elements', '<span>Replaced!</span>', '');
+      const rule = RewriteRule.fromParams(1, { oldString: 'Just text with no elements', newString: '<span>Replaced!</span>', urlPattern: '', isRegex: false });
       const matcher = new ElementMatchesFlexiblePattern(element, rule);
       
       expect(matcher.exec()).toBe(false);
@@ -52,7 +52,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Error Handling', () => {
       container.innerHTML = '<div></div>';
       const element = container.firstElementChild!;
       
-      const rule = new RewriteRule(1, '<div></div>', '<span>Replaced!</span>', '');
+      const rule = RewriteRule.fromParams(1, { oldString: '<div></div>', newString: '<span>Replaced!</span>', urlPattern: '', isRegex: false });
       const matcher = new ElementMatchesFlexiblePattern(element, rule);
       
       expect(matcher.exec()).toBe(true);
@@ -62,7 +62,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Error Handling', () => {
       container.innerHTML = '<div>   </div>';
       const element = container.firstElementChild!;
       
-      const rule = new RewriteRule(1, '<div></div>', '<span>Replaced!</span>', '');
+      const rule = RewriteRule.fromParams(1, { oldString: '<div></div>', newString: '<span>Replaced!</span>', urlPattern: '', isRegex: false });
       const matcher = new ElementMatchesFlexiblePattern(element, rule);
       
       expect(matcher.exec()).toBe(true);
@@ -72,7 +72,7 @@ describe('ElementMatchesFlexiblePattern.exec() - Error Handling', () => {
       container.innerHTML = '<img src="test.jpg" alt="test">';
       const element = container.firstElementChild!;
       
-      const rule = new RewriteRule(1, '<img src="test.jpg" alt="test">', '<img src="new.jpg" alt="new">', '');
+      const rule = RewriteRule.fromParams(1, { oldString: '<img src="test.jpg" alt="test">', newString: '<img src="new.jpg" alt="new">', urlPattern: '', isRegex: false });
       const matcher = new ElementMatchesFlexiblePattern(element, rule);
       
       expect(matcher.exec()).toBe(true);

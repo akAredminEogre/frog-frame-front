@@ -29,72 +29,72 @@
 
 | # | ファイルパス | 状態 |
 |---|-------------|------|
-| 1 | `tests/unit/interface-adapters/factories/DeleteRuleControllerFactory/create/normal-cases.test.ts` | ⬜ 未着手 |
-| 2 | `tests/unit/interface-adapters/presenters/ToggleRuleActivePresenter/present/normal-cases.test.ts` | ⬜ 未着手 |
-| 3 | `tests/unit/interface-adapters/mappers/RewriteRuleMapper/toDto/normal-cases.test.ts` | ⬜ 未着手 |
+| 1 | `tests/unit/interface-adapters/factories/DeleteRuleControllerFactory/create/normal-cases.test.ts` | ✅ 完了 |
+| 2 | `tests/unit/interface-adapters/presenters/ToggleRuleActivePresenter/present/normal-cases.test.ts` | ✅ 完了 |
+| 3 | `tests/unit/interface-adapters/mappers/RewriteRuleMapper/toDto/normal-cases.test.ts` | ✅ 完了 |
 
 #### 2. application-business-rules層（7ファイル）
 
 | # | ファイルパス | 状態 |
 |---|-------------|------|
-| 4 | `tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/normal-cases.test.ts` | ⬜ 未着手 |
-| 5 | `tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/error-cases.test.ts` | ⬜ 未着手 |
-| 6 | `tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/partial-success-cases.test.ts` | ⬜ 未着手 |
-| 7 | `tests/unit/application-business-rules/interactors/DeleteRuleInteractor/execute/normal-cases.test.ts` | ⬜ 未着手 |
-| 8 | `tests/unit/application-business-rules/interactors/DeleteRuleInteractor/execute/error-cases.test.ts` | ⬜ 未着手 |
-| 9 | `tests/unit/application-business-rules/interactors/DeleteRuleInteractor/execute/partial-success-cases.test.ts` | ⬜ 未着手 |
-| 10 | `tests/unit/application-business-rules/dto/output/ToggleRuleActiveOutputData/constructor/normal-cases.test.ts` | ⬜ 未着手 |
+| 4 | `tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/normal-cases.test.ts` | ✅ 完了 |
+| 5 | `tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/error-cases.test.ts` | ✅ 完了 |
+| 6 | `tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/partial-success-cases.test.ts` | ✅ 完了 |
+| 7 | `tests/unit/application-business-rules/interactors/DeleteRuleInteractor/execute/normal-cases.test.ts` | ✅ 完了 |
+| 8 | `tests/unit/application-business-rules/interactors/DeleteRuleInteractor/execute/error-cases.test.ts` | ✅ 完了 |
+| 9 | `tests/unit/application-business-rules/interactors/DeleteRuleInteractor/execute/partial-success-cases.test.ts` | ✅ 完了 |
+| 10 | `tests/unit/application-business-rules/dto/output/ToggleRuleActiveOutputData/constructor/normal-cases.test.ts` | ✅ 完了 |
 
 #### 3. application層（2ファイル）
 
 | # | ファイルパス | 状態 |
 |---|-------------|------|
-| 11 | `tests/unit/application/usecases/rule/LoadRewriteRuleForEditUseCase/execute/normal-cases.test.ts` | ⬜ 未着手 |
-| 12 | `tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts` | ⬜ 未着手 |
+| 11 | `tests/unit/application/usecases/rule/LoadRewriteRuleForEditUseCase/execute/normal-cases.test.ts` | ✅ 完了 |
+| 12 | `tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/normal-cases.test.ts` | ✅ 完了 |
 
 #### 4. enterprise-business-rules層（5ファイル）
 
 | # | ファイルパス | 状態 |
 |---|-------------|------|
-| 13 | `tests/unit/enterprise-business-rules/entities/RewriteRule/matchesUrl/normal-cases-false.test.ts` | ⬜ 未着手 |
-| 14 | `tests/unit/enterprise-business-rules/entities/RewriteRule/matchesUrl/normal-cases-true.test.ts` | ⬜ 未着手 |
-| 15 | `tests/unit/enterprise-business-rules/entities/RewriteRule/withActive/normal-cases.test.ts` | ⬜ 未着手 |
-| 16 | `tests/unit/enterprise-business-rules/entities/RewriteRule/withActive/immutability.test.ts` | ⬜ 未着手 |
-| 17 | `tests/unit/enterprise-business-rules/entities/RewriteRule/withActive/property-preservation.test.ts` | ⬜ 未着手 |
+| 13 | `tests/unit/enterprise-business-rules/entities/RewriteRule/matchesUrl/normal-cases-false.test.ts` | ✅ 完了 |
+| 14 | `tests/unit/enterprise-business-rules/entities/RewriteRule/matchesUrl/normal-cases-true.test.ts` | ✅ 完了 |
+| 15 | `tests/unit/enterprise-business-rules/entities/RewriteRule/withActive/normal-cases.test.ts` | ✅ 完了 |
+| 16 | `tests/unit/enterprise-business-rules/entities/RewriteRule/withActive/immutability.test.ts` | ✅ 完了 |
+| 17 | `tests/unit/enterprise-business-rules/entities/RewriteRule/withActive/property-preservation.test.ts` | ✅ 完了 |
 
 #### 5. domain層（17ファイル）
 
 | # | ファイルパス | 状態 |
 |---|-------------|------|
-| 18 | `tests/unit/domain/value-objects/Tab/matchesRule/normal-cases.test.ts` | ⬜ 未着手 |
-| 19 | `tests/unit/domain/value-objects/Tabs/filterByRule/normal-cases.test.ts` | ⬜ 未着手 |
-| 20 | `tests/unit/domain/value-objects/RewriteRules/applyRulesWithDomDiffer/normal-cases.test.ts` | ⬜ 未着手 |
-| 21 | `tests/unit/domain/value-objects/RewriteRules/toArray/normal-cases.test.ts` | ⬜ 未着手 |
-| 22 | `tests/unit/domain/value-objects/RewriteRules/constructor/normal-cases.test.ts` | ⬜ 未着手 |
-| 23 | `tests/unit/domain/entities/DomDiffer/basic-replacement.test.ts` | ⬜ 未着手 |
-| 24 | `tests/unit/domain/entities/DomDiffer/normal-replacement.test.ts` | ⬜ 未着手 |
-| 25 | `tests/unit/domain/entities/DomDiffer/regex-replacement.test.ts` | ⬜ 未着手 |
-| 26 | `tests/unit/domain/entities/DomDiffer/regex-capture-group.test.ts` | ⬜ 未着手 |
-| 27 | `tests/unit/domain/entities/DomDiffer/simple-element-replacement.test.ts` | ⬜ 未着手 |
-| 28 | `tests/unit/domain/entities/DomDiffer/string-pattern-replacement.test.ts` | ⬜ 未着手 |
-| 29 | `tests/unit/domain/entities/RewriteRule/addHtmlWhitespaceIgnoringPattern/reflection-tests.test.ts` | ⬜ 未着手 |
-| 30 | `tests/unit/domain/entities/RewriteRule/createRedundantPattern/regex-pattern.test.ts` | ⬜ 未着手 |
-| 31 | `tests/unit/domain/entities/RewriteRule/createRedundantPattern/string-pattern.test.ts` | ⬜ 未着手 |
-| 32 | `tests/unit/domain/entities/ElementMatchesFlexiblePattern/exec/exact-pattern-matching.test.ts` | ⬜ 未着手 |
-| 33 | `tests/unit/domain/entities/ElementMatchesFlexiblePattern/exec/regex-pattern-matching.test.ts` | ⬜ 未着手 |
-| 34 | `tests/unit/domain/entities/ElementMatchesFlexiblePattern/exec/Abend/error-handling.test.ts` | ⬜ 未着手 |
+| 18 | `tests/unit/domain/value-objects/Tab/matchesRule/normal-cases.test.ts` | ✅ 完了 |
+| 19 | `tests/unit/domain/value-objects/Tabs/filterByRule/normal-cases.test.ts` | ✅ 完了 |
+| 20 | `tests/unit/domain/value-objects/RewriteRules/applyRulesWithDomDiffer/normal-cases.test.ts` | ✅ 完了 |
+| 21 | `tests/unit/domain/value-objects/RewriteRules/toArray/normal-cases.test.ts` | ✅ 完了 |
+| 22 | `tests/unit/domain/value-objects/RewriteRules/constructor/normal-cases.test.ts` | ✅ 完了 |
+| 23 | `tests/unit/domain/entities/DomDiffer/basic-replacement.test.ts` | ✅ 完了 |
+| 24 | `tests/unit/domain/entities/DomDiffer/normal-replacement.test.ts` | ✅ 完了 |
+| 25 | `tests/unit/domain/entities/DomDiffer/regex-replacement.test.ts` | ✅ 完了 |
+| 26 | `tests/unit/domain/entities/DomDiffer/regex-capture-group.test.ts` | ✅ 完了 |
+| 27 | `tests/unit/domain/entities/DomDiffer/simple-element-replacement.test.ts` | ✅ 完了 |
+| 28 | `tests/unit/domain/entities/DomDiffer/string-pattern-replacement.test.ts` | ✅ 完了 |
+| 29 | `tests/unit/domain/entities/RewriteRule/addHtmlWhitespaceIgnoringPattern/reflection-tests.test.ts` | ✅ 完了 |
+| 30 | `tests/unit/domain/entities/RewriteRule/createRedundantPattern/regex-pattern.test.ts` | ✅ 完了 |
+| 31 | `tests/unit/domain/entities/RewriteRule/createRedundantPattern/string-pattern.test.ts` | ✅ 完了 |
+| 32 | `tests/unit/domain/entities/ElementMatchesFlexiblePattern/exec/exact-pattern-matching.test.ts` | ✅ 完了 |
+| 33 | `tests/unit/domain/entities/ElementMatchesFlexiblePattern/exec/regex-pattern-matching.test.ts` | ✅ 完了 |
+| 34 | `tests/unit/domain/entities/ElementMatchesFlexiblePattern/exec/Abend/error-handling.test.ts` | ✅ 完了 |
 
 #### 6. frameworks-and-drivers層（7ファイル）
 
 | # | ファイルパス | 状態 |
 |---|-------------|------|
-| 35 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/getRulesMatchingUrl/normal-cases.test.ts` | ⬜ 未着手 |
-| 36 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/getAll/normal-cases.test.ts` | ⬜ 未着手 |
-| 37 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/create/normal-cases.test.ts` | ⬜ 未着手 |
-| 38 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/create/Abend/error-cases.test.ts` | ⬜ 未着手 |
-| 39 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/update/normal-cases.test.ts` | ⬜ 未着手 |
-| 40 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/getById/normal-cases.test.ts` | ⬜ 未着手 |
-| 41 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/getById/error-cases.test.ts` | ⬜ 未着手 |
+| 35 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/getRulesMatchingUrl/normal-cases.test.ts` | ✅ 完了 |
+| 36 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/getAll/normal-cases.test.ts` | ✅ 完了 |
+| 37 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/create/normal-cases.test.ts` | ✅ 完了 |
+| 38 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/create/Abend/error-cases.test.ts` | ✅ 完了 |
+| 39 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/update/normal-cases.test.ts` | ✅ 完了 |
+| 40 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/getById/normal-cases.test.ts` | ✅ 完了 |
+| 41 | `tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/getById/error-cases.test.ts` | ✅ 完了 |
 
 ## タスク
 
@@ -102,7 +102,7 @@
 
 | # | タスク | 説明 | 状態 |
 |---|--------|------|------|
-| T-1 | 共通ファクトリの確認・整備 | `RewriteRule.fromParams()` の使用方法を確認し、テストで使用可能か検証する | ⬜ 未着手 |
+| T-1 | 共通ファクトリの確認・整備 | `RewriteRule.fromParams()` の使用方法を確認し、テストで使用可能か検証する | ✅ 完了 |
 
 ### フェーズ2: 層別リファクタリング（6タスク）
 
@@ -114,18 +114,18 @@
 
 | # | タスク | 対象ファイル数 | 状態 |
 |---|--------|---------------|------|
-| T-2 | interface-adapters層の修正 | 3ファイル | ⬜ 未着手 |
-| T-3 | application-business-rules層の修正 | 7ファイル | ⬜ 未着手 |
-| T-4 | application層の修正 | 2ファイル | ⬜ 未着手 |
-| T-5 | enterprise-business-rules層の修正 | 5ファイル | ⬜ 未着手 |
-| T-6 | domain層の修正 | 17ファイル | ⬜ 未着手 |
-| T-7 | frameworks-and-drivers層の修正 | 7ファイル | ⬜ 未着手 |
+| T-2 | interface-adapters層の修正 | 3ファイル | ✅ 完了 |
+| T-3 | application-business-rules層の修正 | 7ファイル | ✅ 完了 |
+| T-4 | application層の修正 | 2ファイル | ✅ 完了 |
+| T-5 | enterprise-business-rules層の修正 | 5ファイル | ✅ 完了 |
+| T-6 | domain層の修正 | 17ファイル | ✅ 完了 |
+| T-7 | frameworks-and-drivers層の修正 | 7ファイル | ✅ 完了 |
 
 ### フェーズ3: 検証（1タスク）
 
 | # | タスク | 説明 | 状態 |
 |---|--------|------|------|
-| T-8 | 全体テスト実行・確認 | `make testlint` を実行し、すべてのテストがパスすることを確認 | ⬜ 未着手 |
+| T-8 | 全体テスト実行・確認 | `make testlint` を実行し、すべてのテストがパスすることを確認 | ✅ 完了 |
 
 ## 受け入れ条件
 
