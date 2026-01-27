@@ -15,81 +15,16 @@ E2Eテストにおいて、類似のテストケースを配列化して実装�
 
 ### 基本構造
 
-```typescript
-test.describe('機能名', () => {
-  // テストケース定義を配列で宣言
-  const testCases = [
-    {
-      name: 'テストケース1の名前',
-      input: '入力値1',
-      expected: '期待値1',
-      // その他のテスト固有データ
-    },
-    {
-      name: 'テストケース2の名前',
-      input: '入力値2',
-      expected: '期待値2',
-    },
-  ];
+配列ベーステストは以下の構成要素で構成する：
 
-  // forEach で各テストケースを実行
-  testCases.forEach(({ name, input, expected }) => {
-    test(name, async ({ page }) => {
-      // 共通のセットアップ
-      // 共通のアクション（パラメータ化）
-      // 共通のアサーション
-      // 共通のクリーンアップ
-    });
-  });
-});
-```
+1. テストケース定義を配列で宣言（`name`、入力値、期待値を含むオブジェクトの配列）
+2. `for...of` または `forEach` で各テストケースを実行
+3. 各テストケース内で共通のセットアップ・アクション・アサーション・クリーンアップを実施
 
-### 実装例：フォーカストラップテスト
+### 適用シナリオ
 
-```typescript
-// フォーカストラップのテストケース定義
-const focusTrapCases = [
-  {
-    name: 'Tabキーでフォーカスがダイアログ内でループする',
-    oldString: 'フォーカストラップテスト',
-    keySequence: ['Tab', 'Tab'],
-    expectedFocusOrder: [
-      'confirm-dialog-confirm-button',
-      'confirm-dialog-cancel-button',
-    ],
-  },
-  {
-    name: 'Shift+Tabキーでフォーカスが逆方向にループする',
-    oldString: '逆方向フォーカステスト',
-    keySequence: ['Shift+Tab', 'Shift+Tab'],
-    expectedFocusOrder: [
-      'confirm-dialog-confirm-button',
-      'confirm-dialog-cancel-button',
-    ],
-  },
-];
-
-focusTrapCases.forEach(({ name, oldString, keySequence, expectedFocusOrder }) => {
-  test(name, async ({ page, popupPage, rulesPage }) => {
-    // 共通のセットアップコード
-    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
-    await saveRule(popupPage, page, { oldString, newString: '置換後' });
-    
-    // パラメータ化されたアクション
-    for (let i = 0; i < keySequence.length; i++) {
-      await rulesPage.keyboard.press(keySequence[i]);
-      const expectedElement = rulesPage.locator(
-        `[data-testid="${expectedFocusOrder[i]}"]`,
-      );
-      await expect(expectedElement).toBeFocused();
-    }
-    
-    // 共通のクリーンアップ
-    await clickCancelButton(rulesPage);
-    assertNoConsoleErrors(consoleMessages);
-  });
-});
-```
+- フォーカストラップテストで、Tabキーの順方向ループとShift+Tabキーの逆方向ループを配列化する場合、各ケースに `name`・`keySequence`・`expectedFocusOrder` を持たせ、アクション部分のみをパラメータ化する
+- ダイアログ閉じ操作テストで、Escapeキーとオーバーレイクリックを配列化する場合、各ケースに `name` と `dismiss` 関数を持たせ、閉じる操作のみを差し替える
 
 ## メリット
 
@@ -110,14 +45,13 @@ focusTrapCases.forEach(({ name, oldString, keySequence, expectedFocusOrder }) =>
 
 1. **テストケース名を明確にする**: `name` プロパティで何をテストしているか明示
 2. **データ構造を統一する**: すべてのテストケースで同じプロパティ構造を使用
-3. **コメントを活用**: 各プロパティの意味をコメントで説明
-4. **過度な抽象化を避ける**: 理解しやすさを優先
+3. **過度な抽象化を避ける**: 理解しやすさを優先
 
 ## ファイル構成ルール
 
 ### 配列化テストファイルの純粋性
 
-**重要**: 
+**重要**:
 1. 配列化テストを使用するファイルには、配列化テスト以外のテストコードを混在させてはならない
 2. 1つのファイルに含められる配列化テストは1つまで
 
@@ -128,43 +62,11 @@ focusTrapCases.forEach(({ name, oldString, keySequence, expectedFocusOrder }) =>
 - **保守性**: パターンの混在による混乱を防ぐ
 - **責務の明確化**: 1ファイル1目的の原則を維持
 
-#### 実装方法
+#### 適用シナリオ
 
-```typescript
-// ✅ 良い例: focus-trap.spec.ts（1つの配列化テストのみ）
-test.describe('フォーカストラップ', () => {
-  const focusTrapCases = [...];
-  focusTrapCases.forEach(({ name, ... }) => {
-    test(name, async () => { ... });
-  });
-});
-
-// ❌ 悪い例1: 配列化テストと個別テストの混在
-test.describe('機能テスト', () => {
-  const testCases = [...];
-  testCases.forEach(({ name, ... }) => {
-    test(name, async () => { ... });
-  });
-  
-  // 個別テスト（禁止）
-  test('別のテスト', async () => { ... });
-});
-
-// ❌ 悪い例2: 複数の配列化テスト
-test.describe('機能テスト', () => {
-  // 1つ目の配列化テスト
-  const testCases1 = [...];
-  testCases1.forEach(({ name, ... }) => {
-    test(name, async () => { ... });
-  });
-  
-  // 2つ目の配列化テスト（禁止）
-  const testCases2 = [...];
-  testCases2.forEach(({ name, ... }) => {
-    test(name, async () => { ... });
-  });
-});
-```
+- フォーカストラップの配列化テストは `focus-trap.spec.ts` に配置し、それ以外のテストケースを同ファイルに含めない
+- 配列化テストを導入したファイルに既存の個別テストがある場合は、個別テストを別ファイルに切り出す
+- 複数の観点の配列化テストが必要な場合は、観点ごとにファイルを分割する
 
 #### 例外
 
@@ -178,6 +80,10 @@ test.describe('機能テスト', () => {
 | 実行時間 | 高速 | 低速 |
 | セットアップ | 軽量（モック使用） | 重い（実環境構築） |
 | 配列化の閾値 | 2つ以上で検討 | 3つ以上で検討 |
+
+## eslint-rule
+
+ESLint化不可（テスト構造のパターンはコード静的解析では判定困難。PRレビューで確認）
 
 ## 関連ドキュメント
 
