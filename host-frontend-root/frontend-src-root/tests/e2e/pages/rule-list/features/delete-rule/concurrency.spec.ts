@@ -106,7 +106,9 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
 
     // 5. Assert: 2つ目のルールの編集ボタンはdisabledではない
     // （モーダルオーバーレイでブロックされているが、disabled属性は設定されていない）
-    const secondEditButton = rulesPage.locator('[data-testid="edit-button"]').nth(1);
+    // 行にスコープしてから編集ボタンを取得（selector-rules.md セクション5準拠）
+    const secondRow = rulesPage.locator('[data-testid="rules-table"] tbody tr').nth(1);
+    const secondEditButton = secondRow.locator('[data-testid="edit-button"]');
     await expect(secondEditButton).not.toBeDisabled();
 
     // 6. Act: 削除を確定
@@ -117,7 +119,9 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     await waitForRuleCount(rulesPage, 1);
 
     // 8. Assert: 残ったルールの編集ボタンがクリック可能（エラーなし）
-    const remainingEditButton = rulesPage.locator('[data-testid="edit-button"]').first();
+    // 行にスコープしてから編集ボタンを取得（selector-rules.md セクション5準拠）
+    const remainingRow = rulesPage.locator('[data-testid="rules-table"] tbody tr').nth(0);
+    const remainingEditButton = remainingRow.locator('[data-testid="edit-button"]');
     await expect(remainingEditButton).toBeEnabled();
 
     // 9. Assert: コンソールエラーが発生していないことを確認
