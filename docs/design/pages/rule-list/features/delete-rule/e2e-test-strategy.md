@@ -161,7 +161,8 @@ tests/e2e/pages/rule-list/features/delete-rule/
 ├── dialog-operations.ts       # ダイアログ操作ヘルパー
 ├── rule-operations.ts         # ルールテーブル操作ヘルパー
 ├── normal-flow.spec.ts        # 正常操作フロー
-├── cancel-operation.spec.ts   # キャンセル操作
+├── cancel-operation.spec.ts   # キャンセル操作（キャンセルボタン）
+├── dismiss-dialog.spec.ts     # ダイアログ閉じ操作（Escapeキー・オーバーレイクリック）
 ├── accessibility.spec.ts      # アクセシビリティ（ADR-007準拠）
 ├── persistence.spec.ts        # DB永続化
 ├── independence.spec.ts       # 複数ルール独立性
