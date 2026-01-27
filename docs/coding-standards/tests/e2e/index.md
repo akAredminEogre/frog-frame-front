@@ -12,6 +12,7 @@ E2Eテスト（Playwright）に適用されるルール。
 | [assertion-rules.md](./assertion-rules.md) | 重複アサーション禁止、前提条件検証 |
 | [interaction-rules.md](./interaction-rules.md) | click()とdispatchEvent()の使い分け、連続クリックテスト |
 | [text-extraction-rules.md](./text-extraction-rules.md) | textContent()のtrim()正規化、innerText()との違い |
+| [consistency-maintenance-guideline.md](./consistency-maintenance-guideline.md) | ルール追加時の一貫性維持、specファイル変更時の戦略書同期 |
 
 ## 概要
 
@@ -23,35 +24,6 @@ E2Eテストコードを書く際は、以下の観点でルールに従うこ�
 4. **アサーション**: ヘルパー関数との重複を避け、前提条件を明示的に検証
 5. **インタラクション**: 連続クリックテストには`dispatchEvent`を使用
 6. **テキスト取得**: `textContent()`は`trim()`で正規化
+7. **一貫性維持**: 新ルール追加時は同じPR内で適用、specファイル変更時は戦略書同期
 
-## ルール適用の一貫性
-
-**重要**: 新しいルールを追加した場合、**同じPR内の全コードにそのルールを適用すること**。
-
-### 理由
-
-- ルールを追加しても、同じPR内のコードが従っていないと矛盾が生じる
-- レビュアーが「自分で追加したルールに違反している」と指摘することになる
-
-### チェックリスト
-
-新しいルールをドキュメントに追加したら：
-
-- [ ] **違反パターンを検索**: 新ルールに違反するコードパターンをgrepで検索
-  - 例: 行スコープルール追加時 → `grep -r "\.nth\|\.first()" tests/e2e/` で全箇所を確認
-- [ ] 同じPR内で追加・変更したコードが新ルールに従っているか確認
-- [ ] ヘルパー関数とテストコードの両方でルールを適用しているか確認
-- [ ] コメントで新ルールへの準拠を明記（例：「selector-rules.md セクション5準拠」）
-
-## specファイル変更時のテスト戦略書同期
-
-specファイルの**分割・統合・リネーム**を行った場合、対応するテスト戦略書を必ず更新すること。
-
-詳細は [E2Eテスト戦略書 ワークフローガイドライン - テストファイルリファクタリング時の同期](../../../../docs-rules/design/07-e2e-test-strategy/workflow-guideline.md) を参照。
-
-### チェックリスト
-
-specファイルを分割・統合・リネームしたら：
-
-- [ ] テスト戦略書の「テストファイル構成」セクションが実際のディレクトリ構造と一致しているか
-- [ ] 分割した場合は新ファイルを列挙し、元ファイルの説明を更新しているか
+詳細なガイドラインは [consistency-maintenance-guideline.md](./consistency-maintenance-guideline.md) を参照。
