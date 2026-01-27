@@ -65,3 +65,45 @@ await clickDeleteButton(rulesPage, deleteIndex);
 ### eslint-rule
 
 ESLint化不可（ヘルパー関数の戻り値の意味はコード静的解析では判定困難。PRレビューで確認）
+
+---
+
+## 3. 状態アサーション前の可視性検証
+
+### 規約
+
+`toBeFocused()`、`toBeChecked()`などの**状態依存アサーション**の前に、`toBeVisible()`で要素の可視性を検証すること。
+
+### 理由
+
+- ダイアログやモーダル内のボタンは、コンテナ要素が表示されても個々のボタンの描画が遅れる場合がある
+- 状態アサーションが失敗した場合、「要素が見えていないのか」「見えているが状態が違うのか」の切り分けが困難
+- 可視性を先に検証することで、失敗原因が明確になりデバッグが容易になる
+
+### 対象となるアサーション
+
+| アサーション | 前提条件 |
+|-------------|---------|
+| `toBeFocused()` | `toBeVisible()` |
+| `toBeChecked()` | `toBeVisible()` |
+| `toHaveValue()` | `toBeVisible()` |
+
+### 例
+
+```typescript
+// ❌ 悪い例：可視性検証なし（描画タイミング差で失敗時に原因不明）
+await waitForConfirmDialog(rulesPage);
+const cancelButton = rulesPage.locator('[data-testid="cancel-button"]');
+await expect(cancelButton).toBeFocused();  // 失敗時「なぜ？」
+
+// ✅ 良い例：可視性を先に検証
+await waitForConfirmDialog(rulesPage);
+const cancelButton = rulesPage.locator('[data-testid="cancel-button"]');
+await expect(cancelButton).toBeVisible();  // 描画確認
+await expect(cancelButton).toBeFocused();  // 状態確認
+```
+
+### eslint-rule
+
+ESLint化不可（アサーションの前提条件はコード静的解析では判定困難。PRレビューで確認）
+
