@@ -118,7 +118,7 @@ test.describe('ルール削除機能 - 重複削除防止・非同期処理', ()
     // 7. Assert: ルールが1件に減る
     await waitForRuleCount(rulesPage, 1);
 
-    // 8. Assert: 残ったルールの編集ボタンがクリック可能（エラーなし）
+    // 8. Assert: 残ったルールの編集ボタンがenabledである
     // 行にスコープしてから編集ボタンを取得（selector-rules.md セクション5準拠）
     const remainingRow = rulesPage.locator('[data-testid="rules-table"] tbody tr').nth(0);
     const remainingEditButton = remainingRow.locator('[data-testid="edit-button"]');
