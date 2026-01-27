@@ -183,6 +183,7 @@ test.describe('ルール削除機能 - キャンセル操作', () => {
     // 4. Act: オーバーレイ（ダイアログ外側）をクリック
     // ConfirmDialogのオーバーレイはdata-testid="confirm-dialog-overlay"を持つ
     const overlay = rulesPage.locator('[data-testid="confirm-dialog-overlay"]');
+    await expect(overlay).toBeVisible();
     await overlay.click({ position: { x: 10, y: 10 } });
 
     // 5. Assert: ダイアログが閉じる

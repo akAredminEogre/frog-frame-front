@@ -82,6 +82,36 @@ await deleteButton.dispatchEvent('click');
 - 要素が存在しない場合のエラーメッセージが不明瞭になる
 - 前提条件を明示することでデバッグが容易になる
 
+## 非明示的要素のクリック前検証
+
+オーバーレイや動的に生成される要素をクリックする場合、`click()`の前に`toBeVisible()`で明示的に可視性を検証すること。
+
+### 理由
+
+- `click()`はActionabilityチェックを行うが、失敗時のエラーメッセージが「要素が見つからない」か「セレクタが間違っている」かの区別がつきにくい
+- 明示的な可視性検証により、「要素が描画されていない」と「セレクタ不一致」を切り分けやすくなる
+
+### 対象となる要素
+
+| 要素タイプ | 例 |
+|-----------|-----|
+| オーバーレイ | `[data-testid="confirm-dialog-overlay"]` |
+| 動的生成要素 | トースト通知、ドロップダウンメニュー |
+| 条件付き表示要素 | ローディング完了後に表示されるボタン |
+
+### 例
+
+```typescript
+// ❌ 悪い例：オーバーレイクリック時に可視性検証なし
+const overlay = page.locator('[data-testid="confirm-dialog-overlay"]');
+await overlay.click({ position: { x: 10, y: 10 } });  // 失敗時に原因不明
+
+// ✅ 良い例：可視性を明示的に検証
+const overlay = page.locator('[data-testid="confirm-dialog-overlay"]');
+await expect(overlay).toBeVisible();  // セレクタ/描画の問題を切り分け
+await overlay.click({ position: { x: 10, y: 10 } });
+```
+
 ## 使い分けの判断基準
 
 | シナリオ | 推奨メソッド | 理由 |
@@ -91,3 +121,4 @@ await deleteButton.dispatchEvent('click');
 | 連続クリック防止テスト | `dispatchEvent('click')` | オーバーレイ前のクリックをシミュレート |
 | ダブルクリック | `dblclick()` | Playwright組み込みメソッド |
 | 素早い操作のレースコンディションテスト | `dispatchEvent('click')` | タイミング制御が必要 |
+| オーバーレイ/動的要素クリック | `toBeVisible()` + `click()` | デバッグ容易性向上 |
