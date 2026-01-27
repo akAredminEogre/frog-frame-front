@@ -192,23 +192,13 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### 結合テスト
 
-- [ ] 正常系テスト（ルール削除 → DB永続化確認）
-- [ ] データ整合性テスト（他ルールへの影響なし）
-- [ ] Presenter出力テスト（コールバック検証）
-- [ ] エラー系テスト（存在しないルールID）
-- [ ] 部分的成功テスト（削除成功・タブリロード失敗）
+- [ ] 結合テスト戦略書に基づくテスト実装完了
+  - 詳細: [integration-test-strategy.md](../../design/pages/rule-list/features/delete-rule/integration-test-strategy.md)
 
 #### E2Eテスト
 
-- [x] 正常操作フロー（ゴミ箱クリック → 確認ダイアログ → 削除 → 一覧から消える）
-- [x] キャンセル操作（確認ダイアログでキャンセル → 何も起こらない）
-- [x] ダイアログ閉じ操作（Escapeキー・オーバーレイクリック → 何も起こらない）
-- [x] DB永続化（ページリロード後もルールが削除されている）
-- [x] 複数ルール独立性（1つ削除しても他ルールに影響なし）
-- [x] アクセシビリティ: フォーカストラップ（accessibility.spec.ts）
-- [x] アクセシビリティ: 背景スクロール抑止（accessibility.spec.ts）
-- [x] 並行性: 重複ダイアログ防止（concurrency.spec.ts）
-- [x] 並行性: 非ブロッキング（他操作への影響なし, concurrency.spec.ts）
+- [x] E2Eテスト戦略書に基づくテスト実装完了
+  - 詳細: [e2e-test-strategy.md](../../design/pages/rule-list/features/delete-rule/e2e-test-strategy.md)
 
 #### リファクタリング（テスト実装後）
 
