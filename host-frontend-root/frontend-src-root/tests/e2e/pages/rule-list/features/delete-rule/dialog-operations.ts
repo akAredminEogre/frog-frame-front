@@ -84,3 +84,32 @@ export async function clickCancelButton(rulesPage: Page): Promise<void> {
   await expect(cancelButton).toBeVisible({ timeout: ELEMENT_VISIBILITY_TIMEOUT });
   await cancelButton.click();
 }
+
+/**
+ * ページのoverflow スタイルを取得する
+ * 
+ * usePreventScrollは環境によってhtmlまたはbodyにスタイルを適用するため、
+ * 両方のoverflow値を取得して返す。
+ * 
+ * @param page - 対象ページ
+ * @returns htmlとbodyのoverflow値
+ */
+export async function getOverflowStyles(page: Page): Promise<{ html: string; body: string }> {
+  return await page.evaluate(() => {
+    const htmlOverflow = window.getComputedStyle(document.documentElement).overflow;
+    const bodyOverflow = window.getComputedStyle(document.body).overflow;
+    return { html: htmlOverflow, body: bodyOverflow };
+  });
+}
+
+/**
+ * スクロール防止が適用されているかを確認する
+ * 
+ * htmlまたはbodyのいずれかにoverflow: hiddenが設定されていればtrueを返す。
+ * 
+ * @param overflowStyles - getOverflowStylesで取得したスタイル
+ * @returns スクロール防止が適用されているか
+ */
+export function isScrollPrevented(overflowStyles: { html: string; body: string }): boolean {
+  return overflowStyles.html === 'hidden' || overflowStyles.body === 'hidden';
+}

@@ -4,6 +4,8 @@ import {
   clearAllRules,
   clickCancelButton,
   clickDeleteButton,
+  getOverflowStyles,
+  isScrollPrevented,
   reloadAndWaitForTable,
   saveRule,
   setupConsoleErrorMonitoring,
@@ -46,37 +48,24 @@ test.describe('ルール削除機能 - アクセシビリティ', () => {
     await reloadAndWaitForTable(rulesPage);
 
     // 3. Assert: ダイアログ表示前はスクロール防止が適用されていない
-    // usePreventScrollは環境によってhtmlまたはbodyにスタイルを適用するため両方チェック
-    const overflowBefore = await rulesPage.evaluate(() => {
-      const htmlOverflow = window.getComputedStyle(document.documentElement).overflow;
-      const bodyOverflow = window.getComputedStyle(document.body).overflow;
-      return { html: htmlOverflow, body: bodyOverflow };
-    });
-    expect(overflowBefore.html === 'hidden' || overflowBefore.body === 'hidden').toBe(false);
+    const overflowBefore = await getOverflowStyles(rulesPage);
+    expect(isScrollPrevented(overflowBefore)).toBe(false);
 
     // 4. Act: ゴミ箱アイコンをクリック
     await clickDeleteButton(rulesPage, 0);
     await waitForConfirmDialog(rulesPage);
 
     // 5. Assert: ダイアログ表示中はスクロール防止が適用される
-    const overflowDuring = await rulesPage.evaluate(() => {
-      const htmlOverflow = window.getComputedStyle(document.documentElement).overflow;
-      const bodyOverflow = window.getComputedStyle(document.body).overflow;
-      return { html: htmlOverflow, body: bodyOverflow };
-    });
-    expect(overflowDuring.html === 'hidden' || overflowDuring.body === 'hidden').toBe(true);
+    const overflowDuring = await getOverflowStyles(rulesPage);
+    expect(isScrollPrevented(overflowDuring)).toBe(true);
 
     // 6. Act: ダイアログを閉じる
     await clickCancelButton(rulesPage);
     await waitForConfirmDialogClosed(rulesPage);
 
     // 7. Assert: ダイアログを閉じた後はスクロール防止が解除される
-    const overflowAfter = await rulesPage.evaluate(() => {
-      const htmlOverflow = window.getComputedStyle(document.documentElement).overflow;
-      const bodyOverflow = window.getComputedStyle(document.body).overflow;
-      return { html: htmlOverflow, body: bodyOverflow };
-    });
-    expect(overflowAfter.html === 'hidden' || overflowAfter.body === 'hidden').toBe(false);
+    const overflowAfter = await getOverflowStyles(rulesPage);
+    expect(isScrollPrevented(overflowAfter)).toBe(false);
 
     // 8. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
