@@ -46,15 +46,41 @@ await deleteButton.click();
 await deleteButton.click();  // タイムアウト
 ```
 
-### OK例：dispatchEvent()を使用
+### OK例：dispatchEvent()を使用（前提条件検証あり）
 
 ```typescript
-// ✅ Actionabilityチェックをバイパスし、
-// オーバーレイ表示前に複数クリックをシミュレート
+// ✅ 前提条件を検証してから、Actionabilityチェックをバイパス
 const deleteButton = page.locator('[data-testid="delete-button"]');
+await expect(deleteButton).toBeVisible();  // 前提条件検証
 await deleteButton.dispatchEvent('click');
 await deleteButton.dispatchEvent('click');
 ```
+
+## dispatchEvent使用時の前提条件検証
+
+**重要**: `dispatchEvent`はActionabilityチェックを行わないため、要素が存在しない場合に分かりにくいエラーが発生する。**必ず事前に要素の存在を検証すること**。
+
+### NG例：前提条件検証なし
+
+```typescript
+// ❌ 要素が存在しない場合、分かりにくいエラーになる
+const deleteButton = page.locator('[data-testid="delete-button"]').first();
+await deleteButton.dispatchEvent('click');  // 要素がなければ謎のエラー
+```
+
+### OK例：前提条件検証あり
+
+```typescript
+// ✅ 要素の存在を明示的に検証してからdispatchEvent
+const deleteButton = page.locator('[data-testid="delete-button"]').first();
+await expect(deleteButton).toBeVisible();  // 前提条件検証
+await deleteButton.dispatchEvent('click');
+```
+
+**理由**:
+- `click()`は要素が表示されるまで自動で待機するが、`dispatchEvent`は待機しない
+- 要素が存在しない場合のエラーメッセージが不明瞭になる
+- 前提条件を明示することでデバッグが容易になる
 
 ## 使い分けの判断基準
 
