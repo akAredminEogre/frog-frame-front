@@ -1,8 +1,10 @@
-# 07-e2e-test-strategy.md ルール
+# E2Eテスト戦略書 フォーマットガイドライン
 
-E2Eテストの設計意図と網羅性を可視化するドキュメント。
+E2Eテスト戦略書が満たすべき状態・形式を定義する。
 
 ## 目的
+
+E2Eテスト戦略書は以下を可視化するドキュメントである：
 
 - ユーザー視点での機能動作を検証する設計を明文化
 - UIからDB永続化までのエンドツーエンドのフローを可視化
@@ -125,6 +127,26 @@ tests/e2e/pages/{page-name}/features/{feature-name}/
 5. ルール一覧ページで保存されたルールが表示される
 ```
 
+## ユーザーストーリートレーサビリティの記述ルール
+
+### E2E対象外のACの記載方法
+
+E2E検証が困難な受け入れ条件（AC）は、トレーサビリティテーブルに「E2E対象外」として記載する。
+
+- テストファイル列には「E2E対象外（結合テストでカバー）」等のテスト種別のみを記載する
+- **存在しないテストファイルのパスを記載してはならない**
+  - E2Eテスト戦略書は自身のスコープ（E2Eテストファイル）のみを管理する
+  - 他テスト種別の具体的なファイルパスは、対応する結合テスト戦略書等に記載する
+
+| 記載方法 | 可否 |
+|---------|------|
+| `E2E対象外（結合テストでカバー）` | ○ |
+| `結合: tests/integration/delete-rule/error-cases.test.ts` | × （他テスト種別のファイルパス参照） |
+
+### E2E検証困難な項目の理由セクション
+
+E2E対象外のACがある場合、トレーサビリティテーブルの後に「E2E検証困難な項目の理由」セクションを設け、各ACについてE2E検証が困難な理由を記載する。
+
 ## 結合テストとの関係
 
 | 結合テスト | E2Eテスト |
@@ -141,6 +163,7 @@ tests/e2e/pages/{page-name}/features/{feature-name}/
 
 ## 参考
 
-- 単体テスト戦略書: [05-test-strategy.md](./05-test-strategy.md)
-- 結合テスト戦略書: [06-integration-test-strategy.md](./06-integration-test-strategy.md)
-- E2Eテストルール: `docs/coding-standards/tests/e2e/`
+- 単体テスト戦略書: [05-test-strategy.md](../05-test-strategy.md)
+- 結合テスト戦略書: [06-integration-test-strategy.md](../06-integration-test-strategy.md)
+- E2Eテストルール: [../../coding-standards/tests/e2e/](../../../docs/coding-standards/tests/e2e/)
+- ワークフローガイドライン: [workflow-guideline.md](./workflow-guideline.md)
