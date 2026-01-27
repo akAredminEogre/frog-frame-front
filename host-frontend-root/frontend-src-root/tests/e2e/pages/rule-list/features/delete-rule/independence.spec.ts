@@ -29,60 +29,7 @@ test.describe('ルール削除機能 - 複数ルール独立性', () => {
     await clearAllRules(rulesPage);
   });
 
-  test('1つのルールを削除しても他のルールは残る', async ({
-    page,
-    popupPage,
-    rulesPage,
-  }) => {
-    // コンソールエラー監視をセットアップ
-    const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
-
-    // 1. Arrange: 2つのルールを保存
-    const ruleAOldString = 'ルールA（削除対象）';
-    const ruleBOldString = 'ルールB（残る）';
-
-    await saveRule(popupPage, page, {
-      oldString: ruleAOldString,
-      newString: '置換後A',
-    });
-
-    await saveRule(popupPage, page, {
-      oldString: ruleBOldString,
-      newString: '置換後B',
-    });
-
-    // 2. Arrange: ルール一覧ページをリロード
-    await reloadAndWaitForTable(rulesPage);
-
-    // 3. Assert: 初期状態で2件のルールが存在
-    const initialCount = await getRuleCount(rulesPage);
-    expect(initialCount).toBe(2);
-
-    // 4. Act: ルールAを削除
-    const ruleAIndex = await getRuleIndexByOldString(rulesPage, ruleAOldString);
-    expect(ruleAIndex).toBeGreaterThanOrEqual(0);
-
-    await clickDeleteButton(rulesPage, ruleAIndex);
-    await waitForConfirmDialog(rulesPage);
-    await clickConfirmDeleteButton(rulesPage);
-    await waitForConfirmDialogClosed(rulesPage);
-
-    // 5. Assert: 1件に減少
-    await waitForRuleCount(rulesPage, 1);
-
-    // 6. Assert: ルールAは存在しない
-    const ruleAExists = await hasRuleWithOldString(rulesPage, ruleAOldString);
-    expect(ruleAExists).toBe(false);
-
-    // 7. Assert: ルールBは残っている
-    const ruleBExists = await hasRuleWithOldString(rulesPage, ruleBOldString);
-    expect(ruleBExists).toBe(true);
-
-    // 8. Assert: コンソールエラーが発生していないことを確認
-    assertNoConsoleErrors(consoleMessages);
-  });
-
-  test('削除後の件数表示が正しく更新される', async ({
+  test('1つのルールを削除しても他のルールは残り、件数表示も正しく更新される', async ({
     page,
     popupPage,
     rulesPage,
@@ -91,33 +38,41 @@ test.describe('ルール削除機能 - 複数ルール独立性', () => {
     const consoleMessages = setupConsoleErrorMonitoring(popupPage, rulesPage);
 
     // 1. Arrange: 3つのルールを保存
+    const deletedOldString = 'ルール1（削除対象）';
+    const remainingOldString1 = 'ルール2（残る）';
+    const remainingOldString2 = 'ルール3（残る）';
+
     await saveRule(popupPage, page, {
-      oldString: 'ルール1',
+      oldString: deletedOldString,
       newString: '置換後1',
     });
 
     await saveRule(popupPage, page, {
-      oldString: 'ルール2',
+      oldString: remainingOldString1,
       newString: '置換後2',
     });
 
     await saveRule(popupPage, page, {
-      oldString: 'ルール3',
+      oldString: remainingOldString2,
       newString: '置換後3',
     });
 
     // 2. Arrange: ルール一覧ページをリロード
     await reloadAndWaitForTable(rulesPage);
 
-    // 3. Assert: 初期状態で3件
-    expect(await getRuleCount(rulesPage)).toBe(3);
+    // 3. Assert: 初期状態で3件のルールが存在
+    const initialCount = await getRuleCount(rulesPage);
+    expect(initialCount).toBe(3);
 
     // 4. Assert: フッターに「合計 3 件」と表示される
     const footer = rulesPage.locator('[data-testid="rules-footer"]');
     await expect(footer).toContainText('合計 3 件');
 
-    // 5. Act: 1つ削除
-    await clickDeleteButton(rulesPage, 0);
+    // 5. Act: 1つのルールを削除
+    const deleteIndex = await getRuleIndexByOldString(rulesPage, deletedOldString);
+    expect(deleteIndex).toBeGreaterThanOrEqual(0);
+
+    await clickDeleteButton(rulesPage, deleteIndex);
     await waitForConfirmDialog(rulesPage);
     await clickConfirmDeleteButton(rulesPage);
     await waitForConfirmDialogClosed(rulesPage);
@@ -128,7 +83,17 @@ test.describe('ルール削除機能 - 複数ルール独立性', () => {
     // 7. Assert: フッターに「合計 2 件」と表示される
     await expect(footer).toContainText('合計 2 件');
 
-    // 8. Assert: コンソールエラーが発生していないことを確認
+    // 8. Assert: 削除されたルールは存在しない
+    const deletedExists = await hasRuleWithOldString(rulesPage, deletedOldString);
+    expect(deletedExists).toBe(false);
+
+    // 9. Assert: 他のルールは残っている（独立性の確認）
+    const remaining1Exists = await hasRuleWithOldString(rulesPage, remainingOldString1);
+    const remaining2Exists = await hasRuleWithOldString(rulesPage, remainingOldString2);
+    expect(remaining1Exists).toBe(true);
+    expect(remaining2Exists).toBe(true);
+
+    // 10. Assert: コンソールエラーが発生していないことを確認
     assertNoConsoleErrors(consoleMessages);
   });
 
