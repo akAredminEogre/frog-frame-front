@@ -69,6 +69,9 @@ export async function hasRuleWithOldString(
 /**
  * 特定のoldStringを持つルールのインデックスを取得する
  *
+ * ループ内でgetRuleOldStringを呼ぶと毎回rows.count()が実行されるため、
+ * rowsとcountを事前に取得してループ内のDOMアクセスを最小化している。
+ *
  * @param rulesPage - ルール一覧ページ
  * @param oldString - 検索するoldString値
  * @returns ルールのインデックス、見つからない場合は-1
@@ -77,10 +80,14 @@ export async function getRuleIndexByOldString(
   rulesPage: Page,
   oldString: string
 ): Promise<number> {
-  const count = await getRuleCount(rulesPage);
+  const rows = rulesPage.locator('[data-testid="rules-table"] tbody tr');
+  const count = await rows.count();
   for (let i = 0; i < count; i++) {
-    const ruleOldString = await getRuleOldString(rulesPage, i);
-    if (ruleOldString === oldString) {
+    const row = rows.nth(i);
+    const oldStringCell = row.locator('[data-testid="rule-old-string"]');
+    const text = await oldStringCell.textContent();
+    const trimmed = (text || '').trim();
+    if (trimmed === oldString) {
       return i;
     }
   }
