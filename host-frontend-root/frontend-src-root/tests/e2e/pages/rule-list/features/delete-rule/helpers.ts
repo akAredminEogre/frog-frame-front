@@ -36,6 +36,8 @@ export {
   clickCancelButton,
   clickConfirmDeleteButton,
   clickDeleteButton,
+  getOverflowStyles,
+  isScrollPrevented,
   waitForConfirmDialog,
   waitForConfirmDialogClosed,
 } from 'tests/e2e/pages/rule-list/features/delete-rule/dialog-operations';
