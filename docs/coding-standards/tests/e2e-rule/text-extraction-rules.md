@@ -12,39 +12,10 @@ E2Eテストで要素からテキストを取得する際のルール。
 
 Reactのレンダリングでは、コンポーネント構造に起因する改行やインデント（空白文字）がテキストに含まれることがある。これにより`toBe()`等の厳密比較が失敗する。
 
-```html
-<!-- Reactがレンダリングした実際のDOM -->
-<td data-testid="rule-old-string">
-  テスト文字列
-</td>
-```
+### 適用シナリオ
 
-```typescript
-// textContent()の結果: "\n  テスト文字列\n"
-// 期待値: "テスト文字列"
-// → 一致しない！
-```
-
-### NG例：trim()なし
-
-```typescript
-// ❌ 空白文字を含む可能性がある
-export async function getRuleOldString(page: Page, index: number): Promise<string> {
-  const cell = page.locator('[data-testid="rule-old-string"]').nth(index);
-  return await cell.textContent() || '';
-}
-```
-
-### OK例：trim()で正規化
-
-```typescript
-// ✅ 前後の空白を除去
-export async function getRuleOldString(page: Page, index: number): Promise<string> {
-  const cell = page.locator('[data-testid="rule-old-string"]').nth(index);
-  const text = await cell.textContent();
-  return (text || '').trim();
-}
-```
+- テーブルセルのテキストをヘルパー関数で取得し、期待値と厳密一致で比較する場合、`textContent()`の結果に前後の空白・改行が含まれている可能性があるため`trim()`を適用する
+- Reactコンポーネントが`<td>` + 子要素で構成されている場合、`textContent()`は`"\n  テスト文字列\n"`のように改行・インデントを含むため、`trim()`なしでは`"テスト文字列"`との比較が失敗する
 
 ## textContent() vs innerText()
 
@@ -62,3 +33,7 @@ export async function getRuleOldString(page: Page, index: number): Promise<strin
 - [ ] `textContent()`の結果に`trim()`を適用しているか
 - [ ] 戻り値のJSDocに「前後の空白を除去済み」と明記しているか
 - [ ] 一致判定に使用する場合、正規化を考慮しているか
+
+## eslint-rule
+
+ESLint化不可（`textContent()`の戻り値に対する正規化はコード静的解析では判定困難。PRレビューで確認）

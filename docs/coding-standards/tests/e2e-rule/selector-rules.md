@@ -27,22 +27,10 @@ E2Eテストで要素を特定する際は、以下の優先順位に従うこ�
 - `data-testid`による要素特定（推奨）
 - `data-testid`確認後の補助的なテキスト検証（`toContainText`）
 
-### 例
+### 適用シナリオ
 
-```typescript
-// ❌ 悪い例：テキストのみに依存
-const emptyMessage = page.getByText('保存されたルールがありません');
-await expect(emptyMessage).toBeVisible();
-
-// ✅ 良い例：data-testidを使用
-const emptyState = page.locator('[data-testid="empty-state"]');
-await expect(emptyState).toBeVisible();
-
-// ✅ 良い例：data-testid + テキスト検証の組み合わせ（テキスト内容も検証したい場合）
-const emptyState = page.locator('[data-testid="empty-state"]');
-await expect(emptyState).toBeVisible();
-await expect(emptyState).toContainText('保存されたルール');
-```
+- 空状態メッセージの表示を検証する場合、テキスト内容（`getByText('保存されたルールがありません')`）ではなく`data-testid="empty-state"`で要素を取得する。テキスト内容も検証したい場合は、`data-testid`で取得した要素に対して`toContainText`で補助的に検証する
+- ボタンの特定に`getByRole('button', { name: '削除' })`ではなく`data-testid="delete-button"`を使用する
 
 ### eslint-rule
 
@@ -61,20 +49,14 @@ ESLint化不可（Playwrightのセレクタ選択はコード静的解析では�
   - テーブル行などの繰り返し要素では、行スコープ内で同じ役割を持つ要素に同一の`data-testid`を付与してよい（例: 各行に`delete-button`/`edit-button`を付与）
   - 繰り返し要素に対するテストでは、必ず「行要素を特定してから、そのスコープ内で`data-testid`を取得する」こと（セクション5参照）
 
-### 例
+### 命名規則
 
-```typescript
-// ✅ 良い例
-data-testid="empty-state"
-data-testid="confirm-dialog"
-data-testid="confirm-dialog-cancel-button"
-data-testid="rules-table"
-
-// ❌ 悪い例
-data-testid="EmptyState"      // PascalCase
-data-testid="empty_state"     // snake_case
-data-testid="btn1"            // 意味不明な名前
-```
+| 形式 | 可否 |
+|------|------|
+| `kebab-case`（例: `empty-state`, `confirm-dialog`） | ✅ |
+| `PascalCase`（例: `EmptyState`） | ❌ |
+| `snake_case`（例: `empty_state`） | ❌ |
+| 意味不明な短縮名（例: `btn1`） | ❌ |
 
 ### eslint-rule
 
@@ -94,15 +76,9 @@ ESLint化不可（HTMLテンプレート内の属性値の命名規則チェッ�
 - `exact: true`なしの`getByRole`（部分一致マッチ）
   - 将来のラベル変更で意図しない要素を取得する可能性がある
 
-### 例
+### 適用シナリオ
 
-```typescript
-// ❌ 悪い例：部分一致（ラベル変更で壊れやすい）
-const deleteButton = page.getByRole('button', { name: 'ルールを削除' });
-
-// ✅ 良い例：厳密マッチ
-const deleteButton = page.getByRole('button', { name: 'ルールを削除', exact: true });
-```
+- 「ルールを削除」ボタンを`getByRole`で取得する場合、`exact: true`を指定しないと「ルールを削除して保存」のような将来追加されるボタンも部分一致で取得されるリスクがある
 
 ### eslint-rule
 
@@ -129,17 +105,9 @@ ESLint化不可（Playwrightのオプション使用はコード静的解析で�
 - [ ] ヘルパー関数のセレクタを`data-testid`に更新
 - [ ] テストが引き続きパスすることを確認
 
-### 例
+### 適用シナリオ
 
-```typescript
-// コンポーネントに data-testid="delete-button" を追加した場合
-
-// ❌ ヘルパーが古いセレクタのまま
-const deleteButtons = page.getByRole('button', { name: 'ルールを削除', exact: true });
-
-// ✅ ヘルパーも data-testid を使用するよう更新
-const deleteButton = row.locator('[data-testid="delete-button"]');
-```
+- 削除ボタンコンポーネントに`data-testid="delete-button"`を追加した場合、ヘルパー関数で`getByRole('button', { name: 'ルールを削除' })`を使用している箇所を`locator('[data-testid="delete-button"]')`に更新する
 
 ---
 
@@ -154,15 +122,11 @@ const deleteButton = row.locator('[data-testid="delete-button"]');
 - 将来同名のボタンや要素が追加された場合の誤取得を防ぐ
 - インデックス指定が明確になり、デバッグが容易になる
 
-### 例
+### 適用シナリオ
 
-```typescript
-// ❌ 悪い例：全ボタンから nth で取得（他のボタンが追加されると壊れる）
-const deleteButtons = page.locator('[data-testid="delete-button"]');
-const deleteButton = deleteButtons.nth(ruleIndex);
+- テーブルの3行目の削除ボタンを取得する場合、全削除ボタンの中から`nth(2)`で取得するのではなく、行ロケータで3行目を特定してからその行内の削除ボタンを取得する。ヘッダー行に削除ボタンが追加された場合でもインデックスがずれない
+- `.first()`で最初の要素を取得する場合も同様に、行スコープを先に確定させてからスコープ内の要素を取得する
 
-// ✅ 良い例：行にスコープしてから取得
-const rows = page.locator('[data-testid="rules-table"] tbody tr');
-const row = rows.nth(ruleIndex);
-const deleteButton = row.locator('[data-testid="delete-button"]');
-```
+### eslint-rule
+
+ESLint化不可（セレクタのスコープ指定はコード静的解析では判定困難。PRレビューで確認）
