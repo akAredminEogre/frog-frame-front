@@ -55,17 +55,12 @@ tests/unit/interface-adapters/factories/DeleteRuleControllerFactory/create/
 
 RepositoryとGatewayをモック化し、Factoryの責務（クラス生成と連携）をテストする。
 
-### 既存モック確認チェック（必須）
+### 使用するモック
 
-- [x] `grep -r "createMockRewriteRuleRepository" tests/` で検索 → 既存モック使用 (`tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository.ts`)
-- [x] `grep -r "createMockTabsGateway" tests/` で検索 → 既存モック使用 (`tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`)
-
-### モック対象
-
-| 依存関係 | モック理由 | 既存モック |
-|---------|-----------|-----------|
-| IRewriteRuleRepository | DB操作の回避、成功/失敗シナリオの制御 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository.ts` |
-| ITabsGateway | Chrome API依存の回避 | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts` |
+| 依存関係 | モック理由 | モックパス |
+| -------- | ---------- | ---------- |
+| IRewriteRuleRepository | DB操作の回避、成功/失敗シナリオの制御 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/` |
+| ITabsGateway | Chrome API依存の回避 | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/` |
 
 ### コールバックのモック
 

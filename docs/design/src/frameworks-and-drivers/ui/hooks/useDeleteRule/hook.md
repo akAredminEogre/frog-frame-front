@@ -93,26 +93,13 @@ tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/
 
 ## モック戦略
 
-### 既存モック確認チェック（必須）
+### 使用するモック
 
-- [x] `grep -r "createMockDeleteRuleControllerFactory" tests/` で検索 → 該当なし、新規作成
-- [x] `grep -r "createMockIDeleteRuleController" tests/` で検索 → 該当なし、新規作成
-
-### モック対象
-
-| 依存関係 | モック理由 | 既存モック |
-|---------|-----------|-----------|
-| IDeleteRuleControllerFactory | DIコンテナ依存を排除 | 新規作成 |
+| 依存関係 | モック理由 | モックパス |
+| -------- | ---------- | ---------- |
+| IDeleteRuleControllerFactory | DIコンテナ依存を排除 | 新規作成（`tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/mocks/`） |
 | IDeleteRuleController | 実際の削除処理を実行させない | 新規作成（Factory内で生成） |
 | container.resolve | DIコンテナ呼び出しをモック化 | vi.mock使用 |
-
-### モックファイル構成
-
-```
-tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/
-└── mocks/
-    └── createMockDeleteRuleControllerFactory.ts
-```
 
 ### テストヘルパー
 
