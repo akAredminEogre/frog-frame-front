@@ -75,7 +75,6 @@ export class UseDeleteRuleTestHelper {
    * beforeEach 内で必ず呼び出すこと
    */
   setup(): void {
-    vi.clearAllMocks();
     this.container = document.createElement('div');
     document.body.appendChild(this.container);
     this.root = ReactDOM.createRoot(this.container);
@@ -97,7 +96,6 @@ export class UseDeleteRuleTestHelper {
     this.container = null;
     this.root = null;
     this.hookRef = { current: null };
-    vi.resetAllMocks();
   }
 
   /**

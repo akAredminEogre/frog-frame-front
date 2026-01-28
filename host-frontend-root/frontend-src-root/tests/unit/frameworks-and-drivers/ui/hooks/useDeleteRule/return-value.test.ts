@@ -31,6 +31,7 @@ describe('useDeleteRule - 戻り値', () => {
   let mockResult: MockDeleteRuleControllerFactoryResult;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     helper.setup();
     mockResult = createMockDeleteRuleControllerFactory();
     (container.resolve as ReturnType<typeof vi.fn>).mockReturnValue(mockResult.factory);
@@ -38,6 +39,7 @@ describe('useDeleteRule - 戻り値', () => {
 
   afterEach(() => {
     helper.cleanup();
+    vi.resetAllMocks();
   });
 
   describe('初期値', () => {
