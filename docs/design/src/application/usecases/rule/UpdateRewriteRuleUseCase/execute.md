@@ -24,13 +24,13 @@ RewriteRule.fromParamsでエンティティを生成し、Repository経由でル
 
 各依存関係が正しい引数で呼び出されることを確認。
 
-| 分類 | テストケース | 根拠 |
-|------|-------------|------|
-| Repository.update | RewriteRule.fromParams(id, params)で生成されたルールで呼び出し | 更新されたルールの永続化 |
-| ChromeTabsService.queryTabs | 空オブジェクトで呼び出し | 全タブの取得 |
-| ChromeTabsService.reloadTab | マッチするタブに対して呼び出し | マッチするタブのリロード |
+| 分類 | テストケース | 根拠 | 実装状況 |
+|------|-------------|------|---------|
+| Repository.update | RewriteRule.fromParams(id, params)で生成されたルールで呼び出し | 更新されたルールの永続化 | ✓ 実装済み |
+| ChromeTabsService.queryTabs | 空オブジェクトで呼び出し | 全タブの取得 | 未実装（モック設定のみ、アサーションなし） |
+| ChromeTabsService.reloadTab | マッチするタブに対して呼び出し | マッチするタブのリロード | 未実装 |
 
-**対応テスト**: `normal-cases.test.ts`（同一テスト内で検証）
+**対応テスト**: `normal-cases.test.ts`（Repository.updateのみ検証）
 
 ### 3. 部分的成功（タブリロード失敗）
 
@@ -59,7 +59,8 @@ urlPatternが空文字列やundefinedの場合、タブリロードをスキッ�
 - [x] 正規表現ルールの更新
 - [x] URLパターンルールの更新
 - [x] Repository.updateの呼び出し確認
-- [x] ChromeTabsService.queryTabsの呼び出し確認
+- [ ] ChromeTabsService.queryTabsの呼び出し確認 → 明示的テスト未実装（モック設定はあるがアサーションなし）
+- [ ] ChromeTabsService.reloadTabの呼び出し確認 → 明示的テスト未実装
 - [ ] タブリロード失敗時のルール保存成功維持 → 明示的テスト未実装（タブリロード失敗を再現するテストが必要）
 - [ ] urlPattern未指定時の早期リターン → 明示的テスト未実装（urlPattern="" / undefined のテストが必要）
 - [ ] Repository.update失敗時の異常系 → 現在のテストでは未カバー（executeはtry-catchでタブリロードのみ保護し、Repository.update失敗は呼び出し元に伝播するため、結合テストまたは上位レイヤーで検証）
