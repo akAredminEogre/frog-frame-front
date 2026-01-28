@@ -110,7 +110,7 @@ Interactorの3つの依存関係をモック化してテストする。
 - [x] `grep -r "createMockTabsGateway" tests/` で既存モックを検索した → 既存モック使用 (`tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`)
 - [x] `grep -r "createMockPresenter" tests/` で既存モックを検索した → 新規作成（IDeleteRulePresenter固有）
 
-> **参照**: [common-rule.md](../../../../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
+> **参照**: [mock-file-placement.md](../../../../../coding-standards/tests/common-rule/mock-file-placement.md) の「モック作成前の確認手順」
 
 ### モック対象
 

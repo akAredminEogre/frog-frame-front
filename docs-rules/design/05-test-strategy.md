@@ -191,7 +191,7 @@ find tests/ -name "createMock*.ts" | xargs grep -l "[InterfaceName]"
 - [x] `grep -r "createMockTabsGateway" tests/` で検索 → 既存モック使用 (`tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`)
 - [x] `grep -r "createMockPresenter" tests/` で検索 → 新規作成（該当なし）
 
-> **参照**: [common-rule.md](../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
+> **参照**: [mock-file-placement.md](../../coding-standards/tests/common-rule/mock-file-placement.md) の「モック作成前の確認手順」
 
 ### モック対象
 
