@@ -29,7 +29,7 @@ describe('useDeleteRule - cancelDelete', () => {
     vi.clearAllMocks();
     helper.setup();
     mockResult = createMockDeleteRuleControllerFactory();
-    (container.resolve as ReturnType<typeof vi.fn>).mockReturnValue(mockResult.factory);
+    vi.mocked(container.resolve).mockReturnValue(mockResult.factory);
   });
 
   afterEach(() => {

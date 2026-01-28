@@ -37,7 +37,7 @@ describe('useDeleteRule - confirmDelete', () => {
     vi.clearAllMocks();
     helper.setup();
     mockResult = createMockDeleteRuleControllerFactory();
-    (container.resolve as ReturnType<typeof vi.fn>).mockReturnValue(mockResult.factory);
+    vi.mocked(container.resolve).mockReturnValue(mockResult.factory);
   });
 
   afterEach(() => {
@@ -64,7 +64,7 @@ describe('useDeleteRule - confirmDelete', () => {
     const deletePromise = new Promise<void>((resolve) => {
       resolveDeleteRule = resolve;
     });
-    (mockResult.controller.deleteRule as ReturnType<typeof vi.fn>).mockReturnValue(deletePromise);
+    vi.mocked(mockResult.controller.deleteRule).mockReturnValue(deletePromise);
 
     await helper.render();
     await helper.callHandleDelete(3);
@@ -143,7 +143,7 @@ describe('useDeleteRule - confirmDelete', () => {
     const deletePromise = new Promise<void>((resolve) => {
       resolveDeleteRule = resolve;
     });
-    (mockResult.controller.deleteRule as ReturnType<typeof vi.fn>).mockReturnValue(deletePromise);
+    vi.mocked(mockResult.controller.deleteRule).mockReturnValue(deletePromise);
 
     await helper.render();
     await helper.callHandleDelete(8);
@@ -170,7 +170,7 @@ describe('useDeleteRule - confirmDelete', () => {
 
   it('deleteRuleが例外を投げてもdeletingIdsからruleIdが除去される', async () => {
     // Arrange
-    (mockResult.controller.deleteRule as ReturnType<typeof vi.fn>).mockRejectedValue(
+    vi.mocked(mockResult.controller.deleteRule).mockRejectedValue(
       new Error('削除失敗')
     );
 
