@@ -63,7 +63,7 @@ tests/unit/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI/
 
 ## モック戦略
 
-> **重要**: モック作成は basic-rule.md の「モック作成の分離ルール」に従うこと。
+> **重要**: モック作成は [basic-rule.md](../../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
 
 ### 既存モック確認チェック（必須）
 
