@@ -16,11 +16,13 @@ describe('DeleteRuleUI - コールバック伝播', () => {
   const helper = new DeleteRuleUITestHelper();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     helper.setup();
   });
 
   afterEach(() => {
     helper.cleanup();
+    vi.resetAllMocks();
   });
 
   it('確認ボタンクリック時にonConfirmDeleteが呼ばれる', async () => {

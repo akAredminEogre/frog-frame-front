@@ -5,17 +5,19 @@
  * - deleteError=オブジェクト: Toast通知が表示され、ruleIdとmessageを含むエラーメッセージが表示される
  */
 import { DeleteRuleUITestHelper } from 'tests/unit/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI/test-helpers';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('DeleteRuleUI - ToastNotification表示', () => {
   const helper = new DeleteRuleUITestHelper();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     helper.setup();
   });
 
   afterEach(() => {
     helper.cleanup();
+    vi.resetAllMocks();
   });
 
   type ToastVisibilityTestCase = {
