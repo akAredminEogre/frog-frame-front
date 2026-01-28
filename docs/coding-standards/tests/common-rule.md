@@ -12,6 +12,11 @@
 | 2 | モックファイルの配置ルール | [mock-file-placement.md](./common-rule/mock-file-placement.md) |
 | 3 | テストデータの型注釈ルール | [test-data-type-annotations.md](./common-rule/test-data-type-annotations.md) |
 | 4 | モック型キャストの禁止 | [mock-type-cast-prohibition.md](./common-rule/mock-type-cast-prohibition.md) |
-| 5 | 非同期処理中のState排他制御 | [async-state-try-finally.md](./common-rule/async-state-try-finally.md) |
-| 6 | テストケース配列のフィールド使用検証 | [test-case-field-usage.md](./common-rule/test-case-field-usage.md) |
-| 7 | モック初期化・リセットの明示的呼び出し | [mock-init-reset.md](./common-rule/mock-init-reset.md) |
+| 5 | テストケース配列のフィールド使用検証 | [test-case-field-usage.md](./common-rule/test-case-field-usage.md) |
+| 6 | モック初期化・リセットの明示的呼び出し | [mock-init-reset.md](./common-rule/mock-init-reset.md) |
+
+## 関連ドキュメント
+
+非同期処理中のState排他制御（try/finally パターン）については、ソースコード実装ルールを参照：
+
+- [状態ガード/ロックの実装ルール](../src/frameworks-and-drivers/ui/react-hooks/state-guard.md)
