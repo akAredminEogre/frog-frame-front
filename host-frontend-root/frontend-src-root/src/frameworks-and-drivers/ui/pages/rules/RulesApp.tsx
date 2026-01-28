@@ -12,9 +12,8 @@ import EmptyStateMessage from 'src/components/organisms/EmptyStateMessage/EmptyS
 import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { container } from 'src/frameworks-and-drivers/di/container';
-import { ToastNotification } from 'src/frameworks-and-drivers/ui/components/atoms/ToastNotification';
-import { ConfirmDialog } from 'src/frameworks-and-drivers/ui/components/organisms/ConfirmDialog';
-import { IDeleteRuleControllerFactory } from 'src/interface-adapters/factories/IDeleteRuleControllerFactory';
+import { DeleteRuleUI } from 'src/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI';
+import { useDeleteRule } from 'src/frameworks-and-drivers/ui/hooks/useDeleteRule';
 import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 
 function RulesApp() {
@@ -22,10 +21,12 @@ function RulesApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
-  const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
   const [toggleError, setToggleError] = useState<{ ruleId: number; message: string } | null>(null);
-  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
-  const [deleteError, setDeleteError] = useState<{ ruleId: number; message: string } | null>(null);
+
+  // 削除機能をuseDeleteRuleフックに委譲
+  const deleteRule = useDeleteRule((ruleId: number) => {
+    setRules((prevRules) => prevRules.filter((r) => r.id !== ruleId));
+  });
 
   const toggleController = useMemo(() => {
     const factory = container.resolve<IToggleRuleActiveControllerFactory>('IToggleRuleActiveControllerFactory');
@@ -41,17 +42,6 @@ function RulesApp() {
     );
   }, []);
 
-  const deleteController = useMemo(() => {
-    const factory = container.resolve<IDeleteRuleControllerFactory>('IDeleteRuleControllerFactory');
-    return factory.create(
-      (ruleId: number) => {
-        setRules((prevRules) => prevRules.filter((r) => r.id !== ruleId));
-      },
-      (ruleId: number, message: string) => {
-        setDeleteError({ ruleId, message });
-      }
-    );
-  }, []);
 
   useEffect(() => {
     const loadRules = async () => {
@@ -129,35 +119,6 @@ function RulesApp() {
     });
   };
 
-  const handleDelete = (ruleId: number) => {
-    if (deletingIds.has(ruleId)) {
-      return;
-    }
-    setDeleteError(null);
-    setDeleteTargetId(ruleId);
-  };
-
-  const confirmDelete = async () => {
-    if (deleteTargetId === null || deletingIds.has(deleteTargetId)) {
-      return;
-    }
-
-    const ruleId = deleteTargetId;
-    setDeleteTargetId(null);
-    setDeletingIds((prev) => new Set(prev).add(ruleId));
-
-    await deleteController.deleteRule(ruleId);
-
-    setDeletingIds((prev) => {
-      const next = new Set(prev);
-      next.delete(ruleId);
-      return next;
-    });
-  };
-
-  const cancelDelete = () => {
-    setDeleteTargetId(null);
-  };
 
   return (
     <div className="container">
@@ -176,9 +137,9 @@ function RulesApp() {
           rules={rules}
           onEdit={handleEdit}
           onToggle={handleToggle}
-          onDelete={handleDelete}
+          onDelete={deleteRule.handleDelete}
           togglingIds={togglingIds}
-          deletingIds={deletingIds}
+          deletingIds={deleteRule.deletingIds}
         />
       )}
 
@@ -186,23 +147,14 @@ function RulesApp() {
         <p>合計 {rules.length} 件のルールが保存されています</p>
       </div>
 
-      <ConfirmDialog
-        isOpen={deleteTargetId !== null}
-        title="ルールの削除"
-        message="このルールを削除しますか？"
-        onConfirm={() => {
-          void confirmDelete();
+      <DeleteRuleUI
+        isDeleteDialogOpen={deleteRule.deleteTargetId !== null}
+        deleteError={deleteRule.deleteError}
+        onConfirmDelete={() => {
+          void deleteRule.confirmDelete();
         }}
-        onCancel={cancelDelete}
-        confirmLabel="削除"
-        cancelLabel="キャンセル"
-      />
-
-      <ToastNotification
-        message={deleteError ? `ルール ${deleteError.ruleId} の削除処理中にエラーが発生しました: ${deleteError.message}` : ''}
-        type="error"
-        isVisible={deleteError !== null}
-        onClose={() => setDeleteError(null)}
+        onCancelDelete={deleteRule.cancelDelete}
+        onCloseDeleteError={deleteRule.clearDeleteError}
       />
     </div>
   );
