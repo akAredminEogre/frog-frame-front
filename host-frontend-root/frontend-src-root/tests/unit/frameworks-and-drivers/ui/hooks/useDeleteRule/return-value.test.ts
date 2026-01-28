@@ -18,6 +18,7 @@ import { UseDeleteRuleTestHelper } from 'tests/unit/frameworks-and-drivers/ui/ho
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { container } from 'src/frameworks-and-drivers/di/container';
+import { UseDeleteRuleResult } from 'src/frameworks-and-drivers/ui/hooks/useDeleteRule';
 
 vi.mock('src/frameworks-and-drivers/di/container', () => ({
   container: {
@@ -78,7 +79,10 @@ describe('useDeleteRule - 戻り値', () => {
   });
 
   describe('メソッドの型', () => {
-    const methodTestCases = [
+    const methodTestCases: Array<{
+      description: string;
+      propertyName: keyof UseDeleteRuleResult;
+    }> = [
       {
         description: 'handleDeleteがfunction型である',
         propertyName: 'handleDelete',
@@ -102,11 +106,9 @@ describe('useDeleteRule - 戻り値', () => {
         // Arrange & Act
         await helper.render();
 
-        // Assert: ヘルパーの対応するメソッドが呼べること（=フックのメソッドが存在すること）を確認
-        // getDeletingIds等のゲッターが正常動作する = hookRef.currentが存在する = メソッドも存在する
-        // ここではプロパティの存在確認のため、直接フックの戻り値の型を検証は不要
-        // （TypeScriptの型チェックで保証されるため、ランタイムでの関数型チェックを行う）
-        expect(typeof helper.getDeletingIds()).not.toBe('undefined');
+        // Assert: フックの戻り値から該当プロパティがfunction型であることを検証
+        const result = helper.getHookResult();
+        expect(typeof result[testCase.propertyName]).toBe('function');
       });
     });
   });

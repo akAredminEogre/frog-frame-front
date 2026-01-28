@@ -129,6 +129,16 @@ export class UseDeleteRuleTestHelper {
     return this.onDeleteSuccess;
   }
 
+  // --- フック戻り値への直接アクセス ---
+
+  /**
+   * フックの戻り値オブジェクトを直接取得する
+   * プロパティの存在確認や型検証など、個別ゲッターでは対応できないケースで使用
+   */
+  getHookResult(): UseDeleteRuleResult {
+    return this.ensureRendered();
+  }
+
   // --- 状態ゲッター ---
 
   /**
