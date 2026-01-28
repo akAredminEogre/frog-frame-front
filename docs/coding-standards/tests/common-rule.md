@@ -195,3 +195,47 @@ try {
 ## eslint-rule
 
 ESLint化不可（State管理のパターンを文脈判断する必要があるため。PRレビューで確認）
+
+---
+
+## 6. テストケース配列のフィールド使用検証
+
+### 規約
+
+- `testCases.forEach()` パターンでテストケース配列を使用する場合、配列要素のすべてのプロパティ（`description` を除く）がテスト本体内で参照されていること
+- データ駆動テストの目的は、テストケースごとに異なる入力・期待値を使うことにある。定義したフィールドを使わないテストはコピー&ペーストミスの兆候
+
+### 禁止事項
+
+```typescript
+// ❌ Bad: propertyNameを定義しているがテスト本体で未使用
+const testCases = [{ description: '...', propertyName: 'foo' }];
+testCases.forEach((testCase) => {
+  it(testCase.description, () => {
+    expect(someUnrelatedValue).toBe(true); // propertyNameを使っていない
+  });
+});
+```
+
+### 許可事項
+
+```typescript
+// ✅ Good: 定義したフィールドをアサーションで使用している
+const testCases: Array<{ description: string; propertyName: keyof SomeType }> = [
+  { description: '...', propertyName: 'foo' },
+];
+testCases.forEach((testCase) => {
+  it(testCase.description, () => {
+    const result = getResult();
+    expect(typeof result[testCase.propertyName]).toBe('function');
+  });
+});
+```
+
+### 根拠
+
+テストケース配列のフィールドが未使用の場合、テストが意図した検証を行っていない可能性が高い。各テストケースの差異がアサーションに反映されなければ、配列化した意味がない。§3の型注釈ルールと組み合わせることで、型注釈で構造を保証し、本ルールで使用漏れを防ぐ二重チェックとなる。
+
+## eslint-rule
+
+ESLint化不可（テスト配列のセマンティクスを静的解析で判定できないため。PRレビューで確認）
