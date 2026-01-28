@@ -33,7 +33,7 @@ describe('useDeleteRule - handleDelete', () => {
     vi.clearAllMocks();
     helper.setup();
     mockResult = createMockDeleteRuleControllerFactory();
-    (container.resolve as ReturnType<typeof vi.fn>).mockReturnValue(mockResult.factory);
+    vi.mocked(container.resolve).mockReturnValue(mockResult.factory);
   });
 
   afterEach(() => {
@@ -107,7 +107,7 @@ describe('useDeleteRule - handleDelete', () => {
     const deletePromise = new Promise<void>((resolve) => {
       resolveDeleteRule = resolve;
     });
-    (mockResult.controller.deleteRule as ReturnType<typeof vi.fn>).mockReturnValue(deletePromise);
+    vi.mocked(mockResult.controller.deleteRule).mockReturnValue(deletePromise);
 
     // handleDelete → startConfirmDeleteWithoutAwaitingでruleId=1をdeletingIdsに追加
     await helper.callHandleDelete(1);
