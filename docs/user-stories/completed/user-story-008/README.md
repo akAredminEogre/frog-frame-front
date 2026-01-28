@@ -6,7 +6,7 @@
 
 ## 概要
 
-[common-rule.md](../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順（必須）」規約に準拠していない既存のモックファイルを正しい配置先に移動する。
+[common-rule](../../coding-standards/tests/common-rule/) の「モック作成前の確認手順（必須）」規約に準拠していない既存のモックファイルを正しい配置先に移動する。
 
 ## 対象ファイル
 

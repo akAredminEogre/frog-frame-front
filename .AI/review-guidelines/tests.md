@@ -31,4 +31,4 @@ import { helper } from '../helpers';
 import { helper } from './helpers';
 ```
 
-詳細は `docs/coding-standards/tests/common-rule.md` を参照してください。
+詳細は `docs/coding-standards/tests/common-rule/` を参照してください。
