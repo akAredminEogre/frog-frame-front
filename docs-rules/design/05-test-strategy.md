@@ -165,32 +165,13 @@ tests/unit/[path]/[methodName]/
 
 [モックを使用する理由と対象を記述]
 
-### 既存モック確認チェック（必須）
+### 使用するモック
 
-新規モック作成前に、同一インターフェースの既存モックを確認すること。
+> **注意**: 新規モック作成前に既存モックを確認すること。詳細は [mock-file-placement.md](../../docs/coding-standards/tests/common-rule/mock-file-placement.md) を参照。
 
-以下のコマンドは `host-frontend-root/frontend-src-root/` ディレクトリで実行:
-```bash
-grep -r "createMock[InterfaceName]" tests/
-# または
-find tests/ -name "createMock*.ts" | xargs grep -l "[InterfaceName]"
-```
-
-**判断基準**:
-- 既存モックが見つかった場合 → **必ず既存モックを使用**（新規作成禁止）
-- 見つからなかった場合のみ → 新規作成可
-
-**チェックリスト記入例**:
-- [x] `grep -r "createMockTabsGateway" tests/` で検索 → 既存モック使用 (`tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`)
-- [x] `grep -r "createMockPresenter" tests/` で検索 → 新規作成（該当なし）
-
-> **参照**: [mock-file-placement.md](../../docs/coding-standards/tests/common-rule/mock-file-placement.md) の「モック作成前の確認手順」
-
-### モック対象
-
-| 依存関係 | モック理由 | 既存モック |
-|---------|-----------|-----------|
-| [インターフェース名] | [モックする理由] | `[パス]` ✓ or 新規作成 |
+| 依存関係 | モック理由 | モックパス |
+| -------- | ---------- | ---------- |
+| [インターフェース名] | [モックする理由] | `[パス]` または 新規作成 |
 
 ### モックファイル構成
 
