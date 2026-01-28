@@ -52,9 +52,9 @@ export class DeleteRuleUITestHelper {
   /**
    * テスト前のセットアップ
    * beforeEach 内で必ず呼び出すこと
+   * 注意: モック初期化（vi.clearAllMocks()）はテストファイル側で明示的に呼び出すこと
    */
   setup(): void {
-    vi.clearAllMocks();
     this.container = document.createElement('div');
     document.body.appendChild(this.container);
     this.root = ReactDOM.createRoot(this.container);
@@ -64,6 +64,7 @@ export class DeleteRuleUITestHelper {
    * テスト後のクリーンアップ
    * afterEach 内で呼び出す
    * setup()が呼ばれていない場合は何もせず早期リターン（他のテストケースへの影響を防ぐため）
+   * 注意: モックリセット（vi.resetAllMocks()）はテストファイル側で明示的に呼び出すこと
    */
   cleanup(): void {
     if (!this.container || !this.root) {
@@ -79,7 +80,6 @@ export class DeleteRuleUITestHelper {
     portalElements.forEach((el) => el.remove());
     // 背景スクロールをリセット
     document.body.style.overflow = '';
-    vi.resetAllMocks();
   }
 
   /**
