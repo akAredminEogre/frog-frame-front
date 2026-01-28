@@ -204,10 +204,10 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 RulesApp が削除機能の詳細を知りすぎている問題を解消する：
 
-- [ ] `useDeleteRule` カスタムフックへのロジック切り出し
+- [x] `useDeleteRule` カスタムフックへのロジック切り出し
   - State: `deletingIds`, `deleteTargetId`, `deleteError`
   - ロジック: `deleteController`, `handleDelete`, `confirmDelete`, `cancelDelete`
-- [ ] `DeleteRuleUI` コンポーネントへのUI切り出し
+- [x] `DeleteRuleUI` コンポーネントへのUI切り出し
   - ConfirmDialog と ToastNotification をまとめる
 
 **期待される効果**:
