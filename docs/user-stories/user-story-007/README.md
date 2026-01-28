@@ -48,7 +48,7 @@
 
 | ファイル | 現状 | 追加すべき内容 |
 |---------|------|---------------|
-| `docs/coding-standards/tests/common-rule.md` | 規約のみ | インポートパス、モック配置、型注釈の適用シナリオ |
+| `docs/coding-standards/tests/common-rule/` | 規約のみ | インポートパス、モック配置、型注釈の適用シナリオ |
 | `docs/coding-standards/tests/array-based-test.md` | 手順とコード例のみ | 配列ベーステストを採用すべき場合の判断事例 |
 | `docs/coding-standards/tests/e2e/common-rule.md` | 実装例のみ | E2Eテストでコンソールエラー検知を追加する判断事例 |
 | `docs/coding-standards/tests/integration/common-rule.md` | 規約のみ | fake-indexeddb、モック管理の適用シナリオ |
