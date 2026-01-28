@@ -40,7 +40,7 @@ Repository.update成功後にタブリロードが失敗した場合の挙動を
 |------|-------------|------|
 | reloadAllTabsAfterRuleUpdate失敗 | ルール保存は成功し、例外がスローされない | DB更新成功後のタブリロード失敗を許容 |
 
-**対応テスト**: `normal-cases.test.ts`（既存テストで暗黙的に検証 - queryTabsが空Tabsを返すため）
+**対応テスト**: 明示的テスト未実装（タブリロード失敗を再現するテストの追加が必要）
 
 ### 4. 早期リターン（urlPattern未指定）
 
@@ -51,7 +51,7 @@ urlPatternが空文字列やundefinedの場合、タブリロードをスキッ�
 | urlPatternが空文字列 | タブリロードがスキップされる | 早期リターン条件（空文字列） |
 | urlPatternがundefined | タブリロードがスキップされる | 早期リターン条件（undefined） |
 
-**対応テスト**: `normal-cases.test.ts`（既存テストで暗黙的に検証）
+**対応テスト**: 明示的テスト未実装（urlPattern="" / undefined を明示的に検証するテストの追加が必要）
 
 ## 網羅性チェック
 
@@ -60,8 +60,8 @@ urlPatternが空文字列やundefinedの場合、タブリロードをスキッ�
 - [x] URLパターンルールの更新
 - [x] Repository.updateの呼び出し確認
 - [x] ChromeTabsService.queryTabsの呼び出し確認
-- [x] タブリロード失敗時のルール保存成功維持（try-catchによる部分的成功）
-- [x] urlPattern未指定時の早期リターン
+- [ ] タブリロード失敗時のルール保存成功維持 → 明示的テスト未実装（タブリロード失敗を再現するテストが必要）
+- [ ] urlPattern未指定時の早期リターン → 明示的テスト未実装（urlPattern="" / undefined のテストが必要）
 - [ ] Repository.update失敗時の異常系 → 現在のテストでは未カバー（executeはtry-catchでタブリロードのみ保護し、Repository.update失敗は呼び出し元に伝播するため、結合テストまたは上位レイヤーで検証）
 
 ## テストファイル構成
