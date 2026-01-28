@@ -45,6 +45,44 @@ const guardedHandler = (handler) => {
 };
 ```
 
+## パターン3: `void` で呼び出される async 関数の例外握りつぶし（try-catch-finally）
+
+`void asyncFunction()` で呼び出される async 関数では、reject が発生すると未処理の Promise 拒否（unhandled rejection）になる。エラー通知が別経路（コールバック、State 更新等）で既に行われている場合は、`catch` で例外を握りつぶし、`finally` で状態をリセットする。
+
+```typescript
+// ✅ Good: catch で握りつぶし、finally で状態リセット
+const confirmDelete = useCallback(async () => {
+  if (targetId === null) return;
+  setProcessingIds((prev) => new Set(prev).add(targetId));
+  try {
+    await deleteRule(targetId);
+  } catch {
+    // エラーは onError コールバックで通知済み
+    // void confirmDelete() で呼び出されるため、ここで握りつぶして未処理のPromise拒否を防ぐ
+  } finally {
+    setProcessingIds((prev) => {
+      const next = new Set(prev);
+      next.delete(targetId);
+      return next;
+    });
+  }
+}, [targetId]);
+// 呼び出し側: void confirmDelete();
+```
+
+```typescript
+// ❌ Bad: void で呼ばれるのに reject が未処理
+const confirmDelete = useCallback(async () => {
+  setProcessingIds((prev) => new Set(prev).add(targetId));
+  try {
+    await deleteRule(targetId); // reject → unhandled rejection
+  } finally {
+    setProcessingIds((prev) => { /* ... */ });
+  }
+}, [targetId]);
+// 呼び出し側: void confirmDelete();
+```
+
 ## 悪い例
 
 ```typescript
@@ -65,6 +103,7 @@ const guardedHandler = (handler) => {
 |-----|---------|
 | 処理完了後すぐに次の操作を受け付ける | try-finally |
 | 連続クリック防止（正常完了時は状態維持） | try-catch（エラー時のみリセット） |
+| `void` で呼ばれる async 関数（エラー通知は別経路） | try-catch-finally（catch で握りつぶし、finally でリセット） |
 
 ## チェックリスト
 
@@ -73,6 +112,7 @@ const guardedHandler = (handler) => {
 - [ ] エラー発生時に状態がリセットされるか
 - [ ] 正常完了時のリセットタイミングは適切か（即座 or 別条件）
 - [ ] 非同期処理の場合、Promiseの完了を待ってからリセットしているか
+- [ ] `void` で呼び出される async 関数の場合、内部で `catch` して例外を握りつぶしているか
 
 ## eslint-rule
 
