@@ -23,8 +23,8 @@ rectangle "P2-U3\nErrorOutput\n実装+テスト" as errorImpl #lightgreen
 rectangle "P2-U4\nInteractor\n実装+テスト" as interactorImpl #lightgreen
 
 ' Phase 2: 実装 - Controller/Presenter
-rectangle "P2-C1\nController\n実装+テスト" as controllerImpl #orange
-rectangle "P2-C2\nFactory\n実装+テスト" as factoryImpl #orange
+rectangle "P2-C1\nController\n実装+テスト" as controllerImpl #lightgreen
+rectangle "P2-C2\nFactory\n実装+テスト" as factoryImpl #lightgreen
 rectangle "P2-C3\nPresenter\n実装+テスト" as presenterImpl #lightgreen
 
 ' Phase 2: 実装 - UI
@@ -33,11 +33,11 @@ rectangle "P2-UI2\nConfirmDialog\n実装+テスト" as confirmImpl #lightgreen
 rectangle "P2-UI3\nToast\n実装+テスト" as toastImpl #lightgreen
 
 ' Phase 3: 統合
-rectangle "P3-1\nRuleTableRow\nDeleteButton追加" as tableRowInteg #pink
-rectangle "P3-2\nRulesApp\n統合" as rulesAppInteg #pink
-rectangle "P3-3\nDI登録" as diReg #pink
-rectangle "P3-4\n結合テスト\n実装" as integrationTest #pink
-rectangle "P3-5\nE2Eテスト\n実装" as e2eTest #pink
+rectangle "P3-1\nRuleTableRow\nDeleteButton追加" as tableRowInteg #lightgreen
+rectangle "P3-2\nRulesApp\n統合" as rulesAppInteg #lightgreen
+rectangle "P3-3\nDI登録" as diReg #lightgreen
+rectangle "P3-4\n結合テスト\n実装" as integrationTest #lightgreen
+rectangle "P3-5\nE2Eテスト\n実装" as e2eTest #lightgreen
 
 ' 依存関係: Phase 2 内部
 requestDtoImpl --> proxyImpl
@@ -79,8 +79,6 @@ rulesAppInteg --> e2eTest
 legend right
   |= 色 |= 状態 |
   | <#lightgreen> | 完了 |
-  | <#orange> | 未完了（スケルトン） |
-  | <#pink> | Phase 3: 統合（未着手） |
 endlegend
 
 note bottom
