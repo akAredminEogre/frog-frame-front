@@ -118,31 +118,6 @@ tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/
 
 ### テストヘルパー
 
-共通のセットアップ・クリーンアップロジックを`UseDeleteRuleTestHelper`クラスに集約:
-
-```typescript
-import { UseDeleteRuleTestHelper } from 'tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/test-helpers';
-
-const helper = new UseDeleteRuleTestHelper();
-
-beforeEach(() => helper.setup());
-afterEach(() => helper.cleanup());
-
-// レンダリング
-await helper.render();
-
-// 状態取得
-helper.getDeletingIds();
-helper.getDeleteTargetId();
-helper.getDeleteError();
-helper.getHookResult();
-
-// アクション
-await helper.callHandleDelete(ruleId);
-await helper.callConfirmDelete();
-await helper.startConfirmDeleteWithoutAwaiting();
-await helper.callCancelDelete();
-await helper.callDismissDeleteError();
-```
+共通のセットアップ・クリーンアップロジックを集約したテストヘルパー:
 
 **参照**: `tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/test-helpers.ts`
