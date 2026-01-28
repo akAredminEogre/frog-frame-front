@@ -30,6 +30,7 @@ describe('useDeleteRule - handleDelete', () => {
   let mockResult: MockDeleteRuleControllerFactoryResult;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     helper.setup();
     mockResult = createMockDeleteRuleControllerFactory();
     (container.resolve as ReturnType<typeof vi.fn>).mockReturnValue(mockResult.factory);
@@ -37,6 +38,7 @@ describe('useDeleteRule - handleDelete', () => {
 
   afterEach(() => {
     helper.cleanup();
+    vi.resetAllMocks();
   });
 
   describe('deleteTargetIdの設定', () => {

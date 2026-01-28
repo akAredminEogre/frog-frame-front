@@ -26,6 +26,7 @@ describe('useDeleteRule - cancelDelete', () => {
   let mockResult: MockDeleteRuleControllerFactoryResult;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     helper.setup();
     mockResult = createMockDeleteRuleControllerFactory();
     (container.resolve as ReturnType<typeof vi.fn>).mockReturnValue(mockResult.factory);
@@ -33,6 +34,7 @@ describe('useDeleteRule - cancelDelete', () => {
 
   afterEach(() => {
     helper.cleanup();
+    vi.resetAllMocks();
   });
 
   it('handleDelete後にcancelDeleteを呼ぶとdeleteTargetIdがnullになる', async () => {

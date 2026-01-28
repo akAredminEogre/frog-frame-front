@@ -34,6 +34,7 @@ describe('useDeleteRule - confirmDelete', () => {
   let mockResult: MockDeleteRuleControllerFactoryResult;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     helper.setup();
     mockResult = createMockDeleteRuleControllerFactory();
     (container.resolve as ReturnType<typeof vi.fn>).mockReturnValue(mockResult.factory);
@@ -41,6 +42,7 @@ describe('useDeleteRule - confirmDelete', () => {
 
   afterEach(() => {
     helper.cleanup();
+    vi.resetAllMocks();
   });
 
   it('deleteController.deleteRuleが正しいruleIdで呼ばれる', async () => {

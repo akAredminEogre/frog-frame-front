@@ -239,3 +239,61 @@ testCases.forEach((testCase) => {
 ## eslint-rule
 
 ESLint化不可（テスト配列のセマンティクスを静的解析で判定できないため。PRレビューで確認）
+
+---
+
+## 7. モック初期化・リセットの明示的呼び出し
+
+### 規約
+
+- `beforeEach` の先頭で `vi.clearAllMocks()` を呼び出すこと
+- `afterEach` の末尾で `vi.resetAllMocks()` を呼び出すこと
+- テストヘルパークラスの `setup()` / `cleanup()` 内に `vi.clearAllMocks()` / `vi.resetAllMocks()` を隠蔽しないこと
+
+### 禁止事項
+
+```typescript
+// ❌ Bad: テストヘルパー内部にモックリセットを隠蔽している
+class TestHelper {
+  setup(): void {
+    vi.clearAllMocks(); // テストファイルから見えない
+    // ... DOM セットアップ
+  }
+  cleanup(): void {
+    // ... DOM クリーンアップ
+    vi.resetAllMocks(); // テストファイルから見えない
+  }
+}
+
+// テストファイル側ではモックリセットが行われているか不明
+beforeEach(() => {
+  helper.setup();
+});
+afterEach(() => {
+  helper.cleanup();
+});
+```
+
+### 許可事項
+
+```typescript
+// ✅ Good: テストファイルでモックリセットを明示的に呼び出す
+beforeEach(() => {
+  vi.clearAllMocks();
+  helper.setup();
+  // ... モック設定
+});
+
+afterEach(() => {
+  helper.cleanup();
+  vi.resetAllMocks();
+});
+```
+
+### 根拠
+
+テストヘルパーの責務は DOM のセットアップ・クリーンアップであり、Vitest のモック状態管理はテストファイル側の責務である。モックリセットをヘルパー内部に隠蔽すると、テストファイルを読んだだけではモック状態の初期化が行われているか判断できず、レビュー時に見落としの原因となる。
+
+## eslint-rule
+
+ESLint化不可（`beforeEach` / `afterEach` 内の呼び出し有無を文脈判断する必要があるため。PRレビューで確認）
