@@ -81,7 +81,7 @@ describe('useDeleteRule - deleteController', () => {
       expect(mockOnDeleteSuccess).toHaveBeenCalledTimes(1);
     });
 
-    const successTestCases = [
+    const successTestCases: Array<{ description: string; ruleId: number }> = [
       { description: 'ruleId=1でonDeleteSuccessが呼ばれる', ruleId: 1 },
       { description: 'ruleId=100でonDeleteSuccessが呼ばれる', ruleId: 100 },
     ];
@@ -127,7 +127,11 @@ describe('useDeleteRule - deleteController', () => {
       });
     });
 
-    const errorTestCases = [
+    const errorTestCases: Array<{
+      description: string;
+      ruleId: number;
+      message: string;
+    }> = [
       {
         description: 'ruleId=1, メッセージ「ネットワークエラー」でdeleteErrorが設定される',
         ruleId: 1,
