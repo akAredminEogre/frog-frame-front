@@ -194,7 +194,7 @@ export class UseDeleteRuleTestHelper {
   async startConfirmDeleteWithoutAwaiting(): Promise<void> {
     const result = this.ensureRendered();
     await act(async () => {
-      result.confirmDelete().catch(() => {});
+      void result.confirmDelete();
       await flushPromises();
     });
   }
