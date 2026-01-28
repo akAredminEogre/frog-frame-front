@@ -2,9 +2,9 @@
 
 ## 規約
 
-- モックファイルは、モック対象クラスのsrcディレクトリ構造を `tests/` 配下で反映したディレクトリに配置すること
+- モックファイルは、モック対象クラスのsrcディレクトリ構造を `tests/` 配下で反映したディレクトリの `mocks/` サブディレクトリに配置すること
 - モック対象クラスのパス: `src/{layer}/{category}/{ClassName}/`
-- モックファイルのパス: `tests/{layer}/{category}/{ClassName}/`
+- モックファイルのパス: `tests/{layer}/{category}/{ClassName}/mocks/`
 
 ## 配置例（新規作成時）
 
@@ -12,8 +12,8 @@
 
 | モック対象クラス | モックファイル配置先 |
 | ------------------ | --------------------- |
-| `src/frameworks-and-drivers/browser/ChromeTabsGateway/` | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/` |
-| `src/infrastructure/persistence/indexeddb/` | `tests/infrastructure/persistence/indexeddb/` |
+| `src/frameworks-and-drivers/browser/ChromeTabsGateway/` | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/` |
+| `src/infrastructure/persistence/indexeddb/` | `tests/infrastructure/persistence/indexeddb/mocks/` |
 | `src/application-business-rules/ports/gateway/ITabsGateway.ts` | `tests/unit/application-business-rules/ports/gateway/ITabsGateway/mocks/` ※既存モックがない場合 |
 
 ## 禁止事項
