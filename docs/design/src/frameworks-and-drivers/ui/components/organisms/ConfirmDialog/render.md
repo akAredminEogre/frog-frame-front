@@ -137,8 +137,6 @@ tests/unit/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/
 
 Reactコンポーネントのテストなので、コールバック関数をモック化する。
 
-> **重要**: モック作成は [basic-rule.md](../../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
-
 ### モック対象
 
 - `onConfirm`: 確認ボタンのクリックハンドラ

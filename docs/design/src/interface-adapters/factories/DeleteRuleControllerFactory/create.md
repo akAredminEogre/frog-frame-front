@@ -55,8 +55,6 @@ tests/unit/interface-adapters/factories/DeleteRuleControllerFactory/create/
 
 RepositoryとGatewayをモック化し、Factoryの責務（クラス生成と連携）をテストする。
 
-> **重要**: モック作成は [basic-rule.md](../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
-
 ### 既存モック確認チェック（必須）
 
 - [x] `grep -r "createMockRewriteRuleRepository" tests/` で検索 → 既存モック使用 (`tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository.ts`)

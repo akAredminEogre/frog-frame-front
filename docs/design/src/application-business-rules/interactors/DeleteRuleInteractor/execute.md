@@ -96,12 +96,6 @@ tests/unit/application-business-rules/interactors/DeleteRuleInteractor/execute/
 Interactorの3つの依存関係をモック化してテストする。
 責務分離のため、モック生成関数は外部ファイルに配置する。
 
-> **重要**: モック作成は [basic-rule.md](../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
-> - モック作成は、別のクラスファイルに切り出し、それをインポートして使用すること
-> - テストコード内で直接モックを定義しないこと
-> - モックファクトリは `createMock[ClassName].ts` の形式で命名
-> - **モック方法に具体的な実装コードを記載しないこと**（実装はテストコードを参照）
-
 ### 既存モック確認チェック（必須）
 
 新規モック作成前に、同一インターフェースの既存モックを確認すること。
