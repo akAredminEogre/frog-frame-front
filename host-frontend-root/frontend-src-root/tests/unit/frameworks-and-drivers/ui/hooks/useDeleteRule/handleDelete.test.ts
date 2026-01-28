@@ -1,0 +1,144 @@
+/**
+ * useDeleteRule - handleDelete テスト
+ *
+ * handleDeleteメソッドの動作を検証する:
+ * 1. ruleIdを渡すとdeleteTargetIdがそのIDに設定される
+ * 2. 既存のdeleteErrorがクリアされる
+ * 3. deletingIdsに含まれるruleIdの場合は無視される（deleteTargetIdが変化しない）
+ * 4. 異なるruleIdで呼び出すとdeleteTargetIdが更新される
+ */
+import {
+  createMockDeleteRuleControllerFactory,
+  MockDeleteRuleControllerFactoryResult,
+} from 'tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/mocks/createMockDeleteRuleControllerFactory';
+import {
+  flushPromises,
+  UseDeleteRuleTestHelper,
+} from 'tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/test-helpers';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { container } from 'src/frameworks-and-drivers/di/container';
+
+vi.mock('src/frameworks-and-drivers/di/container', () => ({
+  container: {
+    resolve: vi.fn(),
+  },
+}));
+
+describe('useDeleteRule - handleDelete', () => {
+  const helper = new UseDeleteRuleTestHelper();
+  let mockResult: MockDeleteRuleControllerFactoryResult;
+
+  beforeEach(() => {
+    helper.setup();
+    mockResult = createMockDeleteRuleControllerFactory();
+    (container.resolve as ReturnType<typeof vi.fn>).mockReturnValue(mockResult.factory);
+  });
+
+  afterEach(() => {
+    helper.cleanup();
+  });
+
+  describe('deleteTargetIdの設定', () => {
+    const testCases = [
+      {
+        description: 'ruleId=1を渡すとdeleteTargetIdが1に設定される',
+        ruleId: 1,
+        expected: 1,
+      },
+      {
+        description: 'ruleId=42を渡すとdeleteTargetIdが42に設定される',
+        ruleId: 42,
+        expected: 42,
+      },
+      {
+        description: 'ruleId=999を渡すとdeleteTargetIdが999に設定される',
+        ruleId: 999,
+        expected: 999,
+      },
+    ];
+
+    testCases.forEach((testCase) => {
+      it(testCase.description, async () => {
+        // Arrange
+        await helper.render();
+
+        // Act
+        await helper.callHandleDelete(testCase.ruleId);
+
+        // Assert
+        expect(helper.getDeleteTargetId()).toBe(testCase.expected);
+      });
+    });
+  });
+
+  it('既存のdeleteErrorがクリアされる', async () => {
+    // Arrange
+    await helper.render();
+
+    // deleteErrorを設定するためにonErrorコールバックを呼び出す
+    const onError = mockResult.getCapturedOnError();
+    expect(onError).not.toBeNull();
+
+    // act内でonErrorを呼び出してdeleteErrorを設定
+    const { act } = await import('react');
+    await act(async () => {
+      onError!(5, 'テストエラー');
+      await flushPromises();
+    });
+    expect(helper.getDeleteError()).toEqual({ ruleId: 5, message: 'テストエラー' });
+
+    // Act
+    await helper.callHandleDelete(10);
+
+    // Assert
+    expect(helper.getDeleteError()).toBeNull();
+    expect(helper.getDeleteTargetId()).toBe(10);
+  });
+
+  it('deletingIdsに含まれるruleIdの場合は無視される', async () => {
+    // Arrange
+    await helper.render();
+
+    // confirmDeleteでdeletingIdsにIDを追加する（deleteRuleを未解決のままにする）
+    let resolveDeleteRule!: () => void;
+    const deletePromise = new Promise<void>((resolve) => {
+      resolveDeleteRule = resolve;
+    });
+    (mockResult.controller.deleteRule as ReturnType<typeof vi.fn>).mockReturnValue(deletePromise);
+
+    // handleDelete → startConfirmDeleteWithoutAwaitingでruleId=1をdeletingIdsに追加
+    await helper.callHandleDelete(1);
+    await helper.startConfirmDeleteWithoutAwaiting();
+
+    // この時点でruleId=1はdeletingIdsに含まれている
+    expect(helper.getDeletingIds().has(1)).toBe(true);
+
+    // Act: deletingIdsに含まれるIDでhandleDeleteを呼ぶ
+    await helper.callHandleDelete(1);
+
+    // Assert: deleteTargetIdは変化しない（nullのまま。confirmDeleteでnullにリセット済み）
+    expect(helper.getDeleteTargetId()).toBeNull();
+
+    // クリーンアップ: 未解決のPromiseを解決
+    const { act: actCleanup } = await import('react');
+    await actCleanup(async () => {
+      resolveDeleteRule();
+      await flushPromises();
+    });
+  });
+
+  it('異なるruleIdで連続して呼び出すとdeleteTargetIdが上書きされる', async () => {
+    // Arrange
+    await helper.render();
+
+    // Act
+    await helper.callHandleDelete(1);
+    expect(helper.getDeleteTargetId()).toBe(1);
+
+    await helper.callHandleDelete(2);
+
+    // Assert
+    expect(helper.getDeleteTargetId()).toBe(2);
+  });
+});
