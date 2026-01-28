@@ -54,13 +54,15 @@ export const useDeleteRule = (
     setDeleteTargetId(null);
     setDeletingIds((prev) => new Set(prev).add(ruleId));
 
-    await deleteController.deleteRule(ruleId);
-
-    setDeletingIds((prev) => {
-      const next = new Set(prev);
-      next.delete(ruleId);
-      return next;
-    });
+    try {
+      await deleteController.deleteRule(ruleId);
+    } finally {
+      setDeletingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(ruleId);
+        return next;
+      });
+    }
   }, [deleteTargetId, deletingIds, deleteController]);
 
   const cancelDelete = useCallback(() => {
