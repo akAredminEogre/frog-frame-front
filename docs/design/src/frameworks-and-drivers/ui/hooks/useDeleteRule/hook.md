@@ -31,6 +31,7 @@
 | ダイアログ閉じ | confirmDeleteでdeleteTargetIdがnullになる | 確認ダイアログの非表示化 |
 | null防止 | deleteTargetIdがnullの場合は何も実行されない | null状態での誤実行防止 |
 | 重複防止 | deletingIds内のruleIdでconfirmDeleteが無視される | 二重実行防止 |
+| エラー時復帰 | deleteRuleが例外を投げてもdeletingIdsからruleIdが除去される | try/finallyによるState復帰保証 |
 
 **対応テスト**: `confirmDelete.test.ts`
 

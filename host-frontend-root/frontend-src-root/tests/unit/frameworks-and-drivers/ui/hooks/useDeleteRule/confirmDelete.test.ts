@@ -8,6 +8,7 @@
  * 4. deleteTargetIdがnullの場合は何もしない
  * 5. deleteTargetIdがdeletingIdsに含まれる場合は何もしない
  * 6. deleteTargetIdがnullにリセットされる
+ * 7. deleteRuleが例外を投げてもdeletingIdsからruleIdが除去される
  */
 import { act } from 'react';
 import {
@@ -163,5 +164,24 @@ describe('useDeleteRule - confirmDelete', () => {
       resolveDeleteRule();
       await flushPromises();
     });
+  });
+
+  it('deleteRuleが例外を投げてもdeletingIdsからruleIdが除去される', async () => {
+    // Arrange
+    (mockResult.controller.deleteRule as ReturnType<typeof vi.fn>).mockRejectedValue(
+      new Error('削除失敗')
+    );
+
+    await helper.render();
+    await helper.callHandleDelete(15);
+
+    // Act: confirmDeleteは内部でrejectされるが、try/finallyでdeletingIdsは解除される
+    // RulesAppでは void confirmDelete() で呼ばれるため、rejectは呼び出し側に伝播しない
+    // テストではstartConfirmDeleteWithoutAwaitingを使い、同様にrejectを伝播させない
+    await helper.startConfirmDeleteWithoutAwaiting();
+
+    // Assert: deletingIdsからruleIdが除去されている（try/finallyで保証）
+    expect(helper.getDeletingIds().has(15)).toBe(false);
+    expect(helper.getDeletingIds().size).toBe(0);
   });
 });
