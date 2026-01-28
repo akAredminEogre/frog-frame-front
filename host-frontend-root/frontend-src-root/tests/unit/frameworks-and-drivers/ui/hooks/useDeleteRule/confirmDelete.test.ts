@@ -111,7 +111,10 @@ describe('useDeleteRule - confirmDelete', () => {
   });
 
   describe('異なるruleIdでの呼び出し', () => {
-    const testCases = [
+    const testCases: Array<{
+      description: string;
+      ruleId: number;
+    }> = [
       {
         description: 'ruleId=1でdeleteRuleが呼ばれる',
         ruleId: 1,

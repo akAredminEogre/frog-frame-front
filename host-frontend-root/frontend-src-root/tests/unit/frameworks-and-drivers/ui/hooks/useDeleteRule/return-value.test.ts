@@ -43,24 +43,29 @@ describe('useDeleteRule - 戻り値', () => {
   });
 
   describe('初期値', () => {
-    const initialStateTestCases = [
+    const initialStateTestCases: Array<{
+      description: string;
+      getActual: (h: UseDeleteRuleTestHelper) => unknown;
+      expected: unknown;
+      matcher: 'toEqual' | 'toBeNull';
+    }> = [
       {
         description: 'deletingIdsが空のSetである',
         getActual: (h: UseDeleteRuleTestHelper) => h.getDeletingIds(),
         expected: new Set<number>(),
-        matcher: 'toEqual' as const,
+        matcher: 'toEqual',
       },
       {
         description: 'deleteTargetIdがnullである',
         getActual: (h: UseDeleteRuleTestHelper) => h.getDeleteTargetId(),
         expected: null,
-        matcher: 'toBeNull' as const,
+        matcher: 'toBeNull',
       },
       {
         description: 'deleteErrorがnullである',
         getActual: (h: UseDeleteRuleTestHelper) => h.getDeleteError(),
         expected: null,
-        matcher: 'toBeNull' as const,
+        matcher: 'toBeNull',
       },
     ];
 

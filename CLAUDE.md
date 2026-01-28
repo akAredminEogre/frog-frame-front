@@ -18,6 +18,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - 見つからなかった場合 → 共有ディレクトリに新規作成
    - 参照: `docs/coding-standards/tests/common-rule.md`
 4. [ ] テストコードを実装
+   - **テストケース配列には型注釈を付与**（§3: テストデータの型注釈ルール）
+   - 参照: `docs/coding-standards/tests/common-rule.md`
 5. [ ] **テスト戦略書との整合性確認**（テストコード実装後）
    - テストコードに戦略書にないケースを追加した場合 → 戦略書に追記
    - 戦略書にあるがテストコードに未実装のケースがある場合 → 理由を明記するか実装

@@ -42,7 +42,11 @@ describe('useDeleteRule - handleDelete', () => {
   });
 
   describe('deleteTargetIdの設定', () => {
-    const testCases = [
+    const testCases: Array<{
+      description: string;
+      ruleId: number;
+      expected: number;
+    }> = [
       {
         description: 'ruleId=1を渡すとdeleteTargetIdが1に設定される',
         ruleId: 1,
