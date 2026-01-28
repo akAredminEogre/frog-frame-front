@@ -56,6 +56,9 @@ export const useDeleteRule = (
 
     try {
       await deleteController.deleteRule(ruleId);
+    } catch {
+      // エラーは onError コールバック経由で deleteError State に通知済み
+      // void confirmDelete() で呼び出されるため、ここで握りつぶして未処理のPromise拒否を防ぐ
     } finally {
       setDeletingIds((prev) => {
         const next = new Set(prev);
