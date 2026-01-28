@@ -131,21 +131,19 @@ ESLint化不可（`@typescript-eslint/typedef`はすべての変数宣言に型�
 
 ### 禁止事項
 
-```typescript
-// ❌ Bad: ランタイムでモック固有メソッドが存在しないためエラーになる
-this.callback = someFunction as ReturnType<typeof vi.fn>;
-```
+- 関数を `as ReturnType<typeof vi.fn>` でキャストすること: ランタイムでモック固有メソッドが存在しないためエラーになる
 
 ### 許可事項
 
-```typescript
-// ✅ Good: vi.fn()でラップすることで元の関数の動作を維持しつつモック機能を付与
-this.callback = vi.fn(someFunction);
-```
+- `vi.fn(someFunction)` でラップすること: 元の関数の動作を維持しつつモック機能を付与できる
 
 ### 根拠
 
 `as` キャストは TypeScript の型チェックを無効化するだけで、ランタイムの実体は変わらない。テストヘルパーは複数のテストから使われるため、型の不整合の影響範囲が広い。
+
+### 適用シナリオ
+
+- テストヘルパーのコンストラクタで `onDeleteSuccess` コールバックを受け取り、モックアサーションで呼び出し回数を検証したい場合: `vi.fn(onDeleteSuccess)` でラップして保持する
 
 ## eslint-rule
 
@@ -161,36 +159,19 @@ ESLint化不可（`as` キャストの用途を文脈判断する必要がある
 
 ### 禁止事項
 
-```typescript
-// ❌ Bad: 例外時にStateが残留し、同一IDの再操作が永久にブロックされる
-setProcessingIds((prev) => new Set(prev).add(id));
-await someAsyncOperation(id);
-setProcessingIds((prev) => {
-  const next = new Set(prev);
-  next.delete(id);
-  return next;
-});
-```
+- 処理中 State に ID を追加した後、`try/finally` なしで `await` し、その後に State から ID を削除すること: 例外時に State が残留し、同一 ID の再操作が永久にブロックされる
 
 ### 許可事項
 
-```typescript
-// ✅ Good: 例外時もStateが解除される
-setProcessingIds((prev) => new Set(prev).add(id));
-try {
-  await someAsyncOperation(id);
-} finally {
-  setProcessingIds((prev) => {
-    const next = new Set(prev);
-    next.delete(id);
-    return next;
-  });
-}
-```
+- 処理中 State への追加後、`try` ブロック内で `await` し、`finally` ブロックで State から ID を削除すること: 例外時も State が解除される
 
 ### 根拠
 
 `await` の前に確保し `await` の後に解放するリソースがある場合、例外発生時に解放処理に到達せずリソースがリークする。これは `lock/unlock`、`open/close`、`add/remove` すべてに共通するパターン。
+
+### 適用シナリオ
+
+- 削除中ルール ID を `deletingIds` で管理し、`deleteRule()` を `await` する場合: `try/finally` で `deletingIds` からの削除を保証する
 
 ## eslint-rule
 
@@ -207,34 +188,19 @@ ESLint化不可（State管理のパターンを文脈判断する必要がある
 
 ### 禁止事項
 
-```typescript
-// ❌ Bad: propertyNameを定義しているがテスト本体で未使用
-const testCases = [{ description: '...', propertyName: 'foo' }];
-testCases.forEach((testCase) => {
-  it(testCase.description, () => {
-    expect(someUnrelatedValue).toBe(true); // propertyNameを使っていない
-  });
-});
-```
+- テストケース配列に `propertyName` 等のフィールドを定義しているが、テスト本体の `expect()` で使用せず、無関係な値を検証していること
 
 ### 許可事項
 
-```typescript
-// ✅ Good: 定義したフィールドをアサーションで使用している
-const testCases: Array<{ description: string; propertyName: keyof SomeType }> = [
-  { description: '...', propertyName: 'foo' },
-];
-testCases.forEach((testCase) => {
-  it(testCase.description, () => {
-    const result = getResult();
-    expect(typeof result[testCase.propertyName]).toBe('function');
-  });
-});
-```
+- テストケース配列に定義したフィールドを `expect()` 内で参照し、各ケースの差異がアサーションに反映されていること
 
 ### 根拠
 
 テストケース配列のフィールドが未使用の場合、テストが意図した検証を行っていない可能性が高い。各テストケースの差異がアサーションに反映されなければ、配列化した意味がない。§3の型注釈ルールと組み合わせることで、型注釈で構造を保証し、本ルールで使用漏れを防ぐ二重チェックとなる。
+
+### 適用シナリオ
+
+- フックの戻り値のメソッド型検証テスト: `propertyName` フィールドを定義した場合、`result[testCase.propertyName]` の `typeof` を検証する
 
 ## eslint-rule
 
@@ -252,47 +218,19 @@ ESLint化不可（テスト配列のセマンティクスを静的解析で判�
 
 ### 禁止事項
 
-```typescript
-// ❌ Bad: テストヘルパー内部にモックリセットを隠蔽している
-class TestHelper {
-  setup(): void {
-    vi.clearAllMocks(); // テストファイルから見えない
-    // ... DOM セットアップ
-  }
-  cleanup(): void {
-    // ... DOM クリーンアップ
-    vi.resetAllMocks(); // テストファイルから見えない
-  }
-}
-
-// テストファイル側ではモックリセットが行われているか不明
-beforeEach(() => {
-  helper.setup();
-});
-afterEach(() => {
-  helper.cleanup();
-});
-```
+- テストヘルパーの `setup()` / `cleanup()` 内に `vi.clearAllMocks()` / `vi.resetAllMocks()` を配置すること: テストファイルを読んだだけではモック状態の初期化が行われているか判断できない
 
 ### 許可事項
 
-```typescript
-// ✅ Good: テストファイルでモックリセットを明示的に呼び出す
-beforeEach(() => {
-  vi.clearAllMocks();
-  helper.setup();
-  // ... モック設定
-});
-
-afterEach(() => {
-  helper.cleanup();
-  vi.resetAllMocks();
-});
-```
+- テストファイルの `beforeEach` / `afterEach` でモックリセットを明示的に呼び出し、テストヘルパーの `setup()` / `cleanup()` は DOM セットアップ・クリーンアップのみを担当すること
 
 ### 根拠
 
 テストヘルパーの責務は DOM のセットアップ・クリーンアップであり、Vitest のモック状態管理はテストファイル側の責務である。モックリセットをヘルパー内部に隠蔽すると、テストファイルを読んだだけではモック状態の初期化が行われているか判断できず、レビュー時に見落としの原因となる。
+
+### 適用シナリオ
+
+- カスタムフックのテストで `UseDeleteRuleTestHelper` を使用する場合: `helper.setup()` は DOM 要素の作成のみを行い、`vi.clearAllMocks()` はテストファイルの `beforeEach` で明示的に呼び出す
 
 ## eslint-rule
 

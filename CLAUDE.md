@@ -32,6 +32,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 → [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
+### docs/coding-standards/ 配下のコーディング規約を追加・編集する場合
+
+1. [ ] **カテゴリ固有のルールを確認**: [docs-rules/coding-standards.md](docs-rules/coding-standards.md) を必ず読むこと
+   - **実装例（Good/Bad例、コードスニペット）は記述しない**
+   - 適用シナリオ（いつ・どこでこの規約を適用するかの判断事例）は記載する
+2. [ ] [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) のチェックリストに従う
+3. [ ] 同一PR内で既存の違反箇所も修正すること
+
 ### User Story READMEのタスク進捗を更新する場合
 
 → `docs-rules/user-stories/readme-guide.md`「タスク進捗更新時のネットワーク図同期」を参照
