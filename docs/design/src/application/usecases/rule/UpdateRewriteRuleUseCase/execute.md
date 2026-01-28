@@ -89,7 +89,7 @@ UseCaseの2つの依存関係をモック化してテストする。
 - [x] `grep -r "createMockRewriteRuleRepository" tests/` で既存モックを検索した → 既存モック使用 (`tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository.ts`)
 - [x] `grep -r "createMockTabsService" tests/` で既存モックを検索した → 既存モック使用 (`tests/unit/application/ports/IChromeTabsService/mocks/createMockTabsService.ts`)
 
-> **参照**: [common-rule.md](../../../../../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
+> **参照**: [common-rule.md](../../../../../../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
 
 ### モック対象
 
