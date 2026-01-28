@@ -42,6 +42,8 @@
 | 分類 | テストケース | 根拠 |
 |------|-------------|------|
 | 正常系 | cancelDeleteでdeleteTargetIdがnullになる | 確認ダイアログの非表示化 |
+| null安全性 | deleteTargetIdが既にnullの場合も安全に呼べる | 境界値・初期状態での誤動作防止 |
+| 状態復帰 | cancelDelete後にhandleDeleteで新しいIDを設定できる | キャンセル後の再操作が正常に動作すること |
 
 **対応テスト**: `cancelDelete.test.ts`
 
