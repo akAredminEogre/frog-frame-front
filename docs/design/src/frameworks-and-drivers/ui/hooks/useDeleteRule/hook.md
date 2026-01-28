@@ -93,7 +93,7 @@ tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/
 
 ## モック戦略
 
-> **重要**: モック作成は basic-rule.md の「モック作成の分離ルール」に従うこと。
+> **重要**: モック作成は [basic-rule.md](../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
 
 ### 既存モック確認チェック（必須）
 
@@ -118,6 +118,31 @@ tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/
 
 ### テストヘルパー
 
-共通のセットアップ・クリーンアップロジックを集約したテストヘルパー:
+共通のセットアップ・クリーンアップロジックを`UseDeleteRuleTestHelper`クラスに集約:
+
+```typescript
+import { UseDeleteRuleTestHelper } from 'tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/test-helpers';
+
+const helper = new UseDeleteRuleTestHelper();
+
+beforeEach(() => helper.setup());
+afterEach(() => helper.cleanup());
+
+// レンダリング
+await helper.render();
+
+// 状態取得
+helper.getDeletingIds();
+helper.getDeleteTargetId();
+helper.getDeleteError();
+helper.getHookResult();
+
+// アクション
+await helper.callHandleDelete(ruleId);
+await helper.callConfirmDelete();
+await helper.startConfirmDeleteWithoutAwaiting();
+await helper.callCancelDelete();
+await helper.callDismissDeleteError();
+```
 
 **参照**: `tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/test-helpers.ts`
