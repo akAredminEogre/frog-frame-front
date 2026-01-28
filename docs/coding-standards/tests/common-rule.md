@@ -6,8 +6,8 @@
 
 ## ルール一覧
 
-| §  | ルール名 | ファイル |
-|----|---------|----------|
+| § | ルール名 | ファイル |
+|---|---------|----------|
 | 1 | インポートパスのルール | [import-paths.md](./common-rule/import-paths.md) |
 | 2 | モックファイルの配置ルール | [mock-file-placement.md](./common-rule/mock-file-placement.md) |
 | 3 | テストデータの型注釈ルール | [test-data-type-annotations.md](./common-rule/test-data-type-annotations.md) |
