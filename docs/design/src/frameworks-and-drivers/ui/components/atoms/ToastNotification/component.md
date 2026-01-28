@@ -79,8 +79,6 @@ tests/unit/frameworks-and-drivers/ui/components/atoms/ToastNotification/
 
 Reactコンポーネントのテストなので、コールバック関数をモック化する。
 
-> **重要**: モック作成は [basic-rule.md](../../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
-
 ### 既存モック確認チェック（必須）
 
 UIコンポーネントのテストで使用する外部依存はないため、既存モック検索は不要。
