@@ -5,17 +5,19 @@
  * - deleteTargetId=数値: ダイアログが表示される
  */
 import { DeleteRuleUITestHelper } from 'tests/unit/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI/test-helpers';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('DeleteRuleUI - ConfirmDialog表示', () => {
   const helper = new DeleteRuleUITestHelper();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     helper.setup();
   });
 
   afterEach(() => {
     helper.cleanup();
+    vi.resetAllMocks();
   });
 
   type ConfirmDialogVisibilityTestCase = {
