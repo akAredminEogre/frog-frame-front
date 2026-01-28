@@ -119,3 +119,79 @@ ESLint化不可（ディレクトリ構造の規約はファイルシステム�
 ## eslint-rule
 
 ESLint化不可（`@typescript-eslint/typedef`はすべての変数宣言に型注釈を要求するため過剰。テストデータ配列のみを対象とするルールは存在しない。PRレビューで確認）
+
+---
+
+## 4. モック型キャストの禁止
+
+### 規約
+
+- 通常の関数をモック型（`ReturnType<typeof vi.fn>` 等）に `as` でキャストしてはならない
+- モック固有のアサーションメソッド（`.toHaveBeenCalled()` 等）を使用する必要がある場合は `vi.fn()` でラップすること
+
+### 禁止事項
+
+```typescript
+// ❌ Bad: ランタイムでモック固有メソッドが存在しないためエラーになる
+this.callback = someFunction as ReturnType<typeof vi.fn>;
+```
+
+### 許可事項
+
+```typescript
+// ✅ Good: vi.fn()でラップすることで元の関数の動作を維持しつつモック機能を付与
+this.callback = vi.fn(someFunction);
+```
+
+### 根拠
+
+`as` キャストは TypeScript の型チェックを無効化するだけで、ランタイムの実体は変わらない。テストヘルパーは複数のテストから使われるため、型の不整合の影響範囲が広い。
+
+## eslint-rule
+
+ESLint化不可（`as` キャストの用途を文脈判断する必要があるため。PRレビューで確認）
+
+---
+
+## 5. 非同期処理中のState排他制御（try/finally パターン）
+
+### 規約
+
+`Set` や `boolean` でUI上の処理中状態（`deletingIds`、`togglingIds` 等）を管理する場合、非同期処理の完了後にStateを解除するコードは `try/finally` で保護すること。
+
+### 禁止事項
+
+```typescript
+// ❌ Bad: 例外時にStateが残留し、同一IDの再操作が永久にブロックされる
+setProcessingIds((prev) => new Set(prev).add(id));
+await someAsyncOperation(id);
+setProcessingIds((prev) => {
+  const next = new Set(prev);
+  next.delete(id);
+  return next;
+});
+```
+
+### 許可事項
+
+```typescript
+// ✅ Good: 例外時もStateが解除される
+setProcessingIds((prev) => new Set(prev).add(id));
+try {
+  await someAsyncOperation(id);
+} finally {
+  setProcessingIds((prev) => {
+    const next = new Set(prev);
+    next.delete(id);
+    return next;
+  });
+}
+```
+
+### 根拠
+
+`await` の前に確保し `await` の後に解放するリソースがある場合、例外発生時に解放処理に到達せずリソースがリークする。これは `lock/unlock`、`open/close`、`add/remove` すべてに共通するパターン。
+
+## eslint-rule
+
+ESLint化不可（State管理のパターンを文脈判断する必要があるため。PRレビューで確認）
