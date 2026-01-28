@@ -192,7 +192,7 @@ Phase 2以降では、以下の原則に従って実装順序を決定する:
 
 #### 結合テスト
 
-- [ ] 結合テスト戦略書に基づくテスト実装完了
+- [x] 結合テスト戦略書に基づくテスト実装完了
   - 詳細: [integration-test-strategy.md](../../design/pages/rule-list/features/delete-rule/integration-test-strategy.md)
 
 #### E2Eテスト
