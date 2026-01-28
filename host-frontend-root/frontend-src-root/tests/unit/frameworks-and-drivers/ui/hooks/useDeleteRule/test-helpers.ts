@@ -109,7 +109,7 @@ export class UseDeleteRuleTestHelper {
   async render(onDeleteSuccess?: (ruleId: number) => void): Promise<void> {
     this.ensureSetup();
     if (onDeleteSuccess) {
-      this.onDeleteSuccess = onDeleteSuccess as ReturnType<typeof vi.fn>;
+      this.onDeleteSuccess = vi.fn(onDeleteSuccess);
     }
     await act(async () => {
       this.root!.render(
