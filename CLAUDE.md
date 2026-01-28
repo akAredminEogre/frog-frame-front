@@ -18,9 +18,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - 見つからなかった場合 → 共有ディレクトリに新規作成
    - 参照: `docs/coding-standards/tests/common-rule.md`
 4. [ ] テストコードを実装
-   - **テストケース配列には型注釈を付与**（§3: テストデータの型注釈ルール）
-   - **beforeEach先頭で`vi.clearAllMocks()`、afterEach末尾で`vi.resetAllMocks()`を呼び出す**（§6: モック初期化・リセットの明示的呼び出し）
-   - **テストヘルパーのsetup()/cleanup()内にモック初期化・リセットを隠蔽しない**（§6: 禁止事項）
+   - **テストケース配列には型注釈を付与**（§2: テストデータの型注釈ルール）
+   - **beforeEach先頭で`vi.clearAllMocks()`、afterEach末尾で`vi.resetAllMocks()`を呼び出す**（§5: モック初期化・リセットの明示的呼び出し）
+   - **テストヘルパーのsetup()/cleanup()内にモック初期化・リセットを隠蔽しない**（§5: 禁止事項）
    - 参照: `docs/coding-standards/tests/common-rule.md`
 5. [ ] **テスト戦略書との整合性確認**（テストコード実装後）
    - テストコードに戦略書にないケースを追加した場合 → 戦略書に追記

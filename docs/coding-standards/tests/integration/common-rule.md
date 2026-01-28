@@ -2,7 +2,7 @@
 
 結合テストを作成する際の共通ルールをまとめたドキュメント。
 
-**参照**: インポートパスのルールは [import-paths.md](../common-rule/import-paths.md) を参照。
+**参照**: インポートパスのルールは [CLAUDE.md - Import Path Rules](../../../../CLAUDE.md#import-path-rules) を参照。
 
 ---
 
