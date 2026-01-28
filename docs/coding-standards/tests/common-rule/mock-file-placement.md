@@ -1,12 +1,12 @@
 # 2. モックファイルの配置ルール
 
-### 規約
+## 規約
 
 - モックファイルは、モック対象クラスのsrcディレクトリ構造を `tests/` 配下で反映したディレクトリに配置すること
 - モック対象クラスのパス: `src/{layer}/{category}/{ClassName}/`
 - モックファイルのパス: `tests/{layer}/{category}/{ClassName}/`
 
-### 配置例（新規作成時）
+## 配置例（新規作成時）
 
 **注意**: 新規モック作成前に必ず「モック作成前の確認手順」で既存モックを検索すること。既存モックがある場合はそちらを使用する。
 
@@ -16,18 +16,18 @@
 | `src/infrastructure/persistence/indexeddb/` | `tests/infrastructure/persistence/indexeddb/` |
 | `src/application-business-rules/ports/gateway/ITabsGateway.ts` | `tests/unit/application-business-rules/ports/gateway/ITabsGateway/mocks/` ※既存モックがない場合 |
 
-### 禁止事項
+## 禁止事項
 
 - テスト固有のディレクトリ（例: `tests/integration/{feature}/mocks/`）にモックを配置すること
 - モック対象クラスのディレクトリ構造と異なる場所に配置すること
 - **同一インターフェースのモックを複数箇所に作成すること**（重複モックの禁止）
 - **既存モックの再エクスポート用ラッパーファイルを作成すること**（直接インポートを使用）
 
-### 許可事項
+## 許可事項
 
 - 複数のテストから共有されるモックは、モック対象クラスに対応するtestsディレクトリに配置
 
-### モック作成前の確認手順（必須）
+## モック作成前の確認手順（必須）
 
 新規モックファクトリ作成前に、以下を確認すること：
 
