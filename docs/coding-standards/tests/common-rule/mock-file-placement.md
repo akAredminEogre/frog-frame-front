@@ -11,7 +11,7 @@
 **注意**: 新規モック作成前に必ず「モック作成前の確認手順」で既存モックを検索すること。既存モックがある場合はそちらを使用する。
 
 | モック対象クラス | モックファイル配置先 |
-|------------------|---------------------|
+| ------------------ | --------------------- |
 | `src/frameworks-and-drivers/browser/ChromeTabsGateway/` | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/` |
 | `src/infrastructure/persistence/indexeddb/` | `tests/infrastructure/persistence/indexeddb/` |
 | `src/application-business-rules/ports/gateway/ITabsGateway.ts` | `tests/unit/application-business-rules/ports/gateway/ITabsGateway/mocks/` ※既存モックがない場合 |
