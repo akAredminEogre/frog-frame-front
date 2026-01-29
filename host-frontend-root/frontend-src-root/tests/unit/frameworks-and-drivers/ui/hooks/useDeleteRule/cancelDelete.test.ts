@@ -1,10 +1,9 @@
 /**
  * useDeleteRule - cancelDelete テスト
  *
- * cancelDeleteメソッドの動作を検証する:
- * 1. deleteTargetIdがnullにリセットされる
- * 2. handleDelete後にcancelDeleteを呼ぶとdeleteTargetIdがnullになる
- * 3. deleteTargetIdが既にnullの場合も安全に呼べる
+ * - cancelDeleteでdeleteTargetIdがnullになる
+ * - deleteTargetIdが既にnullの場合も安全に呼べる
+ * - cancelDelete後にhandleDeleteで新しいIDを設定できる
  */
 import {
   createMockDeleteRuleControllerFactory,
@@ -37,7 +36,7 @@ describe('useDeleteRule - cancelDelete', () => {
     vi.resetAllMocks();
   });
 
-  it('handleDelete後にcancelDeleteを呼ぶとdeleteTargetIdがnullになる', async () => {
+  it('cancelDeleteでdeleteTargetIdがnullになる', async () => {
     // Arrange
     await helper.render();
     await helper.callHandleDelete(5);

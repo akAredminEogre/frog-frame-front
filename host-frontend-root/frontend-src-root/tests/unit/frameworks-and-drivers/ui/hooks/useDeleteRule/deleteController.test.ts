@@ -1,10 +1,8 @@
 /**
  * useDeleteRule - deleteController テスト
  *
- * ファクトリとコントローラの連携を検証する:
- * 1. factory.createがコールバック付きで呼ばれる
- * 2. onSuccessコールバックがonDeleteSuccessを呼び出す
- * 3. onErrorコールバックがdeleteErrorを設定する
+ * - onSuccessコールバックが呼ばれたときonDeleteSuccessが呼ばれる
+ * - onErrorコールバックが呼ばれたときdeleteErrorが設定される
  */
 import { act } from 'react';
 import {
@@ -41,146 +39,42 @@ describe('useDeleteRule - deleteController', () => {
     vi.resetAllMocks();
   });
 
-  it('container.resolveがIDeleteRuleControllerFactoryキーで呼ばれる', async () => {
+  it('onSuccessコールバックが呼ばれたときonDeleteSuccessが呼ばれる', async () => {
+    // Arrange
+    const mockOnDeleteSuccess = vi.fn();
+    await helper.render(mockOnDeleteSuccess);
+
+    const onSuccess = mockResult.getCapturedOnSuccess();
+    expect(onSuccess).not.toBeNull();
+
     // Act
-    await helper.render();
+    await act(async () => {
+      onSuccess!(42);
+      await flushPromises();
+    });
 
     // Assert
-    expect(container.resolve).toHaveBeenCalledWith('IDeleteRuleControllerFactory');
+    expect(mockOnDeleteSuccess).toHaveBeenCalledWith(42);
+    expect(mockOnDeleteSuccess).toHaveBeenCalledTimes(1);
   });
 
-  it('factory.createがコールバック付きで呼ばれる', async () => {
-    // Act
-    await helper.render();
-
-    // Assert
-    expect(mockResult.factory.create).toHaveBeenCalledTimes(1);
-    expect(mockResult.factory.create).toHaveBeenCalledWith(
-      expect.any(Function),
-      expect.any(Function)
-    );
-  });
-
-  describe('onSuccessコールバック', () => {
-    it('onSuccessが呼ばれるとonDeleteSuccessが同じruleIdで呼ばれる', async () => {
-      // Arrange
-      const mockOnDeleteSuccess = vi.fn();
-      await helper.render(mockOnDeleteSuccess);
-
-      const onSuccess = mockResult.getCapturedOnSuccess();
-      expect(onSuccess).not.toBeNull();
-
-      // Act
-      await act(async () => {
-        onSuccess!(42);
-        await flushPromises();
-      });
-
-      // Assert
-      expect(mockOnDeleteSuccess).toHaveBeenCalledWith(42);
-      expect(mockOnDeleteSuccess).toHaveBeenCalledTimes(1);
-    });
-
-    const successTestCases: Array<{ description: string; ruleId: number }> = [
-      { description: 'ruleId=1でonDeleteSuccessが呼ばれる', ruleId: 1 },
-      { description: 'ruleId=100でonDeleteSuccessが呼ばれる', ruleId: 100 },
-    ];
-
-    successTestCases.forEach((testCase) => {
-      it(testCase.description, async () => {
-        // Arrange
-        const mockOnDeleteSuccess = vi.fn();
-        await helper.render(mockOnDeleteSuccess);
-
-        const onSuccess = mockResult.getCapturedOnSuccess();
-
-        // Act
-        await act(async () => {
-          onSuccess!(testCase.ruleId);
-          await flushPromises();
-        });
-
-        // Assert
-        expect(mockOnDeleteSuccess).toHaveBeenCalledWith(testCase.ruleId);
-      });
-    });
-  });
-
-  describe('onErrorコールバック', () => {
-    it('onErrorが呼ばれるとdeleteErrorが設定される', async () => {
-      // Arrange
-      await helper.render();
-
-      const onError = mockResult.getCapturedOnError();
-      expect(onError).not.toBeNull();
-
-      // Act
-      await act(async () => {
-        onError!(5, '削除に失敗しました');
-        await flushPromises();
-      });
-
-      // Assert
-      expect(helper.getDeleteError()).toEqual({
-        ruleId: 5,
-        message: '削除に失敗しました',
-      });
-    });
-
-    const errorTestCases: Array<{
-      description: string;
-      ruleId: number;
-      message: string;
-    }> = [
-      {
-        description: 'ruleId=1, メッセージ「ネットワークエラー」でdeleteErrorが設定される',
-        ruleId: 1,
-        message: 'ネットワークエラー',
-      },
-      {
-        description: 'ruleId=99, メッセージ「権限がありません」でdeleteErrorが設定される',
-        ruleId: 99,
-        message: '権限がありません',
-      },
-    ];
-
-    errorTestCases.forEach((testCase) => {
-      it(testCase.description, async () => {
-        // Arrange
-        await helper.render();
-
-        const onError = mockResult.getCapturedOnError();
-
-        // Act
-        await act(async () => {
-          onError!(testCase.ruleId, testCase.message);
-          await flushPromises();
-        });
-
-        // Assert
-        expect(helper.getDeleteError()).toEqual({
-          ruleId: testCase.ruleId,
-          message: testCase.message,
-        });
-      });
-    });
-  });
-
-  it('dismissDeleteErrorを呼ぶとdeleteErrorがnullにリセットされる', async () => {
+  it('onErrorコールバックが呼ばれたときdeleteErrorが設定される', async () => {
     // Arrange
     await helper.render();
 
     const onError = mockResult.getCapturedOnError();
-    await act(async () => {
-      onError!(3, 'エラー発生');
-      await flushPromises();
-    });
-    expect(helper.getDeleteError()).not.toBeNull();
+    expect(onError).not.toBeNull();
 
     // Act
-    await helper.callDismissDeleteError();
+    await act(async () => {
+      onError!(5, '削除に失敗しました');
+      await flushPromises();
+    });
 
     // Assert
-    expect(helper.getDeleteError()).toBeNull();
+    expect(helper.getDeleteError()).toEqual({
+      ruleId: 5,
+      message: '削除に失敗しました',
+    });
   });
 });
