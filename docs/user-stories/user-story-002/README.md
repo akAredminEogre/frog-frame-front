@@ -237,7 +237,7 @@ src/
 - [x] 全 E2E テストが通る
 - [x] `chrome.runtime.sendMessage` / `chrome.tabs.sendMessage` の直接使用がない
 
-### PR-4: handlers ディレクトリの移管 📋 将来対応
+### PR-4: handlers ディレクトリの移管 ✅ 完了
 
 **目的**: `infrastructure/browser/handlers/` を `frameworks-and-drivers/` 配下に移管し、Clean Architecture の層構造を整理
 
@@ -330,9 +330,9 @@ src/frameworks-and-drivers/messaging/
 3. **既存messaging.tsとの整合性**: 同一ディレクトリに集約されることで一貫性向上
 
 **確認項目**:
-- [ ] 全 E2E テストが通る
-- [ ] import パスが正しく更新されている
-- [ ] Clean Architecture の層構造が整理されている
+- [x] 全 E2E テストが通る（CI検証）
+- [x] import パスが正しく更新されている
+- [x] Clean Architecture の層構造が整理されている
 
 ## 受け入れ条件
 
