@@ -169,9 +169,9 @@ tests/unit/[path]/[methodName]/
 
 > **注意**: 新規モック作成前に既存モックを確認すること。詳細は [mock-file-placement.md](../../docs/coding-standards/tests/common-rule/mock-file-placement.md) を参照。
 
-| 依存関係 | モック理由 | モックパス |
+| 依存関係 | モック理由 | モック対応 |
 | -------- | ---------- | ---------- |
-| [インターフェース名] | [モックする理由] | `[パス]` または 新規作成 |
+| [インターフェース名] | [モックする理由] | `[パス]` / vi.fn()直接 / 不要 |
 
 ### モックファイル構成
 
@@ -246,6 +246,29 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/delete/
 # ❌ 誤った記載（冗長）
 host-frontend-root/frontend-src-root/tests/unit/interface-adapters/mappers/RewriteRuleMapper/delete/
 └── normal-cases.test.ts
+```
+
+### テーブル列名の意味的一貫性
+
+テーブルの列名は、その列に入る値の種類を正確に表すこと。
+
+**規約**:
+- 列名が示す意味と、実際に記載する値の種類が一致すること
+- 複数の異なる種類の情報を1つの列に混在させる場合、列名は汎用的にすること
+
+**例: 「モック対応」列**
+
+「モック対応」列には以下のいずれかを記載する:
+- ファイルパス: `tests/unit/.../mocks/`
+- 直接モック: `vi.fn()で直接モック`
+- 不要: `不要`
+
+```markdown
+| 依存関係 | モック理由 | モック対応 |
+| -------- | ---------- | ---------- |
+| IRepository | DB層分離 | `tests/unit/.../mocks/` |
+| onClose | コールバック検証 | vi.fn()で直接モック |
+| なし | - | 不要 |
 ```
 
 ## コードとの関係

@@ -98,7 +98,7 @@ Interactorの3つの依存関係をモック化してテストする。
 
 ### 使用するモック
 
-| 依存関係 | モック理由 | モックパス |
+| 依存関係 | モック理由 | モック対応 |
 | -------- | ---------- | ---------- |
 | IRewriteRuleRepository | DB/メッセージング層を分離 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/` |
 | ITabsGateway | Chrome API層を分離 | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/` |

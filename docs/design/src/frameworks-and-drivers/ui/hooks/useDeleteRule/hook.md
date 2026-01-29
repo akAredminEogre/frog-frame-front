@@ -95,7 +95,7 @@ tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/
 
 ### 使用するモック
 
-| 依存関係 | モック理由 | モックパス |
+| 依存関係 | モック理由 | モック対応 |
 | -------- | ---------- | ---------- |
 | IDeleteRuleControllerFactory | DIコンテナ依存を排除 | 新規作成（`tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/mocks/`） |
 | IDeleteRuleController | 実際の削除処理を実行させない | 新規作成（Factory内で生成） |

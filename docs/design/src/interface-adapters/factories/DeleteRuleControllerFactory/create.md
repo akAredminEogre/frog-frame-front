@@ -57,7 +57,7 @@ RepositoryとGatewayをモック化し、Factoryの責務（クラス生成と�
 
 ### 使用するモック
 
-| 依存関係 | モック理由 | モックパス |
+| 依存関係 | モック理由 | モック対応 |
 | -------- | ---------- | ---------- |
 | IRewriteRuleRepository | DB操作の回避、成功/失敗シナリオの制御 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/` |
 | ITabsGateway | Chrome API依存の回避 | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/` |
