@@ -1,5 +1,5 @@
 import { observerOnMutate } from 'src/infrastructure/browser/content/observer/onMutate';
-import { runtimeOnMessageReceived } from 'src/infrastructure/browser/content/runtime/onMessageReceived';
+import { runtimeOnMessageReceived } from 'src/frameworks-and-drivers/messaging/content/onMessageReceived';
 import { matchUrl } from 'src/utils/matchUrl';
 
 

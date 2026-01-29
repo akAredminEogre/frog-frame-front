@@ -1,6 +1,6 @@
 import { onContentScriptMessage } from 'src/frameworks-and-drivers/messaging/messaging';
-import { applyAllRulesHandler } from 'src/infrastructure/browser/handlers/content/applyAllRulesHandler';
-import { getElementSelectionHandler } from 'src/infrastructure/browser/handlers/content/getElementSelectionHandler';
+import { applyAllRulesHandler } from 'src/frameworks-and-drivers/messaging/handlers/content/applyAllRulesHandler';
+import { getElementSelectionHandler } from 'src/frameworks-and-drivers/messaging/handlers/content/getElementSelectionHandler';
 
 /**
  * 呼び出し元: entrypoints/content.ts
