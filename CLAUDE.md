@@ -29,7 +29,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 1. [ ] 既存テストが通ることを確認
 2. [ ] **シグネチャ変更時はテスト戦略書を必ず更新**
    - インターフェース/コールバックの引数・戻り値を変更した場合 → 関連するすべてのテスト戦略書を更新
-   - 影響範囲の特定: `grep -r "変更したメソッド名" docs/design/`
+   - 影響範囲の特定（複数パターンで検索）:
+     ```bash
+     grep -r "変更したメソッド名" docs/design/
+     grep -r "変更したprop名" docs/design/
+     grep -r "変更前の振る舞い（例: ruleIdとmessage）" docs/design/
+     ```
 3. [ ] テストコードを更新
    - 参照: `docs/coding-standards/tests/common-rule/`（§3〜§8）
 
