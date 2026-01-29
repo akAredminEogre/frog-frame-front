@@ -268,7 +268,7 @@ See `docs/GIT_WORKTREE.md` for detailed usage guide.
 
 ### Clean Architecture Layers
 
-```
+```text
 src/
 ├── entrypoints/          # WXT entry points (background.ts, content.ts, popup/, etc.)
 ├── components/           # React components (Atomic Design)
@@ -368,7 +368,7 @@ See `docs/coding-standards/src/object-oriented-nine-rules.md` for the 9 rules an
 
 新規メソッド追加時は、TodoWriteで以下の順序でタスクを作成すること:
 
-```
+```text
 1. テスト戦略書の作成（docs/design/src/[layer]/.../[methodName].md）
 2. 実装コードの作成
 3. テストコードの実装
@@ -382,7 +382,7 @@ See `docs/coding-standards/src/object-oriented-nine-rules.md` for the 9 rules an
 - **DO NOT group tests by class** - always split by method
 
 ### Test File Organization (Infrastructure Layer Example)
-```
+```text
 tests/unit/infrastructure/[category]/[ServiceName]/
 ├── [methodName]/
 │   ├── normal-cases.test.ts
@@ -439,7 +439,7 @@ All entry points in `src/entrypoints/`:
 - See `.clinerules/02-workflow-automation/01-issue-launches/workflow-create-worktree.md` for branch creation with worktree setup workflow
 
 ### Documentation Structure
-```
+```text
 docs/
 ├── issue-XXX/              # In-progress issue documentation
 ├── completed/issue-XXX/    # Completed issue documentation
@@ -472,7 +472,7 @@ docs/
 
 **重要**: Claude Code Webで新しいセッションを開始する場合は、**ブランチが既に指定されていても**、以下のスラッシュコマンドでIssue管理のセットアップを行ってください：
 
-```
+```text
 /workflow-ccw-session-start
 ```
 
@@ -491,7 +491,7 @@ docs/
 
 ### PR作成（Claude Code Web用）
 ghコマンドが使用できないため、以下のURLフォーマットでPRを作成します：
-```
+```text
 https://github.com/akAredminEogre/frog-frame-front/compare/develop...<ブランチ名>?expand=1
 ```
 
@@ -499,7 +499,7 @@ https://github.com/akAredminEogre/frog-frame-front/compare/develop...<ブラン�
 
 PRをマージする際は以下のスラッシュコマンドを使用します：
 
-```
+```text
 /workflow-ccw-merge-pull-request
 ```
 
