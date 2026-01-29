@@ -124,7 +124,7 @@
 ### Phase 4: 旧コード削除
 
 - [ ] 旧 UpdateRewriteRuleUseCase の削除
-- [ ] 旧テスト戦略書の削除または移動
+- [ ] 旧テスト戦略書の移動（`docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md` → `docs/design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md`）
 
 ### 対応しない（分類B）
 
