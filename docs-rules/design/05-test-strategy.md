@@ -289,7 +289,7 @@ host-frontend-root/frontend-src-root/tests/unit/interface-adapters/mappers/Rewri
 
 ## コードとの関係
 
-> **参照**: [JSDoc-rule.md](../../coding-standards/tests/unit/common-rule/JSDoc-rule.md)
+> **参照**: [jsdoc-rule.md](/docs/coding-standards/tests/common-rule/jsdoc-rule.md)
 
 テスト戦略書はテストコードのJSDocを補完する:
 

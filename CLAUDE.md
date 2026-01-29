@@ -18,7 +18,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - 見つからなかった場合 → 共有ディレクトリに新規作成
    - 参照: `docs/coding-standards/tests/common-rule/`
 4. [ ] テストコードを実装
-   - **JSDocにテストケース説明を記載**（`docs/coding-standards/tests/unit/common-rule/JSDoc-rule.md`）
+   - **JSDocにテストケース説明を記載**（`docs/coding-standards/tests/common-rule/jsdoc-rule.md`）
      - テスト戦略書のテストケース名と一致させる
      - テストケースの順番もテスト戦略書と一致させる（§7: テスト戦略書との一貫性）
      - 1ケースにつき1行でまとめる
