@@ -18,18 +18,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - 見つからなかった場合 → 共有ディレクトリに新規作成
    - 参照: `docs/coding-standards/tests/common-rule/`
 4. [ ] テストコードを実装
-   - **JSDocにテストケース説明を記載**（`docs/coding-standards/tests/common-rule/jsdoc-rule.md`）
-     - テスト戦略書のテストケース名と一致させる
-     - テストケースの順番もテスト戦略書と一致させる（§7: テスト戦略書との一貫性）
-     - 1ケースにつき1行でまとめる
-   - **配列化テストの適用判断**（`docs/coding-standards/tests/array-based-test.md`）
-     - 1ファイル1配列の原則（配列化テストと非配列テストの混在禁止）
-     - forEach内でif文が必要な場合は配列化しない
-     - 無理な配列化は行わない
-   - **テストケース配列には型注釈を付与**（§3: テストデータの型注釈ルール）
-   - **beforeEach先頭で`vi.clearAllMocks()`、afterEach末尾で`vi.resetAllMocks()`を呼び出す**（§6: モック初期化・リセットの明示的呼び出し）
-   - **テストヘルパーのsetup()/cleanup()内にモック初期化・リセットを隠蔽しない**（§6: 禁止事項）
-   - 参照: `docs/coding-standards/tests/common-rule/`
+   - 参照: `docs/coding-standards/tests/common-rule/`（§3〜§8）
+   - 参照: `docs/coding-standards/tests/array-based-test.md`
 5. [ ] **テスト戦略書との整合性確認**（テストコード実装後）
    - テストコードに戦略書にないケースを追加した場合 → 戦略書に追記
    - 戦略書にあるがテストコードに未実装のケースがある場合 → 理由を明記するか実装
