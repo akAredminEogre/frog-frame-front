@@ -96,8 +96,8 @@ docs/design/src/
 ```markdown
 ## 目的
 
-ルール削除に関するState管理とロジックを提供するカスタムフック。
-`deletingIds`, `deleteTargetId`, `deleteError` のState管理と、`handleDelete`, `confirmDelete`, `cancelDelete`, `dismissDeleteError` のロジックを提供する（エラー通知のリセットは `dismissDeleteError` の責務）。
+[機能]に関するState管理とロジックを提供するカスタムフック。
+`[stateA]`, `[stateB]`, `[stateC]` のState管理と、`[methodA]`, `[methodB]`, `[methodC]`, `[methodD]` のロジックを提供する（[補足説明]）。
 ```
 
 **チェックポイント**:
