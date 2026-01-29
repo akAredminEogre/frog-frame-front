@@ -26,7 +26,7 @@ deleteErrorに応じたエラーToastの表示/非表示を検証。
 |------|-------------|------|
 | 表示 | deleteErrorがnullでない場合ToastNotificationが表示される | エラー通知 |
 | 非表示 | deleteErrorがnullの場合ToastNotificationが非表示 | 正常時 |
-| メッセージ | エラーメッセージにruleIdとmessageが含まれる | ユーザーへの情報提供 |
+| メッセージ | deleteErrorで渡された整形済みメッセージがToastに表示される | Presenterで整形済み（ADR-001準拠） |
 
 **対応テスト**: `toast-notification.test.tsx`
 
@@ -46,7 +46,7 @@ deleteErrorに応じたエラーToastの表示/非表示を検証。
 
 - [x] ConfirmDialogの表示/非表示
 - [x] ToastNotificationの表示/非表示
-- [x] エラーメッセージのフォーマット
+- [x] 整形済みエラーメッセージの表示（Presenter層で整形済み）
 - [x] コールバック伝達（確認・キャンセル・閉じる）
 - [ ] ConfirmDialogの内部動作 → 対象外（ConfirmDialog自体のテストで検証済み）
 - [ ] ToastNotificationの内部動作 → 対象外（ToastNotification自体のテストで検証済み）
