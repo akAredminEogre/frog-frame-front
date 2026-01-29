@@ -215,16 +215,11 @@ RulesApp が削除機能の詳細を知りすぎている問題を解消する�
 - 削除ロジックの再利用可能性向上
 - Toggle 機能も同様に切り出すことで一貫性確保
 
-### Phase 4: 旧コード削除（このユーザーストーリーでは実施しない）
+### Phase 4: 旧コード削除
 
-以下は将来のリファクタリングタスクとして残す：
-- 分類Bファイルの理論的配置への移動（RuleTableRow.tsx）
-
-### 対応しない（分類B）
-
-- RuleTableRow.tsx の配置移動（components/molecules/ → frameworks-and-drivers/ui/components/molecules/）
-  - 機能開発後にリファクタリングとして対応可能
-  - 今回の削除機能には影響しない
+- [x] 分類Bファイルの理論的配置への移動（RuleTableRow.tsx）
+  - `components/molecules/RuleTableRow/` → `frameworks-and-drivers/ui/components/molecules/RuleTableRow/` に移動
+  - 関連するインポートパスを更新
 
 ### タスク網羅性チェック
 

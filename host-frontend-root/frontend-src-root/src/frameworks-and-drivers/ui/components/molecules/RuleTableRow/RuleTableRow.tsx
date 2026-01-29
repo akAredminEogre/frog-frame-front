@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button } from 'src/components/atoms/Button';
 import { TruncatedText } from 'src/components/atoms/TruncatedText';
-import styles from 'src/components/molecules/RuleTableRow/RuleTableRow.module.css';
+import styles from 'src/frameworks-and-drivers/ui/components/molecules/RuleTableRow/RuleTableRow.module.css';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { DeleteButton } from 'src/frameworks-and-drivers/ui/components/atoms/DeleteButton';
 import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
