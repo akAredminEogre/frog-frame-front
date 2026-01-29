@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    ```
    - 既存モックが見つかった場合 → インポートして使用
    - 見つからなかった場合 → 共有ディレクトリに新規作成
-   - 参照: `docs/coding-standards/tests/common-rule/`
+   - 参照: `docs/coding-standards/tests/common-rule/`（§2: モックファイルの配置ルール）
 4. [ ] テストコードを実装
    - 参照: `docs/coding-standards/tests/common-rule/`（§3〜§8）
    - 参照: `docs/coding-standards/tests/array-based-test.md`
@@ -337,7 +337,7 @@ Path aliases configured in `tsconfig.json`:
 - `tests/*` → `./tests/*`
 - `entrypoints/*` → `./src/entrypoints/*`
 
-詳細は `docs/coding-standards/tests/common-rule/` を参照してください。
+詳細は `docs/coding-standards/tests/common-rule/`（§1: インポートパスのルール）を参照してください。
 
 ## Object-Oriented Design Rules (ThoughtWorks Anthology)
 
