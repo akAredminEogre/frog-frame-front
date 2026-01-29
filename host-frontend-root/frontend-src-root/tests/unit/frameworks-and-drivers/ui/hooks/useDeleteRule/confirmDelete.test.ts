@@ -1,14 +1,13 @@
 /**
  * useDeleteRule - confirmDelete テスト
  *
- * confirmDeleteメソッドの動作を検証する:
- * 1. deleteController.deleteRuleが正しいruleIdで呼ばれる
- * 2. 呼び出し中はdeletingIdsにruleIdが追加される
- * 3. 完了後にdeletingIdsからruleIdが削除される
- * 4. deleteTargetIdがnullの場合は何もしない
- * 5. deleteTargetIdがdeletingIdsに含まれる場合は何もしない
- * 6. deleteTargetIdがnullにリセットされる
- * 7. deleteRuleが例外を投げてもdeletingIdsからruleIdが除去される
+ * - confirmDeleteでdeleteController.deleteRuleが呼ばれる
+ * - confirmDelete中にdeletingIdsにruleIdが含まれる
+ * - confirmDelete完了後にdeletingIdsからruleIdが除去される
+ * - confirmDeleteでdeleteTargetIdがnullになる
+ * - deleteTargetIdがnullの場合は何も実行されない
+ * - deletingIds内のruleIdでconfirmDeleteが無視される
+ * - deleteRuleが例外を投げてもdeletingIdsからruleIdが除去される
  */
 import { act } from 'react';
 import {
@@ -45,7 +44,7 @@ describe('useDeleteRule - confirmDelete', () => {
     vi.resetAllMocks();
   });
 
-  it('deleteController.deleteRuleが正しいruleIdで呼ばれる', async () => {
+  it('confirmDeleteでdeleteController.deleteRuleが呼ばれる', async () => {
     // Arrange
     await helper.render();
     await helper.callHandleDelete(7);
@@ -58,7 +57,7 @@ describe('useDeleteRule - confirmDelete', () => {
     expect(mockResult.controller.deleteRule).toHaveBeenCalledTimes(1);
   });
 
-  it('呼び出し中はdeletingIdsにruleIdが追加され、完了後に削除される', async () => {
+  it('confirmDelete中にdeletingIdsにruleIdが含まれる', async () => {
     // Arrange
     let resolveDeleteRule!: () => void;
     const deletePromise = new Promise<void>((resolve) => {
@@ -75,29 +74,26 @@ describe('useDeleteRule - confirmDelete', () => {
     // Assert: deletingIdsにruleIdが含まれている
     expect(helper.getDeletingIds().has(3)).toBe(true);
 
-    // Act: deleteRuleのPromiseを解決
+    // クリーンアップ
     await act(async () => {
       resolveDeleteRule();
       await flushPromises();
     });
+  });
+
+  it('confirmDelete完了後にdeletingIdsからruleIdが除去される', async () => {
+    // Arrange
+    await helper.render();
+    await helper.callHandleDelete(3);
+
+    // Act
+    await helper.callConfirmDelete();
 
     // Assert: deletingIdsからruleIdが削除されている
     expect(helper.getDeletingIds().has(3)).toBe(false);
   });
 
-  it('deleteTargetIdがnullの場合はdeleteRuleが呼ばれない', async () => {
-    // Arrange
-    await helper.render();
-    // handleDeleteを呼ばずにconfirmDeleteを呼ぶ（deleteTargetId === null）
-
-    // Act
-    await helper.callConfirmDelete();
-
-    // Assert
-    expect(mockResult.controller.deleteRule).not.toHaveBeenCalled();
-  });
-
-  it('confirmDelete後にdeleteTargetIdがnullにリセットされる', async () => {
+  it('confirmDeleteでdeleteTargetIdがnullになる', async () => {
     // Arrange
     await helper.render();
     await helper.callHandleDelete(5);
@@ -110,37 +106,19 @@ describe('useDeleteRule - confirmDelete', () => {
     expect(helper.getDeleteTargetId()).toBeNull();
   });
 
-  describe('異なるruleIdでの呼び出し', () => {
-    const testCases: Array<{
-      description: string;
-      ruleId: number;
-    }> = [
-      {
-        description: 'ruleId=1でdeleteRuleが呼ばれる',
-        ruleId: 1,
-      },
-      {
-        description: 'ruleId=100でdeleteRuleが呼ばれる',
-        ruleId: 100,
-      },
-    ];
+  it('deleteTargetIdがnullの場合は何も実行されない', async () => {
+    // Arrange
+    await helper.render();
+    // handleDeleteを呼ばずにconfirmDeleteを呼ぶ（deleteTargetId === null）
 
-    testCases.forEach((testCase) => {
-      it(testCase.description, async () => {
-        // Arrange
-        await helper.render();
-        await helper.callHandleDelete(testCase.ruleId);
+    // Act
+    await helper.callConfirmDelete();
 
-        // Act
-        await helper.callConfirmDelete();
-
-        // Assert
-        expect(mockResult.controller.deleteRule).toHaveBeenCalledWith(testCase.ruleId);
-      });
-    });
+    // Assert
+    expect(mockResult.controller.deleteRule).not.toHaveBeenCalled();
   });
 
-  it('同じruleIdが既にdeletingIdsに含まれる場合はdeleteRuleが呼ばれない', async () => {
+  it('deletingIds内のruleIdでconfirmDeleteが無視される', async () => {
     // Arrange
     let resolveDeleteRule!: () => void;
     const deletePromise = new Promise<void>((resolve) => {

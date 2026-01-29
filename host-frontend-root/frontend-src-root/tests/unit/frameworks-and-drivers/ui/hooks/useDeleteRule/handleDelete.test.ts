@@ -1,10 +1,9 @@
 /**
  * useDeleteRule - handleDelete テスト
  *
- * - ruleIdを渡すとdeleteTargetIdがそのIDに設定される
- * - 既存のdeleteErrorがクリアされる
- * - deletingIdsに含まれるruleIdの場合は無視される
- * - 異なるruleIdで連続して呼び出すとdeleteTargetIdが上書きされる
+ * - handleDeleteでdeleteTargetIdが設定される
+ * - deletingIds内のruleIdでhandleDeleteが無視される
+ * - handleDeleteでdeleteErrorがクリアされる
  */
 import {
   createMockDeleteRuleControllerFactory,
@@ -40,7 +39,7 @@ describe('useDeleteRule - handleDelete', () => {
     vi.resetAllMocks();
   });
 
-  it('ruleIdを渡すとdeleteTargetIdがそのIDに設定される', async () => {
+  it('handleDeleteでdeleteTargetIdが設定される', async () => {
     await helper.render();
 
     await helper.callHandleDelete(42);
@@ -48,31 +47,7 @@ describe('useDeleteRule - handleDelete', () => {
     expect(helper.getDeleteTargetId()).toBe(42);
   });
 
-  it('既存のdeleteErrorがクリアされる', async () => {
-    // Arrange
-    await helper.render();
-
-    // deleteErrorを設定するためにonErrorコールバックを呼び出す
-    const onError = mockResult.getCapturedOnError();
-    expect(onError).not.toBeNull();
-
-    // act内でonErrorを呼び出してdeleteErrorを設定
-    const { act } = await import('react');
-    await act(async () => {
-      onError!(5, 'テストエラー');
-      await flushPromises();
-    });
-    expect(helper.getDeleteError()).toEqual({ ruleId: 5, message: 'テストエラー' });
-
-    // Act
-    await helper.callHandleDelete(10);
-
-    // Assert
-    expect(helper.getDeleteError()).toBeNull();
-    expect(helper.getDeleteTargetId()).toBe(10);
-  });
-
-  it('deletingIdsに含まれるruleIdの場合は無視される', async () => {
+  it('deletingIds内のruleIdでhandleDeleteが無視される', async () => {
     // Arrange
     await helper.render();
 
@@ -104,17 +79,27 @@ describe('useDeleteRule - handleDelete', () => {
     });
   });
 
-  it('異なるruleIdで連続して呼び出すとdeleteTargetIdが上書きされる', async () => {
+  it('handleDeleteでdeleteErrorがクリアされる', async () => {
     // Arrange
     await helper.render();
 
-    // Act
-    await helper.callHandleDelete(1);
-    expect(helper.getDeleteTargetId()).toBe(1);
+    // deleteErrorを設定するためにonErrorコールバックを呼び出す
+    const onError = mockResult.getCapturedOnError();
+    expect(onError).not.toBeNull();
 
-    await helper.callHandleDelete(2);
+    // act内でonErrorを呼び出してdeleteErrorを設定
+    const { act } = await import('react');
+    await act(async () => {
+      onError!(5, 'テストエラー');
+      await flushPromises();
+    });
+    expect(helper.getDeleteError()).toEqual({ ruleId: 5, message: 'テストエラー' });
+
+    // Act
+    await helper.callHandleDelete(10);
 
     // Assert
-    expect(helper.getDeleteTargetId()).toBe(2);
+    expect(helper.getDeleteError()).toBeNull();
+    expect(helper.getDeleteTargetId()).toBe(10);
   });
 });

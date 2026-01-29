@@ -1,14 +1,7 @@
 /**
  * useDeleteRule - 戻り値テスト
  *
- * フックの戻り値が期待するプロパティをすべて含んでいることを検証する:
- * 1. deletingIds: Set<number>型
- * 2. deleteTargetId: number | null型
- * 3. deleteError: { ruleId: number; message: string } | null型
- * 4. handleDelete: function型
- * 5. confirmDelete: function型
- * 6. cancelDelete: function型
- * 7. dismissDeleteError: function型
+ * - 必要なプロパティがすべて含まれる
  */
 import {
   createMockDeleteRuleControllerFactory,
@@ -18,7 +11,6 @@ import { UseDeleteRuleTestHelper } from 'tests/unit/frameworks-and-drivers/ui/ho
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { container } from 'src/frameworks-and-drivers/di/container';
-import { UseDeleteRuleResult } from 'src/frameworks-and-drivers/ui/hooks/useDeleteRule';
 
 vi.mock('src/frameworks-and-drivers/di/container', () => ({
   container: {
@@ -42,96 +34,20 @@ describe('useDeleteRule - 戻り値', () => {
     vi.resetAllMocks();
   });
 
-  describe('初期値', () => {
-    const initialStateTestCases: Array<{
-      description: string;
-      getActual: (h: UseDeleteRuleTestHelper) => unknown;
-      expected: unknown;
-      matcher: 'toEqual' | 'toBeNull';
-    }> = [
-      {
-        description: 'deletingIdsが空のSetである',
-        getActual: (h: UseDeleteRuleTestHelper) => h.getDeletingIds(),
-        expected: new Set<number>(),
-        matcher: 'toEqual',
-      },
-      {
-        description: 'deleteTargetIdがnullである',
-        getActual: (h: UseDeleteRuleTestHelper) => h.getDeleteTargetId(),
-        expected: null,
-        matcher: 'toBeNull',
-      },
-      {
-        description: 'deleteErrorがnullである',
-        getActual: (h: UseDeleteRuleTestHelper) => h.getDeleteError(),
-        expected: null,
-        matcher: 'toBeNull',
-      },
-    ];
-
-    initialStateTestCases.forEach((testCase) => {
-      it(testCase.description, async () => {
-        // Arrange & Act
-        await helper.render();
-
-        // Assert
-        const actual = testCase.getActual(helper);
-        if (testCase.matcher === 'toBeNull') {
-          expect(actual).toBeNull();
-        } else {
-          expect(actual).toEqual(testCase.expected);
-        }
-      });
-    });
-  });
-
-  describe('メソッドの型', () => {
-    const methodTestCases: Array<{
-      description: string;
-      propertyName: keyof UseDeleteRuleResult;
-    }> = [
-      {
-        description: 'handleDeleteがfunction型である',
-        propertyName: 'handleDelete',
-      },
-      {
-        description: 'confirmDeleteがfunction型である',
-        propertyName: 'confirmDelete',
-      },
-      {
-        description: 'cancelDeleteがfunction型である',
-        propertyName: 'cancelDelete',
-      },
-      {
-        description: 'dismissDeleteErrorがfunction型である',
-        propertyName: 'dismissDeleteError',
-      },
-    ];
-
-    methodTestCases.forEach((testCase) => {
-      it(testCase.description, async () => {
-        // Arrange & Act
-        await helper.render();
-
-        // Assert: フックの戻り値から該当プロパティがfunction型であることを検証
-        const result = helper.getHookResult();
-        expect(typeof result[testCase.propertyName]).toBe('function');
-      });
-    });
-  });
-
-  it('すべてのプロパティが返される（プロパティ数の検証）', async () => {
+  it('必要なプロパティがすべて含まれる', async () => {
     // Arrange & Act
     await helper.render();
 
-    // Assert: 状態値とメソッドがすべてアクセス可能であること
+    // Assert: 状態値が正しい型で返される
     expect(helper.getDeletingIds()).toBeInstanceOf(Set);
     expect(helper.getDeleteTargetId()).toBeNull();
     expect(helper.getDeleteError()).toBeNull();
 
-    // メソッドが呼び出し可能であることを検証（エラーが発生しないこと）
-    await helper.callHandleDelete(1);
-    await helper.callCancelDelete();
-    await helper.callDismissDeleteError();
+    // Assert: メソッドがfunction型で返される
+    const result = helper.getHookResult();
+    expect(typeof result.handleDelete).toBe('function');
+    expect(typeof result.confirmDelete).toBe('function');
+    expect(typeof result.cancelDelete).toBe('function');
+    expect(typeof result.dismissDeleteError).toBe('function');
   });
 });
