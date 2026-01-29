@@ -27,7 +27,7 @@
 ### 目標
 
 - CLAUDE.mdをエントリポイントとして最小限の情報のみ残す
-- 詳細情報は`.AI/`配下に分割して配置する
+- 詳細情報は`docs/claude/`配下に分割して配置する
 - 各セクションの責務を明確にする
 - 必要な情報への導線を整理する
 
@@ -50,19 +50,19 @@
 
 | 分割先 | 内容 |
 |-------|------|
-| `.AI/claude/project-overview.md` | プロジェクト概要、技術スタック |
-| `.AI/claude/development-commands.md` | 開発コマンド（make, docker compose） |
-| `.AI/claude/architecture.md` | Clean Architecture詳細、DI |
-| `.AI/claude/testing.md` | テスト要件、戦略書、構造 |
-| `.AI/claude/git-workflow.md` | Git操作、ブランチ戦略、PR |
-| `.AI/claude/claude-code-web.md` | Claude Code Web専用ワークフロー |
-| `.AI/claude/troubleshooting.md` | トラブルシューティング |
+| `docs/claude/project-overview.md` | プロジェクト概要、技術スタック |
+| `docs/claude/development-commands.md` | 開発コマンド（make, docker compose） |
+| `docs/claude/architecture.md` | Clean Architecture詳細、DI |
+| `docs/claude/testing.md` | テスト要件、戦略書、構造 |
+| `docs/claude/git-workflow.md` | Git操作、ブランチ戦略、PR |
+| `docs/claude/claude-code-web.md` | Claude Code Web専用ワークフロー |
+| `docs/claude/troubleshooting.md` | トラブルシューティング |
 
 ## 開発戦略
 
 ### Phase 1: 分割ファイル作成
 
-- [ ] `.AI/claude/` ディレクトリ作成
+- [ ] `docs/claude/` ディレクトリ作成
 - [ ] `project-overview.md` 作成（Project Overview、Project-Specific Rules）
 - [ ] `development-commands.md` 作成（Common Development Commands、Git Worktree）
 - [ ] `architecture.md` 作成（Architecture Overview、Import Path Rules、OO Design Rules）
