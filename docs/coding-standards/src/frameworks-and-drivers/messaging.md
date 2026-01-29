@@ -1,5 +1,10 @@
 # メッセージング層 コーディング規約
 
+## 適用シナリオ
+
+1. **Background ScriptとContent Script間でデータをやり取りするクラスを新規作成する場合**: `@webext-core/proxy-service`を使用するクラスは`ProxyService`サフィックスを付ける。例えば、RewriteRuleのCRUD操作をBackground経由で行うクラスは`RewriteRuleProxyService`とする
+2. **Background ScriptからContent Scriptへ一方向メッセージを送信するクラスを作成する場合**: 送信側は`MessageSender`、受信側は`MessageReceiver`サフィックスを付けて、メッセージの方向と役割を明確にする
+
 ## 命名規約
 
 ### メッセージングクラス
