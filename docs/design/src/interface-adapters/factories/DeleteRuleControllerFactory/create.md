@@ -26,7 +26,7 @@ create()がIDeleteRuleControllerを返し、削除処理が正しく連携する
 | 分類 | テストケース | 根拠 |
 |------|-------------|------|
 | 成功時引数 | onSuccessにdeletedRuleIdが渡される | Presenterの出力仕様 |
-| エラー時引数 | onErrorにruleIdとmessageが渡される | エラー通知仕様 |
+| エラー時引数 | onErrorにフォーマット済みエラーメッセージが渡される | Presenterでメッセージ構築（ADR-001準拠） |
 
 **対応テスト**: `normal-cases.test.ts`（同一テスト内で検証）
 
@@ -36,7 +36,7 @@ create()がIDeleteRuleControllerを返し、削除処理が正しく連携する
 - [x] 成功時にonSuccessコールバックが呼ばれること
 - [x] 成功時コールバックにdeletedRuleIdが渡されること
 - [x] エラー時にonErrorコールバックが呼ばれること
-- [x] エラー時コールバックにruleIdとmessageが渡されること
+- [x] エラー時コールバックにフォーマット済みメッセージが渡されること（Presenter層で構築）
 - [ ] Factoryの内部実装（Presenter/Interactor生成順序）→ 不要（実装詳細、振る舞いで検証）
 
 ### 統合テスト的アプローチの理由
