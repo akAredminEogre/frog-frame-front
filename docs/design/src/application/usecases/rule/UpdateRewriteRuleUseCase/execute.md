@@ -1,9 +1,9 @@
 # UpdateRewriteRuleUseCase.execute() テスト戦略
 
 > **配置について**: 本ドキュメントは現行実装（`src/application/usecases/rule/UpdateRewriteRuleUseCase.ts`）のテスト戦略書です。
-> [テスト戦略書ルール](../../../../../../docs-rules/design/05-test-strategy.md)に従い、ソースコードのディレクトリ構造をミラーリングして配置しています。
+> [テスト戦略書ルール](../../../../../../../docs-rules/design/05-test-strategy.md)に従い、ソースコードのディレクトリ構造をミラーリングして配置しています。
 >
-> **将来の移動予定**: [User Story 012](../../../../../../../user-stories/user-story-012/README.md) でADR-001準拠にリファクタリング後、
+> **将来の移動予定**: [User Story 012](../../../../../../user-stories/user-story-012/README.md) でADR-001準拠にリファクタリング後、
 > ソースコードと共に `docs/design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md` に移動します。
 
 ## 目的
