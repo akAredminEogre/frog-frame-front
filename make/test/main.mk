@@ -1,5 +1,5 @@
 # Testing and Code Quality Commands
-.PHONY: unit e2e check testall testcheck testlint sortimports
+.PHONY: unit e2e check testall testcheck testlint sortimports lintmd lintmdfix
 
 unit:
 	@echo "Running unit tests..."
@@ -28,3 +28,11 @@ testlint:
 sortimports:
 	@echo "Sorting imports in all files..."
 	@docker compose exec frontend npm run sort:imports
+
+lintmd:
+	@echo "Running markdownlint..."
+	@docker compose exec frontend npm run lint:md
+
+lintmdfix:
+	@echo "Running markdownlint with auto-fix..."
+	@docker compose exec frontend npm run lint:md:fix

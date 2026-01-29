@@ -7,10 +7,11 @@ Markdownのコードブロックに言語指定を行うこと:
 - TypeScript/JavaScriptコード: `typescript`, `javascript`, `tsx`, `jsx`
 - CSSコード: `css`, `scss`
 - シェルコマンド: `bash`, `sh`
-- ディレクトリ構造: `text`
+- ディレクトリ構造: `text`, `plaintext`
 - 設定ファイル: `json`, `yaml`
 - Markdownテンプレート: `markdown`
-- その他プレーンテキスト: `text`
+- Dockerファイル: `dockerfile`
+- その他プレーンテキスト: `text`, `plaintext`
 
 > **Lint化**: これらの言語識別子はmarkdownlintの`MD040`ルール + `allowed_languages`設定で検証可能。詳細は[Lint化について](#lint化について)を参照。
 
@@ -61,7 +62,8 @@ Markdownのコードブロックに言語指定を行うこと:
       "css", "scss",
       "bash", "sh",
       "json", "yaml",
-      "markdown", "text"
+      "markdown", "text",
+      "dockerfile", "plaintext"
     ]
   }
 }

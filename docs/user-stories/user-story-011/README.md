@@ -42,22 +42,25 @@ markdownlintを導入することで、これらを自動検証可能にする�
 
 ### Phase 1: 基盤構築
 
-- [ ] markdownlint-cli2 パッケージのインストール
-- [ ] `.markdownlint.jsonc` 設定ファイルの作成(MD001, MD040 + allowed_languages)
-- [ ] `.markdownlintignore` 除外ファイルの作成
-- [ ] `host-frontend-root/frontend-src-root/package.json` へのスクリプト追加(`lint:md`, `lint:md:fix`)
-- [ ] `Makefile` へのコマンド追加
+- [x] markdownlint-cli2 パッケージのインストール
+- [x] `.markdownlint.jsonc` 設定ファイルの作成(MD001, MD040 + allowed_languages)
+- [x] `.markdownlintignore` 除外ファイルの作成
+- [x] `host-frontend-root/frontend-src-root/package.json` へのスクリプト追加(`lint:md`, `lint:md:fix`)
+- [x] `Makefile` へのコマンド追加
 
 ### Phase 2: 既存ドキュメント修正
 
-- [ ] 違反箇所の検出(`make lint:md` 実行; フロントエンドコンテナ内での `npm run lint:md` をラップ)
-- [ ] MD001(見出しレベル階層スキップ)違反の修正
-- [ ] MD040(言語指定なし/許可外言語)違反の修正
+- [x] 違反箇所の検出(`make lintmd` 実行; フロントエンドコンテナ内での `npm run lint:md` をラップ)
+- [x] ルートディレクトリの主要ファイル(README.md, CLAUDE.md)の違反修正
+- [ ] MD001(見出しレベル階層スキップ)違反の修正 (docs/配下は段階的に修正)
+- [ ] MD040(言語指定なし/許可外言語)違反の修正 (docs/配下は段階的に修正)
+
+> **Note**: docs/配下には約1,200ファイル以上のMarkdownがあり、すべての違反を一度に修正することは現実的ではない。CIで警告として検出できるようにし、段階的に修正するアプローチを取る。
 
 ### Phase 3: CI統合(任意)
 
 - [ ] pre-commit フックへの追加検討
-- [ ] GitHub Actions への追加検討
+- [x] GitHub Actions への追加検討 (警告として実行)
 
 ### 対象外
 
