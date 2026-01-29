@@ -65,7 +65,7 @@ tests/unit/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI/
 
 ### 使用するモック
 
-| 依存関係 | モック理由 | モックパス |
+| 依存関係 | モック理由 | モック対応 |
 | -------- | ---------- | ---------- |
 | CSSモジュール | Vitest設定で自動処理 | 不要 |
 | コールバック関数 | vi.fn()で呼び出し検証 | 不要 |

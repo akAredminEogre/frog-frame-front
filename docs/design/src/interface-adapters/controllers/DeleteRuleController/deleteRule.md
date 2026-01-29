@@ -56,7 +56,7 @@ UseCaseをモック化し、Controllerの責務（入力変換とUseCase呼び�
 
 ### 使用するモック
 
-| 依存関係 | モック理由 | モックパス |
+| 依存関係 | モック理由 | モック対応 |
 | -------- | ---------- | ---------- |
 | IDeleteRuleUseCase | UseCase呼び出しの検証 | 新規作成（`tests/unit/interface-adapters/controllers/DeleteRuleController/mocks/`） |
 
