@@ -19,8 +19,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - 参照: `docs/coding-standards/tests/common-rule/`
 4. [ ] テストコードを実装
    - **JSDocにテストケース説明を記載**（`docs/coding-standards/tests/unit/common-rule/JSDoc-rule.md`）
+     - テスト戦略書のテストケース名と一致させる
      - 1ケースにつき1行でまとめる
-     - テストの実際の動作を正確に説明
    - **配列化テストの適用判断**（`docs/coding-standards/tests/array-based-test.md`）
      - 1ファイル1配列の原則（配列化テストと非配列テストの混在禁止）
      - forEach内でif文が必要な場合は配列化しない
