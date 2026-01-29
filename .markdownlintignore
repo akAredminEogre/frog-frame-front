@@ -10,3 +10,6 @@ dist/
 
 # Frontend source (separate from docs)
 host-frontend-root/
+
+# Git worktrees (duplicate copies of project)
+worktrees/

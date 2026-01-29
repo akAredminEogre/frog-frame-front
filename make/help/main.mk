@@ -26,6 +26,8 @@ help:
 	@echo "## Code Quality Commands"
 	@echo "  make check        - Run compile, knip, tsr, and lint checks"
 	@echo "  make sortimports  - Sort imports in all files"
+	@echo "  make lintmd       - Run markdownlint for Markdown files"
+	@echo "  make lintmdfix    - Run markdownlint with auto-fix"
 	@echo ""
 	@echo "## Git Utility Commands"
 	@echo "  make git-list-unmerged - List all branches not merged into develop"
