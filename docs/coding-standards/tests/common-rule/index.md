@@ -13,6 +13,7 @@
 | 5 | [テストケース配列のフィールド使用検証](./test-case-field-usage.md) | 定義したフィールドの使用漏れ防止 |
 | 6 | [モック初期化・リセットの明示的呼び出し](./mock-init-reset.md) | beforeEach/afterEach での明示的呼び出し |
 | 7 | [テスト戦略書との一貫性](./test-strategy-consistency.md) | テストケース名・順番をテスト戦略書と一致 |
+| 8 | [JSDocルール](./jsdoc-rule.md) | テストJSDocの記述原則と更新義務 |
 
 ## カテゴリ別インデックス
 
@@ -34,6 +35,7 @@
 ### ドキュメント関連
 
 - [§7 テスト戦略書との一貫性](./test-strategy-consistency.md)
+- [§8 JSDocルール](./jsdoc-rule.md)
 
 ## 関連ドキュメント
 

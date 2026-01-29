@@ -54,7 +54,7 @@
 | `docs/coding-standards/tests/integration/common-rule.md` | 規約のみ | fake-indexeddb、モック管理の適用シナリオ |
 | `docs/coding-standards/tests/unit/common-rule/basic-rule.md` | 規約のみ | モック分離、ライフサイクル管理の適用シナリオ |
 | `docs/coding-standards/tests/unit/common-rule/test-strategy.md` | 規約のみ | バリデーションテストの適用シナリオ |
-| `docs/coding-standards/tests/unit/common-rule/JSDoc-rule.md` | 規約のみ | JSDoc更新が必要な場合の判断事例 |
+| `docs/coding-standards/tests/common-rule/jsdoc-rule.md` | 規約のみ | JSDoc更新が必要な場合の判断事例 |
 | `docs/coding-standards/tests/unit/infrastructure.md` | 簡潔な規約のみ | infrastructure層テストの適用シナリオ |
 
 ### 優先度低: make/scriptsディレクトリ
