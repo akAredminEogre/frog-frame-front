@@ -65,16 +65,15 @@ describe('useDeleteRule - deleteController', () => {
     const onError = mockResult.getCapturedOnError();
     expect(onError).not.toBeNull();
 
+    const formattedMessage = 'ルール 5 の削除処理中にエラーが発生しました: 削除に失敗しました';
+
     // Act
     await act(async () => {
-      onError!(5, '削除に失敗しました');
+      onError!(formattedMessage);
       await flushPromises();
     });
 
     // Assert
-    expect(helper.getDeleteError()).toEqual({
-      ruleId: 5,
-      message: '削除に失敗しました',
-    });
+    expect(helper.getDeleteError()).toBe(formattedMessage);
   });
 });

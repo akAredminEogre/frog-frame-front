@@ -5,7 +5,7 @@ import { ConfirmDialog } from 'src/frameworks-and-drivers/ui/components/organism
 
 export interface DeleteRuleUIProps {
   deleteTargetId: number | null;
-  deleteError: { ruleId: number; message: string } | null;
+  deleteError: string | null;
   onConfirmDelete: () => void;
   onCancelDelete: () => void;
   onDismissError: () => void;
@@ -34,7 +34,7 @@ export const DeleteRuleUI: React.FC<DeleteRuleUIProps> = ({
       />
 
       <ToastNotification
-        message={deleteError ? `ルール ${deleteError.ruleId} の削除処理中にエラーが発生しました: ${deleteError.message}` : ''}
+        message={deleteError ?? ''}
         type="error"
         isVisible={deleteError !== null}
         onClose={onDismissError}

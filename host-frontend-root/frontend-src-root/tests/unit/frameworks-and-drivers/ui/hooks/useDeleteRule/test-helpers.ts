@@ -156,7 +156,7 @@ export class UseDeleteRuleTestHelper {
   /**
    * deleteErrorを取得
    */
-  getDeleteError(): { ruleId: number; message: string } | null {
+  getDeleteError(): string | null {
     return this.ensureRendered().deleteError;
   }
 

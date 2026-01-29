@@ -88,12 +88,13 @@ describe('useDeleteRule - handleDelete', () => {
     expect(onError).not.toBeNull();
 
     // act内でonErrorを呼び出してdeleteErrorを設定
+    const formattedMessage = 'ルール 5 の削除処理中にエラーが発生しました: テストエラー';
     const { act } = await import('react');
     await act(async () => {
-      onError!(5, 'テストエラー');
+      onError!(formattedMessage);
       await flushPromises();
     });
-    expect(helper.getDeleteError()).toEqual({ ruleId: 5, message: 'テストエラー' });
+    expect(helper.getDeleteError()).toBe(formattedMessage);
 
     // Act
     await helper.callHandleDelete(10);

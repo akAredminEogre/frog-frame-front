@@ -6,7 +6,7 @@ import { IDeleteRuleControllerFactory } from 'src/interface-adapters/factories/I
 export interface UseDeleteRuleResult {
   deletingIds: Set<number>;
   deleteTargetId: number | null;
-  deleteError: { ruleId: number; message: string } | null;
+  deleteError: string | null;
   handleDelete: (ruleId: number) => void;
   confirmDelete: () => Promise<void>;
   cancelDelete: () => void;
@@ -23,7 +23,7 @@ export const useDeleteRule = (
 ): UseDeleteRuleResult => {
   const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
-  const [deleteError, setDeleteError] = useState<{ ruleId: number; message: string } | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const deleteController = useMemo(() => {
     const factory = container.resolve<IDeleteRuleControllerFactory>('IDeleteRuleControllerFactory');
@@ -31,8 +31,8 @@ export const useDeleteRule = (
       (ruleId: number) => {
         onDeleteSuccess(ruleId);
       },
-      (ruleId: number, message: string) => {
-        setDeleteError({ ruleId, message });
+      (formattedMessage: string) => {
+        setDeleteError(formattedMessage);
       }
     );
   }, [onDeleteSuccess]);

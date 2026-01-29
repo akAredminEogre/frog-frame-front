@@ -1,7 +1,8 @@
 /**
  * DeleteRulePresenter.presentError - 正常系テスト（コールバック呼び出し）
- * 1. エラーデータでshowErrorInViewコールバックが呼び出され、ruleIdとmessageが正しく渡される
- * 2. removeRuleFromViewは呼び出されない（コールバック分離）
+ *
+ * - エラーデータでshowErrorInViewコールバックが呼び出され、フォーマット済みメッセージが渡される
+ * - removeRuleFromViewは呼び出されない（コールバック分離）
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -19,26 +20,20 @@ describe('DeleteRulePresenter.presentError - 正常系（コールバック呼�
 
   const testCases = [
     {
-      description: 'Errorオブジェクト由来のエラーでコールバックが呼び出され、ruleIdとmessageが正しく渡される',
+      description: 'Errorオブジェクト由来のエラーでコールバックが呼び出され、フォーマット済みメッセージが渡される',
       input: {
         ruleId: 1,
         error: new Error('削除に失敗しました'),
       },
-      expected: {
-        ruleId: 1,
-        message: '削除に失敗しました',
-      },
+      expectedMessage: 'ルール 1 の削除処理中にエラーが発生しました: 削除に失敗しました',
     },
     {
-      description: '文字列由来のエラーでコールバックが呼び出され、ruleIdとmessageが正しく渡される',
+      description: '文字列由来のエラーでコールバックが呼び出され、フォーマット済みメッセージが渡される',
       input: {
         ruleId: 2,
         error: '文字列エラー',
       },
-      expected: {
-        ruleId: 2,
-        message: '文字列エラー',
-      },
+      expectedMessage: 'ルール 2 の削除処理中にエラーが発生しました: 文字列エラー',
     },
   ];
 
@@ -56,10 +51,7 @@ describe('DeleteRulePresenter.presentError - 正常系（コールバック呼�
       presenter.presentError(errorData);
 
       expect(mockShowErrorInView).toHaveBeenCalledTimes(1);
-      expect(mockShowErrorInView).toHaveBeenCalledWith(
-        testCase.expected.ruleId,
-        testCase.expected.message
-      );
+      expect(mockShowErrorInView).toHaveBeenCalledWith(testCase.expectedMessage);
       expect(mockRemoveRuleFromView).not.toHaveBeenCalled();
     });
   });
