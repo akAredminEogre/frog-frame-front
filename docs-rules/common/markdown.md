@@ -52,21 +52,8 @@ Markdownのコードブロックに言語指定を行うこと:
 | 見出しレベルの階層スキップ禁止 | MD001 (heading-increment) | ✅ 検証可能 |
 | スコープの明示 | - | PRレビューで確認 |
 
-### markdownlint設定例
+### markdownlint設定
 
-```json
-{
-  "MD040": {
-    "allowed_languages": [
-      "typescript", "javascript", "tsx", "jsx",
-      "css", "scss",
-      "bash", "sh",
-      "json", "yaml",
-      "markdown", "text",
-      "dockerfile", "plaintext"
-    ]
-  }
-}
-```
+実際の設定は [`.markdownlint.jsonc`](../../.markdownlint.jsonc) を参照してください。
 
 → [User Story 011: markdownlint導入](../../user-stories/user-story-011/README.md)
