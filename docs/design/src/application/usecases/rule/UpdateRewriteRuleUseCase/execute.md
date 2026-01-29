@@ -1,5 +1,9 @@
 # UpdateRewriteRuleUseCase.execute() テスト戦略
 
+> **注意**: 本ドキュメントは現行実装（`src/application/usecases/rule/UpdateRewriteRuleUseCase.ts`）のテスト戦略書です。
+> [User Story 012](../../../../../../../user-stories/user-story-012/README.md) でADR-001準拠にリファクタリング後、
+> `docs/design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md` に移動予定です。
+
 ## 目的
 
 ルールを更新するワークフローを調整する。
