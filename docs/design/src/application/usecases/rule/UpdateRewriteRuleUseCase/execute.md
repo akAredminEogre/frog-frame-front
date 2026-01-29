@@ -19,7 +19,7 @@ RewriteRule.fromParamsでエンティティを生成し、Repository経由でル
 ルールの更新が正常に行われることを確認。
 
 | 分類 | テストケース | 根拠 |
-|------|-------------|------|
+| ------ | ------------- | ------ |
 | 通常のルール更新 | 通常のルールが正常に更新できる | 基本的な更新操作の確認 |
 | 正規表現ルール更新 | 正規表現を含むルールが正常に更新できる | isRegex=trueのパターン確認 |
 | URLパターンルール更新 | URLパターンを持つルールが正常に更新できる | 複雑なURLパターンの確認 |
@@ -31,7 +31,7 @@ RewriteRule.fromParamsでエンティティを生成し、Repository経由でル
 各依存関係が正しい引数で呼び出されることを確認。
 
 | 分類 | テストケース | 根拠 | 実装状況 |
-|------|-------------|------|---------|
+| ------ | ------------- | ------ | --------- |
 | Repository.update | RewriteRule.fromParams(id, params)で生成されたルールで呼び出し | 更新されたルールの永続化 | ✓ 実装済み |
 | ChromeTabsService.queryTabs | 空オブジェクトで呼び出し | 全タブの取得 | 未実装（モック設定のみ、アサーションなし） |
 | ChromeTabsService.reloadTab | マッチするタブに対して呼び出し | マッチするタブのリロード | 未実装 |
@@ -43,7 +43,7 @@ RewriteRule.fromParamsでエンティティを生成し、Repository経由でル
 Repository.update成功後にタブリロードが失敗した場合の挙動を確認。
 
 | 分類 | テストケース | 根拠 |
-|------|-------------|------|
+| ------ | ------------- | ------ |
 | reloadAllTabsAfterRuleUpdate失敗 | ルール保存は成功し、例外がスローされない | DB更新成功後のタブリロード失敗を許容 |
 
 **対応テスト**: 明示的テスト未実装（タブリロード失敗を再現するテストの追加が必要）
@@ -53,7 +53,7 @@ Repository.update成功後にタブリロードが失敗した場合の挙動を
 urlPatternが空文字列やundefinedの場合、タブリロードをスキップする。
 
 | 分類 | テストケース | 根拠 |
-|------|-------------|------|
+| ------ | ------------- | ------ |
 | urlPatternが空文字列 | タブリロードがスキップされる | 早期リターン条件（空文字列） |
 | urlPatternがundefined | タブリロードがスキップされる | 早期リターン条件（undefined） |
 
@@ -101,7 +101,7 @@ UseCaseの2つの依存関係をモック化してテストする。
 ### モック対象
 
 | 依存関係 | モック理由 | 既存モック |
-|---------|-----------|-----------|
+| --------- | ----------- | ----------- |
 | IRewriteRuleRepository | DB/ストレージ層を分離 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository.ts` ✓ |
 | IChromeTabsService | Chrome API層を分離 | `tests/unit/application/ports/IChromeTabsService/mocks/createMockTabsService.ts` ✓ |
 
