@@ -167,7 +167,7 @@ tests/unit/[path]/[methodName]/
 
 ### 使用するモック
 
-> **注意**: 新規モック作成前に既存モックを確認すること。詳細は [mock-file-placement.md](../../docs/coding-standards/tests/common-rule/mock-file-placement.md) を参照。
+> **注意**: 新規モック作成前に既存モックを確認すること。詳細は [mock-file-placement.md](/docs/coding-standards/tests/common-rule/mock-file-placement.md) を参照。
 
 | 依存関係 | モック理由 | モック対応 |
 | -------- | ---------- | ---------- |
@@ -247,6 +247,22 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/delete/
 host-frontend-root/frontend-src-root/tests/unit/interface-adapters/mappers/RewriteRuleMapper/delete/
 └── normal-cases.test.ts
 ```
+
+### テンプレート内のマークダウンリンク
+
+テンプレート（本ファイル）内で他ドキュメントへのリンクを記載する際は、**リポジトリルートからの絶対パス**を使用する。
+
+**理由**: テンプレートは様々な階層のテスト戦略書にコピーして使用されるため、相対パス（`../../`）は配置場所によって機能しなくなる。
+
+```markdown
+# ✅ 正しい記載（ルート絶対パス）
+[mock-file-placement.md](/docs/coding-standards/tests/common-rule/mock-file-placement.md)
+
+# ❌ 誤った記載（相対パス - 階層依存）
+[mock-file-placement.md](../../docs/coding-standards/tests/common-rule/mock-file-placement.md)
+```
+
+> **注意**: この規約はテンプレートファイル（docs-rules/配下）に適用される。実際のテスト戦略書（docs/design/配下）では相対パスを使用してもよい。
 
 ### テーブル列名の意味的一貫性
 
