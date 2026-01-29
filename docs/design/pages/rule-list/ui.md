@@ -150,11 +150,18 @@ width: 200px;
   .rulesTableContainer {
     font-size: 12px;
   }
-  
+
+  /* URLパターン・置換前・置換後列 */
+  .rulesTable tbody td:nth-child(4),
+  .rulesTable tbody td:nth-child(5),
+  .rulesTable tbody td:nth-child(6) {
+    min-width: 100px;
+  }
+
   .rulesTable td {
     padding: 8px 4px;
   }
-  
+
   .rulesTable thead th {
     padding: 8px 4px;
     font-size: 12px;
