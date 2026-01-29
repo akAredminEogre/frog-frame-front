@@ -24,7 +24,7 @@
 ### 現在の実装状態
 
 | 項目 | 現在 | ADR-001準拠 |
-|------|------|-------------|
+| ------ | ------ | ------------- |
 | クラス名 | `UpdateRewriteRuleUseCase` | `UpdateRewriteRuleInteractor` |
 | 配置 | `src/application/usecases/rule/` | `src/application-business-rules/interactors/` |
 | Input Port | なし | `IUpdateRewriteRuleUseCase` |
@@ -37,7 +37,7 @@
 ### 差分分類
 
 | ファイル | 現在位置 | 理論位置 | 修正 | 分類 |
-|---------|---------|---------|------|------|
+| --------- | --------- | --------- | ------ | ------ |
 | UpdateRewriteRuleUseCase.ts | src/application/usecases/rule/ | src/application-business-rules/interactors/ | 必須（Interactorにリネーム、Presenter導入） | C |
 | IChromeTabsService.ts | src/application/ports/ | - | 不要（ITabsGatewayを使用） | B |
 
@@ -60,7 +60,7 @@
 ### 新規作成ファイル
 
 | ファイル | 配置先 | 説明 |
-|---------|--------|------|
+| --------- | -------- | ------ |
 | IUpdateRewriteRuleUseCase.ts | src/application-business-rules/ports/input/ | Input Port |
 | IUpdateRewriteRulePresenter.ts | src/application-business-rules/ports/output/ | Output Port |
 | UpdateRewriteRuleInteractor.ts | src/application-business-rules/interactors/ | Interactor実装 |
