@@ -62,6 +62,35 @@ ls -la docs/coding-standards/tests/common-rule
 ls docs/coding-standards/tests/common-rule/
 ```
 
+### 相対パスの階層数検証
+
+深い階層のドキュメントから他のファイルを参照する場合、`../` の数を数え間違えやすい。
+
+**検証手順**:
+
+1. ソースファイルのディレクトリに移動
+2. 相対パスが正しく解決されるか `ls` で確認
+
+```bash
+# 例: docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md から
+# docs/coding-standards/tests/common-rule/mock-file-placement.md を参照する場合
+
+cd docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase
+ls ../../../../../../coding-standards/tests/common-rule/mock-file-placement.md
+# ファイルが表示されればOK、エラーなら階層数が間違っている
+```
+
+**よくある間違い**:
+- ファイル名を1階層としてカウントしてしまう（ファイルは階層に含まない）
+- 目視で `../` を数える際のオフバイワンエラー
+
+**正しいカウント方法**:
+```
+docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md
+     ↑      ↑   ↑           ↑        ↑    ↑                       ← ファイルは含まない
+     1      2   3           4        5    6  ← docs/ に到達するまでの階層数
+```
+
 ## 設計ドキュメント変更時の追加チェック
 
 設計ドキュメント（`docs/design/`）を変更する場合は、以下も確認すること：
