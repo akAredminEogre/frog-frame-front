@@ -4,6 +4,11 @@
 
 `useRef`は初期値によって異なる型を返す。不要な型キャストを避け、TypeScriptの型推論を活用する。
 
+## 適用シナリオ
+
+1. **ダイアログやフォーム要素のDOM参照を作成する場合**: `useRef<HTMLDivElement>(null)`のように初期値をnullにすると、TypeScriptが自動的に`RefObject<T>`を推論するため、`as RefObject<T>`キャストは不要。DOM要素用のrefは常にnull初期値を使う
+2. **前回のフォーカス要素など可変値を保持するrefを作成する場合**: `MutableRefObject`が必要なケースでは、初期値にnullを含めず適切な初期値を設定する。Props経由でrefを渡す際は`RefObject<T>`型で定義し、`| null`は不要
+
 ## useRefの型オーバーロード
 
 Reactの`useRef`は以下の型オーバーロードを持つ：
