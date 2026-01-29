@@ -32,6 +32,7 @@ stylelintを導入することで、これらの一部または全部を自動�
 - [x] pre-commit フック（lefthook）に stylelint 追加
 - [x] stylelint-rules/ ディレクトリでのルール分割
 - [x] CSS コーディング規約ドキュメントとの紐づけ
+- [x] CI（GitHub Actions）に stylelint チェック追加
 
 ### 自動検証の対応状況
 
