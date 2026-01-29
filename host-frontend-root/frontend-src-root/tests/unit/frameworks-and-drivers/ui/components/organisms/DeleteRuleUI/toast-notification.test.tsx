@@ -2,7 +2,7 @@
  * DeleteRuleUI コンポーネント - ToastNotification表示テスト
  *
  * - deleteError=nullの場合、Toast通知が表示されない
- * - deleteErrorが存在する場合、Toast通知が表示され、ruleIdとmessageを含む
+ * - deleteErrorが存在する場合、Toast通知が表示される
  */
 import { DeleteRuleUITestHelper } from 'tests/unit/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI/test-helpers';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -27,14 +27,13 @@ describe('DeleteRuleUI - ToastNotification表示', () => {
     expect(toast).toBeNull();
   });
 
-  it('deleteErrorが存在する場合、Toast通知が表示され、ruleIdとmessageを含む', async () => {
-    const deleteError = { ruleId: 42, message: 'ネットワークエラー' };
+  it('deleteErrorが存在する場合、Toast通知が表示される', async () => {
+    const deleteError = 'ルール 42 の削除処理中にエラーが発生しました: ネットワークエラー';
     await helper.render({ deleteError });
 
     const toast = helper.getToastNotification();
     expect(toast).not.toBeNull();
     const textContent = toast!.textContent ?? '';
-    expect(textContent).toContain(String(deleteError.ruleId));
-    expect(textContent).toContain(deleteError.message);
+    expect(textContent).toContain(deleteError);
   });
 });

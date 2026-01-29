@@ -69,7 +69,7 @@ describe('DeleteRuleUI - コールバック伝播', () => {
     // Arrange
     const onDismissError = vi.fn();
     await helper.render({
-      deleteError: { ruleId: 1, message: 'テストエラー' },
+      deleteError: 'ルール 1 の削除処理中にエラーが発生しました: テストエラー',
       onDismissError,
     });
 

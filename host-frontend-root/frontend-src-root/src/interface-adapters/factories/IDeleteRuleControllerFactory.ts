@@ -1,7 +1,7 @@
 import { IDeleteRuleController } from 'src/interface-adapters/controllers/IDeleteRuleController';
 
 export type DeleteSuccessCallback = (ruleId: number) => void;
-export type DeleteErrorCallback = (ruleId: number, message: string) => void;
+export type DeleteErrorCallback = (formattedMessage: string) => void;
 
 /**
  * DeleteRuleControllerを生成するFactoryのインターフェース
