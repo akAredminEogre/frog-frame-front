@@ -38,7 +38,7 @@
   width: 200px; /* URLパターン列 */
 }
 
-/* 置換前・置換後列は残りの幅を均等に分配（指定なしで自動） */
+/* 置換前・置換後列は残りの幅を自動配分（ブラウザによる自動計算） */
 
 .rulesTable tbody tr {
   background-color: #ffffff;
