@@ -9,7 +9,7 @@ import { IDeleteRulePresenter } from 'src/application-business-rules/ports/outpu
 export class DeleteRulePresenter implements IDeleteRulePresenter {
   constructor(
     private readonly removeRuleFromView: (ruleId: number) => void,
-    private readonly showErrorInView: (ruleId: number, message: string) => void
+    private readonly showErrorInView: (formattedMessage: string) => void
   ) {}
 
   /**
@@ -25,6 +25,7 @@ export class DeleteRulePresenter implements IDeleteRulePresenter {
    * @param errorData エラーデータ
    */
   presentError(errorData: DeleteRuleErrorOutputData): void {
-    this.showErrorInView(errorData.ruleId, errorData.message);
+    const formattedMessage = `ルール ${errorData.ruleId} の削除処理中にエラーが発生しました: ${errorData.message}`;
+    this.showErrorInView(formattedMessage);
   }
 }

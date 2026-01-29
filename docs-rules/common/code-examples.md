@@ -116,7 +116,7 @@
 | 間違い | 正しいパス |
 |-------|-----------|
 | `src/coding-standards.md` | `docs/coding-standards/src/coding-standards.md` |
-| `tests/common-rule.md` | `docs/coding-standards/tests/common-rule.md` |
+| `tests/common-rule/` | `docs/coding-standards/tests/common-rule/` |
 
 ## 例示のフォーマット一貫性
 

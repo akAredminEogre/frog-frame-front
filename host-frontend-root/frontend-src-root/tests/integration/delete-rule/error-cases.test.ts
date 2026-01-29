@@ -46,7 +46,6 @@ describe('delete-rule 結合テスト - エラー系', () => {
     // Assert
     expect(onError).toHaveBeenCalledTimes(1);
     expect(onError).toHaveBeenCalledWith(
-      nonExistentRuleId,
       expect.stringContaining(String(nonExistentRuleId))
     );
     expect(onSuccess).not.toHaveBeenCalled();
@@ -139,7 +138,6 @@ describe('delete-rule 結合テスト - エラー系', () => {
 
     // Assert: エラーメッセージにIDが含まれる
     expect(onError).toHaveBeenCalledWith(
-      nonExistentRuleId,
       expect.stringContaining('12345')
     );
   });

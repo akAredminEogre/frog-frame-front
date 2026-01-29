@@ -10,54 +10,48 @@
 
 ## パターン1: 処理完了後に即座にリセットする場合（try-finally）
 
-単発の処理で、完了後すぐにリセットして次の操作を受け付ける場合。
+単発の処理で、完了後すぐにリセットして次の操作を受け付ける場合に使用する。
 
-```typescript
-const handleSubmit = () => {
-  if (isProcessing) return;
-  isProcessing = true;
-  try {
-    submitData();
-  } finally {
-    isProcessing = false; // 正常・エラー問わずリセット
-  }
-};
-```
+- 処理開始時にフラグを `true` に設定
+- `try` ブロック内で処理を実行
+- `finally` ブロックでフラグを `false` にリセット（正常・エラー問わず）
+
+### 適用シナリオ
+
+- フォーム送信ボタンの二重クリック防止: 送信完了後すぐに再操作可能にしたい場合
 
 ## パターン2: 別の条件でリセットする場合（try-catch）
 
-連続クリック防止など、正常完了時は状態を維持し、別の条件（ダイアログ再オープン等）でリセットする場合。
+連続クリック防止など、正常完了時は状態を維持し、別の条件（ダイアログ再オープン等）でリセットする場合に使用する。
 
-```typescript
-const guardedHandler = (handler) => {
-  return () => {
-    if (isProcessing) return;
-    isProcessing = true;
-    try {
-      handler();
-      // 正常完了時はリセットしない（連続クリック防止）
-      // 別の条件（isActive=true等）でリセットされる
-    } catch (error) {
-      isProcessing = false; // エラー時のみリセット
-      throw error;
-    }
-  };
-};
-```
+- 処理開始時にフラグを `true` に設定
+- `try` ブロック内で処理を実行（正常完了時はリセットしない）
+- `catch` ブロックでエラー時のみフラグを `false` にリセット
 
-## 悪い例
+### 適用シナリオ
 
-```typescript
-const guardedHandler = (handler) => {
-  return () => {
-    if (isProcessing) return;
-    isProcessing = true;
-    handler(); // エラー時にisProcessingがtrueのまま
-  };
-};
-```
+- 確認ダイアログの「OK」ボタン連続クリック防止: 正常完了後はダイアログが閉じるため自然にリセットされるが、エラー時はダイアログが残るのでフラグだけリセットする
 
-→ handlerがエラーをスローすると、isProcessingが永続化してボタンが操作不能になる
+## パターン3: `void` で呼び出される async 関数の例外握りつぶし（try-catch-finally）
+
+`void asyncFunction()` で呼び出される async 関数では、reject が発生すると未処理の Promise 拒否（unhandled rejection）になる。エラー通知が別経路（コールバック、State 更新等）で既に行われている場合は、`catch` で例外を握りつぶし、`finally` で状態をリセットする。
+
+- 処理開始時に処理中 State に ID を追加
+- `try` ブロック内で非同期処理を `await`
+- `catch` ブロックで例外を握りつぶす（エラー通知は別経路で処理済みのため）
+- `finally` ブロックで処理中 State から ID を除去
+
+### 禁止事項
+
+- `try-finally` のみで `catch` を省略すること: `void` で呼ばれる関数で reject が未処理になり、unhandled rejection が発生する
+
+### 適用シナリオ
+
+- 削除確認ダイアログの「削除」ボタン: `void confirmDelete()` で呼び出され、エラーは `onError` コールバック経由で `deleteError` State に通知済みのため、`catch` で握りつぶす
+
+## 悪い例（規約違反パターン）
+
+- 処理中フラグを設定した後、`try` ブロックなしでハンドラを直接呼び出すと、エラー時にフラグが `true` のまま残り、ボタンが永久に操作不能になる
 
 ## パターンの選択基準
 
@@ -65,6 +59,7 @@ const guardedHandler = (handler) => {
 |-----|---------|
 | 処理完了後すぐに次の操作を受け付ける | try-finally |
 | 連続クリック防止（正常完了時は状態維持） | try-catch（エラー時のみリセット） |
+| `void` で呼ばれる async 関数（エラー通知は別経路） | try-catch-finally（catch で握りつぶし、finally でリセット） |
 
 ## チェックリスト
 
@@ -73,6 +68,7 @@ const guardedHandler = (handler) => {
 - [ ] エラー発生時に状態がリセットされるか
 - [ ] 正常完了時のリセットタイミングは適切か（即座 or 別条件）
 - [ ] 非同期処理の場合、Promiseの完了を待ってからリセットしているか
+- [ ] `void` で呼び出される async 関数の場合、内部で `catch` して例外を握りつぶしているか
 
 ## eslint-rule
 

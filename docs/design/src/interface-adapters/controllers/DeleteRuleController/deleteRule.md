@@ -54,25 +54,11 @@ tests/unit/interface-adapters/controllers/DeleteRuleController/deleteRule/
 
 UseCaseをモック化し、Controllerの責務（入力変換とUseCase呼び出し）のみをテストする。
 
-> **重要**: モック作成は [basic-rule.md](../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
+### 使用するモック
 
-### 既存モック確認チェック（必須）
-
-- [x] `grep -r "createMockDeleteRuleUseCase" tests/` で検索 → 新規作成（該当なし）
-
-### モック対象
-
-| 依存関係 | モック理由 | 既存モック |
-|---------|-----------|-----------|
-| IDeleteRuleUseCase | UseCase呼び出しの検証 | 新規作成 |
-
-### モックファイル構成
-
-```
-tests/unit/interface-adapters/controllers/DeleteRuleController/
-└── mocks/
-    └── createMockDeleteRuleUseCase.ts    # IDeleteRuleUseCaseモックファクトリ
-```
+| 依存関係 | モック理由 | モック対応 |
+| -------- | ---------- | ---------- |
+| IDeleteRuleUseCase | UseCase呼び出しの検証 | 新規作成（`tests/unit/interface-adapters/controllers/DeleteRuleController/mocks/`） |
 
 ### テストデータ
 
