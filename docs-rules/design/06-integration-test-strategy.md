@@ -213,7 +213,7 @@ tests/integration/{feature-name}/
 
 ### モックファイル構成
 
-モックファイルは `docs/coding-standards/tests/common-rule.md` の「モックファイルの配置ルール」に従い、
+モックファイルは [mock-file-placement.md](/docs/coding-standards/tests/common-rule/mock-file-placement.md) の「モックファイルの配置ルール」に従い、
 モック対象クラスのソースディレクトリ構造を `tests/` 配下で反映したディレクトリに配置する。
 
 \`\`\`

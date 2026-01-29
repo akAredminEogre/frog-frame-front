@@ -77,7 +77,9 @@ describe('DeleteRuleControllerFactory.create - 正常系', () => {
     await controller.deleteRule(ruleId);
 
     expect(onError).toHaveBeenCalledTimes(1);
-    expect(onError).toHaveBeenCalledWith(ruleId, errorMessage);
+    expect(onError).toHaveBeenCalledWith(
+      expect.stringContaining(errorMessage)
+    );
     expect(onSuccess).not.toHaveBeenCalled();
   });
 });

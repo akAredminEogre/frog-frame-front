@@ -78,7 +78,6 @@ describe('delete-rule 結合テスト - 部分的成功（タブリロード失�
     // Assert: onErrorが呼ばれ、エラーメッセージが渡される
     expect(onError).toHaveBeenCalledTimes(1);
     expect(onError).toHaveBeenCalledWith(
-      ruleInDb.id,
       expect.stringContaining(errorMessage)
     );
   });
@@ -136,11 +135,8 @@ describe('delete-rule 結合テスト - 部分的成功（タブリロード失�
     // Assert: onSuccessには削除されたruleIdが渡される
     expect(onSuccess).toHaveBeenCalledWith(ruleInDb.id);
 
-    // Assert: onErrorにはエラー情報が渡される
-    expect(onError).toHaveBeenCalledWith(
-      ruleInDb.id,
-      expect.any(String)
-    );
+    // Assert: onErrorにはフォーマット済みエラーメッセージが渡される
+    expect(onError).toHaveBeenCalledWith(expect.any(String));
   });
 
   it('複数ルールがある場合、削除対象のみが削除され他は影響を受けない', async () => {

@@ -96,41 +96,13 @@ tests/unit/application-business-rules/interactors/DeleteRuleInteractor/execute/
 Interactorの3つの依存関係をモック化してテストする。
 責務分離のため、モック生成関数は外部ファイルに配置する。
 
-> **重要**: モック作成は [basic-rule.md](../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
-> - モック作成は、別のクラスファイルに切り出し、それをインポートして使用すること
-> - テストコード内で直接モックを定義しないこと
-> - モックファクトリは `createMock[ClassName].ts` の形式で命名
-> - **モック方法に具体的な実装コードを記載しないこと**（実装はテストコードを参照）
+### 使用するモック
 
-### 既存モック確認チェック（必須）
-
-新規モック作成前に、同一インターフェースの既存モックを確認すること。
-
-- [x] `grep -r "createMockRewriteRuleRepository" tests/` で既存モックを検索した → 既存モック使用 (`tests/unit/application/ports/IRewriteRuleRepository/mocks/`)
-- [x] `grep -r "createMockTabsGateway" tests/` で既存モックを検索した → 既存モック使用 (`tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`)
-- [x] `grep -r "createMockPresenter" tests/` で既存モックを検索した → 新規作成（IDeleteRulePresenter固有）
-
-> **参照**: [common-rule.md](../../../../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
-
-### モック対象
-
-| 依存関係 | モック方法 | 理由 | 既存モック |
-|---------|-----------|------|-----------|
-| IRewriteRuleRepository | vi.fn()でメソッドをモック | DB/メッセージング層を分離 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/` ✓ |
-| ITabsGateway | vi.fn()でメソッドをモック | Chrome API層を分離 | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/` ✓ |
-| IDeleteRulePresenter | vi.fn()でメソッドをモック | View層を分離 | 新規作成（IDeleteRulePresenter固有） |
-
-### モックファイル構成
-
-```
-tests/unit/application-business-rules/interactors/DeleteRuleInteractor/
-└── mocks/
-    └── createMockPresenter.ts     # IDeleteRulePresenterのモック生成（新規）
-```
-
-注:
-- IRewriteRuleRepositoryのモックは既存の共通モック（`tests/unit/application/ports/IRewriteRuleRepository/mocks/`）から直接インポート
-- ITabsGatewayのモックは既存の共通モック（`tests/frameworks-and-drivers/browser/ChromeTabsGateway/`）から直接インポート
+| 依存関係 | モック理由 | モック対応 |
+| -------- | ---------- | ---------- |
+| IRewriteRuleRepository | DB/メッセージング層を分離 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/` |
+| ITabsGateway | Chrome API層を分離 | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/` |
+| IDeleteRulePresenter | View層を分離 | 新規作成（`tests/unit/application-business-rules/interactors/DeleteRuleInteractor/mocks/`） |
 
 ### テストデータ
 

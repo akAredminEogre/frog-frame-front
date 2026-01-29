@@ -70,6 +70,41 @@ docs/design/src/
 | テストファイル構成 | ○ | 実際のテストファイルとの対応 |
 | モック戦略 | ○ | モック対象と理由、モックファイル構成 |
 
+### 目的セクションの完全性
+
+**適用対象**: 複数のState・メソッドを公開するモジュール（カスタムフック、UIコンポーネント、サービスクラス等）
+
+「目的」セクションでモジュールが提供するState・メソッドを列挙する場合、**実装で公開されているすべてのState・メソッドを漏れなく記載すること**。
+
+**規約**:
+- 実装コードのexport/returnを確認し、公開されるすべてのAPI（State値、メソッド）を列挙する
+- 一部のAPIのみを記載して他を省略しない
+- 各メソッドの責務が明確な場合、括弧内で補足説明を加える
+
+**適用例**:
+
+| モジュール種別 | 適用 | 理由 |
+|---------------|------|------|
+| カスタムフック | ○ | 複数のState・メソッドを返す |
+| UIコンポーネント | ○ | 複数のprops/コールバックを受け取る |
+| サービスクラス | ○ | 複数のpublicメソッドを提供 |
+| Entity/DTO | △ | 単一メソッドの場合は省略可 |
+| Mapper | △ | 単一メソッドの場合は省略可 |
+
+**例（カスタムフックの場合）**:
+
+```markdown
+## 目的
+
+[機能]に関するState管理とロジックを提供するカスタムフック。
+`[stateA]`, `[stateB]`, `[stateC]` のState管理と、`[methodA]`, `[methodB]`, `[methodC]`, `[methodD]` のロジックを提供する（[補足説明]）。
+```
+
+**チェックポイント**:
+- [ ] 実装で返されるすべてのState値が記載されているか
+- [ ] 実装で返されるすべてのメソッドが記載されているか
+- [ ] テスト分類に対応するメソッドと目的セクションの記載が一致しているか
+
 ## テスト分類の観点
 
 以下の観点でテストケースを分類する:
@@ -165,38 +200,13 @@ tests/unit/[path]/[methodName]/
 
 [モックを使用する理由と対象を記述]
 
-> **重要**: モック作成は [basic-rule.md](../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
-> - モック作成は、別のクラスファイルに切り出し、それをインポートして使用すること
-> - テストコード内で直接モックを定義しないこと
-> - モックファクトリは `createMock[ClassName].ts` の形式で命名
-> - **モック方法に具体的な実装コードを記載しないこと**（実装はテストコードを参照）
+### 使用するモック
 
-### 既存モック確認チェック（必須）
+> **注意**: 新規モック作成前に既存モックを確認すること。詳細は [mock-file-placement.md](/docs/coding-standards/tests/common-rule/mock-file-placement.md) を参照。
 
-新規モック作成前に、同一インターフェースの既存モックを確認すること。
-
-以下のコマンドは `host-frontend-root/frontend-src-root/` ディレクトリで実行:
-```bash
-grep -r "createMock[InterfaceName]" tests/
-# または
-find tests/ -name "createMock*.ts" | xargs grep -l "[InterfaceName]"
-```
-
-**判断基準**:
-- 既存モックが見つかった場合 → **必ず既存モックを使用**（新規作成禁止）
-- 見つからなかった場合のみ → 新規作成可
-
-**チェックリスト記入例**:
-- [x] `grep -r "createMockTabsGateway" tests/` で検索 → 既存モック使用 (`tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`)
-- [x] `grep -r "createMockPresenter" tests/` で検索 → 新規作成（該当なし）
-
-> **参照**: [common-rule.md](../../coding-standards/tests/common-rule.md) の「モック作成前の確認手順」
-
-### モック対象
-
-| 依存関係 | モック理由 | 既存モック |
-|---------|-----------|-----------|
-| [インターフェース名] | [モックする理由] | `[パス]` ✓ or 新規作成 |
+| 依存関係 | モック理由 | モック対応 |
+| -------- | ---------- | ---------- |
+| [インターフェース名] | [モックする理由] | `[パス]` / vi.fn()直接 / 不要 |
 
 ### モックファイル構成
 
@@ -273,9 +283,48 @@ host-frontend-root/frontend-src-root/tests/unit/interface-adapters/mappers/Rewri
 └── normal-cases.test.ts
 ```
 
+### テンプレート内のマークダウンリンク
+
+テンプレート（本ファイル）内で他ドキュメントへのリンクを記載する際は、**リポジトリルートからの絶対パス**を使用する。
+
+**理由**: テンプレートは様々な階層のテスト戦略書にコピーして使用されるため、相対パス（`../../`）は配置場所によって機能しなくなる。
+
+```markdown
+# ✅ 正しい記載（ルート絶対パス）
+[mock-file-placement.md](/docs/coding-standards/tests/common-rule/mock-file-placement.md)
+
+# ❌ 誤った記載（相対パス - 階層依存）
+[mock-file-placement.md](../../docs/coding-standards/tests/common-rule/mock-file-placement.md)
+```
+
+> **注意**: この規約はテンプレートファイル（docs-rules/配下）に適用される。実際のテスト戦略書（docs/design/配下）では相対パスを使用してもよい。
+
+### テーブル列名の意味的一貫性
+
+テーブルの列名は、その列に入る値の種類を正確に表すこと。
+
+**規約**:
+- 列名が示す意味と、実際に記載する値の種類が一致すること
+- 複数の異なる種類の情報を1つの列に混在させる場合、列名は汎用的にすること
+
+**例: 「モック対応」列**
+
+「モック対応」列には以下のいずれかを記載する:
+- ファイルパス: `tests/unit/.../mocks/`
+- 直接モック: `vi.fn()直接`
+- 不要: `不要`
+
+```markdown
+| 依存関係 | モック理由 | モック対応 |
+| -------- | ---------- | ---------- |
+| IRepository | DB層分離 | `tests/unit/.../mocks/` |
+| onClose | コールバック検証 | vi.fn()直接 |
+| なし | - | 不要 |
+```
+
 ## コードとの関係
 
-> **参照**: [JSDoc-rule.md](../../coding-standards/tests/unit/common-rule/JSDoc-rule.md)
+> **参照**: [jsdoc-rule.md](/docs/coding-standards/tests/common-rule/jsdoc-rule.md)
 
 テスト戦略書はテストコードのJSDocを補完する:
 

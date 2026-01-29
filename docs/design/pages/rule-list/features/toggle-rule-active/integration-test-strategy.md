@@ -145,7 +145,7 @@ tests/integration/toggle-rule-active/
 └── partial-success.test.ts     # 部分的成功テスト（タブリロード失敗）
 
 # ITabsGateway モックファイル
-# docs/coding-standards/tests/common-rule.md の「モックファイルの配置ルール」に従い、
+# docs/coding-standards/tests/common-rule/ の「モックファイルの配置ルール」に従い、
 # モックは tests/integration 配下ではなく tests/frameworks-and-drivers 配下に配置する。
 tests/frameworks-and-drivers/browser/ChromeTabsGateway/
 ├── createMockTabsGateway.ts           # TabsGatewayモック（正常系）

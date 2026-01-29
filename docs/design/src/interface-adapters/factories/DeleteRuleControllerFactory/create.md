@@ -26,7 +26,7 @@ create()がIDeleteRuleControllerを返し、削除処理が正しく連携する
 | 分類 | テストケース | 根拠 |
 |------|-------------|------|
 | 成功時引数 | onSuccessにdeletedRuleIdが渡される | Presenterの出力仕様 |
-| エラー時引数 | onErrorにruleIdとmessageが渡される | エラー通知仕様 |
+| エラー時引数 | onErrorにフォーマット済みエラーメッセージが渡される | Presenterでメッセージ構築（ADR-001準拠） |
 
 **対応テスト**: `normal-cases.test.ts`（同一テスト内で検証）
 
@@ -36,7 +36,7 @@ create()がIDeleteRuleControllerを返し、削除処理が正しく連携する
 - [x] 成功時にonSuccessコールバックが呼ばれること
 - [x] 成功時コールバックにdeletedRuleIdが渡されること
 - [x] エラー時にonErrorコールバックが呼ばれること
-- [x] エラー時コールバックにruleIdとmessageが渡されること
+- [x] エラー時コールバックにフォーマット済みメッセージが渡されること（Presenter層で構築）
 - [ ] Factoryの内部実装（Presenter/Interactor生成順序）→ 不要（実装詳細、振る舞いで検証）
 
 ### 統合テスト的アプローチの理由
@@ -55,19 +55,12 @@ tests/unit/interface-adapters/factories/DeleteRuleControllerFactory/create/
 
 RepositoryとGatewayをモック化し、Factoryの責務（クラス生成と連携）をテストする。
 
-> **重要**: モック作成は [basic-rule.md](../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
+### 使用するモック
 
-### 既存モック確認チェック（必須）
-
-- [x] `grep -r "createMockRewriteRuleRepository" tests/` で検索 → 既存モック使用 (`tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository.ts`)
-- [x] `grep -r "createMockTabsGateway" tests/` で検索 → 既存モック使用 (`tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts`)
-
-### モック対象
-
-| 依存関係 | モック理由 | 既存モック |
-|---------|-----------|-----------|
-| IRewriteRuleRepository | DB操作の回避、成功/失敗シナリオの制御 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository.ts` |
-| ITabsGateway | Chrome API依存の回避 | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/createMockTabsGateway.ts` |
+| 依存関係 | モック理由 | モック対応 |
+| -------- | ---------- | ---------- |
+| IRewriteRuleRepository | DB操作の回避、成功/失敗シナリオの制御 | `tests/unit/application/ports/IRewriteRuleRepository/mocks/` |
+| ITabsGateway | Chrome API依存の回避 | `tests/frameworks-and-drivers/browser/ChromeTabsGateway/mocks/` |
 
 ### コールバックのモック
 

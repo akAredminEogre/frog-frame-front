@@ -16,18 +16,39 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    ```
    - 既存モックが見つかった場合 → インポートして使用
    - 見つからなかった場合 → 共有ディレクトリに新規作成
-   - 参照: `docs/coding-standards/tests/common-rule.md`
+   - 参照: `docs/coding-standards/tests/common-rule/`（§2: モックファイルの配置ルール）
 4. [ ] テストコードを実装
+   - 参照: `docs/coding-standards/tests/common-rule/`（§3〜§8）
+   - 参照: `docs/coding-standards/tests/array-based-test.md`
+5. [ ] **テスト戦略書との整合性確認**（テストコード実装後）
+   - テストコードに戦略書にないケースを追加した場合 → 戦略書に追記
+   - 戦略書にあるがテストコードに未実装のケースがある場合 → 理由を明記するか実装
 
 ### 既存メソッドを修正する場合
 
 1. [ ] 既存テストが通ることを確認
-2. [ ] 必要に応じてテスト戦略書を更新
+2. [ ] **シグネチャ変更時はテスト戦略書を必ず更新**
+   - インターフェース/コールバックの引数・戻り値を変更した場合 → 関連するすべてのテスト戦略書を更新
+   - 影響範囲の特定（複数パターンで検索）:
+     ```bash
+     grep -r "変更したメソッド名" docs/design/
+     grep -r "変更したprop名" docs/design/
+     grep -r "変更前の振る舞い（例: ruleIdとmessage）" docs/design/
+     ```
 3. [ ] テストコードを更新
+   - 参照: `docs/coding-standards/tests/common-rule/`（§3〜§8）
 
 ### docs/ 配下のドキュメントを作成・編集する場合
 
 → [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
+
+### docs/coding-standards/ 配下のコーディング規約を追加・編集する場合
+
+1. [ ] **カテゴリ固有のルールを確認**: [docs-rules/coding-standards.md](docs-rules/coding-standards.md) を必ず読むこと
+   - **実装例（Good/Bad例、コードスニペット）は記述しない**
+   - 適用シナリオ（いつ・どこでこの規約を適用するかの判断事例）は記載する
+2. [ ] [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) のチェックリストに従う
+3. [ ] 同一PR内で既存の違反箇所も修正すること
 
 ### User Story READMEのタスク進捗を更新する場合
 
@@ -316,7 +337,7 @@ Path aliases configured in `tsconfig.json`:
 - `tests/*` → `./tests/*`
 - `entrypoints/*` → `./src/entrypoints/*`
 
-詳細は `docs/coding-standards/tests/common-rule.md` を参照してください。
+詳細は `docs/coding-standards/tests/common-rule/`（§1: インポートパスのルール）を参照してください。
 
 ## Object-Oriented Design Rules (ThoughtWorks Anthology)
 
