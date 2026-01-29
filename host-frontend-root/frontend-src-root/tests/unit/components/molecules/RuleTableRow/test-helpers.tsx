@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom/client';
 import { flushPromises } from 'tests/unit/frameworks-and-drivers/ui/test-utils';
 import { vi } from 'vitest';
 
-import RuleTableRow from 'src/components/molecules/RuleTableRow/RuleTableRow';
+import RuleTableRow from 'src/frameworks-and-drivers/ui/components/molecules/RuleTableRow/RuleTableRow';
 
 type RuleTableRowProps = React.ComponentProps<typeof RuleTableRow>;
 
