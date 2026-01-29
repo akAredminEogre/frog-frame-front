@@ -1,6 +1,6 @@
 import React from 'react';
 
-import RuleTableRow from 'src/components/molecules/RuleTableRow/RuleTableRow';
+import RuleTableRow from 'src/frameworks-and-drivers/ui/components/molecules/RuleTableRow/RuleTableRow';
 import styles from 'src/components/organisms/RulesTable/RulesTable.module.css';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
