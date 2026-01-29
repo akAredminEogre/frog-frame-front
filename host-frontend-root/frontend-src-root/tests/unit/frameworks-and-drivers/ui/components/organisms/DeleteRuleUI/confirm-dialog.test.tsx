@@ -51,11 +51,7 @@ describe('DeleteRuleUI - ConfirmDialog表示', () => {
 
       // Assert
       const dialog = helper.getConfirmDialog();
-      if (testCase.expected.dialogExists) {
-        expect(dialog).not.toBeNull();
-      } else {
-        expect(dialog).toBeNull();
-      }
+      expect(dialog !== null).toBe(testCase.expected.dialogExists);
     });
   });
 });
