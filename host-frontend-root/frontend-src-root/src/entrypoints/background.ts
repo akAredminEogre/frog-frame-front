@@ -1,3 +1,4 @@
+import { runtimeOnMessageReceived } from 'src/frameworks-and-drivers/messaging/background/onMessageReceived';
 import {
   registerRewriteRuleProxyService,
   setRewriteRuleProxyServiceImpl,
@@ -5,7 +6,6 @@ import {
 import { createRewriteRuleProxyServiceImpl } from 'src/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl';
 import { contextMenusOnClicked } from 'src/infrastructure/browser/background/contextMenus/onClicked';
 import { runtimeOnExtensionInstalled } from 'src/infrastructure/browser/background/runtime/onExtensionInstalled';
-import { runtimeOnMessageReceived } from 'src/frameworks-and-drivers/messaging/background/onMessageReceived';
 import { tabsOnUpdated } from 'src/infrastructure/browser/background/tabs/onUpdated';
 
 export default defineBackground({

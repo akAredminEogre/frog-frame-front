@@ -1,5 +1,5 @@
-import { onBackgroundMessage } from 'src/frameworks-and-drivers/messaging/messaging';
 import { applyAllRulesHandler } from 'src/frameworks-and-drivers/messaging/handlers/background/applyAllRulesHandler';
+import { onBackgroundMessage } from 'src/frameworks-and-drivers/messaging/messaging';
 
 /**
  * 呼び出し元: entrypoints/background.ts
