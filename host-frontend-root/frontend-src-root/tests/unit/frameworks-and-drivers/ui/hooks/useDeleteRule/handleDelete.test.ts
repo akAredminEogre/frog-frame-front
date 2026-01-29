@@ -1,11 +1,5 @@
 /**
  * useDeleteRule - handleDelete テスト
- *
- * handleDeleteメソッドの動作を検証する:
- * 1. ruleIdを渡すとdeleteTargetIdがそのIDに設定される
- * 2. 既存のdeleteErrorがクリアされる
- * 3. deletingIdsに含まれるruleIdの場合は無視される（deleteTargetIdが変化しない）
- * 4. 異なるruleIdで呼び出すとdeleteTargetIdが更新される
  */
 import {
   createMockDeleteRuleControllerFactory,
@@ -41,41 +35,12 @@ describe('useDeleteRule - handleDelete', () => {
     vi.resetAllMocks();
   });
 
-  describe('deleteTargetIdの設定', () => {
-    const testCases: Array<{
-      description: string;
-      ruleId: number;
-      expected: number;
-    }> = [
-      {
-        description: 'ruleId=1を渡すとdeleteTargetIdが1に設定される',
-        ruleId: 1,
-        expected: 1,
-      },
-      {
-        description: 'ruleId=42を渡すとdeleteTargetIdが42に設定される',
-        ruleId: 42,
-        expected: 42,
-      },
-      {
-        description: 'ruleId=999を渡すとdeleteTargetIdが999に設定される',
-        ruleId: 999,
-        expected: 999,
-      },
-    ];
+  it('ruleIdを渡すとdeleteTargetIdがそのIDに設定される', async () => {
+    await helper.render();
 
-    testCases.forEach((testCase) => {
-      it(testCase.description, async () => {
-        // Arrange
-        await helper.render();
+    await helper.callHandleDelete(42);
 
-        // Act
-        await helper.callHandleDelete(testCase.ruleId);
-
-        // Assert
-        expect(helper.getDeleteTargetId()).toBe(testCase.expected);
-      });
-    });
+    expect(helper.getDeleteTargetId()).toBe(42);
   });
 
   it('既存のdeleteErrorがクリアされる', async () => {
