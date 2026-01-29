@@ -9,7 +9,7 @@
 
 .rulesTable {
   width: 100%;
-  table-layout: fixed;
+  table-layout: auto;
   border-collapse: collapse;
   font-size: 14px;
 }
@@ -26,26 +26,19 @@
 }
 
 /* テーブルヘッダーの幅指定 */
-.rulesTable thead th:nth-child(1) {
-  width: 60px;  /* 有効列 */
+.rulesTable thead th:nth-child(1),
+.rulesTable thead th:nth-child(2),
+.rulesTable thead th:nth-child(3) {
+  width: 1%;  /* 有効・編集・削除列: ボタンの最小幅 */
+  white-space: nowrap;
   text-align: center;
 }
 
-.rulesTable thead th:nth-child(2) {
-  width: 60px;  /* 操作列 */
-}
-
-.rulesTable thead th:nth-child(3) {
+.rulesTable thead th:nth-child(4) {
   width: 200px; /* URLパターン列 */
 }
 
-.rulesTable thead th:nth-child(4) {
-  width: calc((100% - 320px) / 2); /* 置換前列 */
-}
-
-.rulesTable thead th:nth-child(5) {
-  width: calc((100% - 320px) / 2); /* 置換後列 */
-}
+/* 置換前・置換後列は残りの幅を均等に分配（指定なしで自動） */
 
 .rulesTable tbody tr {
   background-color: #ffffff;
@@ -73,18 +66,16 @@
 }
 
 /* テーブルデータセルの幅指定（nth-childでより確実に適用） */
-.rulesTable tbody td:nth-child(1) {
-  width: 60px;  /* 有効列 */
+.rulesTable tbody td:nth-child(1),
+.rulesTable tbody td:nth-child(2),
+.rulesTable tbody td:nth-child(3) {
+  width: 1%;  /* 有効・編集・削除列: ボタンの最小幅 */
+  white-space: nowrap;
   text-align: center;
   vertical-align: middle;
 }
 
-.rulesTable tbody td:nth-child(2) {
-  width: 60px;  /* 操作列 */
-  text-align: center;
-}
-
-.rulesTable tbody td:nth-child(3) {
+.rulesTable tbody td:nth-child(4) {
   width: 200px; /* URLパターン列 */
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 12px;
@@ -94,8 +85,7 @@
   text-overflow: ellipsis;
 }
 
-.rulesTable tbody td:nth-child(4) {
-  width: calc((100% - 320px) / 2); /* 置換前列 */
+.rulesTable tbody td:nth-child(5) {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 13px;
   color: #e74c3c;
@@ -103,8 +93,7 @@
   white-space: pre-wrap;
 }
 
-.rulesTable tbody td:nth-child(5) {
-  width: calc((100% - 320px) / 2); /* 置換後列 */
+.rulesTable tbody td:nth-child(6) {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 13px;
   color: #27ae60;
