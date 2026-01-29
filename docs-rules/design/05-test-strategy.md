@@ -311,14 +311,14 @@ host-frontend-root/frontend-src-root/tests/unit/interface-adapters/mappers/Rewri
 
 「モック対応」列には以下のいずれかを記載する:
 - ファイルパス: `tests/unit/.../mocks/`
-- 直接モック: `vi.fn()で直接モック`
+- 直接モック: `vi.fn()直接`
 - 不要: `不要`
 
 ```markdown
 | 依存関係 | モック理由 | モック対応 |
 | -------- | ---------- | ---------- |
 | IRepository | DB層分離 | `tests/unit/.../mocks/` |
-| onClose | コールバック検証 | vi.fn()で直接モック |
+| onClose | コールバック検証 | vi.fn()直接 |
 | なし | - | 不要 |
 ```
 
