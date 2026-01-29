@@ -39,6 +39,28 @@
    ```
 2. [ ] **ADR参照時の正式名確認**: ADRを参照する場合は `docs/adr/` 配下の実際のファイル名を使用（推測しない）
 3. [ ] **相対パスの検証**: 作成したリンクが正しく解決されることを確認
+4. [ ] **ディレクトリ/ファイル名の混同防止**: ディレクトリ名を単一ファイルとして参照していないか確認
+
+### ディレクトリ/ファイル名混同の例
+
+```markdown
+❌ 誤り: ディレクトリ名をファイルとして参照
+[common-rule.md](../coding-standards/tests/common-rule.md)
+# common-rule.md は存在しない。common-rule/ はディレクトリ
+
+✅ 正しい: ディレクトリ内の具体的なファイルを参照
+[mock-file-placement.md](../coding-standards/tests/common-rule/mock-file-placement.md)
+# または index.md を参照
+[common-rule/index.md](../coding-standards/tests/common-rule/index.md)
+```
+
+**確認方法**:
+```bash
+# ディレクトリかファイルかを確認
+ls -la docs/coding-standards/tests/common-rule
+# ディレクトリの場合、内部のファイル一覧を確認
+ls docs/coding-standards/tests/common-rule/
+```
 
 ## 設計ドキュメント変更時の追加チェック
 
