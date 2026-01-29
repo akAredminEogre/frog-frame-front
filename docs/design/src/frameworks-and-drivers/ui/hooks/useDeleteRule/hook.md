@@ -3,7 +3,7 @@
 ## 目的
 
 ルール削除に関するState管理とロジック（削除確認フロー制御）をRulesAppから切り出したカスタムフック。
-`deletingIds`, `deleteTargetId`, `deleteError` のState管理と、`handleDelete`, `confirmDelete`, `cancelDelete` のロジックを提供する。
+`deletingIds`, `deleteTargetId`, `deleteError` のState管理と、`handleDelete`, `confirmDelete`, `cancelDelete`, `dismissDeleteError` のロジックを提供する（エラー通知のリセットは `dismissDeleteError` の責務）。
 
 ## テスト分類
 
