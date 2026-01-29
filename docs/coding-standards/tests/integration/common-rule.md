@@ -4,6 +4,13 @@
 
 **参照**: インポートパスのルールは [import-paths.md](../common-rule/import-paths.md) を参照。
 
+## 適用シナリオ
+
+1. **IndexedDBを使用するリポジトリの結合テストを作成する場合**: fake-indexeddbのautoインポートのみでセットアップし、globalオブジェクトへの手動代入は行わない。autoインポートと手動セットアップを併用すると予期しない挙動になる
+2. **複数の結合テストファイルで共通のモックを使う場合**: beforeEachでモッククリアを行い、afterEachでのモック操作は行わない（単体テストとは異なる規約）。セットアップ順序はモッククリア → DBクリア → 依存オブジェクト初期化 → コールバック初期化の順で統一する
+
+> **注意**: 単体テストでは afterEach でのリセット操作が必要（[basic-rule.md](../unit/common-rule/basic-rule.md) 参照）。結合テストでは不要。
+
 ---
 
 ## 1. fake-indexeddb のセットアップ
