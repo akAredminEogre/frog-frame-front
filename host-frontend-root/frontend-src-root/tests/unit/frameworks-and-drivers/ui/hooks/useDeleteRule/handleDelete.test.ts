@@ -1,5 +1,10 @@
 /**
  * useDeleteRule - handleDelete テスト
+ *
+ * - ruleIdを渡すとdeleteTargetIdがそのIDに設定される
+ * - 既存のdeleteErrorがクリアされる
+ * - deletingIdsに含まれるruleIdの場合は無視される
+ * - 異なるruleIdで連続して呼び出すとdeleteTargetIdが上書きされる
  */
 import {
   createMockDeleteRuleControllerFactory,

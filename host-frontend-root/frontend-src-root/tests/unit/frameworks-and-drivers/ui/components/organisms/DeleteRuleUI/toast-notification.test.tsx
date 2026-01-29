@@ -1,5 +1,8 @@
 /**
  * DeleteRuleUI コンポーネント - ToastNotification表示テスト
+ *
+ * - deleteError=nullの場合、Toast通知が表示されない
+ * - deleteErrorが存在する場合、Toast通知が表示され、ruleIdとmessageを含む
  */
 import { DeleteRuleUITestHelper } from 'tests/unit/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI/test-helpers';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
