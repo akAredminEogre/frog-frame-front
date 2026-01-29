@@ -20,6 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 4. [ ] テストコードを実装
    - **JSDocにテストケース説明を記載**（`docs/coding-standards/tests/unit/common-rule/JSDoc-rule.md`）
      - テスト戦略書のテストケース名と一致させる
+     - テストケースの順番もテスト戦略書と一致させる（§7: テスト戦略書との一貫性）
      - 1ケースにつき1行でまとめる
    - **配列化テストの適用判断**（`docs/coding-standards/tests/array-based-test.md`）
      - 1ファイル1配列の原則（配列化テストと非配列テストの混在禁止）
