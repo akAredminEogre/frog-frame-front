@@ -47,8 +47,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 1. [ ] **カテゴリ固有のルールを確認**: [docs-rules/coding-standards.md](docs-rules/coding-standards.md) を必ず読むこと
    - **実装例（Good/Bad例、コードスニペット）は記述しない**
    - 適用シナリオ（いつ・どこでこの規約を適用するかの判断事例）は記載する
-2. [ ] [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) のチェックリストに従う
-3. [ ] 同一PR内で既存の違反箇所も修正すること
+2. [ ] **コードブロック禁止チェック**: ファイル内に ` ``` ` で囲まれたコードブロックがないことを確認
+   - `// ❌ 悪い例` / `// ✅ 良い例` 形式のコードも禁止
+   - テキスト説明に置き換えるか、テストコードへの参照に変更する
+3. [ ] [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) のチェックリストに従う
+4. [ ] 同一PR内で既存の違反箇所も修正すること
 
 ### User Story READMEのタスク進捗を更新する場合
 
