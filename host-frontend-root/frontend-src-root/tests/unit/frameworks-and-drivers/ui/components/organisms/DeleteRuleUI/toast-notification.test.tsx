@@ -46,11 +46,7 @@ describe('DeleteRuleUI - ToastNotification表示', () => {
 
       // Assert
       const toast = helper.getToastNotification();
-      if (testCase.expected.toastExists) {
-        expect(toast).not.toBeNull();
-      } else {
-        expect(toast).toBeNull();
-      }
+      expect(toast !== null).toBe(testCase.expected.toastExists);
     });
   });
 
@@ -82,12 +78,12 @@ describe('DeleteRuleUI - ToastNotification表示', () => {
       const toast = helper.getToastNotification();
       expect(toast).not.toBeNull();
       const textContent = toast!.textContent ?? '';
-      if (testCase.expected.containsRuleId) {
-        expect(textContent).toContain(String(testCase.input.deleteError.ruleId));
-      }
-      if (testCase.expected.containsMessage) {
-        expect(textContent).toContain(testCase.input.deleteError.message);
-      }
+      expect(textContent.includes(String(testCase.input.deleteError.ruleId))).toBe(
+        testCase.expected.containsRuleId
+      );
+      expect(textContent.includes(testCase.input.deleteError.message)).toBe(
+        testCase.expected.containsMessage
+      );
     });
   });
 });
