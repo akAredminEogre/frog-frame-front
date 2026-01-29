@@ -18,7 +18,16 @@ describe('DeleteRulePresenter.presentError - 正常系（コールバック呼�
     vi.resetAllMocks();
   });
 
-  const testCases = [
+  type PresentErrorTestCase = {
+    description: string;
+    input: {
+      ruleId: number;
+      error: Error | string;
+    };
+    expectedMessage: string;
+  };
+
+  const testCases: Array<PresentErrorTestCase> = [
     {
       description: 'Errorオブジェクト由来のエラーでコールバックが呼び出され、フォーマット済みメッセージが渡される',
       input: {
