@@ -17,7 +17,7 @@
 ## 設計ドキュメント
 
 - [ADR-001: Clean Architecture Presenter付きパターン採用](../../adr/001-clean-architecture-with-presenter-pattern.md)
-- [テスト戦略書](../../design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md) - 現行のテスト戦略書（リファクタリング後に配置変更）
+- [テスト戦略書](../../design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md) - 現行のテスト戦略書（Phase 4でリファクタリング後に配置変更予定）
 - [機能設計](../../design/pages/rule-list/features/update-rule/) - ページ・機能レベルの設計ドキュメント（Phase 1で作成）
 
 ## 現状分析
@@ -84,39 +84,39 @@
 
 ### Phase 1: Skeleton（インターフェース・スケルトンクラス作成）
 
-**第2層: application-business-rules**
+#### 第2層: application-business-rules
 
 - [ ] IUpdateRewriteRuleUseCase（Input Port インターフェース）
 - [ ] IUpdateRewriteRulePresenter（Output Port インターフェース）
 - [ ] UpdateRewriteRuleInputData / OutputData / ErrorOutputData（DTO）
 - [ ] UpdateRewriteRuleInteractor に IUpdateRewriteRuleUseCase を実装（スケルトン）
 
-**第3層: interface-adapters**
+#### 第3層: interface-adapters
 
 - [ ] UpdateRewriteRuleController（スケルトン実装）
 - [ ] UpdateRewriteRulePresenter（スケルトン実装）
 - [ ] UpdateRewriteRuleControllerFactory（スケルトン実装）
 
-**設計ドキュメント（docs/design/pages）**
+#### 設計ドキュメント（docs/design/pages）
 
 - [ ] `docs/design/pages/rule-list/features/update-rule/00-overview.md` の作成
 - [ ] `docs/design/pages/rule-list/features/update-rule/01-class-design.md` の作成
 - [ ] `docs/design/pages/rule-list/features/update-rule/03-directory-structure.md` の作成
 
-**テスト戦略書**
+#### テスト戦略書
 
 - [ ] 結合テスト戦略書の作成（`docs/design/pages/rule-list/features/update-rule/integration-test-strategy.md`）
 
 ### Phase 2: 実装・単体テスト
 
-**第2層: application-business-rules**
+#### 第2層: application-business-rules
 
 - [ ] UpdateRewriteRuleInteractor の実装、テスト戦略書・単体テスト
   - IChromeTabsService → ITabsGateway への変更
   - Presenter経由のエラーハンドリング導入
   - テスト戦略書の配置変更: `docs/design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md`
 
-**第3層: interface-adapters**
+#### 第3層: interface-adapters
 
 - [ ] UpdateRewriteRuleController の実装、テスト戦略書・単体テスト
 - [ ] UpdateRewriteRulePresenter の実装、テスト戦略書・単体テスト
