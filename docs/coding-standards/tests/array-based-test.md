@@ -128,7 +128,7 @@ testCases.forEach(({ name, testDataId, initialState, expectedState }) => {
 ### 禁止事項
 
 ```typescript
-// 同じ入力値で複数のテストケースを作成
+// ❌ 同じ入力値で複数のテストケースを作成
 const testCases = [
   { description: 'ケース1', inputId: 1, expectedDto: { id: 1 } },
   { description: 'ケース2', inputId: 999, expectedDto: { id: 999 } },
@@ -153,7 +153,7 @@ it('呼び出し回数の検証', async () => {
 ### 許可事項
 
 ```typescript
-// 各テストケースの入力値が一意
+// ✅ 各テストケースの入力値が一意
 const testCases = [
   { description: 'ID=1: 最小IDで正しくDTOが構築される', inputId: 1, expectedDto: { id: 1 } },
   { description: 'ID=999: 大きなIDでも正しくDTOが構築される', inputId: 999, expectedDto: { id: 999 } },

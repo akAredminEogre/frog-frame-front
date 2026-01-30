@@ -149,14 +149,12 @@
 ## 修正例
 
 ### Before（禁止）
-
 ```typescript
 const rule = new RewriteRule(1, 'old', 'new', 'https://example.com', false, true);
 // 5番目がisRegex、6番目がisActiveだが、コードからは判別困難
 ```
 
 ### After（許可）
-
 ```typescript
 const rule = RewriteRule.fromParams(1, {
   oldString: 'old',
