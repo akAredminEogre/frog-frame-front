@@ -23,7 +23,10 @@
       "markdown",
       "text",
       "dockerfile",
-      "plaintext"
+      "plaintext",
+      "mermaid",
+      "html",
+      "xml"
     ],
     "language_only": false
   }

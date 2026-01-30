@@ -10,7 +10,7 @@ kk=02
 
 **問題の内容:**
 以下のecho表示で、どこのディレクトリで実行されるか分かりにくいとの指摘：
-```
+```text
 @echo "To start development:"
 @echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec frontend npm run dev"
 ```

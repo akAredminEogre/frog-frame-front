@@ -46,7 +46,7 @@ wt-initコマンドでDocker内のnpm installが失敗していました。原�
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
-```
+```text
 $ make wt-add BRANCH=issue-131-feat-numbering-shell
 Creating worktree for branch: issue-131-feat-numbering-shell...
 Preparing worktree (new branch 'issue-131-feat-numbering-shell')
