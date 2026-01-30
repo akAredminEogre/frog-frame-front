@@ -48,8 +48,8 @@
     "sort:imports": "eslint . --ext .ts,.tsx,.js,.jsx --fix --rule 'simple-import-sort/imports: error' --rule 'simple-import-sort/exports: error'",
     "stylelint": "stylelint 'src/**/*.css'",
     "stylelint:fix": "stylelint 'src/**/*.css' --fix",
-    "lint:md": "cd ../.. && npx markdownlint-cli2 'docs/**/*.md' '*.md'",
-    "lint:md:fix": "cd ../.. && npx markdownlint-cli2 --fix 'docs/**/*.md' '*.md'"
+    "lint:md": "cd ../.. && npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'",
+    "lint:md:fix": "cd ../.. && npx markdownlint-cli2 --fix 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'"
   },
   "dependencies": {
     "@react-aria/dialog": "^3.5.32",
