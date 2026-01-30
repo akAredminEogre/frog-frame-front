@@ -8,6 +8,7 @@ markdown-link-checkによる自動リンク検証を活用して、ドキュメ�
 
 - `docs/`配下のすべてのMarkdownファイル
 - `docs-rules/`配下のすべてのMarkdownファイル  
+- `docs/design/`配下のすべての設計ドキュメント
 - プロジェクトルートの`README.md`等
 
 ## 自動リンクチェック
@@ -58,24 +59,27 @@ find docs docs-rules -name '*.md' -print0 | xargs -0 -n1 npx markdown-link-check
 ### 3. テキスト化
 ファイル名やパスをコード形式で記載し、リンクにしない。
 
-```markdown
-# 修正例
-# 修正前（デッドリンク）
-- [存在しないファイル](../non-existent-file.md)
-
-# 修正後（テキスト化）
-- `non-existent-file.md` - 参照先ファイル（現在未作成）
-```
+**修正例**:
+- 修正前（デッドリンク）: 存在しないファイルへのリンク記述
+- 修正後（テキスト化）: ファイル名をインラインコード形式で記載し、説明を併記
 
 ## よく使用されるリンクパターン
 
-標準的なリンクパターン（自動チェックで確認済み）：
+### 一般的なパターン
 
-```markdown
-- [プロジェクト概要](../README.md)
-- [CLAUDE.md](../CLAUDE.md)  
-- [linting-scope-consistency.md](./linting-scope-consistency.md)
-```
+標準的なリンクパターン（自動チェックで確認済み）：
+- プロジェクトルートファイル: `../README.md`、`../CLAUDE.md`
+- docs-rules内: `./linting-scope-consistency.md`
+
+### 設計ドキュメント特有のパターン
+
+**テスト戦略書からの参照パターン**:
+設計ドキュメントから他のドキュメントを参照する場合、通常7階層上からの参照となる。
+
+**参照先パターン**:
+- コーディング規約への参照: `coding-standards/` 配下のファイル
+- ADR参照: `adr/` 配下のファイル  
+- User Story参照: `user-stories/` 配下のファイル
 
 ## 関連ドキュメント
 
