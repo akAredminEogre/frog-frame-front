@@ -53,7 +53,7 @@ deleteErrorに応じたエラーToastの表示/非表示を検証。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI/
 ├── test-helpers.tsx
 ├── confirm-dialog.test.tsx

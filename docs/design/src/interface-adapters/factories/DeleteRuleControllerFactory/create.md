@@ -46,7 +46,7 @@ Factoryは複数クラスを組み立てる責務を持つため、生成され�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/interface-adapters/factories/DeleteRuleControllerFactory/create/
 └── normal-cases.test.ts       # 生成と統合動作確認（配列ベース）
 ```

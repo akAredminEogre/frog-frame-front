@@ -59,7 +59,7 @@ DeleteButton追加後も既存機能が正常に動作することを確認。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/components/molecules/RuleTableRow/
 ├── test-helpers.tsx               # 共通テストヘルパー（RuleTableRowTestHelper）
 ├── delete-button-rendering.test.tsx   # DeleteButtonレンダリング（3ケース）
@@ -108,7 +108,7 @@ const deleteButton = helper.getDeleteButton();
 
 ### モックファイル構成
 
-```
+```text
 tests/unit/components/molecules/RuleTableRow/
 ├── test-helpers.tsx               # RuleTableRowTestHelper + モックRewriteRule生成
 └── mocks/

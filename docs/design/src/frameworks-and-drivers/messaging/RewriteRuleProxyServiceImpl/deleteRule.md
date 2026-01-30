@@ -39,7 +39,7 @@ container.resolve()でリポジトリを取得し、delete()が1回呼ばれる�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/messaging/RewriteRuleProxyServiceImpl/
 └── deleteRule/
     └── normal-cases.test.ts       # Repository削除委譲（2ケース）

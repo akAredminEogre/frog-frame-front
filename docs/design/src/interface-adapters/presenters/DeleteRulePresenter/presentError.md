@@ -47,7 +47,7 @@ PresenterはErrorOutputDataを受け取りViewに通知するのみで、エラ�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/interface-adapters/presenters/DeleteRulePresenter/presentError/
 └── normal-cases.test.ts       # コールバック呼び出し確認（配列ベース）
 ```

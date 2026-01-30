@@ -40,7 +40,7 @@ getRewriteRuleProxyService()で取得したサービスのgetAllRules()が呼ば
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/
 ├── getAll/
 │   └── normal-cases.test.ts       # ProxyService連携（3ケース）
@@ -59,7 +59,7 @@ tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/
 
 ### モックファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/mocks/
 └── createMockRewriteRuleProxyService.ts    # モックファクトリ
 ```

@@ -86,7 +86,7 @@ Repository.update成功後にTabsGateway.reloadMatchingTabsが失敗した場合
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/execute/
 ├── normal-cases.test.ts          # 状態変更確認（配列ベース、2ケース）
 ├── error-cases.test.ts           # 異常系確認（配列ベース、2ケース）
@@ -108,7 +108,7 @@ Interactorの3つの依存関係をモック化してテストする。
 
 ### モックファイル構成
 
-```
+```text
 tests/unit/application-business-rules/interactors/ToggleRuleActiveInteractor/
 └── mocks/
     ├── createMockRepository.ts    # IRewriteRuleRepositoryのモック生成
