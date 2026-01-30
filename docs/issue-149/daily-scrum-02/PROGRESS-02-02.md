@@ -42,7 +42,7 @@ git worktree作成時に、不要な`frontend-src-root`ディレクトリがwork
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
 動作確認をしようとしたところ、下記のエラーが出てしまいました
-```text
+```
 $ make wt-init BRANCH=issue-131-feat-numbering-shell
 Initializing worktree for development: issue-131-feat-numbering-shell...
 Cleaning up duplicate frontend-src-root directory...

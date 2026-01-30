@@ -2,7 +2,7 @@
 <!-- このチケットで解決したい課題 -->
 
 chrome web storeの審査拒否に対する対応
-```text
+```
 権限の使用
 詳細	
 違反の参照 ID: Purple Potassium

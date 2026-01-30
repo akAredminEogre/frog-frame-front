@@ -10,7 +10,7 @@ kk=02
 
 **問題の内容:**
 `make wt-init BRANCH=issue-131-feat-numbering-shell` を実行すると、以下のエラーが発生していました:
-```text
+```
 OCI runtime exec failed: exec failed: unable to start container process: chdir to cwd ("/opt/frontend-container-app-root/frontend-src-root") set in config.json failed: no such file or directory: unknown
 ```
 
@@ -43,7 +43,7 @@ OCI runtime exec failed: exec failed: unable to start container process: chdir t
 <!-- ここはユーザが書くので空欄にしておいてください。 -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
-```text
+```
 	@echo "To start development:"
 	@echo "  CURRENT_WORKTREE_PATH=./$(WORKTREE_DIR)/$(BRANCH) docker compose exec frontend npm run dev"
 ```
