@@ -14,6 +14,7 @@
     "dist/**",
     "host-frontend-root/**",
     "worktrees/**",
-    "docs/user-stories/completed/**"
+    "docs/user-stories/completed/**",
+    "docs/issues/completed/**"
   ]
 }
