@@ -56,4 +56,4 @@ Markdownのコードブロックに言語指定を行うこと:
 
 実際の設定は [`.markdownlint.jsonc`](../../.markdownlint.jsonc) を参照してください。
 
-→ [User Story 011: markdownlint導入](../../user-stories/user-story-011/README.md)
+→ [User Story 011: markdownlint導入](../../docs/user-stories/user-story-011/README.md)

@@ -190,5 +190,5 @@ docs/adr/
 
 ## 関連ドキュメント
 
-- 基本ルール: [docs-rules.md](../docs-rules.md)
+- 基本ルール: [ドキュメント共通ルール](./common/index.md)
 - 設計ドキュメントルール: [design.md](./design.md)
