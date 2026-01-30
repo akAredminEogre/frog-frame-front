@@ -65,4 +65,3 @@ docs/user-stories/
 - **共通ルール（必読）**: [common/index.md](./common/index.md) - マークダウン記法、文体など全ドキュメント共通のルール
 - 設計ドキュメント: `docs/design/pages/{画面名}/features/{機能名}/`
 - ADR: `docs/adr/`
-- 基本ルール: [ドキュメント共通ルール](./common/index.md)
