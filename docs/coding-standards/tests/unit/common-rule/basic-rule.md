@@ -27,7 +27,7 @@
 3. **命名規則**: モックファクトリは `createMock[ClassName].ts` の形式で命名
 
 **モックファクトリの配置例**:
-```
+```text
 tests/unit/[layer]/[category]/[ServiceName]/
 ├── [methodName]/
 │   └── normal-cases.test.ts
@@ -78,7 +78,7 @@ Clean Architectureの各層に特化したテスト規約です。
 ### テストファイル構造とディレクトリ構成
 
 #### ディレクトリ構造の原則
-```
+```text
 tests/unit/[layer]/[category]/[service-name]/
 ├── [method-name]/
 │   ├── normal-cases.test.ts         # 正常系テスト

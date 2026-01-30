@@ -49,7 +49,7 @@ ADR-001「ドメインロジックの配置原則」に従う:
 
 ### 依存関係
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │ enterprise-business-rules (第1層)                       │
 │   RewriteRule.matchesUrl(url: string): boolean         │

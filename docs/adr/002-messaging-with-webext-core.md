@@ -64,7 +64,7 @@ Mapper は変換だけでなく、MessagingService への呼び出しも担当�
 
 Clean Architecture の依存ルールを守るため、Mapper（interface-adapters 層）が MessagingService（frameworks-and-drivers 層）を直接参照することを避ける。
 
-```
+```text
 [interface-adapters]
   IRewriteRuleMessagingPort (interface)
   RewriteRuleMapper → uses → IRewriteRuleMessagingPort
@@ -86,7 +86,7 @@ Clean Architecture の依存ルールを守るため、Mapper（interface-adapte
 
 `@webext-core/proxy-service` を使用する場合、Background Script と Content Script の両方で同じモジュールを import する必要がある。しかし、proxy-service 実装が DI コンテナ（container.ts）を静的 import すると、Content Script でモジュールをロードした際に Background 専用の依存関係も一緒にロードされ、問題が発生する。
 
-```
+```text
 # 問題のあるパターン
 RewriteRuleProxyService.ts
   └── import { container } from 'container.ts'  ← 静的 import
