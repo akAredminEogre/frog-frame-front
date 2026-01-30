@@ -41,7 +41,7 @@ Mapperがエラーをスローした場合のエラー伝播を検証する。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository/delete/
 ├── normal-cases.test.ts       # 正常系: Mapper委譲確認
 └── Abend/
@@ -62,7 +62,7 @@ tests/unit/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository
 
 既存のモックファクトリを使用:
 
-```
+```text
 tests/unit/interface-adapters/ports/IRewriteRuleMessagingPort/mocks/
 └── createMockRewriteRuleMessagingPort.ts    # 既存モックファクトリ（delete対応済み）
 ```

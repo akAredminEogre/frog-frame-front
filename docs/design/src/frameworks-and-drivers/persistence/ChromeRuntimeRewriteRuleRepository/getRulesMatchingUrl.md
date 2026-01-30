@@ -32,7 +32,7 @@ URLパターンに基づいてルールをフィルタリングできること�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository/getRulesMatchingUrl/
 └── normal-cases.test.ts       # URLマッチング（3ケース）
 ```
@@ -51,7 +51,7 @@ tests/unit/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository
 
 インターフェース配下にモックファクトリを配置（複数テストで共有）:
 
-```
+```text
 tests/unit/interface-adapters/ports/IRewriteRuleMessagingPort/mocks/
 └── createMockRewriteRuleMessagingPort.ts    # モックファクトリ
 ```

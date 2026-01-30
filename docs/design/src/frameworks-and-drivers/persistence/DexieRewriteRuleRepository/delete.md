@@ -50,7 +50,7 @@
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/persistence/DexieRewriteRuleRepository/delete/
 ├── normal-cases.test.ts       # 正常系: 単一削除、複数ルール環境での削除
 └── Abend/
@@ -69,7 +69,7 @@ DexieRewriteRuleRepositoryはIndexedDBへの直接アクセスを行うインフ
 
 ### テスト環境セットアップ
 
-```
+```text
 tests/unit/infrastructure/persistence/indexeddb/setup.ts
 ```
 

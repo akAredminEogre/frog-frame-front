@@ -27,7 +27,7 @@ RewriteRuleDTOからRewriteRuleエンティティへの変換を行う。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/interface-adapters/mappers/RewriteRuleMapper/toEntity/
 └── normal-cases.test.ts       # プロパティ変換（1ケース）
 ```
@@ -46,7 +46,7 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/toEntity/
 
 インターフェース配下にモックファクトリを配置（複数テストで共有）:
 
-```
+```text
 tests/unit/interface-adapters/ports/IRewriteRuleMessagingPort/mocks/
 └── createMockRewriteRuleMessagingPort.ts    # モックファクトリ
 ```

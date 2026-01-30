@@ -84,7 +84,7 @@ Repository.delete成功後にTabsGateway.reloadMatchingTabsが失敗した場合
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/application-business-rules/interactors/DeleteRuleInteractor/execute/
 ├── normal-cases.test.ts          # 正常系確認
 ├── error-cases.test.ts           # 異常系確認（配列ベース、2ケース）
