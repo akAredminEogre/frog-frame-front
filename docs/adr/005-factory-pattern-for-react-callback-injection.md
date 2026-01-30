@@ -32,7 +32,7 @@ Clean Architecture + Presenterパターン（ADR-001）では、Presenterが処�
 1. **起動時（DIコンテナ）**: Repository, Gateway など技術的依存をFactoryに注入
 2. **レンダリング時（Factory.create）**: Reactコールバック（成功/エラー時の状態更新関数）をPresenterに注入
 
-```
+```text
 DIコンテナ（起動時）          Reactコンポーネント（レンダリング時）
        │                              │
        ▼                              ▼
