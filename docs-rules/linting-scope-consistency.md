@@ -96,4 +96,4 @@ npm run lint:md
 
 - `make/test/main.mk` - Makefileでのlint実行設定
 - `host-frontend-root/frontend-src-root/package.json` - npm scriptsでのlint実行設定
-- [プロジェクト概要](../../README.md) - 開発環境セットアップ
+- [プロジェクト概要](../README.md) - 開発環境セットアップ
