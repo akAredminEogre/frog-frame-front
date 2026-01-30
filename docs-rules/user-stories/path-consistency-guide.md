@@ -17,7 +17,7 @@ User Story ドキュメント内でのファイルパス参照の一貫性を保
 
 ## パス参照のルール
 
-### A. 移行予定がない場合
+### A. 現在存在するファイルの場合
 
 現在存在するファイルパスをそのまま記載する。
 
@@ -27,6 +27,20 @@ User Story ドキュメント内でのファイルパス参照の一貫性を保
 
 # 悪い例（存在しないパス）
 - [テスト戦略書](../../design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md)
+```
+
+### A-2. 将来作成予定のファイル・ディレクトリの場合
+
+**重要**: 現在存在しないパスへのリンク（`[テキスト](パス)`形式）は禁止。代わりにパスをコードブロックで記載し、作成予定であることを明記する。
+
+```markdown
+# 良い例（将来作成予定の明記）
+- 機能設計（`docs/design/pages/rule-list/features/update-rule/`） - ページ・機能レベルの設計ドキュメント（Phase 1で作成予定）
+- E2E テスト戦略書（`docs/design/pages/rule-list/features/update-rule/e2e-test-strategy.md`） - Phase 3で作成予定
+
+# 悪い例（存在しないパスへのリンク）
+- [機能設計](../../design/pages/rule-list/features/update-rule/) - ページ・機能レベルの設計ドキュメント（Phase 1で作成）
+- [E2E テスト戦略書](../../design/pages/rule-list/features/update-rule/e2e-test-strategy.md) - Phase 3で作成
 ```
 
 ### B. 移行予定がある場合
@@ -67,6 +81,15 @@ User Story ドキュメント内でのファイルパス参照の一貫性を保
 1. **パス存在確認**
    - 参照しているファイルパスが実際に存在することを確認
    - `ls` コマンドや IDE のファイルブラウザで確認する
+   - **リンク形式のパス**: 必ず存在確認を行う
+     ```bash
+     # ファイルの場合
+     ls docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md
+     
+     # ディレクトリの場合
+     ls -d docs/design/pages/rule-list/features/update-rule/
+     ```
+   - **存在しないパス**: リンクではなくコードブロック形式で記載
 
 2. **パス一貫性確認**
    - 同一ユーザーストーリー内のすべてのドキュメントで同じファイルのパス表記が一致しているか確認
@@ -92,7 +115,23 @@ User Story ドキュメント内でのファイルパス参照の一貫性を保
 
 ## よくある問題パターン
 
-### パターン 1: 移行先パスのみ記載
+### パターン 1: 存在しないパスへのリンク
+
+**問題**: 将来作成予定のファイルに対してリンク形式で記載
+
+```markdown
+# 問題のある記載
+- [機能設計](../../design/pages/rule-list/features/update-rule/) - ページ・機能レベルの設計ドキュメント（Phase 1で作成）
+```
+
+**修正**: コードブロックと作成予定の明記
+
+```markdown
+# 修正後
+- 機能設計（`docs/design/pages/rule-list/features/update-rule/`） - ページ・機能レベルの設計ドキュメント（Phase 1で作成予定）
+```
+
+### パターン 2: 移行先パスのみ記載
 
 **問題**: 現在存在しないパスを記載している
 
