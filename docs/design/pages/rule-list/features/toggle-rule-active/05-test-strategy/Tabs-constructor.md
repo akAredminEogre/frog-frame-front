@@ -43,7 +43,7 @@ url/idがundefinedのタブが除外されることを確認。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/browser/Tabs/constructor/
 ├── normal-cases.test.ts      # 有効タブの保持（3ケース、配列ベース）
 └── filtering-cases.test.ts   # フィルタリング（4ケース、配列ベース）
@@ -56,7 +56,7 @@ chrome APIの呼び出しはないため、グローバルモックは不要。
 
 ### モックファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/browser/Tabs/
 └── mocks/
     └── createMockTab.ts   # モック生成関数
