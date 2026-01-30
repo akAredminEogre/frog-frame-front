@@ -94,6 +94,15 @@ docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md
 **注意**: `docs/` 自体はカウントに含めない。上記の例では `docs/` に到達するために 6 個の `../` が必要。
 `docs-rules/`（リポジトリルート）に到達するには 7 個の `../` が必要。
 
+**検証例**:
+```bash
+# UpdateRewriteRuleUseCase/ ディレクトリから docs/ に到達
+cd docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase
+pwd  # → .../docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase
+cd ../../../../../../  # 6個の ../
+pwd  # → .../docs  ← docs/ に到達
+```
+
 ## 設計ドキュメント変更時の追加チェック
 
 設計ドキュメント（`docs/design/`）を変更する場合は、以下も確認すること：
