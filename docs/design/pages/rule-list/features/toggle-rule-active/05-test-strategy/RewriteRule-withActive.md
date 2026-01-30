@@ -55,7 +55,7 @@ Value Objectパターンとして、元インスタンスが変更されない�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/enterprise-business-rules/entities/RewriteRule/withActive/
 ├── normal-cases.test.ts       # 状態変更（4ケース、配列ベース）
 ├── immutability.test.ts       # イミュータブル性（1ケース）

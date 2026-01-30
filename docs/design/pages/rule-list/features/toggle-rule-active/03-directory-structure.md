@@ -4,7 +4,7 @@
 
 ### 第1層: enterprise-business-rules/
 
-```
+```text
 src/enterprise-business-rules/
 └── entities/                                    ← Entity
     └── RewriteRule/
@@ -13,7 +13,7 @@ src/enterprise-business-rules/
 
 ### 第2層: application-business-rules/
 
-```
+```text
 src/application-business-rules/
 ├── ports/
 │   ├── input/                                   ← Input Port (Interface)
@@ -35,7 +35,7 @@ src/application-business-rules/
 
 ### 第3層: interface-adapters/
 
-```
+```text
 src/interface-adapters/
 ├── controllers/                                 ← Controller
 │   ├── IToggleRuleActiveController.ts           ← Controllerインターフェース（ADR-005参照）
@@ -53,7 +53,7 @@ src/interface-adapters/
 
 ### 第4層: frameworks-and-drivers/
 
-```
+```text
 src/frameworks-and-drivers/
 ├── ui/                                          ← View (React)
 │   ├── components/
