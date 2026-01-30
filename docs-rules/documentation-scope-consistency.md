@@ -91,21 +91,12 @@ npx markdownlint-cli2 'docs/**/*.md' '*.md'
 ### リンクチェックの場合
 
 ```bash
-# 正しいパターン（全対象を含む）
+# 正しいパターン（全対象を含む） - 自動化で使用
+make checklinks
+npm run check:links
+
+# 直接実行する場合
 npx markdown-link-check "docs/**/*.md" "docs-rules/**/*.md"
-
-# 間違いパターン（docs-rulesが抜けている） 
-npx markdown-link-check docs/**/*.md
-```
-
-### ファイル検索の場合
-
-```bash
-# 正しいパターン（全対象を含む）
-find docs docs-rules -name "*.md" -type f
-
-# 間違いパターン（docs-rulesが抜けている）
-find docs -name "*.md" -type f
 ```
 
 ## 新しいディレクトリ追加時のチェックリスト
@@ -129,9 +120,7 @@ find docs -name "*.md" -type f
 ```bash
 # 新しいディレクトリが実際にlintの対象になっているか確認
 make lintmd
-npm run lint:md
-
-# 結果が同じになることを確認
+make checklinks
 ```
 
 ## よくある見落としパターンとその対策
@@ -166,33 +155,29 @@ npm run lint:md
 
 よく使用されるスコープパターンをテンプレート化：
 
-```markdown
-<!-- リンクチェック標準テンプレート -->
-npx markdown-link-check "docs/**/*.md" "docs-rules/**/*.md"
+```bash
+# リンクチェック標準コマンド
+make checklinks
 
-<!-- markdownlint標準テンプレート -->
-npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'
+# markdownlint標準コマンド  
+make lintmd
 ```
 
 ### 2. 作成時チェックリスト
 
 ガイドライン文書作成時の必須確認項目：
 
-- [ ] 記載するコマンドは実際の設定ファイルと一致しているか
-- [ ] 対象範囲は現在のプロジェクト構成を網羅しているか
+- [ ] 記載するコマンドは実際のMakeタスクと一致しているか
+- [ ] 自動チェックが正常に動作することを確認したか
 - [ ] 新しいディレクトリ追加時の影響箇所を明記したか
-- [ ] 他の関連ドキュメントとの整合性を確認したか
+- [ ] 関連ドキュメントでのリンクが正常に動作するか確認したか
 
-### 3. 定期的な整合性チェック
+### 3. 定期的な自動チェック
 
 ```bash
-# 月次での整合性チェック例
-echo "=== Makefile vs package.json スコープ比較 ==="
-grep "markdownlint" make/test/main.mk
-grep "lint:md" host-frontend-root/frontend-src-root/package.json
-
-echo "=== ドキュメント内コマンド例の確認 ==="
-grep -r "markdownlint-cli2" docs-rules/
+# 定期チェックコマンド
+make lintmd      # markdownlint実行
+make checklinks  # リンクチェック実行
 ```
 
 ## 関連ドキュメント
