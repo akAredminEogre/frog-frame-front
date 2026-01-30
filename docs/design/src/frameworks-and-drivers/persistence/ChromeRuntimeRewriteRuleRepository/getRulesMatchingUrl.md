@@ -39,7 +39,7 @@ tests/unit/frameworks-and-drivers/persistence/ChromeRuntimeRewriteRuleRepository
 
 ## モック戦略
 
-> **重要**: [basic-rule.md](../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従う。
+> **重要**: [basic-rule.md](../../../../../../docs/coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従う。
 
 ### モック対象
 

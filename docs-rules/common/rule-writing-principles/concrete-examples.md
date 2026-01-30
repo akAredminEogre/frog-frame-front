@@ -7,7 +7,7 @@
   - 実際のプロジェクトで発生した事例を具体例として記載すると、チームの理解が深まる
   - **注意**: ここでいう「具体例」とは実装コードではなく、適用シナリオや判断事例を指す
 
-**良い例**: [design-tokens.md](../../../coding-standards/src/frameworks-and-drivers/ui/css-styling/design-tokens.md) の「具体例」セクションでは、削除ボタン用トークンの選定手順やWCAG AA準拠のための色修正事例を記載している
+**良い例**: [design-tokens.md](../../../docs/coding-standards/src/frameworks-and-drivers/ui/css-styling/design-tokens.md) の「具体例」セクションでは、削除ボタン用トークンの選定手順やWCAG AA準拠のための色修正事例を記載している
 
 ## 良い例/悪い例の対比は1つの差分のみ
 
