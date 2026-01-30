@@ -73,7 +73,7 @@ urlPatternが空文字列やundefinedの場合、タブリロードをスキッ�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/
 └── normal-cases.test.ts       # 正常系確認（配列ベース、3ケース）
 ```

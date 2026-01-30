@@ -117,7 +117,7 @@ WAI-ARIA Dialog Patternに必要な属性をテストする。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/
 ├── test-helpers.tsx              # 共通ヘルパー（モックファクトリ含む）
 └── render/
@@ -144,7 +144,7 @@ Reactコンポーネントのテストなので、コールバック関数をモ
 
 ### ヘルパーファイル
 
-```
+```text
 tests/unit/frameworks-and-drivers/ui/components/organisms/ConfirmDialog/
 └── test-helpers.tsx    # createDefaultProps関数、ConfirmDialogTestHelperクラス
 ```

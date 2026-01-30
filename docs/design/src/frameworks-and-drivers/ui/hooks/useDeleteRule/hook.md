@@ -79,7 +79,7 @@ Factory経由でコントローラが正しく生成され、コールバック�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/ui/hooks/useDeleteRule/
 ├── mocks/
 │   └── createMockDeleteRuleControllerFactory.ts

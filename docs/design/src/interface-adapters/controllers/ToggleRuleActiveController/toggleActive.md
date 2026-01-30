@@ -45,7 +45,7 @@ ControllerはUseCase呼び出しのみを担当し、エラーハンドリング
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/interface-adapters/controllers/ToggleRuleActiveController/toggleActive/
 └── normal-cases.test.ts       # UseCase呼び出し確認（配列ベース、2ケース）
 ```

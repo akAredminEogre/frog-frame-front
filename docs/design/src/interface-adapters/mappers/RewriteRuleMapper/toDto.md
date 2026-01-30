@@ -29,7 +29,7 @@ RewriteRuleエンティティからRewriteRuleDTOへの変換を行う（**静�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/interface-adapters/mappers/RewriteRuleMapper/toDto/
 └── normal-cases.test.ts       # プロパティ変換（1ケース）
 ```
