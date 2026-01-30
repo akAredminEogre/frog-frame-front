@@ -35,7 +35,7 @@ README.mdの開発戦略セクションのタスクをもとに作成するア�
 
 ## 凡例の例
 
-```plantuml
+```text
 legend right
   |= 色 |= Phase |
   | <#lightgray> | Phase 1: テスト戦略書 |
@@ -48,7 +48,7 @@ endlegend
 
 図に含まないPhase（前提・後続）は note セクションで説明する:
 
-```plantuml
+```text
 note bottom
 **前提（図に含まない）**:
   - Phase 0: ...
