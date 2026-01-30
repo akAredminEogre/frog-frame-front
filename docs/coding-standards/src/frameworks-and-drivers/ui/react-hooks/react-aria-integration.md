@@ -140,6 +140,6 @@ React Ariaコンポーネント/フックを使用する際は、以下を確認
 
 | ルール | ESLint化 | 設定ファイル |
 |-------|---------|-------------|
-| FocusScopeのautoFocus禁止 | ✅ 可能 | [host-frontend-root/frontend-src-root/eslint-rules/react.js](../../../../../../../host-frontend-root/frontend-src-root/eslint-rules/react.js) |
+| FocusScopeのautoFocus禁止 | ✅ 可能 | [host-frontend-root/frontend-src-root/eslint-rules/react.js](../../../../../../host-frontend-root/frontend-src-root/eslint-rules/react.js) |
 | restoreFocusとの重複実装禁止 | ❌ 不可 | PRレビューで確認 |
 | usePreventScrollとの重複実装禁止 | ❌ 不可 | PRレビューで確認 |

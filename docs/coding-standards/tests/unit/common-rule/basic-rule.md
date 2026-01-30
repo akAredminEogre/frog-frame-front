@@ -172,7 +172,7 @@ const rule = RewriteRule.fromParams(1, {
 
 #### 既存コードへの適用
 
-規約に準拠していない既存テストコードは [user-story-005](../../../user-stories/user-story-005/README.md) で対応予定。
+規約に準拠していない既存テストコードは [user-story-005](../../../../user-stories/completed/user-story-005/README.md) で対応予定。
 
 **注意**: 新規テスト作成時は必ずファクトリーメソッドを使用すること。
 

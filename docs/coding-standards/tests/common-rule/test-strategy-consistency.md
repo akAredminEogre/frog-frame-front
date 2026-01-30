@@ -29,5 +29,5 @@
 
 ## 関連ドキュメント
 
-- [テスト戦略書テンプレート](/docs-rules/design/05-test-strategy.md)
-- [結合テスト戦略書テンプレート](/docs-rules/design/06-integration-test-strategy.md)
+- [テスト戦略書テンプレート](../../../../docs-rules/design/05-test-strategy.md)
+- [結合テスト戦略書テンプレート](../../../../docs-rules/design/06-integration-test-strategy.md)

@@ -26,7 +26,7 @@
 | 技術用語の大文字小文字 | △ | textlint/cspellで部分的に可能 |
 | コードフェンス言語識別子 | ✅ | markdownlintで検証可能 |
 
-→ [User Story 011: markdownlint導入](../../../user-stories/user-story-011/README.md)
+→ [User Story 011: markdownlint導入](../../docs/user-stories/user-story-011/README.md)
 
 ## 文体
 
