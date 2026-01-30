@@ -17,7 +17,7 @@
 ## 設計ドキュメント
 
 - [ADR-001: Clean Architecture Presenter付きパターン採用](../../adr/001-clean-architecture-with-presenter-pattern.md)
-- [テスト戦略書](../../design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md) - 現行のテスト戦略書（Phase 4でリファクタリング後に配置変更予定）
+- [テスト戦略書](../../design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md) - 現行のテスト戦略書（Phase 2で新しい場所に作成、Phase 4で旧ファイルを削除）
 - 機能設計（`docs/design/pages/rule-list/features/update-rule/`） - ページ・機能レベルの設計ドキュメント（Phase 1で作成予定）
 
 ## 現状分析
