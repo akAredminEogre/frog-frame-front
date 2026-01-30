@@ -65,24 +65,6 @@ find docs docs-rules -name '*.md' \
 - 修正前（デッドリンク）: 存在しないファイルへのリンク記述
 - 修正後（テキスト化）: ファイル名をインラインコード形式で記載し、説明を併記
 
-## よく使用されるリンクパターン
-
-### 一般的なパターン
-
-標準的なリンクパターン（自動チェックで確認済み）：
-- プロジェクトルートファイル: `../README.md`、`../CLAUDE.md`
-- docs-rules内: `./linting-scope-consistency.md`
-
-### 設計ドキュメント特有のパターン
-
-**テスト戦略書からの参照パターン**:
-設計ドキュメントから他のドキュメントを参照する場合、通常7階層上からの参照となる。
-
-**参照先パターン**:
-- コーディング規約への参照: `coding-standards/` 配下のファイル
-- ADR参照: `adr/` 配下のファイル  
-- User Story参照: `user-stories/` 配下のファイル
-
 ## 関連ドキュメント
 
 - [linting-scope-consistency.md](./linting-scope-consistency.md) - リンティング設定の整合性管理
