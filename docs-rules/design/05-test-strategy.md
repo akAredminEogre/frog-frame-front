@@ -202,7 +202,7 @@ tests/unit/[path]/[methodName]/
 
 ### 使用するモック
 
-> **注意**: 新規モック作成前に既存モックを確認すること。詳細は [mock-file-placement.md](../../docs/coding-standards/tests/common-rule/mock-file-placement.md) を参照。
+> **注意**: 新規モック作成前に既存モックを確認すること。詳細は [mock-file-placement.md](/docs/coding-standards/tests/common-rule/mock-file-placement.md) を参照。
 
 | 依存関係 | モック理由 | モック対応 |
 | -------- | ---------- | ---------- |
@@ -359,7 +359,7 @@ host-frontend-root/frontend-src-root/tests/unit/interface-adapters/mappers/Rewri
 
 ## コードとの関係
 
-> **参照**: [jsdoc-rule.md](../../docs/coding-standards/tests/common-rule/jsdoc-rule.md)
+> **参照**: [jsdoc-rule.md](/docs/coding-standards/tests/common-rule/jsdoc-rule.md)
 
 テスト戦略書はテストコードのJSDocを補完する:
 
