@@ -29,7 +29,7 @@
 `## eslint-rule` セクションを設け、**各規約ごとに** ESLintルールの有無を明示する。
 
 - ESLintルールがある場合: ルールファイルへの**リンク**を記述（リポジトリルートからの相対パス）
-  - 実在する例: [host-frontend-root/frontend-src-root/eslint-rules/react.js](../../host-frontend-root/frontend-src-root/eslint-rules/react.js)
+  - 実在する例: [host-frontend-root/frontend-src-root/eslint-rules/react.js](../host-frontend-root/frontend-src-root/eslint-rules/react.js)
   - 実装コードの掲載は不要（リンク先で確認できるため）
 - ESLint化できない場合: その旨を記述
   - ESLint化できない場合は、無理に空のeslint-rule.jsのファイルを作成しないこと

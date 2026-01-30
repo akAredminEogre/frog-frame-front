@@ -17,7 +17,7 @@
 
 ### 既存ADRへの適用
 
-本規約に準拠していない既存ADRは [user-story-006](../../user-stories/completed/user-story-006/README.md) で対応済み。
+本規約に準拠していない既存ADRは [user-story-006](../../docs/user-stories/completed/user-story-006/README.md) で対応済み。
 
 **注意**: 新規ADR作成時は必ず本規約に従うこと。
 
@@ -60,7 +60,7 @@
 
 ## 良い例（実在する参照）
 
-適用シナリオの記載例は[アクセシブルモーダルコンポーネント規約の適用シナリオ](../../coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md#適用シナリオ)を参照。
+適用シナリオの記載例は[アクセシブルモーダルコンポーネント規約の適用シナリオ](../../docs/coding-standards/src/frameworks-and-drivers/ui/accessible-modal.md#適用シナリオ)を参照。
 **実在する良い例**: [adr.md](../adr.md) の「## 悪い例（詳細を列挙）」のようにスコープを含める
 ```
 

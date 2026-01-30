@@ -80,5 +80,5 @@ docs/design/
 
 - ユーザーストーリー: `docs/user-stories/`
 - ADR: `docs/adr/`
-- 基本ルール: [docs-rules.md](../docs-rules.md)
+- 基本ルール: [ドキュメント共通ルール](./common/index.md)
 - ユーザーストーリールール: [user-stories.md](./user-stories.md)
