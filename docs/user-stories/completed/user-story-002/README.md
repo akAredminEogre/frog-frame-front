@@ -2,28 +2,28 @@
 
 ## ストーリー
 
-> 既存のメッセージング実装を @webext-core エコシステムに統一し、型安全性と保守性を向上させる
+> 既存のメッセージング実装を @webext-core エコシステムに統一し、型安全性と保守性を向上させた
 
 ## 概要
 
-現在の `chrome.runtime.sendMessage` / `chrome.tabs.sendMessage` を直接使用した実装を、`@webext-core/proxy-service` と `@webext-core/messaging` に移行する。
+`chrome.runtime.sendMessage` / `chrome.tabs.sendMessage` を直接使用していた実装を、`@webext-core/proxy-service` と `@webext-core/messaging` に移行した。
 
 ## 設計ドキュメント
 
 - [ADR-002: メッセージングに @webext-core を採用](../../adr/002-messaging-with-webext-core.md)
 - [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../adr/003-unified-db-access-via-messaging.md)
 
-## 現状分析
+## 移行前の状態
 
 ### 問題点: 車輪の再発明
 
-現在の実装は以下の問題を抱えている：
+移行前の実装は以下の問題を抱えていた：
 
 1. **手動のメッセージルーティング**: `messageRouter` + `handlers` オブジェクトで手動ルーティング
 2. **型安全性の欠如**: メッセージ型が `any` で定義
 3. **ボイラープレート**: メッセージタイプごとにハンドラーファイルを作成
 
-### 現在のメッセージフロー
+### 移行前のメッセージフロー
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -170,7 +170,7 @@ src/
 ✅ 1つのフローを送受信セットで移行
 ```
 
-旧ハンドラーは最後まで残し、PR-3で一括削除する。
+旧ハンドラーは最後まで残し、PR-3で一括削除した。
 
 ### PR-1: proxy-service 基盤 + Flow 1 移行 ✅ 完了
 
