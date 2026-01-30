@@ -7,6 +7,7 @@
 3. **開発者向けコマンドを追加する場合**: `make dev`, `make unit`, `make check` などの開発者が日常的に使用するMakefileターゲットを追加した場合は、以下の2箇所を同時に更新すること
    - `CLAUDE.md` の「Common Development Commands」セクション
    - `make/help/main.mk` の該当カテゴリ（`make help` で表示される内容）
+4. **npm scriptsを実行する場合**: `docker compose exec frontend npm run <script>` 形式を使用すること。直接 `npx` や `npm run` を使用しない（ローカル環境でのパッケージインストール不要、一貫性の維持）
 
 ## オブジェクト指向ルール（ThoughtWorksアンソロジー）
 
