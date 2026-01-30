@@ -95,8 +95,8 @@ npx markdownlint-cli2 'docs/**/*.md' '*.md'
 make checklinks
 npm run check:links
 
-# 直接実行する場合
-npx markdown-link-check "docs/**/*.md" "docs-rules/**/*.md"
+# 直接実行する場合（効率的な方法）
+find docs docs-rules -name '*.md' -print0 | xargs -0 -n1 npx markdown-link-check
 ```
 
 ## 新しいディレクトリ追加時のチェックリスト

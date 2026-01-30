@@ -21,8 +21,8 @@ make checklinks
 # npm scriptでの実行
 npm run check:links
 
-# 直接実行
-npx markdown-link-check "docs/**/*.md" "docs-rules/**/*.md"
+# 直接実行（効率的な方法）
+find docs docs-rules -name '*.md' -print0 | xargs -0 -n1 npx markdown-link-check
 ```
 
 ### 実行タイミング
