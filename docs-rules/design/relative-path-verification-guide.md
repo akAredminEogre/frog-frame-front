@@ -21,7 +21,7 @@
 ### テスト戦略書からの標準的な参照
 
 **テスト戦略書の典型的な位置**:
-```
+```text
 docs/design/src/[layer]/[category]/[ClassName]/[methodName].md
 ```
 
@@ -30,12 +30,12 @@ docs/design/src/[layer]/[category]/[ClassName]/[methodName].md
 #### 階層数の計算方法
 
 1. **現在のファイル位置を確認**
-   ```
+   ```text
    docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md
    ```
 
 2. **階層を数える**
-   ```
+   ```text
    1. docs/ (最上位)
    2. design/
    3. src/

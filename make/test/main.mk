@@ -31,8 +31,8 @@ sortimports:
 
 lintmd:
 	@echo "Running markdownlint..."
-	@npx markdownlint-cli2 'docs/**/*.md' '*.md'
+	@npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'
 
 lintmdfix:
 	@echo "Running markdownlint with auto-fix..."
-	@npx markdownlint-cli2 --fix 'docs/**/*.md' '*.md'
+	@npx markdownlint-cli2 --fix 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'
