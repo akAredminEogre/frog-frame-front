@@ -94,6 +94,6 @@ npm run lint:md
 
 ## 関連ドキュメント
 
-- [ESLint設定ガイド](../coding-standards/eslint-configuration.md)
-- [CI/CD設定ドキュメント](../development/ci-cd-setup.md)
-- [開発環境セットアップ](../../README.md)
+- `make/test/main.mk` - Makefileでのlint実行設定
+- `host-frontend-root/frontend-src-root/package.json` - npm scriptsでのlint実行設定
+- [プロジェクト概要](../../README.md) - 開発環境セットアップ
