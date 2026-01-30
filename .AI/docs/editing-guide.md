@@ -88,8 +88,11 @@ ls ../../../../../../coding-standards/tests/common-rule/mock-file-placement.md
 ```
 docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md
      ↑      ↑   ↑           ↑        ↑    ↑                       ← ファイルは含まない
-     1      2   3           4        5    6  ← docs/ に到達するまでの階層数
+     1      2   3           4        5    6  ← docs/ 配下のディレクトリ数 = ../ の数
 ```
+
+**注意**: `docs/` 自体はカウントに含めない。上記の例では `docs/` に到達するために 6 個の `../` が必要。
+`docs-rules/`（リポジトリルート）に到達するには 7 個の `../` が必要。
 
 ## 設計ドキュメント変更時の追加チェック
 
