@@ -31,8 +31,8 @@ sortimports:
 
 lintmd:
 	@echo "Running markdownlint..."
-	@cd host-frontend-root/frontend-src-root && npx markdownlint-cli2 '../../docs/**/*.md' '../../*.md'
+	@npx markdownlint-cli2 'docs/**/*.md' '*.md'
 
 lintmdfix:
 	@echo "Running markdownlint with auto-fix..."
-	@cd host-frontend-root/frontend-src-root && npx markdownlint-cli2 --fix '../../docs/**/*.md' '../../*.md'
+	@npx markdownlint-cli2 --fix 'docs/**/*.md' '*.md'
