@@ -31,8 +31,8 @@ sortimports:
 
 lintmd:
 	@echo "Running markdownlint..."
-	@docker compose run --rm -v "$$(pwd):/repo" -w /repo frontend npx markdownlint-cli2 'docs/**/*.md' '*.md'
+	@cd host-frontend-root/frontend-src-root && npx markdownlint-cli2 '../../docs/**/*.md' '../../*.md'
 
 lintmdfix:
 	@echo "Running markdownlint with auto-fix..."
-	@docker compose run --rm -v "$$(pwd):/repo" -w /repo frontend npx markdownlint-cli2 --fix 'docs/**/*.md' '*.md'
+	@cd host-frontend-root/frontend-src-root && npx markdownlint-cli2 --fix '../../docs/**/*.md' '../../*.md'
