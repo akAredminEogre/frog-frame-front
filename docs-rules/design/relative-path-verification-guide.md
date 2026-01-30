@@ -41,18 +41,11 @@ npm run check:links
 docs/design/src/[layer]/[category]/[ClassName]/[methodName].md
 ```
 
-**参照例**（7階層上からの参照）:
+**参照パターン**（7階層上からの参照）:
 
-```markdown
-# コーディング規約への参照
-[mock-file-placement.md](../../../../../../../coding-standards/tests/common-rule/mock-file-placement.md)
-
-# ADR参照
-[ADR-001](../../../../../../../adr/001-clean-architecture-with-presenter-pattern.md)
-
-# User Story参照
-[User Story 014](../../../../../../../user-stories/user-story-014/README.md)
-```
+- コーディング規約への参照: `coding-standards/` 配下のファイル
+- ADR参照: `adr/` 配下のファイル  
+- User Story参照: `user-stories/` 配下のファイル
 
 ## リンク切れへの対応
 
@@ -67,14 +60,9 @@ docs/design/src/[layer]/[category]/[ClassName]/[methodName].md
 ### 3. テキスト化
 ファイル名をコード形式で記載し、リンクにしない。
 
-```markdown
-# 修正例
-# 修正前（リンク切れ）
-[存在しないファイル](../../../../../../../non-existent-file.md)
-
-# 修正後（テキスト化）
-`non-existent-file.md` - 参照予定ファイル（未作成）
-```
+**修正例**:
+- 修正前（リンク切れ）: 存在しないファイルへのリンク記述
+- 修正後（テキスト化）: ファイル名をインラインコード形式で記載し、説明を併記
 
 ## 作成時チェックリスト
 
