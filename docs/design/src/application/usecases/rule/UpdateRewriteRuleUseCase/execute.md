@@ -83,7 +83,7 @@ tests/unit/application/usecases/rule/UpdateRewriteRuleUseCase/execute/
 UseCaseの2つの依存関係をモック化してテストする。
 責務分離のため、モック生成関数は外部ファイルに配置する。
 
-> **重要**: モック作成は [basic-rule.md](../../../../../../coding-standards/tests/unit/common-rule/basic-rule.md) の「モック作成の分離ルール」に従うこと。
+> **重要**: モック作成は [mock-file-placement.md](../../../../../../../coding-standards/tests/common-rule/mock-file-placement.md) の「モック作成の分離ルール」に従うこと。
 > - モック作成は、別のクラスファイルに切り出し、それをインポートして使用すること
 > - テストコード内で直接モックを定義しないこと
 > - モックファクトリは `createMock[ClassName].ts` の形式で命名
@@ -96,7 +96,7 @@ UseCaseの2つの依存関係をモック化してテストする。
 - [x] `grep -r "createMockRewriteRuleRepository" tests/` で既存モックを検索した → 既存モック使用 (`tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository.ts`)
 - [x] `grep -r "createMockTabsService" tests/` で既存モックを検索した → 既存モック使用 (`tests/unit/application/ports/IChromeTabsService/mocks/createMockTabsService.ts`)
 
-> **参照**: [mock-file-placement.md](../../../../../../coding-standards/tests/common-rule/mock-file-placement.md) の「モック作成前の確認手順」
+> **参照**: [mock-file-placement.md](../../../../../../../coding-standards/tests/common-rule/mock-file-placement.md) の「モック作成前の確認手順」
 
 ### モック対象
 
