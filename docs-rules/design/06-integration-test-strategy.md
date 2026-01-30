@@ -23,7 +23,7 @@
 
 結合テスト戦略書は、featureの `00-overview.md` と同じディレクトリに配置する。
 
-```
+```text
 docs/design/pages/{page-name}/features/{feature-name}/
 ├── 00-overview.md
 ├── ...

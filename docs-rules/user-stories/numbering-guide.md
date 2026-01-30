@@ -68,7 +68,7 @@ git log --all --oneline --name-only | grep -oE "user-story-[0-9]+" | sort -u -t'
 
 ### 現状
 
-```
+```text
 docs/user-stories/user-story-002/
 docs/user-stories/user-story-007/
 docs/user-stories/user-story-009/
