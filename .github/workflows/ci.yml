@@ -71,8 +71,8 @@ jobs:
       - name: Prepare WXT
         run: npx wxt prepare
 
-      - name: Run compile, knip, tsr, lint, and stylelint checks
-        run: npm run compile && (npm run knip:all || true) && (npm run tsr:check || true) && (npm run lint || true) && (npm run stylelint || true)
+      - name: Run compile, knip, tsr, lint, stylelint, and markdownlint checks
+        run: npm run compile && (npm run knip:all || true) && (npm run tsr:check || true) && (npm run lint || true) && (npm run stylelint || true) && (npm run lint:md || true)
 
   e2e:
     name: E2E Tests
