@@ -50,7 +50,7 @@
     "stylelint:fix": "stylelint 'src/**/*.css' --fix",
     "lint:md": "cd ../.. && npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'",
     "lint:md:fix": "cd ../.. && npx markdownlint-cli2 --fix 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'",
-    "check:links": "cd ../.. && find docs docs-rules -name '*.md' -exec npx markdown-link-check {} \\;"
+    "check:links": "cd ../.. && find docs docs-rules -name '*.md' -print0 | xargs -0 -n1 npx markdown-link-check"
   },
   "dependencies": {
     "@react-aria/dialog": "^3.5.32",

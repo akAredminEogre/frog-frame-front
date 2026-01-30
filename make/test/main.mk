@@ -39,4 +39,4 @@ lintmdfix:
 
 checklinks:
 	@echo "Checking markdown links..."
-	@find docs docs-rules -name '*.md' -exec npx markdown-link-check {} \;
+	@find docs docs-rules -name '*.md' -print0 | xargs -0 -n1 npx markdown-link-check
