@@ -104,7 +104,7 @@ ls ../../README.md # 最終ターゲットファイル確認
 make lintmd
 
 # 手動でのリンクチェック（利用可能な場合）
-npx markdown-link-check docs/**/*.md
+npx markdown-link-check "docs/**/*.md" "docs-rules/**/*.md"
 ```
 
 ### プルリクエスト作成前チェックリスト

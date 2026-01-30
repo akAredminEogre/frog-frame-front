@@ -49,7 +49,8 @@
     "stylelint": "stylelint 'src/**/*.css'",
     "stylelint:fix": "stylelint 'src/**/*.css' --fix",
     "lint:md": "cd ../.. && npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'",
-    "lint:md:fix": "cd ../.. && npx markdownlint-cli2 --fix 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'"
+    "lint:md:fix": "cd ../.. && npx markdownlint-cli2 --fix 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'",
+    "check:links": "cd ../.. && find docs docs-rules -name '*.md' -exec npx markdown-link-check {} \\;"
   },
   "dependencies": {
     "@react-aria/dialog": "^3.5.32",
@@ -91,6 +92,7 @@
     "globals": "^16.5.0",
     "happy-dom": "^18.0.1",
     "knip": "^5.62.0",
+    "markdown-link-check": "^3.14.2",
     "markdownlint-cli2": "^0.17.2",
     "postcss": "^8.5.6",
     "serve": "^14.2.5",

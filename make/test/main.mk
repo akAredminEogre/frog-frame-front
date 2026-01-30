@@ -1,5 +1,5 @@
 # Testing and Code Quality Commands
-.PHONY: unit e2e check testall testcheck testlint sortimports lintmd lintmdfix
+.PHONY: unit e2e check testall testcheck testlint sortimports lintmd lintmdfix checklinks
 
 unit:
 	@echo "Running unit tests..."
@@ -36,3 +36,7 @@ lintmd:
 lintmdfix:
 	@echo "Running markdownlint with auto-fix..."
 	@npx markdownlint-cli2 --fix 'docs/**/*.md' 'docs-rules/**/*.md' '*.md'
+
+checklinks:
+	@echo "Checking markdown links..."
+	@find docs docs-rules -name '*.md' -exec npx markdown-link-check {} \;
