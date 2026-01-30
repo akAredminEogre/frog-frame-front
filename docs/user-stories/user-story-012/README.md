@@ -18,6 +18,7 @@
 
 - [ADR-001: Clean Architecture Presenter付きパターン採用](../../adr/001-clean-architecture-with-presenter-pattern.md)
 - [テスト戦略書](../../design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md) - 現行のテスト戦略書（リファクタリング後に配置変更）
+- [機能設計](../../design/pages/rule-list/features/update-rule/) - ページ・機能レベルの設計ドキュメント（Phase 1で作成）
 
 ## 現状分析
 
@@ -96,9 +97,15 @@
 - [ ] UpdateRewriteRulePresenter（スケルトン実装）
 - [ ] UpdateRewriteRuleControllerFactory（スケルトン実装）
 
+**設計ドキュメント（docs/design/pages）**
+
+- [ ] `docs/design/pages/rule-list/features/update-rule/00-overview.md` の作成
+- [ ] `docs/design/pages/rule-list/features/update-rule/01-class-design.md` の作成
+- [ ] `docs/design/pages/rule-list/features/update-rule/03-directory-structure.md` の作成
+
 **テスト戦略書**
 
-- [ ] 結合テスト戦略書の作成
+- [ ] 結合テスト戦略書の作成（`docs/design/pages/rule-list/features/update-rule/integration-test-strategy.md`）
 
 ### Phase 2: 実装・単体テスト
 
@@ -120,6 +127,8 @@
 - [ ] container.ts に新クラスのDI登録を追加
 - [ ] 呼び出し元を Controller 経由に変更
 - [ ] 結合テスト戦略書に基づくテスト実装
+- [ ] E2Eテスト戦略書の作成（`docs/design/pages/rule-list/features/update-rule/e2e-test-strategy.md`）
+- [ ] E2Eテスト実装
 
 ### Phase 4: 旧コード削除
 
