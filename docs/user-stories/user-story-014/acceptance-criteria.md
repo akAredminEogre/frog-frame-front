@@ -33,7 +33,8 @@
   - UpdateRewriteRulePresenter
 
 - [ ] テスト戦略書が新しい配置に移動されている
-  - `docs/design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md`
+  - 現在: `docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md`
+  - 移行先: `docs/design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md`
 
 - [ ] 結合テストが存在し、パスする
 
