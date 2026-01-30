@@ -114,7 +114,7 @@
 - [ ] UpdateRewriteRuleInteractor の実装、テスト戦略書・単体テスト
   - IChromeTabsService → ITabsGateway への変更
   - Presenter経由のエラーハンドリング導入
-  - テスト戦略書の配置変更: `docs/design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md`
+  - テスト戦略書を新しい場所に作成: `docs/design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md`
 
 #### 第3層: interface-adapters
 
@@ -133,7 +133,8 @@
 ### Phase 4: 旧コード削除
 
 - [ ] 旧 UpdateRewriteRuleUseCase の削除
-- [ ] 旧テスト戦略書の移動（`docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md` → `docs/design/src/application-business-rules/interactors/UpdateRewriteRuleInteractor/execute.md`）
+- [ ] 旧テスト戦略書の削除（`docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md`）
+  - 新しいテスト戦略書はPhase 2で作成済みのため、旧ファイルは単純削除
 
 ### 対応しない（分類B）
 
