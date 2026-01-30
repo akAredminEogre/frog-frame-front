@@ -8,7 +8,7 @@
 
 ### 対象レイヤー
 
-```
+```text
 入力: onSuccess, onError, ruleId
   ↓
 ToggleRuleActiveControllerFactory.create(onSuccess, onError)
@@ -133,7 +133,7 @@ Presenterを通じてView層に正しいデータが渡されることを検証�
 
 ## テストファイル構成
 
-```
+```text
 tests/integration/toggle-rule-active/
 ├── setup.ts                    # 共通セットアップ（fake-indexeddb等）
 ├── helpers/
@@ -190,7 +190,7 @@ TabsGatewayは `reloadMatchingTabs` メソッドのみをモック化し、呼�
 
 ### モックファイル構成
 
-```
+```text
 tests/
 └── frameworks-and-drivers/
     └── browser/
@@ -239,7 +239,7 @@ const inactiveRule = new RewriteRule(
 
 ## 依存関係図
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    テストコード                              │
 │  ┌─────────────────────────────────────────────────────┐   │

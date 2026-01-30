@@ -45,7 +45,7 @@
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/application-business-rules/dto/input/ToggleRuleActiveInputData/constructor/
 └── normal-cases.test.ts       # インスタンス生成（3ケース、配列ベース）
 ```
