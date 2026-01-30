@@ -23,7 +23,7 @@ UIコンポーネントの配置を段階的に移行する:
 
 新規作成するUIコンポーネントは、すべて `src/frameworks-and-drivers/ui/components/` に配置する。
 
-```
+```text
 src/frameworks-and-drivers/ui/components/
 ├── atoms/
 │   ├── DeleteButton/
