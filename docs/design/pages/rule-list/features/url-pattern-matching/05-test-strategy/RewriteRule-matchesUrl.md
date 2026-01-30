@@ -48,7 +48,7 @@ URLパターンが空文字列の場合はマッチしないものとして扱�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/enterprise-business-rules/entities/RewriteRule/matchesUrl/
 ├── normal-cases-true.test.ts    # 前方一致（trueを返す）5ケース、配列ベース
 └── normal-cases-false.test.ts   # 不一致（falseを返す）4ケース、配列ベース

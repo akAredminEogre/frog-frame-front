@@ -53,7 +53,7 @@ RewriteRule.matchesUrl()によるフィルタリング結果を確認。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/browser/Tabs/filterByRule/
 ├── normal-cases.test.ts   # マッチング結果（3ケース、配列ベース）
 └── edge-cases.test.ts     # エッジケース（3ケース、配列ベース）
@@ -65,7 +65,7 @@ RewriteRuleのmatchesUrl()メソッドをモック化。
 
 ### モックファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/browser/Tabs/
 └── mocks/
     ├── createMockTab.ts    # Tab生成関数（constructorと共用）

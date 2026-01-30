@@ -9,7 +9,7 @@ Repository、TabsGateway、Presenterの連携動作を検証する。
 
 ### 対象レイヤー
 
-```
+```text
 入力: ruleId
   ↓
 DeleteRuleInteractor.execute(inputData)
