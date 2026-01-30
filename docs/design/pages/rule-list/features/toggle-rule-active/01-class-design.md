@@ -120,8 +120,8 @@
 
 ### Chrome拡張機能のコンテキスト分離
 
-> **参照**: [ADR-002: メッセージングに @webext-core を採用](../../../../adr/002-messaging-with-webext-core.md)
-> **参照**: [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../adr/003-unified-db-access-via-messaging.md)
+> **参照**: [ADR-002: メッセージングに @webext-core を採用](../../../../../adr/002-messaging-with-webext-core.md)
+> **参照**: [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../../adr/003-unified-db-access-via-messaging.md)
 
 Rules Page は技術的には IndexedDB に直接アクセス可能だが、ADR-003 の決定に従い、
 すべてのコンテキストからの DB アクセスは messaging 経由で Background Script に集約する。
@@ -176,7 +176,7 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 
 ### ドメインロジックの配置原則
 
-> **参照**: [ADR-001: Clean Architecture Presenter付きパターン採用 - 6. ドメインロジックの配置原則](../../../../adr/001-clean-architecture-with-presenter-pattern.md)
+> **参照**: [ADR-001: Clean Architecture Presenter付きパターン採用 - 6. ドメインロジックの配置原則](../../../../../adr/001-clean-architecture-with-presenter-pattern.md)
 
 ADR-001 に従い、ドメインエンティティの値を用いた判定・計算は `enterprise-business-rules` 層で実装する。
 
