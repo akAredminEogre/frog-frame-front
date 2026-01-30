@@ -66,7 +66,7 @@ Tab補完により、長いブランチ名を入力する手間が省けます�
 
 ## ディレクトリ構造
 
-```
+```text
 frog-frame-front/           # メインワークツリー（developブランチ）
 ├── worktrees/              # worktreeディレクトリ（.gitignoreで除外）
 │   ├── feature-A/          # feature-Aブランチのworktree
@@ -322,7 +322,7 @@ git worktree prune
 
 ### worktreeを追加できない
 
-```
+```text
 fatal: 'branch-name' is already checked out at '/path/to/repo'
 ```
 
