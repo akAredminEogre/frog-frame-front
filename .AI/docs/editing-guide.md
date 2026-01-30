@@ -39,6 +39,69 @@
    ```
 2. [ ] **ADR参照時の正式名確認**: ADRを参照する場合は `docs/adr/` 配下の実際のファイル名を使用（推測しない）
 3. [ ] **相対パスの検証**: 作成したリンクが正しく解決されることを確認
+4. [ ] **ディレクトリ/ファイル名の混同防止**: ディレクトリ名を単一ファイルとして参照していないか確認
+
+### ディレクトリ/ファイル名混同の例
+
+```markdown
+❌ 誤り: ディレクトリ名をファイルとして参照
+[common-rule.md](../coding-standards/tests/common-rule.md)
+# common-rule.md は存在しない。common-rule/ はディレクトリ
+
+✅ 正しい: ディレクトリ内の具体的なファイルを参照
+[mock-file-placement.md](../coding-standards/tests/common-rule/mock-file-placement.md)
+# または index.md を参照
+[common-rule/index.md](../coding-standards/tests/common-rule/index.md)
+```
+
+**確認方法**:
+```bash
+# ディレクトリかファイルかを確認
+ls -la docs/coding-standards/tests/common-rule
+# ディレクトリの場合、内部のファイル一覧を確認
+ls docs/coding-standards/tests/common-rule/
+```
+
+### 相対パスの階層数検証
+
+深い階層のドキュメントから他のファイルを参照する場合、`../` の数を数え間違えやすい。
+
+**検証手順**:
+
+1. ソースファイルのディレクトリに移動
+2. 相対パスが正しく解決されるか `ls` で確認
+
+```bash
+# 例: docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md から
+# docs/coding-standards/tests/common-rule/mock-file-placement.md を参照する場合
+
+cd docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase
+ls ../../../../../../coding-standards/tests/common-rule/mock-file-placement.md
+# ファイルが表示されればOK、エラーなら階層数が間違っている
+```
+
+**よくある間違い**:
+- ファイル名を1階層としてカウントしてしまう（ファイルは階層に含まない）
+- 目視で `../` を数える際のオフバイワンエラー
+
+**正しいカウント方法**:
+```
+docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md
+     ↑      ↑   ↑           ↑        ↑    ↑                       ← ファイルは含まない
+     1      2   3           4        5    6  ← docs/ 配下のディレクトリ数 = ../ の数
+```
+
+**注意**: `docs/` 自体はカウントに含めない。上記の例では `docs/` に到達するために 6 個の `../` が必要。
+`docs-rules/`（リポジトリルート）に到達するには 7 個の `../` が必要。
+
+**検証例**:
+```bash
+# UpdateRewriteRuleUseCase/ ディレクトリから docs/ に到達
+cd docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase
+pwd  # → .../docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase
+cd ../../../../../../  # 6個の ../
+pwd  # → .../docs  ← docs/ に到達
+```
 
 ## 設計ドキュメント変更時の追加チェック
 
