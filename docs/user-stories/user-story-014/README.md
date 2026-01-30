@@ -1,4 +1,4 @@
-# User Story 012: UpdateRewriteRuleUseCaseのADR-001適合リファクタリング
+# User Story 014: UpdateRewriteRuleUseCaseのADR-001適合リファクタリング
 
 ## ストーリー
 
