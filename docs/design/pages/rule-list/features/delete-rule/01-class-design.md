@@ -344,3 +344,11 @@ ADR-002 に従い、メッセージングには @webext-core/proxy-service を�
 ## 影響ドキュメント
 
 - `docs/design/pages/rule-list/ui.md` - ゴミ箱アイコン列の追加
+
+## 関連ドキュメント
+
+- [ルールトグル機能](../toggle-rule-active/) - 先行機能(同様のアーキテクチャ)
+- [ADR-001: Clean Architecture with Presenter Pattern](../../../../../adr/001-clean-architecture-with-presenter-pattern.md)
+- [ADR-002: メッセージングに @webext-core を採用](../../../../../adr/002-messaging-with-webext-core.md)
+- [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../../adr/003-unified-db-access-via-messaging.md)
+- [ADR-005: ReactコールバックをPresenterに注入するためのFactoryパターン採用](../../../../../adr/005-factory-pattern-for-react-callback-injection.md)
