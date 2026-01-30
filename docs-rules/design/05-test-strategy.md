@@ -13,7 +13,7 @@
 
 テスト戦略書は **ソースコードのディレクトリ構造をミラーリング** して配置する（Clean Architecture準拠）。
 
-```
+```text
 docs/design/src/
 └── [layer]/
     └── [category]/
@@ -31,7 +31,7 @@ docs/design/src/
 
 ### ディレクトリ構造
 
-```
+```text
 docs/design/src/
 ├── enterprise-business-rules/
 │   └── entities/
