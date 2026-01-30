@@ -25,7 +25,7 @@
 
 ### 移行前のメッセージフロー
 
-```text
+```
 ┌─────────────────────────────────────────────────────────────────┐
 │ Flow 1: getAllRules (Content Script → Background)               │
 ├─────────────────────────────────────────────────────────────────┤
@@ -63,7 +63,7 @@
 
 ### 移行後のメッセージフロー
 
-```text
+```
 ┌─────────────────────────────────────────────────────────────────┐
 │ Flow 1: getAllRules (Content Script → Background)               │
 ├─────────────────────────────────────────────────────────────────┤
@@ -86,7 +86,7 @@
 
 ### Clean Architecture 層構成
 
-```text
+```
 ┌─────────────────────────────────────────────────────────────────┐
 │ interface-adapters                                              │
 ├─────────────────────────────────────────────────────────────────┤
@@ -120,7 +120,7 @@
 
 ### ディレクトリ構成
 
-```text
+```
 src/
 ├── interface-adapters/
 │   ├── ports/
@@ -164,7 +164,7 @@ src/
 
 送信と受信は同時に移行する必要があるため、フロー単位で移行する。
 
-```text
+```
 ❌ 受信だけ先に移行 → 送信側が旧方式のまま → 動作しない
 ❌ 送信だけ先に移行 → 受信側が旧方式のまま → 動作しない
 ✅ 1つのフローを送受信セットで移行
@@ -258,7 +258,7 @@ src/
 
 #### 依存関係（現在・移管前）
 
-```text
+```
 entrypoints/background.ts
   └─ infrastructure/browser/background/runtime/onMessageReceived.ts
        └─ infrastructure/browser/handlers/background/applyAllRulesHandler.ts
@@ -276,7 +276,7 @@ entrypoints/content.ts
 
 #### 移管後のディレクトリ構成
 
-```text
+```
 src/frameworks-and-drivers/messaging/
 ├── background/
 │   └── onMessageReceived.ts        （移動元から名称維持、サブディレクトリで分離）

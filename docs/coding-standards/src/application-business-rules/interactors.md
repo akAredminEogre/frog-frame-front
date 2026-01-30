@@ -73,7 +73,6 @@ await this.tabsGateway.reloadMatchingTabs(rule);
 2. **呼び出し順序**: `present`が`presentError`より**先に**呼ばれること
 
 順序検証のコード例：
-
 ```typescript
 // invocationCallOrderを使用して呼び出し順序を検証
 const presentOrder = (mockPresenter.present as ReturnType<typeof vi.fn>).mock.invocationCallOrder[0];
