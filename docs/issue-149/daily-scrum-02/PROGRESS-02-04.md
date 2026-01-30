@@ -53,7 +53,7 @@ kk=02
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-see-and-commit-review-comment-then-code-again.md -->
 <!-- ユーザーが使うコマンド frog-frame-front/.clinerules/02-workflow-automation/03-daily-scrum-finishes/workflow-daily-scrum-pass-review.md -->
 下記のエラーが出ました
-```text
+```
 $ make wt-init BRANCH=issue-131-feat-numbering-shell
 Initializing worktree for development: issue-131-feat-numbering-shell...
 Cleaning up duplicate frontend-src-root directory...

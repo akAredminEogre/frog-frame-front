@@ -13,6 +13,3 @@ host-frontend-root/
 
 # Git worktrees (duplicate copies of project)
 worktrees/
-
-# Qiita article uses Qiita-specific syntax (bash:WSL, typescript:filename.ts, etc.)
-docs/20250110-qiita.md
