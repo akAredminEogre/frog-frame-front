@@ -8,7 +8,7 @@
    - `CLAUDE.md` の「Common Development Commands」セクション
    - `make/help/main.mk` の該当カテゴリ（`make help` で表示される内容）
 4. **npm scriptsを実行する場合**: `docker compose exec frontend npm run <script>` 形式を使用すること。直接 `npx` や `npm run` を使用しない（ローカル環境でのパッケージインストール不要、一貫性の維持）
-   - **例外**: `docs/`ディレクトリにアクセスが必要なコマンド（例: `lintmd`）は、Dockerコンテナ内に`docs/`がマウントされていないため、ホストから直接実行する
+   - **docs/へのアクセスが必要な場合**: `docker compose run --rm -v "$(pwd):/repo" -w /repo frontend npx <command>` 形式でリポジトリルートをマウントして実行する（例: `lintmd`）
 
 ## オブジェクト指向ルール（ThoughtWorksアンソロジー）
 
