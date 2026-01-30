@@ -9,7 +9,6 @@ markdown-link-checkによる自動リンク検証を活用して、ドキュメ�
 - `docs/`配下のすべてのMarkdownファイル
 - `docs-rules/`配下のすべてのMarkdownファイル  
 - `docs/design/`配下のすべての設計ドキュメント
-- プロジェクトルートの`README.md`等
 
 ## 自動リンクチェック
 
