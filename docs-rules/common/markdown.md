@@ -7,10 +7,11 @@ Markdownのコードブロックに言語指定を行うこと:
 - TypeScript/JavaScriptコード: `typescript`, `javascript`, `tsx`, `jsx`
 - CSSコード: `css`, `scss`
 - シェルコマンド: `bash`, `sh`
-- ディレクトリ構造: `text`
+- ディレクトリ構造: `text`, `plaintext`
 - 設定ファイル: `json`, `yaml`
 - Markdownテンプレート: `markdown`
-- その他プレーンテキスト: `text`
+- Dockerファイル: `dockerfile`
+- その他プレーンテキスト: `text`, `plaintext`
 
 > **Lint化**: これらの言語識別子はmarkdownlintの`MD040`ルール + `allowed_languages`設定で検証可能。詳細は[Lint化について](#lint化について)を参照。
 
@@ -51,20 +52,8 @@ Markdownのコードブロックに言語指定を行うこと:
 | 見出しレベルの階層スキップ禁止 | MD001 (heading-increment) | ✅ 検証可能 |
 | スコープの明示 | - | PRレビューで確認 |
 
-### markdownlint設定例
+### markdownlint設定
 
-```json
-{
-  "MD040": {
-    "allowed_languages": [
-      "typescript", "javascript", "tsx", "jsx",
-      "css", "scss",
-      "bash", "sh",
-      "json", "yaml",
-      "markdown", "text"
-    ]
-  }
-}
-```
+実際の設定は [`.markdownlint.jsonc`](../../.markdownlint.jsonc) を参照してください。
 
 → [User Story 011: markdownlint導入](../../user-stories/user-story-011/README.md)
