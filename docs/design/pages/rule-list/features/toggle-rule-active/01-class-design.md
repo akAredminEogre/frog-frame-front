@@ -280,3 +280,10 @@ ADR-001 に従い、ドメインエンティティの値を用いた判定・計
 ## クラス図（PlantUML）
 
 [04-class-diagram.puml](./04-class-diagram.puml) を参照
+
+## 関連ドキュメント
+
+- [ユーザーストーリー](../../../../../user-stories/completed/user-story-001/)
+- [ADR-001: Clean Architecture with Presenter Pattern](../../../../../adr/001-clean-architecture-with-presenter-pattern.md)
+- [ADR-002: メッセージングに @webext-core を採用](../../../../../adr/002-messaging-with-webext-core.md)
+- [ADR-003: DB アクセスを messaging 経由に統一し DTO を使用](../../../../../adr/003-unified-db-access-via-messaging.md)
