@@ -38,7 +38,7 @@ getRewriteRuleProxyService()で取得したサービスのdeleteRule()が正し�
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/
 ├── delete/
 │   └── normal-cases.test.ts       # ProxyService連携（2ケース）
@@ -57,7 +57,7 @@ tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/
 
 ### モックファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/messaging/RewriteRuleMessagingService/mocks/
 └── createMockRewriteRuleProxyService.ts    # モックファクトリ（既存、deleteRule()はモック済み）
 ```

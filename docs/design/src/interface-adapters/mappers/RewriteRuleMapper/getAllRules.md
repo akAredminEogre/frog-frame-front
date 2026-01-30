@@ -31,7 +31,7 @@ MessagingPortからDTOを取得し、Entityに変換できることを確認。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/interface-adapters/mappers/RewriteRuleMapper/getAllRules/
 └── normal-cases.test.ts       # MessagingPort連携（3ケース）
 ```
@@ -50,7 +50,7 @@ tests/unit/interface-adapters/mappers/RewriteRuleMapper/getAllRules/
 
 インターフェース配下にモックファクトリを配置（複数テストで共有）:
 
-```
+```text
 tests/unit/interface-adapters/ports/IRewriteRuleMessagingPort/mocks/
 └── createMockRewriteRuleMessagingPort.ts    # モックファクトリ
 ```

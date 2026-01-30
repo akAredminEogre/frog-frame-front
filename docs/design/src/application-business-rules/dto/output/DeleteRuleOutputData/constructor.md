@@ -38,7 +38,7 @@ deletedRuleIdがreadonlyとして保持されることを確認。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/application-business-rules/dto/output/DeleteRuleOutputData/constructor/
 └── normal-cases.test.ts       # プロパティ設定確認（配列ベース、2ケース）
 ```

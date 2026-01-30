@@ -55,7 +55,7 @@ WAI-ARIA属性の正しい設定を確認。
 
 ## テストファイル構成
 
-```
+```text
 tests/unit/frameworks-and-drivers/ui/components/atoms/ToggleSwitch/
 ├── test-helpers.tsx          # 共通テストヘルパー（ToggleSwitchTestHelper）
 ├── rendering.test.tsx        # レンダリング（4ケース）
