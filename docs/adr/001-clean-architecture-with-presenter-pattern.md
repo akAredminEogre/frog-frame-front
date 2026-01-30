@@ -22,7 +22,7 @@
 
 ### 1. ディレクトリ構造: Clean Architecture 4層の正式名称を使用
 
-```
+```text
 src/
 ├── enterprise-business-rules/   ← 第1層: Enterprise Business Rules (Entities)
 ├── application-business-rules/  ← 第2層: Application Business Rules (Use Cases)
@@ -38,7 +38,7 @@ src/
 - Controller → Input Port ← Interactor (implements)
 - Interactor → Output Port ← Presenter (implements)
 
-```
+```text
 【制御の流れ（実線矢印）】
 
 ┌──────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌───────────┐
@@ -88,7 +88,7 @@ src/
 
 ### 4. 詳細ディレクトリ構造
 
-```
+```text
 src/
 ├── enterprise-business-rules/                   ← 第1層: Enterprise Business Rules
 │   ├── entities/                               ← Entity
@@ -152,7 +152,7 @@ src/
 
 ### 5. 依存関係ルール
 
-```
+```text
 内側（安定）                                            外側（不安定）
 ───────────────────────────────────────────────────────────────────────→
 
@@ -182,7 +182,7 @@ src/
 
 #### 実装パターン
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │ enterprise-business-rules (第1層)                                │
 │                                                                 │
@@ -216,7 +216,7 @@ src/
 
 #### 制御の流れ
 
-```
+```text
 【正常系】
 View → Controller → Interactor → Presenter.present(OutputData) → View
 
