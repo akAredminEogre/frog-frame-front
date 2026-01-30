@@ -154,15 +154,13 @@ make testall      # Both unit and E2E tests
 # Code quality checks
 make check        # Run compile, knip, tsr, and lint checks
 make sortimports  # Sort imports in all files
-make lintmd       # Run markdownlint for Markdown files
-make lintmdfix    # Run markdownlint with auto-fix
+make lintmd       # Run markdownlint for Markdown files (runs on host, not in Docker)
+make lintmdfix    # Run markdownlint with auto-fix (runs on host, not in Docker)
 docker compose exec frontend npm run compile        # TypeScript compilation check
 docker compose exec frontend npm run lint           # Run ESLint
 docker compose exec frontend npm run lint:fix       # Auto-fix ESLint issues
 docker compose exec frontend npm run stylelint      # Run stylelint for CSS files
 docker compose exec frontend npm run stylelint:fix  # Auto-fix stylelint issues
-docker compose exec frontend npm run lint:md        # Run markdownlint
-docker compose exec frontend npm run lint:md:fix    # Auto-fix markdownlint issues
 
 # Unused code detection and cleanup
 docker compose exec frontend npm run unused:complete    # Remove unused code
