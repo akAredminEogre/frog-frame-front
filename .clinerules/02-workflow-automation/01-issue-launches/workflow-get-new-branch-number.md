@@ -1,5 +1,5 @@
 workflow-get-new-branch-number
-```cline-instructions
+````cline-instructions
 issue番号の採番ロジック：
 
 以下のスクリプトを実行して新しいissue番号を取得する：
@@ -20,4 +20,4 @@ nnn=$(scripts/.clinerules/get-new-issue-number.sh)
 出力形式：
 - 3桁の番号を標準出力に出力（例: "087", "001", "123"）
 - 変数 `nnn` に格納して後続処理で使用する
-```
+````

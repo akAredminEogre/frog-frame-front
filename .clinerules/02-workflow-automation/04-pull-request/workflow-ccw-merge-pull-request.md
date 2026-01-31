@@ -3,7 +3,7 @@ workflow-ccw-merge-pull-request
 Claude Code Web版のプルリクエストマージワークフローです。
 ghコマンドが使用できないため、一部の作業は手動で行う必要があります。
 
-```cline-instructions
+````cline-instructions
 ## Claude Code Web PRマージワークフロー
 
 ### 1. Issue番号の取得
@@ -67,4 +67,4 @@ https://github.com/akAredminEogre/frog-frame-front/pulls
 ### 注意
 - ターミナル版Claude Codeでは `/workflow-merge-pull-request` を使用してください
 ```
-```
+````
