@@ -26,7 +26,7 @@ ADR・設計ドキュメントと現状の実装との乖離を洗い出し、�
 
 ### Step 1: ドキュメント一覧の取得
 
-```
+```text
 docs/adr/*.md
 docs/design/**/*.md
 docs/coding-standards/**/*.md
