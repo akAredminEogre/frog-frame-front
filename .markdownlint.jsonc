@@ -23,7 +23,8 @@
       "markdown",
       "text",
       "dockerfile",
-      "plaintext"
+      "plaintext",
+      "cline-instructions"
     ],
     "language_only": false
   }

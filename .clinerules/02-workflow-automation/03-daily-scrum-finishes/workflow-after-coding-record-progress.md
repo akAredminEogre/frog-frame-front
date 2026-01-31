@@ -4,7 +4,7 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 その中で別のworkflowに従うと指示されてる場合は、その手順も検索・確認して再帰的にチャットスレッドに表示してください
 手順全体表示はあなたの確認のために行うものなので、開発者の指示・操作を待たずその表示した手順に従って実行してください
 
-```cline-instructions
+````cline-instructions
 nnn=$(scripts/.clinerules/get-issue-number.sh)
 kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナンバーの最大数+1)
 作業ありがとうございました。今回の作業を
@@ -23,4 +23,4 @@ cp docs/issue-000/daily-scrum-00/DAILY_SCRUM-.md docs/issue-nnn/daily-scrum-kk/D
 の出力結果に基づき、
 workflow-record-progress に従って、docs/issue-nnn/daily-scrum-kk/PROGRESS-kk-ii.mdを作成してください。
 
-```
+````

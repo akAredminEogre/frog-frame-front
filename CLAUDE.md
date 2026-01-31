@@ -154,9 +154,9 @@ make testall      # Both unit and E2E tests
 # Code quality checks
 make check        # Run compile, knip, tsr, and lint checks
 make sortimports  # Sort imports in all files
-make lintmd       # Run markdownlint (targets: docs/, docs-rules/, .claude/, *.md; runs on host)
-make lintmdfix    # Run markdownlint with --fix (targets: docs/, docs-rules/, .claude/, *.md; runs on host)
-make checklinks   # Check for broken links (targets: docs/, docs-rules/, .claude/; external URLs excluded; runs on host)
+make lintmd       # Run markdownlint (targets: docs/, docs-rules/, .claude/, .clinerules/, *.md; runs on host)
+make lintmdfix    # Run markdownlint with --fix (targets: docs/, docs-rules/, .claude/, .clinerules/, *.md; runs on host)
+make checklinks   # Check for broken links (targets: docs/, docs-rules/, .claude/, .clinerules/; external URLs excluded; runs on host)
 docker compose exec frontend npm run compile        # TypeScript compilation check
 docker compose exec frontend npm run lint           # Run ESLint
 docker compose exec frontend npm run lint:fix       # Auto-fix ESLint issues
