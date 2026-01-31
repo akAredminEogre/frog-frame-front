@@ -156,7 +156,7 @@ make check        # Run compile, knip, tsr, and lint checks
 make sortimports  # Sort imports in all files
 make lintmd       # Run markdownlint (targets: docs/, docs-rules/, .claude/, *.md; runs on host)
 make lintmdfix    # Run markdownlint with --fix (targets: docs/, docs-rules/, .claude/, *.md; runs on host)
-make checklinks   # Check for broken links in Markdown files (uses .markdown-link-check.json config, external URLs excluded; runs on host, not in Docker)
+make checklinks   # Check for broken links (targets: docs/, docs-rules/, .claude/; external URLs excluded; runs on host)
 docker compose exec frontend npm run compile        # TypeScript compilation check
 docker compose exec frontend npm run lint           # Run ESLint
 docker compose exec frontend npm run lint:fix       # Auto-fix ESLint issues
