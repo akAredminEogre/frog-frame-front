@@ -39,7 +39,7 @@ lintmdfix:
 
 checklinks:
 	@echo "Checking markdown links..."
-	@find docs docs-rules -name '*.md' \
+	@find docs docs-rules .claude -name '*.md' \
 		-not -path 'docs/user-stories/completed/*' \
 		-not -path 'docs/issues/completed/*' \
 		-print0 | xargs -0 -P 4 -n 10 npx markdown-link-check -q -c .markdown-link-check.json

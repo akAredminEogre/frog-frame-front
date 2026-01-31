@@ -62,7 +62,7 @@ markdownlintを導入することで、これらを自動検証可能にする�
 - [ ] `.AI/` ディレクトリをmarkdownlint対象に追加・違反修正
 - [ ] `.AI/` ディレクトリをchecklinks対象に追加・違反修正
 - [x] `.claude/` ディレクトリをmarkdownlint対象に追加・違反修正
-- [ ] `.claude/` ディレクトリをchecklinks対象に追加・違反修正
+- [x] `.claude/` ディレクトリをchecklinks対象に追加・違反修正
 - [ ] `.clinerules/` ディレクトリをmarkdownlint対象に追加・違反修正
 - [ ] `.clinerules/` ディレクトリをchecklinks対象に追加・違反修正
 
