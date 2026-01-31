@@ -154,8 +154,8 @@ make testall      # Both unit and E2E tests
 # Code quality checks
 make check        # Run compile, knip, tsr, and lint checks
 make sortimports  # Sort imports in all files
-make lintmd       # Run markdownlint for Markdown files (runs on host, not in Docker)
-make lintmdfix    # Run markdownlint with auto-fix (runs on host, not in Docker)
+make lintmd       # Run markdownlint (targets: docs/, docs-rules/, .claude/, *.md; runs on host)
+make lintmdfix    # Run markdownlint with --fix (targets: docs/, docs-rules/, .claude/, *.md; runs on host)
 make checklinks   # Check for broken links in Markdown files (uses .markdown-link-check.json config, external URLs excluded; runs on host, not in Docker)
 docker compose exec frontend npm run compile        # TypeScript compilation check
 docker compose exec frontend npm run lint           # Run ESLint
