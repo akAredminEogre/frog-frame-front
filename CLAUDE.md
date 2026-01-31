@@ -157,6 +157,12 @@ make sortimports  # Sort imports in all files
 make lintmd       # Run markdownlint (targets: docs/, docs-rules/, .claude/, .clinerules/, *.md; runs on host)
 make lintmdfix    # Run markdownlint with --fix (targets: docs/, docs-rules/, .claude/, .clinerules/, *.md; runs on host)
 make checklinks   # Check for broken links (targets: docs/, docs-rules/, .claude/, .clinerules/; external URLs excluded; runs on host)
+
+# Markdown linting (npm scripts - alternative to make commands, run from host-frontend-root/frontend-src-root/)
+npm run lint:md       # Run markdownlint (same targets as make lintmd; uses .markdownlint-cli2.jsonc config)
+npm run lint:md:fix   # Run markdownlint with --fix (same targets as make lintmdfix)
+npm run check:links   # Check for broken links (same targets as make checklinks; uses .markdown-link-check.json config)
+
 docker compose exec frontend npm run compile        # TypeScript compilation check
 docker compose exec frontend npm run lint           # Run ESLint
 docker compose exec frontend npm run lint:fix       # Auto-fix ESLint issues
@@ -481,7 +487,7 @@ docs/
 
 このワークフローは以下を行います：
 - **pre-commitフックのセットアップ**（ESLint + import sorting）
-- Issue番号の採番
+- Issue番号の採番（内部的に `workflow-get-new-branch-number` を使用）
 - `docs/issue-nnn/` ディレクトリ作成
 - ブランチ作成（既にブランチが指定されている場合はスキップ）
 - PR作成リンクの表示
