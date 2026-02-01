@@ -63,8 +63,8 @@ markdownlintを導入することで、これらを自動検証可能にする�
 - [x] `.AI/` ディレクトリをchecklinks対象に追加・違反修正
 - [x] `.claude/` ディレクトリをmarkdownlint対象に追加・違反修正
 - [x] `.claude/` ディレクトリをchecklinks対象に追加・違反修正
-- [ ] `.clinerules/` ディレクトリをmarkdownlint対象に追加・違反修正
-- [ ] `.clinerules/` ディレクトリをchecklinks対象に追加・違反修正
+- [x] `.clinerules/` ディレクトリをmarkdownlint対象に追加・違反修正
+- [x] `.clinerules/` ディレクトリをchecklinks対象に追加・違反修正
 
 > **Note**: docs/配下には約1,200ファイル以上のMarkdownがあり、すべての違反を一度に修正することは現実的ではない。CIで警告として検出できるようにし、段階的に修正するアプローチを取る。
 
