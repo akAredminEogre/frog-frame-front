@@ -72,7 +72,7 @@ markdownlintを導入することで、これらを自動検証可能にする�
 
 ### Phase 3: CI統合(任意)
 
-- [ ] pre-commit フックへの追加検討
+- [x] pre-commit フックへの追加検討
 - [x] GitHub Actions への追加検討 (警告として実行)
 
 ### 対象外
