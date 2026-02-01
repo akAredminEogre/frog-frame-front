@@ -31,15 +31,15 @@ sortimports:
 
 lintmd:
 	@echo "Running markdownlint..."
-	@npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '.claude/**/*.md' '.clinerules/**/*.md' '.AI/**/*.md' '*.md'
+	@npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '.claude/**/*.md' '.clinerules/**/*.md' '.AI/**/*.md' '.github/**/*.md' '*.md'
 
 lintmdfix:
 	@echo "Running markdownlint with auto-fix..."
-	@npx markdownlint-cli2 --fix 'docs/**/*.md' 'docs-rules/**/*.md' '.claude/**/*.md' '.clinerules/**/*.md' '.AI/**/*.md' '*.md'
+	@npx markdownlint-cli2 --fix 'docs/**/*.md' 'docs-rules/**/*.md' '.claude/**/*.md' '.clinerules/**/*.md' '.AI/**/*.md' '.github/**/*.md' '*.md'
 
 checklinks:
 	@echo "Checking markdown links..."
-	@find docs docs-rules .claude .clinerules .AI -name '*.md' \
+	@find docs docs-rules .claude .clinerules .AI .github -name '*.md' \
 		-not -path 'docs/user-stories/completed/*' \
 		-not -path 'docs/issues/completed/*' \
 		-print0 | xargs -0 -P 4 -n 10 npx markdown-link-check -q -c .markdown-link-check.json
