@@ -11,3 +11,8 @@ pre-commit:
       glob: "host-frontend-root/frontend-src-root/**/*.css"
       run: "npm exec --prefix host-frontend-root/frontend-src-root -- stylelint --config host-frontend-root/frontend-src-root/stylelint.config.js --fix {staged_files}"
       stage_fixed: true
+    markdownlint:
+      glob: "**/*.md"
+      exclude: "node_modules/**|.git/**|.output/**|dist/**|host-frontend-root/**|worktrees/**|docs/user-stories/completed/**|docs/issues/completed/**"
+      run: "npm exec --prefix host-frontend-root/frontend-src-root -- markdownlint-cli2 --fix {staged_files}"
+      stage_fixed: true

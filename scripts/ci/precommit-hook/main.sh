@@ -57,7 +57,7 @@ readonly EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@
 if grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Pre-commit hook already patched."
     echo "Pre-commit hook setup complete!"
-    echo "The hook will run ESLint with import sorting on staged TypeScript/JavaScript files."
+    echo "The hook will run ESLint, stylelint, and markdownlint on staged files."
     exit 0
 fi
 
@@ -106,4 +106,4 @@ remove_file_with_warning "${BACKUP_FILE}"
 
 echo "Pre-commit hook patched successfully!"
 echo "Pre-commit hook setup complete!"
-echo "The hook will run ESLint with import sorting on staged TypeScript/JavaScript files."
+echo "The hook will run ESLint, stylelint, and markdownlint on staged files."
