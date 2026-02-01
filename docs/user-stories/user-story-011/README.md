@@ -59,8 +59,8 @@ markdownlintを導入することで、これらを自動検証可能にする�
 
 以下のディレクトリはmarkdownlint/checklinksの対象外となっている。段階的に対象に追加し、違反を修正する。
 
-- [ ] `.AI/` ディレクトリをmarkdownlint対象に追加・違反修正
-- [ ] `.AI/` ディレクトリをchecklinks対象に追加・違反修正
+- [x] `.AI/` ディレクトリをmarkdownlint対象に追加・違反修正
+- [x] `.AI/` ディレクトリをchecklinks対象に追加・違反修正
 - [x] `.claude/` ディレクトリをmarkdownlint対象に追加・違反修正
 - [x] `.claude/` ディレクトリをchecklinks対象に追加・違反修正
 - [ ] `.clinerules/` ディレクトリをmarkdownlint対象に追加・違反修正
