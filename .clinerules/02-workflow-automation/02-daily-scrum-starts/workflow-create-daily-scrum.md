@@ -1,6 +1,6 @@
 frog-frame-front/.clinerules/02-workflow-automation/02-daily-scrum-starts/workflow-create-daily-scrum.md
 
-```cline-instructions
+````cline-instructions
 nnn=$(scripts/.clinerules/get-issue-number.sh)
 kk=(docs/issue-nnn/daily-scrum-mm(mは任意の数字)のディレクトリナンバーの最大数+1)
 スクラムkk回目の作業を計画を立ててもらいます。
@@ -20,4 +20,4 @@ mkdir -p docs/issue-nnn/daily-scrum-kk/
     - の手順を **指示を待たずに自動的に** 実行する
   - ## 相談事項セクションに記入がある場合
   　- チャットスレッドに記入がある旨表示し、本ワークフローを終了する
-```
+````

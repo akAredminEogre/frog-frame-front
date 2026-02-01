@@ -1,5 +1,5 @@
 workflow-ccw-session-start branch-suffix=
-```cline-instructions
+````cline-instructions
 ## Claude Code Web セッション開始ワークフロー
 
 このワークフローは、Claude Code Webで新しいセッションを開始する際に実行します。
@@ -61,4 +61,4 @@ https://github.com/akAredminEogre/frog-frame-front/compare/develop...<ブラン�
 - このワークフローはClaude Code Web専用です
 - ターミナル版Claude Codeでは `/workflow-create-branch` を使用してください
 - ブランチ名は必ず `claude/` で始めてください（Claude Code Webの制約）
-```
+````
