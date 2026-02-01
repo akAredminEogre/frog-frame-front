@@ -154,9 +154,9 @@ make testall      # Both unit and E2E tests
 # Code quality checks
 make check        # Run compile, knip, tsr, and lint checks
 make sortimports  # Sort imports in all files
-make lintmd       # Run markdownlint (targets: docs/, docs-rules/, .claude/, .clinerules/, *.md; runs on host)
-make lintmdfix    # Run markdownlint with --fix (targets: docs/, docs-rules/, .claude/, .clinerules/, *.md; runs on host)
-make checklinks   # Check for broken links (targets: docs/, docs-rules/, .claude/, .clinerules/; external URLs excluded; runs on host)
+make lintmd       # Run markdownlint (targets: docs/, docs-rules/, .claude/, .clinerules/, .AI/, *.md; runs on host)
+make lintmdfix    # Run markdownlint with --fix (targets: docs/, docs-rules/, .claude/, .clinerules/, .AI/, *.md; runs on host)
+make checklinks   # Check for broken links (targets: docs/, docs-rules/, .claude/, .clinerules/, .AI/; external URLs excluded; runs on host)
 
 # Markdown linting (npm scripts - alternative to make commands, run from host-frontend-root/frontend-src-root/)
 npm run lint:md       # Run markdownlint (same targets as make lintmd; uses .markdownlint-cli2.jsonc config)
