@@ -85,7 +85,7 @@ ls ../../../../../../coding-standards/tests/common-rule/mock-file-placement.md
 - 目視で `../` を数える際のオフバイワンエラー
 
 **正しいカウント方法**:
-```
+```text
 docs/design/src/application/usecases/rule/UpdateRewriteRuleUseCase/execute.md
      ↑      ↑   ↑           ↑        ↑    ↑                       ← ファイルは含まない
      1      2   3           4        5    6  ← docs/ 配下のディレクトリ数 = ../ の数
