@@ -32,7 +32,8 @@ resolve_precommit_hook_path() {
 
     # Handle absolute paths (Unix /, Windows C:/ D:\, UNC // or \\) and relative paths
     # Check for: Unix absolute (/), Windows drive letter ([A-Za-z]:), or UNC path (// or \\)
-    if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]] || [[ "${PRE_COMMIT_HOOK_REL}" =~ ^[A-Za-z]: ]] || [[ "${PRE_COMMIT_HOOK_REL}" == \\\\* ]]; then
+    # Note: Use regex =~ for UNC path check to avoid escaping ambiguity in glob patterns
+    if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]] || [[ "${PRE_COMMIT_HOOK_REL}" =~ ^[A-Za-z]: ]] || [[ "${PRE_COMMIT_HOOK_REL}" =~ ^\\\\ ]]; then
         echo "${PRE_COMMIT_HOOK_REL}"
     else
         echo "${REPO_ROOT}/${PRE_COMMIT_HOOK_REL}"
