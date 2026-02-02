@@ -53,7 +53,9 @@ readonly REPO_ROOT
 
 # Use git rev-parse --git-path to support worktrees and custom core.hooksPath
 # This dynamically resolves the actual hook location instead of assuming .git/hooks/
-readonly PRE_COMMIT_HOOK="$(git -C "${SCRIPT_DIR}" rev-parse --git-path hooks/pre-commit)"
+# Note: Run from REPO_ROOT context and convert to absolute path to handle relative paths correctly
+PRE_COMMIT_HOOK_REL="$(cd "${REPO_ROOT}" && git rev-parse --git-path hooks/pre-commit)"
+readonly PRE_COMMIT_HOOK="${REPO_ROOT}/${PRE_COMMIT_HOOK_REL}"
 
 # Fast check: if pre-commit hook is executable AND already patched, exit immediately
 # Note: Use -x to also verify execute permission, ensuring the hook can actually run
