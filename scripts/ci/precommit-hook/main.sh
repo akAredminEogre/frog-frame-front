@@ -18,6 +18,13 @@ if [ ! -f "${SCRIPT_DIR}/constants.sh" ]; then
     exit 1
 fi
 source "${SCRIPT_DIR}/constants.sh"
+
+# Validate EXPECTED_LEFTHOOK_PATH is not empty (prevents false positive in grep -Fq "")
+if [ -z "${EXPECTED_LEFTHOOK_PATH:-}" ]; then
+    echo "Error: EXPECTED_LEFTHOOK_PATH is empty or not set in constants.sh"
+    exit 1
+fi
+
 source "${SCRIPT_DIR}/helper.sh"
 source "${SCRIPT_DIR}/awk-helper.sh"
 source "${SCRIPT_DIR}/npm-helper.sh"
@@ -30,9 +37,9 @@ readonly REPO_ROOT
 readonly FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
 # Use git rev-parse --git-path to support worktrees and custom core.hooksPath
 PRE_COMMIT_HOOK_REL="$(git rev-parse --git-path hooks/pre-commit)"
-# Handle absolute paths (Unix /, Windows C:/ D:\, UNC //) and relative paths
-# Check for: Unix absolute (/), Windows drive letter ([A-Za-z]:), or UNC path (//)
-if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]] || [[ "${PRE_COMMIT_HOOK_REL}" =~ ^[A-Za-z]: ]]; then
+# Handle absolute paths (Unix /, Windows C:/ D:\, UNC // or \\) and relative paths
+# Check for: Unix absolute (/), Windows drive letter ([A-Za-z]:), or UNC path (// or \\)
+if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]] || [[ "${PRE_COMMIT_HOOK_REL}" =~ ^[A-Za-z]: ]] || [[ "${PRE_COMMIT_HOOK_REL}" == \\\\* ]]; then
     readonly PRE_COMMIT_HOOK="${PRE_COMMIT_HOOK_REL}"
 else
     readonly PRE_COMMIT_HOOK="${REPO_ROOT}/${PRE_COMMIT_HOOK_REL}"
