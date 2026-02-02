@@ -70,7 +70,7 @@ require_file "${PRE_COMMIT_HOOK}" "Pre-commit hook not found. lefthook install m
 if grep -Fq "${EXPECTED_LEFTHOOK_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Pre-commit hook already patched."
     echo "Pre-commit hook setup complete!"
-    echo "The hook will run ESLint, stylelint, and markdownlint on staged files."
+    echo "The hook will run ESLint (with simple-import-sort), stylelint, and markdownlint on staged files."
     exit 0
 fi
 
@@ -119,4 +119,4 @@ remove_file_with_warning "${BACKUP_FILE}"
 
 echo "Pre-commit hook patched successfully!"
 echo "Pre-commit hook setup complete!"
-echo "The hook will run ESLint, stylelint, and markdownlint on staged files."
+echo "The hook will run ESLint (with simple-import-sort), stylelint, and markdownlint on staged files."
