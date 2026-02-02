@@ -35,6 +35,22 @@ SessionStart hookはセッション開始時に毎回実行されるため、起
 
 参照: `.claude/settings.json`
 
+### クロスプラットフォーム互換性
+
+実行権限が保持されない環境（ZIP展開、Windows等）を考慮する。
+
+**推奨パターン:**
+
+1. **settings.jsonでのスクリプト実行**: `bash` 経由で実行する
+   - 直接実行: `"$CLAUDE_PROJECT_DIR/script.sh"` → 権限エラーの可能性
+   - bash経由: `bash "$CLAUDE_PROJECT_DIR/script.sh"` → 安全
+
+2. **フルセットアップスクリプトの呼び出し**: `exec bash` を使用する
+
+3. **fast-checkでの実行権限確認**: `-x` フラグでhookが実行可能かも確認する
+   - `-f` のみ: ファイル存在のみ確認（不十分）
+   - `-x`: 存在 + 実行権限を確認（推奨）
+
 ### 設定ファイルの配置
 
 | ファイル | スコープ | Git管理 |
