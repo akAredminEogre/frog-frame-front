@@ -31,7 +31,15 @@ SessionStart hookはセッション開始時に毎回実行されるため、起
 
 **settings.json での記述:**
 
-コマンド全体をダブルクォートで囲む（JSON内でエスケープが必要）。
+スクリプトパス部分をシェルクォートで囲み、JSON文字列内では`\"`でエスケープする。
+
+**正しい形式:**
+
+`"command": "bash \"$CLAUDE_PROJECT_DIR/path/to/script.sh\""`
+
+- 外側の`"`はJSON文字列の区切り
+- `\"`はシェルに渡されるクォート（スペース含むパス対応）
+- `bash`コマンド自体はクォート不要
 
 参照: `.claude/settings.json`
 
