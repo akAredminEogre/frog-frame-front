@@ -31,8 +31,9 @@ fi
 readonly REPO_ROOT
 readonly PRE_COMMIT_HOOK="${REPO_ROOT}/.git/hooks/pre-commit"
 
-# Fast check: if pre-commit hook exists AND is already patched, exit immediately
-if [ -f "${PRE_COMMIT_HOOK}" ] && grep -Fq "${EXPECTED_LEFTHOOK_PATH}" "${PRE_COMMIT_HOOK}" 2>/dev/null; then
+# Fast check: if pre-commit hook is executable AND already patched, exit immediately
+# Note: Use -x to also verify execute permission, ensuring the hook can actually run
+if [ -x "${PRE_COMMIT_HOOK}" ] && grep -Fq "${EXPECTED_LEFTHOOK_PATH}" "${PRE_COMMIT_HOOK}" 2>/dev/null; then
     # Already configured - exit silently for fast startup
     exit 0
 fi
