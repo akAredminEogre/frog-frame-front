@@ -51,4 +51,12 @@ if [ ! -f "${MAIN_SCRIPT}" ]; then
 fi
 
 echo "Pre-commit hook not configured. Running setup..."
+
+# Change to repo root before calling main.sh to ensure git commands work correctly
+# main.sh uses git rev-parse which depends on cwd being inside the repository
+cd "${REPO_ROOT}" || {
+    echo "Error: Failed to change to repository root: ${REPO_ROOT}"
+    exit 1
+}
+
 exec bash "${MAIN_SCRIPT}"
