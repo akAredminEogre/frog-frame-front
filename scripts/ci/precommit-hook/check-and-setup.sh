@@ -28,6 +28,14 @@ if ! command -v git >/dev/null 2>&1; then
     exit 0
 fi
 
+# Check if npx is available (required by main.sh for lefthook installation)
+# Skip gracefully to maintain consistent behavior with git check
+if ! command -v npx >/dev/null 2>&1; then
+    echo "Warning: npx command not found. Skipping pre-commit hook setup."
+    echo "Install Node.js to enable pre-commit hooks."
+    exit 0
+fi
+
 # Get repository root (use -C to ensure we find repo based on script location, not cwd)
 if ! REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel 2>/dev/null)"; then
     echo "Warning: Not in a git repository. Skipping pre-commit hook setup."
