@@ -1,42 +1,42 @@
-# Shell Script Coding Guidelines
+# シェルスクリプト コーディングガイドライン
 
-## Error Output Convention
+## エラー出力の規約
 
-All error messages MUST be written to stderr (`>&2`), not stdout.
+すべてのエラーメッセージは stdout ではなく stderr（`>&2`）に出力すること。
 
-### Rule
+### ルール
 
 ```bash
-# CORRECT: Error messages go to stderr
+# 正しい: エラーメッセージを stderr に出力
 echo "Error: Something went wrong" >&2
 
-# INCORRECT: Error messages to stdout
+# 誤り: エラーメッセージを stdout に出力
 echo "Error: Something went wrong"
 ```
 
-### Rationale
+### 理由
 
-1. **Separation of concerns**: stdout is for normal output, stderr is for errors
-2. **Pipeline safety**: Errors won't pollute pipelines (`cmd1 | cmd2`)
-3. **Logging**: stderr can be redirected separately for error logs
-4. **Script composition**: Calling scripts can distinguish success output from errors
+1. **関心の分離**: stdout は通常出力、stderr はエラー用
+2. **パイプラインの安全性**: エラーがパイプラインを汚染しない（`cmd1 | cmd2`）
+3. **ログ取得**: stderr を別途リダイレクトしてエラーログを取得可能
+4. **スクリプト合成**: 呼び出し元が成功出力とエラーを区別できる
 
-### Examples
+### 例
 
 ```bash
-# File existence check
+# ファイル存在確認
 if [ ! -f "${CONFIG_FILE}" ]; then
     echo "Error: Config file not found at ${CONFIG_FILE}" >&2
     exit 1
 fi
 
-# Command execution failure
+# コマンド実行失敗
 if ! some_command; then
     echo "Error: some_command failed" >&2
     exit 1
 fi
 
-# Multi-line error messages
+# 複数行のエラーメッセージ
 if [ ! -d "${REQUIRED_DIR}" ]; then
     echo "Error: Required directory not found: ${REQUIRED_DIR}" >&2
     echo "Please run setup script first." >&2
@@ -44,68 +44,69 @@ if [ ! -d "${REQUIRED_DIR}" ]; then
 fi
 ```
 
-### Warning Messages
+### 警告メッセージ
 
-Warning messages (non-fatal) should also go to stderr:
+警告メッセージ（致命的でない）も stderr に出力する:
 
 ```bash
 echo "Warning: Optional dependency not found. Some features disabled." >&2
 ```
 
-### Info Messages
+### 情報メッセージ
 
-Informational messages that are part of normal operation go to stdout:
+通常動作の一部である情報メッセージは stdout に出力する:
 
 ```bash
 echo "Installing dependencies..."
 echo "Setup complete!"
 ```
 
-## npm Check Logic Consistency
+## npm チェックロジックの一貫性
 
-When checking for Node.js tooling availability, ensure consistency between:
-- npx availability
-- npm availability
-- Node.js version requirements
+Node.js ツールの利用可否をチェックする際は、以下の一貫性を確保すること:
 
-### Rule
+- npx の利用可否
+- npm の利用可否
+- Node.js のバージョン要件
 
-If a script requires npm operations (like `npm install`), check for both `npx` AND `npm`:
+### ルール
+
+スクリプトが npm 操作（`npm install` など）を必要とする場合、`npx` と `npm` の両方をチェックする:
 
 ```bash
-# Check if npx is available
+# npx が利用可能か確認
 if ! command -v npx >/dev/null 2>&1; then
     echo "Warning: npx command not found. Skipping setup." >&2
     exit 0
 fi
 
-# Check if npm is available (required for npm install)
+# npm が利用可能か確認（npm install に必要）
 if ! command -v npm >/dev/null 2>&1; then
     echo "Warning: npm command not found. Skipping setup." >&2
     exit 0
 fi
 ```
 
-### Rationale
+### 理由
 
-- npx and npm are typically installed together, but not guaranteed
-- Some environments may have npx without npm (e.g., custom tooling)
-- Scripts that run `npm install` will fail cryptically if npm is missing
+- npx と npm は通常一緒にインストールされるが、保証されていない
+- 一部の環境では npm なしで npx のみが存在する場合がある（カスタムツーリングなど）
+- `npm install` を実行するスクリプトは、npm が存在しない場合に不明確なエラーで失敗する
 
-## Exit Code Convention
+## 終了コードの規約
 
-| Exit Code | Meaning |
-|-----------|---------|
-| 0 | Success |
-| 0 | Graceful skip (optional dependency not met) |
-| 1 | Error (with stderr message) |
+| 終了コード | 意味 |
+|-----------|------|
+| 0 | 成功 |
+| 0 | 正常スキップ（オプション依存が満たされない） |
+| 1 | エラー（stderr メッセージ付き） |
 
-### Graceful Skip Example
+### 正常スキップの例
 
 ```bash
-# Git not installed - skip gracefully
+# Git がインストールされていない場合 - 正常にスキップ
 if ! command -v git >/dev/null 2>&1; then
     echo "Warning: git not found. Skipping pre-commit hook setup." >&2
-    exit 0  # Not an error, just skipping
+    exit 0  # エラーではなく、単にスキップ
 fi
 ```
