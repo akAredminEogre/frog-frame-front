@@ -13,22 +13,22 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Check constants.sh exists before sourcing (consistent with check-and-setup.sh)
 if [ ! -f "${SCRIPT_DIR}/constants.sh" ]; then
-    echo "Error: constants.sh not found at ${SCRIPT_DIR}/constants.sh"
-    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    echo "Error: constants.sh not found at ${SCRIPT_DIR}/constants.sh" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
     exit 1
 fi
 source "${SCRIPT_DIR}/constants.sh"
 
 # Validate EXPECTED_LEFTHOOK_PATH is not empty (prevents false positive in grep -Fq "")
 if [ -z "${EXPECTED_LEFTHOOK_PATH:-}" ]; then
-    echo "Error: EXPECTED_LEFTHOOK_PATH is empty or not set in constants.sh"
+    echo "Error: EXPECTED_LEFTHOOK_PATH is empty or not set in constants.sh" >&2
     exit 1
 fi
 
 # Check path-helper.sh exists before sourcing (required for resolve_precommit_hook_path)
 if [ ! -f "${SCRIPT_DIR}/path-helper.sh" ]; then
-    echo "Error: path-helper.sh not found at ${SCRIPT_DIR}/path-helper.sh"
-    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    echo "Error: path-helper.sh not found at ${SCRIPT_DIR}/path-helper.sh" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
     exit 1
 fi
 source "${SCRIPT_DIR}/path-helper.sh"
@@ -66,7 +66,7 @@ fi
 # Note: --prefix specifies where to find node_modules, cd to REPO_ROOT ensures lefthook.yml is found
 echo "Installing lefthook..."
 if ! (cd "${REPO_ROOT}" && npx --prefix "${FRONTEND_DIR}" lefthook install); then
-    echo "Error: Failed to install lefthook."
+    echo "Error: Failed to install lefthook." >&2
     exit 1
 fi
 
@@ -88,14 +88,14 @@ echo "Patching pre-commit hook for custom node_modules path..."
 # Create backup before modification
 BACKUP_FILE="${PRE_COMMIT_HOOK}.backup"
 if ! cp "${PRE_COMMIT_HOOK}" "${BACKUP_FILE}"; then
-    echo "Error: Failed to create backup. Check disk space and permissions."
+    echo "Error: Failed to create backup. Check disk space and permissions." >&2
     exit 1
 fi
 
 # Use awk for cleaner multi-line insertion (portable across GNU/BSD)
 # Insert custom path check after the @evilmartians/lefthook execution line
 TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
-    echo "Error: Failed to create temporary file. Set TMPDIR if /tmp is unavailable."
+    echo "Error: Failed to create temporary file. Set TMPDIR if /tmp is unavailable." >&2
     rm -f "${BACKUP_FILE}"
     exit 1
 }
@@ -105,7 +105,7 @@ TEMP_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_patch.XXXXXX") || {
 trap 'rm -f "${TEMP_FILE}"' EXIT
 
 MATCH_STATUS_FILE=$(mktemp "${TMPDIR:-/tmp}/precommit_status.XXXXXX") || {
-    echo "Error: Failed to create status file. Set TMPDIR if /tmp is unavailable."
+    echo "Error: Failed to create status file. Set TMPDIR if /tmp is unavailable." >&2
     rm -f "${BACKUP_FILE}"
     exit 1
 }
