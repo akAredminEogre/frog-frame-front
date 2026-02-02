@@ -22,9 +22,13 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 readonly REPO_ROOT
 readonly FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
 # Use git rev-parse --git-path to support worktrees and custom core.hooksPath
-# Convert to absolute path for consistent behavior across working directories
 PRE_COMMIT_HOOK_REL="$(git rev-parse --git-path hooks/pre-commit)"
-readonly PRE_COMMIT_HOOK="${REPO_ROOT}/${PRE_COMMIT_HOOK_REL}"
+# Handle both absolute paths (from core.hooksPath) and relative paths
+if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]]; then
+    readonly PRE_COMMIT_HOOK="${PRE_COMMIT_HOOK_REL}"
+else
+    readonly PRE_COMMIT_HOOK="${REPO_ROOT}/${PRE_COMMIT_HOOK_REL}"
+fi
 
 echo "Setting up pre-commit hook for Claude Code Web..."
 
