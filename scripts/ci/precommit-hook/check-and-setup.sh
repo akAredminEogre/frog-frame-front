@@ -16,8 +16,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Source shared constants (with explicit existence check for clearer error messages)
 readonly CONSTANTS_FILE="${SCRIPT_DIR}/constants.sh"
 if [ ! -f "${CONSTANTS_FILE}" ]; then
-    echo "Error: constants.sh not found at ${CONSTANTS_FILE}"
-    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    echo "Error: constants.sh not found at ${CONSTANTS_FILE}" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
     exit 1
 fi
 source "${CONSTANTS_FILE}"
@@ -25,15 +25,15 @@ source "${CONSTANTS_FILE}"
 # Source path helper for resolve_precommit_hook_path function
 readonly PATH_HELPER_FILE="${SCRIPT_DIR}/path-helper.sh"
 if [ ! -f "${PATH_HELPER_FILE}" ]; then
-    echo "Error: path-helper.sh not found at ${PATH_HELPER_FILE}"
-    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    echo "Error: path-helper.sh not found at ${PATH_HELPER_FILE}" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
     exit 1
 fi
 source "${PATH_HELPER_FILE}"
 
 # Validate EXPECTED_LEFTHOOK_PATH is not empty (prevents false positive in grep -Fq "")
 if [ -z "${EXPECTED_LEFTHOOK_PATH:-}" ]; then
-    echo "Error: EXPECTED_LEFTHOOK_PATH is empty or not set in constants.sh"
+    echo "Error: EXPECTED_LEFTHOOK_PATH is empty or not set in constants.sh" >&2
     exit 1
 fi
 
@@ -87,8 +87,8 @@ readonly MAIN_SCRIPT="${SCRIPT_DIR}/main.sh"
 # Note: Use -f (exists) instead of -x (executable) for compatibility with
 # environments where permissions aren't preserved (ZIP extraction, Windows, etc.)
 if [ ! -f "${MAIN_SCRIPT}" ]; then
-    echo "Error: main.sh not found at ${MAIN_SCRIPT}"
-    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    echo "Error: main.sh not found at ${MAIN_SCRIPT}" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
     exit 1
 fi
 
@@ -97,7 +97,7 @@ echo "Pre-commit hook not configured. Running setup..."
 # Change to repo root before calling main.sh to ensure git commands work correctly
 # main.sh uses git rev-parse which depends on cwd being inside the repository
 cd "${REPO_ROOT}" || {
-    echo "Error: Failed to change to repository root: ${REPO_ROOT}"
+    echo "Error: Failed to change to repository root: ${REPO_ROOT}" >&2
     exit 1
 }
 
