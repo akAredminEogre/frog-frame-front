@@ -124,7 +124,7 @@ All commands should be run from the repository root unless otherwise specified.
 ```bash
 make init-config    # Apply Git configuration
 make init-dev       # Build containers, install dependencies, generate .wxt/tsconfig.json, and start dev server
-make init-hooks     # Install Git hooks (pre-commit: ESLint, stylelint, markdownlint)
+make init-hooks     # Install Git hooks (pre-commit: ESLint with import sorting, stylelint, markdownlint)
 ```
 
 ### Development (After Initial Setup)
@@ -486,7 +486,7 @@ docs/
 ```
 
 このワークフローは以下を行います：
-- **pre-commitフックのセットアップ**（ESLint + stylelint + markdownlint）
+- **pre-commitフックのセットアップ**（ESLint + simple-import-sort + stylelint + markdownlint）
 - Issue番号の採番（内部的に `workflow-get-new-branch-number` を使用）
 - `docs/issue-nnn/` ディレクトリ作成
 - ブランチ作成（既にブランチが指定されている場合はスキップ）
