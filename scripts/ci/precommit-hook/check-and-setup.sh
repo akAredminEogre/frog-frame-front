@@ -22,8 +22,8 @@ if ! command -v git >/dev/null 2>&1; then
     exit 0
 fi
 
-# Get repository root
-if ! REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+# Get repository root (use -C to ensure we find repo based on script location, not cwd)
+if ! REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel 2>/dev/null)"; then
     echo "Warning: Not in a git repository. Skipping pre-commit hook setup."
     exit 0
 fi
@@ -40,12 +40,14 @@ fi
 # Not configured or needs patching - run full setup
 readonly MAIN_SCRIPT="${SCRIPT_DIR}/main.sh"
 
-# Validate main.sh exists and is executable before execution
-if [ ! -x "${MAIN_SCRIPT}" ]; then
-    echo "Error: main.sh not found or not executable at ${MAIN_SCRIPT}"
+# Validate main.sh exists before execution
+# Note: Use -f (exists) instead of -x (executable) for compatibility with
+# environments where permissions aren't preserved (ZIP extraction, Windows, etc.)
+if [ ! -f "${MAIN_SCRIPT}" ]; then
+    echo "Error: main.sh not found at ${MAIN_SCRIPT}"
     echo "Please verify the scripts/ci/precommit-hook directory is intact."
     exit 1
 fi
 
 echo "Pre-commit hook not configured. Running setup..."
-exec "${MAIN_SCRIPT}"
+exec bash "${MAIN_SCRIPT}"
