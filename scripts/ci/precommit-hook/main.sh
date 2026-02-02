@@ -101,6 +101,8 @@ require_file "${PRE_COMMIT_HOOK}" "Pre-commit hook not found. lefthook install m
 # Note: EXPECTED_LEFTHOOK_PATH is defined in constants.sh
 if grep -Fq "${EXPECTED_LEFTHOOK_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Pre-commit hook already patched."
+    # Ensure execute permission even when already patched (may be lost in ZIP extraction, Windows, etc.)
+    chmod +x "${PRE_COMMIT_HOOK}" 2>/dev/null || true
     echo "Pre-commit hook setup complete!"
     echo "The hook will run ESLint (with simple-import-sort), stylelint, and markdownlint on staged files."
     exit 0
