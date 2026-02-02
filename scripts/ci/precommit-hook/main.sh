@@ -25,6 +25,7 @@ if [ -z "${EXPECTED_LEFTHOOK_PATH:-}" ]; then
     exit 1
 fi
 
+source "${SCRIPT_DIR}/path-helper.sh"
 source "${SCRIPT_DIR}/helper.sh"
 source "${SCRIPT_DIR}/awk-helper.sh"
 source "${SCRIPT_DIR}/npm-helper.sh"
@@ -35,16 +36,9 @@ require_command git "Please install Git."
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 readonly REPO_ROOT
 readonly FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
-# Use git rev-parse --git-path to support worktrees and custom core.hooksPath
-# Note: Use -C to ensure consistent behavior regardless of current working directory
-PRE_COMMIT_HOOK_REL="$(git -C "${REPO_ROOT}" rev-parse --git-path hooks/pre-commit)"
-# Handle absolute paths (Unix /, Windows C:/ D:\, UNC // or \\) and relative paths
-# Check for: Unix absolute (/), Windows drive letter ([A-Za-z]:), or UNC path (// or \\)
-if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]] || [[ "${PRE_COMMIT_HOOK_REL}" =~ ^[A-Za-z]: ]] || [[ "${PRE_COMMIT_HOOK_REL}" == \\\\* ]]; then
-    readonly PRE_COMMIT_HOOK="${PRE_COMMIT_HOOK_REL}"
-else
-    readonly PRE_COMMIT_HOOK="${REPO_ROOT}/${PRE_COMMIT_HOOK_REL}"
-fi
+# Resolve pre-commit hook path (supports worktrees, custom core.hooksPath, various path formats)
+PRE_COMMIT_HOOK="$(resolve_precommit_hook_path "${REPO_ROOT}")" || exit 1
+readonly PRE_COMMIT_HOOK
 
 echo "Setting up pre-commit hook for Claude Code Web..."
 
