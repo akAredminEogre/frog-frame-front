@@ -13,8 +13,14 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Source shared constants
-source "${SCRIPT_DIR}/constants.sh"
+# Source shared constants (with explicit existence check for clearer error messages)
+readonly CONSTANTS_FILE="${SCRIPT_DIR}/constants.sh"
+if [ ! -f "${CONSTANTS_FILE}" ]; then
+    echo "Error: constants.sh not found at ${CONSTANTS_FILE}"
+    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    exit 1
+fi
+source "${CONSTANTS_FILE}"
 
 # Check if git is available
 if ! command -v git >/dev/null 2>&1; then
