@@ -8,13 +8,15 @@
 # Usage: run_awk_patch <awk_script> <input_file> <output_file> <status_file>
 # Example: run_awk_patch "./patch-hook.awk" "/path/to/hook" "/tmp/out" "/tmp/status"
 # Note: Exits on awk failure or pattern mismatch
+# Note: Requires EXPECTED_LEFTHOOK_PATH to be set (from constants.sh)
 run_awk_patch() {
     local AWK_SCRIPT="$1"
     local INPUT_FILE="$2"
     local OUTPUT_FILE="$3"
     local STATUS_FILE="$4"
 
-    if ! awk -v STATUS_FILE="${STATUS_FILE}" -f "${AWK_SCRIPT}" "${INPUT_FILE}" > "${OUTPUT_FILE}"; then
+    # Pass EXPECTED_LEFTHOOK_PATH to awk to maintain single source of truth
+    if ! awk -v STATUS_FILE="${STATUS_FILE}" -v LEFTHOOK_PATH="${EXPECTED_LEFTHOOK_PATH}" -f "${AWK_SCRIPT}" "${INPUT_FILE}" > "${OUTPUT_FILE}"; then
         echo "Error: awk processing failed. Check input file exists and output location is writable." >&2
         exit 1
     fi
