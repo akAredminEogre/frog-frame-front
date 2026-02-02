@@ -13,6 +13,9 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Source shared constants
+source "${SCRIPT_DIR}/constants.sh"
+
 # Get repository root
 if ! REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"; then
     echo "Warning: Not in a git repository. Skipping pre-commit hook setup."
@@ -22,16 +25,21 @@ fi
 readonly REPO_ROOT
 readonly PRE_COMMIT_HOOK="${REPO_ROOT}/.git/hooks/pre-commit"
 
-# Expected patch path for verification (must match main.sh)
-# Note: This is a literal grep pattern; shell variables are NOT expanded
-readonly EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
-
 # Fast check: if pre-commit hook exists AND is already patched, exit immediately
-if [ -f "${PRE_COMMIT_HOOK}" ] && grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}" 2>/dev/null; then
+if [ -f "${PRE_COMMIT_HOOK}" ] && grep -Fq "${EXPECTED_LEFTHOOK_PATH}" "${PRE_COMMIT_HOOK}" 2>/dev/null; then
     # Already configured - exit silently for fast startup
     exit 0
 fi
 
 # Not configured or needs patching - run full setup
+readonly MAIN_SCRIPT="${SCRIPT_DIR}/main.sh"
+
+# Validate main.sh exists before execution
+if [ ! -f "${MAIN_SCRIPT}" ]; then
+    echo "Error: Setup script not found at ${MAIN_SCRIPT}"
+    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    exit 1
+fi
+
 echo "Pre-commit hook not configured. Running setup..."
-exec "${SCRIPT_DIR}/main.sh"
+exec "${MAIN_SCRIPT}"

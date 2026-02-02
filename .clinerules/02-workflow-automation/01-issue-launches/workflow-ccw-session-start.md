@@ -21,9 +21,12 @@ workflow-ccw-session-start branch-suffix=
 ※ node_modulesがない場合は自動的にnpm installも実行されます
 
 **フックの内容**:
-- ESLint（コード品質チェック）
-- simple-import-sort（import文の自動整列）
-- 対象ファイル: ステージされた `.ts`, `.tsx`, `.js`, `.jsx` ファイル
+- ESLint + simple-import-sort（コード品質チェック + import文の自動整列）
+  - 対象: `.ts`, `.tsx`, `.js`, `.jsx` ファイル
+- stylelint（CSSコード品質チェック）
+  - 対象: `.css` ファイル
+- markdownlint（Markdownフォーマットチェック）
+  - 対象: `.md` ファイル
 
 **トラブルシューティング**:
 - エラー時はバックアップファイル `.git/hooks/pre-commit.backup` から復元可能
