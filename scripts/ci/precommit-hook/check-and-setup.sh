@@ -34,9 +34,9 @@ fi
 # Not configured or needs patching - run full setup
 readonly MAIN_SCRIPT="${SCRIPT_DIR}/main.sh"
 
-# Validate main.sh exists before execution
-if [ ! -f "${MAIN_SCRIPT}" ]; then
-    echo "Error: Setup script not found at ${MAIN_SCRIPT}"
+# Validate main.sh exists and is executable before execution
+if [ ! -x "${MAIN_SCRIPT}" ]; then
+    echo "Error: main.sh not found or not executable at ${MAIN_SCRIPT}"
     echo "Please verify the scripts/ci/precommit-hook directory is intact."
     exit 1
 fi
