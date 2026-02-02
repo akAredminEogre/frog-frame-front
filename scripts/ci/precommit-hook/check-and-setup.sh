@@ -22,6 +22,15 @@ if [ ! -f "${CONSTANTS_FILE}" ]; then
 fi
 source "${CONSTANTS_FILE}"
 
+# Source path helper for resolve_precommit_hook_path function
+readonly PATH_HELPER_FILE="${SCRIPT_DIR}/path-helper.sh"
+if [ ! -f "${PATH_HELPER_FILE}" ]; then
+    echo "Error: path-helper.sh not found at ${PATH_HELPER_FILE}"
+    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    exit 1
+fi
+source "${PATH_HELPER_FILE}"
+
 # Validate EXPECTED_LEFTHOOK_PATH is not empty (prevents false positive in grep -Fq "")
 if [ -z "${EXPECTED_LEFTHOOK_PATH:-}" ]; then
     echo "Error: EXPECTED_LEFTHOOK_PATH is empty or not set in constants.sh"
@@ -57,16 +66,12 @@ fi
 
 readonly REPO_ROOT
 
-# Use git rev-parse --git-path to support worktrees and custom core.hooksPath
-# This dynamically resolves the actual hook location instead of assuming .git/hooks/
-PRE_COMMIT_HOOK_REL="$(cd "${REPO_ROOT}" && git rev-parse --git-path hooks/pre-commit)"
-# Handle absolute paths (Unix /, Windows C:/ D:\, UNC // or \\) and relative paths
-# Check for: Unix absolute (/), Windows drive letter ([A-Za-z]:), or UNC path (// or \\)
-if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]] || [[ "${PRE_COMMIT_HOOK_REL}" =~ ^[A-Za-z]: ]] || [[ "${PRE_COMMIT_HOOK_REL}" == \\\\* ]]; then
-    readonly PRE_COMMIT_HOOK="${PRE_COMMIT_HOOK_REL}"
-else
-    readonly PRE_COMMIT_HOOK="${REPO_ROOT}/${PRE_COMMIT_HOOK_REL}"
-fi
+# Resolve pre-commit hook path (supports worktrees, custom core.hooksPath, various path formats)
+PRE_COMMIT_HOOK="$(resolve_precommit_hook_path "${REPO_ROOT}")" || {
+    echo "Warning: Failed to resolve pre-commit hook path. Skipping pre-commit hook setup."
+    exit 0
+}
+readonly PRE_COMMIT_HOOK
 
 # Fast check: if pre-commit hook is executable AND already patched, exit immediately
 # Note: Use -x to also verify execute permission, ensuring the hook can actually run
