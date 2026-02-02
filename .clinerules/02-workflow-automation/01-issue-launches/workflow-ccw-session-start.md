@@ -33,7 +33,9 @@ workflow-ccw-session-start branch-suffix=
   - 対象: `.md` ファイル
 
 **トラブルシューティング**:
-- エラー時はバックアップファイル `.git/hooks/pre-commit.backup` から復元可能
+- エラー時はバックアップファイルから復元可能（hookパスの末尾に`.backup`が付与される）
+  - 通常: `.git/hooks/pre-commit.backup`
+  - worktree/custom hooksPath: `git rev-parse --git-path hooks/pre-commit`で確認
 - パターンマッチエラーの場合は lefthook バージョンの互換性を確認
 
 ### Issue番号の採番

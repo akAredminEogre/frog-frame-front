@@ -23,8 +23,9 @@ readonly REPO_ROOT
 readonly FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
 # Use git rev-parse --git-path to support worktrees and custom core.hooksPath
 PRE_COMMIT_HOOK_REL="$(git rev-parse --git-path hooks/pre-commit)"
-# Handle both absolute paths (from core.hooksPath) and relative paths
-if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]]; then
+# Handle absolute paths (Unix /, Windows C:/ D:\, UNC //) and relative paths
+# Check for: Unix absolute (/), Windows drive letter ([A-Za-z]:), or UNC path (//)
+if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]] || [[ "${PRE_COMMIT_HOOK_REL}" =~ ^[A-Za-z]: ]]; then
     readonly PRE_COMMIT_HOOK="${PRE_COMMIT_HOOK_REL}"
 else
     readonly PRE_COMMIT_HOOK="${REPO_ROOT}/${PRE_COMMIT_HOOK_REL}"

@@ -54,8 +54,9 @@ readonly REPO_ROOT
 # Use git rev-parse --git-path to support worktrees and custom core.hooksPath
 # This dynamically resolves the actual hook location instead of assuming .git/hooks/
 PRE_COMMIT_HOOK_REL="$(cd "${REPO_ROOT}" && git rev-parse --git-path hooks/pre-commit)"
-# Handle both absolute paths (from core.hooksPath) and relative paths
-if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]]; then
+# Handle absolute paths (Unix /, Windows C:/ D:\, UNC //) and relative paths
+# Check for: Unix absolute (/), Windows drive letter ([A-Za-z]:), or UNC path (//)
+if [[ "${PRE_COMMIT_HOOK_REL}" = /* ]] || [[ "${PRE_COMMIT_HOOK_REL}" =~ ^[A-Za-z]: ]]; then
     readonly PRE_COMMIT_HOOK="${PRE_COMMIT_HOOK_REL}"
 else
     readonly PRE_COMMIT_HOOK="${REPO_ROOT}/${PRE_COMMIT_HOOK_REL}"
