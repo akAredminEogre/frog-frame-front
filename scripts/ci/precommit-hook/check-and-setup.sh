@@ -16,6 +16,12 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Source shared constants
 source "${SCRIPT_DIR}/constants.sh"
 
+# Check if git is available
+if ! command -v git >/dev/null 2>&1; then
+    echo "Warning: git command not found. Skipping pre-commit hook setup."
+    exit 0
+fi
+
 # Get repository root
 if ! REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"; then
     echo "Warning: Not in a git repository. Skipping pre-commit hook setup."
