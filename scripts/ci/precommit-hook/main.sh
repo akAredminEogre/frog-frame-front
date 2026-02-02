@@ -8,8 +8,9 @@
 
 set -e
 
-# Source helper functions
+# Source helper functions and constants
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${SCRIPT_DIR}/constants.sh"
 source "${SCRIPT_DIR}/helper.sh"
 source "${SCRIPT_DIR}/awk-helper.sh"
 source "${SCRIPT_DIR}/npm-helper.sh"
@@ -49,12 +50,9 @@ fi
 # Check pre-commit hook exists (early return pattern)
 require_file "${PRE_COMMIT_HOOK}" "Pre-commit hook not found. lefthook install may have failed."
 
-# Expected patch path for verification
-# Note: This is a literal grep pattern; shell variables ($dir, ${osArch}, etc.) are NOT expanded
-readonly EXPECTED_PATH='$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook'
-
 # Check if already patched (early return pattern)
-if grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"; then
+# Note: EXPECTED_LEFTHOOK_PATH is defined in constants.sh
+if grep -Fq "${EXPECTED_LEFTHOOK_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Pre-commit hook already patched."
     echo "Pre-commit hook setup complete!"
     echo "The hook will run ESLint, stylelint, and markdownlint on staged files."
@@ -97,7 +95,7 @@ run_awk_patch "${SCRIPT_DIR}/patch-hook.awk" "${PRE_COMMIT_HOOK}" "${TEMP_FILE}"
 run_or_restore "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" "Failed to apply patch." mv "${TEMP_FILE}" "${PRE_COMMIT_HOOK}"
 run_or_restore "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" "Failed to set execute permission." chmod +x "${PRE_COMMIT_HOOK}"
 # Verify patch was applied successfully with exact string match
-run_or_restore "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" "Patch verification failed." grep -Fq "${EXPECTED_PATH}" "${PRE_COMMIT_HOOK}"
+run_or_restore "${BACKUP_FILE}" "${PRE_COMMIT_HOOK}" "Patch verification failed." grep -Fq "${EXPECTED_LEFTHOOK_PATH}" "${PRE_COMMIT_HOOK}"
 
 # Clear trap and cleanup temp files on success
 trap - EXIT
