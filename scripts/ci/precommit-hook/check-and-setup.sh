@@ -36,6 +36,13 @@ if ! command -v npx >/dev/null 2>&1; then
     exit 0
 fi
 
+# Check if npm is available (required by main.sh for package installation)
+if ! command -v npm >/dev/null 2>&1; then
+    echo "Warning: npm command not found. Skipping pre-commit hook setup."
+    echo "Install Node.js to enable pre-commit hooks."
+    exit 0
+fi
+
 # Get repository root (use -C to ensure we find repo based on script location, not cwd)
 if ! REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel 2>/dev/null)"; then
     echo "Warning: Not in a git repository. Skipping pre-commit hook setup."
@@ -43,7 +50,10 @@ if ! REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel 2>/dev/null)"
 fi
 
 readonly REPO_ROOT
-readonly PRE_COMMIT_HOOK="${REPO_ROOT}/.git/hooks/pre-commit"
+
+# Use git rev-parse --git-path to support worktrees and custom core.hooksPath
+# This dynamically resolves the actual hook location instead of assuming .git/hooks/
+readonly PRE_COMMIT_HOOK="$(git -C "${SCRIPT_DIR}" rev-parse --git-path hooks/pre-commit)"
 
 # Fast check: if pre-commit hook is executable AND already patched, exit immediately
 # Note: Use -x to also verify execute permission, ensuring the hook can actually run
