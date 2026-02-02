@@ -72,6 +72,7 @@ readonly PRE_COMMIT_HOOK
 echo "Setting up pre-commit hook for Claude Code Web..."
 
 require_command npx "Please install Node.js and npm."
+require_command npm "Please install Node.js and npm."
 
 # Check if frontend directory exists (early return pattern)
 require_directory "${FRONTEND_DIR}" "Frontend directory not found at ${FRONTEND_DIR}"
