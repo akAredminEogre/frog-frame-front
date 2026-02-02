@@ -32,14 +32,37 @@ if [ ! -f "${SCRIPT_DIR}/path-helper.sh" ]; then
     exit 1
 fi
 source "${SCRIPT_DIR}/path-helper.sh"
+
+# Check helper.sh exists before sourcing
+if [ ! -f "${SCRIPT_DIR}/helper.sh" ]; then
+    echo "Error: helper.sh not found at ${SCRIPT_DIR}/helper.sh" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
+    exit 1
+fi
 source "${SCRIPT_DIR}/helper.sh"
+
+# Check awk-helper.sh exists before sourcing
+if [ ! -f "${SCRIPT_DIR}/awk-helper.sh" ]; then
+    echo "Error: awk-helper.sh not found at ${SCRIPT_DIR}/awk-helper.sh" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
+    exit 1
+fi
 source "${SCRIPT_DIR}/awk-helper.sh"
+
+# Check npm-helper.sh exists before sourcing
+if [ ! -f "${SCRIPT_DIR}/npm-helper.sh" ]; then
+    echo "Error: npm-helper.sh not found at ${SCRIPT_DIR}/npm-helper.sh" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
+    exit 1
+fi
 source "${SCRIPT_DIR}/npm-helper.sh"
 
 # Check required commands (early return pattern)
 require_command git "Please install Git."
 
-REPO_ROOT="$(git rev-parse --show-toplevel)"
+# Use git -C to ensure consistent behavior regardless of current working directory
+# This makes the script work correctly even when called from check-and-setup.sh
+REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel)"
 readonly REPO_ROOT
 readonly FRONTEND_DIR="${REPO_ROOT}/host-frontend-root/frontend-src-root"
 # Resolve pre-commit hook path (supports worktrees, custom core.hooksPath, various path formats)
