@@ -39,28 +39,28 @@ fi
 
 # Check if git is available
 if ! command -v git >/dev/null 2>&1; then
-    echo "Warning: git command not found. Skipping pre-commit hook setup."
+    echo "Warning: git command not found. Skipping pre-commit hook setup." >&2
     exit 0
 fi
 
 # Check if npx is available (required by main.sh for lefthook installation)
 # Skip gracefully to maintain consistent behavior with git check
 if ! command -v npx >/dev/null 2>&1; then
-    echo "Warning: npx command not found. Skipping pre-commit hook setup."
-    echo "Install Node.js to enable pre-commit hooks."
+    echo "Warning: npx command not found. Skipping pre-commit hook setup." >&2
+    echo "Install Node.js to enable pre-commit hooks." >&2
     exit 0
 fi
 
 # Check if npm is available (required by main.sh for package installation)
 if ! command -v npm >/dev/null 2>&1; then
-    echo "Warning: npm command not found. Skipping pre-commit hook setup."
-    echo "Install Node.js to enable pre-commit hooks."
+    echo "Warning: npm command not found. Skipping pre-commit hook setup." >&2
+    echo "Install Node.js to enable pre-commit hooks." >&2
     exit 0
 fi
 
 # Get repository root (use -C to ensure we find repo based on script location, not cwd)
 if ! REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel 2>/dev/null)"; then
-    echo "Warning: Not in a git repository. Skipping pre-commit hook setup."
+    echo "Warning: Not in a git repository. Skipping pre-commit hook setup." >&2
     exit 0
 fi
 
@@ -68,7 +68,7 @@ readonly REPO_ROOT
 
 # Resolve pre-commit hook path (supports worktrees, custom core.hooksPath, various path formats)
 PRE_COMMIT_HOOK="$(resolve_precommit_hook_path "${REPO_ROOT}")" || {
-    echo "Warning: Failed to resolve pre-commit hook path. Skipping pre-commit hook setup."
+    echo "Warning: Failed to resolve pre-commit hook path. Skipping pre-commit hook setup." >&2
     exit 0
 }
 readonly PRE_COMMIT_HOOK
