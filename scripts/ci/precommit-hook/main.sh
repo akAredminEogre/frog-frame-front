@@ -25,6 +25,12 @@ if [ -z "${EXPECTED_LEFTHOOK_PATH:-}" ]; then
     exit 1
 fi
 
+# Check path-helper.sh exists before sourcing (required for resolve_precommit_hook_path)
+if [ ! -f "${SCRIPT_DIR}/path-helper.sh" ]; then
+    echo "Error: path-helper.sh not found at ${SCRIPT_DIR}/path-helper.sh"
+    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    exit 1
+fi
 source "${SCRIPT_DIR}/path-helper.sh"
 source "${SCRIPT_DIR}/helper.sh"
 source "${SCRIPT_DIR}/awk-helper.sh"
