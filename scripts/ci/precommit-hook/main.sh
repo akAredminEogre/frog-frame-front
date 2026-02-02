@@ -10,6 +10,13 @@ set -e
 
 # Source helper functions and constants
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Check constants.sh exists before sourcing (consistent with check-and-setup.sh)
+if [ ! -f "${SCRIPT_DIR}/constants.sh" ]; then
+    echo "Error: constants.sh not found at ${SCRIPT_DIR}/constants.sh"
+    echo "Please verify the scripts/ci/precommit-hook directory is intact."
+    exit 1
+fi
 source "${SCRIPT_DIR}/constants.sh"
 source "${SCRIPT_DIR}/helper.sh"
 source "${SCRIPT_DIR}/awk-helper.sh"
