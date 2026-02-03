@@ -167,7 +167,7 @@ make wt-remove BRANCH=feature-x # worktree削除
 
 ### Entry Points
 
-All entry points in `src/entrypoints/`:
+All entry points in `host-frontend-root/frontend-src-root/src/entrypoints/`:
 
 - `background.ts` - Background service worker
 - `content.ts` - Content script
