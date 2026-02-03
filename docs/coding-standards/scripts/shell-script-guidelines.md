@@ -6,60 +6,25 @@
 
 ### ルール
 
-```bash
-# 正しい: エラーメッセージを stderr に出力
-echo "Error: Something went wrong" >&2
-
-# 誤り: エラーメッセージを stdout に出力
-echo "Error: Something went wrong"
-```
+- エラーメッセージの echo 文末尾に `>&2` を付与する
+- 警告メッセージも同様に stderr へ出力する
+- 情報メッセージ（正常動作の一部）のみ stdout へ出力する
 
 ### 理由
 
 1. **関心の分離**: stdout は通常出力、stderr はエラー用
-2. **パイプラインの安全性**: エラーがパイプラインを汚染しない（`cmd1 | cmd2`）
+2. **パイプラインの安全性**: エラーがパイプラインを汚染しない
 3. **ログ取得**: stderr を別途リダイレクトしてエラーログを取得可能
 4. **スクリプト合成**: 呼び出し元が成功出力とエラーを区別できる
 
-### 例
+### 適用シナリオ
 
-```bash
-# ファイル存在確認
-if [ ! -f "${CONFIG_FILE}" ]; then
-    echo "Error: Config file not found at ${CONFIG_FILE}" >&2
-    exit 1
-fi
+- ファイル存在確認の失敗時
+- コマンド実行失敗時
+- 必須依存の欠如時
+- 複数行のエラーメッセージ出力時
 
-# コマンド実行失敗
-if ! some_command; then
-    echo "Error: some_command failed" >&2
-    exit 1
-fi
-
-# 複数行のエラーメッセージ
-if [ ! -d "${REQUIRED_DIR}" ]; then
-    echo "Error: Required directory not found: ${REQUIRED_DIR}" >&2
-    echo "Please run setup script first." >&2
-    exit 1
-fi
-```
-
-### 警告メッセージ
-
-警告メッセージ（致命的でない）も stderr に出力する:
-
-```bash
-echo "Warning: Optional dependency not found. Some features disabled." >&2
-```
-
-### 情報メッセージ
-
-通常動作の一部である情報メッセージは stdout に出力する:
-
-```bash
-echo "Installing dependencies..."
-echo "Setup complete!"
-```
+参照実装: `scripts/ci/precommit-hook/helper.sh`、`scripts/ci/precommit-hook/main.sh`
 
 ## npm チェックロジックの一貫性
 
@@ -71,27 +36,15 @@ Node.js ツールの利用可否をチェックする際は、以下の一貫性
 
 ### ルール
 
-スクリプトが npm 操作（`npm install` など）を必要とする場合、`npx` と `npm` の両方をチェックする:
-
-```bash
-# npx が利用可能か確認
-if ! command -v npx >/dev/null 2>&1; then
-    echo "Warning: npx command not found. Skipping setup." >&2
-    exit 0
-fi
-
-# npm が利用可能か確認（npm install に必要）
-if ! command -v npm >/dev/null 2>&1; then
-    echo "Warning: npm command not found. Skipping setup." >&2
-    exit 0
-fi
-```
+スクリプトが npm 操作を必要とする場合、`npx` と `npm` の両方をチェックする。
 
 ### 理由
 
 - npx と npm は通常一緒にインストールされるが、保証されていない
 - 一部の環境では npm なしで npx のみが存在する場合がある（カスタムツーリングなど）
-- `npm install` を実行するスクリプトは、npm が存在しない場合に不明確なエラーで失敗する
+- npm install を実行するスクリプトは、npm が存在しない場合に不明確なエラーで失敗する
+
+参照実装: `scripts/ci/precommit-hook/check-and-setup.sh`（npx/npm 両方のチェック例）
 
 ## 終了コードの規約
 
@@ -102,12 +55,10 @@ fi
 
 **注**: 正常スキップは成功と同じ終了コード `0` を使用する。これはオプション機能の欠如がエラーではないことを示す。
 
-### 正常スキップの例
+### 適用シナリオ
 
-```bash
-# Git がインストールされていない場合 - 正常にスキップ
-if ! command -v git >/dev/null 2>&1; then
-    echo "Warning: git not found. Skipping pre-commit hook setup." >&2
-    exit 0  # エラーではなく、単にスキップ
-fi
-```
+- Git がインストールされていない場合 → 警告を stderr に出力し `exit 0`
+- オプション機能の依存が欠如 → 警告を stderr に出力し `exit 0`
+- 必須機能の失敗 → エラーを stderr に出力し `exit 1`
+
+参照実装: `scripts/ci/precommit-hook/check-and-setup.sh`（正常スキップパターン）
