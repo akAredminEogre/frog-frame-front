@@ -51,6 +51,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 → [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
+### CLAUDE.mdを編集する場合
+
+→ [.AI/docs/claude-md-editing-guide.md](.AI/docs/claude-md-editing-guide.md) を参照
+
+**重要**: README.mdとの重複を避けること。詳細はREADME.mdに記載し、CLAUDE.mdからは参照のみとする。
+
 ---
 
 ## Project Overview
@@ -74,34 +80,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Common Development Commands
 
-All commands should be run from the repository root unless otherwise specified.
+→ セットアップ手順・利用可能なコマンド一覧は [README.md](README.md) を参照
 
-### Initial Setup (First Time Only)
+### Claude Code固有の追加セットアップ
 
 ```bash
-make init-config    # Apply Git configuration
-make init-dev       # Build containers, install dependencies, generate .wxt/tsconfig.json, and start dev server
 make init-hooks     # Install Git hooks (pre-commit: ESLint with import sorting, stylelint, markdownlint)
 ```
 
-### Development (After Initial Setup)
-
-```bash
-make dev            # Start development server
-make down           # Stop Docker containers
-make storybook      # Start Storybook development server
-```
-
-### Testing and Linting
+### Testing and Linting（必須コマンド）
 
 ```bash
 make testlint       # REQUIRED before completing any task (comprehensive checks)
-make testcheck      # Quick check (tests with warnings)
-make unit           # Unit tests only
-make e2e            # E2E tests only
-make check          # Run compile, knip, tsr, and lint checks
-make lintmd         # Run markdownlint
-make checklinks     # Check for broken links
 ```
 
 ### Critical Pre-Completion Check
