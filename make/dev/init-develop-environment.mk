@@ -37,4 +37,4 @@ init-hooks:
 	@echo "Git hooks installed successfully!"
 	@echo ""
 	@echo "The following hooks are now active:"
-	@echo "  - pre-commit: Runs sort:imports and lint on staged files"
+	@echo "  - pre-commit: ESLint with import sorting, stylelint, markdownlint"
