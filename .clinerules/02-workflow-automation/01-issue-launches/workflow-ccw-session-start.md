@@ -10,23 +10,32 @@ workflow-ccw-session-start branch-suffix=
 - Node.js / npm がインストールされていること
 - リポジトリのルートディレクトリで実行すること
 
-### pre-commitフックのセットアップ（初回セッションのみ）
-**注意**: このステップはフックが未設定の場合のみ必要です。既に設定済みの場合はスキップされます。
+### pre-commitフックのセットアップ（自動実行）
 
-セッション開始時に以下のスクリプトを実行して、pre-commitフックを有効化します：
+**通常は手動操作不要です。** SessionStart hookにより、セッション開始時に自動的にpre-commitフックがセットアップされます。
+
+- 既にセットアップ済みの場合は即座にスキップ（起動時間への影響なし）
+- 未セットアップの場合のみフルセットアップを実行
+- lefthookパッケージがない場合は自動的にnpm installも実行
+
+**手動実行（トラブルシューティング用）**:
+自動セットアップが失敗した場合のみ、以下のスクリプトを手動で実行してください：
 ```bash
 ./scripts/ci/precommit-hook/main.sh
 ```
-※ このスクリプトは複数回実行しても安全です（既存の設定を検出して終了します）
-※ node_modulesがない場合は自動的にnpm installも実行されます
 
 **フックの内容**:
-- ESLint（コード品質チェック）
-- simple-import-sort（import文の自動整列）
-- 対象ファイル: ステージされた `.ts`, `.tsx`, `.js`, `.jsx` ファイル
+- ESLint + simple-import-sort（コード品質チェック + import文の自動整列）
+  - 対象: `.ts`, `.tsx`, `.js`, `.jsx` ファイル
+- stylelint（CSSコード品質チェック）
+  - 対象: `.css` ファイル
+- markdownlint（Markdownフォーマットチェック）
+  - 対象: `.md` ファイル
 
 **トラブルシューティング**:
-- エラー時はバックアップファイル `.git/hooks/pre-commit.backup` から復元可能
+- エラー時はバックアップファイルから復元可能（hookパスの末尾に`.backup`が付与される）
+  - 通常: `.git/hooks/pre-commit.backup`
+  - worktree/custom hooksPath: `git rev-parse --git-path hooks/pre-commit`で確認
 - パターンマッチエラーの場合は lefthook バージョンの互換性を確認
 
 ### Issue番号の採番
