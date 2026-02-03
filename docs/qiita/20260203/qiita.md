@@ -1,191 +1,216 @@
-# Chrome拡張機能開発にClean Architectureを適用した話 〜WXT + TypeScript + Reactで実践〜
+# AIで逆にうまくいく ドキュメント駆動フラクタル型ウォーターフォール個人開発
+
+〜怠け者のClean Architecture（lazy man's clean architecture）〜
 
 ## はじめに
 
-Chrome拡張機能の開発において、「Clean Architectureなんて大袈裟では？」と思われる方も多いかもしれません。しかし、機能が増えてくると、background scriptとcontent scriptの間のメッセージング、Chrome APIへの依存、データ永続化など、複雑さは急速に増していきます。
+「Clean Architectureは現場では使えない」「妥協して取捨選択すべき」——ネット上ではこうした意見をよく目にします。
 
-本記事では、実際のChrome拡張機能開発プロジェクトでClean Architectureを適用した経験から得た知見を共有します。
+しかし、AI駆動開発の時代において、Clean Architectureと徹底したドキュメント整備の組み合わせは、むしろ**怠け者にこそ向いている**と実感しました。
 
-### 技術スタック
+本記事では、Chrome拡張機能の個人開発で実践した「ドキュメント駆動フラクタル型ウォーターフォール開発」の知見を共有します。
 
-- **WXT**: Chrome拡張機能フレームワーク（Viteベース）
-- **TypeScript**: 型安全性の確保
-- **React**: UI構築
-- **tsyringe**: DIコンテナ
-- **Vitest + Playwright**: テスト
+### キーワード: フラクタル
 
-## Clean Architectureの4層構造
+本記事で「フラクタル」という言葉を使うのは、**同じ構造が入れ子で繰り返される**からです。
 
-プロジェクトでは、Clean Architectureの正式なレイヤー名を採用しています。
+- 機能設計書 → クラス設計書 → シーケンス図 → テスト戦略書
+- 各ドキュメントが親に従属し、同じパターンで展開される
 
-```text
-src/
-├── enterprise-business-rules/   # 第1層: Entities, Value Objects
-├── application-business-rules/  # 第2層: Use Cases, Interactors
-├── interface-adapters/          # 第3層: Controllers, Presenters
-└── frameworks-and-drivers/      # 第4層: UI, Chrome API, DB
-```
+この自己相似的な構造が、AIによる自動化と相性が良いのです。
 
-### なぜ正式名称を使うのか
+## やったこと
 
-「domain」「application」「infrastructure」といった独自の命名も一般的ですが、正式名称を使うことで：
+### Clean Architectureの学習と徹底
 
-1. **新規参画者が理解しやすい**: Clean Architectureの文献と対応づけやすい
-2. **設計の意図が明確**: どのレイヤーがどの責務を持つか迷わない
-3. **AI駆動開発との相性**: LLMに設計意図を伝えやすい
+参考記事に従い、ある1機能について該当クラスを模倣し、スケルトン実装を行いました。
 
-## Chrome拡張機能特有の課題と解決策
+その際に以下を**徹底的に**作り込みました：
 
-### 課題1: background / content script間のメッセージング
+- ADR（アーキテクチャ決定記録）
+- クラス設計書
+- シーケンス図
+- ディレクトリ構成
+- 設計書やドキュメントのガイドライン
 
-Chrome拡張機能では、backgroundとcontent scriptが異なるコンテキストで動作します。直接の関数呼び出しはできず、メッセージングが必要です。
+**目安は「同じ指示をしなくて済む」レベル**です。あるいは「これに従って」と言えば済むレベルまで整備します。
 
-**解決策: Gateway Interfaceによる抽象化**
+### AIへの指示方法
 
-```text
-application-business-rules/ports/gateway/
-├── IRewriteRuleRepository.ts  # データアクセスのInterface
-└── ITabsGateway.ts            # タブ操作のInterface
+スケルトン実装をする際、AIに直接「この機能を実装して」とは指示しません。
 
-frameworks-and-drivers/persistence/
-└── ChromeRuntimeRewriteRuleRepository.ts  # メッセージング経由で実装
-```
+代わりに：
 
-Interactor（Use Case）はGateway Interfaceにのみ依存し、メッセージングの詳細を知りません。これにより、テスト時にはモックを注入でき、実装の変更も局所化されます。
+1. ドキュメントを作成する
+2. 「このアーキテクチャに従ってください」と指示する
 
-### 課題2: Chrome APIへの依存
+場合によっては、実装を先に行い、そこからドキュメントを生成させることもあります。
 
-`chrome.tabs.query()`や`chrome.runtime.sendMessage()`といったChrome APIは、テスト環境では動作しません。
+## 実際に作成したドキュメント体系
 
-**解決策: Frameworks & Drivers層への隔離**
+### ADR（Architecture Decision Record）
 
-```text
-ドメインロジック: enterprise-business-rules層で実装
-Chrome API呼び出し: frameworks-and-drivers層で実装
-```
+アーキテクチャ上の決定を記録するドキュメントです。
 
-例えば、「このルールがURLにマッチするか」という判定ロジックは第1層のEntityに実装し、「マッチするタブをリロードする」というChrome API呼び出しは第4層のGateway実装に記述します。
+- アーキテクチャ、ディレクトリ構成の決定
+- 外部APIやフレームワーク都合に振り回されるロジックの処理方法
 
-```text
-【ドメインロジックの配置例】
+ADRがあることで、AIは「なぜこの設計なのか」を理解した上で実装できます。
 
-enterprise-business-rules:
-  RewriteRule.matchesUrl(url): boolean  # ドメイン判定
+### 機能設計書（docs/design/）
 
-frameworks-and-drivers:
-  ChromeTabsGateway.reloadMatchingTabs(rule):
-    tabs = chrome.tabs.query()
-    for tab in tabs:
-      if rule.matchesUrl(tab.url):  # ドメインロジック呼び出し
-        chrome.tabs.reload(tab.id)
-```
+機能ごとに以下の構成で設計書を作成します：
 
-この分離により、ドメインロジックはChrome APIモックなしでテスト可能になります。
+| ファイル | 役割 | 従属関係 |
+|---------|------|----------|
+| 01-overall.md | 開発者が作りたい完成形を記述。フレームワークや実装詳細、現在の実装状況に振り回されない | - |
+| 02-class-design.md | 01-overall.mdを実現するクラス設計。ADRに完全従属。設計者はほぼレビューしない | 01-overall.md |
+| 03-sequence.puml | クラスのシーケンス図。02-class-design.mdを開発者がレビューするためのドキュメント。画像出力してレビュー | 02-class-design.md |
+| 04-directory-structure | 登場するクラスのディレクトリ構成。実装時に使用 | 02-class-design.md |
+| 05-integration-test-strategy | 機能単位の結合テスト戦略 | 01-overall.md |
 
-## Presenter付きパターンの採用
+**ポイント**: 02-class-design.mdはADRに完全従属するため、AIが自動生成しても設計者のレビュー負荷は最小限です。03-sequence.pumlを画像出力してレビューすることで、クラス設計のレビューを効率化しています。
 
-### 制御の流れ
+### ユーザーストーリー（docs/user-stories/）
 
-```text
-View → Controller → Interactor → Presenter → View
-```
+設計書（理想）と現在の実装（現実）のギャップを埋めるためのドキュメントです。
 
-Controllerはユーザー入力を受け取り、InteractorのInput Portを呼び出します。Interactorはビジネスロジックを実行し、結果をPresenterのOutput Portに渡します。Presenterは結果をViewに通知します。
+| ファイル | 役割 |
+|---------|------|
+| README.md | 開発戦略と工程表。機能設計書と現在の実装状況のギャップを管理 |
+| acceptance.md | ユーザーストーリーとしての完了条件 |
+| アローダイアグラム | タスク依存関係の可視化（任意） |
 
-### エラーハンドリングの責務
+### テスト戦略書（docs/design/src/...）
 
-エラーハンドリングはInteractorの責務としました。Viewでtry-catchを書く必要はありません。
-
-```text
-【エラー系の流れ】
-View → Controller → Interactor → (try-catch) → Presenter.presentError() → View
-```
-
-Viewは`fire-and-forget`で非同期処理を呼び出し、エラーはPresenter経由で通知されます。これにより、Viewはビジネスロジックを持たず、表示に専念できます。
-
-## UI/Container分離とAtomic Design
-
-Frameworks & Drivers層内のReactコンポーネントには、UI/Container分離パターンを適用しています。
-
-### ディレクトリ構成
-
-```text
-pages/[PageName]/
-├── index.tsx                    # エントリーポイント
-├── [PageName].container.tsx     # Container: Controller呼び出し、状態管理
-├── [PageName].ui.tsx            # UI: 表示のみ
-├── hooks/
-│   └── use[PageName]State.ts    # UI状態管理Hook
-└── components/                  # ページ固有コンポーネント
-```
-
-### Containerの責務
-
-- DIコンテナからControllerを取得
-- UI状態（useState）を管理
-- Controllerのコールバックを定義
-- UI層にpropsで渡す
-
-### UIの責務
-
-- propsで受け取ったデータを表示
-- propsで受け取ったコールバックを呼び出す
-- ビジネスロジックに関する状態は持たない
-
-この分離により、UI層はStorybookで容易にプレビューでき、ビジュアルリグレッションテストが実施しやすくなります。
-
-## テスト戦略書ドリブン開発
-
-プロジェクトでは、**テストコードを書く前にテスト戦略書を作成する**というルールを設けています。
-
-### なぜテスト戦略書が先なのか
-
-1. **テストケースの網羅性を事前に検討できる**: 実装に引きずられたテストにならない
-2. **レビューが容易**: テスト戦略書をレビューすることで、実装前に設計の妥当性を確認できる
-3. **ドキュメントとしての価値**: テスト戦略書がそのまま仕様書として機能する
-
-### テスト戦略書の配置
+**メソッド単位**で作成します。
 
 ```text
 docs/design/src/[layer]/[category]/[ClassName]/[methodName].md
 ```
 
-ソースコードのディレクトリ構造をミラーリングすることで、テスト戦略書とコードの対応が明確になります。
+特徴：
 
-## 得られた効果
+- ディレクトリ構成はソースコード構造を**完全に模倣**
+- テストケースはテストコード上の見出しコメントと**一致**させる
+- テストコードはこの戦略書に従って作成させる
 
-### ドメインロジックの分離
+**重要**: 指針がないと、AIは膨大にテストコードを書いてしまいます。テスト戦略書で範囲を制御することで、必要十分なテストに絞れます。
 
-Chrome拡張機能特有の技術的詳細（メッセージング、Chrome API、IndexedDB）からドメインロジックを分離できました。ブラウザ対応（Firefox対応など）の際も、ドメインロジックは変更不要です。
+### 命名規約・コード規約（docs/coding-standards/）
 
-### テスト容易性
+ディレクトリや要素ごとに規約を定めます。
 
-各層の責務が明確なため、適切な粒度でテストを書けます。
+- 可能であればコード整形ツール（ESLint、Prettier等）のルールを作成し、**機械的に守らせる**
+- ルールが作成できない場合でも、記述しておけばGitHub上のレビューAIが巡回して警告してくれる
 
-- **enterprise-business-rules**: 純粋なユニットテスト
-- **application-business-rules**: Gateway/Presenterをモック
-- **interface-adapters**: Interactorをモック
-- **frameworks-and-drivers**: 統合テスト / E2Eテスト
+## 工夫したところ
 
-### AI駆動開発との相性
+### AIへの指示テンプレート
 
-Clean Architectureの明確な層構造とADR（Architecture Decision Records）により、AIアシスタントに設計意図を伝えやすくなりました。「この機能はどの層に実装すべきか」という判断を、ADRを参照しながら行えます。
+#### レビュー指摘からガイドライン作成
+
+```text
+「〇〇の指摘を受けていますので修正対応をお願いします。
+またこの指摘を初手で防げたであろうガイドラインやドキュメントの作成もお願いします。」
+```
+
+一度受けた指摘は、ガイドラインに落とし込むことで二度と繰り返さなくなります。
+
+#### 設計と実装の乖離への対処
+
+```text
+「ADRや設計ドキュメントと、実際の実装を比較し、
+乖離している箇所の洗い出しと、どちらを修正すべきかの比較表を作成してください」
+```
+
+```text
+「この設計はXXが実態に即していなかったので、
+設計ガイドラインのYYを修正してください」
+```
+
+設計と実装の乖離は必ず発生します。重要なのは、**どちらを正とするか判断し、一方を修正する**ことです。
+
+## 便利に感じたこと
+
+### 人間は人間のわかる形で考えた方が良い
+
+実装詳細をAIに任せ、人間は「何を作りたいか」「なぜそうするのか」に集中できます。
+
+01-overall.md（完成形のイメージ）を自然言語で書き、クラス設計以降はAIに任せる——この分担が効果的でした。
+
+### 設計書さえできていればほぼオートマチック
+
+設計書が整備されていれば、実装は「この設計に従って実装してください」の一言で済みます。
+
+これが「怠け者のClean Architecture」の本質です。**最初にドキュメントを整備する手間をかければ、その後は楽ができます**。
+
+### ドキュメント修正が一括でできる
+
+ウォーターフォール開発の問題点として「実装が正しく設計が誤り」のケースがあります。
+
+従来は設計書の修正が面倒で放置されがちでしたが、AIを使えば**設計書の一括修正も容易**です。
+
+「実装を正として、関連する設計書をすべて更新してください」——これで済みます。
+
+## 現実的でないと感じたところ
+
+### ADRの頻繁な現実適応が必要
+
+実装を進めると、ADRや docs-rules の修正が頻繁に必要になります。
+
+「このルールは理想的だが、このケースでは適用できない」という状況が発生し、その都度ドキュメントを更新する必要があります。
+
+### チーム開発での実現性
+
+個人開発だからこそできた面があります。チーム開発で同じことをやるには：
+
+- 超ワンマントップダウンのプロジェクトマネージャーが必要
+- または全員がこの開発スタイルに賛同している必要
+
+現実的には、チーム開発への適用はハードルが高いかもしれません。
+
+## あらためてClean Architectureについて
+
+### ネットでは散々な言われよう
+
+- 「全てに使えるわけではない」
+- 「妥協して取捨選択して使うべき」
+- 「オーバーエンジニアリングだ」
+
+### 必死に学習して感じたこと
+
+**要素1個1個わけると膨大に感じる。けれど実はClean Architectureを使わなくても同じことを考えている。**
+
+Clean Architectureの各概念（Entity、Use Case、Gateway、Presenter...）は、名前がついていないだけで、どんな開発でも考慮している事項です。
+
+- 「このロジックはどこに書くべきか」
+- 「外部APIへの依存をどう隔離するか」
+- 「テストしやすい構造にするにはどうするか」
+
+Clean Architectureは、これらに**名前と置き場所を与えているだけ**です。
+
+### 数値化してみる価値あり
+
+「Clean Architectureは重い」という印象は、**定量的に検証する価値があります**。
+
+- Clean Architectureを適用した場合の総コード行数
+- 適用しなかった場合の総コード行数
+- テストカバレッジ、変更容易性の比較
+
+感覚で「重い」と判断するのではなく、数値で比較すれば、意外と差がないかもしれません。
 
 ## まとめ
 
-Chrome拡張機能開発にClean Architectureを適用することで、以下を実現できました。
+AI駆動開発の時代において、Clean Architectureと徹底したドキュメント整備の組み合わせは、**怠け者にこそ向いています**。
 
-- ドメインロジックとブラウザ固有実装の分離
-- テスト容易性の向上
-- 設計判断の明文化（ADR）
-- AI駆動開発との親和性
+- 最初にドキュメントを整備する手間をかければ、その後はAIが自動化してくれる
+- 「これに従って」の一言で実装が進む
+- 設計と実装の乖離もAIが一括修正してくれる
 
-「Chrome拡張機能にClean Architectureは大袈裟」と思われるかもしれませんが、機能が増えてくると、この投資は確実にリターンをもたらします。
-
-「現場での妥協」という言い訳をせずにClean Architectureを実践することで、コードベースの健全性を維持し続けることができます。
+「現場での妥協」という言い訳をせずにClean Architectureを実践することで、**むしろ楽ができる**——これがドキュメント駆動フラクタル型ウォーターフォール個人開発の結論です。
 
 ## 参考資料
 
 - [実践クリーンアーキテクチャ - nrslib](https://nrslib.com/clean-architecture/)
 - Robert C. Martin「Clean Architecture 達人に学ぶソフトウェアの構造と設計」
-- [前回の記事: WXTをDocker環境で動かす](https://qiita.com/)（※リンクは仮）
