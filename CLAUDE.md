@@ -120,32 +120,7 @@ make wt-remove BRANCH=feature-x # worktree削除
 
 ## Architecture Overview
 
-### Clean Architecture Layers
-
-```text
-src/
-├── entrypoints/          # WXT entry points (background.ts, content.ts, popup/, etc.)
-├── components/           # React components (Atomic Design)
-├── application/          # Application layer (Use Cases, ports)
-├── domain/              # Domain layer (Business logic, NO external dependencies)
-└── infrastructure/      # Infrastructure layer (External dependencies, DI container)
-
-tests/
-├── unit/               # Vitest unit tests (mirrors src/ structure)
-└── e2e/               # Playwright E2E tests (*.spec.ts)
-```
-
-### Key Architectural Rules
-
-- **Domain Layer**: MUST NOT depend on any other layer. Pure business logic only.
-- **Infrastructure Layer**: ONLY layer that may use Chrome APIs and browser-specific code.
-- **Application Layer**: Use Cases coordinate between domain and infrastructure.
-- **Component Layer**: Cannot directly call Chrome APIs. Must go through UseCases.
-
-### Dependency Injection
-
-- **Container**: `src/infrastructure/di/container.ts`
-- All dependencies are injected via constructor using `@inject()` decorator
+→ アーキテクチャの詳細は [docs/adr/001-clean-architecture-with-presenter-pattern.md](docs/adr/001-clean-architecture-with-presenter-pattern.md) を参照
 
 ## Import Path Rules
 
