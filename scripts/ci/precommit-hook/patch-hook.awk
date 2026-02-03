@@ -1,5 +1,9 @@
 # AWK script to patch pre-commit hook for custom node_modules path
-# Usage: awk -v STATUS_FILE="<path>" -f patch-hook.awk <input_file>
+# Usage: awk -v STATUS_FILE="<path>" -v LEFTHOOK_PATH="<path>" -f patch-hook.awk <input_file>
+#
+# Required variables:
+#   STATUS_FILE   - Path to write match status (1=matched, 0=not matched)
+#   LEFTHOOK_PATH - Path to lefthook binary (from constants.sh EXPECTED_LEFTHOOK_PATH)
 #
 # This script inserts an elif block after the @evilmartians/lefthook execution line
 # to check for lefthook in host-frontend-root/frontend-src-root/node_modules
@@ -48,9 +52,10 @@ BEGIN { pattern_matched = 0; already_patched = 0 }
     # Remove one indentation level for elif/then (outer level)
     # Note: lefthook-generated scripts typically use tab indentation
     outer_indent = remove_one_indent_level(base_indent)
-    print outer_indent "elif test -f \"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\""
+    # Use LEFTHOOK_PATH variable from constants.sh (single source of truth)
+    print outer_indent "elif test -f \"" LEFTHOOK_PATH "\""
     print outer_indent "then"
-    print base_indent "\"$dir/host-frontend-root/frontend-src-root/node_modules/@evilmartians/lefthook/bin/lefthook-${osArch}-${cpuArch}/lefthook\" \"$@\""
+    print base_indent "\"" LEFTHOOK_PATH "\" \"$@\""
     next
 }
 

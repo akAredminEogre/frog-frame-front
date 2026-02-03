@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# Lightweight pre-commit hook check for SessionStart
+# This script performs a fast check and only runs full setup when necessary
+#
+# 使用例:
+#   ./scripts/ci/precommit-hook/check-and-setup.sh
+#
+# SessionStart hookから呼び出されることを想定。
+# 既にセットアップ済みの場合は即座に終了し、起動時間への影響を最小化する。
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Source shared constants (with explicit existence check for clearer error messages)
+readonly CONSTANTS_FILE="${SCRIPT_DIR}/constants.sh"
+if [ ! -f "${CONSTANTS_FILE}" ]; then
+    echo "Error: constants.sh not found at ${CONSTANTS_FILE}" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
+    exit 1
+fi
+source "${CONSTANTS_FILE}"
+
+# Source path helper for resolve_precommit_hook_path function
+readonly PATH_HELPER_FILE="${SCRIPT_DIR}/path-helper.sh"
+if [ ! -f "${PATH_HELPER_FILE}" ]; then
+    echo "Error: path-helper.sh not found at ${PATH_HELPER_FILE}" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
+    exit 1
+fi
+source "${PATH_HELPER_FILE}"
+
+# Validate EXPECTED_LEFTHOOK_PATH is not empty (prevents false positive in grep -Fq "")
+if [ -z "${EXPECTED_LEFTHOOK_PATH:-}" ]; then
+    echo "Error: EXPECTED_LEFTHOOK_PATH is empty or not set in constants.sh" >&2
+    exit 1
+fi
+
+# Check if git is available
+if ! command -v git >/dev/null 2>&1; then
+    echo "Warning: git command not found. Skipping pre-commit hook setup." >&2
+    exit 0
+fi
+
+# Check if npx is available (required by main.sh for lefthook installation)
+# Skip gracefully to maintain consistent behavior with git check
+if ! command -v npx >/dev/null 2>&1; then
+    echo "Warning: npx command not found. Skipping pre-commit hook setup." >&2
+    echo "Install Node.js to enable pre-commit hooks." >&2
+    exit 0
+fi
+
+# Check if npm is available (required by main.sh for package installation)
+if ! command -v npm >/dev/null 2>&1; then
+    echo "Warning: npm command not found. Skipping pre-commit hook setup." >&2
+    echo "Install Node.js to enable pre-commit hooks." >&2
+    exit 0
+fi
+
+# Get repository root (use -C to ensure we find repo based on script location, not cwd)
+if ! REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel 2>/dev/null)"; then
+    echo "Warning: Not in a git repository. Skipping pre-commit hook setup." >&2
+    exit 0
+fi
+
+readonly REPO_ROOT
+
+# Resolve pre-commit hook path (supports worktrees, custom core.hooksPath, various path formats)
+PRE_COMMIT_HOOK="$(resolve_precommit_hook_path "${REPO_ROOT}")" || {
+    echo "Warning: Failed to resolve pre-commit hook path. Skipping pre-commit hook setup." >&2
+    exit 0
+}
+readonly PRE_COMMIT_HOOK
+
+# Fast check: if pre-commit hook is executable AND already patched, exit immediately
+# Note: Use -x to also verify execute permission, ensuring the hook can actually run
+if [ -x "${PRE_COMMIT_HOOK}" ] && grep -Fq "${EXPECTED_LEFTHOOK_PATH}" "${PRE_COMMIT_HOOK}" 2>/dev/null; then
+    # Already configured - exit silently for fast startup
+    exit 0
+fi
+
+# Not configured or needs patching - run full setup
+readonly MAIN_SCRIPT="${SCRIPT_DIR}/main.sh"
+
+# Validate main.sh exists before execution
+# Note: Use -f (exists) instead of -x (executable) for compatibility with
+# environments where permissions aren't preserved (ZIP extraction, Windows, etc.)
+if [ ! -f "${MAIN_SCRIPT}" ]; then
+    echo "Error: main.sh not found at ${MAIN_SCRIPT}" >&2
+    echo "Please verify the scripts/ci/precommit-hook directory is intact." >&2
+    exit 1
+fi
+
+echo "Pre-commit hook not configured. Running setup..."
+
+# Note: main.sh uses git -C for cwd-independent operation, so cd is not strictly required.
+# However, we keep it for consistency and potential future compatibility.
+cd "${REPO_ROOT}" || {
+    echo "Error: Failed to change to repository root: ${REPO_ROOT}" >&2
+    exit 1
+}
+
+exec bash "${MAIN_SCRIPT}"
