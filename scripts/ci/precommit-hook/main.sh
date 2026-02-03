@@ -102,7 +102,10 @@ require_file "${PRE_COMMIT_HOOK}" "Pre-commit hook not found. lefthook install m
 if grep -Fq "${EXPECTED_LEFTHOOK_PATH}" "${PRE_COMMIT_HOOK}"; then
     echo "Pre-commit hook already patched."
     # Ensure execute permission even when already patched (may be lost in ZIP extraction, Windows, etc.)
-    chmod +x "${PRE_COMMIT_HOOK}" 2>/dev/null || true
+    if ! chmod +x "${PRE_COMMIT_HOOK}" 2>/dev/null; then
+        echo "Warning: Failed to set execute permission on ${PRE_COMMIT_HOOK}" >&2
+        echo "Pre-commit hook may not run. Check file permissions manually." >&2
+    fi
     echo "Pre-commit hook setup complete!"
     echo "The hook will run ESLint (with simple-import-sort), stylelint, and markdownlint on staged files."
     exit 0
