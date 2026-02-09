@@ -63,13 +63,15 @@ ADRがあることで、AIは「なぜこの設計なのか」を理解した上
 
 | ファイル | 役割 | 従属関係 |
 |---------|------|----------|
-| 01-overall.md | 開発者が作りたい完成形を記述。フレームワークや実装詳細、現在の実装状況に振り回されない | なし（起点） |
-| 02-class-design.md | 01-overall.mdを実現するクラス設計。ADRに完全従属。設計者はほぼレビューしない | 01-overall.md, ADR |
-| 03-sequence.puml | クラスのシーケンス図。02-class-design.mdを開発者がレビューするためのドキュメント。画像出力してレビュー | 02-class-design.md |
-| 04-directory-structure | 登場するクラスのディレクトリ構成。実装時に使用 | 02-class-design.md |
-| 05-integration-test-strategy | 機能単位の結合テスト戦略 | 01-overall.md |
+| 00-overview.md | 開発者が作りたい完成形を記述。フレームワークや実装詳細、現在の実装状況に振り回されない | なし（起点） |
+| 01-class-design.md | 00-overview.mdを実現するクラス設計。ADRに完全従属。設計者はほぼレビューしない | 00-overview.md, ADR |
+| 02-sequence.md | クラスのシーケンス図。01-class-design.mdを開発者がレビューするためのドキュメント。画像出力してレビュー | 01-class-design.md |
+| 03-directory-structure.md | 登場するクラスのディレクトリ構成。実装時に使用 | 01-class-design.md |
+| 05-test-strategy.md | メソッド単位の単体テスト戦略 | 01-class-design.md |
+| 06-integration-test-strategy.md | 機能単位の結合テスト戦略 | 00-overview.md |
+| 07-e2e-test-strategy/ | E2Eテスト戦略（ディレクトリ） | 00-overview.md |
 
-**ポイント**: 02-class-design.mdはADRに完全従属するため、AIが自動生成しても設計者のレビュー負荷は最小限だ。03-sequence.pumlを画像出力してレビューすることで、クラス設計のレビューを効率化している。
+**ポイント**: 01-class-design.mdはADRに完全従属するため、AIが自動生成しても設計者のレビュー負荷は最小限だ。02-sequence.mdを画像出力してレビューすることで、クラス設計のレビューを効率化している。
 
 ### ユーザーストーリー（docs/user-stories/）
 
@@ -137,7 +139,7 @@ docs/design/src/[layer]/[category]/[ClassName]/[methodName].md
 
 実装詳細をAIに任せ、人間は「何を作りたいか」「なぜそうするのか」に集中できる。
 
-01-overall.md（完成形のイメージ）を自然言語で書き、クラス設計以降はAIに任せる——この分担が効果的だった。
+00-overview.md（完成形のイメージ）を自然言語で書き、クラス設計以降はAIに任せる——この分担が効果的だった。
 
 ### 設計書さえできていればほぼオートマチック
 
