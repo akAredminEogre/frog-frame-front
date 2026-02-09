@@ -1,6 +1,6 @@
-# AIで逆にうまくいく ドキュメント駆動フラクタル型ウォーターフォール個人開発
+# Lazy man's Clean Architecture
 
-〜怠け者のための開発手法〜
+～怠け者のクリーンアーキテクチャとhooks containerパターンを添えて～
 
 ## はじめに
 
@@ -60,6 +60,41 @@
 2. 「このアーキテクチャに従ってください」と指示する
 
 場合によっては、実装を先に行い、そこからドキュメントを生成させることもある。
+
+## 実際に採用した構造
+
+Chrome拡張機能プロジェクトでは、ADR-001（Clean Architecture Presenter付きパターン採用）として以下の構造を定義した：
+
+```text
+src/
+├── enterprise-business-rules/        # 第1層: Entities, Value Objects
+│   ├── entities/
+│   ├── value-objects/
+│   └── constants/
+│
+├── application-business-rules/       # 第2層: Use Cases
+│   ├── ports/
+│   │   ├── input/                    # Input Port (Interface)
+│   │   ├── output/                   # Output Port (Interface)
+│   │   └── gateway/                  # Gateway Interface
+│   ├── interactors/                  # Use Case Interactor
+│   └── dto/
+│
+├── interface-adapters/               # 第3層: Controllers, Presenters
+│   ├── controllers/
+│   ├── presenters/
+│   ├── factories/
+│   └── mappers/
+│
+└── frameworks-and-drivers/           # 第4層: UI, Chrome API, DB
+    ├── ui/
+    ├── persistence/
+    ├── messaging/
+    ├── browser/
+    └── di/
+```
+
+**注**: この構造は本プロジェクト固有のものであり、ADR-001で詳細な設計判断を記録している。Clean Architectureの適用方法はプロジェクトごとに異なる。
 
 ## 実際に作成したドキュメント体系
 
@@ -209,6 +244,50 @@ docs/design/src/[layer]/[category]/[ClassName]/[methodName].md
 
 現実的には、チーム開発への適用はハードルが高いかもしれない。
 
+## あらためてClean Architectureについて
+
+### ネットでは散々な言われよう
+
+Clean Architectureに対する典型的な批判は以下のようなものだ：
+
+- 「全てに使えるわけではない」
+- 「妥協して取捨選択して使うべき」
+- 「オーバーエンジニアリングだ」
+
+### 必死に学習して感じたこと
+
+**要素1個1個わけると膨大に感じる。けれど実はClean Architectureを使わなくても同じことを考えている。**
+
+Clean Architectureの各概念（Entity、Use Case、Gateway、Presenter...）は、名前がついていないだけで、どんな開発でも考慮している事項だ。
+
+- 「このロジックはどこに書くべきか」
+- 「外部APIへの依存をどう隔離するか」
+- 「テストしやすい構造にするにはどうするか」
+
+Clean Architectureは、これらに**名前と置き場所を与えているだけ**だ。
+
+名前がつくことで、チーム内の認識が統一される。「このロジックはEntityに書いて」「GatewayでAPIを隔離して」という会話が可能になる。名前がなければ、毎回「ビジネスロジックを書くところ」「外部APIを呼び出すところ」と説明する必要がある。
+
+### 数値化してみる価値あり
+
+「Clean Architectureは重い」という印象は、**定量的に検証する価値がある**。
+
+- Clean Architectureを適用した場合の総コード行数
+- 適用しなかった場合の総コード行数
+- テストカバレッジ、変更容易性の比較
+
+感覚で「重い」と判断するのではなく、数値で比較すれば、意外と差がないかもしれない。
+
+### 本プロジェクトでの観察（参考値）
+
+本プロジェクトでは、各層のコード量がほぼ均等になった。ただし、これはプロジェクト固有の結果であり、普遍的な原則ではない。
+
+観察された傾向：
+
+- 各層の責務が明確なため、各ファイルのコード量は少ない
+- 同じロジックを複数箇所に書く必要がない
+- テストコードが書きやすく、結果的にテストカバレッジが向上
+
 ## まとめ
 
 AI駆動開発の時代において、徹底したドキュメント整備は**怠け者にこそ向いている**。
@@ -217,11 +296,7 @@ AI駆動開発の時代において、徹底したドキュメント整備は**�
 - 「これに従って」の一言で実装が進む
 - 設計と実装の乖離もAIが一括修正してくれる
 
-**むしろ楽ができる**——これがドキュメント駆動フラクタル型ウォーターフォール個人開発の結論だ。
-
-## 関連記事
-
-- [あらためてClean Architectureについて考える](./qiita-clean-architecture.md)
+**むしろ楽ができる**——これがLazy man's Clean Architectureの結論だ。
 
 ## 参考資料
 
