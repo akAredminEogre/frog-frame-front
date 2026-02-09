@@ -6,23 +6,138 @@
 
 - [実践クリーンアーキテクチャ](https://nrslib.com/clean-architecture/)を参考にADRを作成し、ディレクトリ構造を決定
 - ユーザーの入力→処理→出力を1機能単位としてドキュメントを作成し、ADRに従わせて実装
-- **利点**: AIが生成するコードを意図を持って制御できる。UI部分でエラー判定をしなくていい（Interactorで判断、Presenterで規定）
+- **利点**: AIが生成するコードをかなり意図通り制御できる。UI部分でエラー判定をしなくていい（Interactorで判断、Presenterで規定）
+- 機能ドキュメントを自然言語で書き、クラス設計以降はAIに任せる分担が効果的
 - **技術駆動ディレクトリの意外な良さ**: 人間に優しくないがAIには優しい。リポジトリ全体で規則を統一できる
 
 ## 発端
 
-[実践クリーンアーキテクチャ - nrslib](https://nrslib.com/clean-architecture/)の記事が発端だ。この記事を使ってADRを作らせた。
+なんとなくClean Architectureをずっと学びたいと思っていたが、どの記事を読んでもピンとこない。
+そんなときに下記の記事に出会った。
+
+https://qiita.com/nrslib/items/a5f902c4defc83bd46b8
+
+特に腑に落ちたのは次の表現
+
+(画像を引用)
+> どこかで見たことありませんか？
+> 
+> そう、クリーンアーキテクチャの図の右下のこれです。
+(画像を引用)
+
+すぐに真似したくなり、Chrome拡張機能の個人開発で実践してみた。
+
+## まずやったこと：Clean ArchitectureのADRをChrome拡張機能プロジェクトに適用
+- 先行記事のClean Architectureをただただ追従。リポジトリ全体のADR、ディレクトリ構造を決定。
+ディレクトリ構造にはあえて技術駆動構造を採用（後述）。
+その結果がこちら
+```text
+src/
+├── enterprise-business-rules/        # 第1層: Entities, Value Objects
+│   ├── entities/
+│   ├── value-objects/
+│   └── constants/
+│├── application-business-rules/       # 第2層: Use Cases
+│   ├── ports/
+│   │   ├── input/                    # Input Port (Interface)
+│   │   ├── output/                   # Output Port (Interface)
+│   │   └── gateway/                  # Gateway Interface
+│   ├── interactors/                  # Use Case Interactor
+│   └── dto/
+│├── interface-adapters/               # 第3層: Controllers, Presenters
+│   ├── controllers/
+│   ├── presenters/
+│   ├── factories/
+│   └── mappers/
+└── frameworks-and-drivers/           # 第4層: UI, Chrome API, DB
+    ├── ui/ # ユーザーインターフェース関連。この中でatomic-designパターンを適用
+    ├── persistence/ # データベース、ストレージ関連
+    ├── messaging/ # chrome拡張機能に必要なメッセージング関連
+    ├── browser/ # chrome拡張機能のブラウザAPI関連(DOM要素取得・操作等)
+    └── di/ # 依存性注入関連。npmのinversifyを直接利用するコードをここに集約
+```
+
+その結果、Clean Architectureについて現時点で自分は下記のように解釈をしている
+
+### 第4層 frameworks-and-drivers 
+  - 外部の "なにか" を **直接** 操作していい唯一の場所
+  - `よくUIやDBをここにまとめる` とか言われる。部分的にはあってはいるがあまりピンとこなかった
+  - `自分が作ってない、メソッドやロジックはここ以外では直接使わない` と理解したら腑に落ちた
+  - なのでnpmパッケージの直接利用コード、chrome拡張機能開発のためのフレームワーク、WXT都合のコードもすべてここに集約
+
+### 第1層 enterprise-business-rules
+- **PMや社長、お客様が仰ること**
+- ソフトウェア工学における合理性とか関係ない。 
+- ソフトウェアがどう動いてほしいかという **願望** が記述される
+  - あえて願望と書く。よくClean Architectureの記事には `ビジネスルール`と書かれている。この単語だと合理的な印象をあたえてしまう。
+  - だからエンジニアの理屈で書き換えられると勘違いしてしまう。
+  - だが実際には、エンジニアの常識からすると非合理に思える機能も要求される。(むしろそれが世間が望むものであったりする)
+    - だからエンジニアが用意には境界を超えられない、という意味で **願望** と書いた。
+
+### 第2層 application-business-rules
+- 第1層と第4層に振り回される、可哀想な仲介役
+- 加えて、Clean Architectureの `内側の層は外側の層に依存してはいけない` というルールを守るためにいろいろと苦心している。
+  - その苦心の表れが、`Input Port` `Output Port` `Gateway Interface` `Use Case` という要素
+    - `Gateway Interface` という単語のせいで、第3層と第2層の違いを長い間理解できずにいた。
+
+### 第3層 interface-adapters
+- **わからん。** 言葉遊びの域を出ないので一言での理解は諦めた。
+
+とにかくディレクトリ構造ができたので、これを利用し、次に述べる開発フローをやってみた。
+
+
 
 ## 開発フロー
 
 以下のフローで開発を進めた：
 
-1. **ADR作成**: 参考記事を元にClean ArchitectureのADRを作成
-2. **ディレクトリ構造決定**: あえて技術駆動構造を採用（後述）
-3. **機能単位ドキュメント作成**: ユーザーの入力→処理→出力を1機能単位としてドキュメントを作成
-4. **スケルトン実装**: ドキュメントとADRに従わせて正常系1パターンのE2Eテストと最低限実装を作成
-5. **ユニットテスト**: 各モジュール単位でテスト戦略書とユニットテスト、不具合修正
-6. **テスト網羅**: 最後に結合テストとE2Eテストを網羅
+1. **機能単位ドキュメント作成**: ユーザーの入力→処理→出力を1機能単位としてドキュメントを作成
+2. **正常系1パターン実装**: ドキュメントとADRに従わせて正常系1パターンのE2Eテストを通る最低限の実装。
+3. **モジュール単位の実装ユニットテスト**: 各モジュール単位でテスト戦略書とユニットテスト、不具合修正
+4. **結合テスト、E2Eテスト網羅**: 最後に結合テストとE2Eテストを網羅、不具合修正
+5. **ユーザーテスト**: 実際にブラウザ上で動かして動作確認
+
+### 1. 機能単位ドキュメント作成
+機能ごとに以下の構成で設計書を作成する：
+
+| ファイル | 役割 | 従属関係 |
+|---------|------|----------|
+| 00-overview.md | 開発者が作りたい完成形を記述。フレームワークや実装詳細、現在の実装状況に振り回されない | なし（起点） |
+| 01-class-design.md | 00-overview.mdを実現するクラス設計。ADRに完全従属。設計者はほぼレビューしない | 00-overview.md, ADR |
+| 02-sequence.md | クラスのシーケンス図。01-class-design.mdを開発者がレビューするためのドキュメント。画像出力してレビュー | 01-class-design.md |
+| 03-directory-structure.md | 登場するクラスのディレクトリ構成。実装時に使用 | 01-class-design.md |
+| 04-arrow-diagram.md | 各モジュールの開発タスクのアローダイアグラム。 | 01-class-design.md |
+| 05-test-strategy.md | メソッド単位の単体テスト戦略。これは各モジュール単位で作成される | 01-class-design.md |
+| 06-integration-test-strategy.md | 機能単位の結合テスト戦略 | 00-overview.md |
+| 07-e2e-test-strategy/ | E2Eテスト戦略（ディレクトリ） | 00-overview.md |
+
+**ポイント**: 01-class-design.mdはADRに完全従属するため、AIが自動生成しても設計者のレビュー負荷は最小限だ。02-sequence.mdを画像出力してレビューすることで、クラス設計のレビューを効率化している。
+
+### 2. 正常系1パターン実装
+
+Claude Code Webへの指示はこう
+
+```text
+ADR、00-overview.md、01-class-design.mdに従って、正常系1パターンの実装を行ってください。
+```
+
+これでほぼオートマチックに意図通りの実装ができる。
+開発初期や新規機能追加時にはこれだけでもよいくらいだ。
+
+### 3. モジュール単位の実装ユニットテスト
+
+04-arrow-diagram.mdに従って、各モジュール単位で05-test-strategy.mdを作成し、ユニットテストを実装する。
+アローダイアグラムには開発タスクナンバーもついているので
+```text
+アローダイアグラムのP2-3タスクを始めてください。
+```
+でP2-3タスクに紐づけられているモジュールのテスト戦略書、ユニットテスト作成が始まる。
+場合によっては並行も可能。
+
+### 4. 結合テスト、E2Eテスト網羅
+UIコンポーネントが触るロジックの入出力を結合テストで網羅する。(これにはDBやストレージアクセスも含む)
+
+
 
 ## やったこと
 
@@ -51,38 +166,7 @@
 
 場合によっては、実装を先に行い、そこからドキュメントを生成させることもある。
 
-## 実際に採用した構造
 
-Chrome拡張機能プロジェクトでは、ADR-001（Clean Architecture Presenter付きパターン採用）として以下の構造を定義した：
-
-```text
-src/
-├── enterprise-business-rules/        # 第1層: Entities, Value Objects
-│   ├── entities/
-│   ├── value-objects/
-│   └── constants/
-│
-├── application-business-rules/       # 第2層: Use Cases
-│   ├── ports/
-│   │   ├── input/                    # Input Port (Interface)
-│   │   ├── output/                   # Output Port (Interface)
-│   │   └── gateway/                  # Gateway Interface
-│   ├── interactors/                  # Use Case Interactor
-│   └── dto/
-│
-├── interface-adapters/               # 第3層: Controllers, Presenters
-│   ├── controllers/
-│   ├── presenters/
-│   ├── factories/
-│   └── mappers/
-│
-└── frameworks-and-drivers/           # 第4層: UI, Chrome API, DB
-    ├── ui/
-    ├── persistence/
-    ├── messaging/
-    ├── browser/
-    └── di/
-```
 
 **注**: この構造は本プロジェクト固有のものであり、ADR-001で詳細な設計判断を記録している。Clean Architectureの適用方法はプロジェクトごとに異なる。
 
@@ -99,19 +183,7 @@ ADRがあることで、AIは「なぜこの設計なのか」を理解した上
 
 ### 機能設計書（docs/design/）
 
-機能ごとに以下の構成で設計書を作成する：
 
-| ファイル | 役割 | 従属関係 |
-|---------|------|----------|
-| 00-overview.md | 開発者が作りたい完成形を記述。フレームワークや実装詳細、現在の実装状況に振り回されない | なし（起点） |
-| 01-class-design.md | 00-overview.mdを実現するクラス設計。ADRに完全従属。設計者はほぼレビューしない | 00-overview.md, ADR |
-| 02-sequence.md | クラスのシーケンス図。01-class-design.mdを開発者がレビューするためのドキュメント。画像出力してレビュー | 01-class-design.md |
-| 03-directory-structure.md | 登場するクラスのディレクトリ構成。実装時に使用 | 01-class-design.md |
-| 05-test-strategy.md | メソッド単位の単体テスト戦略 | 01-class-design.md |
-| 06-integration-test-strategy.md | 機能単位の結合テスト戦略 | 00-overview.md |
-| 07-e2e-test-strategy/ | E2Eテスト戦略（ディレクトリ） | 00-overview.md |
-
-**ポイント**: 01-class-design.mdはADRに完全従属するため、AIが自動生成しても設計者のレビュー負荷は最小限だ。02-sequence.mdを画像出力してレビューすることで、クラス設計のレビューを効率化している。
 
 ### テスト戦略書（docs/design/src/...）
 
