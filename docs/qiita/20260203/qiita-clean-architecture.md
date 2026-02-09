@@ -28,6 +28,41 @@ Clean Architectureは、これらに**名前と置き場所を与えているだ
 
 名前がつくことで、チーム内の認識が統一される。「このロジックはEntityに書いて」「GatewayでAPIを隔離して」という会話が可能になる。名前がなければ、毎回「ビジネスロジックを書くところ」「外部APIを呼び出すところ」と説明する必要がある。
 
+## 実際に採用した構造
+
+Chrome拡張機能プロジェクトでは、ADR-001（Clean Architecture Presenter付きパターン採用）として以下の構造を定義した：
+
+```text
+src/
+├── enterprise-business-rules/        # 第1層: Entities, Value Objects
+│   ├── entities/
+│   ├── value-objects/
+│   └── constants/
+│
+├── application-business-rules/       # 第2層: Use Cases
+│   ├── ports/
+│   │   ├── input/                    # Input Port (Interface)
+│   │   ├── output/                   # Output Port (Interface)
+│   │   └── gateway/                  # Gateway Interface
+│   ├── interactors/                  # Use Case Interactor
+│   └── dto/
+│
+├── interface-adapters/               # 第3層: Controllers, Presenters
+│   ├── controllers/
+│   ├── presenters/
+│   ├── factories/
+│   └── mappers/
+│
+└── frameworks-and-drivers/           # 第4層: UI, Chrome API, DB
+    ├── ui/
+    ├── persistence/
+    ├── messaging/
+    ├── browser/
+    └── di/
+```
+
+**注**: この構造は本プロジェクト固有のものであり、ADR-001で詳細な設計判断を記録している。Clean Architectureの適用方法はプロジェクトごとに異なる。
+
 ## 数値化してみる価値あり
 
 「Clean Architectureは重い」という印象は、**定量的に検証する価値がある**。
@@ -38,18 +73,11 @@ Clean Architectureは、これらに**名前と置き場所を与えているだ
 
 感覚で「重い」と判断するのではなく、数値で比較すれば、意外と差がないかもしれない。
 
-### 実際に測定してみた（参考値）
+### 本プロジェクトでの観察（参考値）
 
-Chrome拡張機能プロジェクトで、Clean Architectureを適用した場合の構成：
+本プロジェクトでは、各層のコード量がほぼ均等になった。ただし、これはプロジェクト固有の結果であり、普遍的な原則ではない。
 
-```text
-enterprise-business-rules/   # Entity, Value Object
-application-business-rules/  # Use Case, Interactor
-interface-adapters/          # Controller, Presenter
-frameworks-and-drivers/      # UI, Chrome API, DB
-```
-
-各層のコード量はほぼ均等だった。「Clean Architectureは層が多くてコードが増える」という印象があるが、実際には：
+観察された傾向：
 
 - 各層の責務が明確なため、各ファイルのコード量は少ない
 - 同じロジックを複数箇所に書く必要がない
