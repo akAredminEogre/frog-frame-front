@@ -63,8 +63,8 @@ ADRがあることで、AIは「なぜこの設計なのか」を理解した上
 
 | ファイル | 役割 | 従属関係 |
 |---------|------|----------|
-| 01-overall.md | 開発者が作りたい完成形を記述。フレームワークや実装詳細、現在の実装状況に振り回されない | - |
-| 02-class-design.md | 01-overall.mdを実現するクラス設計。ADRに完全従属。設計者はほぼレビューしない | 01-overall.md |
+| 01-overall.md | 開発者が作りたい完成形を記述。フレームワークや実装詳細、現在の実装状況に振り回されない | なし（起点） |
+| 02-class-design.md | 01-overall.mdを実現するクラス設計。ADRに完全従属。設計者はほぼレビューしない | 01-overall.md, ADR |
 | 03-sequence.puml | クラスのシーケンス図。02-class-design.mdを開発者がレビューするためのドキュメント。画像出力してレビュー | 02-class-design.md |
 | 04-directory-structure | 登場するクラスのディレクトリ構成。実装時に使用 | 02-class-design.md |
 | 05-integration-test-strategy | 機能単位の結合テスト戦略 | 01-overall.md |
