@@ -106,22 +106,38 @@ src/
 | 01-class-design.md | 00-overview.mdを実現するクラス設計。ADRに完全従属。設計者はほぼレビューしない | 00-overview.md, ADR |
 | 02-sequence.md | クラスのシーケンス図。01-class-design.mdを開発者がレビューするためのドキュメント。画像出力してレビュー | 01-class-design.md |
 | 03-directory-structure.md | 登場するクラスのディレクトリ構成。実装時に使用 | 01-class-design.md |
-| 04-arrow-diagram.md | 各モジュールの開発タスクのアローダイアグラム。 | 01-class-design.md |
+| 04-arrow-diagram.md(任意) | 各モジュールの開発タスクのアローダイアグラム。 | 01-class-design.md |
 | 05-test-strategy.md | メソッド単位の単体テスト戦略。これは各モジュール単位で作成される | 01-class-design.md |
 | 06-integration-test-strategy.md | 機能単位の結合テスト戦略 | 00-overview.md |
 | 07-e2e-test-strategy/ | E2Eテスト戦略（ディレクトリ） | 00-overview.md |
 
-**ポイント**: 01-class-design.mdはADRに完全従属するため、AIが自動生成しても設計者のレビュー負荷は最小限だ。02-sequence.mdを画像出力してレビューすることで、クラス設計のレビューを効率化している。
+00-overview.mdには、**自然言語で**開発者が作りたい完成形を書く。大事なのは **願望** でよいことだ。この切り分けができるようになっただけでも、今回Clean Architectureを学んで良かったと思う。コアだけ書いたら、AIに補完させてもよい。
+
+あとはオートマティックだ。
+```text
+ADR、00-overview.mdに従って、01-class-design.md、02-sequence.md、03-directory-structure.md、04-arrow-diagram.md を作成して
+```
+で指示すれば、AIが自動生成してくれる。
+現状、開発者の私がレビューするのは、02-sequence.mdの画像出力部分だけだ。これは私がシーケンス図が好きだからと言うだけであって、01-class-design.mdのクラス図を読める人はいらないかもしれない。シーケンス図でレビュー指摘を行い、問題なければドキュメントとしてはPR通過としている。
+
+これは今も軸が定まっていないが、ここまでAI駆動開発が進んでいると、ある程度はAIが作るものを信用してdumbレビューで済ませて良い気がしている。
+今の自分としては、02-sequence.mdの画像出力部分に自分の願望が反映されていることが確認できれば良い、ということにしている。
+
+ここができたらe2eテスト1パターンを作らせる
+```text
+ADR、00-overview.mdに従って、01-class-design.md、02-sequence.md、03-directory-structure.mdに従って、正常系e2eテスト1パターンを07-e2e-test-strategy直下に作成して
+```
+これでe2eテスト戦略書ができる
 
 ### 2. 正常系1パターン実装
 
 Claude Code Webへの指示はこう
 
 ```text
-ADR、00-overview.md、01-class-design.mdに従って、正常系1パターンの実装を行ってください。
+ADR、00-overview.mdに従って、01-class-design.md、02-sequence.md、03-directory-structure.mdに従って、07-e2e-test-strategyに通るよう実装を行って
 ```
 
-これでほぼオートマチックに意図通りの実装ができる。
+これでほぼオートマチックにほぼ意図通りの実装ができる。
 開発初期や新規機能追加時にはこれだけでもよいくらいだ。
 
 ### 3. モジュール単位の実装ユニットテスト
