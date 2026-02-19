@@ -1,19 +1,19 @@
-# Testing Requirements
+# テスト要件
 
 → テストコーディング規約は [`.clinerules/03-test-coding-standards.md`](.clinerules/03-test-coding-standards.md) を参照
 
-## Test Frameworks
+## テストフレームワーク
 
-- **Unit tests**: Vitest with happy-dom (`*.test.ts` in `tests/`)
-- **E2E tests**: Playwright (`*.spec.ts` in `tests/e2e/`)
-- Run both: `make testall` or comprehensive `make testlint`
+- **ユニットテスト**: Vitest（happy-dom使用）（`tests/` 配下の `*.test.ts`）
+- **E2Eテスト**: Playwright（`tests/e2e/` 配下の `*.spec.ts`）
+- 全テスト実行: `make testall` または包括的な `make testlint`
 
-## Test Strategy Document
+## テスト戦略書
 
-**CRITICAL**: Before writing any test code, create a test strategy document.
+**重要**: テストコードを書く前に、テスト戦略書を作成すること。
 
-- **Location**: `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md`
-- **Templates**:
+- **保存先**: `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md`
+- **テンプレート**:
   - 単体: `docs-rules/design/05-test-strategy.md`
   - 結合: `docs-rules/design/06-integration-test-strategy.md`
   - E2E: `docs-rules/design/07-e2e-test-strategy/`

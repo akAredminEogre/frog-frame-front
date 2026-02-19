@@ -1,73 +1,73 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、リポジトリ内のコードを扱う際のClaude Code (claude.ai/code) へのガイダンスを提供します。
 
-## Project Overview
+## プロジェクト概要
 
-**frog-frame-front** is a Chrome extension project built with the WXT framework that manipulates DOM elements. The project follows Clean Architecture principles with Domain-Driven Design (DDD) patterns.
+**frog-frame-front** は、DOMエレメントを操作するWXTフレームワーク製のChrome拡張機能プロジェクトです。Clean ArchitectureおよびDomain-Driven Design（DDD）パターンに基づいて設計されています。
 
-- **Main Tech Stack**: TypeScript, React, WXT (Chrome extension framework)
-- **Architecture**: Clean Architecture + DDD
-- **DI Container**: tsyringe with reflect-metadata
-- **Testing**: Vitest (unit tests), Playwright (E2E tests)
-- **Development**: Docker-based development environment
+- **主要技術スタック**: TypeScript、React、WXT（Chrome拡張機能フレームワーク）
+- **アーキテクチャ**: Clean Architecture + DDD
+- **DIコンテナ**: tsyringe（reflect-metadata使用）
+- **テスト**: Vitest（ユニットテスト）、Playwright（E2Eテスト）
+- **開発環境**: Dockerベースの開発環境
 
-## Project-Specific Rules and Workflows
+## プロジェクト固有のルールとワークフロー
 
-### Coding Standards
+### コーディング規約
 
-- **`docs/coding-standards/`** - Core coding conventions
-- **`.clinerules/02-workflow-automation/`** - Automated workflow definitions
+- **`docs/coding-standards/`** - コアコーディング規約
+- **`.clinerules/02-workflow-automation/`** - 自動化ワークフロー定義
 
-**Note**: When working on this project, always refer to these `.clinerules/` files for detailed guidance.
+**注意**: このプロジェクトで作業する際は、詳細なガイダンスのために `.clinerules/` ファイルを必ず参照してください。
 
-## Common Development Commands
+## 共通開発コマンド
 
 → セットアップ手順・利用可能なコマンド一覧は [README.md](README.md) を参照
 
 ### Claude Code固有の追加セットアップ
 
 ```bash
-make init-hooks     # Install Git hooks (pre-commit: ESLint with import sorting, stylelint, markdownlint)
+make init-hooks     # Gitフックのインストール（pre-commit: ESLintによるimportソート、stylelint、markdownlint）
 ```
 
-### Critical Pre-Completion Check（必須）
+### タスク完了前の必須確認
 
-**IMPORTANT**: Before marking any task as complete, you MUST run:
+**重要**: タスクを完了とする前に、必ず以下を実行すること:
 
 ```bash
-make testlint       # REQUIRED before completing any task (comprehensive checks)
+make testlint       # タスク完了前に必須（包括的チェック）
 ```
 
-**Note**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
+**注意**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
 
 **このチェックを実行せずにタスクを完了することは禁止されています。**
 
-## Architecture Overview
+## アーキテクチャ概要
 
 → 詳細は [.AI/architecture.md](.AI/architecture.md) を参照
 
 ADRは [docs/adr/001-clean-architecture-with-presenter-pattern.md](docs/adr/001-clean-architecture-with-presenter-pattern.md) も参照。
 
-## Import Path Rules
+## インポートパスルール
 
-**CRITICAL**: All imports MUST use absolute paths with configured aliases.
+**重要**: 全インポートは設定済みエイリアスを使った絶対パスを使用すること。
 
 → 詳細は [.AI/import-paths.md](.AI/import-paths.md) を参照
 
-## Object-Oriented Design Rules (ThoughtWorks Anthology)
+## オブジェクト指向設計ルール（ThoughtWorksアンソロジー）
 
 → 詳細は [.AI/oo-design-rules.md](.AI/oo-design-rules.md) を参照
 
-## Testing Requirements
+## テスト要件
 
 → 詳細は [.AI/testing-requirements.md](.AI/testing-requirements.md) を参照
 
-## WXT Framework Specifics
+## WXTフレームワーク詳細
 
 → 詳細は [.AI/wxt-framework.md](.AI/wxt-framework.md) を参照
 
-## Git Workflow
+## Gitワークフロー
 
 → 詳細は [.AI/git-workflow.md](.AI/git-workflow.md) を参照
 
@@ -75,6 +75,6 @@ ADRは [docs/adr/001-clean-architecture-with-presenter-pattern.md](docs/adr/001-
 
 → 詳細は [.AI/claude-code-web-workflow.md](.AI/claude-code-web-workflow.md) を参照
 
-## Troubleshooting
+## トラブルシューティング
 
 → 詳細は [.AI/troubleshooting.md](.AI/troubleshooting.md) を参照

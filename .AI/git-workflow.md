@@ -1,27 +1,27 @@
-# Git Workflow
+# Gitワークフロー
 
-## Branch Strategy
+## ブランチ戦略
 
-- **Base branch**: `develop`
-- **Branch naming**: Issue-based branches (e.g., `issue-086-docs-how-to-set-up`)
-- See `.clinerules/02-workflow-automation/01-issue-launches/workflow-create-branch.md` for branch creation workflow
+- **ベースブランチ**: `develop`
+- **ブランチ命名規則**: Issueベースのブランチ（例: `issue-086-docs-how-to-set-up`）
+- ブランチ作成手順は `.clinerules/02-workflow-automation/01-issue-launches/workflow-create-branch.md` を参照
 
-## Documentation Structure
+## ドキュメント構成
 
 ```
 docs/
-├── issue-XXX/              # In-progress issue documentation
-├── completed/issue-XXX/    # Completed issue documentation
-└── issue-000/             # Template for new issues
+├── issue-XXX/              # 対応中のIssueドキュメント
+├── completed/issue-XXX/    # 完了したIssueドキュメント
+└── issue-000/             # 新規Issue用テンプレート
 ```
 
-## Files to Exclude from Commits
+## コミット除外ファイル
 
-- `WITH_CLINE.md` - Work-in-progress instructions
-- `issues.md` - Task management file
+- `WITH_CLINE.md` - 作業中の手順書
+- `issues.md` - タスク管理ファイル
 
-## Pull Requests
+## プルリクエスト
 
-- Create PRs using `gh` CLI
-- Base PRs against `develop` branch
-- Repository: `akAredminEogre/frog-frame-front`
+- `gh` CLIを使ってPRを作成
+- `develop` ブランチをベースにPRを作成
+- リポジトリ: `akAredminEogre/frog-frame-front`
