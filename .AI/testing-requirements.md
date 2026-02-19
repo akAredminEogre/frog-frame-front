@@ -1,6 +1,6 @@
 # テスト要件
 
-→ テストコーディング規約は [`.clinerules/03-test-coding-standards.md`](.clinerules/03-test-coding-standards.md) を参照
+→ テストコーディング規約は [`.clinerules/03-test-coding-standards.md`](../.clinerules/03-test-coding-standards.md) を参照
 
 ## テストフレームワーク
 

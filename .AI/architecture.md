@@ -57,7 +57,7 @@ tests/
 
 ## アーキテクチャルール
 
-→ アーキテクチャルール詳細は [`.clinerules/01-coding-standards.md`](.clinerules/01-coding-standards.md) を参照
+→ アーキテクチャルール詳細は [`.clinerules/01-coding-standards.md`](../.clinerules/01-coding-standards.md) を参照
 
 ## 依存性注入
 

@@ -1,6 +1,6 @@
 # インポートパスルール
 
-→ ルール詳細は [`.clinerules/01-coding-standards.md`](.clinerules/01-coding-standards.md) を参照（`src` 始まりの絶対パス使用）
+→ ルール詳細は [`.clinerules/01-coding-standards.md`](../.clinerules/01-coding-standards.md) を参照（`src` 始まりの絶対パス使用）
 
 ## tsconfig.json パス設定
 
