@@ -25,7 +25,3 @@ docs/
 - Create PRs using `gh` CLI
 - Base PRs against `develop` branch
 - Repository: `akAredminEogre/frog-frame-front`
-
-## Git Worktree (Parallel Development)
-
-詳細は [docs/GIT_WORKTREE.md](../docs/GIT_WORKTREE.md) を参照。

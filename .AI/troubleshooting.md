@@ -1,16 +1,6 @@
 # Troubleshooting
 
-## `.wxt/tsconfig.json` Not Found
-
-This file is auto-generated. Run:
-
-```bash
-docker compose exec frontend npx wxt prepare
-```
-
-## Docker Layer Cache Optimization
-
-The Dockerfile copies `package.json` and `package-lock.json` first, runs `npm install`, then copies source code. The `postinstall` script is designed to skip during build and run after full source code is available.
+→ セットアップ・Docker関連のトラブルシューティングは [README.md](../README.md) を参照
 
 ## Permission Issues
 

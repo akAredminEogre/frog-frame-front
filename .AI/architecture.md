@@ -1,59 +1,61 @@
 # Architecture Overview
 
-## Clean Architecture Layers
+## Project Structure
+
+```
+frog-frame-front/
+├── host-frontend-root/
+│   └── frontend-src-root/    # フロントエンドソースコード
+│       ├── src/              # アプリケーションコード
+│       ├── tests/            # テストコード
+│       └── wxt.config.ts
+├── docs/                     # ドキュメント
+├── CLAUDE.md
+└── Makefile
+```
+
+## Clean Architecture Layers (src/)
 
 ```
 src/
-├── entrypoints/          # WXT entry points (background.ts, content.ts, popup/, etc.)
-├── components/           # React components (Atomic Design)
+├── entrypoints/              # WXT entry points
+│   ├── background.ts
+│   ├── content.ts
+│   ├── popup/
+│   ├── rules/
+│   └── edit/
+├── components/               # React components (Atomic Design)
 │   ├── atoms/
 │   ├── molecules/
 │   ├── organisms/
 │   └── pages/
-├── application/          # Application layer (Use Cases)
+├── application/              # Application layer (Use Cases)
 │   ├── usecases/
-│   ├── ports/           # Interfaces for infrastructure dependencies
+│   ├── ports/
 │   └── types/
-├── domain/              # Domain layer (Business logic, NO external dependencies)
+├── domain/                   # Domain layer (Business logic)
 │   ├── entities/
 │   ├── value-objects/
 │   ├── constants/
 │   └── errors/
-└── infrastructure/      # Infrastructure layer (External dependencies)
-    ├── browser/         # Chrome API wrappers (tabs, runtime, popup, window)
-    ├── persistance/     # Storage services
-    ├── selection/       # Browser selection services
-    └── di/             # Dependency injection container
+├── infrastructure/           # Infrastructure layer
+│   ├── browser/              # Chrome API wrappers
+│   ├── persistence/          # Storage services
+│   ├── windows/              # Window management
+│   └── di/                   # Dependency injection container
+└── utils/
 
 tests/
-├── unit/               # Vitest unit tests (mirrors src/ structure)
+├── unit/                     # Vitest unit tests
 │   ├── domain/
 │   ├── application/
 │   └── infrastructure/
-└── e2e/               # Playwright E2E tests (*.spec.ts)
+└── e2e/                      # Playwright E2E tests
 ```
 
 ## Key Architectural Rules
 
-**Domain Layer Isolation**:
-- Domain layer MUST NOT depend on any other layer
-- No Chrome APIs, window objects, or infrastructure code in domain layer
-- Domain contains pure business logic only
-
-**Infrastructure Layer**:
-- ONLY infrastructure layer may use Chrome APIs and browser-specific code
-- All external dependencies must be wrapped in infrastructure services
-- Services implement interfaces (ports) defined in application layer
-
-**Application Layer**:
-- Use Cases coordinate between domain and infrastructure
-- Dependencies resolved via `container.ts` (tsyringe)
-- One component method should call ideally one UseCase method
-
-**Component Layer**:
-- Cannot directly call Chrome APIs or window objects
-- Must go through UseCases in application layer
-- Follow Atomic Design pattern
+→ アーキテクチャルール詳細は [`.clinerules/01-coding-standards.md`](.clinerules/01-coding-standards.md) を参照
 
 ## Dependency Injection
 

@@ -1,20 +1,10 @@
 # Import Path Rules
 
-**CRITICAL**: All imports MUST use absolute paths starting from `src`:
+→ ルール詳細は [`.clinerules/01-coding-standards.md`](.clinerules/01-coding-standards.md) を参照（`src` 始まりの絶対パス使用）
 
-```typescript
-// ✅ Correct
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+## tsconfig.json パス設定
 
-// ❌ Wrong
-import { RewriteRule } from '../domain/entities/RewriteRule/RewriteRule';
-import { RewriteRule } from '@/domain/entities/RewriteRule/RewriteRule';
-```
-
-Path aliases configured in `tsconfig.json`:
+Path aliases configured in `host-frontend-root/frontend-src-root/tsconfig.json`:
 - `src/*` → `./src/*`
 - `tests/*` → `./tests/*`
 - `entrypoints/*` → `./src/entrypoints/*`
-
-詳細は `docs/coding-standards/tests/common-rule/import-paths.md` を参照。
