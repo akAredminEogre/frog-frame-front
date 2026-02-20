@@ -36,6 +36,24 @@ make testlint       # タスク完了前に必須（包括的チェック）
 
 **このチェックを実行せずにタスクを完了することは禁止されています。**
 
+## タスク別チェックリスト
+
+### 新規メソッド/クラスを追加する場合・既存メソッドを修正する場合
+
+→ 詳細は [.AI/testing-requirements.md](.AI/testing-requirements.md) を参照
+
+### docs/・docs/design/ 配下のドキュメントを作成・編集する場合・ADRを作成・編集する場合
+
+→ 詳細は [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
+
+### E2E specファイルを分割・統合・リネームする場合
+
+→ 詳細は [.AI/tests/e2e/consistency-maintenance-guideline.md](.AI/tests/e2e/consistency-maintenance-guideline.md) を参照
+
+### CLAUDE.mdを編集する場合
+
+→ 詳細は [.AI/docs/claude-md-editing-guide.md](.AI/docs/claude-md-editing-guide.md) を参照
+
 ## アーキテクチャ概要
 
 → 詳細は [.AI/architecture.md](.AI/architecture.md) を参照
