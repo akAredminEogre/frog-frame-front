@@ -16,6 +16,7 @@
 
 ### コーディング規約
 
+- **`docs/coding-standards/`** - コアコーディング規約（テスト規約・モック配置ルール等）
 - **`.clinerules/02-workflow-automation/`** - 自動化ワークフロー定義
 
 **注意**: このプロジェクトで作業する際は、詳細なガイダンスのために `.clinerules/` ファイルを必ず参照してください。
@@ -79,6 +80,8 @@ make testlint       # タスク完了前に必須（包括的チェック）
 ## Gitワークフロー
 
 → 詳細は [README.md の「開発ワークフロー」セクション](README.md#開発ワークフロー) を参照
+
+- **Git Worktree（並行開発）**: [docs/GIT_WORKTREE.md](docs/GIT_WORKTREE.md) を参照（`make wt-dev`・`make wt-disable`・`make wt-remove`）
 
 ## Claude Code Web専用ワークフロー
 
