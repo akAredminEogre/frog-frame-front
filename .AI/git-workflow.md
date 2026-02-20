@@ -4,7 +4,6 @@
 
 - **ベースブランチ**: `develop`
 - **ブランチ命名規則**: Issueベースのブランチ（例: `issue-086-docs-how-to-set-up`）
-- ブランチ作成手順は `../.clinerules/02-workflow-automation/01-issue-launches/workflow-create-branch.md` を参照
 
 ## ドキュメント構成
 
