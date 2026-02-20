@@ -1,236 +1,92 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、リポジトリ内のコードを扱う際のClaude Code (claude.ai/code) へのガイダンスを提供します。
 
-## タスク別チェックリスト（実装前に必ず確認）
+## プロジェクト概要
 
-### 新規メソッド/クラスを追加する場合
+**frog-frame-front** は、DOMエレメントを操作するWXTフレームワーク製のChrome拡張機能プロジェクトです。Clean ArchitectureおよびDomain-Driven Design（DDD）パターンに基づいて設計されています。
 
-1. [ ] **テスト戦略書を先に作成**（`docs/design/src/[layer]/.../[methodName].md`）
-   - テンプレートは「docs/design/ 配下の設計ドキュメントを作成・編集する場合」セクションを参照
-   - **既存モック確認チェック**セクションを必ず記載すること
-2. [ ] 実装コードを作成
-3. [ ] **既存モック検索を実行**（テストコード実装前）
-   - 参照: `docs/coding-standards/tests/common-rule/mock-file-placement.md`
-4. [ ] テストコードを実装
-   - 参照: `docs/coding-standards/tests/common-rule/index.md`
-   - 参照: `docs/coding-standards/tests/array-based-test.md`
-5. [ ] **テスト戦略書との整合性確認**（テストコード実装後）
+- **主要技術スタック**: TypeScript、React、WXT（Chrome拡張機能フレームワーク）
+- **アーキテクチャ**: Clean Architecture + DDD
+- **DIコンテナ**: tsyringe（reflect-metadata使用）
+- **テスト**: Vitest（ユニットテスト）、Playwright（E2Eテスト）
+- **開発環境**: Dockerベースの開発環境
 
-### 既存メソッドを修正する場合
+## プロジェクト固有のルールとワークフロー
 
-1. [ ] 既存テストが通ることを確認
-2. [ ] **シグネチャ変更時はテスト戦略書を必ず更新**
-3. [ ] テストコードを更新
-   - 参照: `docs/coding-standards/tests/common-rule/index.md`
+### コーディング規約
 
-### docs/ 配下のドキュメントを作成・編集する場合
+- **`docs/coding-standards/`** - コアコーディング規約（テスト規約・モック配置ルール等）
+- **`.clinerules/02-workflow-automation/`** - 自動化ワークフロー定義
 
-→ [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
+**注意**: このプロジェクトで作業する際は、詳細なガイダンスのために `.clinerules/` ファイルを必ず参照してください。
 
-### docs/coding-standards/ 配下のコーディング規約を追加・編集する場合
-
-1. [ ] **カテゴリ固有のルールを確認**: [docs-rules/coding-standards.md](docs-rules/coding-standards.md) を必ず読むこと
-2. [ ] [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) のチェックリストに従う
-
-### User Story READMEのタスク進捗を更新する場合
-
-→ `docs-rules/user-stories/readme-guide.md`「タスク進捗更新時のネットワーク図同期」を参照
-
-### docs/design/ 配下の設計ドキュメントを作成・編集する場合
-
-→ [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
-
-**テンプレート**: `docs-rules/design/` 配下の各ルールファイルに従うこと
-
-### E2E specファイルを分割・統合・リネームする場合
-
-→ [.AI/tests/e2e/consistency-maintenance-guideline.md](.AI/tests/e2e/consistency-maintenance-guideline.md) を参照
-
-### ADRを作成・編集する場合
-
-→ [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
-
-### CLAUDE.mdを編集する場合
-
-→ [.AI/docs/claude-md-editing-guide.md](.AI/docs/claude-md-editing-guide.md) を参照
-
-**重要**: README.mdとの重複を避けること。詳細はREADME.mdに記載し、CLAUDE.mdからは参照のみとする。
-
----
-
-## Project Overview
-
-**frog-frame-front** is a Chrome extension project built with the WXT framework that manipulates DOM elements. The project follows Clean Architecture principles with Domain-Driven Design (DDD) patterns.
-
-- **Main Tech Stack**: TypeScript, React, WXT (Chrome extension framework)
-- **Architecture**: Clean Architecture + DDD
-- **DI Container**: tsyringe with reflect-metadata
-- **Testing**: Vitest (unit tests), Playwright (E2E tests)
-- **Development**: Docker-based development environment
-
-## Project-Specific Rules and Workflows
-
-### Coding Standards
-
-- **`docs/coding-standards/`** - Core coding conventions
-- **`.clinerules/02-workflow-automation/`** - Automated workflow definitions
-
-**Note**: When working on this project, always refer to these `.clinerules/` files for detailed guidance.
-
-## Common Development Commands
+## 共通開発コマンド
 
 → セットアップ手順・利用可能なコマンド一覧は [README.md](README.md) を参照
 
-### Claude Code固有の追加セットアップ
+### タスク完了前の必須確認
+
+**重要**: タスクを完了とする前に、必ず以下を実行すること:
 
 ```bash
-make init-hooks     # Install Git hooks (pre-commit: ESLint with import sorting, stylelint, markdownlint)
+make testlint       # タスク完了前に必須（包括的チェック）
 ```
 
-### Testing and Linting（必須コマンド）
-
-```bash
-make testlint       # REQUIRED before completing any task (comprehensive checks)
-```
-
-### Critical Pre-Completion Check
-
-**IMPORTANT**: Before marking any task as complete, you MUST run:
-
-```bash
-make testlint
-```
-
-**Note**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
+**注意**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
 
 **このチェックを実行せずにタスクを完了することは禁止されています。**
 
-### Git Worktree (Parallel Development)
+## タスク別チェックリスト
 
-→ 詳細は [docs/GIT_WORKTREE.md](docs/GIT_WORKTREE.md) を参照
+### 新規メソッド/クラスを追加する場合・既存メソッドを修正する場合
 
-基本コマンド:
+→ 詳細は [.AI/testing-requirements.md](.AI/testing-requirements.md) を参照
 
-```bash
-make wt-dev BRANCH=feature-x    # 開発サーバー起動（自動初期化含む）
-make wt-disable                 # メインリポジトリに戻る
-make wt-remove BRANCH=feature-x # worktree削除
-```
+### docs/・docs/design/ 配下のドキュメントを作成・編集する場合・ADRを作成・編集する場合
 
-## Architecture Overview
+→ 詳細は [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
-→ アーキテクチャの詳細は [docs/adr/001-clean-architecture-with-presenter-pattern.md](docs/adr/001-clean-architecture-with-presenter-pattern.md) を参照
+### E2E specファイルを分割・統合・リネームする場合
 
-## Import Path Rules
+→ 詳細は [.AI/tests/e2e/consistency-maintenance-guideline.md](.AI/tests/e2e/consistency-maintenance-guideline.md) を参照
 
-**CRITICAL**: All imports MUST use absolute paths with configured aliases.
+### CLAUDE.mdを編集する場合
 
-→ 詳細は `docs/coding-standards/tests/common-rule/import-paths.md` を参照
+→ 詳細は [.AI/docs/claude-md-editing-guide.md](.AI/docs/claude-md-editing-guide.md) を参照
 
-## Object-Oriented Design Rules (ThoughtWorks Anthology)
+## アーキテクチャ概要
 
-→ 詳細は `docs/coding-standards/src/object-oriented-nine-rules.md` を参照
+→ 詳細は [.AI/architecture.md](.AI/architecture.md) を参照
 
-## Testing Requirements
+## インポートパスルール
 
-### Test Strategy Document (Required)
+**重要**: 全インポートは設定済みエイリアスを使った絶対パスを使用すること。
 
-**CRITICAL**: Before writing any test code, create a test strategy document.
+→ 詳細は [.AI/import-paths.md](.AI/import-paths.md) を参照
 
-- **Location**: `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md`
-- **Templates**: `docs-rules/design/05-test-strategy.md`（単体）、`docs-rules/design/06-integration-test-strategy.md`（結合）、`docs-rules/design/07-e2e-test-strategy/`（E2E）
+## オブジェクト指向設計ルール（ThoughtWorksアンソロジー）
 
-### テストを伴う実装時のTodoWrite使用
+→ 詳細は [.AI/oo-design-rules.md](.AI/oo-design-rules.md) を参照
 
-新規メソッド追加時は、TodoWriteで以下の順序でタスクを作成すること:
+## テスト要件
 
-1. テスト戦略書の作成
-2. 実装コードの作成
-3. テストコードの実装
+→ 詳細は [.AI/testing-requirements.md](.AI/testing-requirements.md) を参照
 
-### Testing Standards
+## WXTフレームワーク詳細
 
-→ 詳細は以下を参照:
+→ 詳細は [.AI/wxt-framework.md](.AI/wxt-framework.md) を参照
 
-- 共通ルール: `docs/coding-standards/tests/common-rule/index.md`
-- 配列ベーステスト: `docs/coding-standards/tests/array-based-test.md`
-- E2Eルール: `docs/coding-standards/tests/e2e/index.md`
-- infrastructure層ルール: `docs/coding-standards/tests/unit/infrastructure.md`
+## Gitワークフロー
 
-## WXT Framework Specifics
+→ 詳細は [README.md の「開発ワークフロー」セクション](README.md#開発ワークフロー) を参照
 
-### Configuration
-
-- Config file: `host-frontend-root/frontend-src-root/wxt.config.ts`
-- **Required**: `srcDir: 'src'` must be set in config
-
-### Entry Points
-
-All entry points in `host-frontend-root/frontend-src-root/src/entrypoints/`:
-
-- `background.ts` - Background service worker
-- `content.ts` - Content script
-- `popup/`, `rules/`, `edit/` - UI directories
-
-### Special Files
-
-- `.wxt/tsconfig.json` - Generated by `npx wxt prepare` (DO NOT manually create)
-- `matchUrl.ts` - Must be created from `matchUrl.ts.example` during setup
-
-## Git Workflow
-
-### Branch Strategy
-
-- **Base branch**: `develop`
-- **Branch naming**: Issue-based branches (e.g., `issue-086-docs-how-to-set-up`)
-- See `.clinerules/02-workflow-automation/01-issue-launches/` for branch creation workflows
-
-### Files to Exclude from Commits
-
-- `WITH_CLINE.md` - Work-in-progress instructions
-- `issues.md` - Task management file
-
-### Pull Requests
-
-- Create PRs using `gh` CLI
-- Base PRs against `develop` branch
-- Repository: `akAredminEogre/frog-frame-front`
+- **Git Worktree（並行開発）**: [docs/GIT_WORKTREE.md](docs/GIT_WORKTREE.md) を参照（`make wt-dev`・`make wt-disable`・`make wt-remove`）
 
 ## Claude Code Web専用ワークフロー
 
-**注意**: このセクションはClaude Code Web（ブラウザ版）専用です。ターミナル版のClaude Codeでは `.claude/commands/` 内のスラッシュコマンドを使用してください。
+→ 詳細は [.AI/claude-code-web-workflow.md](.AI/claude-code-web-workflow.md) を参照
 
-### テスト実行ルール（Claude Code Web用）
+## トラブルシューティング
 
-**重要**: Claude Code Web環境では、**テストは手動で実行せず、CIに任せてください**。
-
-### セッション開始時（Claude Code Web用）
-
-```text
-/workflow-ccw-session-start
-```
-
-このワークフローは pre-commitフックのセットアップ、Issue番号の採番、ブランチ作成、PR作成リンクの表示を行います。
-
-- **ブランチ命名規則**: `claude/issue-nnn-<branch-suffix>-<random5chars>`
-
-### PRマージ（Claude Code Web用）
-
-```text
-/workflow-ccw-merge-pull-request
-```
-
-## Troubleshooting
-
-### `.wxt/tsconfig.json` Not Found
-
-This file is auto-generated. Run:
-
-```bash
-docker compose exec frontend npx wxt prepare
-```
-
-### Permission Issues
-
-The Docker setup includes a `fix-permissions.sh` script that runs on container start to handle file permission issues between host and container.
+→ 詳細は [.AI/troubleshooting.md](.AI/troubleshooting.md) を参照
