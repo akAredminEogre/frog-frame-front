@@ -9,11 +9,31 @@
 - [`e2e/index.md`](../docs/coding-standards/tests/e2e/index.md) - E2Eテスト規約
 - [`unit/infrastructure.md`](../docs/coding-standards/tests/unit/infrastructure.md) - ユニットテスト（インフラ層）
 
+## ローカルテスト方針（AI駆動開発版）
+
+**原則**: ローカルでの全テスト実行は不要。CI/CDに委譲する。
+
+| タイミング | 実行すべきテスト |
+|-----------|----------------|
+| 実装中 | 変更した機能に関連するユニットテストのみ（`npx vitest run path/to/unit.test.ts`） |
+| PR作成前 | Lint のみ（`make lint`） |
+| PR作成後 | CI/CDが全テストを自動実行（確認はCIログを参照） |
+| E2E確認 | Docker使用は CI/CD で確認。ローカル実行は任意 |
+
+> **理由**: `make testall` / `make testlint` によるフル実行は時間がかかり並行開発のスピードを阻害する。
+> CI/CDが全テストをカバーするため、ローカルでは差分テストのみで十分。
+
+## Dockerの使用方針
+
+- **基本**: Dockerコンテナの使用は**実際の挙動確認が必要な場合のみ**（最小限）
+- **MAS並行開発**: 各足軽はDockerを使わずに開発する（ユニットテスト＋Lint のみ）
+- **Docker起動コマンド**: `make wt-dev BRANCH=branch-name`（必要な場合のみ）
+
 ## テストフレームワーク
 
 - **ユニットテスト**: Vitest（happy-dom使用）（`tests/` 配下の `**/*.test.ts`）
 - **E2Eテスト**: Playwright（`tests/e2e/` 配下の `**/*.spec.ts`）
-- 全テスト実行: `make testall`（テストのみ）または `make testlint`（テスト＋リント包括）
+- 全テスト実行（CI/CDまたは必要時のみ）: `make testall`（テストのみ）または `make testlint`（テスト＋リント包括）
 
 > **注意**: E2Eスペックファイルの分割・統合・リネームを行う場合は、[`.AI/tests/e2e/consistency-maintenance-guideline.md`](tests/e2e/consistency-maintenance-guideline.md) を必ず参照すること。
 

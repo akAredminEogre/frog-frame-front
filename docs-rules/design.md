@@ -2,16 +2,21 @@
 
 ## 設計方針
 
-**理論的設計を先行させる**
+**理論的設計を先行させ、E2E 1パターン実装に直結させる**
 
 設計ドキュメントは Clean Architecture の原則に基づく「理論的なあるべき姿」を記述する。
-既存実装との齟齬は設計段階では考慮せず、ユーザーストーリーの現状分析で差分を管理する。
+設計完了後は**スケルトン実装フェーズを経ずに**、E2E 1パターンが通る実装に直接進む。
 
 ```text
-設計ドキュメント（理論）  →  ユーザーストーリー（現状分析）  →  実装
+設計ドキュメント（理論）  →  E2E 1パターン実装  →  ユニットテスト戦略・不具合修正
      ↓                              ↓
- あるべき姿を定義            理論と現実の差分を分類・計画
+ あるべき姿を定義          1シナリオが通る最小実装
 ```
+
+> **廃止**: スケルトン実装フェーズ（ADR準拠のクラス骨格のみ作成する工程）は廃止。
+> 設計完了後は直接 E2E シナリオを1件通す実装に進むこと。
+
+詳細な開発フロー: [.AI/development-flow.md](../.AI/development-flow.md) を参照
 
 ## ディレクトリ構造
 
@@ -25,7 +30,7 @@ docs/design/
 │               ├── 00-overview.md      # 必須: 概要
 │               ├── 01-class-design.md  # 必須: クラス設計（理論）
 │               ├── 02-sequence.puml    # 必須: シーケンス図
-│               └── 03-directory-structure.md  # 必須: ディレクトリ構成（理論）
+│               └── 03-directory-structure.md  # オプション: ディレクトリ構成（理論）
 └── clean-architecture/                 # アーキテクチャ共通設計（参考用）
     └── domain/
         └── entities.md
@@ -51,13 +56,16 @@ docs/design/
 
 各ファイルの詳細ルールは以下を参照:
 
-| ファイル | ルール |
-|---------|--------|
-| ui.md（画面単位） | [design/ui.md](./design/ui.md) |
-| 00-overview.md（機能単位） | [design/00-overview.md](./design/00-overview.md) |
-| 01-class-design.md（機能単位） | [design/01-class-design.md](./design/01-class-design.md) |
-| 02-sequence.puml（機能単位） | [design/02-sequence.md](./design/02-sequence.md) |
-| 03-directory-structure.md（機能単位） | [design/03-directory-structure.md](./design/03-directory-structure.md) |
+| ファイル | 必須/オプション | ルール |
+|---------|----------------|--------|
+| ui.md（画面単位） | 必須 | [design/ui.md](./design/ui.md) |
+| 00-overview.md（機能単位） | 必須 | [design/00-overview.md](./design/00-overview.md) |
+| 01-class-design.md（機能単位） | 必須 | [design/01-class-design.md](./design/01-class-design.md) |
+| 02-sequence.puml（機能単位） | 必須 | [design/02-sequence.md](./design/02-sequence.md) |
+| 03-directory-structure.md（機能単位） | **オプション** | [design/03-directory-structure.md](./design/03-directory-structure.md) |
+
+> **注意**: `03-directory-structure.md` はオプション。クラス設計・シーケンス図から
+> ディレクトリ構成が自明でない複雑な機能にのみ作成すること。スケルトン実装の代替ではない。
 
 ### テスト戦略書
 
