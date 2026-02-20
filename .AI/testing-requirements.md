@@ -6,7 +6,9 @@
 
 - **ユニットテスト**: Vitest（happy-dom使用）（`tests/` 配下の `*.test.ts`）
 - **E2Eテスト**: Playwright（`tests/e2e/` 配下の `*.spec.ts`）
-- 全テスト実行: `make testall` または包括的な `make testlint`
+- 全テスト実行: `make testall`（テストのみ）または `make testlint`（テスト＋リント包括）
+
+> **注意**: E2Eスペックファイルの分割・統合・リネームを行う場合は、[`.AI/tests/e2e/consistency-maintenance-guideline.md`](tests/e2e/consistency-maintenance-guideline.md) を必ず参照すること。
 
 ## テスト戦略書
 
