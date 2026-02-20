@@ -78,7 +78,7 @@ make testlint       # タスク完了前に必須（包括的チェック）
 
 ## Gitワークフロー
 
-→ 詳細は [.AI/git-workflow.md](.AI/git-workflow.md) を参照
+→ 詳細は [README.md の「開発ワークフロー」セクション](README.md#開発ワークフロー) を参照
 
 ## Claude Code Web専用ワークフロー
 

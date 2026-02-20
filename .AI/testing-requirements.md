@@ -1,13 +1,13 @@
 # テスト要件
 
-→ テストコーディング規約は [`docs/coding-standards/tests/`](../../docs/coding-standards/tests/) を参照
+→ テストコーディング規約は [`docs/coding-standards/tests/`](../docs/coding-standards/tests/) を参照
 
 主要ドキュメント:
 
-- [`common-rule/index.md`](../../docs/coding-standards/tests/common-rule/index.md) - 共通テストルール
-- [`array-based-test.md`](../../docs/coding-standards/tests/array-based-test.md) - 配列ベーステスト
-- [`e2e/index.md`](../../docs/coding-standards/tests/e2e/index.md) - E2Eテスト規約
-- [`unit/infrastructure.md`](../../docs/coding-standards/tests/unit/infrastructure.md) - ユニットテスト（インフラ層）
+- [`common-rule/index.md`](../docs/coding-standards/tests/common-rule/index.md) - 共通テストルール
+- [`array-based-test.md`](../docs/coding-standards/tests/array-based-test.md) - 配列ベーステスト
+- [`e2e/index.md`](../docs/coding-standards/tests/e2e/index.md) - E2Eテスト規約
+- [`unit/infrastructure.md`](../docs/coding-standards/tests/unit/infrastructure.md) - ユニットテスト（インフラ層）
 
 ## テストフレームワーク
 
