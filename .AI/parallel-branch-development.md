@@ -19,14 +19,14 @@ git worktree を活用し、複数の担当者に**ユニット単位**の作業
 | 分割基準 | 説明 |
 |----------|------|
 | **クラス単位** | 1クラス（Repository, UseCase, Presenter等）を1ユニットとする |
-| **レイヤー単位** | Infrastructure / Application / Domain / Presentation を独立割当可 |
+| **レイヤー単位** | enterprise-business-rules / application-business-rules / interface-adapters / frameworks-and-drivers を独立割当可（[ADR-001](../docs/adr/001-clean-architecture-with-presenter-pattern.md)参照） |
 | **テスト単位** | 実装ユニットにテストを対で割り当てる |
 
 ### 依存関係に注意すること
 
 - 依存するユニットが未完成の場合はインターフェース（`interface`）を先に確定させる
 - インターフェース確定後に各ユニットの実装を並行開始する
-- 依存方向: Presentation → Application → Domain ← Infrastructure
+- 依存関係: 各ユーザーストーリーのアローダイアグラムに従うこと（[新機能開発フロー](../docs/development-flow/new-feature/index.md)参照）
 
 ## 統合担当者の段取り手順
 
