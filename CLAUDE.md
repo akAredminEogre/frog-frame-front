@@ -27,23 +27,7 @@
 
 ### タスク完了前の確認
 
-**ローカルでの全テスト実行は不要**。CI/CDに委譲する方針に変更。
-
-タスク完了前に実行すること:
-
-```bash
-make lint           # Lintチェック（必須）
-```
-
-```bash
-# 実装した機能のユニットテストのみ（推奨）
-npx vitest run path/to/unit.test.ts
-```
-
-**注意**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
-
-> `make testlint`（全テスト）はCIで自動実行される。ローカルでのフル実行は任意。
-> テスト方針の詳細: [.AI/testing-requirements.md](.AI/testing-requirements.md)
+→ 詳細は [.AI/testing-requirements.md](.AI/testing-requirements.md) を参照
 
 ## タスク別チェックリスト
 
@@ -101,8 +85,6 @@ npx vitest run path/to/unit.test.ts
 ## PR運用
 
 → 詳細は [.AI/pr-policy.md](.AI/pr-policy.md) を参照
-
-- ユーザーストーリー境界にとらわれず、気づいた改善を同一PRに含めてよい
 
 ## Claude Code Web専用ワークフロー
 
