@@ -1,18 +1,6 @@
 # design ドキュメントルール
 
-## 設計方針
-
-**理論的設計を先行させ、E2E 1パターン実装に直結させる**
-
-設計ドキュメントは Clean Architecture の原則に基づく「理論的なあるべき姿」を記述する。
-
-```text
-設計ドキュメント（理論）  →  E2E 1パターン実装  →  ユニットテスト戦略・不具合修正
-     ↓                              ↓
- あるべき姿を定義          1シナリオが通る最小実装
-```
-
-詳細な開発フロー: [.AI/development-flow.md](../.AI/development-flow.md) を参照
+開発フロー: [docs/development-flow/new-feature/index.md](../docs/development-flow/new-feature/index.md)
 
 ## ディレクトリ構造
 
