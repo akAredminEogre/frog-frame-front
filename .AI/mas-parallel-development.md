@@ -1,17 +1,17 @@
-# MAS並行開発ガイド（Multi-Agent-Shogun）
+# ブランチ並行開発ガイド
 
-このドキュメントは multi-agent-shogun（MAS）を使った複数足軽（ashigaru）による
+このドキュメントは git worktree を活用した複数担当者による
 frog-frame-front の並行開発手順を定義する。
 
 ## 概要
 
-git worktree を活用し、複数の足軽に**ユニット単位**の作業を並行割り当てする。
+git worktree を活用し、複数の担当者に**ユニット単位**の作業を並行割り当てする。
 
 ```text
-家老（karo）
-├── 足軽1: feat/unit-A (make wt-dev BRANCH=feat/unit-A)
-├── 足軽2: feat/unit-B (make wt-dev BRANCH=feat/unit-B)
-└── 足軽3: feat/unit-C (make wt-dev BRANCH=feat/unit-C)
+統合担当者
+├── 担当者1: feat/unit-A (make wt-dev BRANCH=feat/unit-A)
+├── 担当者2: feat/unit-B (make wt-dev BRANCH=feat/unit-B)
+└── 担当者3: feat/unit-C (make wt-dev BRANCH=feat/unit-C)
 ```
 
 ## ユニット分割の原則
@@ -28,7 +28,7 @@ git worktree を活用し、複数の足軽に**ユニット単位**の作業を
 - インターフェース確定後に各ユニットの実装を並行開始する
 - 依存方向: Presentation → Application → Domain ← Infrastructure
 
-## 家老の段取り手順
+## 統合担当者の段取り手順
 
 ### Step 1: ブランチ戦略決定
 
@@ -41,10 +41,10 @@ git -C /path/to/frog-frame-front checkout develop
 git -C /path/to/frog-frame-front checkout -b feat/unit-B
 ```
 
-### Step 2: 各足軽にタスクYAMLを割り当て
+### Step 2: 各担当者にタスクを割り当て
 
 ```yaml
-# queue/tasks/ashigaru1.yaml 例
+# タスク割当例
 task_id: task_XXX
 target_repo: frog-frame-front
 target_branch: feat/unit-A
@@ -53,15 +53,15 @@ unit: UserRepository（InfrastructureLayer実装）
 interface_contract: docs/design/pages/.../01-class-design.md
 ```
 
-### Step 3: 各足軽のworktree起動指示
+### Step 3: 各担当者のworktree起動指示
 
 ```bash
-# 足軽に実行させるコマンド
+# 担当者に実行させるコマンド
 make wt-dev BRANCH=feat/unit-A
 # working_dirが worktrees/feat-unit-A になる
 ```
 
-## 足軽の作業手順
+## 担当者の作業手順
 
 ### 初期化
 
@@ -76,14 +76,14 @@ make wt-dev BRANCH=feat/unit-A
 ```text
 frog-frame-front/
 ├── worktrees/
-│   ├── feat-unit-A/   ← 足軽1の作業ディレクトリ
-│   ├── feat-unit-B/   ← 足軽2の作業ディレクトリ
-│   └── feat-unit-C/   ← 足軽3の作業ディレクトリ
+│   ├── feat-unit-A/   ← 担当者1の作業ディレクトリ
+│   ├── feat-unit-B/   ← 担当者2の作業ディレクトリ
+│   └── feat-unit-C/   ← 担当者3の作業ディレクトリ
 ```
 
 ### テスト方針（Docker不使用）
 
-MAS並行開発では各足軽はDockerを使わずに開発する:
+各担当者はDockerを使わずに開発する:
 
 ```bash
 # ユニットテストのみローカル実行（Docker不要）
@@ -94,23 +94,23 @@ npx vitest run path/to/unit.test.ts
 make lint
 ```
 
-E2Eテスト・Docker使用は統合時（家老マージ後）にCI/CDが実行する。
+E2Eテスト・Docker使用は統合時（マージ後）にCI/CDが実行する。
 
 ### コミット・プッシュ
 
 ```bash
-# 足軽は自分のユニットブランチにpush
+# 各担当者は自分のユニットブランチにpush
 cd worktrees/feat-unit-A
 git add src/path/to/unit.ts tests/path/to/unit.test.ts
 git commit -m "feat(unit-A): implement UserRepository"
 git push origin feat/unit-A
 ```
 
-## 統合・マージ手順（家老）
+## 統合・マージ手順（統合担当者）
 
 ### 1. 各ユニットのPRを確認
 
-各足軽のブランチをPRでレビュー（`develop` へのPR）。
+各担当者のブランチをPRでレビュー（`develop` へのPR）。
 
 ### 2. 依存順にマージ
 
@@ -130,7 +130,7 @@ feat/unit-domain → feat/unit-infra → feat/unit-app → feat/unit-ui
 ## 注意事項
 
 1. **node_modules重複**: 各worktreeは独自のnode_modulesを持つ。ディスク容量注意。
-2. **Docker同時起動不可**: `make wt-dev` は他のworktreeを自動停止するため、同時Docker起動は不可。MAS並行開発ではDockerを使わない方針を徹底する。
+2. **Docker同時起動不可**: `make wt-dev` は他のworktreeを自動停止するため、同時Docker起動は不可。並行開発ではDockerを使わない方針を徹底する。
 3. **worktree後片付け**: 完了後は `make wt-remove BRANCH=feat/unit-A` でクリーンアップ。
 
 ## 関連ドキュメント
