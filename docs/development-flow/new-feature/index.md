@@ -79,12 +79,12 @@ E2E 1 シナリオ実装
 3. E2Eテストがパスしたら、ユニットテストを追加
 4. 不具合修正・リファクタリング
 
-### MAS 並行開発での適用
+### 並行開発での適用
 
-複数の足軽（ashigaru）に並行作業を割り当てる場合:
+複数の担当者に並行作業を割り当てる場合:
 
 - ユニット単位（クラス/機能ごと）でブランチを切り、git worktreeで並行実装
-- 詳細: [.AI/mas-parallel-development.md](../../../.AI/mas-parallel-development.md)
+- 詳細: [.AI/parallel-branch-development.md](../../../.AI/parallel-branch-development.md)
 
 ## テスト方針
 
