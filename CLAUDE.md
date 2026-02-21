@@ -90,7 +90,7 @@ npx vitest run path/to/unit.test.ts
 → 詳細は [.AI/development-flow.md](.AI/development-flow.md) を参照
 
 - スケルトン実装フェーズ廃止・E2E 1パターン実装直行
-- MAS並行開発: [.AI/mas-parallel-development.md](.AI/mas-parallel-development.md)
+- 並行開発: [.AI/parallel-branch-development.md](.AI/parallel-branch-development.md)
 
 ## Gitワークフロー
 

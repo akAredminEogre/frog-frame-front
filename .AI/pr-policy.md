@@ -46,5 +46,5 @@
 ## 関連ドキュメント
 
 - 開発フロー: [.AI/development-flow.md](./development-flow.md)
-- MAS並行開発: [.AI/mas-parallel-development.md](./mas-parallel-development.md)
+- 並行開発: [.AI/parallel-branch-development.md](./parallel-branch-development.md)
 - Gitワークフロー: [docs/GIT_WORKTREE.md](../docs/GIT_WORKTREE.md)
