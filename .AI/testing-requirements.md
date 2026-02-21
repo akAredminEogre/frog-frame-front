@@ -16,17 +16,28 @@
 
 **ローカルでの全テスト実行は不要**。CI/CDに委譲する方針。
 
-タスク完了前に実行すること:
+### 実行すること（Docker不要 — 必須）
+
+以下のコマンドはDockerなしで実行できるため、タスク完了前に必ず実行すること:
 
 ```bash
 make lint           # Lintチェック（必須）
 ```
 
 ```bash
-# 実装した機能のユニットテストのみ（推奨）
+# 実装した機能のユニットテスト（必須）
 npx vitest run path/to/unit.test.ts
 ```
 
 **注意**: Claude Code Web環境では `make` コマンドが使用できません。詳細は [.AI/claude-code-web-workflow.md](./claude-code-web-workflow.md) を参照してください。
+
+### 環境依存・省略可（Docker必須）
+
+以下のコマンドはDockerが必要なため、ローカル環境によっては省略可。CI/CDで自動実行される:
+
+```bash
+make testlint       # 全テスト（E2Eを含む）— CIで自動実行
+make test           # Docker起動を要するテスト全般
+```
 
 > `make testlint`（全テスト）はCIで自動実行される。ローカルでのフル実行は任意。
