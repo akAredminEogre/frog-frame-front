@@ -30,7 +30,8 @@ docs/design/
 │               ├── 00-overview.md      # 必須: 概要
 │               ├── 01-class-design.md  # 必須: クラス設計（理論）
 │               ├── 02-sequence.puml    # 必須: シーケンス図
-│               └── 03-directory-structure.md  # オプション: ディレクトリ構成（理論）
+│               ├── 03-directory-structure.md  # 必須: ディレクトリ構成（理論）
+│               └── arrow-diagram       # 必須: アローダイアグラム（依存関係・データフロー図）
 └── clean-architecture/                 # アーキテクチャ共通設計（参考用）
     └── domain/
         └── entities.md
@@ -62,10 +63,11 @@ docs/design/
 | 00-overview.md（機能単位） | 必須 | [design/00-overview.md](./design/00-overview.md) |
 | 01-class-design.md（機能単位） | 必須 | [design/01-class-design.md](./design/01-class-design.md) |
 | 02-sequence.puml（機能単位） | 必須 | [design/02-sequence.md](./design/02-sequence.md) |
-| 03-directory-structure.md（機能単位） | **オプション** | [design/03-directory-structure.md](./design/03-directory-structure.md) |
+| 03-directory-structure.md（機能単位） | **必須** | [design/03-directory-structure.md](./design/03-directory-structure.md) |
+| アローダイアグラム（機能単位） | **必須** | コンポーネント間の依存関係・データフローを ASCII Art で図示 |
 
-> **注意**: `03-directory-structure.md` はオプション。クラス設計・シーケンス図から
-> ディレクトリ構成が自明でない複雑な機能にのみ作成すること。スケルトン実装の代替ではない。
+> **注意**: `03-directory-structure.md` とアローダイアグラムは**必須**。
+> スケルトン実装フェーズのみ廃止。設計成果物は全件作成すること。
 
 ### テスト戦略書
 
