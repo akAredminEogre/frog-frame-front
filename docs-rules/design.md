@@ -1,7 +1,5 @@
 # design ドキュメントルール
 
-開発フロー: [docs/development-flow/new-feature/index.md](../docs/development-flow/new-feature/index.md)
-
 ## ディレクトリ構造
 
 ```text
@@ -15,7 +13,7 @@ docs/design/
 │               ├── 01-class-design.md  # 必須: クラス設計（理論）
 │               ├── 02-sequence.puml    # 必須: シーケンス図
 │               ├── 03-directory-structure.md  # 必須: ディレクトリ構成（理論）
-│               └── arrow-diagram       # 必須: アローダイアグラム（依存関係・データフロー図）
+│               └── 04-arrow-diagram.md # 必須: アローダイアグラム（依存関係・データフロー図）
 └── clean-architecture/                 # アーキテクチャ共通設計（参考用）
     └── domain/
         └── entities.md
@@ -43,12 +41,12 @@ docs/design/
 
 | ファイル | 必須/オプション | ルール |
 |---------|----------------|--------|
-| ui.md（画面単位） | 必須 | [design/ui.md](./design/ui.md) |
-| 00-overview.md（機能単位） | 必須 | [design/00-overview.md](./design/00-overview.md) |
-| 01-class-design.md（機能単位） | 必須 | [design/01-class-design.md](./design/01-class-design.md) |
-| 02-sequence.puml（機能単位） | 必須 | [design/02-sequence.md](./design/02-sequence.md) |
+| ui.md（画面単位） | **必須** | [design/ui.md](./design/ui.md) |
+| 00-overview.md（機能単位） | **必須** | [design/00-overview.md](./design/00-overview.md) |
+| 01-class-design.md（機能単位） | **必須** | [design/01-class-design.md](./design/01-class-design.md) |
+| 02-sequence.puml（機能単位） | **必須** | [design/02-sequence.md](./design/02-sequence.md) |
 | 03-directory-structure.md（機能単位） | **必須** | [design/03-directory-structure.md](./design/03-directory-structure.md) |
-| アローダイアグラム（機能単位） | **必須** | コンポーネント間の依存関係・データフローを ASCII Art で図示 |
+| アローダイアグラム（機能単位） | **必須** | [design/04-arrow-diagram.md](./design/04-arrow-diagram.md) |
 
 > `03-directory-structure.md` とアローダイアグラムは**必須**。
 
@@ -71,6 +69,7 @@ docs/design/
 
 ## 関連ドキュメント
 
+- 開発フロー: [docs/development-flow/new-feature/index.md](../docs/development-flow/new-feature/index.md)
 - ユーザーストーリー: `docs/user-stories/`
 - ADR: `docs/adr/`
 - 基本ルール: [ドキュメント共通ルール](./common/index.md)
