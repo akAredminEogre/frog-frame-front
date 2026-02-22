@@ -192,7 +192,7 @@ else isExporting = false
     - version: "1.0"
     - exportedAt: ISO 8601日時
     - rules: IDを含む全属性の配列
-    - fileName: frog-frame-rules-YYYY-MM-DD.json
+    - fileName: frog-frame-front-rules-YYYYMMDD_hhmmss.json
   end note
 
   Interactor -> OutputData : new(\n  jsonContent,\n  fileName)

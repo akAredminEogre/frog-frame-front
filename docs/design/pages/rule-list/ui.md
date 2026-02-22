@@ -228,7 +228,7 @@ width: 200px;
 ### 動作
 
 - クリック時: `useExportRulesJson` Hook経由でJSON形式のファイルダウンロードを実行
-- ファイル形式: JSON（`frog-frame-rules-YYYY-MM-DD.json`）
+- ファイル形式: JSON（`frog-frame-front-rules-YYYYMMDD_hhmmss.json`）
 - エラー時: トースト通知で「エクスポートに失敗しました」を表示
 
 ## 更新履歴

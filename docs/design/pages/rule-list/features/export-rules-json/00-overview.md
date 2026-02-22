@@ -33,7 +33,7 @@
 
 ### ファイル命名
 
-- ファイル名: `frog-frame-rules-YYYY-MM-DD.json`（エクスポート日付を含む）
+- ファイル名: `frog-frame-front-rules-YYYYMMDD_hhmmss.json`（エクスポート日時を含む）
 
 ### エラーハンドリング
 
