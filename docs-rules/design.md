@@ -1,18 +1,5 @@
 # design ドキュメントルール
 
-## 設計方針
-
-**理論的設計を先行させる**
-
-設計ドキュメントは Clean Architecture の原則に基づく「理論的なあるべき姿」を記述する。
-既存実装との齟齬は設計段階では考慮せず、ユーザーストーリーの現状分析で差分を管理する。
-
-```text
-設計ドキュメント（理論）  →  ユーザーストーリー（現状分析）  →  実装
-     ↓                              ↓
- あるべき姿を定義            理論と現実の差分を分類・計画
-```
-
 ## ディレクトリ構造
 
 ```text
@@ -25,7 +12,8 @@ docs/design/
 │               ├── 00-overview.md      # 必須: 概要
 │               ├── 01-class-design.md  # 必須: クラス設計（理論）
 │               ├── 02-sequence.puml    # 必須: シーケンス図
-│               └── 03-directory-structure.md  # 必須: ディレクトリ構成（理論）
+│               ├── 03-directory-structure.md  # 必須: ディレクトリ構成（理論）
+│               └── 04-arrow-diagram.puml # 必須: アローダイアグラム（依存関係・データフロー図）
 └── clean-architecture/                 # アーキテクチャ共通設計（参考用）
     └── domain/
         └── entities.md
@@ -51,13 +39,16 @@ docs/design/
 
 各ファイルの詳細ルールは以下を参照:
 
-| ファイル | ルール |
-|---------|--------|
-| ui.md（画面単位） | [design/ui.md](./design/ui.md) |
-| 00-overview.md（機能単位） | [design/00-overview.md](./design/00-overview.md) |
-| 01-class-design.md（機能単位） | [design/01-class-design.md](./design/01-class-design.md) |
-| 02-sequence.puml（機能単位） | [design/02-sequence.md](./design/02-sequence.md) |
-| 03-directory-structure.md（機能単位） | [design/03-directory-structure.md](./design/03-directory-structure.md) |
+| ファイル | 必須/オプション | ルール |
+|---------|----------------|--------|
+| ui.md（画面単位） | **必須** | [design/ui.md](./design/ui.md) |
+| 00-overview.md（機能単位） | **必須** | [design/00-overview.md](./design/00-overview.md) |
+| 01-class-design.md（機能単位） | **必須** | [design/01-class-design.md](./design/01-class-design.md) |
+| 02-sequence.puml（機能単位） | **必須** | [design/02-sequence.md](./design/02-sequence.md) |
+| 03-directory-structure.md（機能単位） | **必須** | [design/03-directory-structure.md](./design/03-directory-structure.md) |
+| アローダイアグラム（機能単位） | **必須** | [design/04-arrow-diagram.md](./design/04-arrow-diagram.md) |
+
+> `03-directory-structure.md` とアローダイアグラムは**必須**。
 
 ### テスト戦略書
 
@@ -78,6 +69,7 @@ docs/design/
 
 ## 関連ドキュメント
 
+- 開発フロー: [docs/development-flow/new-feature/index.md](../docs/development-flow/new-feature/index.md)
 - ユーザーストーリー: `docs/user-stories/`
 - ADR: `docs/adr/`
 - 基本ルール: [ドキュメント共通ルール](./common/index.md)

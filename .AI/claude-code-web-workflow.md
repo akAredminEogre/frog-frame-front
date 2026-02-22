@@ -4,7 +4,9 @@
 
 ## テスト実行ルール（Claude Code Web用）
 
-**重要**: Claude Code Web環境では、**テストは手動で実行せず、CIに任せてください**。
+[docs/development-flow/testing-policy/index.md](../docs/development-flow/testing-policy/index.md) に従うこと。
+
+> **CCW環境の制約**: Claude Code Webはローカルシェルを直接操作できないため、`make` コマンドは使用不可。テスト実行方針に記載の `npx` コマンドも実行できない場合は、PR説明欄に「ローカルテスト未実行」と明記し、CI/CDでの全テスト通過を必須条件とすること。
 
 ## セッション開始時（Claude Code Web用）
 

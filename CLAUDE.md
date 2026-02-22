@@ -25,17 +25,9 @@
 
 → セットアップ手順・利用可能なコマンド一覧は [README.md](README.md) を参照
 
-### タスク完了前の必須確認
+### タスク完了前の確認
 
-**重要**: タスクを完了とする前に、必ず以下を実行すること:
-
-```bash
-make testlint       # タスク完了前に必須（包括的チェック）
-```
-
-**注意**: Claude Code Web環境では `make` コマンドが使用できません。詳細は「[Claude Code Web専用ワークフロー](#claude-code-web専用ワークフロー)」セクションを参照してください。
-
-**このチェックを実行せずにタスクを完了することは禁止されています。**
+→ 詳細は [.AI/testing-requirements.md](.AI/testing-requirements.md) を参照
 
 ## タスク別チェックリスト
 
@@ -77,11 +69,22 @@ make testlint       # タスク完了前に必須（包括的チェック）
 
 → 詳細は [.AI/wxt-framework.md](.AI/wxt-framework.md) を参照
 
+## 開発フロー
+
+→ 詳細は [.AI/development-flow.md](.AI/development-flow.md) を参照
+
+- スケルトン実装フェーズ廃止・E2E 1パターン実装直行
+- 並行開発: [.AI/parallel-branch-development.md](.AI/parallel-branch-development.md)
+
 ## Gitワークフロー
 
 → 詳細は [README.md の「開発ワークフロー」セクション](README.md#開発ワークフロー) を参照
 
 - **Git Worktree（並行開発）**: [docs/GIT_WORKTREE.md](docs/GIT_WORKTREE.md) を参照（`make wt-dev`・`make wt-disable`・`make wt-remove`）
+
+## PR運用
+
+→ 詳細は [.AI/pr-policy.md](.AI/pr-policy.md) を参照
 
 ## Claude Code Web専用ワークフロー
 
