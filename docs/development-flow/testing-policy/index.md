@@ -20,7 +20,7 @@ Dockerコマンドに依存しないテスト・Lintは、タスク完了前に�
 
 - Dockerコンテナの使用は実際の挙動確認が必要な場合のみ（最小限）
 - 並行開発時: 各担当者はDockerを使わずに開発する（ユニットテスト＋Lint のみ）
-- Docker起動コマンド: `make wt-dev BRANCH=branch-name`（必要な場合のみ）
+- worktree開発環境の一括起動（Docker + devサーバ + 他worktree停止を含む）: `make wt-dev BRANCH=branch-name`（必要な場合のみ）
 
 ## テストフレームワーク
 
