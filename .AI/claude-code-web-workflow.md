@@ -6,6 +6,8 @@
 
 **重要**: Claude Code Web環境では、**テストは手動で実行せず、CIに任せてください**。
 
+テスト方針の詳細（ローカル実行・Docker・フレームワーク・テスト戦略書）については [docs/development-flow/testing-policy/index.md](../docs/development-flow/testing-policy/index.md) を参照してください。
+
 ## セッション開始時（Claude Code Web用）
 
 ```text
