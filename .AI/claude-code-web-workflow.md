@@ -4,9 +4,12 @@
 
 ## テスト実行ルール（Claude Code Web用）
 
-**重要**: Claude Code Web環境では、**テストは手動で実行せず、CIに任せてください**。
+[docs/development-flow/testing-policy/index.md](../docs/development-flow/testing-policy/index.md) に従い、タスク完了前に以下を実行すること:
 
-テスト方針の詳細（ローカル実行・Docker・フレームワーク・テスト戦略書）については [docs/development-flow/testing-policy/index.md](../docs/development-flow/testing-policy/index.md) を参照してください。
+1. **全ユニットテスト通過**: `npx vitest --run`
+2. **Lint全通過**: `npx eslint . --ext .ts,.tsx,.js,.jsx` / `npx stylelint 'src/**/*.css'`
+
+> `make` コマンドが使用できない場合でも、上記の `npx` コマンドはDockerなしで実行可能です。E2Eテストのみ CI/CD に委譲します。
 
 ## セッション開始時（Claude Code Web用）
 

@@ -112,16 +112,16 @@ E2Eテスト通過後、各クラス・メソッドのユニットテストを�
 
 ## テスト方針
 
-ローカルでの全テスト実行は不要。CI/CDに委譲する。
+タスク完了前にDockerコマンドに依存しないテスト・Lintを全て通過させること。
 
-| 場面 | 推奨 |
-|------|------|
-| 実装中(ローカル) | 変更した機能に関連するユニットテストのみ実行 |
-| PR作成前 | Lint チェック(`make lint`)のみ実行 |
+| 場面 | 実行すべきこと |
+|------|--------------|
+| タスク完了前 | 全ユニットテスト通過(`npx vitest --run`) |
+| タスク完了前 | Lint 全通過(`npx eslint . --ext .ts,.tsx,.js,.jsx` / `npx stylelint 'src/**/*.css'`) |
 | CI/CD | 全テスト(ユニット + E2E)を自動実行 |
 | Docker使用 | 実際の挙動確認が必要な場合のみ |
 
-詳細: [.AI/testing-requirements.md](../../../.AI/testing-requirements.md)
+詳細: [docs/development-flow/testing-policy/index.md](testing-policy/index.md)
 
 ## PR 運用方針
 
