@@ -74,7 +74,9 @@ E2E 1 シナリオ実装
 
 ### アローダイアグラム(必須)
 
-全機能で作成すること。コンポーネント間の依存関係・データフローを ASCII Art 形式で図示する。
+全機能で作成すること。コンポーネント間の依存関係・データフローを PlantUML(.puml)形式で図示する。
+
+ルール: [docs-rules/design/04-arrow-diagram.md](../../../docs-rules/design/04-arrow-diagram.md)
 
 ### E2E 1 シナリオ実装
 
@@ -122,7 +124,7 @@ E2Eテスト通過後、各クラス・メソッドのユニットテストを�
 | CI/CD | 全テスト(ユニット + E2E)を自動実行 |
 | Docker使用 | 実際の挙動確認が必要な場合のみ |
 
-詳細: [docs/development-flow/testing-policy/index.md](testing-policy/index.md)
+詳細: [docs/development-flow/testing-policy/index.md](../testing-policy/index.md)
 
 ## PR 運用方針
 

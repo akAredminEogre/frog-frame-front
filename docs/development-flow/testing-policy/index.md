@@ -43,7 +43,7 @@ Dockerコマンドに依存しないテスト・Lintは、タスク完了前に�
 1. テスト戦略書の作成
 2. 実装コードの作成
 3. テストコードの実装
-   - **実装前**: 既存モック検索を実行（[`common-rule/mock-file-placement.md`](../../../docs/coding-standards/tests/common-rule/mock-file-placement.md) 参照）
+   - **実装前**: 既存モック検索を実行（[`common-rule/mock-file-placement.md`](../../coding-standards/tests/common-rule/mock-file-placement.md) 参照）
    - **実装後**: テスト戦略書との整合性確認
 4. シグネチャ変更時は必ずテスト戦略書を更新
 

@@ -13,7 +13,7 @@ docs/design/
 │               ├── 01-class-design.md  # 必須: クラス設計（理論）
 │               ├── 02-sequence.puml    # 必須: シーケンス図
 │               ├── 03-directory-structure.md  # 必須: ディレクトリ構成（理論）
-│               └── 04-arrow-diagram.md # 必須: アローダイアグラム（依存関係・データフロー図）
+│               └── 04-arrow-diagram.puml # 必須: アローダイアグラム（依存関係・データフロー図）
 └── clean-architecture/                 # アーキテクチャ共通設計（参考用）
     └── domain/
         └── entities.md

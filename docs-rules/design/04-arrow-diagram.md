@@ -206,5 +206,7 @@ docs/design/pages/{画面名}/features/{機能名}/
 
 ```text
 docs/user-stories/completed/{user-story-XXX}/
-└── 04-network-diagram.puml   # ネットワーク図はこの命名規則
+└── 04-network-diagram.puml   # 新規作成時はこの命名規則
 ```
+
+> **注**: 既存の `user-story-003/network-diagram.puml` は04-プレフィックスなしで作成済み。新規作成時は `04-` プレフィックス付きで統一すること。
