@@ -107,6 +107,7 @@
 | ExportButton | UIコンポーネント。エクスポートボタン。disabled propで操作制御 |
 | ToastNotification | UIコンポーネント。トースト通知(既存) |
 | RulesApp | View。ルール一覧画面。isExportingフラグでエクスポート中の重複実行を防止(既存、変更対象) |
+| useExportRulesJson | カスタムフック。useMemoによるController初期化・isExporting状態管理・onSuccessコールバック(Blob生成→ダウンロード実行)を担う |
 
 ## アーキテクチャ補足
 
@@ -127,11 +128,13 @@ IDを含む全属性をエクスポートする(バックアップ・リスト�
 
 ### ファイルダウンロードの責務配置
 
-ファイルダウンロードはUI層(View/Hook)の責務とする:
+ファイルダウンロードはUI層(Hook)の責務とする:
 
 - Blob生成とダウンロードトリガーはブラウザAPI操作
-- Presenterは成功時コールバックでJSON文字列とファイル名をViewに渡す
-- Hook内でBlob生成→URL.createObjectURL→aタグクリック→URL.revokeObjectURL
+- Presenterはコールバック(`triggerDownload`)を呼び出してJSON文字列とファイル名を通知する
+- このコールバックはHook(`useExportRulesJson`)の`onSuccess`として定義され、Factory経由でPresenterに注入される(ADR-005)
+- 実行コンテキストはHook内: Blob生成→URL.createObjectURL→aタグクリック→URL.revokeObjectURL
+- シーケンス図上は`Presenter → View : triggerDownload`と表現されるが、実際にはHookのonSuccessコールバックが実行される
 
 ```text
 [エクスポートボタンクリック]

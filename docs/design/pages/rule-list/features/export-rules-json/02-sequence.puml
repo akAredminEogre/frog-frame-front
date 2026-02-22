@@ -5,6 +5,7 @@ title ルールJSONエクスポート機能
 box "Rules Page - UI" #LightBlue
   participant "ExportButton" as ExportBtn
   participant "RulesApp" as View
+  participant "useExportRulesJson\n(Hook)" as Hook
   participant "Toast\nNotification" as Toast
 end box
 
@@ -46,7 +47,15 @@ end box
 
 == 初期化(useMemo内) ==
 
-View -> IFactory : create(\n  onSuccess,\n  onError)
+View -> Hook : useExportRulesJson()
+activate Hook
+note right of Hook
+  useMemo内でFactory初期化
+  onSuccess/onErrorコールバックを定義
+  isExporting状態を管理
+end note
+
+Hook -> IFactory : create(\n  onSuccess,\n  onError)
 activate IFactory
 
 IFactory -> Factory : create(\n  onSuccess,\n  onError)
@@ -62,36 +71,43 @@ Factory -> Controller : new(useCase)
 Factory --> IFactory : controller
 deactivate Factory
 
-IFactory --> View : controller
+IFactory --> Hook : controller
 deactivate IFactory
 
-note right of View
+Hook --> View : { exportRulesJson,\n  isExporting }
+
+note right of Hook
   ADR-005: Factoryパターンにより
   ReactコールバックをPresenterに注入
+  ダウンロード実行はHookのonSuccess内
 end note
 
 == エクスポート実行 ==
 
 ExportBtn -> View : onExportClick()
 activate View
+View -> Hook : exportRulesJson()
+activate Hook
 
 alt isExporting = true
-  note over View
+  note over Hook
     **重複実行防止**
     既にエクスポート処理中のため
     早期リターン
   end note
+  Hook --> View : 早期リターン
   View --> ExportBtn : 早期リターン
+  deactivate Hook
   deactivate View
 
 else isExporting = false
-  View -> View : setIsExporting(true)
-  note right of View
+  Hook -> Hook : setIsExporting(true)
+  note right of Hook
     処理中フラグを設定
     ExportButtonをdisabledにする
   end note
 
-  View -> IController : exportRulesJson()
+  Hook -> IController : exportRulesJson()
   activate IController
 
   IController -> Controller : exportRulesJson()
@@ -188,8 +204,9 @@ else isExporting = false
   IPresenter -> Presenter : present(outputData)
   activate Presenter
 
-  Presenter -> View : triggerDownload(\n  jsonContent,\n  fileName)
-  note right of View
+  Presenter -> Hook : triggerDownload(\n  jsonContent,\n  fileName)
+  note right of Hook
+    onSuccessコールバック実行(ADR-005):
     Blob生成 →
     URL.createObjectURL →
     aタグクリック →
@@ -202,12 +219,14 @@ else isExporting = false
   deactivate Controller
   deactivate IController
 
-  View -> View : setIsExporting(false)
-  note right of View
+  Hook -> Hook : setIsExporting(false)
+  note right of Hook
     処理中フラグを解除
     ExportButton.disabled = false
   end note
 
+  Hook --> View : 完了
+  deactivate Hook
   deactivate View
 
 end
@@ -235,19 +254,19 @@ alt ルール取得失敗
   IPresenter -> Presenter : presentError(\n  errorOutputData)
   activate Presenter
 
-  Presenter -> View : showErrorInView(\n  message)
-  activate View
+  Presenter -> Hook : showErrorInView(\n  message)
+  activate Hook
 
-  View -> Toast : show(\n  "エクスポートに失敗しました",\n  type: "error")
+  Hook -> Toast : show(\n  "エクスポートに失敗しました",\n  type: "error")
   activate Toast
-  Toast --> View : 表示
+  Toast --> Hook : 表示
   deactivate Toast
 
-  View -> View : setIsExporting(false)
-  note right of View : 処理中フラグを解除
+  Hook -> Hook : setIsExporting(false)
+  note right of Hook : 処理中フラグを解除
 
-  View --> Presenter : エラー表示完了
-  deactivate View
+  Hook --> Presenter : エラー表示完了
+  deactivate Hook
   deactivate Presenter
   deactivate IPresenter
 end
