@@ -118,7 +118,8 @@
 | IRewriteRuleRepository | データ永続化のみ | 既存のgetAll()を使用 |
 | Interactor | ワークフロー調整 | ルール取得→JSON構築→Presenter通知 |
 | Presenter | View通知のみ | ダウンロードはReactコールバック経由 |
-| View (RulesApp) | ボタン状態管理、ファイルダウンロード実行 | isExportingによる重複防止 |
+| View (RulesApp) | ボタン状態管理 | isExportingによる重複防止 |
+| Hook (useExportRulesJson) | ファイルダウンロード実行 | onSuccessコールバック内でBlob生成→URL.createObjectURL→aタグクリック→URL.revokeObjectURL |
 
 ### エクスポートJSONフォーマット(Interactorの責務)
 
