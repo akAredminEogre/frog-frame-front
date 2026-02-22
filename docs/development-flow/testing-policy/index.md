@@ -8,6 +8,7 @@
 |-----------|----------------|
 | タスク完了前 | 全ユニットテスト通過（`npx vitest --run`） |
 | タスク完了前 | Lint 全通過（`npx eslint . --ext .ts,.tsx,.js,.jsx` / `npx stylelint 'src/**/*.css'`） |
+| タスク完了前 | Markdownlint 全通過（`npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '.claude/**/*.md' '.clinerules/**/*.md' '.AI/**/*.md' '.github/**/*.md' '*.md'`） |
 | PR作成後 | CI/CDが全テスト（ユニット + E2E）を自動実行（確認はCIログを参照） |
 | E2E確認 | CI/CD で確認。ローカル実行は任意 |
 
