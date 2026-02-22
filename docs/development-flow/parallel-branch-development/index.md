@@ -9,9 +9,9 @@ git worktree を活用し、複数の担当者に**ユニット単位**の作業
 
 ```text
 統合担当者
-├── 担当者1: feat/unit-A (make wt-dev BRANCH=feat/unit-A)
-├── 担当者2: feat/unit-B (make wt-dev BRANCH=feat/unit-B)
-└── 担当者3: feat/unit-C (make wt-dev BRANCH=feat/unit-C)
+├── 担当者1: feat/unit-A (git worktree add worktrees/feat/unit-A feat/unit-A)
+├── 担当者2: feat/unit-B (git worktree add worktrees/feat/unit-B feat/unit-B)
+└── 担当者3: feat/unit-C (git worktree add worktrees/feat/unit-C feat/unit-C)
 ```
 
 ## ユニット分割の原則
@@ -48,7 +48,7 @@ git -C /path/to/frog-frame-front checkout -b feat/unit-B
 task_id: task_XXX
 target_repo: frog-frame-front
 target_branch: feat/unit-A
-working_dir: /path/to/frog-frame-front/worktrees/feat-unit-A
+working_dir: /path/to/frog-frame-front/worktrees/feat/unit-A
 unit: UserRepository（InfrastructureLayer実装）
 interface_contract: docs/design/pages/.../01-class-design.md
 ```
@@ -56,9 +56,9 @@ interface_contract: docs/design/pages/.../01-class-design.md
 ### Step 3: 各担当者のworktree起動指示
 
 ```bash
-# 担当者に実行させるコマンド
-make wt-dev BRANCH=feat/unit-A
-# working_dirが worktrees/feat-unit-A になる
+# 担当者に実行させるコマンド（worktree作成のみ、Docker不使用）
+git worktree add worktrees/feat/unit-A feat/unit-A
+# working_dirが worktrees/feat/unit-A になる
 ```
 
 ## 担当者の作業手順
@@ -66,9 +66,9 @@ make wt-dev BRANCH=feat/unit-A
 ### 初期化
 
 ```bash
-# worktreeが存在しない場合は自動作成
-make wt-dev BRANCH=feat/unit-A
-# → worktrees/feat-unit-A/ に独立した作業環境が作られる
+# worktreeが存在しない場合は作成
+git worktree add worktrees/feat/unit-A feat/unit-A
+# → worktrees/feat/unit-A/ に独立した作業環境が作られる
 ```
 
 ### 作業ディレクトリ
@@ -76,17 +76,18 @@ make wt-dev BRANCH=feat/unit-A
 ```text
 frog-frame-front/
 ├── worktrees/
-│   ├── feat-unit-A/   ← 担当者1の作業ディレクトリ
-│   ├── feat-unit-B/   ← 担当者2の作業ディレクトリ
-│   └── feat-unit-C/   ← 担当者3の作業ディレクトリ
+│   └── feat/
+│       ├── unit-A/   ← 担当者1の作業ディレクトリ
+│       ├── unit-B/   ← 担当者2の作業ディレクトリ
+│       └── unit-C/   ← 担当者3の作業ディレクトリ
 ```
 
 ### テスト方針（Docker不使用）
 
-各担当者はDockerを使わずに開発する。`make wt-dev` はDocker環境をセットアップするが、ユニットテスト・Lintはworktreeディレクトリ内で直接実行可能:
+各担当者はDockerを使わずに開発する。ユニットテスト・Lintはworktreeディレクトリ内で直接実行可能:
 
 ```bash
-cd worktrees/feat-unit-A/host-frontend-root/frontend-src-root
+cd worktrees/feat/unit-A/host-frontend-root/frontend-src-root
 
 # 依存関係のインストール（worktree初回のみ）
 npm ci
@@ -105,7 +106,7 @@ E2Eテスト・Docker使用は統合時（マージ後）にCI/CDが実行する
 
 ```bash
 # 各担当者は自分のユニットブランチにpush（worktreeルートで作業）
-cd worktrees/feat-unit-A
+cd worktrees/feat/unit-A
 git add host-frontend-root/frontend-src-root/src/path/to/unit.ts host-frontend-root/frontend-src-root/tests/path/to/unit.test.ts
 git commit -m "feat(unit-A): implement UserRepository"
 git push origin feat/unit-A
@@ -136,7 +137,7 @@ feat/unit-domain → feat/unit-infra → feat/unit-app → feat/unit-ui
 
 1. **node_modules重複**: 各worktreeは独自のnode_modulesを持つ。ディスク容量注意。
 2. **Docker同時起動不可**: `make wt-dev` は他のworktreeを自動停止するため、同時Docker起動は不可。並行開発ではDockerを使わない方針を徹底する。
-3. **worktree後片付け**: 完了後は `make wt-remove BRANCH=feat/unit-A` でクリーンアップ。
+3. **worktree後片付け**: 完了後は `git worktree remove worktrees/feat/unit-A` でクリーンアップ。
 
 ## 関連ドキュメント
 
