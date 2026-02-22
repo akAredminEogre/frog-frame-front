@@ -10,7 +10,7 @@
 2. **Lint全通過**: `npx eslint . --ext .ts,.tsx,.js,.jsx` / `npx stylelint 'src/**/*.css'`
 3. **Markdownlint全通過**: `npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '.claude/**/*.md' '.clinerules/**/*.md' '.AI/**/*.md' '.github/**/*.md' '*.md'`
 
-> `make` コマンドが使用できない場合でも、上記の `npx` コマンドはDockerなしで実行可能です。E2Eテストのみ CI/CD に委譲します。
+> `make` コマンドが使用できない場合でも、上記の `npx` コマンドはDockerなしで実行可能です。E2Eテストのみ CI/CD に委譲します。実行ディレクトリは `host-frontend-root/frontend-src-root/`（`package.json` の配置先）で `npm ci` 後に実行すること。
 
 ## セッション開始時（Claude Code Web用）
 

@@ -14,10 +14,12 @@
 
 Dockerコマンドに依存しないテスト・Lintは、タスク完了前にローカルで全て通過させること。E2Eテストのローカル実行は不要（CI/CDに委譲）。
 
+> **実行ディレクトリ**: 上記の `npx` コマンドは `host-frontend-root/frontend-src-root/` で実行すること（`package.json` の配置先）。
+
 ## Dockerの使用方針
 
 - Dockerコンテナの使用は実際の挙動確認が必要な場合のみ（最小限）
-- MAS並行開発時: 各エージェントはDockerを使わずに開発する（ユニットテスト＋Lint のみ）
+- 並行開発時: 各担当者はDockerを使わずに開発する（ユニットテスト＋Lint のみ）
 - Docker起動コマンド: `make wt-dev BRANCH=branch-name`（必要な場合のみ）
 
 ## テストフレームワーク

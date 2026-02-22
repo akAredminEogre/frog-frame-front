@@ -86,7 +86,7 @@ frog-frame-front/
 各担当者はDockerを使わずに開発する。`make wt-dev` はDocker環境をセットアップするが、ユニットテスト・Lintはworktreeディレクトリ内で直接実行可能:
 
 ```bash
-cd worktrees/feat-unit-A
+cd worktrees/feat-unit-A/host-frontend-root/frontend-src-root
 
 # 依存関係のインストール（worktree初回のみ）
 npm ci
@@ -104,9 +104,9 @@ E2Eテスト・Docker使用は統合時（マージ後）にCI/CDが実行する
 ### コミット・プッシュ
 
 ```bash
-# 各担当者は自分のユニットブランチにpush
+# 各担当者は自分のユニットブランチにpush（worktreeルートで作業）
 cd worktrees/feat-unit-A
-git add src/path/to/unit.ts tests/path/to/unit.test.ts
+git add host-frontend-root/frontend-src-root/src/path/to/unit.ts host-frontend-root/frontend-src-root/tests/path/to/unit.test.ts
 git commit -m "feat(unit-A): implement UserRepository"
 git push origin feat/unit-A
 ```
