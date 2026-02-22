@@ -45,7 +45,7 @@
 │  │                                                                  │   │
 │  │ - Repositoryから全ルール取得(messaging経由でBackground Scriptへ)  │   │
 │  │ - エクスポート用JSON構造を構築(メタデータ+ルール配列)               │   │
-│  │ - ファイル名を生成(frog-frame-rules-YYYY-MM-DD.json)              │   │
+│  │ - ファイル名を生成(frog-frame-front-rules-YYYYMMDD_hhmmss.json)   │   │
 │  │ - OutputDataを作成してPresenterに渡す                              │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────────────┘
