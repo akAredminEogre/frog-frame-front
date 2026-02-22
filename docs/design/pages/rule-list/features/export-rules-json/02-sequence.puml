@@ -221,67 +221,67 @@ else isExporting = false
 
   Hook --> View : 完了
 
-end
+  == エラーケース ==
 
-== エラーケース ==
+  note over Interactor, Presenter
+    エラー発生時のフロー
+    - ルール取得失敗: ダウンロードなし
+    - ダウンロード処理失敗: トースト通知
 
-note over Interactor, Presenter
-  エラー発生時のフロー
-  - ルール取得失敗: ダウンロードなし
-  - ダウンロード処理失敗: トースト通知
-
-  ※ isExportingフラグはfinally節で解除
-    (成功・エラー両パス共通)
-end note
-
-alt ルール取得失敗
-  note over Interactor
-    getAll()でエラー発生
-  end note
-  Interactor -> ErrorOutputData : new(message)
-  ErrorOutputData --> Interactor : errorOutputData
-
-  Interactor -> IPresenter : presentError(\n  errorOutputData)
-  activate IPresenter
-
-  IPresenter -> Presenter : presentError(\n  errorOutputData)
-  activate Presenter
-
-  Presenter -> Hook : showErrorInView(\n  message)
-  activate Hook
-
-  Hook -> Toast : show(\n  "エクスポートに失敗しました",\n  type: "error")
-  activate Toast
-  Toast --> Hook : 表示
-  deactivate Toast
-
-  Hook --> Presenter : エラー表示完了
-  deactivate Hook
-  deactivate Presenter
-  deactivate IPresenter
-
-else ダウンロード処理失敗
-  note over Hook
-    Blob生成/URL.createObjectURL等で
-    例外発生
+    ※ isExportingフラグはfinally節で解除
+      (成功・エラー両パス共通)
   end note
 
-  Hook -> Toast : show(\n  "エクスポートに失敗しました",\n  type: "error")
-  activate Toast
-  Toast --> Hook : 表示
-  deactivate Toast
+  alt ルール取得失敗
+    note over Interactor
+      getAll()でエラー発生
+    end note
+    Interactor -> ErrorOutputData : new(message)
+    ErrorOutputData --> Interactor : errorOutputData
 
-end
+    Interactor -> IPresenter : presentError(\n  errorOutputData)
+    activate IPresenter
 
-group finally [成功・エラー共通]
-  Hook -> Hook : setIsExporting(false)
-  note right of Hook
-    処理中フラグを解除(finally節)
-    ExportButton.disabled = false
-  end note
+    IPresenter -> Presenter : presentError(\n  errorOutputData)
+    activate Presenter
+
+    Presenter -> Hook : showErrorInView(\n  message)
+    activate Hook
+
+    Hook -> Toast : show(\n  "エクスポートに失敗しました",\n  type: "error")
+    activate Toast
+    Toast --> Hook : 表示
+    deactivate Toast
+
+    Hook --> Presenter : エラー表示完了
+    deactivate Hook
+    deactivate Presenter
+    deactivate IPresenter
+
+  else ダウンロード処理失敗
+    note over Hook
+      Blob生成/URL.createObjectURL等で
+      例外発生
+    end note
+
+    Hook -> Toast : show(\n  "エクスポートに失敗しました",\n  type: "error")
+    activate Toast
+    Toast --> Hook : 表示
+    deactivate Toast
+
+  end
+
+  group finally [成功・エラー共通]
+    Hook -> Hook : setIsExporting(false)
+    note right of Hook
+      処理中フラグを解除(finally節)
+      ExportButton.disabled = false
+    end note
+  end
 
   deactivate Hook
   deactivate View
+
 end
 
 @enduml
