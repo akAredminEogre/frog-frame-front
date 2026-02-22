@@ -83,18 +83,23 @@ frog-frame-front/
 
 ### テスト方針（Docker不使用）
 
-各担当者はDockerを使わずに開発する:
+各担当者はDockerを使わずに開発する。`make wt-dev` はDocker環境をセットアップするが、ユニットテスト・Lintはworktreeディレクトリ内で直接実行可能:
 
 ```bash
-# ユニットテストのみローカル実行（Docker不要）
 cd worktrees/feat-unit-A
+
+# 依存関係のインストール（worktree初回のみ）
+npm ci
+
+# ユニットテストのみローカル実行（Docker不要）
 npx vitest run path/to/unit.test.ts
 
-# Lintのみ実行
-make lint
+# Lint実行
+npx eslint . --ext .ts,.tsx,.js,.jsx
+npx stylelint 'src/**/*.css'
 ```
 
-E2Eテスト・Docker使用は統合時（マージ後）にCI/CDが実行する。
+E2Eテスト・Docker使用は統合時（マージ後）にCI/CDが実行する。テスト実行方針の詳細は [testing-policy](../testing-policy/index.md) を参照。
 
 ### コミット・プッシュ
 
