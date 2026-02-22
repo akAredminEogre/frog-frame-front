@@ -118,6 +118,7 @@ E2Eテスト通過後、各クラス・メソッドのユニットテストを�
 |------|--------------|
 | タスク完了前 | 全ユニットテスト通過(`npx vitest --run`) |
 | タスク完了前 | Lint 全通過(`npx eslint . --ext .ts,.tsx,.js,.jsx` / `npx stylelint 'src/**/*.css'`) |
+| タスク完了前 | Markdownlint 全通過(`npx markdownlint-cli2 'docs/**/*.md' 'docs-rules/**/*.md' '.claude/**/*.md' '.clinerules/**/*.md' '.AI/**/*.md' '.github/**/*.md' '*.md'`) |
 | CI/CD | 全テスト(ユニット + E2E)を自動実行 |
 | Docker使用 | 実際の挙動確認が必要な場合のみ |
 
