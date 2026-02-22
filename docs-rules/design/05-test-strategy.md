@@ -15,6 +15,26 @@
 
 ## 配置
 
+### テスト戦略書の種類と配置先
+
+テスト戦略書は目的に応じて3種類に分かれ、配置場所が異なる:
+
+| 種類 | 配置先 | スコープ |
+|------|--------|----------|
+| ユニットテスト戦略 | `docs/design/src/[layer]/[category]/[ClassName]/[methodName].md` | モジュール単位 |
+| 結合テスト戦略 | `docs/design/pages/.../features/[feature]/integration-test-strategy.md` | 機能単位 |
+| E2Eテスト戦略 | `docs/design/pages/.../features/[feature]/e2e-test-strategy.md` | 機能単位 |
+
+**リファレンス実装**: `docs/design/pages/rule-list/features/delete-rule/` のドキュメント構造を正とする。
+
+- ユニットテスト戦略: `docs/design/src/application-business-rules/interactors/DeleteRuleInteractor/execute.md`
+- 結合テスト戦略: `docs/design/pages/rule-list/features/delete-rule/integration-test-strategy.md`
+- E2Eテスト戦略: `docs/design/pages/rule-list/features/delete-rule/e2e-test-strategy.md`
+
+以下のセクション（配置例、ディレクトリ構造、テンプレート等）は**ユニットテスト戦略書**のルールを定義する。
+
+### ユニットテスト戦略書の配置
+
 テスト戦略書は **ソースコードのディレクトリ構造をミラーリング** して配置する（Clean Architecture準拠）。
 
 ```text
@@ -412,7 +432,15 @@ host-frontend-root/frontend-src-root/tests/unit/interface-adapters/mappers/Rewri
 
 ### 旧配置ルールで作成されたテスト戦略書
 
-本規約の配置ルール変更（`docs/design/pages/.../05-test-strategy/` → `docs/design/src/`）により、以下のファイルが新しい規約に適合していない:
+旧パターンでは、テスト戦略書を `docs/design/pages/.../features/[feature]/05-test-strategy/` フォルダ内に `[ModuleName]-[method].md` として配置していた。
+
+新パターン（delete-rule以降）では:
+
+- **ユニットテスト戦略** → `docs/design/src/` へ移動（モジュール単位）
+- **結合テスト戦略** → `docs/design/pages/.../features/[feature]/integration-test-strategy.md`（機能単位）
+- **E2Eテスト戦略** → `docs/design/pages/.../features/[feature]/e2e-test-strategy.md`（機能単位）
+
+以下のファイルが旧パターンのまま残っている:
 
 | 現在の配置 | 新規約での配置 |
 |-----------|---------------|
