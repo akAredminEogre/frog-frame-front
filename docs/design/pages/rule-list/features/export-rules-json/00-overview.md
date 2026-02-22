@@ -33,7 +33,8 @@
 
 ### ファイル命名
 
-- ファイル名: `frog-frame-front-rules-YYYYMMDD_hhmmss.json`（エクスポート日時を含む）
+- ファイル名: `frog-frame-front-rules-YYYYMMDD_hhmmss.json`（エクスポート日時を含む。**ローカルタイム**を使用）
+- `exportedAt`: ISO 8601形式（ローカルタイム + タイムゾーンオフセット、例: `2026-02-23T10:30:00+09:00`）
 
 ### エラーハンドリング
 

@@ -125,104 +125,6 @@ else isExporting = false
   IUseCase -> Interactor : execute(inputData)
   activate Interactor
 
-  == 全ルール取得 ==
-
-  Interactor -> IRepository : getAll()
-  activate IRepository
-
-  IRepository -> MessagingRepo : getAll()
-  activate MessagingRepo
-
-  MessagingRepo -> Mapper : getAll()
-  activate Mapper
-
-  Mapper -> IMessagingPort : getAll()
-  activate IMessagingPort
-
-  IMessagingPort -> MessagingService : getAll()
-  activate MessagingService
-
-  MessagingService -> IProxyService : getAll()
-  activate IProxyService
-
-  IProxyService -> ProxyService : getAll()
-  activate ProxyService
-
-  ProxyService -> ProxyServiceImpl : getAll()
-  activate ProxyServiceImpl
-
-  ProxyServiceImpl -> DexieRepo : getAll()
-  activate DexieRepo
-  DexieRepo --> ProxyServiceImpl : DTO[]
-  deactivate DexieRepo
-
-  ProxyServiceImpl --> ProxyService : DTO[]
-  deactivate ProxyServiceImpl
-
-  ProxyService --> IProxyService : DTO[]
-  deactivate ProxyService
-
-  IProxyService --> MessagingService : DTO[]
-  deactivate IProxyService
-
-  MessagingService --> IMessagingPort : DTO[]
-  deactivate MessagingService
-
-  IMessagingPort --> Mapper : DTO[]
-  deactivate IMessagingPort
-
-  loop 各DTO
-    Mapper -> Entity : fromDTO(dto)
-    Entity --> Mapper : rule
-  end
-
-  Mapper --> MessagingRepo : rules
-  deactivate Mapper
-
-  MessagingRepo --> IRepository : rules
-  deactivate MessagingRepo
-
-  IRepository --> Interactor : rules
-  deactivate IRepository
-
-  == JSON構築・結果通知 ==
-
-  note over Interactor
-    エクスポートJSON構築:
-    - version: "1.0"
-    - exportedAt: ISO 8601日時
-    - rules: IDを含む全属性の配列
-    - fileName: frog-frame-front-rules-YYYYMMDD_hhmmss.json
-  end note
-
-  Interactor -> OutputData : new(\n  jsonContent,\n  fileName)
-  OutputData --> Interactor : outputData
-
-  Interactor -> IPresenter : present(outputData)
-  activate IPresenter
-
-  IPresenter -> Presenter : present(outputData)
-  activate Presenter
-
-  Presenter -> Hook : triggerDownload(\n  jsonContent,\n  fileName)
-  note right of Hook
-    onSuccessコールバック実行(ADR-005):
-    Blob生成 →
-    URL.createObjectURL →
-    aタグクリック →
-    URL.revokeObjectURL
-  end note
-
-  deactivate Presenter
-  deactivate IPresenter
-  deactivate Interactor
-  deactivate Controller
-  deactivate IController
-
-  Hook --> View : 完了
-
-  == エラーケース ==
-
   note over Interactor, Presenter
     エラー発生時のフロー
     - ルール取得失敗: ダウンロードなし
@@ -232,7 +134,104 @@ else isExporting = false
       (成功・エラー両パス共通)
   end note
 
-  alt ルール取得失敗
+  alt 成功
+    == 全ルール取得 ==
+
+    Interactor -> IRepository : getAll()
+    activate IRepository
+
+    IRepository -> MessagingRepo : getAll()
+    activate MessagingRepo
+
+    MessagingRepo -> Mapper : getAll()
+    activate Mapper
+
+    Mapper -> IMessagingPort : getAll()
+    activate IMessagingPort
+
+    IMessagingPort -> MessagingService : getAll()
+    activate MessagingService
+
+    MessagingService -> IProxyService : getAll()
+    activate IProxyService
+
+    IProxyService -> ProxyService : getAll()
+    activate ProxyService
+
+    ProxyService -> ProxyServiceImpl : getAll()
+    activate ProxyServiceImpl
+
+    ProxyServiceImpl -> DexieRepo : getAll()
+    activate DexieRepo
+    DexieRepo --> ProxyServiceImpl : DTO[]
+    deactivate DexieRepo
+
+    ProxyServiceImpl --> ProxyService : DTO[]
+    deactivate ProxyServiceImpl
+
+    ProxyService --> IProxyService : DTO[]
+    deactivate ProxyService
+
+    IProxyService --> MessagingService : DTO[]
+    deactivate IProxyService
+
+    MessagingService --> IMessagingPort : DTO[]
+    deactivate MessagingService
+
+    IMessagingPort --> Mapper : DTO[]
+    deactivate IMessagingPort
+
+    loop 各DTO
+      Mapper -> Entity : fromDTO(dto)
+      Entity --> Mapper : rule
+    end
+
+    Mapper --> MessagingRepo : rules
+    deactivate Mapper
+
+    MessagingRepo --> IRepository : rules
+    deactivate MessagingRepo
+
+    IRepository --> Interactor : rules
+    deactivate IRepository
+
+    == JSON構築・結果通知 ==
+
+    note over Interactor
+      エクスポートJSON構築:
+      - version: "1.0"
+      - exportedAt: ISO 8601日時（ローカルタイム + タイムゾーンオフセット、例: 2026-02-23T10:30:00+09:00）
+      - rules: IDを含む全属性の配列
+      - fileName: frog-frame-front-rules-YYYYMMDD_hhmmss.json（ローカルタイム）
+    end note
+
+    Interactor -> OutputData : new(\n  jsonContent,\n  fileName)
+    OutputData --> Interactor : outputData
+
+    Interactor -> IPresenter : present(outputData)
+    activate IPresenter
+
+    IPresenter -> Presenter : present(outputData)
+    activate Presenter
+
+    Presenter -> Hook : triggerDownload(\n  jsonContent,\n  fileName)
+    note right of Hook
+      onSuccessコールバック実行(ADR-005):
+      Blob生成 →
+      URL.createObjectURL →
+      aタグクリック →
+      URL.revokeObjectURL
+    end note
+
+    deactivate Presenter
+    deactivate IPresenter
+    deactivate Interactor
+    deactivate Controller
+    deactivate IController
+
+    Hook --> View : 完了
+
+  else ルール取得失敗
     note over Interactor
       getAll()でエラー発生
     end note
@@ -257,6 +256,9 @@ else isExporting = false
     deactivate Hook
     deactivate Presenter
     deactivate IPresenter
+    deactivate Interactor
+    deactivate Controller
+    deactivate IController
 
   else ダウンロード処理失敗
     note over Hook
@@ -268,6 +270,9 @@ else isExporting = false
     activate Toast
     Toast --> Hook : 表示
     deactivate Toast
+    deactivate Interactor
+    deactivate Controller
+    deactivate IController
 
   end
 
