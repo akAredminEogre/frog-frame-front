@@ -14,6 +14,7 @@ import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persisten
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { DeleteRuleControllerFactory } from 'src/interface-adapters/factories/DeleteRuleControllerFactory';
+import { ExportRulesJsonControllerFactory } from 'src/interface-adapters/factories/ExportRulesJsonControllerFactory';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
@@ -102,6 +103,11 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
       description: 'DeleteRuleControllerFactoryを解決できること',
       input: { classToken: DeleteRuleControllerFactory },
       expected: { className: 'DeleteRuleControllerFactory' }
+    },
+    {
+      description: 'ExportRulesJsonControllerFactoryを解決できること',
+      input: { classToken: ExportRulesJsonControllerFactory },
+      expected: { className: 'ExportRulesJsonControllerFactory' }
     },
     {
       description: 'RewriteRuleMapperを解決できること',

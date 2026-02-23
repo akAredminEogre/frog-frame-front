@@ -13,8 +13,10 @@ import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { DeleteRuleUI } from 'src/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI';
+import { ExportRulesJsonUI } from 'src/frameworks-and-drivers/ui/components/organisms/ExportRulesJsonUI';
 import { ImportRulesJsonUI } from 'src/frameworks-and-drivers/ui/components/organisms/ImportRulesJsonUI/ImportRulesJsonUI';
 import { useDeleteRule } from 'src/frameworks-and-drivers/ui/hooks/useDeleteRule';
+import { useExportRulesJson } from 'src/frameworks-and-drivers/ui/hooks/useExportRulesJson';
 import { useImportRulesJson } from 'src/frameworks-and-drivers/ui/hooks/useImportRulesJson';
 import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 
@@ -69,6 +71,13 @@ function RulesApp() {
     dismissImportError,
     dismissImportSuccess,
   } = useImportRulesJson(onImportSuccess);
+
+  const {
+    exportRulesJson,
+    isExporting,
+    exportError,
+    dismissExportError,
+  } = useExportRulesJson();
 
   const toggleController = useMemo(() => {
     const factory = container.resolve<IToggleRuleActiveControllerFactory>('IToggleRuleActiveControllerFactory');
@@ -158,6 +167,13 @@ function RulesApp() {
       {rules.length === 0 ? (
         <EmptyStateMessage />
       ) : (
+        <>
+        <ExportRulesJsonUI
+          onExport={() => { void exportRulesJson(); }}
+          isExporting={isExporting}
+          exportError={exportError}
+          onDismissError={dismissExportError}
+        />
         <RulesTable
           rules={rules}
           onEdit={handleEdit}
@@ -166,6 +182,7 @@ function RulesApp() {
           togglingIds={togglingIds}
           deletingIds={deletingIds}
         />
+        </>
       )}
 
       <div className="footer" data-testid="rules-footer">
