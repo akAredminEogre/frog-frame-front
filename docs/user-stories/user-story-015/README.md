@@ -54,48 +54,27 @@
 
 ## 開発戦略
 
-### Phase 1: Skeleton（インターフェース・スケルトンクラス作成）
+[docs/development-flow/new-feature/index.md](../../../docs/development-flow/new-feature/index.md) に従う。
+スケルトンフェーズは設けず、E2E 1シナリオ実装へ直結する（スタブ・スケルトンは作成しない）。
 
-コンパイルが通る最小実装でスケルトンを作成する。
+### Phase 1: E2E 1シナリオ実装
+
+`02-sequence.puml` の正常系（エクスポートボタンクリック → JSONファイルダウンロード）を通す最小限の実装。
 
 #### 第2層: application-business-rules
 
 - [ ] IExportRulesJsonUseCase（Input Port インターフェース）
 - [ ] IExportRulesJsonPresenter（Output Port インターフェース）
 - [ ] ExportRulesJsonInputData / OutputData / ErrorOutputData（DTO）
-- [ ] ExportRulesJsonInteractor に IExportRulesJsonUseCase を実装（スケルトン）
-
-#### 第3層: interface-adapters
-
-- [ ] IExportRulesJsonController（Controllerインターフェース、ADR-005準拠）
-- [ ] ExportRulesJsonController（スケルトン実装）
-- [ ] IExportRulesJsonControllerFactory（Factoryインターフェース、ADR-005準拠）
-- [ ] ExportRulesJsonControllerFactory（スケルトン実装）
-- [ ] ExportRulesJsonPresenter（スケルトン実装）
-
-#### 第4層: frameworks-and-drivers
-
-- [ ] ExportButton UIコンポーネント（スケルトン）
-- [ ] useExportRulesJson カスタムフック（スケルトン）
-
-#### テスト戦略書
-
-- [ ] 結合テスト戦略書の作成（`docs/design/pages/rule-list/features/export-rules-json/integration-test-strategy.md`）
-- [x] E2Eテスト戦略書の作成（`docs/design/pages/rule-list/features/export-rules-json/e2e-test-strategy.md`）
-
-### Phase 2: E2E 1シナリオ実装
-
-`02-sequence.puml` の正常系（エクスポートボタンクリック → JSONファイルダウンロード）を通す最小限の実装。
-
-#### 第2層: application-business-rules
-
 - [ ] ExportRulesJsonInteractor の実装（getAll() 呼び出し、OutputData / ErrorOutputData 生成）
 
 #### 第3層: interface-adapters
 
+- [ ] IExportRulesJsonController（Controllerインターフェース、ADR-005準拠）
 - [ ] ExportRulesJsonController の実装
-- [ ] ExportRulesJsonPresenter の実装（ファイルダウンロード処理）
+- [ ] IExportRulesJsonControllerFactory（Factoryインターフェース、ADR-005準拠）
 - [ ] ExportRulesJsonControllerFactory の実装
+- [ ] ExportRulesJsonPresenter の実装（ファイルダウンロード処理）
 
 #### 第4層: frameworks-and-drivers
 
@@ -106,9 +85,10 @@
 
 #### E2Eテスト
 
+- [x] E2Eテスト戦略書の作成（`docs/design/pages/rule-list/features/export-rules-json/e2e-test-strategy.md`）
 - [ ] E2Eテスト実装（正常系 1 シナリオ: `normal-flow.spec.ts`）
 
-### Phase 3: ユニットテスト網羅・不具合修正
+### Phase 2: ユニットテスト網羅・不具合修正
 
 E2Eテスト通過後、各クラス・メソッドの単体テストを整備する。
 
@@ -127,7 +107,7 @@ E2Eテスト通過後、各クラス・メソッドの単体テストを整備�
 - [ ] ExportButton UIコンポーネントのテスト戦略書・単体テスト
 - [ ] useExportRulesJson カスタムフックのテスト戦略書・単体テスト
 
-### Phase 4: 結合テスト・E2Eテスト全件
+### Phase 3: 結合テスト・E2Eテスト全件
 
 - [ ] 結合テスト戦略書に基づくテスト実装完了
   - 詳細: [integration-test-strategy.md](../../design/pages/rule-list/features/export-rules-json/integration-test-strategy.md)
