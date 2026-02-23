@@ -1,0 +1,53 @@
+@startuml
+!theme plain
+title User Story 015: ルールJSONエクスポート機能 - タスク依存ネットワーク図
+
+' Phase 2: 実装タスク（第2層）
+rectangle "2A-1\nExportRulesJson\nInteractor\n実装+単体テスト" as interactor #orange
+
+' Phase 2: 実装タスク（第3層）
+rectangle "2B-1\nExportRulesJson\nController\n実装+単体テスト" as controller #orange
+rectangle "2B-2\nExportRulesJson\nPresenter\n実装+単体テスト" as presenter #orange
+rectangle "2B-3\nExportRulesJson\nControllerFactory\n実装+単体テスト" as factory #orange
+
+' Phase 2: 実装タスク（第4層）
+rectangle "2C-1\nExportButton\nUIコンポーネント\n実装+単体テスト" as exportButton #orange
+rectangle "2C-2\nuseExportRulesJson\nカスタムフック\n実装+単体テスト" as hook #orange
+
+' Phase 3: 統合タスク
+rectangle "3-1\ncontainer.ts\nDI登録追加" as di #pink
+rectangle "3-2\nRulesApp.tsx\nExportButton統合" as integration #pink
+rectangle "3-3\n結合テスト\n実装" as integrationTest #pink
+rectangle "3-4\nE2Eテスト\n実装\n（正常系1パターン）" as e2eTest #pink
+
+' 依存関係
+interactor --> controller
+interactor --> presenter
+controller --> factory
+presenter --> factory
+factory --> di
+exportButton --> integration
+hook --> integration
+di --> integration
+integration --> integrationTest
+integration --> e2eTest
+
+' 色分け凡例
+legend right
+  |= 色 |= Phase |
+  | <#lightgray> | Phase 1: Skeleton作成 |
+  | <#orange> | Phase 2: 実装+単体テスト |
+  | <#pink> | Phase 3: 統合 |
+endlegend
+
+note bottom
+**前提（図に含まない）**:
+  - Phase 1: Skeleton作成（インターフェース・スケルトンクラス作成、テスト戦略書作成）
+**本図の範囲**:
+  - Phase 2: 実装+単体テスト
+  - Phase 3: 統合（DI登録、UI統合、結合テスト・E2Eテスト実装）
+**後続（このストーリーでは実施しない）**:
+  - Phase 4: 旧コード削除（分類A/Eのみのため対象なし）
+end note
+
+@enduml
