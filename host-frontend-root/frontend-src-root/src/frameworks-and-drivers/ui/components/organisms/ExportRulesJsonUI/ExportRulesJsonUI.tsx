@@ -21,7 +21,7 @@ export const ExportRulesJsonUI: React.FC<ExportRulesJsonUIProps> = ({
 }) => {
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
+      <div className="export-button-container">
         <ExportButton
           onClick={onExport}
           disabled={isExporting}
