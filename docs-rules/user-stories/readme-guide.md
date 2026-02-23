@@ -231,7 +231,7 @@ README.mdのタスクチェックリストに進捗があった場合、`04-netw
 
 1. タスクを `- [ ]` から `- [x]` に変更した場合、対応するネットワーク図のノードも完了状態に更新する
 2. ネットワーク図が存在する場合のみ適用（`04-network-diagram.puml` は必須ファイル）
-3. 同一コミットまたは同一PRでREADME.mdとnetwork-diagram.pumlを更新する
+3. 同一コミットまたは同一PRでREADME.mdと04-network-diagram.pumlを更新する
 
 #### 理由
 
