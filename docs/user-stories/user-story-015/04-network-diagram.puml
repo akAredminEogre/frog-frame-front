@@ -2,25 +2,30 @@
 !theme plain
 title User Story 015: ルールJSONエクスポート機能 - タスク依存ネットワーク図
 
-' Phase 2: 実装タスク（第2層）
-rectangle "2A-1\nExportRulesJson\nInteractor\n実装+単体テスト" as interactor #orange
+' Phase 2: E2E 1シナリオ実装タスク
+rectangle "2A-1\nExportRulesJson\nInteractor\n実装" as interactor #orange
+rectangle "2B-1\nExportRulesJson\nController\n実装" as controller #orange
+rectangle "2B-2\nExportRulesJson\nPresenter\n実装" as presenter #orange
+rectangle "2B-3\nExportRulesJson\nControllerFactory\n実装" as factory #orange
+rectangle "2C-1\nExportButton\nUIコンポーネント\n実装" as exportButton #orange
+rectangle "2C-2\nuseExportRulesJson\nカスタムフック\n実装" as hook #orange
+rectangle "2D-1\ncontainer.ts\nDI登録追加" as di #orange
+rectangle "2D-2\nRulesApp.tsx\nExportButton統合" as integration #orange
+rectangle "2E-1\nE2Eテスト\n正常系1シナリオ\n実装" as e2eTest1 #orange
 
-' Phase 2: 実装タスク（第3層）
-rectangle "2B-1\nExportRulesJson\nController\n実装+単体テスト" as controller #orange
-rectangle "2B-2\nExportRulesJson\nPresenter\n実装+単体テスト" as presenter #orange
-rectangle "2B-3\nExportRulesJson\nControllerFactory\n実装+単体テスト" as factory #orange
+' Phase 3: ユニットテスト網羅タスク
+rectangle "3A-1\nInteractor\nテスト戦略書\n単体テスト" as interactorTest #lightblue
+rectangle "3B-1\nController\nテスト戦略書\n単体テスト" as controllerTest #lightblue
+rectangle "3B-2\nPresenter\nテスト戦略書\n単体テスト" as presenterTest #lightblue
+rectangle "3B-3\nControllerFactory\nテスト戦略書\n単体テスト" as factoryTest #lightblue
+rectangle "3C-1\nExportButton\nテスト戦略書\n単体テスト" as exportButtonTest #lightblue
+rectangle "3C-2\nuseExportRules\nJson テスト\n戦略書・単体テスト" as hookTest #lightblue
 
-' Phase 2: 実装タスク（第4層）
-rectangle "2C-1\nExportButton\nUIコンポーネント\n実装+単体テスト" as exportButton #orange
-rectangle "2C-2\nuseExportRulesJson\nカスタムフック\n実装+単体テスト" as hook #orange
+' Phase 4: 結合テスト・E2Eテスト全件
+rectangle "4-1\n結合テスト\n実装" as integrationTest #pink
+rectangle "4-2\nE2Eテスト\n全シナリオ\n実装" as e2eTestAll #pink
 
-' Phase 3: 統合タスク
-rectangle "3-1\ncontainer.ts\nDI登録追加" as di #pink
-rectangle "3-2\nRulesApp.tsx\nExportButton統合" as integration #pink
-rectangle "3-3\n結合テスト\n実装" as integrationTest #pink
-rectangle "3-4\nE2Eテスト\n実装\n（正常系1パターン）" as e2eTest #pink
-
-' 依存関係
+' Phase 2 依存関係
 interactor --> controller
 interactor --> presenter
 controller --> factory
@@ -29,25 +34,41 @@ factory --> di
 exportButton --> integration
 hook --> integration
 di --> integration
-integration --> integrationTest
-integration --> e2eTest
+integration --> e2eTest1
+
+' Phase 3 依存関係（E2Eテスト通過後）
+e2eTest1 --> interactorTest
+e2eTest1 --> controllerTest
+e2eTest1 --> presenterTest
+e2eTest1 --> factoryTest
+e2eTest1 --> exportButtonTest
+e2eTest1 --> hookTest
+
+' Phase 4 依存関係
+interactorTest --> integrationTest
+controllerTest --> integrationTest
+presenterTest --> integrationTest
+factoryTest --> integrationTest
+exportButtonTest --> integrationTest
+hookTest --> integrationTest
+integrationTest --> e2eTestAll
 
 ' 色分け凡例
 legend right
   |= 色 |= Phase |
   | <#lightgray> | Phase 1: Skeleton作成 |
-  | <#orange> | Phase 2: 実装+単体テスト |
-  | <#pink> | Phase 3: 統合 |
+  | <#orange> | Phase 2: E2E 1シナリオ実装 |
+  | <#lightblue> | Phase 3: ユニットテスト網羅 |
+  | <#pink> | Phase 4: 結合テスト・E2Eテスト全件 |
 endlegend
 
 note bottom
 **前提（図に含まない）**:
   - Phase 1: Skeleton作成（インターフェース・スケルトンクラス作成、テスト戦略書作成）
 **本図の範囲**:
-  - Phase 2: 実装+単体テスト
-  - Phase 3: 統合（DI登録、UI統合、結合テスト・E2Eテスト実装）
-**後続（このストーリーでは実施しない）**:
-  - Phase 4: 旧コード削除（分類A/Eのみのため対象なし）
+  - Phase 2: E2E 1シナリオ実装（全レイヤー実装 + 正常系E2Eテスト）
+  - Phase 3: ユニットテスト網羅・不具合修正
+  - Phase 4: 結合テスト・E2Eテスト全件
 end note
 
 @enduml
