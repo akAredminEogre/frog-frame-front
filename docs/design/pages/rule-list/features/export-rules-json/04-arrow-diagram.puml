@@ -2,6 +2,12 @@
 !theme plain
 title ルールJSONエクスポート機能 - コンポーネント依存・データフロー図
 
+' NOTE:
+' 本図は docs-rules/design.md で定義される
+' 「user-stories 用アローダイアグラム（タスク依存ネットワーク図）」ではなく、
+' Export Rules JSON 機能のコンポーネント依存・データフローを示す設計用ドキュメントです。
+' user-stories 側の 04-network-diagram.puml とは目的が異なります。
+
 ' === Rules Page コンテキスト ===
 
 ' Layer 4: frameworks-and-drivers (UI)

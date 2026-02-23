@@ -1,6 +1,8 @@
-# network-diagram.puml ガイドライン
+# 04-network-diagram.puml ガイドライン
 
-user-story ディレクトリ内の network-diagram.puml 作成ルール（任意ファイル）。
+user-story ディレクトリ内の 04-network-diagram.puml 作成ルール（必須ファイル）。
+
+> **ファイル命名**: 新規作成時は `04-network-diagram.puml`。既存の `user-story-003/network-diagram.puml` は旧命名規則で作成済み（`04-` プレフィックスなし）。
 
 README.mdの開発戦略セクションのタスクをもとに作成するアローダイアグラム。
 
