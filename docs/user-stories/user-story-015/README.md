@@ -78,34 +78,60 @@
 - [ ] ExportButton UIコンポーネント（スケルトン）
 - [ ] useExportRulesJson カスタムフック（スケルトン）
 
-#### テスト戦略書作成
+#### テスト戦略書
 
 - [ ] 結合テスト戦略書の作成（`docs/design/pages/rule-list/features/export-rules-json/integration-test-strategy.md`）
+- [x] E2Eテスト戦略書の作成（`docs/design/pages/rule-list/features/export-rules-json/e2e-test-strategy.md`）
 
-### Phase 2: 実装（スケルトンにロジック追加）
+### Phase 2: E2E 1シナリオ実装
+
+`02-sequence.puml` の正常系（エクスポートボタンクリック → JSONファイルダウンロード）を通す最小限の実装。
 
 #### 第2層: application-business-rules
 
-- [ ] ExportRulesJsonInteractor の実装、テスト戦略書・単体テスト
+- [ ] ExportRulesJsonInteractor の実装（getAll() 呼び出し、OutputData / ErrorOutputData 生成）
 
 #### 第3層: interface-adapters
 
-- [ ] ExportRulesJsonController の実装、テスト戦略書・単体テスト
-- [ ] ExportRulesJsonPresenter の実装、テスト戦略書・単体テスト
-- [ ] ExportRulesJsonControllerFactory の実装、テスト戦略書・単体テスト
+- [ ] ExportRulesJsonController の実装
+- [ ] ExportRulesJsonPresenter の実装（ファイルダウンロード処理）
+- [ ] ExportRulesJsonControllerFactory の実装
 
 #### 第4層: frameworks-and-drivers
 
-- [ ] ExportButton UIコンポーネントの実装、テスト戦略書・単体テスト
-- [ ] useExportRulesJson カスタムフックの実装、テスト戦略書・単体テスト
+- [ ] useExportRulesJson カスタムフックの実装
+- [ ] ExportButton UIコンポーネントの実装
+- [ ] RulesApp.tsx に ExportButton を統合（ExportButton を RulesApp 内でレンダリング）
+- [ ] container.ts に ExportRulesJsonControllerFactory の DI 登録を追加
 
-### Phase 3: 統合
+#### E2Eテスト
 
-- [ ] container.ts に ExportRulesJsonControllerFactory のDI登録を追加
-- [ ] RulesApp.tsx に ExportButton を統合（useExportRulesJson 呼び出し）
+- [ ] E2Eテスト実装（正常系 1 シナリオ: `normal-flow.spec.ts`）
+
+### Phase 3: ユニットテスト網羅・不具合修正
+
+E2Eテスト通過後、各クラス・メソッドの単体テストを整備する。
+
+#### 第2層: application-business-rules
+
+- [ ] ExportRulesJsonInteractor のテスト戦略書・単体テスト
+
+#### 第3層: interface-adapters
+
+- [ ] ExportRulesJsonController のテスト戦略書・単体テスト
+- [ ] ExportRulesJsonPresenter のテスト戦略書・単体テスト
+- [ ] ExportRulesJsonControllerFactory のテスト戦略書・単体テスト
+
+#### 第4層: frameworks-and-drivers
+
+- [ ] ExportButton UIコンポーネントのテスト戦略書・単体テスト
+- [ ] useExportRulesJson カスタムフックのテスト戦略書・単体テスト
+
+### Phase 4: 結合テスト・E2Eテスト全件
+
 - [ ] 結合テスト戦略書に基づくテスト実装完了
   - 詳細: [integration-test-strategy.md](../../design/pages/rule-list/features/export-rules-json/integration-test-strategy.md)
-- [ ] E2Eテスト戦略書に基づくテスト実装完了
+- [ ] E2Eテスト戦略書に基づくテスト実装完了（全シナリオ）
   - 詳細: [e2e-test-strategy.md](../../design/pages/rule-list/features/export-rules-json/e2e-test-strategy.md)
 
 ## 受け入れ条件
