@@ -26,7 +26,6 @@ src/application-business-rules/
 │   └── ImportRulesJsonInteractor.ts             ← NEW
 └── dto/                                         ← Data Transfer Objects
     ├── input/
-    │   └── ImportRulesJsonInputData.ts           ← NEW
     └── output/
         ├── ImportRulesJsonPreviewOutputData.ts          ← NEW (プレビュー確認ダイアログ用)
         ├── ImportRulesJsonOutputData.ts           ← NEW
@@ -91,7 +90,6 @@ src/frameworks-and-drivers/
 | `src/application-business-rules/ports/input/IImportRulesJsonUseCase.ts` | 第2層 | UseCase Input Port インターフェース |
 | `src/application-business-rules/ports/output/IImportRulesJsonPresenter.ts` | 第2層 | Presenter Output Port インターフェース |
 | `src/application-business-rules/interactors/ImportRulesJsonInteractor.ts` | 第2層 | UseCaseの実装。バリデーション・プレビュー・一括上書き |
-| `src/application-business-rules/dto/input/ImportRulesJsonInputData.ts` | 第2層 | 入力DTO（jsonString） |
 | `src/application-business-rules/dto/output/ImportRulesJsonPreviewOutputData.ts` | 第2層 | プレビューDTO（currentRuleCount / importRuleCount） |
 | `src/application-business-rules/dto/output/ImportRulesJsonOutputData.ts` | 第2層 | 出力DTO（importedCount / previousCount） |
 | `src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData.ts` | 第2層 | エラーDTO（error / errorType / message） |
