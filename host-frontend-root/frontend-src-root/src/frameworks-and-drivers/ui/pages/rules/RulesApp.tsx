@@ -12,8 +12,11 @@ import EmptyStateMessage from 'src/components/organisms/EmptyStateMessage/EmptyS
 import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { container } from 'src/frameworks-and-drivers/di/container';
+import { ExportButton } from 'src/frameworks-and-drivers/ui/components/atoms/ExportButton/ExportButton';
+import { ToastNotification } from 'src/frameworks-and-drivers/ui/components/atoms/ToastNotification';
 import { DeleteRuleUI } from 'src/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI';
 import { useDeleteRule } from 'src/frameworks-and-drivers/ui/hooks/useDeleteRule';
+import { useExportRulesJson } from 'src/frameworks-and-drivers/ui/hooks/useExportRulesJson';
 import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 
 function RulesApp() {
@@ -36,6 +39,13 @@ function RulesApp() {
     cancelDelete,
     dismissDeleteError,
   } = useDeleteRule(onDeleteSuccess);
+
+  const {
+    exportRulesJson,
+    isExporting,
+    exportError,
+    dismissExportError,
+  } = useExportRulesJson();
 
   const toggleController = useMemo(() => {
     const factory = container.resolve<IToggleRuleActiveControllerFactory>('IToggleRuleActiveControllerFactory');
@@ -140,6 +150,13 @@ function RulesApp() {
       {rules.length === 0 ? (
         <EmptyStateMessage />
       ) : (
+        <>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
+          <ExportButton
+            onClick={() => { void exportRulesJson(); }}
+            disabled={isExporting}
+          />
+        </div>
         <RulesTable
           rules={rules}
           onEdit={handleEdit}
@@ -148,11 +165,19 @@ function RulesApp() {
           togglingIds={togglingIds}
           deletingIds={deletingIds}
         />
+        </>
       )}
 
       <div className="footer" data-testid="rules-footer">
         <p>合計 {rules.length} 件のルールが保存されています</p>
       </div>
+
+      <ToastNotification
+        message={exportError ?? ''}
+        type="error"
+        isVisible={exportError !== null}
+        onClose={dismissExportError}
+      />
 
       <DeleteRuleUI
         deleteTargetId={deleteTargetId}
