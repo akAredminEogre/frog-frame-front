@@ -93,6 +93,11 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
       expected: { implementationName: 'ExportRulesJsonControllerFactory' }
     },
     {
+      description: 'IImportRulesJsonControllerFactoryをImportRulesJsonControllerFactoryに解決できること',
+      input: { interfaceToken: 'IImportRulesJsonControllerFactory' as const },
+      expected: { implementationName: 'ImportRulesJsonControllerFactory' }
+    },
+    {
       description: 'ITabsGatewayをChromeTabsGatewayに解決できること',
       input: { interfaceToken: 'ITabsGateway' as const },
       expected: { implementationName: 'ChromeTabsGateway' }

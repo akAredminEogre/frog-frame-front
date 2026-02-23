@@ -15,6 +15,7 @@ import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeC
 import { ChromeTabsService } from 'src/infrastructure/browser/tabs/ChromeTabsService';
 import { DeleteRuleControllerFactory } from 'src/interface-adapters/factories/DeleteRuleControllerFactory';
 import { ExportRulesJsonControllerFactory } from 'src/interface-adapters/factories/ExportRulesJsonControllerFactory';
+import { ImportRulesJsonControllerFactory } from 'src/interface-adapters/factories/ImportRulesJsonControllerFactory';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
 
@@ -108,6 +109,11 @@ describe('DI Container - 具体クラス登録確認テスト (Awilix)', () => {
       description: 'ExportRulesJsonControllerFactoryを解決できること',
       input: { classToken: ExportRulesJsonControllerFactory },
       expected: { className: 'ExportRulesJsonControllerFactory' }
+    },
+    {
+      description: 'ImportRulesJsonControllerFactoryを解決できること',
+      input: { classToken: ImportRulesJsonControllerFactory },
+      expected: { className: 'ImportRulesJsonControllerFactory' }
     },
     {
       description: 'RewriteRuleMapperを解決できること',
