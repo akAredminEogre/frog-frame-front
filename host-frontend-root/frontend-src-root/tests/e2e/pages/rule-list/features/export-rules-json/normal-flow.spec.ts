@@ -1,32 +1,32 @@
 import { expect, test } from 'tests/e2e/fixtures';
-import { saveRuleViaPopup } from 'tests/e2e/pages/rule-list/features/export-rules-json/helpers';
+import {
+  assertNoConsoleErrors,
+  DEFAULT_TIMEOUT,
+  reloadAndWaitForTable,
+  saveRule,
+  setupConsoleErrorMonitoring,
+} from 'tests/e2e/pages/rule-list/features/export-rules-json/helpers';
 
 test('エクスポートボタンクリック後にJSONファイルがダウンロードされ、内容が正しい', async ({
   page,
   popupPage,
   rulesPage,
 }) => {
-  // コンソールエラー監視
-  const consoleErrors: string[] = [];
-  rulesPage.on('console', (msg) => {
-    if (msg.type() === 'error') {
-      consoleErrors.push(msg.text());
-    }
-  });
+  // コンソールエラー監視（popupPage + rulesPage 両方を監視）
+  const consoleErrors = setupConsoleErrorMonitoring(popupPage, rulesPage);
 
   // 1. Arrange: ルールを1件保存
-  await saveRuleViaPopup(page, popupPage, {
+  await saveRule(popupPage, page, {
     oldString: 'テスト置換前',
     newString: 'テスト置換後',
   });
 
   // 2. ルール一覧ページをリロードして保存されたルールを確認
-  await rulesPage.reload();
-  await expect(rulesPage.locator('[data-testid="rules-table"]')).toBeVisible({ timeout: 60000 });
+  await reloadAndWaitForTable(rulesPage);
 
   // 3. エクスポートボタンが表示されクリック可能であることを確認
   const exportButton = rulesPage.locator('[data-testid="export-button"]');
-  await expect(exportButton).toBeVisible({ timeout: 60000 });
+  await expect(exportButton).toBeVisible({ timeout: DEFAULT_TIMEOUT });
   await expect(exportButton).toBeEnabled();
 
   // 4. Act: ダウンロードイベントを待機しながらエクスポートボタンをクリック
@@ -74,5 +74,5 @@ test('エクスポートボタンクリック後にJSONファイルがダウン�
   expect(exportedRule).toHaveProperty('isActive');
 
   // 11. Assert: コンソールエラーが発生していないこと
-  expect(consoleErrors).toHaveLength(0);
+  assertNoConsoleErrors(consoleErrors);
 });
