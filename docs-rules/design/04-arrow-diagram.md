@@ -54,15 +54,11 @@ rectangle "表示テキスト\n複数行も可\n[状態]" as alias #color
 
 | 記法 | 意味 |
 |------|------|
-| `A --> B` | A が B に依存（依存元 --> 依存先） |
+| `A --> B` | A が完了後、B を開始できる（先行タスク --> 後続タスク） |
 | `A --> B : ラベル` | ラベル付き依存 |
 | `A -[#color]-> B : ラベル` | 色付き矢印（完了済みは `#gray`） |
 
-**依存の方向**: 外層 → 内層のみ許可 (Clean Architecture 原則)
-
-- Presentation → Application → Domain
-- Infrastructure → Application → Domain
-- 内 → 外の依存: インターフェース (Port) 経由でのみ許可
+> **注意**: タスク依存図の矢印はクラス依存図・アーキテクチャ依存図とは異なる。詳細は [network-diagram-guide.md](../user-stories/network-diagram-guide.md#重要-クラス図との違い) を参照。
 
 ### 凡例
 
@@ -163,33 +159,26 @@ end note
 ```text
 @startuml feature-dependency
 !theme plain
-title {機能名} - コンポーネント依存図
+title UserStory XXX: {機能名} - タスク依存ネットワーク図（進行中）
 
-' Presentation Layer
-rectangle "UI\nComponent" as ui #lightgreen
-rectangle "ViewModel" as vm #yellow
-
-' Application Layer
-rectangle "UseCase" as usecase #lightgreen
-
-' Domain Layer
-rectangle "Domain\nEntity" as entity #lightgreen
-
-' Infrastructure Layer
-rectangle "Repository\nInterface" as repoIf #lightgreen
-rectangle "Repository\nImpl" as repoImpl #lightgreen
+' ノード定義（タスク）
+rectangle "T1\nDomain Entity\n実装\n[完了]" as t1 #green
+rectangle "T2\nRepository\nInterface\n[完了]" as t2 #green
+rectangle "T3\nInteractor\n実装\n[進行中]" as t3 #yellow
+rectangle "T4\nController\n実装\n[未着手]" as t4 #pink
+rectangle "T5\nUI Component\n実装\n[未着手]" as t5 #pink
 
 ' 依存関係
-ui --> vm
-vm --> usecase
-usecase --> entity
-usecase --> repoIf
-repoIf --> repoImpl
+t1 -[#gray]-> t3 : 完了済み
+t2 -[#gray]-> t3 : 完了済み
+t3 --> t4
+t4 --> t5
 
 legend right
   |= 色 |= 状態 |
-  | <#lightgreen> | 完了 |
+  | <#green> | 完了 |
   | <#yellow> | 進行中 |
+  | <#pink> | 未着手 |
 endlegend
 
 @enduml
