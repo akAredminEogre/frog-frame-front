@@ -3,11 +3,27 @@ import { useCallback, useMemo, useState } from 'react';
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { IImportRulesJsonControllerFactory } from 'src/interface-adapters/factories/IImportRulesJsonControllerFactory';
 
+/**
+ * インポートプレビューの件数情報を保持する状態型。
+ * currentCount: 現在の既存ルール件数、importCount: インポートするルール件数。
+ */
 export interface ImportPreviewState {
   currentCount: number;
   importCount: number;
 }
 
+/**
+ * useImportRulesJson フックの返却値型。
+ * - handleFileSelect: ファイル選択時に呼ぶ。JSONを読み取り Phase 1（検証・プレビュー）を実行する。
+ * - confirmImport: プレビューダイアログの「インポート実行」で呼ぶ。Phase 2（一括上書き）を非同期で実行する。
+ * - cancelImport: プレビューダイアログを閉じる。既存ルールは変更しない（同期）。
+ * - isImporting: Phase 2 実行中は true。ImportButton を disabled にするために使用する。
+ * - previewData: Phase 1 完了後に設定される件数情報。null のときはダイアログを非表示。
+ * - importError: エラー発生時のメッセージ文字列（null = エラーなし）。
+ * - importSuccess: 成功時のメッセージ文字列（null = 未完了または消去済み）。
+ * - dismissImportError: エラートーストを閉じる（importError を null に）。
+ * - dismissImportSuccess: 成功トーストを閉じる（importSuccess を null に）。
+ */
 export interface UseImportRulesJsonResult {
   handleFileSelect: (file: File) => Promise<void>;
   confirmImport: () => Promise<void>;
@@ -54,17 +70,23 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
   }, [onRulesChanged]);
 
   const handleFileSelect = useCallback(async (file: File) => {
+    if (!file) return;
     setImportError(null);
     setImportSuccess(null);
 
-    const reader = new FileReader();
-    const jsonString = await new Promise<string>((resolve, reject) => {
-      reader.onload = (e) => resolve(e.target?.result as string);
-      reader.onerror = () => reject(new Error('ファイルの読み取りに失敗しました'));
-      reader.readAsText(file);
-    });
+    try {
+      const reader = new FileReader();
+      const jsonString = await new Promise<string>((resolve, reject) => {
+        reader.onload = (e) => resolve(e.target?.result as string);
+        reader.onerror = () => reject(new Error('ファイルの読み取りに失敗しました'));
+        reader.readAsText(file);
+      });
 
-    await importController.importRulesJson(jsonString);
+      await importController.importRulesJson(jsonString);
+    } catch (err) {
+      setImportSuccess(null);
+      setImportError(err instanceof Error ? err.message : 'ファイルの読み取りに失敗しました');
+    }
   }, [importController]);
 
   const confirmImport = useCallback(async () => {

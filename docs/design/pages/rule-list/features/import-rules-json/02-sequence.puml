@@ -22,7 +22,7 @@ end box
 
 box "application-business-rules" #LightYellow
   participant "ImportRulesJson\nInputData" as InputData
-  participant "ImportRulesJson\nPreviewData" as PreviewData
+  participant "ImportRulesJson\nPreviewOutputData" as PreviewOutputData
   participant "ImportRulesJson\nOutputData" as OutputData
   participant "ImportRulesJson\nError\nOutputData" as ErrorOutputData
   participant "<<interface>>\nIImportRulesJson\nUseCase" as IUseCase
@@ -233,8 +233,8 @@ else isImporting = false
       importRuleCount = jsonRules.length
     end note
 
-    Interactor -> PreviewData : new(\n  currentRuleCount,\n  importRuleCount)
-    PreviewData --> Interactor : previewData
+    Interactor -> PreviewOutputData : new(\n  currentRuleCount,\n  importRuleCount)
+    PreviewOutputData --> Interactor : previewData
 
     Interactor -> IPresenter : presentPreview(\n  previewData)
     activate IPresenter

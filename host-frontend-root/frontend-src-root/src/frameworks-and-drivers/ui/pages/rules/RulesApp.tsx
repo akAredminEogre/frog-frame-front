@@ -1,6 +1,6 @@
 import 'src/frameworks-and-drivers/ui/pages/rules/style.css';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { GetAllRewriteRulesUseCase } from 'src/application/usecases/rule/GetAllRewriteRulesUseCase';
@@ -27,10 +27,14 @@ function RulesApp() {
   const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
   const [toggleError, setToggleError] = useState<{ ruleId: number; message: string } | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const isInitialLoad = useRef(true);
 
   const loadRules = useCallback(async () => {
     try {
-      setLoading(true);
+      if (isInitialLoad.current) {
+        setLoading(true);
+      }
+      setError(null);
       const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
       const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
       const loadedRules = await getAllRulesUseCase.execute();
@@ -38,7 +42,10 @@ function RulesApp() {
     } catch (err) {
       setError('ルールの読み込みに失敗しました: ' + (err instanceof Error ? err.message : String(err)));
     } finally {
-      setLoading(false);
+      if (isInitialLoad.current) {
+        setLoading(false);
+        isInitialLoad.current = false;
+      }
     }
   }, []);
 

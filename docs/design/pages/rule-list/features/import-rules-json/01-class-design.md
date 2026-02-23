@@ -89,7 +89,7 @@
 | クラス | 責務 |
 |--------|------|
 | ImportRulesJsonInputData | 入力DTO。jsonString（ファイル読み取り文字列）を保持 |
-| ImportRulesJsonPreviewData | プレビューDTO。currentRuleCount / importRuleCountを保持 |
+| ImportRulesJsonPreviewOutputData | プレビューDTO。currentRuleCount / importRuleCountを保持 |
 | ImportRulesJsonOutputData | 出力DTO。importedCount / previousCountを保持 |
 | ImportRulesJsonErrorOutputData | エラー出力DTO。error / errorType ('parse'\|'validation'\|'storage') / messageを保持 |
 | IImportRulesJsonUseCase | Input Port。インポート処理のインターフェース（2メソッド） |

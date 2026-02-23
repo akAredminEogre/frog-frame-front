@@ -28,7 +28,7 @@ src/application-business-rules/
     ├── input/
     │   └── ImportRulesJsonInputData.ts           ← NEW
     └── output/
-        ├── ImportRulesJsonPreviewData.ts          ← NEW (プレビュー確認ダイアログ用)
+        ├── ImportRulesJsonPreviewOutputData.ts          ← NEW (プレビュー確認ダイアログ用)
         ├── ImportRulesJsonOutputData.ts           ← NEW
         └── ImportRulesJsonErrorOutputData.ts      ← NEW
 ```
@@ -60,11 +60,11 @@ src/frameworks-and-drivers/
 │   │   ├── atoms/
 │   │   │   └── ImportButton/                    ← NEW (Atomコンポーネント)
 │   │   │       ├── ImportButton.tsx             ← NEW (hidden inputを内包)
-│   │   │       ├── ImportButton.module.css      ← NEW
+│   │   │       ├── ImportButton.module.css      ← NEW (Atomはカプセル化・再利用性のためCSSモジュール採用)
 │   │   │       └── UploadIcon.tsx               ← NEW (DownloadIconとの対)
 │   │   └── organisms/
 │   │       └── ImportRulesJsonUI/               ← NEW (Organismコンポーネント)
-│   │           └── ImportRulesJsonUI.tsx        ← NEW (ImportButton + 確認ダイアログ統合)
+│   │           └── ImportRulesJsonUI.tsx        ← NEW (ImportButton + 確認ダイアログ統合; ダイアログオーバーレイはpropsによる動的レイアウトのためインラインスタイル採用)
 │   ├── hooks/                                   ← React Custom Hooks
 │   │   └── useImportRulesJson.ts               ← NEW
 │   └── pages/
@@ -88,27 +88,27 @@ src/frameworks-and-drivers/
 
 | ファイル | 層 | 概要 |
 |---------|------|------|
-| `application-business-rules/ports/input/IImportRulesJsonUseCase.ts` | 第2層 | UseCase Input Port インターフェース |
-| `application-business-rules/ports/output/IImportRulesJsonPresenter.ts` | 第2層 | Presenter Output Port インターフェース |
-| `application-business-rules/interactors/ImportRulesJsonInteractor.ts` | 第2層 | UseCaseの実装。バリデーション・プレビュー・一括上書き |
-| `application-business-rules/dto/input/ImportRulesJsonInputData.ts` | 第2層 | 入力DTO（jsonString） |
-| `application-business-rules/dto/output/ImportRulesJsonPreviewData.ts` | 第2層 | プレビューDTO（currentRuleCount / importRuleCount） |
-| `application-business-rules/dto/output/ImportRulesJsonOutputData.ts` | 第2層 | 出力DTO（importedCount / previousCount） |
-| `application-business-rules/dto/output/ImportRulesJsonErrorOutputData.ts` | 第2層 | エラーDTO（error / errorType / message） |
-| `interface-adapters/controllers/IImportRulesJsonController.ts` | 第3層 | Controller インターフェース（ADR-005） |
-| `interface-adapters/controllers/ImportRulesJsonController.ts` | 第3層 | Controller 実装 |
-| `interface-adapters/factories/IImportRulesJsonControllerFactory.ts` | 第3層 | Factory インターフェース（ADR-005） |
-| `interface-adapters/factories/ImportRulesJsonControllerFactory.ts` | 第3層 | Factory 実装 |
-| `interface-adapters/presenters/ImportRulesJsonPresenter.ts` | 第3層 | Presenter 実装（3コールバック） |
-| `frameworks-and-drivers/ui/components/atoms/ImportButton/ImportButton.tsx` | 第4層 | インポートボタンUIコンポーネント |
-| `frameworks-and-drivers/ui/components/atoms/ImportButton/ImportButton.module.css` | 第4層 | インポートボタンスタイル |
-| `frameworks-and-drivers/ui/components/atoms/ImportButton/UploadIcon.tsx` | 第4層 | アップロードアイコン（DownloadIconと対） |
-| `frameworks-and-drivers/ui/components/organisms/ImportRulesJsonUI/ImportRulesJsonUI.tsx` | 第4層 | ImportButton + 確認ダイアログ統合Organism |
-| `frameworks-and-drivers/ui/hooks/useImportRulesJson.ts` | 第4層 | カスタムHook（状態管理・ファイルI/O） |
+| `src/application-business-rules/ports/input/IImportRulesJsonUseCase.ts` | 第2層 | UseCase Input Port インターフェース |
+| `src/application-business-rules/ports/output/IImportRulesJsonPresenter.ts` | 第2層 | Presenter Output Port インターフェース |
+| `src/application-business-rules/interactors/ImportRulesJsonInteractor.ts` | 第2層 | UseCaseの実装。バリデーション・プレビュー・一括上書き |
+| `src/application-business-rules/dto/input/ImportRulesJsonInputData.ts` | 第2層 | 入力DTO（jsonString） |
+| `src/application-business-rules/dto/output/ImportRulesJsonPreviewOutputData.ts` | 第2層 | プレビューDTO（currentRuleCount / importRuleCount） |
+| `src/application-business-rules/dto/output/ImportRulesJsonOutputData.ts` | 第2層 | 出力DTO（importedCount / previousCount） |
+| `src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData.ts` | 第2層 | エラーDTO（error / errorType / message） |
+| `src/interface-adapters/controllers/IImportRulesJsonController.ts` | 第3層 | Controller インターフェース（ADR-005） |
+| `src/interface-adapters/controllers/ImportRulesJsonController.ts` | 第3層 | Controller 実装 |
+| `src/interface-adapters/factories/IImportRulesJsonControllerFactory.ts` | 第3層 | Factory インターフェース（ADR-005） |
+| `src/interface-adapters/factories/ImportRulesJsonControllerFactory.ts` | 第3層 | Factory 実装 |
+| `src/interface-adapters/presenters/ImportRulesJsonPresenter.ts` | 第3層 | Presenter 実装（3コールバック） |
+| `src/frameworks-and-drivers/ui/components/atoms/ImportButton/ImportButton.tsx` | 第4層 | インポートボタンUIコンポーネント |
+| `src/frameworks-and-drivers/ui/components/atoms/ImportButton/ImportButton.module.css` | 第4層 | インポートボタンスタイル |
+| `src/frameworks-and-drivers/ui/components/atoms/ImportButton/UploadIcon.tsx` | 第4層 | アップロードアイコン（DownloadIconと対） |
+| `src/frameworks-and-drivers/ui/components/organisms/ImportRulesJsonUI/ImportRulesJsonUI.tsx` | 第4層 | ImportButton + 確認ダイアログ統合Organism |
+| `src/frameworks-and-drivers/ui/hooks/useImportRulesJson.ts` | 第4層 | カスタムHook（状態管理・ファイルI/O） |
 
 ## 既存修正ファイル一覧
 
 | ファイル | 変更内容 |
 |---------|---------|
-| `frameworks-and-drivers/ui/pages/rules/RulesApp.tsx` | ImportRulesJsonUI コンポーネントを統合。isImportingフラグ追加 |
-| `frameworks-and-drivers/di/container.ts` | ImportRulesJsonControllerFactory を DI コンテナに登録 |
+| `src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx` | ImportRulesJsonUI コンポーネントを統合。isImportingフラグ追加 |
+| `src/frameworks-and-drivers/di/container.ts` | ImportRulesJsonControllerFactory を DI コンテナに登録 |

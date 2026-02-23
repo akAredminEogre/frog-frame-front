@@ -21,7 +21,7 @@ test('インポートボタンクリック後にJSONファイルを選択する�
   // 2. Arrange: インポート用JSONデータを作成
   const importData = {
     version: '1.0',
-    exportedAt: '2026-02-24T10:00:00+09:00',
+    exportedAt: new Date().toISOString(),
     rules: [
       {
         id: 1,
