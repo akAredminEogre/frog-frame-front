@@ -161,7 +161,7 @@ ADR-005 Factoryパターン準拠。エクスポートの2コールバック（o
 
 ```typescript
 interface IImportRulesJsonPresenter {
-  presentPreview(preview: ImportRulesJsonPreviewData): void;  // onPreview
+  presentPreview(preview: ImportRulesJsonPreviewOutputData): void;  // onPreview
   present(output: ImportRulesJsonOutputData): void;           // onSuccess
   presentError(error: ImportRulesJsonErrorOutputData): void;  // onError
 }
@@ -258,7 +258,7 @@ Chrome拡張のルール件数規模（数百件程度）では性能問題な�
 │                                                                             │
 │  ┌──────────────────────────┐  ┌──────────────────────┐                   │
 │  │ ImportRulesJson          │  │ ImportRulesJson       │                   │
-│  │ InputData                │  │ PreviewData           │                   │
+│  │ InputData                │  │ PreviewOutputData     │                   │
 │  │ ──────────────────────── │  │ ──────────────────── │                   │
 │  │ + jsonString: string     │  │ + currentRuleCount:  │                   │
 │  └──────────────────────────┘  │     number           │                   │
