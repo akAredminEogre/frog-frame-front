@@ -202,15 +202,15 @@ width: 200px;
 
 | プロパティ | 値 |
 |-----------|-----|
-| 背景色 | `#3498db`（青） |
-| 文字色 | `white` |
-| 境界線 | なし |
-| パディング | `6px 12px` |
-| 角の丸み | `4px` |
-| フォントサイズ | 12px |
-| フォント太さ | 500（ミディアム） |
+| 背景色 | `transparent` |
+| 文字色 | `var(--color-secondary)` |
+| 境界線 | `1px solid var(--color-border)` |
+| パディング | `var(--spacing-sm) var(--spacing-md)` |
+| 角の丸み | `var(--border-radius)` |
+| フォントサイズ | 14px |
+| 最小高さ | 44px |
 | カーソル | `pointer` |
-| トランジション | `background-color 0.2s ease` |
+| トランジション | `background-color 0.2s ease, color 0.2s ease` |
 | アイコン | ダウンロードアイコン（ボタンテキスト左側） |
 | ツールチップ | 「ルールをJSONファイルとしてエクスポート」 |
 | aria-label | `"ルールをJSONエクスポート"` |
@@ -222,8 +222,8 @@ width: 200px;
 | 通常（ルール1件以上） | 有効。クリックでJSONダウンロード開始 |
 | ルール0件 | `disabled`。グレーアウト（`opacity: 0.5; cursor: not-allowed`） |
 | エクスポート中（isExporting=true） | `disabled`。グレーアウト（重複実行防止） |
-| ホバー時（有効状態） | 背景色: `#2980b9`（濃い青） |
-| フォーカス時 | ボックスシャドウ: `0 0 0 2px rgba(52, 152, 219, 0.3)` |
+| ホバー時（有効状態） | 背景色: `var(--color-primary-bg)`, 文字色: `var(--color-primary)`, 境界線色: `var(--color-primary)` |
+| フォーカス時 | アウトライン: `2px solid var(--color-primary)`, オフセット: `2px` |
 
 ### 動作
 

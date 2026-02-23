@@ -25,7 +25,8 @@ export const ExportButton: React.FC<ExportButtonProps> = ({
       className={styles.exportButton}
       onClick={onClick}
       disabled={disabled}
-      aria-label="ルールをエクスポート"
+      aria-label="ルールをJSONエクスポート"
+      title="ルールをJSONファイルとしてエクスポート"
       data-testid="export-button"
     >
       <DownloadIcon className={styles.icon} />

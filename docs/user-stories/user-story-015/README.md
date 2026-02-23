@@ -110,7 +110,7 @@ E2Eテスト通過後、各クラス・メソッドの単体テストを整備�
 ### Phase 3: 結合テスト・E2Eテスト全件
 
 - [ ] 結合テスト戦略書に基づくテスト実装完了
-  - 詳細: [integration-test-strategy.md](../../design/pages/rule-list/features/export-rules-json/integration-test-strategy.md)
+  - 詳細: [integration-test-strategy.md](../../design/pages/rule-list/features/export-rules-json/integration-test-strategy.md)（未作成。Phase 3 で作成・実施）
 - [ ] E2Eテスト戦略書に基づくテスト実装完了（全シナリオ）
   - 詳細: [e2e-test-strategy.md](../../design/pages/rule-list/features/export-rules-json/e2e-test-strategy.md)
 
