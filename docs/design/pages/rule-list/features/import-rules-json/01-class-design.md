@@ -211,7 +211,7 @@ Chrome拡張のルール件数規模（数百件程度）では性能問題な�
 | Hook | useExportRulesJson | useImportRulesJson |
 | Controller | ExportRulesJsonController | ImportRulesJsonController |
 | Interactor | ExportRulesJsonInteractor | ImportRulesJsonInteractor |
-| Presenterコールバック | onSuccess, onError | onPreview, onSuccess, onError |
+| Presenterコールバック | onSuccess, onError | onPreview, onSuccess, showErrorInView |
 | Repository操作 | getAll() | getAll(), delete(), create() |
 
 ## クラス図
