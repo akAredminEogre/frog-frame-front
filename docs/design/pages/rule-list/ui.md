@@ -189,8 +189,52 @@ width: 200px;
 - **置換前・後**: 長いテキストは折り返し表示
 - **ホバー**: 全体の文字列をtitle属性で表示
 
+## エクスポートボタン
+
+テーブル上部に配置するエクスポート機能のボタン。
+
+### 配置
+
+- **位置**: テーブルヘッダー上部、右寄せ
+- **コンポーネント**: ExportButton（Atom層）
+
+### スタイル仕様
+
+| プロパティ | 値 |
+|-----------|-----|
+| 背景色 | `transparent` |
+| 文字色 | `var(--color-secondary)` |
+| 境界線 | `1px solid var(--color-border)` |
+| パディング | `var(--spacing-sm) var(--spacing-md)` |
+| 角の丸み | `var(--border-radius)` |
+| フォントサイズ | 14px |
+| 最小高さ | 44px |
+| カーソル | `pointer` |
+| トランジション | `background-color 0.2s ease, color 0.2s ease` |
+| アイコン | ダウンロードアイコン（ボタンテキスト左側） |
+| ツールチップ | 「ルールをJSONファイルとしてエクスポート」 |
+| aria-label | `"ルールをJSONエクスポート"` |
+
+### 状態
+
+| 状態 | 表示 |
+|------|------|
+| 通常（ルール1件以上） | 有効。クリックでJSONダウンロード開始 |
+| ルール0件 | `disabled`。グレーアウト（`opacity: 0.5; cursor: not-allowed`） |
+| エクスポート中（isExporting=true） | `disabled`。グレーアウト（重複実行防止） |
+| ホバー時（有効状態） | 背景色: `var(--color-primary-bg)`, 文字色: `var(--color-primary)`, 境界線色: `var(--color-primary)` |
+| フォーカス時 | アウトライン: `2px solid var(--color-primary)`, オフセット: `2px` |
+
+### 動作
+
+- クリック時: `useExportRulesJson` Hook経由でJSON形式のファイルダウンロードを実行
+- ファイル形式: JSON（`frog-frame-front-rules-YYYYMMDD_hhmmss.json`）
+- エラー時: トースト通知で「エクスポート処理中にエラーが発生しました: ...」形式のメッセージを表示（詳細エラーメッセージを含める）
+
 ## 更新履歴
 
+- 2026-02-22: export-rules-json対応
+  - エクスポートボタンのUI仕様を追加（配置、スタイル、状態、動作）
 - 2026-01-29: user-story-003対応
   - 列構成を6列に拡張（有効・編集・削除・URLパターン・置換前・置換後）
   - 有効・編集・削除列の幅をボタンの最小幅に変更（`width: 1%; white-space: nowrap`）

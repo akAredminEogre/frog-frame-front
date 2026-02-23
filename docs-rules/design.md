@@ -12,8 +12,7 @@ docs/design/
 │               ├── 00-overview.md      # 必須: 概要
 │               ├── 01-class-design.md  # 必須: クラス設計（理論）
 │               ├── 02-sequence.puml    # 必須: シーケンス図
-│               ├── 03-directory-structure.md  # 必須: ディレクトリ構成（理論）
-│               └── 04-arrow-diagram.puml # 必須: アローダイアグラム（依存関係・データフロー図）
+│               └── 03-directory-structure.md  # 必須: ディレクトリ構成（理論）
 └── clean-architecture/                 # アーキテクチャ共通設計（参考用）
     └── domain/
         └── entities.md
@@ -46,9 +45,8 @@ docs/design/
 | 01-class-design.md（機能単位） | **必須** | [design/01-class-design.md](./design/01-class-design.md) |
 | 02-sequence.puml（機能単位） | **必須** | [design/02-sequence.md](./design/02-sequence.md) |
 | 03-directory-structure.md（機能単位） | **必須** | [design/03-directory-structure.md](./design/03-directory-structure.md) |
-| アローダイアグラム（機能単位） | **必須** | [design/04-arrow-diagram.md](./design/04-arrow-diagram.md) |
 
-> `03-directory-structure.md` とアローダイアグラムは**必須**。
+> `03-directory-structure.md` は**必須**。旧 `04-arrow-diagram.md` は廃止済み。アローダイアグラムはuser-storiesドキュメントとして作成する（[user-stories/network-diagram-guide.md](./user-stories/network-diagram-guide.md)参照）。
 
 ### テスト戦略書
 

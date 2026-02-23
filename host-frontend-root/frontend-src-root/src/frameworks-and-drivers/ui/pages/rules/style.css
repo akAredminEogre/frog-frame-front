@@ -1,7 +1,7 @@
 /* ルール一覧表示ページのスタイル */
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   margin: 0;
   padding: 20px;
   background-color: #f8f9fa;
@@ -14,7 +14,7 @@ body {
   margin: 0;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
   padding: 24px;
   min-height: 100vh;
   box-sizing: border-box;
@@ -66,13 +66,20 @@ h1 {
   color: #5a6c7d;
 }
 
+/* エクスポートボタンコンテナ */
+.export-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
 /* ルール一覧テーブル */
 .rules-table-container {
   margin: 20px 0;
   overflow-x: auto;
   border-radius: 8px;
   border: 1px solid #e1e5e9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
 .rules-table {
@@ -93,7 +100,7 @@ h1 {
 }
 
 .rules-table tbody tr {
-  background-color: #ffffff;
+  background-color: #fff;
   transition: background-color 0.2s ease;
 }
 
@@ -119,7 +126,7 @@ h1 {
 
 .rule-url-pattern {
   width: 30%;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: Monaco, Menlo, 'Ubuntu Mono', monospace;
   font-size: 12px;
   color: #3498db;
   white-space: nowrap;
@@ -129,7 +136,7 @@ h1 {
 
 .rule-old-string {
   width: 30%;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: Monaco, Menlo, 'Ubuntu Mono', monospace;
   font-size: 13px;
   color: #e74c3c;
   white-space: nowrap;
@@ -139,7 +146,7 @@ h1 {
 
 .rule-new-string {
   width: 30%;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: Monaco, Menlo, 'Ubuntu Mono', monospace;
   font-size: 13px;
   color: #27ae60;
   white-space: nowrap;
@@ -173,7 +180,7 @@ h1 {
 
 .edit-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 0 0 2px rgb(52 152 219 / 30%);
 }
 
 /* フッター */
@@ -187,7 +194,7 @@ h1 {
 }
 
 /* レスポンシブデザイン */
-@media (max-width: 600px) {
+@media (width <= 600px) {
   body {
     padding: 10px;
   }
