@@ -50,7 +50,8 @@ export const useExportRulesJson = (): UseExportRulesJsonResult => {
     try {
       await exportController.exportRulesJson();
     } catch {
-      // エラーは onError コールバック経由で exportError State に通知済み
+      // Interactor内で全例外をcatchしpresentError経由でonErrorコールバックに通知する設計。
+      // catch節は予期しないエラーに対する防御的プログラミングとして、未処理のPromise拒否を防ぐ。
     } finally {
       setIsExporting(false);
     }
