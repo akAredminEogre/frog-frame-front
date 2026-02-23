@@ -27,6 +27,8 @@ import { SelectedPageTextRepository } from 'src/infrastructure/persistence/stora
 import { GetSelectionService } from 'src/infrastructure/windows/getSelectionService';
 import { DeleteRuleControllerFactory } from 'src/interface-adapters/factories/DeleteRuleControllerFactory';
 import { IDeleteRuleControllerFactory } from 'src/interface-adapters/factories/IDeleteRuleControllerFactory';
+import { IImportRulesJsonControllerFactory } from 'src/interface-adapters/factories/IImportRulesJsonControllerFactory';
+import { ImportRulesJsonControllerFactory } from 'src/interface-adapters/factories/ImportRulesJsonControllerFactory';
 import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
@@ -77,6 +79,10 @@ const deleteRuleControllerFactory = new DeleteRuleControllerFactory(
   rewriteRuleRepository,
   chromeTabsGateway
 );
+// Import Rules JSON feature
+const importRulesJsonControllerFactory = new ImportRulesJsonControllerFactory(
+  rewriteRuleRepository
+);
 // NOTE: Background contextでは DexieRewriteRuleRepository を直接使用するため、
 // RewriteRuleMessagingService の getAll() は呼ばれない（Mapper 経由の getAllRules は未使用）
 const rewriteRuleMessagingService = new RewriteRuleMessagingService();
@@ -114,7 +120,10 @@ awilixContainer.register({
   rewriteRuleMessagingService: asValue(rewriteRuleMessagingService),
 
   // Delete Rule feature
-  deleteRuleControllerFactory: asValue(deleteRuleControllerFactory)
+  deleteRuleControllerFactory: asValue(deleteRuleControllerFactory),
+
+  // Import Rules JSON feature
+  importRulesJsonControllerFactory: asValue(importRulesJsonControllerFactory)
 });
 
 // Type definitions for container resolution
@@ -150,6 +159,9 @@ interface ContainerCradle {
 
   // Delete Rule feature
   deleteRuleControllerFactory: IDeleteRuleControllerFactory;
+
+  // Import Rules JSON feature
+  importRulesJsonControllerFactory: IImportRulesJsonControllerFactory;
 }
 
 // Token mappings for interface-based resolution (legacy compatibility)
@@ -164,6 +176,7 @@ type InterfaceToken =
   | 'IGetSelectionService'
   | 'IToggleRuleActiveControllerFactory'
   | 'IDeleteRuleControllerFactory'
+  | 'IImportRulesJsonControllerFactory'
   | 'ITabsGateway'
   | 'IRewriteRuleMessagingPort';
 
@@ -178,6 +191,7 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IGetSelectionService': 'getSelectionService',
   'IToggleRuleActiveControllerFactory': 'toggleRuleActiveControllerFactory',
   'IDeleteRuleControllerFactory': 'deleteRuleControllerFactory',
+  'IImportRulesJsonControllerFactory': 'importRulesJsonControllerFactory',
   'ITabsGateway': 'chromeTabsGateway',
   'IRewriteRuleMessagingPort': 'rewriteRuleMessagingService'
 };
@@ -196,6 +210,7 @@ const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [ChromeCurrentTabService, 'chromeCurrentTabService'],
   [ToggleRuleActiveControllerFactory, 'toggleRuleActiveControllerFactory'],
   [DeleteRuleControllerFactory, 'deleteRuleControllerFactory'],
+  [ImportRulesJsonControllerFactory, 'importRulesJsonControllerFactory'],
   [RewriteRuleMapper, 'rewriteRuleMapper'],
   [ChromeTabsGateway, 'chromeTabsGateway'],
   [RewriteRuleMessagingService, 'rewriteRuleMessagingService']
@@ -215,6 +230,7 @@ interface Container {
   resolve(token: typeof ChromeCurrentTabService): ChromeCurrentTabService;
   resolve(token: typeof ToggleRuleActiveControllerFactory): ToggleRuleActiveControllerFactory;
   resolve(token: typeof DeleteRuleControllerFactory): DeleteRuleControllerFactory;
+  resolve(token: typeof ImportRulesJsonControllerFactory): ImportRulesJsonControllerFactory;
   resolve(token: typeof RewriteRuleMapper): RewriteRuleMapper;
   resolve(token: typeof ChromeTabsGateway): ChromeTabsGateway;
   resolve(token: typeof RewriteRuleMessagingService): RewriteRuleMessagingService;

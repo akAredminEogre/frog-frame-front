@@ -13,7 +13,9 @@ import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { DeleteRuleUI } from 'src/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI';
+import { ImportRulesJsonUI } from 'src/frameworks-and-drivers/ui/components/organisms/ImportRulesJsonUI/ImportRulesJsonUI';
 import { useDeleteRule } from 'src/frameworks-and-drivers/ui/hooks/useDeleteRule';
+import { useImportRulesJson } from 'src/frameworks-and-drivers/ui/hooks/useImportRulesJson';
 import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 
 function RulesApp() {
@@ -22,6 +24,21 @@ function RulesApp() {
   const [error, setError] = useState<string | null>(null);
   const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
   const [toggleError, setToggleError] = useState<{ ruleId: number; message: string } | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const loadRules = useCallback(async () => {
+    try {
+      setLoading(true);
+      const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+      const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
+      const loadedRules = await getAllRulesUseCase.execute();
+      setRules(loadedRules);
+    } catch (err) {
+      setError('ルールの読み込みに失敗しました: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const onDeleteSuccess = useCallback((ruleId: number) => {
     setRules((prevRules) => prevRules.filter((r) => r.id !== ruleId));
@@ -36,6 +53,22 @@ function RulesApp() {
     cancelDelete,
     dismissDeleteError,
   } = useDeleteRule(onDeleteSuccess);
+
+  const onImportSuccess = useCallback(() => {
+    setRefreshKey((k) => k + 1);
+  }, []);
+
+  const {
+    handleFileSelect,
+    confirmImport,
+    cancelImport,
+    isImporting,
+    previewData,
+    importError,
+    importSuccess,
+    dismissImportError,
+    dismissImportSuccess,
+  } = useImportRulesJson(onImportSuccess);
 
   const toggleController = useMemo(() => {
     const factory = container.resolve<IToggleRuleActiveControllerFactory>('IToggleRuleActiveControllerFactory');
@@ -52,22 +85,8 @@ function RulesApp() {
   }, []);
 
   useEffect(() => {
-    const loadRules = async () => {
-      try {
-        setLoading(true);
-        const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
-        const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
-        const loadedRules = await getAllRulesUseCase.execute();
-        setRules(loadedRules);
-      } catch (err) {
-        setError('ルールの読み込みに失敗しました: ' + (err instanceof Error ? err.message : String(err)));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadRules();
-  }, []);
+    void loadRules();
+  }, [loadRules, refreshKey]);
 
   if (loading) {
     return (
@@ -84,20 +103,7 @@ function RulesApp() {
           message={error}
           onRetry={() => {
             setError(null);
-            setLoading(true);
-            const loadRules = async () => {
-              try {
-                const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
-                const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
-                const loadedRules = await getAllRulesUseCase.execute();
-                setRules(loadedRules);
-              } catch (err) {
-                setError('ルールの読み込みに失敗しました: ' + (err instanceof Error ? err.message : String(err)));
-              } finally {
-                setLoading(false);
-              }
-            };
-            loadRules();
+            void loadRules();
           }}
         />
       </div>
@@ -136,6 +142,18 @@ function RulesApp() {
           message={`ルール ${toggleError.ruleId} の切り替えに失敗しました: ${toggleError.message}`}
         />
       )}
+
+      <ImportRulesJsonUI
+        onImportClick={(file) => { void handleFileSelect(file); }}
+        onConfirm={() => { void confirmImport(); }}
+        onCancel={cancelImport}
+        isImporting={isImporting}
+        previewData={previewData}
+        importError={importError}
+        importSuccess={importSuccess}
+        onDismissError={dismissImportError}
+        onDismissSuccess={dismissImportSuccess}
+      />
 
       {rules.length === 0 ? (
         <EmptyStateMessage />

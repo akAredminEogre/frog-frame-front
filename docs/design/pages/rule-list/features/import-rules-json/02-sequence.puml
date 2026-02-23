@@ -1,0 +1,414 @@
+@startuml ImportRulesJson
+
+title ルールJSONインポート機能
+
+box "Rules Page - UI" #LightBlue
+  participant "ImportButton" as ImportBtn
+  participant "ImportRulesJsonUI" as ImportUI
+  participant "RulesApp" as View
+  participant "useImportRulesJson\n(Hook)" as Hook
+  participant "Toast\nNotification" as Toast
+end box
+
+box "interface-adapters" #LightGreen
+  participant "<<interface>>\nIImportRulesJson\nControllerFactory" as IFactory
+  participant "ImportRulesJson\nController\nFactory" as Factory
+  participant "<<interface>>\nIImportRulesJson\nController" as IController
+  participant "ImportRulesJson\nController" as Controller
+  participant "ImportRulesJson\nPresenter" as Presenter
+  participant "RewriteRule\nMapper" as Mapper
+  participant "<<interface>>\nIRewriteRule\nMessagingPort" as IMessagingPort
+end box
+
+box "application-business-rules" #LightYellow
+  participant "ImportRulesJson\nInputData" as InputData
+  participant "ImportRulesJson\nPreviewData" as PreviewData
+  participant "ImportRulesJson\nOutputData" as OutputData
+  participant "ImportRulesJson\nError\nOutputData" as ErrorOutputData
+  participant "<<interface>>\nIImportRulesJson\nUseCase" as IUseCase
+  participant "<<interface>>\nIImportRulesJson\nPresenter" as IPresenter
+  participant "ImportRulesJson\nInteractor" as Interactor
+  participant "<<interface>>\nIRewriteRule\nRepository" as IRepository
+end box
+
+box "frameworks-and-drivers" #LightCyan
+  participant "ChromeRuntime\nRewriteRule\nRepository" as MessagingRepo
+  participant "RewriteRule\nMessaging\nService" as MessagingService
+  participant "<<interface>>\nIRewriteRule\nProxyService" as IProxyService
+end box
+
+box "Background" #LightGray
+  participant "RewriteRule\nProxyService" as ProxyService
+  participant "RewriteRule\nProxyService\nImpl" as ProxyServiceImpl
+  participant "Dexie\nRewriteRule\nRepository" as DexieRepo
+end box
+
+box "enterprise-business-rules" #LightPink
+  participant "RewriteRule" as Entity
+end box
+
+== 初期化(useMemo内) ==
+
+View -> Hook : useImportRulesJson()
+activate Hook
+note right of Hook
+  useMemo内でFactory初期化
+  onPreview/onSuccess/onErrorコールバックを定義
+  isImporting/previewData状態を管理
+end note
+
+Hook -> IFactory : create(\n  onPreview,\n  onSuccess,\n  onError)
+activate IFactory
+
+IFactory -> Factory : create(\n  onPreview,\n  onSuccess,\n  onError)
+activate Factory
+
+Factory -> Presenter : new(\n  onPreview,\n  onSuccess,\n  onError)
+Factory -> Interactor : new(\n  repository,\n  presenter)
+note right of Factory
+  Interactor は
+  IImportRulesJsonUseCase を実装
+end note
+Factory -> Controller : new(useCase)
+Factory --> IFactory : controller
+deactivate Factory
+
+IFactory --> Hook : controller
+deactivate IFactory
+
+Hook --> View : { importRulesJson,\n  confirmImport,\n  cancelImport,\n  isImporting,\n  previewData }
+
+note right of Hook
+  ADR-005: Factoryパターンにより
+  ReactコールバックをPresenterに注入
+  onPreview: プレビューダイアログ表示
+  onSuccess: 成功トースト + リフレッシュ
+  onError: エラートースト表示
+end note
+
+== Phase 1: ファイル選択 → バリデーション → プレビュー ==
+
+ImportBtn -> View : onFileSelect(file)
+activate View
+note right of View
+  <input type="file" accept=".json">
+  ファイル選択後に発火
+end note
+
+View -> Hook : importRulesJson(file)
+activate Hook
+
+alt isImporting = true
+  note over Hook
+    **重複実行防止**
+    既にインポート処理中のため
+    早期リターン
+  end note
+  Hook --> View : 早期リターン
+  deactivate Hook
+  deactivate View
+
+else isImporting = false
+  Hook -> Hook : FileReader.readAsText(file)
+  note right of Hook
+    ファイルサイズ確認(>5MB → エラー)
+    読み取り完了後にjsonStringを取得
+  end note
+
+  Hook -> Hook : setIsImporting(true)
+
+  Hook -> IController : importRulesJson(jsonString)
+  activate IController
+
+  IController -> Controller : importRulesJson(jsonString)
+  activate Controller
+
+  Controller -> InputData : new(jsonString)
+  InputData --> Controller : inputData
+
+  Controller -> IUseCase : importRulesJson(inputData)
+  IUseCase -> Interactor : importRulesJson(inputData)
+  activate Interactor
+
+  alt バリデーション失敗
+    note over Interactor
+      JSON.parse() 失敗 or スキーマ不正 or
+      version不一致 or ルール0件 or 件数上限超過
+    end note
+    Interactor -> ErrorOutputData : new(\n  error,\n  errorType)
+    ErrorOutputData --> Interactor : errorOutputData
+
+    Interactor -> IPresenter : presentError(\n  errorOutputData)
+    activate IPresenter
+
+    IPresenter -> Presenter : presentError(\n  errorOutputData)
+    activate Presenter
+
+    Presenter -> Hook : showErrorInView(\n  message)
+    activate Hook
+
+    Hook -> Toast : show(\n  message,\n  type: "error")
+    activate Toast
+    Toast --> Hook : 表示
+    deactivate Toast
+
+    Hook --> Presenter : エラー表示完了
+    deactivate Hook
+    deactivate Presenter
+    deactivate IPresenter
+    deactivate Interactor
+    deactivate Controller
+    deactivate IController
+
+    group finally [エラー時]
+      Hook -> Hook : setIsImporting(false)
+    end
+
+  else バリデーション成功
+    == 現在ルール件数取得 ==
+
+    Interactor -> IRepository : getAll()
+    activate IRepository
+
+    IRepository -> MessagingRepo : getAll()
+    activate MessagingRepo
+
+    MessagingRepo -> Mapper : getAll()
+    activate Mapper
+
+    Mapper -> IMessagingPort : getAll()
+    activate IMessagingPort
+
+    IMessagingPort -> MessagingService : getAll()
+    activate MessagingService
+
+    MessagingService -> IProxyService : getAll()
+    activate IProxyService
+
+    IProxyService -> ProxyService : getAll()
+    activate ProxyService
+
+    ProxyService -> ProxyServiceImpl : getAll()
+    activate ProxyServiceImpl
+
+    ProxyServiceImpl -> DexieRepo : getAll()
+    activate DexieRepo
+    DexieRepo --> ProxyServiceImpl : DTO[]
+    deactivate DexieRepo
+
+    ProxyServiceImpl --> ProxyService : DTO[]
+    deactivate ProxyServiceImpl
+
+    ProxyService --> IProxyService : DTO[]
+    deactivate ProxyService
+
+    IProxyService --> MessagingService : DTO[]
+    deactivate IProxyService
+
+    MessagingService --> IMessagingPort : DTO[]
+    deactivate MessagingService
+
+    IMessagingPort --> Mapper : DTO[]
+    deactivate IMessagingPort
+
+    loop 各DTO
+      Mapper -> Entity : fromDTO(dto)
+      Entity --> Mapper : rule
+    end
+
+    Mapper --> MessagingRepo : currentRules
+    deactivate Mapper
+
+    MessagingRepo --> IRepository : currentRules
+    deactivate MessagingRepo
+
+    IRepository --> Interactor : currentRules
+    deactivate IRepository
+
+    == プレビューデータ生成・通知 ==
+
+    note over Interactor
+      pendingRulesにインポートルールを保持
+      currentRuleCount = currentRules.length
+      importRuleCount = jsonRules.length
+    end note
+
+    Interactor -> PreviewData : new(\n  currentRuleCount,\n  importRuleCount)
+    PreviewData --> Interactor : previewData
+
+    Interactor -> IPresenter : presentPreview(\n  previewData)
+    activate IPresenter
+
+    IPresenter -> Presenter : presentPreview(\n  previewData)
+    activate Presenter
+
+    Presenter -> Hook : onPreview(\n  previewData)
+    note right of Hook
+      onPreviewコールバック実行(ADR-005):
+      setPreviewData(previewData)
+      → 確認ダイアログ表示
+    end note
+
+    deactivate Presenter
+    deactivate IPresenter
+    deactivate Interactor
+    deactivate Controller
+    deactivate IController
+
+    Hook -> Hook : setIsImporting(false)
+    note right of Hook
+      プレビュー表示中はisImporting=false
+      ユーザーの確認待ち状態
+    end note
+
+    Hook --> View : previewData更新
+    deactivate Hook
+    deactivate View
+
+  end
+end
+
+== Phase 2: ユーザー確認 → インポート実行 ==
+
+ImportUI -> View : onConfirm()
+activate View
+note right of View
+  [インポート実行] ボタンクリック
+end note
+
+View -> Hook : confirmImport()
+activate Hook
+
+Hook -> Hook : setIsImporting(true)
+
+Hook -> IController : confirmImport()
+activate IController
+
+IController -> Controller : confirmImport()
+activate Controller
+
+Controller -> IUseCase : confirmImport()
+IUseCase -> Interactor : confirmImport()
+activate Interactor
+
+note over Interactor
+  pendingRulesからインポートルールを取得
+  全既存ルール削除 → 新ルール追加
+end note
+
+== 全既存ルール削除 ==
+
+loop 各既存ルールID
+  Interactor -> IRepository : delete(id)
+  activate IRepository
+  IRepository -> MessagingRepo : delete(id)
+  activate MessagingRepo
+  MessagingRepo --> IRepository : 完了
+  deactivate MessagingRepo
+  IRepository --> Interactor : 完了
+  deactivate IRepository
+end
+
+== 新ルール追加 ==
+
+loop 各インポートルール
+  Interactor -> IRepository : create(rule)
+  activate IRepository
+  IRepository -> MessagingRepo : create(rule)
+  activate MessagingRepo
+  note right of MessagingRepo
+    JSONにIDがあればそのIDを使用
+    IDがなければDB側で自動採番
+  end note
+  MessagingRepo --> IRepository : 完了
+  deactivate MessagingRepo
+  IRepository --> Interactor : 完了
+  deactivate IRepository
+end
+
+== 結果通知 ==
+
+alt 成功
+  Interactor -> OutputData : new(\n  importedCount,\n  previousCount)
+  OutputData --> Interactor : outputData
+
+  Interactor -> IPresenter : present(outputData)
+  activate IPresenter
+
+  IPresenter -> Presenter : present(outputData)
+  activate Presenter
+
+  Presenter -> Hook : onSuccess(\n  outputData)
+  note right of Hook
+    onSuccessコールバック実行(ADR-005):
+    トースト通知「M件のルールをインポートしました（旧N件を置換）」
+    + ルール一覧リフレッシュ
+    + previewData = null（ダイアログ閉じる）
+  end note
+
+  deactivate Presenter
+  deactivate IPresenter
+  deactivate Interactor
+  deactivate Controller
+  deactivate IController
+
+else Storage操作失敗
+  note over Interactor
+    delete() / create() でエラー発生
+  end note
+  Interactor -> ErrorOutputData : new(\n  error,\n  'storage')
+  ErrorOutputData --> Interactor : errorOutputData
+
+  Interactor -> IPresenter : presentError(\n  errorOutputData)
+  activate IPresenter
+
+  IPresenter -> Presenter : presentError(\n  errorOutputData)
+  activate Presenter
+
+  Presenter -> Hook : showErrorInView(\n  message)
+  activate Hook
+
+  Hook -> Toast : show(\n  "インポート処理中にエラーが発生しました",\n  type: "error")
+  activate Toast
+  Toast --> Hook : 表示
+  deactivate Toast
+
+  Hook --> Presenter : エラー表示完了
+  deactivate Hook
+  deactivate Presenter
+  deactivate IPresenter
+  deactivate Interactor
+  deactivate Controller
+  deactivate IController
+
+end
+
+group finally [成功・エラー共通]
+  Hook -> Hook : setIsImporting(false)
+  note right of Hook
+    処理中フラグを解除(finally節)
+    ImportButton.disabled = false
+  end note
+end
+
+deactivate Hook
+deactivate View
+
+== キャンセル ==
+
+ImportUI -> View : onCancel()
+activate View
+View -> Hook : cancelImport()
+activate Hook
+Hook -> Hook : setPreviewData(null)
+note right of Hook
+  確認ダイアログを閉じる
+  既存ルールは変更しない
+  pendingRulesはInteractor内で保持されたまま
+  （次回ファイル選択で上書き）
+end note
+Hook --> View : previewData = null
+deactivate Hook
+deactivate View
+
+@enduml
