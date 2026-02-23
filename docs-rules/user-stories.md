@@ -7,7 +7,7 @@ docs/user-stories/
 ├── user-story-{番号}/           # 作業中のユーザーストーリー
 │   ├── README.md                 # 必須: ストーリー概要
 │   ├── acceptance-criteria.md    # 必須: 受け入れ条件（※テンプレートの場合は省略可）
-│   └── network-diagram.puml      # 任意: タスク依存ネットワーク図
+│   └── 04-network-diagram.puml   # 必須: アローダイアグラム（タスク依存ネットワーク図）
 └── completed/                    # 完了したユーザーストーリー
     └── user-story-{番号}/
 ```
@@ -58,7 +58,7 @@ docs/user-stories/
 |---------|-------------|------|
 | README.md | [readme-guide.md](./user-stories/readme-guide.md) | ○ |
 | acceptance-criteria.md | [acceptance-criteria-guide.md](./user-stories/acceptance-criteria-guide.md) | ○ |
-| network-diagram.puml | [network-diagram-guide.md](./user-stories/network-diagram-guide.md) | - |
+| 04-network-diagram.puml | [network-diagram-guide.md](./user-stories/network-diagram-guide.md) | ○ |
 
 ## 関連ドキュメント
 

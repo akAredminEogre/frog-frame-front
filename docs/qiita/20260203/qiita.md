@@ -103,7 +103,7 @@ src/
 | 01-class-design.md | 00-overview.mdを実現するクラス設計。ADRに完全従属。設計者はほぼレビューしない | 00-overview.md, ADR |
 | 02-sequence.md | クラスのシーケンス図。01-class-design.mdを開発者がレビューするためのドキュメント。画像出力してレビュー | 01-class-design.md |
 | 03-directory-structure.md | 登場するクラスのディレクトリ構成。実装時に使用 | 01-class-design.md |
-| 04-arrow-diagram.md(任意) | 各モジュールの開発タスクのアローダイアグラム。 | 01-class-design.md |
+| user-stories/04-network-diagram.puml | 開発タスク依存ネットワーク図（設計ドキュメントではなくuser-storiesドキュメント）。 | README.md（開発戦略） |
 | 05-test-strategy.md | メソッド単位の単体テスト戦略。これは各モジュール単位で作成される | 01-class-design.md |
 | 06-integration-test-strategy.md | 機能単位の結合テスト戦略 | 00-overview.md |
 | 07-e2e-test-strategy/ | E2Eテスト戦略（ディレクトリ） | 00-overview.md |
@@ -112,7 +112,7 @@ src/
 
 あとはオートマティックだ。
 ```text
-ADR、00-overview.mdに従って、01-class-design.md、02-sequence.md、03-directory-structure.md、04-arrow-diagram.md を作成して
+ADR、00-overview.mdに従って、01-class-design.md、02-sequence.md、03-directory-structure.md を作成して
 ```
 で指示すれば、AIが自動生成してくれる。
 現状、開発者の私がレビューするのは、02-sequence.mdの画像出力部分だけだ。これは私がシーケンス図が好きだからと言うだけであって、01-class-design.mdのクラス図を読める人はいらないかもしれない。シーケンス図でレビュー指摘を行い、問題なければドキュメントとしてはPR通過としている。
@@ -142,7 +142,7 @@ ADR、00-overview.mdに従って、01-class-design.md、02-sequence.md、03-dire
 
 ### 3. モジュール単位の実装ユニットテスト
 
-AI生成で04-arrow-diagram.mdを作れば、どのモジュールから実装を着手すればいいかもわかる
+user-storiesのアローダイアグラム(04-network-diagram.puml)を作れば、どのモジュールから実装を着手すればいいかもわかる
 [画像]
 アローダイアグラムには開発タスクナンバーもついているので
 ```text
