@@ -135,7 +135,7 @@ IDを含む全属性をエクスポートする(バックアップ・リスト�
 - Presenterはコールバック(`triggerDownload`)を呼び出してJSON文字列とファイル名を通知する
 - このコールバックはHook(`useExportRulesJson`)の`onSuccess`として定義され、Factory経由でPresenterに注入される(ADR-005)
 - 実行コンテキストはHook内: Blob生成→URL.createObjectURL→aタグクリック→URL.revokeObjectURL
-- シーケンス図上は`Presenter → View : triggerDownload`と表現されるが、実際にはHookのonSuccessコールバックが実行される
+- シーケンス図上は`Presenter → Hook : triggerDownload`と表現され、HookのonSuccessコールバックが実行される
 
 ```text
 [エクスポートボタンクリック]

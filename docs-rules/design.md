@@ -46,7 +46,7 @@ docs/design/
 | 02-sequence.puml（機能単位） | **必須** | [design/02-sequence.md](./design/02-sequence.md) |
 | 03-directory-structure.md（機能単位） | **必須** | [design/03-directory-structure.md](./design/03-directory-structure.md) |
 
-> `03-directory-structure.md` は**必須**。アローダイアグラムはuser-storiesドキュメントとして作成する（[user-stories/network-diagram-guide.md](./user-stories/network-diagram-guide.md)参照）。
+> `03-directory-structure.md` は**必須**。旧 `04-arrow-diagram.md` は廃止済み。アローダイアグラムはuser-storiesドキュメントとして作成する（[user-stories/network-diagram-guide.md](./user-stories/network-diagram-guide.md)参照）。
 
 ### テスト戦略書
 
