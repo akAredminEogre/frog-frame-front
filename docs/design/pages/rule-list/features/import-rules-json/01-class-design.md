@@ -127,9 +127,9 @@
 |---------------|------|------|
 | IRewriteRuleRepository | データ永続化のみ | 既存のgetAll/delete/createを使用。インターフェース変更なし |
 | Interactor | ワークフロー調整 | バリデーション→プレビュー→全件削除→新規作成→Presenter通知 |
-| Presenter | View通知のみ | onPreview/onSuccess/onErrorコールバック経由 |
+| Presenter | View通知のみ | onPreview/onSuccess/showErrorInViewコールバック経由 |
 | View (RulesApp) | ボタン状態管理 | isImportingによる重複防止 |
-| Hook (useImportRulesJson) | 状態管理・ファイルI/O | FileReader、プレビュー状態、onPreview/onSuccess/onErrorコールバック |
+| Hook (useImportRulesJson) | 状態管理・ファイルI/O | FileReader、プレビュー状態、onPreview/onSuccess/showErrorInViewコールバック |
 
 ### 2フェーズ制御フロー
 
