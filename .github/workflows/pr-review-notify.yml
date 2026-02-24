@@ -1,0 +1,122 @@
+name: PR Review Comment Notifier
+
+on:
+  pull_request_review_comment:
+    types: [created]
+  issue_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+  check_run:
+    types: [completed]
+
+jobs:
+  notify-review-comment:
+    runs-on: ubuntu-latest
+    # issue_comment は PR 以外(Issue)でも発火するため PR のみフィルタ
+    if: >-
+      (github.event_name != 'issue_comment' || github.event.issue.pull_request) &&
+      (github.event_name != 'check_run' || github.event.check_run.conclusion == 'failure')
+    steps:
+      - name: Extract comment info
+        id: extract
+        run: |
+          EVENT="${{ github.event_name }}"
+
+          if [ "$EVENT" = "pull_request_review_comment" ]; then
+            echo "author=${{ github.event.comment.user.login }}" >> "$GITHUB_OUTPUT"
+            echo "user_type=${{ github.event.comment.user.type }}" >> "$GITHUB_OUTPUT"
+            echo "pr_num=${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
+            echo "url=${{ github.event.comment.html_url }}" >> "$GITHUB_OUTPUT"
+            BODY=$(echo '${{ toJSON(github.event.comment.body) }}' | head -c 200)
+            echo "body=${BODY}" >> "$GITHUB_OUTPUT"
+            echo "event_type=pr_review" >> "$GITHUB_OUTPUT"
+          elif [ "$EVENT" = "issue_comment" ]; then
+            echo "author=${{ github.event.comment.user.login }}" >> "$GITHUB_OUTPUT"
+            echo "user_type=${{ github.event.comment.user.type }}" >> "$GITHUB_OUTPUT"
+            echo "pr_num=${{ github.event.issue.number }}" >> "$GITHUB_OUTPUT"
+            echo "url=${{ github.event.comment.html_url }}" >> "$GITHUB_OUTPUT"
+            BODY=$(echo '${{ toJSON(github.event.comment.body) }}' | head -c 200)
+            echo "body=${BODY}" >> "$GITHUB_OUTPUT"
+            echo "event_type=pr_review" >> "$GITHUB_OUTPUT"
+          elif [ "$EVENT" = "pull_request_review" ]; then
+            echo "author=${{ github.event.review.user.login }}" >> "$GITHUB_OUTPUT"
+            echo "user_type=${{ github.event.review.user.type }}" >> "$GITHUB_OUTPUT"
+            echo "pr_num=${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
+            echo "url=${{ github.event.review.html_url }}" >> "$GITHUB_OUTPUT"
+            BODY=$(echo '${{ toJSON(github.event.review.body) }}' | head -c 200)
+            echo "body=${BODY}" >> "$GITHUB_OUTPUT"
+            echo "event_type=pr_review" >> "$GITHUB_OUTPUT"
+          elif [ "$EVENT" = "check_run" ]; then
+            echo "author=${{ github.event.check_run.app.slug }}" >> "$GITHUB_OUTPUT"
+            echo "user_type=Bot" >> "$GITHUB_OUTPUT"
+            echo "pr_num=${{ github.event.check_run.pull_requests[0].number }}" >> "$GITHUB_OUTPUT"
+            echo "url=${{ github.event.check_run.details_url }}" >> "$GITHUB_OUTPUT"
+            CONCLUSION="${{ github.event.check_run.conclusion }}"
+            echo "body=CI check failed: ${CONCLUSION}" >> "$GITHUB_OUTPUT"
+            echo "event_type=ci_fail" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Filter actionable comments
+        id: filter
+        run: |
+          AUTHOR="${{ steps.extract.outputs.author }}"
+          EVENT_TYPE="${{ steps.extract.outputs.event_type }}"
+
+          # CI fail messages always send
+          if [ "$EVENT_TYPE" = "ci_fail" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "priority=ci_fail" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # github-actions[bot], dependabot[bot] 等はスキップ
+          SKIP_BOTS="github-actions[bot] dependabot[bot] renovate[bot] codecov[bot]"
+          for bot in $SKIP_BOTS; do
+            if [ "$AUTHOR" = "$bot" ]; then
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+          # 優先度判定
+          USER_TYPE="${{ steps.extract.outputs.user_type }}"
+          if [ "$USER_TYPE" = "Bot" ]; then
+            case "$AUTHOR" in
+              "coderabbitai[bot]") echo "priority=P2" >> "$GITHUB_OUTPUT" ;;
+              "copilot[bot]")     echo "priority=P3" >> "$GITHUB_OUTPUT" ;;
+              *)                  echo "priority=P4" >> "$GITHUB_OUTPUT" ;;
+            esac
+          else
+            echo "priority=P1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Send ntfy notification
+        if: steps.filter.outputs.skip != 'true'
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          PR_NUM="${{ steps.extract.outputs.pr_num }}"
+          AUTHOR="${{ steps.extract.outputs.author }}"
+          PRIORITY="${{ steps.filter.outputs.priority }}"
+          BODY="${{ steps.extract.outputs.body }}"
+          URL="${{ steps.extract.outputs.url }}"
+          EVENT_TYPE="${{ steps.extract.outputs.event_type }}"
+
+          # ntfyにPush（pr_review/ci_failタグ付き）
+          if [ "$PRIORITY" = "ci_fail" ]; then
+            TAG="ci_fail"
+            TITLE="[CI FAIL] PR#${PR_NUM}"
+          else
+            TAG="pr_review"
+            TITLE="[${PRIORITY}] PR#${PR_NUM} @${AUTHOR}"
+          fi
+
+          curl -s \
+            -H "Tags: ${TAG}" \
+            -H "Priority: min" \
+            -H "Title: ${TITLE}" \
+            -H "Click: ${URL}" \
+            -d "PR#${PR_NUM}: ${BODY}" \
+            "https://ntfy.sh/${NTFY_TOPIC}"
