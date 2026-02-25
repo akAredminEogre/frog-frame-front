@@ -1,5 +1,11 @@
 # ディレクトリ構造設計
 
+<!-- 本ドキュメントは機能実装に伴うディレクトリ構造の設計ドキュメントです。
+     ADR（Architecture Decision Record）ではなく、実装ガイド・補足資料として機能します。
+     docs/design 配下に配置しているのは、同機能の他設計ドキュメント（00-overview.md, 01-class-design.md 等）との
+     一元管理のためです。アーキテクチャ上の意思決定は docs/adr/ の各 ADR を参照してください。
+     関連ADR: ADR-001（クリーンアーキテクチャ層構造）, ADR-005（ControllerFactory パターン） -->
+
 ## 詳細構造
 
 ### 第1層: enterprise-business-rules/
