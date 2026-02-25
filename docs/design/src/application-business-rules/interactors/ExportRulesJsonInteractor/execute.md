@@ -65,7 +65,7 @@ repository.getAll()でエラーが発生した場合にpresentError()が呼び�
 - [x] OutputData.jsonContent内のrulesデータ確認（全属性）
 - [x] OutputData.fileNameのファイル名形式確認
 - [x] 異常系（Repository.getAllでエラー発生）
-- [x] presentError()のErrorOutputData.message確認 → テスト戦略書にあるが、エラーケーステストで実施
+- [x] presentError()のErrorOutputData.message確認 → エラーケーステストで実施済み
 - [ ] タイムゾーン厳密検証 → 実行環境依存のため、フォーマット確認（正規表現）のみ実施
 
 ## テストファイル構成
