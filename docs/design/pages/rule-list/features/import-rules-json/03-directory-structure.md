@@ -89,7 +89,7 @@ src/frameworks-and-drivers/
     └── container.ts                             ← 既存、ImportRulesJsonControllerFactory登録追加
 ```
 
-## 新規ファイル一覧
+## 新規実装ファイル一覧（src配下）
 
 | ファイル | 層 | 概要 |
 |---------|------|------|
@@ -116,3 +116,12 @@ src/frameworks-and-drivers/
 |---------|---------|
 | `src/frameworks-and-drivers/ui/pages/rules/RulesApp.tsx` | ImportRulesJsonUI コンポーネントを統合。isImportingフラグ追加 |
 | `src/frameworks-and-drivers/di/container.ts` | ImportRulesJsonControllerFactory を DI コンテナに登録 |
+---
+
+## ドキュメント対象範囲（ガイドライン）
+
+> **このドキュメントはプロダクションコード（`src/` 配下）の設計書です。**
+> E2E テストファイル（`e2e/` 配下）は対象外です。
+> テストコードのディレクトリ構造は [e2e-test-strategy.md](./e2e-test-strategy.md) を参照してください。
+>
+> **新規ファイル一覧を記載する際は、`src/` 配下のファイルのみを記載し、E2E テストファイルは含めないこと。**
