@@ -1,0 +1,124 @@
+name: Auto Copilot Review
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+jobs:
+  auto-copilot-review:
+    runs-on: ubuntu-latest
+    # CI全ジョブがpassした場合のみ実行
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Get PR number from head SHA
+        id: get-pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const headSha = context.payload.workflow_run.head_sha;
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+            });
+            const pr = prs.find(p => p.head.sha === headSha);
+            if (!pr) {
+              core.info(`No open PR found for SHA: ${headSha}`);
+              core.setOutput('pr_number', '');
+              return;
+            }
+            core.info(`Found PR #${pr.number} for SHA: ${headSha}`);
+            core.setOutput('pr_number', pr.number.toString());
+
+      - name: Check unresolved review threads
+        id: check-threads
+        if: steps.get-pr.outputs.pr_number != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = parseInt('${{ steps.get-pr.outputs.pr_number }}');
+
+            const query = `
+              query($owner: String!, $repo: String!, $pr: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $pr) {
+                    reviewThreads(first: 100) {
+                      nodes {
+                        isResolved
+                        isOutdated
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+            const result = await github.graphql(query, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pr: prNumber,
+            });
+
+            const threads = result.repository.pullRequest.reviewThreads.nodes;
+            const unresolved = threads.filter(t => !t.isResolved && !t.isOutdated);
+
+            core.info(`Total threads: ${threads.length}, Unresolved: ${unresolved.length}`);
+            core.setOutput('unresolved_count', unresolved.length.toString());
+            core.setOutput('has_unresolved', unresolved.length > 0 ? 'true' : 'false');
+
+      - name: Check if Copilot already requested
+        id: check-copilot
+        if: |
+          steps.get-pr.outputs.pr_number != '' &&
+          steps.check-threads.outputs.has_unresolved == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = parseInt('${{ steps.get-pr.outputs.pr_number }}');
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+            });
+            const alreadyRequested = pr.requested_reviewers.some(
+              r => r.login === 'copilot-pull-request-reviewer'
+            );
+            const { data: reviews } = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+            });
+            const alreadyReviewed = reviews.some(
+              r => r.user.login === 'copilot-pull-request-reviewer[bot]'
+            );
+            const skip = alreadyRequested || alreadyReviewed;
+            core.info(`Copilot already requested: ${alreadyRequested}, reviewed: ${alreadyReviewed}`);
+            core.setOutput('skip', skip ? 'true' : 'false');
+
+      - name: Request Copilot review
+        if: |
+          steps.get-pr.outputs.pr_number != '' &&
+          steps.check-threads.outputs.has_unresolved == 'false' &&
+          steps.check-copilot.outputs.skip == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = parseInt('${{ steps.get-pr.outputs.pr_number }}');
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              reviewers: ['copilot-pull-request-reviewer'],
+            });
+            core.info(`✅ Copilot review requested for PR #${prNumber}`);
+
+      - name: Skip Copilot review (unresolved threads exist)
+        if: |
+          steps.get-pr.outputs.pr_number != '' &&
+          steps.check-threads.outputs.has_unresolved == 'true'
+        run: |
+          echo "⏭️ Skipping Copilot review: ${{ steps.check-threads.outputs.unresolved_count }} unresolved thread(s) found"
