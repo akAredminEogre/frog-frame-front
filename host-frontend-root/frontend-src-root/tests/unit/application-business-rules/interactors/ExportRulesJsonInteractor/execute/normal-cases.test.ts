@@ -53,6 +53,7 @@ describe('ExportRulesJsonInteractor.execute - 正常系', () => {
     await interactor.execute(inputData);
 
     expect(mockRepository.getAll).toHaveBeenCalledTimes(1);
+    expect(mockRepository.getAll).toHaveBeenCalledWith();
     expect(mockPresenter.present).toHaveBeenCalledTimes(1);
     expect(mockPresenter.present).toHaveBeenCalledWith(expect.any(ExportRulesJsonOutputData));
     expect(mockPresenter.presentError).not.toHaveBeenCalled();
@@ -92,6 +93,7 @@ describe('ExportRulesJsonInteractor.execute - 正常系', () => {
     await interactor.execute(inputData);
 
     expect(mockRepository.getAll).toHaveBeenCalledTimes(1);
+    expect(mockRepository.getAll).toHaveBeenCalledWith();
     expect(mockPresenter.present).toHaveBeenCalledTimes(1);
     expect(mockPresenter.present).toHaveBeenCalledWith(expect.any(ExportRulesJsonOutputData));
     expect(mockPresenter.presentError).not.toHaveBeenCalled();
