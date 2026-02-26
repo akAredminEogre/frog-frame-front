@@ -5,6 +5,10 @@ on:
     workflows: ["CI"]
     types: [completed]
 
+concurrency:
+  group: copilot-review-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: true
+
 jobs:
   auto-copilot-review:
     runs-on: ubuntu-latest
@@ -21,13 +25,12 @@ jobs:
         with:
           script: |
             const headSha = context.payload.workflow_run.head_sha;
-            const prs = await github.paginate(github.rest.pulls.list, {
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              state: 'open',
-              per_page: 100,
+              commit_sha: headSha,
             });
-            const pr = prs.find(p => p.head.sha === headSha);
+            const pr = prs.find(p => p.state === 'open');
             if (!pr) {
               core.info(`No open PR found for SHA: ${headSha}`);
               core.setOutput('pr_number', '');
