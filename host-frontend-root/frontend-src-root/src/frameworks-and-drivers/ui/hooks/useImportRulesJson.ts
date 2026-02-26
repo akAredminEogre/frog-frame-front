@@ -90,7 +90,6 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
 
       await importController.importRulesJson(jsonString);
     } catch (err) {
-      setImportSuccess(null);
       setImportError(err instanceof Error ? err.message : 'ファイルの読み取りに失敗しました');
     }
   }, [importController]);
