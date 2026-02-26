@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { IImportRulesJsonControllerFactory } from 'src/interface-adapters/factories/IImportRulesJsonControllerFactory';
@@ -46,6 +46,12 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
   const [importError, setImportError] = useState<string | null>(null);
   const [importSuccess, setImportSuccess] = useState<string | null>(null);
 
+  // コールバック参照を安定化し、useMemoの再生成を防ぐ
+  const onRulesChangedRef = useRef(onRulesChanged);
+  useEffect(() => {
+    onRulesChangedRef.current = onRulesChanged;
+  }, [onRulesChanged]);
+
   const importController = useMemo(() => {
     const factory = container.resolve<IImportRulesJsonControllerFactory>('IImportRulesJsonControllerFactory');
     return factory.create(
@@ -58,7 +64,7 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
         setPreviewData(null);
         setIsImporting(false);
         setImportSuccess(formattedMessage);
-        onRulesChanged();
+        onRulesChangedRef.current();
       },
       (formattedMessage: string) => {
         // onError: エラートースト表示
@@ -67,7 +73,7 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
         setImportError(formattedMessage);
       }
     );
-  }, [onRulesChanged]);
+  }, []);
 
   const handleFileSelect = useCallback(async (file: File) => {
     if (!file) return;
