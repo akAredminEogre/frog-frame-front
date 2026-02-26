@@ -100,6 +100,8 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
     } catch {
       // Interactor内で全例外をcatchしpresentError経由でonErrorコールバックに通知する設計。
       // catch節は予期しないエラーに対する防御的プログラミングとして、未処理のPromise拒否を防ぐ。
+    } finally {
+      setIsImporting(false);
     }
   }, [isImporting, importController]);
 

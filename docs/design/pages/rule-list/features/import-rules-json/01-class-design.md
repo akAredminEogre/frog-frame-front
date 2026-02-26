@@ -35,7 +35,7 @@
 │  │ ImportRulesJson          │    │ ImportRulesJson          │          │
 │  │ Controller               │    │ Presenter                │          │
 │  │                          │    │                          │          │
-│  │ - InputDataを生成         │    │ - PreviewDataを受け取る   │          │
+│  │ - jsonStringを直接渡す    │    │ - PreviewDataを受け取る   │          │
 │  │ - UseCaseを呼び出す       │    │ - OutputDataを受け取る    │          │
 │  │ (2メソッド:               │    │ - エラーを通知            │          │
 │  │   importRulesJson /      │    │ (3メソッド:               │          │
@@ -44,7 +44,7 @@
 │  │                          │    │   presentError)          │          │
 │  └────────────┬─────────────┘    └──────────▲───────────────┘          │
 └───────────────┼──────────────────────────────┼──────────────────────────┘
-                │ InputData                    │ OutputData / PreviewData
+                │ jsonString                   │ OutputData / PreviewData
                 ▼                              │
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                   application-business-rules/ (第2層)                    │
@@ -255,15 +255,18 @@ Chrome拡張のルール件数規模（数百件程度）では性能問題な�
 │  │ + confirmImport(): Promise<void>                         │              │
 │  └──────────────────────────────────────────────────────────┘              │
 │                                                                             │
-│  ┌──────────────────────────┐  ┌──────────────────────┐                   │
-│  │ ImportRulesJson          │  │ ImportRulesJson       │                   │
-│  │ InputData                │  │ PreviewOutputData     │                   │
-│  │ ──────────────────────── │  │ ──────────────────── │                   │
-│  │ + jsonString: string     │  │ + currentRuleCount:  │                   │
-│  └──────────────────────────┘  │     number           │                   │
-│                                │ + importRuleCount:   │                   │
-│  ┌──────────────────────────┐  │     number           │                   │
-│  │ ImportRulesJson          │  └──────────────────────┘                   │
+│  ┌──────────────────────┐                                                   │
+│  │ ImportRulesJson       │                                                   │
+│  │ PreviewOutputData     │                                                   │
+│  │ ──────────────────── │                                                   │
+│  │ + currentRuleCount:  │                                                   │
+│  │     number           │                                                   │
+│  │ + importRuleCount:   │                                                   │
+│  │     number           │                                                   │
+│  └──────────────────────┘                                                   │
+│                                                                             │
+│  ┌──────────────────────────┐                                               │
+│  │ ImportRulesJson          │                                               │
 │  │ OutputData               │                                             │
 │  │ ──────────────────────── │  ┌──────────────────────────────────────┐   │
 │  │ + importedCount: number  │  │ ImportRulesJsonErrorOutputData       │   │
