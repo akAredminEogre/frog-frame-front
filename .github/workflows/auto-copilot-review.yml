@@ -13,7 +13,7 @@ jobs:
   auto-copilot-review:
     runs-on: ubuntu-latest
     # CI全ジョブがpassした場合のみ実行
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: github.event.workflow_run.conclusion == 'success'
 
     permissions:
       pull-requests: write
@@ -72,25 +72,30 @@ jobs:
             let cursor = null;
             let hasNextPage = true;
 
-            while (hasNextPage) {
-              const result = await github.graphql(query, {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pr: prNumber,
-                cursor: cursor,
-              });
+            try {
+              while (hasNextPage) {
+                const result = await github.graphql(query, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pr: prNumber,
+                  cursor: cursor,
+                });
 
-              const threadData = result.repository.pullRequest.reviewThreads;
-              allThreads = allThreads.concat(threadData.nodes);
-              hasNextPage = threadData.pageInfo.hasNextPage;
-              cursor = threadData.pageInfo.endCursor;
+                const threadData = result.repository.pullRequest.reviewThreads;
+                allThreads = allThreads.concat(threadData.nodes);
+                hasNextPage = threadData.pageInfo.hasNextPage;
+                cursor = threadData.pageInfo.endCursor;
+              }
+
+              const unresolved = allThreads.filter(t => !t.isResolved && !t.isOutdated);
+
+              core.info(`Total threads: ${allThreads.length}, Unresolved: ${unresolved.length}`);
+              core.setOutput('unresolved_count', unresolved.length.toString());
+              core.setOutput('has_unresolved', unresolved.length > 0 ? 'true' : 'false');
+            } catch (error) {
+              core.error(`❌ Failed to check review threads: ${error.message}`);
+              throw error;
             }
-
-            const unresolved = allThreads.filter(t => !t.isResolved && !t.isOutdated);
-
-            core.info(`Total threads: ${allThreads.length}, Unresolved: ${unresolved.length}`);
-            core.setOutput('unresolved_count', unresolved.length.toString());
-            core.setOutput('has_unresolved', unresolved.length > 0 ? 'true' : 'false');
 
       - name: Check if Copilot already requested
         id: check-copilot
@@ -103,25 +108,30 @@ jobs:
         with:
           script: |
             const prNumber = parseInt(process.env.PR_NUMBER, 10);
-            const { data: pr } = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-            });
-            const alreadyRequested = pr.requested_reviewers.some(
-              r => r.login === 'copilot-pull-request-reviewer[bot]'
-            );
-            const { data: reviews } = await github.rest.pulls.listReviews({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-            });
-            const alreadyReviewed = reviews.some(
-              r => r.user.login === 'copilot-pull-request-reviewer[bot]'
-            );
-            const skip = alreadyRequested || alreadyReviewed;
-            core.info(`Copilot already requested: ${alreadyRequested}, reviewed: ${alreadyReviewed}`);
-            core.setOutput('skip', skip ? 'true' : 'false');
+            try {
+              const { data: pr } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+              });
+              const alreadyRequested = pr.requested_reviewers.some(
+                r => r?.login === 'copilot-pull-request-reviewer[bot]'
+              );
+              const { data: reviews } = await github.rest.pulls.listReviews({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+              });
+              const alreadyReviewed = reviews.some(
+                r => r.user?.login === 'copilot-pull-request-reviewer[bot]'
+              );
+              const skip = alreadyRequested || alreadyReviewed;
+              core.info(`Copilot already requested: ${alreadyRequested}, reviewed: ${alreadyReviewed}`);
+              core.setOutput('skip', skip ? 'true' : 'false');
+            } catch (error) {
+              core.error(`❌ Failed to check Copilot status: ${error.message}`);
+              throw error;
+            }
 
       - name: Request Copilot review
         if: |
@@ -134,13 +144,18 @@ jobs:
         with:
           script: |
             const prNumber = parseInt(process.env.PR_NUMBER, 10);
-            await github.rest.pulls.requestReviewers({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-              reviewers: ['copilot-pull-request-reviewer[bot]'],
-            });
-            core.info(`✅ Copilot review requested for PR #${prNumber}`);
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                reviewers: ['copilot-pull-request-reviewer[bot]'],
+              });
+              core.info(`✅ Copilot review requested for PR #${prNumber}`);
+            } catch (error) {
+              core.error(`❌ Failed to request Copilot review: ${error.message}`);
+              throw error;
+            }
 
       - name: Skip Copilot review (unresolved threads exist)
         if: |
