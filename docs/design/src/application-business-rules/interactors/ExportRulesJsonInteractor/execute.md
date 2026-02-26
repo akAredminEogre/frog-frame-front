@@ -46,11 +46,11 @@ Presenterに渡されるOutputDataが正しい構造と内容を持つことを�
 
 ### 4. 異常系（エラーハンドリング）
 
-repository.getAll()でエラーが発生した場合にpresentError()が呼び出されることを確認。
+Repository.getAll()でエラーが発生した場合にpresentError()が呼び出されることを確認。
 
 | 分類 | テストケース | 根拠 |
 |------|-------------|------|
-| Repository.getAll失敗 | repository.getAll()がエラーを投げた場合、presentError()を呼び出す | ルール取得失敗時の通知 |
+| Repository.getAll失敗 | Repository.getAll()がエラーを投げた場合、presentError()を呼び出す | ルール取得失敗時の通知 |
 
 **対応テスト**: `error-cases.test.ts`
 
