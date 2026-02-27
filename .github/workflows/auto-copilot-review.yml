@@ -17,6 +17,7 @@ jobs:
 
     permissions:
       pull-requests: write
+      contents: read
 
     steps:
       - name: Get PR number from head SHA
@@ -25,19 +26,24 @@ jobs:
         with:
           script: |
             const headSha = context.payload.workflow_run.head_sha;
-            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: headSha,
-            });
-            const pr = prs.find(p => p.state === 'open');
-            if (!pr) {
-              core.info(`No open PR found for SHA: ${headSha}`);
+            try {
+              const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                commit_sha: headSha,
+              });
+              const pr = prs.find(p => p.state === 'open');
+              if (!pr) {
+                core.info(`No open PR found for SHA: ${headSha}`);
+                core.setOutput('pr_number', '');
+                return;
+              }
+              core.info(`Found PR #${pr.number} for SHA: ${headSha}`);
+              core.setOutput('pr_number', pr.number.toString());
+            } catch (error) {
+              core.error(`❌ Failed to get PR number for SHA ${headSha}: ${error.message}`);
               core.setOutput('pr_number', '');
-              return;
             }
-            core.info(`Found PR #${pr.number} for SHA: ${headSha}`);
-            core.setOutput('pr_number', pr.number.toString());
 
       - name: Check unresolved review threads
         id: check-threads
@@ -87,7 +93,7 @@ jobs:
                 cursor = threadData.pageInfo.endCursor;
               }
 
-              const unresolved = allThreads.filter(t => !t.isResolved && !t.isOutdated);
+              const unresolved = allThreads.filter(t => t && !t.isResolved && !t.isOutdated);
 
               core.info(`Total threads: ${allThreads.length}, Unresolved: ${unresolved.length}`);
               core.setOutput('unresolved_count', unresolved.length.toString());
@@ -114,7 +120,7 @@ jobs:
                 repo: context.repo.repo,
                 pull_number: prNumber,
               });
-              const alreadyRequested = pr.requested_reviewers.some(
+              const alreadyRequested = pr.requested_reviewers?.some(
                 r => r?.login === 'copilot-pull-request-reviewer[bot]'
               );
               const { data: reviews } = await github.rest.pulls.listReviews({
@@ -122,7 +128,7 @@ jobs:
                 repo: context.repo.repo,
                 pull_number: prNumber,
               });
-              const alreadyReviewed = reviews.some(
+              const alreadyReviewed = reviews?.some(
                 r => r.user?.login === 'copilot-pull-request-reviewer[bot]'
               );
               const skip = alreadyRequested || alreadyReviewed;
@@ -153,8 +159,7 @@ jobs:
               });
               core.info(`✅ Copilot review requested for PR #${prNumber}`);
             } catch (error) {
-              core.error(`❌ Failed to request Copilot review: ${error.message}`);
-              throw error;
+              core.warning(`⚠️ Failed to request Copilot review (non-fatal): ${error.message}`);
             }
 
       - name: Skip Copilot review (unresolved threads exist)
@@ -163,3 +168,4 @@ jobs:
           steps.check-threads.outputs.has_unresolved == 'true'
         run: |
           echo "⏭️ Skipping Copilot review: ${{ steps.check-threads.outputs.unresolved_count }} unresolved thread(s) found"
+
