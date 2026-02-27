@@ -13,5 +13,6 @@ export function createMockRewriteRuleRepository(): IRewriteRuleRepository {
     getAll: vi.fn(),
     getById: vi.fn(),
     getRulesMatchingUrl: vi.fn(),
+    replaceAll: vi.fn(),
   };
 }

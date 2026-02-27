@@ -115,12 +115,12 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       const rules: RewriteRule[] = [];
       for (let i = 0; i < data.rules.length; i++) {
         const ruleData = data.rules[i];
-        if (!ruleData.oldString) {
+        if (ruleData.oldString === null || ruleData.oldString === undefined || ruleData.oldString === '') {
           this.presenter.presentError(
             new ImportRulesJsonErrorOutputData(
               new Error('missing field'),
               'validation',
-              `ルール #${i + 1}: oldStringが欠落しています`
+              `ルール #${i + 1}: oldStringが欠落または空白です`
             )
           );
           return;
@@ -167,19 +167,12 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     this.pendingRules = null;
 
     try {
-      // 全既存ルールを取得して削除
+      // 現在の件数を取得（完了メッセージ用）
       const currentRules = await this.repository.getAll();
-      const currentArray = currentRules.toArray();
-      const previousCount = currentArray.length;
+      const previousCount = currentRules.toArray().length;
 
-      for (const rule of currentArray) {
-        await this.repository.delete(rule.id);
-      }
-
-      // 新規ルールを作成
-      for (const rule of rulesToImport) {
-        await this.repository.create(rule);
-      }
+      // トランザクション内でアトミックに全置換（削除→作成）
+      await this.repository.replaceAll(rulesToImport);
 
       this.presenter.present(
         new ImportRulesJsonOutputData(rulesToImport.length, previousCount)

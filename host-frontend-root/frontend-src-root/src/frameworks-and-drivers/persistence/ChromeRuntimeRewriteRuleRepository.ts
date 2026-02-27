@@ -96,4 +96,14 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
     // Phase 2で実装予定: Mapper経由でBackground Scriptに削除を委譲
     await this.mapper.delete(id);
   }
+
+  /**
+   * 全ルールをアトミックに置換する
+   * Content ScriptではreplaceAll操作は使用しないため、エラーをthrow
+   * @param _rules 新規に設定するRewriteRuleの配列
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
+  async replaceAll(_rules: RewriteRule[]): Promise<void> {
+    throw new Error('ChromeRuntimeRewriteRuleRepository does not support replaceAll operation in content script context');
+  }
 }

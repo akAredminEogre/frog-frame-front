@@ -104,6 +104,20 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
   }
 
   /**
+   * 全ルールをアトミックに置換する
+   * Dexie.jsのトランザクション内で全削除→全作成を実行するため、
+   * 途中でエラーが発生した場合は自動的にロールバックされる
+   * @param rules 新規に設定するRewriteRuleの配列
+   */
+  async replaceAll(rules: RewriteRule[]): Promise<void> {
+    await this.database.transaction('rw', this.database.rewriteRules, async () => {
+      await this.database.rewriteRules.clear();
+      const schemas = rules.map(rule => this.convertToSchemaForCreate(rule));
+      await this.database.rewriteRules.bulkAdd(schemas);
+    });
+  }
+
+  /**
    * RewriteRuleをRewriteRuleSchemaに変換する（新規作成用）
    * @param rule 変換元のRewriteRule
    * @returns 変換されたRewriteRuleSchema（idフィールドなし - DB側で自動採番）
