@@ -51,6 +51,7 @@
 | [US-016](../user-story-016/README.md) | `ImportRulesJsonUI.tsx` | ModalDialogBase移行（アクセシビリティ完全対応） |
 | [US-017](../user-story-017/README.md) | `ImportRulesJsonInteractor.ts` | I/Oバッチ最適化（Dexie bulk操作） |
 | [US-018](../user-story-018/README.md) | `ImportRulesJsonInputData.ts` 他 | UseCase/Controller InputData注入パターン統一 |
+| [US-020](../user-story-020/README.md) | `IRewriteRuleRepository.ts` 他 | ID保持リストア（createWithId実装） |
 
 ## 開発戦略
 
@@ -88,6 +89,7 @@
 - [ ] [US-016](../user-story-016/README.md): ModalDialogBase移行（アクセシビリティ完全対応）
 - [ ] [US-017](../user-story-017/README.md): I/Oバッチ最適化（Dexie bulk操作）
 - [ ] [US-018](../user-story-018/README.md): UseCase/Controller InputData注入パターン統一
+- [ ] [US-020](../user-story-020/README.md): ID保持リストア（createWithId実装）
 
 ## 受け入れ条件
 
