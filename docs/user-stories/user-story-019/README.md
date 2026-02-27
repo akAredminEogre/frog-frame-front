@@ -52,6 +52,7 @@
 | [US-017](../user-story-017/README.md) | `ImportRulesJsonInteractor.ts` | I/Oバッチ最適化（Dexie bulk操作） |
 | [US-018](../user-story-018/README.md) | `ImportRulesJsonInputData.ts` 他 | UseCase/Controller InputData注入パターン統一 |
 | [US-020](../user-story-020/README.md) | `IRewriteRuleRepository.ts` 他 | ID保持リストア（createWithId実装） |
+| [US-021](../user-story-021/README.md) | `ImportRulesJsonInteractor.ts` | previewImport() id フィールドのバリデーション強化 |
 
 ## 開発戦略
 
@@ -90,6 +91,7 @@
 - [ ] [US-017](../user-story-017/README.md): I/Oバッチ最適化（Dexie bulk操作）
 - [ ] [US-018](../user-story-018/README.md): UseCase/Controller InputData注入パターン統一
 - [ ] [US-020](../user-story-020/README.md): ID保持リストア（createWithId実装）
+- [ ] [US-021](../user-story-021/README.md): previewImport() id フィールドのバリデーション強化
 
 ## 受け入れ条件
 
