@@ -20,30 +20,16 @@ jobs:
       contents: read
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
       - name: Get PR number from head SHA
         id: get-pr
         uses: actions/github-script@v7
         with:
-          script: |
-            const headSha = context.payload.workflow_run.head_sha;
-            try {
-              const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                commit_sha: headSha,
-              });
-              const pr = prs.find(p => p.state === 'open');
-              if (!pr) {
-                core.info(`No open PR found for SHA: ${headSha}`);
-                core.setOutput('pr_number', '');
-                return;
-              }
-              core.info(`Found PR #${pr.number} for SHA: ${headSha}`);
-              core.setOutput('pr_number', pr.number.toString());
-            } catch (error) {
-              core.error(`❌ Failed to get PR number for SHA ${headSha}: ${error.message}`);
-              core.setOutput('pr_number', '');
-            }
+          script-file: scripts/ci/auto-copilot-review/get-pr.js
 
       - name: Check unresolved review threads
         id: check-threads
@@ -52,56 +38,7 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.get-pr.outputs.pr_number }}
         with:
-          script: |
-            const prNumber = parseInt(process.env.PR_NUMBER, 10);
-
-            const query = `
-              query($owner: String!, $repo: String!, $pr: Int!, $cursor: String) {
-                repository(owner: $owner, name: $repo) {
-                  pullRequest(number: $pr) {
-                    reviewThreads(first: 100, after: $cursor) {
-                      pageInfo {
-                        hasNextPage
-                        endCursor
-                      }
-                      nodes {
-                        isResolved
-                        isOutdated
-                      }
-                    }
-                  }
-                }
-              }
-            `;
-
-            let allThreads = [];
-            let cursor = null;
-            let hasNextPage = true;
-
-            try {
-              while (hasNextPage) {
-                const result = await github.graphql(query, {
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  pr: prNumber,
-                  cursor: cursor,
-                });
-
-                const threadData = result.repository.pullRequest.reviewThreads;
-                allThreads = allThreads.concat(threadData.nodes);
-                hasNextPage = threadData.pageInfo.hasNextPage;
-                cursor = threadData.pageInfo.endCursor;
-              }
-
-              const unresolved = allThreads.filter(t => t && !t.isResolved && !t.isOutdated);
-
-              core.info(`Total threads: ${allThreads.length}, Unresolved: ${unresolved.length}`);
-              core.setOutput('unresolved_count', unresolved.length.toString());
-              core.setOutput('has_unresolved', unresolved.length > 0 ? 'true' : 'false');
-            } catch (error) {
-              core.error(`❌ Failed to check review threads: ${error.message}`);
-              throw error;
-            }
+          script-file: scripts/ci/auto-copilot-review/check-threads.js
 
       - name: Check if Copilot already requested
         id: check-copilot
@@ -112,32 +49,7 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.get-pr.outputs.pr_number }}
         with:
-          script: |
-            const prNumber = parseInt(process.env.PR_NUMBER, 10);
-            try {
-              const { data: pr } = await github.rest.pulls.get({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: prNumber,
-              });
-              const alreadyRequested = pr.requested_reviewers?.some(
-                r => r?.login === 'copilot-pull-request-reviewer[bot]'
-              );
-              const { data: reviews } = await github.rest.pulls.listReviews({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: prNumber,
-              });
-              const alreadyReviewed = reviews?.some(
-                r => r.user?.login === 'copilot-pull-request-reviewer[bot]'
-              );
-              const skip = alreadyRequested || alreadyReviewed;
-              core.info(`Copilot already requested: ${alreadyRequested}, reviewed: ${alreadyReviewed}`);
-              core.setOutput('skip', skip ? 'true' : 'false');
-            } catch (error) {
-              core.error(`❌ Failed to check Copilot status: ${error.message}`);
-              throw error;
-            }
+          script-file: scripts/ci/auto-copilot-review/check-copilot.js
 
       - name: Request Copilot review
         if: |
@@ -148,19 +60,7 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.get-pr.outputs.pr_number }}
         with:
-          script: |
-            const prNumber = parseInt(process.env.PR_NUMBER, 10);
-            try {
-              await github.rest.pulls.requestReviewers({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: prNumber,
-                reviewers: ['copilot-pull-request-reviewer[bot]'],
-              });
-              core.info(`✅ Copilot review requested for PR #${prNumber}`);
-            } catch (error) {
-              core.warning(`⚠️ Failed to request Copilot review (non-fatal): ${error.message}`);
-            }
+          script-file: scripts/ci/auto-copilot-review/request-review.js
 
       - name: Skip Copilot review (unresolved threads exist)
         if: |
@@ -168,4 +68,3 @@ jobs:
           steps.check-threads.outputs.has_unresolved == 'true'
         run: |
           echo "⏭️ Skipping Copilot review: ${{ steps.check-threads.outputs.unresolved_count }} unresolved thread(s) found"
-
