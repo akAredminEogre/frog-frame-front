@@ -80,6 +80,12 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
     setImportError(null);
     setImportSuccess(null);
 
+    // ファイル読み込み前にfile.sizeで上限チェック（DoS/メモリ消費防止）
+    if (file.size > 5 * 1024 * 1024) {
+      setImportError('ファイルサイズが上限（5MB）を超えています');
+      return;
+    }
+
     try {
       const reader = new FileReader();
       const jsonString = await new Promise<string>((resolve, reject) => {

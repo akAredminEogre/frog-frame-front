@@ -131,8 +131,8 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
             String(ruleData.oldString),
             String(ruleData.newString ?? ''),
             String(ruleData.urlPattern ?? ''),
-            Boolean(ruleData.isRegex ?? false),
-            Boolean(ruleData.isActive ?? true)
+            typeof ruleData.isRegex === 'boolean' ? ruleData.isRegex : false,
+            typeof ruleData.isActive === 'boolean' ? ruleData.isActive : true
           )
         );
       }

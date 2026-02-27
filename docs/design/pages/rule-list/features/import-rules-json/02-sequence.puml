@@ -21,7 +21,6 @@ box "interface-adapters" #LightGreen
 end box
 
 box "application-business-rules" #LightYellow
-  participant "ImportRulesJson\nInputData" as InputData
   participant "ImportRulesJson\nPreviewOutputData" as PreviewOutputData
   participant "ImportRulesJson\nOutputData" as OutputData
   participant "ImportRulesJson\nError\nOutputData" as ErrorOutputData
@@ -123,11 +122,8 @@ else isImporting = false
   IController -> Controller : importRulesJson(jsonString)
   activate Controller
 
-  Controller -> InputData : new(jsonString)
-  InputData --> Controller : inputData
-
-  Controller -> IUseCase : importRulesJson(inputData)
-  IUseCase -> Interactor : importRulesJson(inputData)
+  Controller -> IUseCase : importRulesJson(jsonString)
+  IUseCase -> Interactor : importRulesJson(jsonString)
   activate Interactor
 
   alt バリデーション失敗
