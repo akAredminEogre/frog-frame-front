@@ -59,15 +59,23 @@
 
 ## 開発フロー
 
-### Phase 0: 設計（PR#394 完了）
+### Phase 0: 設計・user-storiesドキュメント作成（PR#394 完了）
 
 機能実装に先立ち、Clean Architecture準拠の設計ドキュメント一式を作成した。
+設計ドキュメント完成後、user-storiesドキュメント（アローダイアグラム含む）を整備した。
+
+#### 設計ドキュメント（00〜03）
 
 - [x] [00-overview.md](../../design/pages/rule-list/features/import-rules-json/00-overview.md) — 機能概要・検証レベル定義
 - [x] [01-class-design.md](../../design/pages/rule-list/features/import-rules-json/01-class-design.md) — クラス設計（4層CA構成）
 - [x] [02-sequence.puml](../../design/pages/rule-list/features/import-rules-json/02-sequence.puml) — シーケンス図（previewImport / confirmImport フロー）
 - [x] [03-directory-structure.md](../../design/pages/rule-list/features/import-rules-json/03-directory-structure.md) — ディレクトリ構造
 - [x] [e2e-test-strategy.md](../../design/pages/rule-list/features/import-rules-json/e2e-test-strategy.md) — E2Eテスト戦略書
+
+#### user-storiesドキュメント作成（アローダイアグラム含む）
+
+- [x] [04-network-diagram.puml](./04-network-diagram.puml) — タスク依存ネットワーク図（アローダイアグラム）
+- [x] [README.md](./README.md) — ユーザーストーリードキュメント（受け入れ条件・開発フロー・子タスク定義）
 
 ---
 
@@ -162,6 +170,30 @@ JSONスキーマ検証・バージョンチェックをEBR層（Interactor）に
 - [x] `ImportRulesJsonInteractor` にJSONスキーマ構造チェックを追加（EBR層で実施）
 - [x] `JsonParser.ts` のバリデーション強化（parse前後の型ガード）
 - [x] 型定義の共有化（`ImportRulesJsonInteractor` と `JsonParser` 間の型整合）
+
+---
+
+### Phase 6: ユニットテスト網羅・不具合修正（PR#394 完了）
+
+各フェーズの実装に対応するユニットテストを整備し、CI/CDで通過を確認した。
+
+- [x] `ImportRulesJsonInteractor` ユニットテスト（previewImport / confirmImport — 全バリデーションケース）
+- [x] `ImportRulesJsonController` / `ImportRulesJsonPresenter` ユニットテスト
+- [x] `JsonParser.ts` ユニットテスト（型ガード・エラーケース）
+- [x] `FileTextReader` / `FileSizeValidator` / `BlobByteSizeCalculator` ユニットテスト
+- [x] `interface-registration-completeness.test.ts` に `IFileTextReader` / `IFileSizeValidator` / `IByteSizeCalculator` を追加（CI修正）
+- [x] ユニットテスト全通過（`npx vitest --run`）・Lint全通過
+
+---
+
+### Phase 7: 結合テスト・UI実装・E2Eテスト網羅（PR#394 完了）
+
+UI実装とE2Eテストを実施し、CI/CDによる全テスト自動実行で動作を確認した。
+
+- [x] `ImportRulesJsonUI.tsx` UIコンポーネント実装（確認ダイアログ統合、Phase 1 で実施）
+- [x] `useImportRulesJson.ts` カスタムフック実装（Phase 1 で実施）
+- [x] E2Eテスト正常系 1 シナリオ実装（`normal-flow.spec.ts`、Phase 1 で実施）
+- [x] CI/CDによる全テスト（ユニット + E2E）自動実行・通過確認
 
 ---
 
