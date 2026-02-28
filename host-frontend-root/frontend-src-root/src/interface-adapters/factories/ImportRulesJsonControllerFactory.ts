@@ -1,6 +1,6 @@
 import { ImportRulesJsonInteractor } from 'src/application-business-rules/interactors/ImportRulesJsonInteractor';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
-import { IByteSizeCalculator } from 'src/application-business-rules/ports/services/IByteSizeCalculator';
+import { IFileSizeValidator } from 'src/application-business-rules/ports/services/IFileSizeValidator';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { IImportRulesJsonController } from 'src/interface-adapters/controllers/IImportRulesJsonController';
@@ -21,8 +21,8 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
   constructor(
     private readonly repository: IRewriteRuleRepository,
     private readonly jsonParser: IJsonParser,
-    private readonly fileTextReader: IFileTextReader,
-    private readonly byteSizeCalculator: IByteSizeCalculator
+    private readonly fileSizeValidator: IFileSizeValidator,
+    private readonly fileTextReader: IFileTextReader
   ) {}
 
   create(
@@ -31,7 +31,13 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
     onError: ImportErrorCallback
   ): IImportRulesJsonController {
     const presenter = new ImportRulesJsonPresenter(onPreview, onSuccess, onError);
-    const interactor = new ImportRulesJsonInteractor(this.repository, presenter, this.jsonParser);
-    return new ImportRulesJsonController(interactor, this.fileTextReader, this.byteSizeCalculator);
+    const interactor = new ImportRulesJsonInteractor(
+      this.repository,
+      presenter,
+      this.jsonParser,
+      this.fileSizeValidator,
+      this.fileTextReader
+    );
+    return new ImportRulesJsonController(interactor);
   }
 }
