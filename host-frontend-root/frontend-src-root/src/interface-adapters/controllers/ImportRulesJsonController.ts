@@ -1,3 +1,4 @@
+import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/input/ImportRulesJsonInputData';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IImportRulesJsonController } from 'src/interface-adapters/controllers/IImportRulesJsonController';
 
@@ -12,7 +13,7 @@ export class ImportRulesJsonController implements IImportRulesJsonController {
   ) {}
 
   async importRulesJson(file: File): Promise<void> {
-    await this.useCase.importRulesJson(file);
+    await this.useCase.importRulesJson(new ImportRulesJsonInputData(file));
   }
 
   async confirmImport(): Promise<void> {

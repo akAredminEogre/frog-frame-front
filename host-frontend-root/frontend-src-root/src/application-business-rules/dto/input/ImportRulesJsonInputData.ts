@@ -1,11 +1,10 @@
 /**
  * ルールJSONインポートの入力データ
- * byteSize は frameworks-and-drivers 層（Blob API）で計算し、
- * Use-case 層がインフラ詳細（Blob）に依存しないよう注入する。
+ * CA準拠: ControllerはFileをDTOにラップしてUseCase（Interactor）に渡す。
+ * fileの読み取り・サイズチェックはInteractor内で実施する。
  */
 export class ImportRulesJsonInputData {
   constructor(
-    public readonly jsonString: string,
-    public readonly byteSize: number
+    public readonly file: File
   ) {}
 }

@@ -1,3 +1,4 @@
+import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/input/ImportRulesJsonInputData';
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import { ImportRulesJsonPreviewOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonPreviewOutputData';
@@ -31,7 +32,8 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     private readonly fileTextReader: IFileTextReader
   ) {}
 
-  async importRulesJson(file: File): Promise<void> {
+  async importRulesJson(inputData: ImportRulesJsonInputData): Promise<void> {
+    const file = inputData.file;
     try {
       // ①ファイルサイズチェック（File.sizeによる高速チェック）
       // CA準拠: IFileSizeValidatorポート経由でFile.size APIへのアクセスを抽象化
