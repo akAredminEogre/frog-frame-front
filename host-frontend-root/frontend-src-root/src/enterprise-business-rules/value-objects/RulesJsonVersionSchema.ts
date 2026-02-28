@@ -1,0 +1,37 @@
+export const SUPPORTED_RULES_JSON_VERSION = '1.0';
+
+/**
+ * ルールJSONのバージョン/スキーマ検証Value Object
+ * スキーマ整合性チェック・バージョン互換性チェックはドメインルールのため
+ * enterprise-business-rules層に配置する
+ */
+export class RulesJsonVersionSchema {
+  constructor(private readonly data: Record<string, unknown>) {}
+
+  /**
+   * スキーマ構造チェック（versionフィールドが文字列、rulesフィールドが配列かどうか）
+   */
+  isValidSchema(): boolean {
+    return (
+      'version' in this.data &&
+      typeof this.data.version === 'string' &&
+      'rules' in this.data &&
+      Array.isArray(this.data.rules)
+    );
+  }
+
+  /**
+   * バージョン互換性チェック（サポート対象バージョンかどうか）
+   * 事前に isValidSchema() が true であることを確認してから呼び出すこと
+   */
+  isSupportedVersion(): boolean {
+    return this.data.version === SUPPORTED_RULES_JSON_VERSION;
+  }
+
+  /**
+   * バージョン文字列を取得（エラーメッセージ用）
+   */
+  getVersion(): string {
+    return String(this.data.version);
+  }
+}

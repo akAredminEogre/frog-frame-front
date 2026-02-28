@@ -10,6 +10,7 @@ import { IJsonParser } from 'src/application-business-rules/ports/services/IJson
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
+import { RulesJsonVersionSchema } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
 
 const MAX_RULE_COUNT = 1000;
 
@@ -63,9 +64,10 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         return;
       }
 
-      // L2: スキーマチェック（version / rules が必要）
+      // L2/L3: スキーマ・バージョンチェック（enterprise-business-rules層に委譲）
       // parsed は parseAsObject によりオブジェクト・非null が保証済み
-      if (!this.isValidSchema(parsed)) {
+      const versionSchema = new RulesJsonVersionSchema(parsed);
+      if (!versionSchema.isValidSchema()) {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(
             new Error('invalid schema'),
@@ -76,22 +78,21 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         return;
       }
 
-      const data = parsed as { version: string; rules: RulesJsonRuleEntryRaw[] };
-
-      // L3: バージョンチェック
       // version はJSONスキーマの互換性を管理するバージョン識別子。
       // エクスポート機能も '1.0' を出力する（RulesJsonFileSchema参照）。
       // フィールド追加・削除などスキーマ変更時はバージョンを上げ、ここに分岐を追加する。
-      if (data.version !== '1.0') {
+      if (!versionSchema.isSupportedVersion()) {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(
             new Error('unsupported version'),
             'validation',
-            `未対応のバージョンです: ${data.version}`
+            `未対応のバージョンです: ${versionSchema.getVersion()}`
           )
         );
         return;
       }
+
+      const data = parsed as { version: string; rules: RulesJsonRuleEntryRaw[] };
 
       // L5: ルール件数0件チェック
       if (data.rules.length === 0) {
@@ -193,15 +194,4 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     }
   }
 
-  private isValidSchema(
-    data: Record<string, unknown>
-  ): data is { version: string; rules: RulesJsonRuleEntryRaw[] } {
-    // オブジェクト・非null は parseAsObject により呼び出し元で保証済み
-    return (
-      'version' in data &&
-      typeof data.version === 'string' &&
-      'rules' in data &&
-      Array.isArray(data.rules)
-    );
-  }
 }
