@@ -22,14 +22,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Get PR number from head SHA
         id: get-pr
         uses: actions/github-script@v7
         with:
-          script-file: scripts/ci/auto-copilot-review/get-pr.js
+          script: |
+            const script = require('./scripts/ci/auto-copilot-review/get-pr.js')
+            return await script({ github, context, core })
 
       - name: Check unresolved review threads
         id: check-threads
@@ -38,7 +38,9 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.get-pr.outputs.pr_number }}
         with:
-          script-file: scripts/ci/auto-copilot-review/check-threads.js
+          script: |
+            const script = require('./scripts/ci/auto-copilot-review/check-threads.js')
+            return await script({ github, context, core })
 
       - name: Check if Copilot already requested
         id: check-copilot
@@ -49,7 +51,9 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.get-pr.outputs.pr_number }}
         with:
-          script-file: scripts/ci/auto-copilot-review/check-copilot.js
+          script: |
+            const script = require('./scripts/ci/auto-copilot-review/check-copilot.js')
+            return await script({ github, context, core })
 
       - name: Request Copilot review
         if: |
@@ -60,7 +64,9 @@ jobs:
         env:
           PR_NUMBER: ${{ steps.get-pr.outputs.pr_number }}
         with:
-          script-file: scripts/ci/auto-copilot-review/request-review.js
+          script: |
+            const script = require('./scripts/ci/auto-copilot-review/request-review.js')
+            return await script({ github, context, core })
 
       - name: Skip Copilot review (unresolved threads exist)
         if: |
