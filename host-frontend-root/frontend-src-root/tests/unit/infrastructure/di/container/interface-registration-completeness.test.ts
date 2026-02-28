@@ -101,6 +101,21 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
       description: 'ITabsGatewayをChromeTabsGatewayに解決できること',
       input: { interfaceToken: 'ITabsGateway' as const },
       expected: { implementationName: 'ChromeTabsGateway' }
+    },
+    {
+      description: 'IFileTextReaderをFileTextReaderに解決できること',
+      input: { interfaceToken: 'IFileTextReader' as const },
+      expected: { implementationName: 'FileTextReader' }
+    },
+    {
+      description: 'IFileSizeValidatorをFileSizeValidatorに解決できること',
+      input: { interfaceToken: 'IFileSizeValidator' as const },
+      expected: { implementationName: 'FileSizeValidator' }
+    },
+    {
+      description: 'IByteSizeCalculatorをBlobByteSizeCalculatorに解決できること',
+      input: { interfaceToken: 'IByteSizeCalculator' as const },
+      expected: { implementationName: 'BlobByteSizeCalculator' }
     }
   ];
 
