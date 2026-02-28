@@ -98,6 +98,9 @@
 | IImportRulesJsonUseCase | Input Port。インポート処理のインターフェース（2メソッド） |
 | IImportRulesJsonPresenter | Output Port。結果通知のインターフェース（3メソッド） |
 | IJsonParser | Service Port。JSON解析のインターフェース。CA準拠でInteractorがJSON.parseに直接依存しないよう抽象化 |
+| IFileTextReader | Service Port。ファイルテキスト読み取りのインターフェース。CA準拠でFileReader APIへの依存をF&D層に限定 |
+| IFileSizeValidator | Service Port。ファイルサイズ検証のインターフェース。CA準拠でFile.size APIへの依存をF&D層に限定 |
+| IByteSizeCalculator | Service Port。バイトサイズ計算のインターフェース。CA準拠でBlob APIへの依存をF&D層に限定 |
 | ImportRulesJsonInteractor | UseCase実装。バリデーション→プレビュー通知→一括上書き→結果通知を実行 |
 | IRewriteRuleRepository | Gateway Interface。ルール永続化（既存、変更なし。getAll/delete/createを使用） |
 
@@ -122,8 +125,11 @@
 | ImportRulesJsonUI | Organism。ImportButton＋プレビュー確認ダイアログを統合 |
 | ToastNotification | UIコンポーネント。トースト通知（既存） |
 | RulesApp | View。ルール一覧画面。isImportingフラグでインポート中の重複実行を防止（既存、変更対象） |
-| useImportRulesJson | カスタムフック。useMemoによるController初期化・isImporting/previewData状態管理・onPreview/onSuccess/onErrorコールバックを担う |
+| useImportRulesJson | カスタムフック。useMemoによるController/FileTextReader/FileSizeValidator/BlobByteSizeCalculator初期化・isImporting/previewData状態管理・onPreview/onSuccess/onErrorコールバックを担う |
 | JsonParser | IJsonParserの実装。JSON.parseをラップしCA準拠でフレームワーク依存をこの層に閉じ込める（`frameworks-and-drivers/Json/JsonParser.ts`） |
+| FileTextReader | IFileTextReaderの実装。FileReader.readAsTextをラップしCA準拠でブラウザAPI依存をこの層に閉じ込める（`frameworks-and-drivers/File/FileTextReader.ts`） |
+| FileSizeValidator | IFileSizeValidatorの実装。File.sizeチェックをラップしCA準拠でブラウザAPI依存をこの層に閉じ込める（`frameworks-and-drivers/File/FileSizeValidator.ts`） |
+| BlobByteSizeCalculator | IByteSizeCalculatorの実装。Blob APIによるバイト計算をラップしCA準拠でブラウザAPI依存をこの層に閉じ込める（`frameworks-and-drivers/File/BlobByteSizeCalculator.ts`） |
 
 ## アーキテクチャ補足
 

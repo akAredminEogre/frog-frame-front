@@ -26,6 +26,11 @@ src/application-business-rules/
 │   │   └── IImportRulesJsonUseCase.ts           ← NEW
 │   ├── output/                                  ← Output Port (Interface)
 │   │   └── IImportRulesJsonPresenter.ts         ← NEW
+│   ├── services/                                ← Service Port (Interface)
+│   │   ├── IJsonParser.ts                       ← NEW (JSON.parseの抽象化)
+│   │   ├── IFileTextReader.ts                   ← NEW (FileReader APIの抽象化)
+│   │   ├── IFileSizeValidator.ts                ← NEW (File.size APIの抽象化)
+│   │   └── IByteSizeCalculator.ts               ← NEW (Blob APIの抽象化)
 │   └── gateway/                                 ← Gateway Interface (Interactorが依存)
 │       └── IRewriteRuleRepository.ts            ← 既存、変更なし(getAll/create/deleteを使用)
 ├── interactors/                                 ← Use Case Interactor
@@ -75,6 +80,10 @@ src/frameworks-and-drivers/
 │   └── pages/
 │       └── rules/
 │           └── RulesApp.tsx                     ← 既存、ImportRulesJsonUI統合
+├── File/                                        ← ブラウザファイルAPI実装
+│   ├── FileTextReader.ts                        ← NEW (FileReader.readAsTextのラッパー)
+│   ├── FileSizeValidator.ts                     ← NEW (File.sizeチェックのラッパー)
+│   └── BlobByteSizeCalculator.ts               ← NEW (Blob APIによるバイト計算のラッパー)
 ├── persistence/                                 ← Repository 実装
 │   ├── indexeddb/
 │   │   └── DexieRewriteRuleRepository.ts        ← 既存、変更なし
@@ -109,6 +118,14 @@ src/frameworks-and-drivers/
 | `src/frameworks-and-drivers/ui/components/atoms/ImportButton/UploadIcon.tsx` | 第4層 | アップロードアイコン（DownloadIconと対） |
 | `src/frameworks-and-drivers/ui/components/organisms/ImportRulesJsonUI/ImportRulesJsonUI.tsx` | 第4層 | ImportButton + 確認ダイアログ統合Organism |
 | `src/frameworks-and-drivers/ui/hooks/useImportRulesJson.ts` | 第4層 | カスタムHook（状態管理・ファイルI/O） |
+| `src/application-business-rules/ports/services/IJsonParser.ts` | 第2層 | JSON解析 Service Port インターフェース |
+| `src/application-business-rules/ports/services/IFileTextReader.ts` | 第2層 | FileReader API Service Port インターフェース |
+| `src/application-business-rules/ports/services/IFileSizeValidator.ts` | 第2層 | File.size API Service Port インターフェース |
+| `src/application-business-rules/ports/services/IByteSizeCalculator.ts` | 第2層 | Blob API Service Port インターフェース |
+| `src/frameworks-and-drivers/Json/JsonParser.ts` | 第4層 | IJsonParserの実装。JSON.parseをラップ |
+| `src/frameworks-and-drivers/File/FileTextReader.ts` | 第4層 | IFileTextReaderの実装。FileReader.readAsTextをラップ |
+| `src/frameworks-and-drivers/File/FileSizeValidator.ts` | 第4層 | IFileSizeValidatorの実装。File.sizeチェックをラップ |
+| `src/frameworks-and-drivers/File/BlobByteSizeCalculator.ts` | 第4層 | IByteSizeCalculatorの実装。Blob APIによるバイト計算をラップ |
 
 ## 既存修正ファイル一覧
 

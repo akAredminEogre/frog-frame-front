@@ -32,6 +32,9 @@ end box
 
 box "frameworks-and-drivers" #LightCyan
   participant "JsonParser" as JsonParser
+  participant "FileTextReader" as FileTextReader
+  participant "FileSizeValidator" as FileSizeValidator
+  participant "BlobByteSize\nCalculator" as BlobCalc
   participant "ChromeRuntime\nRewriteRule\nRepository" as MessagingRepo
   participant "RewriteRule\nMessaging\nService" as MessagingService
   participant "<<interface>>\nIRewriteRule\nProxyService" as IProxyService
@@ -110,17 +113,30 @@ alt isImporting = true
   deactivate View
 
 else isImporting = false
-  Hook -> Hook : FileReader.readAsText(file)
-  note right of Hook
-    ファイルサイズ確認(>5MB → エラー)
-    読み取り完了後にjsonStringを取得
+  Hook -> FileSizeValidator : isExceedingMaxSize(file)
+  note right of FileSizeValidator
+    CA準拠: File.size APIはF&D層に閉じ込め
+    超過(>5MB)→エラーを返す
   end note
+  FileSizeValidator --> Hook : true/false
 
-  Hook -> Hook : byteSize = new Blob([jsonString]).size
-  note right of Hook
-    CA準拠: Blob APIはframeworks-and-driversのみで使用
-    バイト数をInputData経由でUseCase層に注入
-  end note
+  alt サイズ超過
+    Hook -> Hook : setImportError(...)
+    Hook --> View : 早期リターン
+  else サイズ正常
+    Hook -> FileTextReader : readAsText(file)
+    note right of FileTextReader
+      CA準拠: FileReader APIはF&D層に閉じ込め
+      読み取り完了後にjsonStringを返す
+    end note
+    FileTextReader --> Hook : jsonString
+
+    Hook -> BlobCalc : calculateByteSize(jsonString)
+    note right of BlobCalc
+      CA準拠: Blob APIはF&D層に閉じ込め
+      バイト数をInputData経由でUseCase層に注入
+    end note
+    BlobCalc --> Hook : byteSize
 
   Hook -> Hook : setIsImporting(true)
 
@@ -277,6 +293,7 @@ else isImporting = false
     deactivate Hook
     deactivate View
 
+  end
   end
 end
 

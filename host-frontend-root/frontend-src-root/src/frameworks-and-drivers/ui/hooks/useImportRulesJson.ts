@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { IByteSizeCalculator } from 'src/application-business-rules/ports/services/IByteSizeCalculator';
+import { IFileSizeValidator } from 'src/application-business-rules/ports/services/IFileSizeValidator';
+import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { IImportRulesJsonControllerFactory } from 'src/interface-adapters/factories/IImportRulesJsonControllerFactory';
 
@@ -75,32 +78,32 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
     );
   }, []);
 
+  const fileTextReader = useMemo(() => container.resolve<IFileTextReader>('IFileTextReader'), []);
+  const fileSizeValidator = useMemo(() => container.resolve<IFileSizeValidator>('IFileSizeValidator'), []);
+  const byteSizeCalculator = useMemo(() => container.resolve<IByteSizeCalculator>('IByteSizeCalculator'), []);
+
   const handleFileSelect = useCallback(async (file: File) => {
     if (!file) return;
     setImportError(null);
     setImportSuccess(null);
 
-    // ファイル読み込み前にfile.sizeで上限チェック（DoS/メモリ消費防止）
-    if (file.size > 5 * 1024 * 1024) {
+    // ファイル読み込み前にFileSizeValidator経由でサイズチェック（DoS/メモリ消費防止）
+    if (fileSizeValidator.isExceedingMaxSize(file)) {
       setImportError('ファイルサイズが上限（5MB）を超えています');
       return;
     }
 
     try {
-      const reader = new FileReader();
-      const jsonString = await new Promise<string>((resolve, reject) => {
-        reader.onload = (e) => resolve(e.target?.result as string);
-        reader.onerror = () => reject(new Error('ファイルの読み取りに失敗しました'));
-        reader.readAsText(file);
-      });
+      // FileTextReader経由でファイルを読み取る（CA準拠: FileReader APIはF&D層に閉じ込め）
+      const jsonString = await fileTextReader.readAsText(file);
 
-      // Blob API でバイト数を計算し、Use-case 層に渡す（CA準拠: Blob はここのみで使用）
-      const byteSize = new Blob([jsonString]).size;
+      // BlobByteSizeCalculator経由でバイト数を計算し、Use-case層に渡す（CA準拠: Blob APIはF&D層に閉じ込め）
+      const byteSize = byteSizeCalculator.calculateByteSize(jsonString);
       await importController.importRulesJson(jsonString, byteSize);
     } catch (err) {
       setImportError(err instanceof Error ? err.message : 'ファイルの読み取りに失敗しました');
     }
-  }, [importController]);
+  }, [importController, fileTextReader, fileSizeValidator, byteSizeCalculator]);
 
   const confirmImport = useCallback(async () => {
     if (isImporting) {
