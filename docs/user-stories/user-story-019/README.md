@@ -1,4 +1,4 @@
-# User Story 019: ルールJSONインポート機能作成（Phase 1: E2E正常1シナリオ）
+# User Story 019: ルールJSONインポート機能作成
 
 ## ストーリー
 
@@ -10,8 +10,8 @@
 エクスポート機能（user-story-015）で出力したJSONファイルと互換性のある形式で取り込みを行い、
 プレビュー確認後に確定することでルールを上書き保存する。
 
-本ユーザーストーリーは Phase 1 として、E2E正常1シナリオ（正常系インポートフロー）の実装を対象とする。
-将来フェーズで実装する改善項目は、下記「子タスク（別PR対応）」に記載する。
+本ユーザーストーリーは PR#394（feat/rule-json-import）にて、設計から実装・CA準拠リファクタリングまでの
+全フェーズを完了した。将来フェーズで実装する改善項目は、下記「子タスク（別PR対応）」に記載する。
 
 ## 設計ドキュメント
 
@@ -57,16 +57,30 @@
 | [US-020](../user-story-020/README.md) | `IRewriteRuleRepository.ts` 他 | ID保持リストア（createWithId実装） |
 | [US-021](../user-story-021/README.md) | `ImportRulesJsonInteractor.ts` | previewImport() id フィールドのバリデーション強化 |
 
-## 開発戦略
+## 開発フロー
+
+### Phase 0: 設計（PR#394 完了）
+
+機能実装に先立ち、Clean Architecture準拠の設計ドキュメント一式を作成した。
+
+- [x] [00-overview.md](../../design/pages/rule-list/features/import-rules-json/00-overview.md) — 機能概要・検証レベル定義
+- [x] [01-class-design.md](../../design/pages/rule-list/features/import-rules-json/01-class-design.md) — クラス設計（4層CA構成）
+- [x] [02-sequence.puml](../../design/pages/rule-list/features/import-rules-json/02-sequence.puml) — シーケンス図（previewImport / confirmImport フロー）
+- [x] [03-directory-structure.md](../../design/pages/rule-list/features/import-rules-json/03-directory-structure.md) — ディレクトリ構造
+- [x] [e2e-test-strategy.md](../../design/pages/rule-list/features/import-rules-json/e2e-test-strategy.md) — E2Eテスト戦略書
+
+---
 
 ### Phase 1: E2E 1シナリオ実装（PR#394 完了）
+
+4層Clean Architectureに従いインポート機能の最小実装を行い、E2E正常フロー1シナリオを実装した。
 
 #### 第2層: application-business-rules
 
 - [x] IImportRulesJsonUseCase（Input Port インターフェース）
 - [x] IImportRulesJsonPresenter（Output Port インターフェース）
-- [x] ImportRulesJsonInputData / OutputData（DTO）— byteSize注入によるCA準拠対応済み
-- [x] ImportRulesJsonInteractor の実装（previewImport / confirmImport）— Blob API除去、inputData.byteSize参照に修正; IJsonParser経由でJSON.parse呼び出し; RewriteRules FCC使用（pendingRules型変更）
+- [x] ImportRulesJsonInputData / OutputData / PreviewOutputData / ErrorOutputData（DTO群）
+- [x] ImportRulesJsonInteractor の実装（previewImport / confirmImport — バリデーションL1〜L5）
 
 #### 第3層: interface-adapters
 
@@ -74,20 +88,82 @@
 - [x] ImportRulesJsonController の実装
 - [x] IImportRulesJsonControllerFactory（Factoryインターフェース、ADR-005準拠）
 - [x] ImportRulesJsonControllerFactory の実装
-- [x] ImportRulesJsonPresenter の実装
+- [x] ImportRulesJsonPresenter の実装（3コールバック構成: onPreview / onSuccess / onError）
 
 #### 第4層: frameworks-and-drivers
 
-- [x] IJsonParser port interface の実装 / JsonParser (F&D層) の実装 — JSON.parseをCA準拠でF&D層に委譲（`frameworks-and-drivers/Json/JsonParser.ts`）
-- [x] useImportRulesJson カスタムフックの実装（ファイル選択・プレビュー・確定）— Blob byteSize計算をCA準拠で実装
-- [x] ImportRulesJsonUI UIコンポーネントの実装
+- [x] ImportButton / UploadIcon UIコンポーネントの実装
+- [x] ImportRulesJsonUI UIコンポーネントの実装（確認ダイアログ統合）
+- [x] useImportRulesJson カスタムフックの実装（ファイル選択・プレビュー・確定・エラーハンドリング）
 - [x] RulesApp.tsx にインポートボタンを統合
-- [x] container.ts に DI 登録を追加
+- [x] container.ts に DI 登録を追加（ImportRulesJsonControllerFactory）
 
 #### E2Eテスト
 
 - [x] E2Eテスト戦略書の作成
 - [x] E2Eテスト実装（正常系 1 シナリオ: `normal-flow.spec.ts`）
+
+---
+
+### Phase 2: CA準拠リファクタリング — ブラウザAPI抽象化（PR#394 完了）
+
+ブラウザ固有APIをClean Architecture準拠でFrameworks & Drivers層に分離した。
+
+#### Blob計算のF&D層委譲
+
+- [x] `ImportRulesJsonInputData` に `byteSize` フィールドを追加（Blob計算をInteractorから除去）
+- [x] `useImportRulesJson.ts` でBlobバイトサイズを計算しInputDataに注入
+- [x] `ImportRulesJsonInteractor` から `Blob` API直接利用を除去
+
+#### JSON.parseのF&D層委譲
+
+- [x] `IJsonParser` port interface を定義（application-business-rules層）
+- [x] `JsonParser.ts` をF&D層に実装（`frameworks-and-drivers/Json/JsonParser.ts`）
+- [x] `ImportRulesJsonInteractor` を `IJsonParser` 経由に変更（CA準拠）
+
+#### FCC・型整理
+
+- [x] `ImportRulesJsonInteractor` で `RewriteRules` FCC（FormattedCollectionClass）を使用（`pendingRules` 型変更）
+- [x] DI登録を `container.ts` に追加（JsonParser）
+
+---
+
+### Phase 3: CA準拠リファクタリング — ブラウザAPIモジュール化（PR#394 完了）
+
+`useImportRulesJson.ts` に残存していたブラウザ固有API（FileReader・Blob）をF&D層モジュールとして抽出した。
+
+- [x] `IFileTextReader` port interface を定義（application-business-rules層）
+- [x] `FileTextReader.ts` をF&D層に実装（FileReader APIをラップ）
+- [x] `IFileSizeValidator` port interface を定義
+- [x] `FileSizeValidator.ts` をF&D層に実装（ファイルサイズ検証）
+- [x] `IByteSizeCalculator` port interface を定義
+- [x] `BlobByteSizeCalculator.ts` をF&D層に実装（Blob byteSize計算）
+- [x] `useImportRulesJson.ts` を上記インターフェース経由に変更
+- [x] `container.ts` にDI登録を追加（3モジュール）
+- [x] DIコンテナ完全性テスト（`interface-registration-completeness.test.ts`）に3件追加
+
+---
+
+### Phase 4: EBR層バリデーション強化（PR#394 完了）
+
+ファイルサイズ検証ロジックをフレームワーク非依存のEnterprise Business Rules層に移動し、UIバリデーションを除去した。
+
+- [x] `IFileSizeValidator` の実装をEBR層に移動（フレームワーク非依存のバイト数比較ロジック）
+- [x] `ImportRulesJsonInteractor` でファイルサイズ上限チェック（`byteSize > MAX_FILE_SIZE_BYTES`）を実施
+- [x] `useImportRulesJson.ts`（UI層）のファイルサイズバリデーションを除去（EBR層に一本化）
+
+---
+
+### Phase 5: EBR層バリデーション拡張 — バージョン/スキーマチェック（PR#394 完了）
+
+JSONスキーマ検証・バージョンチェックをEBR層（Interactor）に集約し、JsonParserの検証を強化した。
+
+- [x] `ImportRulesJsonInteractor` にバージョンフィールド検証を追加（EBR層で実施）
+- [x] `ImportRulesJsonInteractor` にJSONスキーマ構造チェックを追加（EBR層で実施）
+- [x] `JsonParser.ts` のバリデーション強化（parse前後の型ガード）
+- [x] 型定義の共有化（`ImportRulesJsonInteractor` と `JsonParser` 間の型整合）
+
+---
 
 ### 子タスク（別PR対応）
 
