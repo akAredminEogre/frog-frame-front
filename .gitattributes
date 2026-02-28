@@ -1,0 +1,6 @@
+# Enforce LF line endings for YAML files (GitHub Actions)
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Default behavior: normalize line endings on checkout
+* text=auto
