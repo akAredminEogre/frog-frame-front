@@ -94,7 +94,9 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
         reader.readAsText(file);
       });
 
-      await importController.importRulesJson(jsonString);
+      // Blob API でバイト数を計算し、Use-case 層に渡す（CA準拠: Blob はここのみで使用）
+      const byteSize = new Blob([jsonString]).size;
+      await importController.importRulesJson(jsonString, byteSize);
     } catch (err) {
       setImportError(err instanceof Error ? err.message : 'ファイルの読み取りに失敗しました');
     }

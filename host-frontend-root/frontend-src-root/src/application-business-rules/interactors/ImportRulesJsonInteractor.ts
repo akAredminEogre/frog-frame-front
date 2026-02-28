@@ -1,3 +1,4 @@
+import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/input/ImportRulesJsonInputData';
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import { ImportRulesJsonPreviewOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonPreviewOutputData';
@@ -32,10 +33,12 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     private readonly presenter: IImportRulesJsonPresenter
   ) {}
 
-  async importRulesJson(jsonString: string): Promise<void> {
+  async importRulesJson(inputData: ImportRulesJsonInputData): Promise<void> {
+    const { jsonString, byteSize } = inputData;
     try {
       // ファイルサイズチェック（バイト数換算）
-      if (new Blob([jsonString]).size > MAX_FILE_SIZE_BYTES) {
+      // byteSize は frameworks-and-drivers 層（Blob API）で計算済み
+      if (byteSize > MAX_FILE_SIZE_BYTES) {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(
             new Error('file size exceeded'),

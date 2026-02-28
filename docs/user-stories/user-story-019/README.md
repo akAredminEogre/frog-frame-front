@@ -21,6 +21,7 @@
   - [02-sequence.puml](../../design/pages/rule-list/features/import-rules-json/02-sequence.puml) - シーケンス図
   - [03-directory-structure.md](../../design/pages/rule-list/features/import-rules-json/03-directory-structure.md) - ディレクトリ構造
   - [e2e-test-strategy.md](../../design/pages/rule-list/features/import-rules-json/e2e-test-strategy.md) - E2Eテスト戦略書
+- [04-network-diagram.puml](./04-network-diagram.puml) - タスク依存ネットワーク図（アローダイアグラム）
 
 ## 現状分析
 
@@ -30,7 +31,7 @@
 |--------|------|------|
 | `IImportRulesJsonUseCase.ts` | A | 実装済み |
 | `IImportRulesJsonPresenter.ts` | A | 実装済み |
-| `ImportRulesJsonInputData.ts` | A | 実装済み（未使用・将来対応 → US-018） |
+| `ImportRulesJsonInputData.ts` | A | 実装済み（byteSize注入によるCA準拠対応）|
 | `ImportRulesJsonOutputData.ts` | A | 実装済み |
 | `ImportRulesJsonInteractor.ts` | A | 実装済み |
 | `IImportRulesJsonController.ts` | A | 実装済み |
@@ -62,8 +63,8 @@
 
 - [x] IImportRulesJsonUseCase（Input Port インターフェース）
 - [x] IImportRulesJsonPresenter（Output Port インターフェース）
-- [x] ImportRulesJsonInputData / OutputData（DTO）
-- [x] ImportRulesJsonInteractor の実装（previewImport / confirmImport）
+- [x] ImportRulesJsonInputData / OutputData（DTO）— byteSize注入によるCA準拠対応済み
+- [x] ImportRulesJsonInteractor の実装（previewImport / confirmImport）— Blob API除去、inputData.byteSize参照に修正
 
 #### 第3層: interface-adapters
 
@@ -75,7 +76,7 @@
 
 #### 第4層: frameworks-and-drivers
 
-- [x] useImportRulesJson カスタムフックの実装（ファイル選択・プレビュー・確定）
+- [x] useImportRulesJson カスタムフックの実装（ファイル選択・プレビュー・確定）— Blob byteSize計算をCA準拠で実装
 - [x] ImportRulesJsonUI UIコンポーネントの実装
 - [x] RulesApp.tsx にインポートボタンを統合
 - [x] container.ts に DI 登録を追加
