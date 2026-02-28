@@ -8,8 +8,8 @@ import { IImportRulesJsonPresenter } from 'src/application-business-rules/ports/
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
 
-const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 const MAX_RULE_COUNT = 1000;
 
 interface ImportedRuleData {
@@ -41,7 +41,9 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     try {
       // ファイルサイズチェック（バイト数換算）
       // byteSize は frameworks-and-drivers 層（Blob API）で計算済み
-      if (byteSize > MAX_FILE_SIZE_BYTES) {
+      // サイズ上限判定はenterprise-business-rules層のImportFileSizeに委譲
+      const importFileSize = new ImportFileSize(byteSize);
+      if (importFileSize.isExceedingLimit()) {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(
             new Error('file size exceeded'),
