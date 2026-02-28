@@ -16,9 +16,9 @@ import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRe
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
+import { JsonParser } from 'src/frameworks-and-drivers/Json/JsonParser';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
-import { JsonParser } from 'src/frameworks-and-drivers/utils/JsonParser';
 import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';

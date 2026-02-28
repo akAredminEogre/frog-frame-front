@@ -123,7 +123,7 @@
 | ToastNotification | UIコンポーネント。トースト通知（既存） |
 | RulesApp | View。ルール一覧画面。isImportingフラグでインポート中の重複実行を防止（既存、変更対象） |
 | useImportRulesJson | カスタムフック。useMemoによるController初期化・isImporting/previewData状態管理・onPreview/onSuccess/onErrorコールバックを担う |
-| JsonParser | IJsonParserの実装。JSON.parseをラップしCA準拠でフレームワーク依存をこの層に閉じ込める |
+| JsonParser | IJsonParserの実装。JSON.parseをラップしCA準拠でフレームワーク依存をこの層に閉じ込める（`frameworks-and-drivers/Json/JsonParser.ts`） |
 
 ## アーキテクチャ補足
 
@@ -266,7 +266,7 @@ Chrome拡張のルール件数規模（数百件程度）では性能問題な�
 │  │ - repository: IRewriteRuleRepository                     │              │
 │  │ - presenter: IImportRulesJsonPresenter                    │              │
 │  │ - jsonParser: IJsonParser                                │              │
-│  │ - pendingRules: RewriteRule[] | null  ← Phase間保持       │              │
+│  │ - pendingRules: RewriteRules | null  ← Phase間保持(FCC)   │              │
 │  │ ──────────────────────────────────────────────────────── │              │
 │  │ + importRulesJson(inputData): Promise<void>              │              │
 │  │ + confirmImport(): Promise<void>                         │              │

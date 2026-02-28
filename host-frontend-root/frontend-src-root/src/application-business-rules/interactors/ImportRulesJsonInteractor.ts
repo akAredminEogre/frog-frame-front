@@ -6,6 +6,7 @@ import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gat
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IImportRulesJsonPresenter } from 'src/application-business-rules/ports/output/IImportRulesJsonPresenter';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
+import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
@@ -27,7 +28,7 @@ interface ImportedRuleData {
  *   Phase 2: confirmImport() → delete() × N → create() × M → present()
  */
 export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
-  private pendingRules: RewriteRule[] | null = null;
+  private pendingRules: RewriteRules | null = null;
 
   constructor(
     private readonly repository: IRewriteRuleRepository,
@@ -117,8 +118,8 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         return;
       }
 
-      // L4: 各ルールの必須フィールドチェック
-      const rules: RewriteRule[] = [];
+      // L4: 各ルールの必須フィールドチェック（RewriteRules FCCで管理）
+      const rulesRecord: Record<string, RewriteRule> = {};
       for (let i = 0; i < data.rules.length; i++) {
         const ruleData = data.rules[i];
         if (ruleData.oldString === null || ruleData.oldString === undefined || ruleData.oldString === '') {
@@ -131,17 +132,16 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
           );
           return;
         }
-        rules.push(
-          new RewriteRule(
-            typeof ruleData.id === 'number' ? ruleData.id : 0,
-            String(ruleData.oldString),
-            String(ruleData.newString ?? ''),
-            String(ruleData.urlPattern ?? ''),
-            typeof ruleData.isRegex === 'boolean' ? ruleData.isRegex : false,
-            typeof ruleData.isActive === 'boolean' ? ruleData.isActive : true
-          )
+        rulesRecord[String(i)] = new RewriteRule(
+          typeof ruleData.id === 'number' ? ruleData.id : 0,
+          String(ruleData.oldString),
+          String(ruleData.newString ?? ''),
+          String(ruleData.urlPattern ?? ''),
+          typeof ruleData.isRegex === 'boolean' ? ruleData.isRegex : false,
+          typeof ruleData.isActive === 'boolean' ? ruleData.isActive : true
         );
       }
+      const rules = new RewriteRules(rulesRecord);
 
       // 現在のルール件数を取得してプレビューデータを生成
       const currentRules = await this.repository.getAll();
@@ -150,7 +150,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       this.pendingRules = rules;
 
       this.presenter.presentPreview(
-        new ImportRulesJsonPreviewOutputData(currentCount, rules.length)
+        new ImportRulesJsonPreviewOutputData(currentCount, rules.toArray().length)
       );
     } catch (error) {
       this.pendingRules = null;
@@ -178,10 +178,10 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       const previousCount = currentRules.toArray().length;
 
       // トランザクション内でアトミックに全置換（削除→作成）
-      await this.repository.replaceAll(rulesToImport);
+      await this.repository.replaceAll(rulesToImport.toArray());
 
       this.presenter.present(
-        new ImportRulesJsonOutputData(rulesToImport.length, previousCount)
+        new ImportRulesJsonOutputData(rulesToImport.toArray().length, previousCount)
       );
     } catch (error) {
       this.presenter.presentError(
