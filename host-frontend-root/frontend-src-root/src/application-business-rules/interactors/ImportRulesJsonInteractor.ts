@@ -2,6 +2,7 @@ import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/inp
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import { ImportRulesJsonPreviewOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonPreviewOutputData';
+import { RulesJsonRuleEntryRaw } from 'src/application-business-rules/dto/RulesJsonSchema';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IImportRulesJsonPresenter } from 'src/application-business-rules/ports/output/IImportRulesJsonPresenter';
@@ -11,15 +12,6 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
 
 const MAX_RULE_COUNT = 1000;
-
-interface ImportedRuleData {
-  id?: unknown;
-  oldString?: unknown;
-  newString?: unknown;
-  urlPattern?: unknown;
-  isRegex?: unknown;
-  isActive?: unknown;
-}
 
 /**
  * ルールJSONインポートのInteractor
@@ -54,11 +46,12 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         return;
       }
 
-      // L1: JSON構文チェック
+      // L1: JSON構文チェック + Objectチェック
       // CA準拠: JSON.parseはframeworks-and-drivers層（IJsonParser）を介して呼び出す
-      let parsed: unknown;
+      // parseAsObject は構文エラー・null・非オブジェクト型をまとめて検出する
+      let parsed: Record<string, unknown>;
       try {
-        parsed = this.jsonParser.parse(jsonString);
+        parsed = this.jsonParser.parseAsObject(jsonString);
       } catch {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(
@@ -71,6 +64,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       }
 
       // L2: スキーマチェック（version / rules が必要）
+      // parsed は parseAsObject によりオブジェクト・非null が保証済み
       if (!this.isValidSchema(parsed)) {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(
@@ -82,9 +76,12 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         return;
       }
 
-      const data = parsed as { version: string; rules: ImportedRuleData[] };
+      const data = parsed as { version: string; rules: RulesJsonRuleEntryRaw[] };
 
       // L3: バージョンチェック
+      // version はJSONスキーマの互換性を管理するバージョン識別子。
+      // エクスポート機能も '1.0' を出力する（RulesJsonFileSchema参照）。
+      // フィールド追加・削除などスキーマ変更時はバージョンを上げ、ここに分岐を追加する。
       if (data.version !== '1.0') {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(
@@ -196,14 +193,15 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     }
   }
 
-  private isValidSchema(data: unknown): data is { version: string; rules: ImportedRuleData[] } {
+  private isValidSchema(
+    data: Record<string, unknown>
+  ): data is { version: string; rules: RulesJsonRuleEntryRaw[] } {
+    // オブジェクト・非null は parseAsObject により呼び出し元で保証済み
     return (
-      typeof data === 'object' &&
-      data !== null &&
       'version' in data &&
-      typeof (data as Record<string, unknown>).version === 'string' &&
+      typeof data.version === 'string' &&
       'rules' in data &&
-      Array.isArray((data as Record<string, unknown>).rules)
+      Array.isArray(data.rules)
     );
   }
 }

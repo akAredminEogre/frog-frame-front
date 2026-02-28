@@ -8,4 +8,19 @@ export class JsonParser implements IJsonParser {
   parse<T = unknown>(jsonString: string): T {
     return JSON.parse(jsonString) as T;
   }
+
+  /**
+   * JSON文字列を解析し、結果がnull非許容のオブジェクトであることを検証する
+   * @throws SyntaxError 不正なJSONの場合
+   * @throws TypeError 解析結果がオブジェクト型でない場合（null・配列・プリミティブ値）
+   */
+  parseAsObject(jsonString: string): Record<string, unknown> {
+    const parsed: unknown = JSON.parse(jsonString);
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      throw new TypeError(
+        `Expected a JSON object, but got: ${parsed === null ? 'null' : Array.isArray(parsed) ? 'array' : typeof parsed}`
+      );
+    }
+    return parsed as Record<string, unknown>;
+  }
 }

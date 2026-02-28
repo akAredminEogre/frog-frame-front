@@ -1,6 +1,7 @@
 import { ExportRulesJsonInputData } from 'src/application-business-rules/dto/input/ExportRulesJsonInputData';
 import { ExportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ExportRulesJsonErrorOutputData';
 import { ExportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ExportRulesJsonOutputData';
+import { RulesJsonFileSchema } from 'src/application-business-rules/dto/RulesJsonSchema';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IExportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IExportRulesJsonUseCase';
 import { IExportRulesJsonPresenter } from 'src/application-business-rules/ports/output/IExportRulesJsonPresenter';
@@ -25,7 +26,8 @@ export class ExportRulesJsonInteractor implements IExportRulesJsonUseCase {
       const exportedAt = this.formatLocalISO(now);
       const fileName = `frog-frame-front-rules-${this.formatLocalDateTime(now)}.json`;
 
-      const exportData = {
+      // RulesJsonFileSchema に型付けすることでインポート機能との整合性を保証する
+      const exportData: RulesJsonFileSchema = {
         version: '1.0',
         exportedAt,
         rules: rules.map((rule) => ({

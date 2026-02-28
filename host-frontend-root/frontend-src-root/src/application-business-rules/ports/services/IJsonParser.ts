@@ -10,4 +10,13 @@ export interface IJsonParser {
    * @throws SyntaxError 不正なJSONの場合
    */
   parse<T = unknown>(jsonString: string): T;
+
+  /**
+   * JSON文字列を解析し、結果がnull非許容のオブジェクトであることを検証する
+   * @param jsonString 解析対象のJSON文字列
+   * @returns 解析済みオブジェクト (Record<string, unknown>)
+   * @throws SyntaxError 不正なJSONの場合
+   * @throws TypeError 解析結果がオブジェクト型でない場合、またはnullの場合
+   */
+  parseAsObject(jsonString: string): Record<string, unknown>;
 }
