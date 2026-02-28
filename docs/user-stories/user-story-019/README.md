@@ -33,6 +33,7 @@
 | `IImportRulesJsonPresenter.ts` | A | 実装済み |
 | `ImportRulesJsonInputData.ts` | A | 実装済み（byteSize注入によるCA準拠対応）|
 | `ImportRulesJsonOutputData.ts` | A | 実装済み |
+| `IJsonParser.ts` | A | 実装済み（JSON.parse CA準拠対応）|
 | `ImportRulesJsonInteractor.ts` | A | 実装済み |
 | `IImportRulesJsonController.ts` | A | 実装済み |
 | `ImportRulesJsonController.ts` | A | 実装済み |
@@ -41,6 +42,7 @@
 | `ImportRulesJsonPresenter.ts` | A | 実装済み |
 | `ImportRulesJsonUI.tsx` | A | 実装済み（将来改善 → US-016） |
 | `useImportRulesJson.ts` | A | 実装済み |
+| `JsonParser.ts` | E | 実装済み（IJsonParser実装、CA準拠）|
 | `container.ts` | E | 修正済み（DI登録） |
 
 ### PR#394で先送りした改善項目（子タスク）
@@ -64,7 +66,7 @@
 - [x] IImportRulesJsonUseCase（Input Port インターフェース）
 - [x] IImportRulesJsonPresenter（Output Port インターフェース）
 - [x] ImportRulesJsonInputData / OutputData（DTO）— byteSize注入によるCA準拠対応済み
-- [x] ImportRulesJsonInteractor の実装（previewImport / confirmImport）— Blob API除去、inputData.byteSize参照に修正
+- [x] ImportRulesJsonInteractor の実装（previewImport / confirmImport）— Blob API除去、inputData.byteSize参照に修正; IJsonParser経由でJSON.parse呼び出し
 
 #### 第3層: interface-adapters
 
@@ -76,6 +78,7 @@
 
 #### 第4層: frameworks-and-drivers
 
+- [x] IJsonParser port interface の実装 / JsonParser (F&D層) の実装 — JSON.parseをCA準拠でF&D層に委譲
 - [x] useImportRulesJson カスタムフックの実装（ファイル選択・プレビュー・確定）— Blob byteSize計算をCA準拠で実装
 - [x] ImportRulesJsonUI UIコンポーネントの実装
 - [x] RulesApp.tsx にインポートボタンを統合

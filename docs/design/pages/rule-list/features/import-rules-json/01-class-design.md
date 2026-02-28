@@ -54,7 +54,7 @@
 │  │ ※ Rules Pageコンテキストで実行                                     │   │
 │  │                                                                  │   │
 │  │ Phase 1: importRulesJson(jsonString)                             │   │
-│  │   - JSON.parse() → バリデーション                                 │   │
+│  │   - jsonParser.parse() → バリデーション                           │   │
 │  │   - getAll()でcurrentCount取得                                   │   │
 │  │   - PreviewData生成 → Presenter.presentPreview()                 │   │
 │  │                                                                  │   │
@@ -97,6 +97,7 @@
 | ImportRulesJsonErrorOutputData | エラー出力DTO。error / errorType ('parse'\|'validation'\|'storage') / messageを保持 |
 | IImportRulesJsonUseCase | Input Port。インポート処理のインターフェース（2メソッド） |
 | IImportRulesJsonPresenter | Output Port。結果通知のインターフェース（3メソッド） |
+| IJsonParser | Service Port。JSON解析のインターフェース。CA準拠でInteractorがJSON.parseに直接依存しないよう抽象化 |
 | ImportRulesJsonInteractor | UseCase実装。バリデーション→プレビュー通知→一括上書き→結果通知を実行 |
 | IRewriteRuleRepository | Gateway Interface。ルール永続化（既存、変更なし。getAll/delete/createを使用） |
 
@@ -122,6 +123,7 @@
 | ToastNotification | UIコンポーネント。トースト通知（既存） |
 | RulesApp | View。ルール一覧画面。isImportingフラグでインポート中の重複実行を防止（既存、変更対象） |
 | useImportRulesJson | カスタムフック。useMemoによるController初期化・isImporting/previewData状態管理・onPreview/onSuccess/onErrorコールバックを担う |
+| JsonParser | IJsonParserの実装。JSON.parseをラップしCA準拠でフレームワーク依存をこの層に閉じ込める |
 
 ## アーキテクチャ補足
 
@@ -146,7 +148,7 @@ Phase 1: ファイル選択→バリデーション→プレビュー
     → FileReader.readAsText()
     → useImportRulesJson: new Blob([jsonString]).size でbyteSize計算（CA準拠: Blob使用はここのみ）
     → Controller.importRulesJson(jsonString, byteSize)
-    → Interactor: inputData.byteSize でサイズチェック + JSON.parse() + バリデーション + getAll()
+    → Interactor: inputData.byteSize でサイズチェック + jsonParser.parse() + バリデーション + getAll()
     → Presenter.presentPreview(previewData)
     → Hook(onPreview): プレビューダイアログ表示
 
@@ -263,6 +265,7 @@ Chrome拡張のルール件数規模（数百件程度）では性能問題な�
 │  │ ──────────────────────────────────────────────────────── │              │
 │  │ - repository: IRewriteRuleRepository                     │              │
 │  │ - presenter: IImportRulesJsonPresenter                    │              │
+│  │ - jsonParser: IJsonParser                                │              │
 │  │ - pendingRules: RewriteRule[] | null  ← Phase間保持       │              │
 │  │ ──────────────────────────────────────────────────────── │              │
 │  │ + importRulesJson(inputData): Promise<void>              │              │

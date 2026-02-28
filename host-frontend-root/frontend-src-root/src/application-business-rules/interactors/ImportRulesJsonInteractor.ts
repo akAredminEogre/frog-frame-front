@@ -5,6 +5,7 @@ import { ImportRulesJsonPreviewOutputData } from 'src/application-business-rules
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IImportRulesJsonPresenter } from 'src/application-business-rules/ports/output/IImportRulesJsonPresenter';
+import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
@@ -22,7 +23,7 @@ interface ImportedRuleData {
 /**
  * ルールJSONインポートのInteractor
  * 2フェーズ制御フロー:
- *   Phase 1: importRulesJson() → JSON.parse() → バリデーション → getAll() → presentPreview()
+ *   Phase 1: importRulesJson() → jsonParser.parse() → バリデーション → getAll() → presentPreview()
  *   Phase 2: confirmImport() → delete() × N → create() × M → present()
  */
 export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
@@ -30,7 +31,8 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
 
   constructor(
     private readonly repository: IRewriteRuleRepository,
-    private readonly presenter: IImportRulesJsonPresenter
+    private readonly presenter: IImportRulesJsonPresenter,
+    private readonly jsonParser: IJsonParser
   ) {}
 
   async importRulesJson(inputData: ImportRulesJsonInputData): Promise<void> {
@@ -50,9 +52,10 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       }
 
       // L1: JSON構文チェック
+      // CA準拠: JSON.parseはframeworks-and-drivers層（IJsonParser）を介して呼び出す
       let parsed: unknown;
       try {
-        parsed = JSON.parse(jsonString);
+        parsed = this.jsonParser.parse(jsonString);
       } catch {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(

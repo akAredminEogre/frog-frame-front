@@ -18,6 +18,7 @@ import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gat
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
+import { JsonParser } from 'src/frameworks-and-drivers/utils/JsonParser';
 import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
 import { ChromeRuntimeService } from 'src/infrastructure/browser/runtime/ChromeRuntimeService';
 import { ChromeCurrentTabService } from 'src/infrastructure/browser/tabs/ChromeCurrentTabService';
@@ -82,8 +83,10 @@ const deleteRuleControllerFactory = new DeleteRuleControllerFactory(
   chromeTabsGateway
 );
 // Import Rules JSON feature
+const jsonParser = new JsonParser();
 const importRulesJsonControllerFactory = new ImportRulesJsonControllerFactory(
-  rewriteRuleRepository
+  rewriteRuleRepository,
+  jsonParser
 );
 // Export Rules JSON feature
 const exportRulesJsonControllerFactory = new ExportRulesJsonControllerFactory(

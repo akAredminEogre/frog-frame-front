@@ -31,6 +31,7 @@ box "application-business-rules" #LightYellow
 end box
 
 box "frameworks-and-drivers" #LightCyan
+  participant "JsonParser" as JsonParser
   participant "ChromeRuntime\nRewriteRule\nRepository" as MessagingRepo
   participant "RewriteRule\nMessaging\nService" as MessagingService
   participant "<<interface>>\nIRewriteRule\nProxyService" as IProxyService
@@ -63,10 +64,11 @@ IFactory -> Factory : create(\n  onPreview,\n  onSuccess,\n  onError)
 activate Factory
 
 Factory -> Presenter : new(\n  onPreview,\n  onSuccess,\n  onError)
-Factory -> Interactor : new(\n  repository,\n  presenter)
+Factory -> Interactor : new(\n  repository,\n  presenter,\n  jsonParser)
 note right of Factory
   Interactor は
   IImportRulesJsonUseCase を実装
+  jsonParser: IJsonParser (CA準拠)
 end note
 Factory -> Controller : new(useCase)
 Factory --> IFactory : controller
@@ -132,10 +134,17 @@ else isImporting = false
   IUseCase -> Interactor : importRulesJson(inputData)
   activate Interactor
 
+  Interactor -> JsonParser : parse(jsonString)
+  note right of JsonParser
+    CA準拠: JSON.parseはframeworks-and-drivers層に委譲
+    SyntaxError発生時はInteractorがcatchしてpresentError
+  end note
+  JsonParser --> Interactor : parsedJson or throws SyntaxError
+
   alt バリデーション失敗
     note over Interactor
       inputData.byteSize > 5MB or
-      JSON.parse() 失敗 or スキーマ不正 or
+      jsonParser.parse() 失敗 or スキーマ不正 or
       version不一致 or ルール0件 or 件数上限超過
     end note
     Interactor -> ErrorOutputData : new(\n  error,\n  errorType)

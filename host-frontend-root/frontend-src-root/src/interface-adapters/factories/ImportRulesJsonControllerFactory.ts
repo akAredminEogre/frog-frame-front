@@ -1,5 +1,6 @@
 import { ImportRulesJsonInteractor } from 'src/application-business-rules/interactors/ImportRulesJsonInteractor';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
+import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { IImportRulesJsonController } from 'src/interface-adapters/controllers/IImportRulesJsonController';
 import { ImportRulesJsonController } from 'src/interface-adapters/controllers/ImportRulesJsonController';
 import {
@@ -15,7 +16,10 @@ import { ImportRulesJsonPresenter } from 'src/interface-adapters/presenters/Impo
  * ADR-005: ReactコールバックをPresenterに注入するためのFactoryパターン
  */
 export class ImportRulesJsonControllerFactory implements IImportRulesJsonControllerFactory {
-  constructor(private readonly repository: IRewriteRuleRepository) {}
+  constructor(
+    private readonly repository: IRewriteRuleRepository,
+    private readonly jsonParser: IJsonParser
+  ) {}
 
   create(
     onPreview: ImportPreviewCallback,
@@ -23,7 +27,7 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
     onError: ImportErrorCallback
   ): IImportRulesJsonController {
     const presenter = new ImportRulesJsonPresenter(onPreview, onSuccess, onError);
-    const interactor = new ImportRulesJsonInteractor(this.repository, presenter);
+    const interactor = new ImportRulesJsonInteractor(this.repository, presenter, this.jsonParser);
     return new ImportRulesJsonController(interactor);
   }
 }
