@@ -176,8 +176,20 @@ JSONスキーマ検証・バージョンチェックをEBR層（Interactor）に
 ### Phase 6: ユニットテスト網羅・不具合修正（PR#394 完了）
 
 各フェーズの実装に対応するユニットテストを整備し、CI/CDで通過を確認した。
+本PRで新規作成・修正した全モジュールを以下に洗い出す。
 
 #### 第2層: application-business-rules
+
+**Port interfaces（インターフェース定義のみ・ランタイム実装なし・ユニットテスト不要）**
+
+- [x] `IImportRulesJsonUseCase` — Input Port インターフェース（実装: `ImportRulesJsonInteractor`）
+- [x] `IImportRulesJsonPresenter` — Output Port インターフェース（実装: `ImportRulesJsonPresenter`）
+- [x] `IFileTextReader` — Service Port インターフェース（実装: `FileTextReader`、DI完全性テストで検証済み）
+- [x] `IFileSizeValidator` — Service Port インターフェース（実装: `FileSizeValidator`、DI完全性テストで検証済み）
+- [x] `IByteSizeCalculator` — Service Port インターフェース（実装: `BlobByteSizeCalculator`、DI完全性テストで検証済み）
+- [x] `IJsonParser` — Service Port インターフェース（実装: `JsonParser`）
+
+**実装クラス・ユニットテスト**
 
 - [x] `ImportRulesJsonInteractor` ユニットテスト（previewImport / confirmImport — 全バリデーションケース）
 - [ ] `ImportRulesJsonInputData` ユニットテスト（コンストラクタ検証）
@@ -189,17 +201,31 @@ JSONスキーマ検証・バージョンチェックをEBR層（Interactor）に
 
 #### 第3層: interface-adapters
 
+**インターフェース定義（ユニットテスト不要）**
+
+- [x] `IImportRulesJsonController` — Controller インターフェース（ADR-005準拠）
+- [x] `IImportRulesJsonControllerFactory` — Factory インターフェース（ADR-005準拠、DI完全性テストで検証済み）
+
+**実装クラス・ユニットテスト**
+
 - [x] `ImportRulesJsonController` / `ImportRulesJsonPresenter` ユニットテスト
-- [ ] `ImportRulesJsonControllerFactory` ユニットテスト（create メソッド検証）
+- [ ] `ImportRulesJsonControllerFactory` ユニットテスト（`create` メソッド検証）
 
 #### 第4層: frameworks-and-drivers
+
+**ユニットテスト実施**
 
 - [x] `JsonParser.ts` ユニットテスト（型ガード・エラーケース）
 - [x] `FileTextReader` / `FileSizeValidator` / `BlobByteSizeCalculator` ユニットテスト
 
+**E2Eテストで検証済み（ユニットテスト対象外）**
+
+- [x] `ImportRulesJsonUI` UIコンポーネント（E2E正常系シナリオで検証済み → Phase 7）
+- [x] `useImportRulesJson.ts` カスタムフック（E2E正常系シナリオで検証済み → Phase 7）
+
 #### インフラ: DI登録完全性
 
-- [x] `interface-registration-completeness.test.ts` に `IFileTextReader` / `IFileSizeValidator` / `IByteSizeCalculator` を追加（CI修正）
+- [x] `interface-registration-completeness.test.ts` に `IImportRulesJsonControllerFactory` / `IFileTextReader` / `IFileSizeValidator` / `IByteSizeCalculator` を追加（CI修正）
 
 #### 全体確認
 
