@@ -1,8 +1,11 @@
 @startuml
 !theme plain
-title User Story 019: ルールJSONインポート機能 Phase1 - タスク依存ネットワーク図
+title User Story 019: ルールJSONインポート機能 — 全フェーズ タスク依存ネットワーク図
 
-' Phase 1: E2E 1シナリオ実装タスク（完了）
+' Phase 0: 設計・user-storiesドキュメント作成（テストレビュー対象）
+rectangle "Phase 0\n設計・\nドキュメント作成" as phase0 #lightblue
+
+' Phase 1: E2E 1シナリオ実装（PR#394 完了）
 rectangle "1A-1\nImportRulesJson\nInputData\n作成" as inputData #orange
 rectangle "1A-2\nIImportRulesJson\nUseCase\n更新(InputData対応)" as useCase #orange
 rectangle "1A-3\nImportRulesJson\nInteractor\n実装\n(Blob除去・CA準拠)" as interactor #orange
@@ -17,17 +20,28 @@ rectangle "1D-1\ncontainer.ts\nDI登録追加" as di #orange
 rectangle "1D-2\nRulesApp.tsx\nImportButton統合" as integration #orange
 rectangle "1E-1\nE2Eテスト\n正常系1シナリオ\n実装" as e2eTest1 #orange
 
-' Phase 2: ユニットテスト網羅タスク（未着手）
-rectangle "2A-1\nInteractor\nユニットテスト\n(InputData対応)" as interactorTest #lightblue
-rectangle "2B-1\nController\nユニットテスト" as controllerTest #lightblue
-rectangle "2B-2\nPresenter\nユニットテスト" as presenterTest #lightblue
-rectangle "2C-1\nuseImportRulesJson\nユニットテスト" as hookTest #lightblue
+' Phase 2: CA準拠リファクタリング — ブラウザAPI抽象化
+rectangle "Phase 2\nCA準拠リファクタリング\nブラウザAPI抽象化" as phase2 #pink
 
-' Phase 3: 結合テスト・E2Eテスト全件（未着手）
-rectangle "3-1\n結合テスト\n実装" as integrationTest #pink
-rectangle "3-2\nE2Eテスト\n全シナリオ\n実装" as e2eTestAll #pink
+' Phase 3: CA準拠リファクタリング — ブラウザAPIモジュール化
+rectangle "Phase 3\nCA準拠リファクタリング\nブラウザAPIモジュール化" as phase3 #pink
 
-' Phase 1 依存関係
+' Phase 4: EBR層バリデーション強化
+rectangle "Phase 4\nEBR層\nバリデーション強化" as phase4 #pink
+
+' Phase 5: EBR層バリデーション拡張
+rectangle "Phase 5\nEBR層\nバリデーション拡張\n(バージョン/スキーマ)" as phase5 #pink
+
+' Phase 6: ユニットテスト網羅・不具合修正
+rectangle "Phase 6\nユニットテスト網羅\n不具合修正" as phase6 #pink
+
+' Phase 7: 結合テスト・UI実装・E2Eテスト網羅
+rectangle "Phase 7\n結合テスト\nUI実装\nE2Eテスト網羅" as phase7 #pink
+
+' Phase 0 → Phase 1 依存
+phase0 --> inputData
+
+' Phase 1 内部依存関係
 inputData --> useCase
 useCase --> interactor
 inputData --> interactor
@@ -42,33 +56,34 @@ hook --> integration
 di --> integration
 integration --> e2eTest1
 
-' Phase 2 依存関係（E2Eテスト通過後）
-e2eTest1 --> interactorTest
-e2eTest1 --> controllerTest
-e2eTest1 --> presenterTest
-e2eTest1 --> hookTest
+' Phase 1 → 以降
+e2eTest1 --> phase2
 
-' Phase 3 依存関係
-interactorTest --> integrationTest
-controllerTest --> integrationTest
-presenterTest --> integrationTest
-hookTest --> integrationTest
-integrationTest --> e2eTestAll
+' Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → Phase 7
+phase2 --> phase3
+phase3 --> phase4
+phase4 --> phase5
+phase5 --> phase6
+phase6 --> phase7
 
 ' 色分け凡例
 legend right
-  |= 色 |= Phase |
-  | <#orange> | Phase 1: E2E 1シナリオ実装（PR#394完了） |
-  | <#lightblue> | Phase 2: ユニットテスト網羅 |
-  | <#pink> | Phase 3: 結合テスト・E2Eテスト全件 |
+  |= 色 |= 状態 |
+  | <#orange> | Phase 1: E2E 1シナリオ実装（PR#394 完了） |
+  | <#lightblue> | Phase 0: 設計・ドキュメント作成（テストレビュー対象） |
+  | <#pink> | Phase 2〜7: 未完了（PR単位でレビュー予定） |
 endlegend
 
 note bottom
-**本図の範囲**:
-  - Phase 1: E2E 1シナリオ実装（全レイヤー実装 + 正常系E2Eテスト）PR#394完了
-    - CA準拠: ImportRulesJsonInputData導入・Blob計算をhookに移動
-  - Phase 2: ユニットテスト網羅・不具合修正
-  - Phase 3: 結合テスト・E2Eテスト全件
+**本図の範囲（全フェーズ）**:
+  - Phase 0: 設計・user-storiesドキュメント作成（テスト戦略書・テストコード実装はPR単位でレビュー）
+  - Phase 1: E2E 1シナリオ実装（PR#394完了）
+  - Phase 2: CA準拠リファクタリング — ブラウザAPI抽象化
+  - Phase 3: CA準拠リファクタリング — ブラウザAPIモジュール化
+  - Phase 4: EBR層バリデーション強化
+  - Phase 5: EBR層バリデーション拡張 — バージョン/スキーマチェック
+  - Phase 6: ユニットテスト網羅・不具合修正
+  - Phase 7: 結合テスト・UI実装・E2Eテスト網羅
 end note
 
 @enduml

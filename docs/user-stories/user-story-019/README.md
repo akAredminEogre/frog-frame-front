@@ -66,16 +66,16 @@
 
 #### 設計ドキュメント（00〜03）
 
-- [x] [00-overview.md](../../design/pages/rule-list/features/import-rules-json/00-overview.md) — 機能概要・検証レベル定義
-- [x] [01-class-design.md](../../design/pages/rule-list/features/import-rules-json/01-class-design.md) — クラス設計（4層CA構成）
-- [x] [02-sequence.puml](../../design/pages/rule-list/features/import-rules-json/02-sequence.puml) — シーケンス図（previewImport / confirmImport フロー）
-- [x] [03-directory-structure.md](../../design/pages/rule-list/features/import-rules-json/03-directory-structure.md) — ディレクトリ構造
-- [x] [e2e-test-strategy.md](../../design/pages/rule-list/features/import-rules-json/e2e-test-strategy.md) — E2Eテスト戦略書
+- [ ] [00-overview.md](../../design/pages/rule-list/features/import-rules-json/00-overview.md) — 機能概要・検証レベル定義
+- [ ] [01-class-design.md](../../design/pages/rule-list/features/import-rules-json/01-class-design.md) — クラス設計（4層CA構成）
+- [ ] [02-sequence.puml](../../design/pages/rule-list/features/import-rules-json/02-sequence.puml) — シーケンス図（previewImport / confirmImport フロー）
+- [ ] [03-directory-structure.md](../../design/pages/rule-list/features/import-rules-json/03-directory-structure.md) — ディレクトリ構造
+- [ ] [e2e-test-strategy.md](../../design/pages/rule-list/features/import-rules-json/e2e-test-strategy.md) — E2Eテスト戦略書
 
 #### user-storiesドキュメント作成（アローダイアグラム含む）
 
-- [x] [04-network-diagram.puml](./04-network-diagram.puml) — タスク依存ネットワーク図（アローダイアグラム）
-- [x] [README.md](./README.md) — ユーザーストーリードキュメント（受け入れ条件・開発フロー・子タスク定義）
+- [ ] [04-network-diagram.puml](./04-network-diagram.puml) — タスク依存ネットワーク図（アローダイアグラム）
+- [ ] [README.md](./README.md) — ユーザーストーリードキュメント（受け入れ条件・開発フロー・子タスク定義）
 
 ---
 
@@ -119,20 +119,20 @@
 
 #### Blob計算のF&D層委譲
 
-- [x] `ImportRulesJsonInputData` に `byteSize` フィールドを追加（Blob計算をInteractorから除去）
-- [x] `useImportRulesJson.ts` でBlobバイトサイズを計算しInputDataに注入
-- [x] `ImportRulesJsonInteractor` から `Blob` API直接利用を除去
+- [ ] `ImportRulesJsonInputData` に `byteSize` フィールドを追加（Blob計算をInteractorから除去）
+- [ ] `useImportRulesJson.ts` でBlobバイトサイズを計算しInputDataに注入
+- [ ] `ImportRulesJsonInteractor` から `Blob` API直接利用を除去
 
 #### JSON.parseのF&D層委譲
 
-- [x] `IJsonParser` port interface を定義（application-business-rules層）
-- [x] `JsonParser.ts` をF&D層に実装（`frameworks-and-drivers/Json/JsonParser.ts`）
-- [x] `ImportRulesJsonInteractor` を `IJsonParser` 経由に変更（CA準拠）
+- [ ] `IJsonParser` port interface を定義（application-business-rules層）
+- [ ] `JsonParser.ts` をF&D層に実装（`frameworks-and-drivers/Json/JsonParser.ts`）
+- [ ] `ImportRulesJsonInteractor` を `IJsonParser` 経由に変更（CA準拠）
 
 #### FCC・型整理
 
-- [x] `ImportRulesJsonInteractor` で `RewriteRules` FCC（FormattedCollectionClass）を使用（`pendingRules` 型変更）
-- [x] DI登録を `container.ts` に追加（JsonParser）
+- [ ] `ImportRulesJsonInteractor` で `RewriteRules` FCC（FormattedCollectionClass）を使用（`pendingRules` 型変更）
+- [ ] DI登録を `container.ts` に追加（JsonParser）
 
 ---
 
@@ -140,15 +140,15 @@
 
 `useImportRulesJson.ts` に残存していたブラウザ固有API（FileReader・Blob）をF&D層モジュールとして抽出した。
 
-- [x] `IFileTextReader` port interface を定義（application-business-rules層）
-- [x] `FileTextReader.ts` をF&D層に実装（FileReader APIをラップ）
-- [x] `IFileSizeValidator` port interface を定義
-- [x] `FileSizeValidator.ts` をF&D層に実装（ファイルサイズ検証）
-- [x] `IByteSizeCalculator` port interface を定義
-- [x] `BlobByteSizeCalculator.ts` をF&D層に実装（Blob byteSize計算）
-- [x] `useImportRulesJson.ts` を上記インターフェース経由に変更
-- [x] `container.ts` にDI登録を追加（3モジュール）
-- [x] DIコンテナ完全性テスト（`interface-registration-completeness.test.ts`）に3件追加
+- [ ] `IFileTextReader` port interface を定義（application-business-rules層）
+- [ ] `FileTextReader.ts` をF&D層に実装（FileReader APIをラップ）
+- [ ] `IFileSizeValidator` port interface を定義
+- [ ] `FileSizeValidator.ts` をF&D層に実装（ファイルサイズ検証）
+- [ ] `IByteSizeCalculator` port interface を定義
+- [ ] `BlobByteSizeCalculator.ts` をF&D層に実装（Blob byteSize計算）
+- [ ] `useImportRulesJson.ts` を上記インターフェース経由に変更
+- [ ] `container.ts` にDI登録を追加（3モジュール）
+- [ ] DIコンテナ完全性テスト（`interface-registration-completeness.test.ts`）に3件追加
 
 ---
 
@@ -156,9 +156,9 @@
 
 ファイルサイズ検証ロジックをフレームワーク非依存のEnterprise Business Rules層に移動し、UIバリデーションを除去した。
 
-- [x] `IFileSizeValidator` の実装をEBR層に移動（フレームワーク非依存のバイト数比較ロジック）
-- [x] `ImportRulesJsonInteractor` でファイルサイズ上限チェック（`byteSize > MAX_FILE_SIZE_BYTES`）を実施
-- [x] `useImportRulesJson.ts`（UI層）のファイルサイズバリデーションを除去（EBR層に一本化）
+- [ ] `IFileSizeValidator` の実装をEBR層に移動（フレームワーク非依存のバイト数比較ロジック）
+- [ ] `ImportRulesJsonInteractor` でファイルサイズ上限チェック（`byteSize > MAX_FILE_SIZE_BYTES`）を実施
+- [ ] `useImportRulesJson.ts`（UI層）のファイルサイズバリデーションを除去（EBR層に一本化）
 
 ---
 
@@ -166,10 +166,10 @@
 
 JSONスキーマ検証・バージョンチェックをEBR層（Interactor）に集約し、JsonParserの検証を強化した。
 
-- [x] `ImportRulesJsonInteractor` にバージョンフィールド検証を追加（EBR層で実施）
-- [x] `ImportRulesJsonInteractor` にJSONスキーマ構造チェックを追加（EBR層で実施）
-- [x] `JsonParser.ts` のバリデーション強化（parse前後の型ガード）
-- [x] 型定義の共有化（`ImportRulesJsonInteractor` と `JsonParser` 間の型整合）
+- [ ] `ImportRulesJsonInteractor` にバージョンフィールド検証を追加（EBR層で実施）
+- [ ] `ImportRulesJsonInteractor` にJSONスキーマ構造チェックを追加（EBR層で実施）
+- [ ] `JsonParser.ts` のバリデーション強化（parse前後の型ガード）
+- [ ] 型定義の共有化（`ImportRulesJsonInteractor` と `JsonParser` 間の型整合）
 
 ---
 
@@ -182,16 +182,16 @@ JSONスキーマ検証・バージョンチェックをEBR層（Interactor）に
 
 **Port interfaces（インターフェース定義のみ・ランタイム実装なし・ユニットテスト不要）**
 
-- [x] `IImportRulesJsonUseCase` — Input Port インターフェース（実装: `ImportRulesJsonInteractor`）
-- [x] `IImportRulesJsonPresenter` — Output Port インターフェース（実装: `ImportRulesJsonPresenter`）
-- [x] `IFileTextReader` — Service Port インターフェース（実装: `FileTextReader`、DI完全性テストで検証済み）
-- [x] `IFileSizeValidator` — Service Port インターフェース（実装: `FileSizeValidator`、DI完全性テストで検証済み）
-- [x] `IByteSizeCalculator` — Service Port インターフェース（実装: `BlobByteSizeCalculator`、DI完全性テストで検証済み）
-- [x] `IJsonParser` — Service Port インターフェース（実装: `JsonParser`）
+- [ ] `IImportRulesJsonUseCase` — Input Port インターフェース（実装: `ImportRulesJsonInteractor`）
+- [ ] `IImportRulesJsonPresenter` — Output Port インターフェース（実装: `ImportRulesJsonPresenter`）
+- [ ] `IFileTextReader` — Service Port インターフェース（実装: `FileTextReader`、DI完全性テストで検証済み）
+- [ ] `IFileSizeValidator` — Service Port インターフェース（実装: `FileSizeValidator`、DI完全性テストで検証済み）
+- [ ] `IByteSizeCalculator` — Service Port インターフェース（実装: `BlobByteSizeCalculator`、DI完全性テストで検証済み）
+- [ ] `IJsonParser` — Service Port インターフェース（実装: `JsonParser`）
 
 **実装クラス・ユニットテスト**
 
-- [x] `ImportRulesJsonInteractor` ユニットテスト（previewImport / confirmImport — 全バリデーションケース）
+- [ ] `ImportRulesJsonInteractor` ユニットテスト（previewImport / confirmImport — 全バリデーションケース）
 - [ ] `ImportRulesJsonInputData` ユニットテスト（コンストラクタ検証）
 - [ ] `ImportRulesJsonOutputData` / `ImportRulesJsonPreviewOutputData` / `ImportRulesJsonErrorOutputData` ユニットテスト（コンストラクタ検証）
 
@@ -203,33 +203,33 @@ JSONスキーマ検証・バージョンチェックをEBR層（Interactor）に
 
 **インターフェース定義（ユニットテスト不要）**
 
-- [x] `IImportRulesJsonController` — Controller インターフェース（ADR-005準拠）
-- [x] `IImportRulesJsonControllerFactory` — Factory インターフェース（ADR-005準拠、DI完全性テストで検証済み）
+- [ ] `IImportRulesJsonController` — Controller インターフェース（ADR-005準拠）
+- [ ] `IImportRulesJsonControllerFactory` — Factory インターフェース（ADR-005準拠、DI完全性テストで検証済み）
 
 **実装クラス・ユニットテスト**
 
-- [x] `ImportRulesJsonController` / `ImportRulesJsonPresenter` ユニットテスト
+- [ ] `ImportRulesJsonController` / `ImportRulesJsonPresenter` ユニットテスト
 - [ ] `ImportRulesJsonControllerFactory` ユニットテスト（`create` メソッド検証）
 
 #### 第4層: frameworks-and-drivers
 
 **ユニットテスト実施**
 
-- [x] `JsonParser.ts` ユニットテスト（型ガード・エラーケース）
-- [x] `FileTextReader` / `FileSizeValidator` / `BlobByteSizeCalculator` ユニットテスト
+- [ ] `JsonParser.ts` ユニットテスト（型ガード・エラーケース）
+- [ ] `FileTextReader` / `FileSizeValidator` / `BlobByteSizeCalculator` ユニットテスト
 
 **E2Eテストで検証済み（ユニットテスト対象外）**
 
-- [x] `ImportRulesJsonUI` UIコンポーネント（E2E正常系シナリオで検証済み → Phase 7）
-- [x] `useImportRulesJson.ts` カスタムフック（E2E正常系シナリオで検証済み → Phase 7）
+- [ ] `ImportRulesJsonUI` UIコンポーネント（E2E正常系シナリオで検証済み → Phase 7）
+- [ ] `useImportRulesJson.ts` カスタムフック（E2E正常系シナリオで検証済み → Phase 7）
 
 #### インフラ: DI登録完全性
 
-- [x] `interface-registration-completeness.test.ts` に `IImportRulesJsonControllerFactory` / `IFileTextReader` / `IFileSizeValidator` / `IByteSizeCalculator` を追加（CI修正）
+- [ ] `interface-registration-completeness.test.ts` に `IImportRulesJsonControllerFactory` / `IFileTextReader` / `IFileSizeValidator` / `IByteSizeCalculator` を追加（CI修正）
 
 #### 全体確認
 
-- [x] ユニットテスト全通過（`npx vitest --run`）・Lint全通過
+- [ ] ユニットテスト全通過（`npx vitest --run`）・Lint全通過
 
 ---
 
@@ -237,10 +237,10 @@ JSONスキーマ検証・バージョンチェックをEBR層（Interactor）に
 
 UI実装とE2Eテストを実施し、CI/CDによる全テスト自動実行で動作を確認した。
 
-- [x] `ImportRulesJsonUI.tsx` UIコンポーネント実装（確認ダイアログ統合、Phase 1 で実施）
-- [x] `useImportRulesJson.ts` カスタムフック実装（Phase 1 で実施）
-- [x] E2Eテスト正常系 1 シナリオ実装（`normal-flow.spec.ts`、Phase 1 で実施）
-- [x] CI/CDによる全テスト（ユニット + E2E）自動実行・通過確認
+- [ ] `ImportRulesJsonUI.tsx` UIコンポーネント実装（確認ダイアログ統合、Phase 1 で実施）
+- [ ] `useImportRulesJson.ts` カスタムフック実装（Phase 1 で実施）
+- [ ] E2Eテスト正常系 1 シナリオ実装（`normal-flow.spec.ts`、Phase 1 で実施）
+- [ ] CI/CDによる全テスト（ユニット + E2E）自動実行・通過確認
 
 ---
 
