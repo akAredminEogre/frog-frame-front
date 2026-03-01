@@ -177,11 +177,32 @@ JSONスキーマ検証・バージョンチェックをEBR層（Interactor）に
 
 各フェーズの実装に対応するユニットテストを整備し、CI/CDで通過を確認した。
 
+#### 第2層: application-business-rules
+
 - [x] `ImportRulesJsonInteractor` ユニットテスト（previewImport / confirmImport — 全バリデーションケース）
+- [ ] `ImportRulesJsonInputData` ユニットテスト（コンストラクタ検証）
+- [ ] `ImportRulesJsonOutputData` / `ImportRulesJsonPreviewOutputData` / `ImportRulesJsonErrorOutputData` ユニットテスト（コンストラクタ検証）
+
+#### 第1層: enterprise-business-rules
+
+- [ ] `ImportFileSize` value-object ユニットテスト（ファイルサイズ上限定数・比較ロジック）
+
+#### 第3層: interface-adapters
+
 - [x] `ImportRulesJsonController` / `ImportRulesJsonPresenter` ユニットテスト
+- [ ] `ImportRulesJsonControllerFactory` ユニットテスト（create メソッド検証）
+
+#### 第4層: frameworks-and-drivers
+
 - [x] `JsonParser.ts` ユニットテスト（型ガード・エラーケース）
 - [x] `FileTextReader` / `FileSizeValidator` / `BlobByteSizeCalculator` ユニットテスト
+
+#### インフラ: DI登録完全性
+
 - [x] `interface-registration-completeness.test.ts` に `IFileTextReader` / `IFileSizeValidator` / `IByteSizeCalculator` を追加（CI修正）
+
+#### 全体確認
+
 - [x] ユニットテスト全通過（`npx vitest --run`）・Lint全通過
 
 ---
