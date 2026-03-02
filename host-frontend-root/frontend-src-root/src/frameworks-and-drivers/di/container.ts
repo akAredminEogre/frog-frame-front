@@ -93,7 +93,6 @@ const blobByteSizeCalculator = new BlobByteSizeCalculator();
 const importRulesJsonControllerFactory = new ImportRulesJsonControllerFactory(
   rewriteRuleRepository,
   jsonParser,
-  fileSizeValidator,
   fileTextReader
 );
 // Export Rules JSON feature

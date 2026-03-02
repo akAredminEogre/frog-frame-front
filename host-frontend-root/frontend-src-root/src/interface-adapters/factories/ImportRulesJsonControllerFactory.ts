@@ -1,6 +1,5 @@
 import { ImportRulesJsonInteractor } from 'src/application-business-rules/interactors/ImportRulesJsonInteractor';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
-import { IFileSizeValidator } from 'src/application-business-rules/ports/services/IFileSizeValidator';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { IImportRulesJsonController } from 'src/interface-adapters/controllers/IImportRulesJsonController';
@@ -21,7 +20,6 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
   constructor(
     private readonly repository: IRewriteRuleRepository,
     private readonly jsonParser: IJsonParser,
-    private readonly fileSizeValidator: IFileSizeValidator,
     private readonly fileTextReader: IFileTextReader
   ) {}
 
@@ -35,7 +33,6 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
       this.repository,
       presenter,
       this.jsonParser,
-      this.fileSizeValidator,
       this.fileTextReader
     );
     return new ImportRulesJsonController(interactor);

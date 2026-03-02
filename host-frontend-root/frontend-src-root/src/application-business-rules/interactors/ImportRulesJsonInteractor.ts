@@ -6,11 +6,11 @@ import { RulesJsonRuleEntryRaw } from 'src/application-business-rules/dto/RulesJ
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IImportRulesJsonPresenter } from 'src/application-business-rules/ports/output/IImportRulesJsonPresenter';
-import { IFileSizeValidator } from 'src/application-business-rules/ports/services/IFileSizeValidator';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
 import { RulesJsonVersionSchema } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
 
 const MAX_RULE_COUNT = 1000;
@@ -18,7 +18,7 @@ const MAX_RULE_COUNT = 1000;
 /**
  * ルールJSONインポートのInteractor
  * 2フェーズ制御フロー:
- *   Phase 1: importRulesJson() → fileSizeValidator → fileTextReader → jsonParser.parse() → バリデーション → getAll() → presentPreview()
+ *   Phase 1: importRulesJson() → ImportFileSize → fileTextReader → jsonParser.parse() → バリデーション → getAll() → presentPreview()
  *   Phase 2: confirmImport() → delete() × N → create() × M → present()
  */
 export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
@@ -28,7 +28,6 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     private readonly repository: IRewriteRuleRepository,
     private readonly presenter: IImportRulesJsonPresenter,
     private readonly jsonParser: IJsonParser,
-    private readonly fileSizeValidator: IFileSizeValidator,
     private readonly fileTextReader: IFileTextReader
   ) {}
 
@@ -36,13 +35,14 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     const file = inputData.file;
     try {
       // ①ファイルサイズチェック（File.sizeによる高速チェック）
-      // CA準拠: IFileSizeValidatorポート経由でFile.size APIへのアクセスを抽象化
-      if (this.fileSizeValidator.isExceedingMaxSize(file)) {
+      // EBR準拠: ImportFileSize VO（enterprise-business-rules）を直接使用
+      const importFileSize = new ImportFileSize(file.size);
+      if (importFileSize.isExceedingLimit()) {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(
             new Error('file size exceeded'),
             'validation',
-            'ファイルサイズが上限（5MB）を超えています'
+            importFileSize.errorMessage
           )
         );
         return;

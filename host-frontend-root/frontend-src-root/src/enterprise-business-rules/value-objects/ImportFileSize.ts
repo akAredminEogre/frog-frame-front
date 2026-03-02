@@ -1,4 +1,5 @@
 export const MAX_IMPORT_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+const MAX_IMPORT_FILE_SIZE_MB = 5;
 
 /**
  * インポートファイルサイズのValue Object
@@ -10,5 +11,9 @@ export class ImportFileSize {
 
   isExceedingLimit(): boolean {
     return this.byteSize > MAX_IMPORT_FILE_SIZE_BYTES;
+  }
+
+  get errorMessage(): string {
+    return `ファイルサイズが上限（${MAX_IMPORT_FILE_SIZE_MB}MB）を超えています`;
   }
 }
