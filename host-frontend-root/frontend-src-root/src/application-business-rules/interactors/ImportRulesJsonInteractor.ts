@@ -10,7 +10,8 @@ import { IFileTextReader } from 'src/application-business-rules/ports/services/I
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-import { ImportFileSize, MAX_IMPORT_FILE_SIZE_MB } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
+import { ImportFileSizeError } from 'src/enterprise-business-rules/errors/ImportFileSizeError';
+import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
 import { RulesJsonVersionSchema } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
 
 const MAX_RULE_COUNT = 1000;
@@ -36,17 +37,9 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     try {
       // ①ファイルサイズチェック（File.sizeによる高速チェック）
       // EBR準拠: ImportFileSize VO（enterprise-business-rules）を直接使用
+      // ImportFileSizeErrorはEBR層で保有し、メッセージ詳細をInteractorに知らせない設計
       const importFileSize = new ImportFileSize(file.size);
-      if (importFileSize.isExceedingLimit()) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(
-            new Error('file size exceeded'),
-            'validation',
-            `ファイルサイズが上限（${MAX_IMPORT_FILE_SIZE_MB}MB）を超えています`
-          )
-        );
-        return;
-      }
+      importFileSize.validateOrThrow();
 
       // ②jsonString取得（サイズチェック通過後のみ読み取り）
       // CA準拠: IFileTextReaderポート経由でFileReader APIへのアクセスを抽象化
@@ -159,6 +152,14 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       );
     } catch (error) {
       this.pendingRules = null;
+      // ImportFileSizeError はEBR層で詳細メッセージを保有しているため、
+      // Interactor は message を直接使用（詳細を知らない設計）
+      if (error instanceof ImportFileSizeError) {
+        this.presenter.presentError(
+          new ImportRulesJsonErrorOutputData(error, 'validation', error.message)
+        );
+        return;
+      }
       this.presenter.presentError(
         new ImportRulesJsonErrorOutputData(
           error,
