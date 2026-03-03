@@ -13,7 +13,4 @@ export class ImportFileSize {
     return this.byteSize > MAX_IMPORT_FILE_SIZE_BYTES;
   }
 
-  get errorMessage(): string {
-    return `ファイルサイズが上限（${MAX_IMPORT_FILE_SIZE_MB}MB）を超えています`;
-  }
 }

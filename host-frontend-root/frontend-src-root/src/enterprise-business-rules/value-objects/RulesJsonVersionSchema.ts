@@ -28,10 +28,4 @@ export class RulesJsonVersionSchema {
     return this.data.version === SUPPORTED_RULES_JSON_VERSION;
   }
 
-  /**
-   * バージョン文字列を取得（エラーメッセージ用）
-   */
-  getVersion(): string {
-    return String(this.data.version);
-  }
 }

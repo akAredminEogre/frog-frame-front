@@ -10,7 +10,7 @@ import { IFileTextReader } from 'src/application-business-rules/ports/services/I
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
+import { ImportFileSize, MAX_IMPORT_FILE_SIZE_MB } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
 import { RulesJsonVersionSchema } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
 
 const MAX_RULE_COUNT = 1000;
@@ -42,7 +42,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
           new ImportRulesJsonErrorOutputData(
             new Error('file size exceeded'),
             'validation',
-            importFileSize.errorMessage
+            `ファイルサイズが上限（${MAX_IMPORT_FILE_SIZE_MB}MB）を超えています`
           )
         );
         return;
@@ -91,7 +91,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
           new ImportRulesJsonErrorOutputData(
             new Error('unsupported version'),
             'validation',
-            `未対応のバージョンです: ${versionSchema.getVersion()}`
+            `未対応のバージョンです: ${String(parsed.version)}`
           )
         );
         return;
