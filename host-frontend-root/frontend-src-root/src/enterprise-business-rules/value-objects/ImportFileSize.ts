@@ -1,4 +1,4 @@
-import { ImportFileSizeError } from '../errors/ImportFileSizeError';
+import { ImportFileSizeError } from '@/enterprise-business-rules/errors/ImportFileSizeError';
 
 export const MAX_IMPORT_FILE_SIZE_MB = 5;
 export const MAX_IMPORT_FILE_SIZE_BYTES = MAX_IMPORT_FILE_SIZE_MB * 1024 * 1024;
@@ -9,7 +9,11 @@ export const MAX_IMPORT_FILE_SIZE_BYTES = MAX_IMPORT_FILE_SIZE_MB * 1024 * 1024;
  * enterprise-business-rules層に配置する
  */
 export class ImportFileSize {
-  constructor(private readonly byteSize: number) {}
+  constructor(private readonly byteSize: number) {
+    if (this.byteSize > MAX_IMPORT_FILE_SIZE_BYTES) {
+      throw new ImportFileSizeError(this.byteSize);
+    }
+  }
 
   isExceedingLimit(): boolean {
     return this.byteSize > MAX_IMPORT_FILE_SIZE_BYTES;
