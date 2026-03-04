@@ -1,4 +1,4 @@
-import { MAX_IMPORT_FILE_SIZE_MB } from '../value-objects/ImportFileSize';
+import { MAX_IMPORT_FILE_SIZE_MB } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
 
 /**
  * インポートファイルサイズ超過エラー
