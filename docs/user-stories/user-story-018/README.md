@@ -6,9 +6,10 @@
 
 ## 概要
 
-`ImportRulesJsonInteractor`（UseCase）および `ImportRulesJsonController` は、現在 `jsonString: string` を直接受け取る設計となっており、`ImportRulesJsonInputData` DTO は使用されていない。
+`ImportRulesJsonInteractor`（UseCase）は `importRulesJson(inputData: ImportRulesJsonInputData)` で InputData を受け取る実装に更新済み。
+一方 `ImportRulesJsonController` は `importRulesJson(file: File)` で File を直接受け取り、内部で `ImportRulesJsonInputData` を生成して UseCase に渡す設計となっている。
 
-本ユーザーストーリーでは、他の UseCase/Controller と同様に `ImportRulesJsonInputData` を経由して入力を受け取るパターンへ統一し、コードベースの一貫性を向上させる。
+本ユーザーストーリーでは、Controller も `ImportRulesJsonInputData` を直接受け取るパターンに統一し、コードベースの一貫性を向上させることを将来的な目標とする。
 
 ## 背景
 
@@ -23,33 +24,27 @@ PR#394 レビュー（GitHub Copilot によるコメント、akAredminEogre 返�
 
 ## 現状
 
-### 現在の設計（直接 string 受け取り）
+### 現在の設計（Controller が File を受け取り、内部で InputData 生成）
 
 ```typescript
-// IImportRulesJsonUseCase.ts
+// IImportRulesJsonUseCase.ts — InputData 経由に更新済み
 interface IImportRulesJsonUseCase {
-  previewImport(jsonString: string): Promise<void>;
+  importRulesJson(inputData: ImportRulesJsonInputData): Promise<void>;
   confirmImport(): Promise<void>;
 }
 
-// ImportRulesJsonController.ts
-async execute(jsonString: string): Promise<void> {
-  await this.useCase.previewImport(jsonString);
+// ImportRulesJsonController.ts — Controller は File を直接受け取る
+async importRulesJson(file: File): Promise<void> {
+  await this.useCase.importRulesJson(new ImportRulesJsonInputData(file));
 }
 ```
 
-### 目標設計（InputData DTO 経由）
+### 目標設計（Controller も InputData DTO 経由に統一）
 
 ```typescript
-// IImportRulesJsonUseCase.ts
-interface IImportRulesJsonUseCase {
-  previewImport(inputData: ImportRulesJsonInputData): Promise<void>;
-  confirmImport(): Promise<void>;
-}
-
 // ImportRulesJsonController.ts
-async execute(inputData: ImportRulesJsonInputData): Promise<void> {
-  await this.useCase.previewImport(inputData);
+async importRulesJson(inputData: ImportRulesJsonInputData): Promise<void> {
+  await this.useCase.importRulesJson(inputData);
 }
 ```
 
@@ -57,9 +52,9 @@ async execute(inputData: ImportRulesJsonInputData): Promise<void> {
 
 | 課題 | 詳細 |
 |------|------|
-| 一貫性欠如 | 他の UseCase/Controller は InputData DTO を経由しているが、ImportRulesJson は直接 string を受け取っている |
-| テスト容易性 | InputData DTO を使うことで、テスト時に入力値の構造が明確になり、将来の拡張も容易になる |
-| `ImportRulesJsonInputData` 未使用 | DTO が存在するにもかかわらず使用されておらず、コードの意図が不明瞭 |
+| 一貫性欠如 | UseCase は InputData DTO を受け取っているが、Controller は `File` を直接受け取っており、他の Controller との一貫性がない |
+| テスト容易性 | Controller も InputData DTO を受け取ることで、テスト時に入力値の構造が明確になり、将来の拡張も容易になる |
+| Controller 層での InputData 未活用 | UseCase は InputData を受け取っているが、Controller はまだ `File` を直接受け取っている |
 
 ## 開発戦略
 

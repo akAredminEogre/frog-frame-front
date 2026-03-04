@@ -2,70 +2,63 @@
 
 ## ストーリー
 
-> ルールJSONインポート時の削除・作成処理を Dexie のバッチ操作（bulkDelete / bulkCreate）に切り替えることで、大量ルール（最大1000件）のインポートを高速化し、部分適用リスクを排除したい
+> ルールJSONインポート時の削除・作成処理を `replaceAll()` を用いたアトミックな一括置換に切り替えることで、大量ルール（最大1000件）のインポートを高速化し、部分適用リスクを排除したい
 
 ## 概要
 
-`ImportRulesJsonInteractor.confirmImport()` は現在、削除・作成を1件ずつ逐次 `await` している。
-最大1000件のルールが対象となる場合、最大2000回の逐次 I/O が発生し、パフォーマンス上の懸念と、処理途中でエラーが発生した際の「部分削除・部分作成」リスクがある。
+`ImportRulesJsonInteractor.confirmImport()` は `IRewriteRuleRepository.replaceAll()` を用いた原子的な一括置換を行う実装に更新済み。
+`replaceAll()` は Dexie の `db.transaction()` 内で全削除と一括追加をアトミックに実行し、部分適用リスクを排除している。
 
-本ユーザーストーリーでは、`IRewriteRuleRepository` インターフェースに一括操作メソッドを追加し、Dexie の `db.transaction()` / `bulkDelete()` / `bulkCreate()` を活用したバッチ処理へ切り替える。
+本ユーザーストーリーでは、`IRewriteRuleRepository` インターフェースに `replaceAll(rules: RewriteRule[]): Promise<void>` を追加し、`DexieRewriteRuleRepository` でトランザクション保護付きの実装を行い、`ImportRulesJsonInteractor.confirmImport()` で逐次ループを廃止してバッチ置換に切り替えた。
 
 ## 背景
 
 PR#394 レビュー（GitHub Copilot コメント id:2856697497）で指摘済み。
-本 PR（feat/rule-json-import）では変更範囲が広いことを理由に見送り、将来最適化候補として本ユーザーストーリーを作成した。
+本 PR（feat/rule-json-import）にて `IRewriteRuleRepository.replaceAll()` を導入し、`ImportRulesJsonInteractor.confirmImport()` を一括置換方式に更新済み。
 
 **該当ファイル**:
 - `host-frontend-root/frontend-src-root/src/application-business-rules/interactors/ImportRulesJsonInteractor.ts`
 - `host-frontend-root/frontend-src-root/src/application-business-rules/ports/gateway/IRewriteRuleRepository.ts`
 - `host-frontend-root/frontend-src-root/src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository.ts`
 
-## 現状
+## 実装
 
-### 現在の実装（逐次 I/O）
+### 実装済み（`replaceAll()` による一括置換）
 
 ```typescript
-// confirmImport() 内
-for (const rule of currentArray) {
-  await this.repository.delete(rule.id);  // 1000件 × 1回 = 1000回
-}
-for (const rule of rulesToImport) {
-  await this.repository.create(rule);     // 1000件 × 1回 = 1000回
-}
-// 合計: 最大 2000回の逐次 I/O
+// confirmImport() 内 — feat/rule-json-import にて実装済み
+await this.repository.replaceAll(rulesToImport.toArray());
+// DexieRewriteRuleRepository.replaceAll() が db.transaction() 内でアトミックに実行
 ```
 
-### 課題
+### 解決した課題
 
-| 課題 | 詳細 |
+| 課題 | 対応 |
 |------|------|
-| パフォーマンス | 最大2000回の逐次 I/O（IndexedDB ラウンドトリップ） |
-| 部分適用リスク | 削除完了後・作成中にエラーが発生すると、一部のルールが失われる |
-| インターフェース未対応 | `IRewriteRuleRepository` に `bulkDelete` / `bulkCreate` がない |
+| パフォーマンス | `replaceAll()` で逐次 I/O を廃止し、トランザクション内で一括処理 |
+| 部分適用リスク | `db.transaction()` によりロールバック保証、部分適用なし |
+| インターフェース追加 | `IRewriteRuleRepository` に `replaceAll(rules: RewriteRule[]): Promise<void>` を追加済み |
 
 ## 開発戦略
 
-### Phase 1: インターフェース拡張
+### Phase 1: インターフェース拡張（feat/rule-json-import にて完了）
 
-- [ ] `IRewriteRuleRepository` に `bulkDelete(ids: string[]): Promise<void>` を追加
-- [ ] `IRewriteRuleRepository` に `bulkCreate(rules: RewriteRule[]): Promise<void>` を追加
+- [x] `IRewriteRuleRepository` に `replaceAll(rules: RewriteRule[]): Promise<void>` を追加
 
-### Phase 2: DexieRewriteRuleRepository 実装
+### Phase 2: DexieRewriteRuleRepository 実装（feat/rule-json-import にて完了）
 
-- [ ] `DexieRewriteRuleRepository.bulkDelete()` を Dexie `db.transaction()` + `bulkDelete()` で実装
-- [ ] `DexieRewriteRuleRepository.bulkCreate()` を Dexie `db.transaction()` + `bulkAdd()` で実装
-- [ ] トランザクション内で削除・作成を一括実行（原子性保証）
+- [x] `DexieRewriteRuleRepository.replaceAll()` を Dexie `db.transaction()` + 全削除 + `bulkAdd()` で実装
+- [x] トランザクション内で削除・作成を一括実行（原子性保証）
 
-### Phase 3: ImportRulesJsonInteractor 更新
+### Phase 3: ImportRulesJsonInteractor 更新（feat/rule-json-import にて完了）
 
-- [ ] `confirmImport()` を `bulkDelete` + `bulkCreate` に置き換え
-- [ ] エラー時のロールバック挙動を確認
+- [x] `confirmImport()` を `replaceAll()` に置き換え（逐次ループ廃止）
+- [x] エラー時のロールバック挙動を確認
 
 ### Phase 4: テスト整備
 
-- [ ] `DexieRewriteRuleRepository.bulkDelete` / `bulkCreate` のユニットテスト
-- [ ] `ImportRulesJsonInteractor.confirmImport()` のユニットテスト（バッチ操作版）
+- [ ] `DexieRewriteRuleRepository.replaceAll()` のユニットテスト
+- [ ] `ImportRulesJsonInteractor.confirmImport()` のユニットテスト（`replaceAll()` 版）
 - [ ] E2E テスト: 1000件規模のインポートが正常完了すること（パフォーマンステスト）
 
 ## 受け入れ条件

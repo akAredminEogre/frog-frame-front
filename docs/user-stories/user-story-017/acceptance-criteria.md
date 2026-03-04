@@ -9,9 +9,9 @@
 
 ## 技術要件
 
-- [ ] AC-5: `IRewriteRuleRepository` に `bulkDelete(ids: string[]): Promise<void>` が追加されている
-- [ ] AC-6: `IRewriteRuleRepository` に `bulkCreate(rules: RewriteRule[]): Promise<void>` が追加されている
-- [ ] AC-7: `DexieRewriteRuleRepository` が Dexie の `db.transaction()` を用いて原子性を保証している
-- [ ] AC-8: `ImportRulesJsonInteractor.confirmImport()` が逐次ループを廃止し `bulkDelete` + `bulkCreate` を呼び出している
+- [ ] AC-5: `IRewriteRuleRepository` に `replaceAll(rules: RewriteRule[]): Promise<void>` が追加されている
+- [ ] AC-6: `DexieRewriteRuleRepository.replaceAll()` が `db.transaction()` 内で全削除と一括追加をアトミックに実行している
+- [ ] AC-7: `ImportRulesJsonInteractor.confirmImport()` が `replaceAll()` を呼び出している
+- [ ] AC-8: 途中失敗時にトランザクション全体がロールバックされ、部分適用が発生しない
 - [ ] AC-9: 既存の全ユニットテストおよび E2E テストが通過する
 - [ ] AC-10: Clean Architecture の層構造が維持されている（Repository インターフェース経由のみ）
