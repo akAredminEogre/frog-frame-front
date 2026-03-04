@@ -113,40 +113,15 @@ alt isImporting = true
   deactivate View
 
 else isImporting = false
-  Hook -> FileSizeValidator : isExceedingMaxSize(file)
-  note right of FileSizeValidator
-    CA準拠: File.size APIはF&D層に閉じ込め
-    超過(>5MB)→エラーを返す
-  end note
-  FileSizeValidator --> Hook : true/false
-
-  alt サイズ超過
-    Hook -> Hook : setImportError(...)
-    Hook --> View : 早期リターン
-  else サイズ正常
-    Hook -> FileTextReader : readAsText(file)
-    note right of FileTextReader
-      CA準拠: FileReader APIはF&D層に閉じ込め
-      読み取り完了後にjsonStringを返す
-    end note
-    FileTextReader --> Hook : jsonString
-
-    Hook -> BlobCalc : calculateByteSize(jsonString)
-    note right of BlobCalc
-      CA準拠: Blob APIはF&D層に閉じ込め
-      バイト数をInputData経由でUseCase層に注入
-    end note
-    BlobCalc --> Hook : byteSize
-
   Hook -> Hook : setIsImporting(true)
 
-  Hook -> IController : importRulesJson(jsonString, byteSize)
+  Hook -> IController : importRulesJson(file)
   activate IController
 
-  IController -> Controller : importRulesJson(jsonString, byteSize)
+  IController -> Controller : importRulesJson(file)
   activate Controller
 
-  Controller -> IUseCase : importRulesJson(\n  new ImportRulesJsonInputData(\n    jsonString, byteSize))
+  Controller -> IUseCase : importRulesJson(\n  new ImportRulesJsonInputData(file))
   IUseCase -> Interactor : importRulesJson(inputData)
   activate Interactor
 
@@ -159,7 +134,7 @@ else isImporting = false
 
   alt バリデーション失敗
     note over Interactor
-      inputData.byteSize > 5MB or
+      new ImportFileSize(file.size) での5MB超過 or
       jsonParser.parse() 失敗 or スキーマ不正 or
       version不一致 or ルール0件 or 件数上限超過
     end note
@@ -294,7 +269,6 @@ else isImporting = false
     deactivate View
 
   end
-  end
 end
 
 == Phase 2: ユーザー確認 → インポート実行 ==
@@ -322,38 +296,23 @@ activate Interactor
 
 note over Interactor
   pendingRulesからインポートルールを取得
-  全既存ルール削除 → 新ルール追加
+  replaceAll() で原子的置換
 end note
 
-== 全既存ルール削除 ==
+== 全ルール原子的置換 ==
 
-loop 各既存ルールID
-  Interactor -> IRepository : delete(id)
-  activate IRepository
-  IRepository -> MessagingRepo : delete(id)
-  activate MessagingRepo
-  MessagingRepo --> IRepository : 完了
-  deactivate MessagingRepo
-  IRepository --> Interactor : 完了
-  deactivate IRepository
-end
-
-== 新ルール追加 ==
-
-loop 各インポートルール
-  Interactor -> IRepository : create(rule)
-  activate IRepository
-  IRepository -> MessagingRepo : create(rule)
-  activate MessagingRepo
-  note right of MessagingRepo
-    JSONにIDがあればそのIDを使用
-    IDがなければDB側で自動採番
-  end note
-  MessagingRepo --> IRepository : 完了
-  deactivate MessagingRepo
-  IRepository --> Interactor : 完了
-  deactivate IRepository
-end
+Interactor -> IRepository : replaceAll(pendingRules)
+activate IRepository
+IRepository -> MessagingRepo : replaceAll(pendingRules)
+activate MessagingRepo
+note right of MessagingRepo
+  トランザクション保護付き原子的置換
+  既存ルール全削除 → 新ルール全作成
+end note
+MessagingRepo --> IRepository : 完了
+deactivate MessagingRepo
+IRepository --> Interactor : 完了
+deactivate IRepository
 
 == 結果通知 ==
 
@@ -383,7 +342,7 @@ alt 成功
 
 else Storage操作失敗
   note over Interactor
-    delete() / create() でエラー発生
+    replaceAll() でエラー発生
   end note
   Interactor -> ErrorOutputData : new(\n  error,\n  'storage')
   ErrorOutputData --> Interactor : errorOutputData

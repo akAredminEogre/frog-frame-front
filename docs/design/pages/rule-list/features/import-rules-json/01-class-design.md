@@ -35,8 +35,8 @@
 │  │ ImportRulesJson          │    │ ImportRulesJson          │          │
 │  │ Controller               │    │ Presenter                │          │
 │  │                          │    │                          │          │
-│  │ - jsonString+byteSizeを  │    │ - PreviewDataを受け取る   │          │
-│  │   InputDataに変換し渡す   │    │ - OutputDataを受け取る    │          │
+│  │ - FileオブジェクトをInput │    │ - PreviewDataを受け取る   │          │
+│  │   Dataに変換し渡す        │    │ - OutputDataを受け取る    │          │
 │  │ (2メソッド:               │    │ - エラーを通知            │          │
 │  │   importRulesJson /      │    │ (3メソッド:               │          │
 │  │   confirmImport)         │    │   presentPreview /       │          │
@@ -45,7 +45,7 @@
 │  └────────────┬─────────────┘    └──────────▲───────────────┘          │
 └───────────────┼──────────────────────────────┼──────────────────────────┘
                 │ ImportRulesJsonInputData      │ OutputData / PreviewData
-                │ (jsonString + byteSize)
+                │ (file: File)
                 ▼                              │
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                   application-business-rules/ (第2層)                    │
@@ -53,14 +53,14 @@
 │  │ interactors/rule/ImportRulesJsonInteractor                       │   │
 │  │ ※ Rules Pageコンテキストで実行                                     │   │
 │  │                                                                  │   │
-│  │ Phase 1: importRulesJson(jsonString)                             │   │
+│  │ Phase 1: importRulesJson(inputData)                              │   │
+│  │   - new ImportFileSize(file.size) でサイズチェック                │   │
 │  │   - jsonParser.parse() → バリデーション                           │   │
 │  │   - getAll()でcurrentCount取得                                   │   │
 │  │   - PreviewData生成 → Presenter.presentPreview()                 │   │
 │  │                                                                  │   │
 │  │ Phase 2: confirmImport()                                         │   │
-│  │   - 全件 delete() × N回                                          │   │
-│  │   - 新ルール create() × M回                                      │   │
+│  │   - replaceAll(pendingRules) で原子的置換                         │   │
 │  │   - OutputData生成 → Presenter.present()                         │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────────────┘
@@ -92,7 +92,7 @@
 
 | クラス | 責務 |
 |--------|------|
-| ImportRulesJsonInputData | 入力DTO。jsonString / byteSize（Blob APIで計算済みのバイト数）を保持。frameworks-and-drivers層からCA準拠で注入 |
+| ImportRulesJsonInputData | 入力DTO。file（Fileオブジェクト）を保持。frameworks-and-drivers層からCA準拠で注入 |
 | ImportRulesJsonPreviewOutputData | プレビューDTO。currentRuleCount / importRuleCountを保持 |
 | ImportRulesJsonOutputData | 出力DTO。importedCount / previousCountを保持 |
 | ImportRulesJsonErrorOutputData | エラー出力DTO。error / errorType ('parse'\|'validation'\|'storage') / messageを保持 |
@@ -103,7 +103,7 @@
 | IFileSizeValidator | Service Port。ファイルサイズ検証のインターフェース。CA準拠でFile.size APIへの依存をF&D層に限定 |
 | IByteSizeCalculator | Service Port。バイトサイズ計算のインターフェース。CA準拠でBlob APIへの依存をF&D層に限定 |
 | ImportRulesJsonInteractor | UseCase実装。バリデーション→プレビュー通知→一括上書き→結果通知を実行 |
-| IRewriteRuleRepository | Gateway Interface。ルール永続化（既存、変更なし。getAll/delete/createを使用） |
+| IRewriteRuleRepository | Gateway Interface。ルール永続化（replaceAllメソッドを追加。getAll/replaceAllを使用） |
 
 ### interface-adapters (第3層)
 
@@ -126,7 +126,7 @@
 | ImportRulesJsonUI | Organism。ImportButton＋プレビュー確認ダイアログを統合 |
 | ToastNotification | UIコンポーネント。トースト通知（既存） |
 | RulesApp | View。ルール一覧画面。isImportingフラグでインポート中の重複実行を防止（既存、変更対象） |
-| useImportRulesJson | カスタムフック。useMemoによるController/FileTextReader/FileSizeValidator/BlobByteSizeCalculator初期化・isImporting/previewData状態管理・onPreview/onSuccess/onErrorコールバックを担う |
+| useImportRulesJson | カスタムフック。useMemoによるController初期化・isImporting/previewData状態管理・onPreview/onSuccess/onErrorコールバックを担う。ファイルはFileオブジェクトのままControllerへ渡す（FileSizeValidator/FileTextReader/BlobByteSizeCalculatorはInteractor層で使用） |
 | JsonParser | IJsonParserの実装。JSON.parseをラップしCA準拠でフレームワーク依存をこの層に閉じ込める（`frameworks-and-drivers/Json/JsonParser.ts`） |
 | FileTextReader | IFileTextReaderの実装。FileReader.readAsTextをラップしCA準拠でブラウザAPI依存をこの層に閉じ込める（`frameworks-and-drivers/File/FileTextReader.ts`） |
 | FileSizeValidator | IFileSizeValidatorの実装。File.sizeチェックをラップしCA準拠でブラウザAPI依存をこの層に閉じ込める（`frameworks-and-drivers/File/FileSizeValidator.ts`） |
@@ -138,7 +138,7 @@
 
 | コンポーネント | 責務 | 備考 |
 |---------------|------|------|
-| IRewriteRuleRepository | データ永続化のみ | 既存のgetAll/delete/createを使用。インターフェース変更なし |
+| IRewriteRuleRepository | データ永続化のみ | replaceAll（原子的置換）を使用。インターフェース変更あり（replaceAll追加） |
 | Interactor | ワークフロー調整 | バリデーション→プレビュー→全件削除→新規作成→Presenter通知 |
 | Presenter | View通知のみ | onPreview/onSuccess/showErrorInViewコールバック経由 |
 | View (RulesApp) | ボタン状態管理 | isImportingによる重複防止 |
@@ -152,17 +152,15 @@
 Phase 1: ファイル選択→バリデーション→プレビュー
   ImportButton クリック
     → <input type="file"> 発火
-    → FileReader.readAsText()
-    → useImportRulesJson: new Blob([jsonString]).size でbyteSize計算（CA準拠: Blob使用はここのみ）
-    → Controller.importRulesJson(jsonString, byteSize)
-    → Interactor: inputData.byteSize でサイズチェック + jsonParser.parse() + バリデーション + getAll()
+    → Controller.importRulesJson(file)
+    → Interactor: new ImportFileSize(file.size) でサイズチェック + FileReader.readAsText() + jsonParser.parse() + バリデーション + getAll()
     → Presenter.presentPreview(previewData)
     → Hook(onPreview): プレビューダイアログ表示
 
 Phase 2: ユーザー確認→実行
   [インポート実行] ボタンクリック
     → Controller.confirmImport()
-    → Interactor: delete() × N + create() × M
+    → Interactor: replaceAll(pendingRules) による原子的一括置換
     → Presenter.present(outputData)
     → Hook(onSuccess): 成功トースト + ルール一覧リフレッシュ
 ```
@@ -180,18 +178,16 @@ interface IImportRulesJsonPresenter {
 }
 ```
 
-### IRewriteRuleRepositoryインターフェース変更なし
+### IRewriteRuleRepositoryインターフェース変更あり（replaceAll追加）
 
-インポート処理は既存メソッドのループで実現する（バルクAPI追加不要）:
+インポート処理はreplaceAllによる原子的置換で実現する:
 
 ```text
-getAll()   → 全件ID取得（件数表示・削除対象特定）
-delete(id) × N回 → 全件削除
-create(rule) × M回 → 新ルール追加
+getAll()          → 全件取得（プレビュー用件数表示）
+replaceAll(rules) → 全件原子的置換（トランザクション保護付き）
 ```
 
-Chrome拡張のルール件数規模（数百件程度）では性能問題なし。
-影響範囲を最小化するためインターフェース変更を避ける。
+Chrome拡張のルール件数規模での一貫性を保証するため、delete/createループの代わりにトランザクション保護付きのreplaceAllを採用。
 
 ### エラーハンドリングの責務配置
 
@@ -225,7 +221,7 @@ Chrome拡張のルール件数規模（数百件程度）では性能問題な�
 | Controller | ExportRulesJsonController | ImportRulesJsonController |
 | Interactor | ExportRulesJsonInteractor | ImportRulesJsonInteractor |
 | Presenterコールバック | onSuccess, onError | onPreview, onSuccess, showErrorInView |
-| Repository操作 | getAll() | getAll(), delete(), create() |
+| Repository操作 | getAll() | getAll(), replaceAll() |
 
 ## クラス図
 
@@ -259,9 +255,7 @@ Chrome拡張のルール件数規模（数百件程度）では性能問題な�
 │  │ ImportRulesJson       │                                                   │
 │  │ InputData             │                                                   │
 │  │ ──────────────────── │                                                   │
-│  │ + jsonString: string  │                                                   │
-│  │ + byteSize: number    │                                                   │
-│  │ (Blob APIで計算済み)  │                                                   │
+│  │ + file: File          │                                                   │
 │  └──────────────────────┘                                                   │
 │                                                                             │
 │  ┌─────────────────────────────┐    ┌──────────────────────────────────┐   │
@@ -310,8 +304,7 @@ Chrome拡張のルール件数規模（数百件程度）では性能問題な�
 │  │ IRewriteRuleRepository      │  └──────────────────────────────────┘   │
 │  │ ─────────────────────────── │                                          │
 │  │ + getAll(): Promise<Rules>  │                                          │
-│  │ + create(rule): Promise     │                                          │
-│  │ + delete(id): Promise       │                                          │
+│  │ + replaceAll(rules):Promise │                                          │
 │  └─────────────────────────────┘                                          │
 └─────────────────────────────────────────────────────────────────────────────┘
 
@@ -323,19 +316,19 @@ Chrome拡張のルール件数規模（数百件程度）では性能問題な�
 │  │ IImportRulesJsonControllerFactory  │  │ IImportRulesJsonController │    │
 │  │ ────────────────────────────────── │  │ ────────────────────────── │    │
 │  │ + create(onPreview,               │  │ + importRulesJson(         │    │
-│  │   onSuccess,                      │  │   jsonString,              │    │
-│  │   onError): IImportRules...       │  │   byteSize): void          │    │
-│  └──────────▲─────────────────────────┘  │ + confirmImport(): void    │    │
-│             │ implements                 └──────────▲─────────────────┘    │
-│  ┌──────────┴─────────────────────────┐            │ implements           │
-│  │ ImportRulesJsonControllerFactory   │  ┌──────────┴─────────────────┐    │
-│  │ ────────────────────────────────── │  │ ImportRulesJsonController  │    │
-│  │ - repository: IRewriteRule...      │  │ ────────────────────────── │    │
-│  │ ────────────────────────────────── │  │ - useCase: IImportRules... │    │
-│  │ + create(onPreview,               │  │ ────────────────────────── │    │
-│  │   onSuccess,                      │  │ + importRulesJson(         │    │
-│  │   onError): IImportRules...       │  │   jsonString,              │    │
-│  └────────────────────────────────────┘  │   byteSize): void          │    │
+│  │   onSuccess,                      │  │   file: File): void        │    │
+│  │   onError): IImportRules...       │  │ + confirmImport(): void    │    │
+│  └──────────▲─────────────────────────┘  └──────────▲─────────────────┘    │
+│             │ implements                            │ implements           │
+│  ┌──────────┴─────────────────────────┐  ┌──────────┴─────────────────┐    │
+│  │ ImportRulesJsonControllerFactory   │  │ ImportRulesJsonController  │    │
+│  │ ────────────────────────────────── │  │ ────────────────────────── │    │
+│  │ - repository: IRewriteRule...      │  │ - useCase: IImportRules... │    │
+│  │ ────────────────────────────────── │  │ ────────────────────────── │    │
+│  │ + create(onPreview,               │  │ + importRulesJson(         │    │
+│  │   onSuccess,                      │  │   file: File): void        │    │
+│  │   onError): IImportRules...       │  │ + confirmImport(): void    │    │
+│  └────────────────────────────────────┘  └────────────────────────────┘    │
 │                                          │ + confirmImport(): void    │    │
 │                                          └────────────────────────────┘    │
 │                                                                             │
