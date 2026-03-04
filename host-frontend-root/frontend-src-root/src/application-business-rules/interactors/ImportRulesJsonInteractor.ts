@@ -22,13 +22,13 @@ import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { ImportFileSizeError } from 'src/enterprise-business-rules/errors/ImportFileSizeError';
 import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
-import { RulesJsonVersionSchema } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
+import { InvalidRulesJsonSchemaError, RulesJsonVersionSchema } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
 
 /**
  * ルールJSONインポートのInteractor
  * 2フェーズ制御フロー:
  *   Phase 1: importRulesJson() → ImportFileSize → fileTextReader → jsonParser.parse() → バリデーション → getAll() → presentPreview()
- *   Phase 2: confirmImport() → delete() × N → create() × M → present()
+ *   Phase 2: confirmImport() → replaceAll() → present()
  */
 export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
   private pendingRules: RewriteRules | null = null;
@@ -41,6 +41,8 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
   ) {}
 
   async importRulesJson(inputData: ImportRulesJsonInputData): Promise<void> {
+    // 新規インポート開始時に保留状態をリセット（pendingRules残留バグ防止）
+    this.pendingRules = null;
     const file = inputData.file;
     try {
       // ①ファイルサイズチェック（File.sizeによる高速チェック）
@@ -67,13 +69,8 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
 
       // L2/L3: スキーマ・バージョンチェック（enterprise-business-rules層に委譲）
       // parsed は parseAsObject によりオブジェクト・非null が保証済み
+      // RulesJsonVersionSchema コンストラクタがスキーマ不正時に InvalidRulesJsonSchemaError をスロー
       const versionSchema = new RulesJsonVersionSchema(parsed);
-      if (!versionSchema.isValidSchema()) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
-        );
-        return;
-      }
 
       // version はJSONスキーマの互換性を管理するバージョン識別子。
       // エクスポート機能も '1.0' を出力する（RulesJsonFileSchema参照）。
@@ -140,6 +137,12 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       if (error instanceof ImportFileSizeError) {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(error, 'validation')
+        );
+        return;
+      }
+      if (error instanceof InvalidRulesJsonSchemaError) {
+        this.presenter.presentError(
+          new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
         );
         return;
       }

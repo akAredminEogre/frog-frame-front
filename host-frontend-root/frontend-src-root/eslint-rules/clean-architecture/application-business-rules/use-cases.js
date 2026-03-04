@@ -13,8 +13,13 @@ const useCaseInputDataConfig = {
       },
       {
         // UseCaseメソッドのパラメータはInputDataで終わること
+        // catchバインディング変数（error, err, e, exception）は除外する
         selector: 'parameter',
         format: null,
+        filter: {
+          regex: '^(error|err|e|exception)$',
+          match: false,
+        },
         custom: {
           regex: 'InputData$|inputData$',
           match: true,

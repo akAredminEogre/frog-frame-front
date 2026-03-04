@@ -96,9 +96,10 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
 
     try {
       await importController.confirmImport();
-    } catch {
+    } catch (err) {
       // Interactor内で全例外をcatchしpresentError経由でonErrorコールバックに通知する設計。
       // catch節は予期しないエラーに対する防御的プログラミングとして、未処理のPromise拒否を防ぐ。
+      setImportError(err instanceof Error ? err.message : 'インポートの確定中に予期しないエラーが発生しました');
     } finally {
       setIsImporting(false);
     }

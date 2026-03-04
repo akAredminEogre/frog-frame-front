@@ -11,7 +11,7 @@ export class ImportRulesJsonErrorOutputData {
     public readonly error: unknown,
     public readonly errorType: 'parse' | 'validation' | 'storage'
   ) {
-    this._message = error instanceof Error ? error.message : String(error);
+    this._message = error instanceof Error ? error.message : 'インポート処理中に予期しないエラーが発生しました';
   }
 
   get message(): string {
