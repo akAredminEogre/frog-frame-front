@@ -16,8 +16,6 @@ import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRe
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
-import { BlobByteSizeCalculator } from 'src/frameworks-and-drivers/File/BlobByteSizeCalculator';
-import { FileSizeValidator } from 'src/frameworks-and-drivers/File/FileSizeValidator';
 import { FileTextReader } from 'src/frameworks-and-drivers/File/FileTextReader';
 import { JsonParser } from 'src/frameworks-and-drivers/Json/JsonParser';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
@@ -88,8 +86,6 @@ const deleteRuleControllerFactory = new DeleteRuleControllerFactory(
 // Import Rules JSON feature
 const jsonParser = new JsonParser();
 const fileTextReader = new FileTextReader();
-const fileSizeValidator = new FileSizeValidator();
-const blobByteSizeCalculator = new BlobByteSizeCalculator();
 const importRulesJsonControllerFactory = new ImportRulesJsonControllerFactory(
   rewriteRuleRepository,
   jsonParser,
@@ -141,8 +137,6 @@ awilixContainer.register({
   // Import Rules JSON feature
   importRulesJsonControllerFactory: asValue(importRulesJsonControllerFactory),
   fileTextReader: asValue(fileTextReader),
-  fileSizeValidator: asValue(fileSizeValidator),
-  blobByteSizeCalculator: asValue(blobByteSizeCalculator),
 
   // Export Rules JSON feature
   exportRulesJsonControllerFactory: asValue(exportRulesJsonControllerFactory)
@@ -185,8 +179,6 @@ interface ContainerCradle {
   // Import Rules JSON feature
   importRulesJsonControllerFactory: IImportRulesJsonControllerFactory;
   fileTextReader: FileTextReader;
-  fileSizeValidator: FileSizeValidator;
-  blobByteSizeCalculator: BlobByteSizeCalculator;
 
   // Export Rules JSON feature
   exportRulesJsonControllerFactory: IExportRulesJsonControllerFactory;
@@ -208,9 +200,7 @@ type InterfaceToken =
   | 'IExportRulesJsonControllerFactory'
   | 'ITabsGateway'
   | 'IRewriteRuleMessagingPort'
-  | 'IFileTextReader'
-  | 'IFileSizeValidator'
-  | 'IByteSizeCalculator';
+  | 'IFileTextReader';
 
 const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeTabsService': 'chromeTabsService',
@@ -227,9 +217,7 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IExportRulesJsonControllerFactory': 'exportRulesJsonControllerFactory',
   'ITabsGateway': 'chromeTabsGateway',
   'IRewriteRuleMessagingPort': 'rewriteRuleMessagingService',
-  'IFileTextReader': 'fileTextReader',
-  'IFileSizeValidator': 'fileSizeValidator',
-  'IByteSizeCalculator': 'blobByteSizeCalculator'
+  'IFileTextReader': 'fileTextReader'
 };
 
 // Class to key mappings for class-based resolution
