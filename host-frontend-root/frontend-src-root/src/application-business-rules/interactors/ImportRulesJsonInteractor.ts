@@ -38,8 +38,8 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       // ①ファイルサイズチェック（File.sizeによる高速チェック）
       // EBR準拠: ImportFileSize VO（enterprise-business-rules）を直接使用
       // ImportFileSizeErrorはEBR層で保有し、メッセージ詳細をInteractorに知らせない設計
-      const importFileSize = new ImportFileSize(file.size);
-      importFileSize.validateOrThrow();
+      // コンストラクタがサイズ超過時にImportFileSizeErrorをスロー
+      new ImportFileSize(file.size);
 
       // ②jsonString取得（サイズチェック通過後のみ読み取り）
       // CA準拠: IFileTextReaderポート経由でFileReader APIへのアクセスを抽象化
