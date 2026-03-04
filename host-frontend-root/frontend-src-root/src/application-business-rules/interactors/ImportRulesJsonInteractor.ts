@@ -3,6 +3,16 @@ import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/d
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import { ImportRulesJsonPreviewOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonPreviewOutputData';
 import { RulesJsonRuleEntryRaw } from 'src/application-business-rules/dto/RulesJsonSchema';
+import {
+  EmptyRulesImportError,
+  InvalidJsonImportError,
+  InvalidSchemaImportError,
+  MAX_RULE_COUNT,
+  MissingFieldImportError,
+  RuleCountExceededImportError,
+  StorageImportError,
+  UnsupportedVersionImportError,
+} from 'src/application-business-rules/errors/ImportRulesJsonErrors';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IImportRulesJsonPresenter } from 'src/application-business-rules/ports/output/IImportRulesJsonPresenter';
@@ -13,8 +23,6 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 import { ImportFileSizeError } from 'src/enterprise-business-rules/errors/ImportFileSizeError';
 import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
 import { RulesJsonVersionSchema } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
-
-const MAX_RULE_COUNT = 1000;
 
 /**
  * ルールJSONインポートのInteractor
@@ -37,7 +45,6 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
     try {
       // ①ファイルサイズチェック（File.sizeによる高速チェック）
       // EBR準拠: ImportFileSize VO（enterprise-business-rules）を直接使用
-      // ImportFileSizeErrorはEBR層で保有し、メッセージ詳細をInteractorに知らせない設計
       // コンストラクタがサイズ超過時にImportFileSizeErrorをスロー
       new ImportFileSize(file.size);
 
@@ -53,11 +60,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         parsed = this.jsonParser.parseAsObject(jsonString);
       } catch {
         this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(
-            new Error('invalid JSON'),
-            'parse',
-            '不正なJSONファイルです'
-          )
+          new ImportRulesJsonErrorOutputData(new InvalidJsonImportError(), 'parse')
         );
         return;
       }
@@ -67,11 +70,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       const versionSchema = new RulesJsonVersionSchema(parsed);
       if (!versionSchema.isValidSchema()) {
         this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(
-            new Error('invalid schema'),
-            'validation',
-            'JSONスキーマが不正です（versionとrulesが必要です）'
-          )
+          new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
         );
         return;
       }
@@ -81,11 +80,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       // フィールド追加・削除などスキーマ変更時はバージョンを上げ、ここに分岐を追加する。
       if (!versionSchema.isSupportedVersion()) {
         this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(
-            new Error('unsupported version'),
-            'validation',
-            `未対応のバージョンです: ${String(parsed.version)}`
-          )
+          new ImportRulesJsonErrorOutputData(new UnsupportedVersionImportError(parsed.version), 'validation')
         );
         return;
       }
@@ -95,11 +90,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       // L5: ルール件数0件チェック
       if (data.rules.length === 0) {
         this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(
-            new Error('no rules'),
-            'validation',
-            'インポートするルールがありません'
-          )
+          new ImportRulesJsonErrorOutputData(new EmptyRulesImportError(), 'validation')
         );
         return;
       }
@@ -107,11 +98,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       // ルール件数上限チェック
       if (data.rules.length > MAX_RULE_COUNT) {
         this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(
-            new Error('rule count exceeded'),
-            'validation',
-            `ルール件数が上限（${MAX_RULE_COUNT}件）を超えています`
-          )
+          new ImportRulesJsonErrorOutputData(new RuleCountExceededImportError(), 'validation')
         );
         return;
       }
@@ -122,11 +109,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         const ruleData = data.rules[i];
         if (ruleData.oldString === null || ruleData.oldString === undefined || ruleData.oldString === '') {
           this.presenter.presentError(
-            new ImportRulesJsonErrorOutputData(
-              new Error('missing field'),
-              'validation',
-              `ルール #${i + 1}: oldStringが欠落または空白です`
-            )
+            new ImportRulesJsonErrorOutputData(new MissingFieldImportError(i + 1), 'validation')
           );
           return;
         }
@@ -152,20 +135,16 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       );
     } catch (error) {
       this.pendingRules = null;
-      // ImportFileSizeError はEBR層で詳細メッセージを保有しているため、
-      // Interactor は message を直接使用（詳細を知らない設計）
+      // ImportFileSizeError はEBR層で詳細メッセージを保有するため、
+      // Interactor はerrorオブジェクトをそのまま渡す（メッセージ詳細を知らない設計）
       if (error instanceof ImportFileSizeError) {
         this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(error, 'validation', error.message)
+          new ImportRulesJsonErrorOutputData(error, 'validation')
         );
         return;
       }
       this.presenter.presentError(
-        new ImportRulesJsonErrorOutputData(
-          error,
-          'storage',
-          `インポート処理中にエラーが発生しました: ${error instanceof Error ? error.message : String(error)}`
-        )
+        new ImportRulesJsonErrorOutputData(new StorageImportError(error), 'storage')
       );
     }
   }
@@ -191,11 +170,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       );
     } catch (error) {
       this.presenter.presentError(
-        new ImportRulesJsonErrorOutputData(
-          error,
-          'storage',
-          `インポート処理中にエラーが発生しました: ${error instanceof Error ? error.message : String(error)}`
-        )
+        new ImportRulesJsonErrorOutputData(new StorageImportError(error), 'storage')
       );
     }
   }
