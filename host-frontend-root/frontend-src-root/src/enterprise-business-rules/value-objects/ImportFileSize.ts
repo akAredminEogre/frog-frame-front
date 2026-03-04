@@ -10,23 +10,13 @@ export const MAX_IMPORT_FILE_SIZE_BYTES = MAX_IMPORT_FILE_SIZE_MB * 1024 * 1024;
  */
 export class ImportFileSize {
   constructor(private readonly byteSize: number) {
-    if (this.byteSize > MAX_IMPORT_FILE_SIZE_BYTES) {
+    if (this.isExceedingLimit()) {
       throw new ImportFileSizeError(this.byteSize);
     }
   }
 
   isExceedingLimit(): boolean {
     return this.byteSize > MAX_IMPORT_FILE_SIZE_BYTES;
-  }
-
-  /**
-   * ファイルサイズがエラーメッセージを持つ例外を発生させるバリデーション
-   * @throws ImportFileSizeError ファイルサイズが上限を超えている場合
-   */
-  validateOrThrow(): void {
-    if (this.isExceedingLimit()) {
-      throw new ImportFileSizeError(this.byteSize);
-    }
   }
 
 }
