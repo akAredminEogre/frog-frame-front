@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { IImportRulesJsonControllerFactory } from 'src/interface-adapters/factories/IImportRulesJsonControllerFactory';
 
@@ -52,15 +53,20 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
     onRulesChangedRef.current = onRulesChanged;
   }, [onRulesChanged]);
 
-  const importController = useMemo(() => {
+  // validatedRules を React 外で保持（再レンダリング不要）
+  const pendingRulesRef = useRef<RewriteRule[] | null>(null);
+
+  const { previewController, confirmController } = useMemo(() => {
     const factory = container.resolve<IImportRulesJsonControllerFactory>('IImportRulesJsonControllerFactory');
     return factory.create(
-      (currentCount: number, importCount: number) => {
-        // onPreview: プレビューダイアログを表示
+      (currentCount: number, importCount: number, validatedRules: RewriteRule[]) => {
+        // onPreview: プレビューダイアログを表示・validatedRulesをRefで保持
+        pendingRulesRef.current = validatedRules;
         setPreviewData({ currentCount, importCount });
       },
       (formattedMessage: string) => {
         // onSuccess: 成功トースト表示 + ルール一覧リフレッシュ
+        pendingRulesRef.current = null;
         setPreviewData(null);
         setIsImporting(false);
         setImportSuccess(formattedMessage);
@@ -68,6 +74,7 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
       },
       (formattedMessage: string) => {
         // onError: エラートースト表示
+        pendingRulesRef.current = null;
         setPreviewData(null);
         setIsImporting(false);
         setImportError(formattedMessage);
@@ -77,25 +84,23 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
 
   const handleFileSelect = useCallback(async (file: File) => {
     if (!file) return;
+    pendingRulesRef.current = null;
     setImportError(null);
     setImportSuccess(null);
 
     try {
-      // file: File をそのままControllerに渡す（CA準拠: サイズチェック・バリデーションはController以降で実施）
-      await importController.importRulesJson(file);
+      await previewController.previewRulesJson(file);
     } catch (err) {
       setImportError(err instanceof Error ? err.message : 'ファイルの読み取りに失敗しました');
     }
-  }, [importController]);
+  }, [previewController]);
 
   const confirmImport = useCallback(async () => {
-    if (isImporting) {
-      return;
-    }
+    if (isImporting || !pendingRulesRef.current) return;
     setIsImporting(true);
 
     try {
-      await importController.confirmImport();
+      await confirmController.confirmImport(pendingRulesRef.current);
     } catch (err) {
       // Interactor内で全例外をcatchしpresentError経由でonErrorコールバックに通知する設計。
       // catch節は予期しないエラーに対する防御的プログラミングとして、未処理のPromise拒否を防ぐ。
@@ -103,9 +108,10 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
     } finally {
       setIsImporting(false);
     }
-  }, [isImporting, importController]);
+  }, [isImporting, confirmController]);
 
   const cancelImport = useCallback(() => {
+    pendingRulesRef.current = null;
     setPreviewData(null);
   }, []);
 
