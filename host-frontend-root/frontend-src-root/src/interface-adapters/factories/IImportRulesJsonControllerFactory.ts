@@ -1,10 +1,11 @@
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { IConfirmImportController } from 'src/interface-adapters/controllers/IConfirmImportController';
 import { IPreviewRulesJsonController } from 'src/interface-adapters/controllers/IPreviewRulesJsonController';
 
-export type PreviewCallback = (currentCount: number, importCount: number, validatedRules: RewriteRule[]) => void;
-/** @deprecated タスクD削除予定。IImportRulesJsonPresenter（旧）との後方互換用。 */
-export type ImportPreviewCallback = (currentCount: number, importCount: number) => void;
+/**
+ * Phase1完了時のUI通知コールバック。
+ * validatedRulesはfactory内でconfirmInteractorに保持されるため、呼び出し元には渡さない。
+ */
+export type PreviewCallback = (currentCount: number, importCount: number) => void;
 export type ImportSuccessCallback = (formattedMessage: string) => void;
 export type ImportErrorCallback = (formattedMessage: string) => void;
 

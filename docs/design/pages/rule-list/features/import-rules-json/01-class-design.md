@@ -86,7 +86,7 @@
 | クラス | 責務 |
 |--------|------|
 | RewriteRule | ルールエンティティ。インポート対象のIDを含む全属性を保持（既存、変更なし） |
-| ImportFileSize | ファイルサイズのValue Object。`MAX_IMPORT_FILE_SIZE_BYTES`（5MB）を保持し、`isExceedingLimit()`でサイズ超過を判定する。ファイルサイズ上限はドメインルールのためEBR層に配置 |
+| ImportFileSize | ファイルサイズのValue Object。`MAX_IMPORT_FILE_SIZE_BYTES`（5MB）を保持し、`validateOrThrow()`でサイズ上限を検証する。違反時は `ImportFileSizeError` を送出する。ファイルサイズ上限はドメインルールのためEBR層に配置 |
 
 ### application-business-rules (第2層)
 
@@ -329,8 +329,6 @@ Chrome拡張のルール件数規模での一貫性を保証するため、delet
 │  │   onSuccess,                      │  │   file: File): void        │    │
 │  │   onError): IImportRules...       │  │ + confirmImport(): void    │    │
 │  └────────────────────────────────────┘  └────────────────────────────┘    │
-│                                          │ + confirmImport(): void    │    │
-│                                          └────────────────────────────┘    │
 │                                                                             │
 │                                          ┌────────────────────────────┐    │
 │                                          │ ImportRulesJsonPresenter   │    │

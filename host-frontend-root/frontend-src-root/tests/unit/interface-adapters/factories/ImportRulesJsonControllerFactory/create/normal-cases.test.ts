@@ -79,30 +79,41 @@ describe('ImportRulesJsonControllerFactory.create - 正常系', () => {
     await previewController.previewRulesJson(file);
 
     expect(onPreview).toHaveBeenCalledTimes(1);
-    expect(onPreview).toHaveBeenCalledWith(0, 1, expect.any(Array));
+    expect(onPreview).toHaveBeenCalledWith(0, 1);
     expect(onSuccess).not.toHaveBeenCalled();
     expect(onError).not.toHaveBeenCalled();
   });
 
   it('confirmController経由で確定するとonSuccessが呼ばれる', async () => {
-    const existingRule = new RewriteRule(10, 'existing', '', '', false, true);
-    (mockRepository.getAll as ReturnType<typeof vi.fn>).mockResolvedValue(
-      new RewriteRules({ '10': existingRule })
+    // Phase1: プレビューを実行してpendingRulesをconfirmInteractorにセット
+    const jsonData = {
+      version: '1.0',
+      rules: [{ id: 1, oldString: 'foo', newString: 'bar', urlPattern: '', isRegex: false, isActive: true }],
+    };
+    (mockFileTextReader.readAsText as ReturnType<typeof vi.fn>).mockResolvedValue(
+      JSON.stringify(jsonData)
     );
+    (mockJsonParser.parseAsObject as ReturnType<typeof vi.fn>).mockReturnValue(jsonData);
+    const existingRule = new RewriteRule(10, 'existing', '', '', false, true);
+    (mockRepository.getAll as ReturnType<typeof vi.fn>)
+      .mockResolvedValueOnce(new RewriteRules({}))         // Phase1: 現在ルール0件
+      .mockResolvedValueOnce(new RewriteRules({ '10': existingRule })); // Phase2: 既存1件
 
     const factory = new ImportRulesJsonControllerFactory(
       mockRepository,
       mockJsonParser,
       mockFileTextReader
     );
-    const { confirmController } = factory.create(onPreview, onSuccess, onError);
+    const { previewController, confirmController } = factory.create(onPreview, onSuccess, onError);
 
-    const validatedRules = [new RewriteRule(1, 'foo', 'bar', '', false, true)];
-    await confirmController.confirmImport(validatedRules);
+    const file = new File([''], 'rules.json', { type: 'application/json' });
+    await previewController.previewRulesJson(file);
+
+    // Phase2: ゼロ引数で確定（pendingRulesはconfirmInteractorが保持）
+    await confirmController.confirmImport();
 
     expect(onSuccess).toHaveBeenCalledTimes(1);
     expect(onSuccess).toHaveBeenCalledWith(expect.stringContaining('1'));
-    expect(onPreview).not.toHaveBeenCalled();
     expect(onError).not.toHaveBeenCalled();
   });
 });

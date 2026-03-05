@@ -3,7 +3,7 @@
  * 1. fileをPreviewRulesJsonInputDataに包んでUseCaseが呼ばれる
  */
 import { createMockPreviewRulesJsonUseCase } from 'tests/unit/interface-adapters/controllers/PreviewRulesJsonController/mocks/createMockPreviewRulesJsonUseCase';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PreviewRulesJsonInputData } from 'src/application-business-rules/dto/input/PreviewRulesJsonInputData';
 import { IPreviewRulesJsonUseCase } from 'src/application-business-rules/ports/input/IPreviewRulesJsonUseCase';
@@ -15,6 +15,10 @@ describe('PreviewRulesJsonController.previewRulesJson - 正常系', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseCase = createMockPreviewRulesJsonUseCase();
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
   });
 
   const testCases = [

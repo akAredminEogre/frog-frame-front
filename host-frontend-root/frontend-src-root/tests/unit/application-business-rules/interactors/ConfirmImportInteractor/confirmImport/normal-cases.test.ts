@@ -7,7 +7,6 @@ import { createMockRewriteRuleRepository as createMockRepository } from 'tests/u
 import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/ConfirmImportInteractor/mocks/createMockPresenter';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ConfirmImportInputData } from 'src/application-business-rules/dto/input/ConfirmImportInputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import { ConfirmImportInteractor } from 'src/application-business-rules/interactors/ConfirmImportInteractor';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
@@ -38,8 +37,9 @@ describe('ConfirmImportInteractor.confirmImport - 正常系', () => {
 
     const validatedRules = [new RewriteRule(1, 'foo', '', '', false, true)];
     const interactor = new ConfirmImportInteractor(mockRepository, mockPresenter);
+    interactor.setPendingRules(validatedRules);
 
-    await interactor.confirmImport(new ConfirmImportInputData(validatedRules));
+    await interactor.confirmImport();
 
     expect(mockRepository.replaceAll).toHaveBeenCalledTimes(1);
     expect(mockRepository.replaceAll).toHaveBeenCalledWith(validatedRules);
@@ -62,8 +62,9 @@ describe('ConfirmImportInteractor.confirmImport - 正常系', () => {
 
     const validatedRules = [new RewriteRule(10, 'x', '', '', false, true), new RewriteRule(11, 'y', '', '', false, true), new RewriteRule(12, 'z', '', '', false, true)];
     const interactor = new ConfirmImportInteractor(mockRepository, mockPresenter);
+    interactor.setPendingRules(validatedRules);
 
-    await interactor.confirmImport(new ConfirmImportInputData(validatedRules));
+    await interactor.confirmImport();
 
     expect(mockRepository.replaceAll).toHaveBeenCalledTimes(1);
     const outputData = (mockPresenter.present as ReturnType<typeof vi.fn>).mock

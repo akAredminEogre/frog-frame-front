@@ -35,7 +35,19 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
     previewController: IPreviewRulesJsonController;
     confirmController: IConfirmImportController;
   } {
-    const previewPresenter = new PreviewRulesJsonPresenter(onPreview, onError);
+    // confirmInteractorを先に生成し、Phase1完了時にpendingRulesをセットできるよう配線
+    const confirmPresenter = new ConfirmImportPresenter(onSuccess, onError);
+    const confirmInteractor = new ConfirmImportInteractor(this.repository, confirmPresenter);
+    const confirmController = new ConfirmImportController(confirmInteractor);
+
+    const previewPresenter = new PreviewRulesJsonPresenter(
+      (currentCount, importCount, validatedRules) => {
+        // Phase1完了: pendingRulesをconfirmInteractorに保持させてからUI通知
+        confirmInteractor.setPendingRules(validatedRules);
+        onPreview(currentCount, importCount);
+      },
+      onError
+    );
     const previewInteractor = new PreviewRulesJsonInteractor(
       this.repository,
       previewPresenter,
@@ -43,10 +55,6 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
       this.fileTextReader
     );
     const previewController = new PreviewRulesJsonController(previewInteractor);
-
-    const confirmPresenter = new ConfirmImportPresenter(onSuccess, onError);
-    const confirmInteractor = new ConfirmImportInteractor(this.repository, confirmPresenter);
-    const confirmController = new ConfirmImportController(confirmInteractor);
 
     return { previewController, confirmController };
   }

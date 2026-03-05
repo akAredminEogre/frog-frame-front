@@ -1,13 +1,11 @@
 /**
  * ConfirmImportController.confirmImport - 正常系テスト
- * 1. validatedRulesをConfirmImportInputDataに包んでUseCaseが呼ばれる
+ * 1. ゼロ引数でUseCaseのconfirmImportが呼ばれる（pendingRulesはInteractorが保持）
  */
 import { createMockConfirmImportUseCase } from 'tests/unit/interface-adapters/controllers/ConfirmImportController/mocks/createMockConfirmImportUseCase';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ConfirmImportInputData } from 'src/application-business-rules/dto/input/ConfirmImportInputData';
 import { IConfirmImportUseCase } from 'src/application-business-rules/ports/input/IConfirmImportUseCase';
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { ConfirmImportController } from 'src/interface-adapters/controllers/ConfirmImportController';
 
 describe('ConfirmImportController.confirmImport - 正常系', () => {
@@ -18,29 +16,16 @@ describe('ConfirmImportController.confirmImport - 正常系', () => {
     mockUseCase = createMockConfirmImportUseCase();
   });
 
-  const testCases = [
-    {
-      description: 'validatedRulesをConfirmImportInputDataに包んでUseCaseが呼ばれる',
-      validatedRules: [
-        new RewriteRule(1, 'foo', 'bar', '', false, true),
-        new RewriteRule(2, 'baz', 'qux', '', false, true),
-      ],
-    },
-  ];
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
 
-  testCases.forEach((testCase) => {
-    it(testCase.description, async () => {
-      const controller = new ConfirmImportController(mockUseCase);
+  it('ゼロ引数でUseCaseのconfirmImportが呼ばれる', async () => {
+    const controller = new ConfirmImportController(mockUseCase);
 
-      await controller.confirmImport(testCase.validatedRules);
+    await controller.confirmImport();
 
-      expect(mockUseCase.confirmImport).toHaveBeenCalledTimes(1);
-      expect(mockUseCase.confirmImport).toHaveBeenCalledWith(
-        expect.any(ConfirmImportInputData)
-      );
-      const calledInputData = (mockUseCase.confirmImport as ReturnType<typeof vi.fn>)
-        .mock.calls[0][0] as ConfirmImportInputData;
-      expect(calledInputData.validatedRules).toBe(testCase.validatedRules);
-    });
+    expect(mockUseCase.confirmImport).toHaveBeenCalledTimes(1);
+    expect(mockUseCase.confirmImport).toHaveBeenCalledWith();
   });
 });

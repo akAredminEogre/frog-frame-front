@@ -7,7 +7,6 @@ import { createMockRewriteRuleRepository as createMockRepository } from 'tests/u
 import { createMockPresenter } from 'tests/unit/application-business-rules/interactors/ConfirmImportInteractor/mocks/createMockPresenter';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ConfirmImportInputData } from 'src/application-business-rules/dto/input/ConfirmImportInputData';
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ConfirmImportInteractor } from 'src/application-business-rules/interactors/ConfirmImportInteractor';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
@@ -36,8 +35,9 @@ describe('ConfirmImportInteractor.confirmImport - 異常系', () => {
 
     const validatedRules = [new RewriteRule(1, 'foo', '', '', false, true)];
     const interactor = new ConfirmImportInteractor(mockRepository, mockPresenter);
+    interactor.setPendingRules(validatedRules);
 
-    await interactor.confirmImport(new ConfirmImportInputData(validatedRules));
+    await interactor.confirmImport();
 
     expect(mockPresenter.presentError).toHaveBeenCalledTimes(1);
     expect(mockPresenter.presentError).toHaveBeenCalledWith(
@@ -57,8 +57,9 @@ describe('ConfirmImportInteractor.confirmImport - 異常系', () => {
 
     const validatedRules = [new RewriteRule(1, 'foo', '', '', false, true), new RewriteRule(2, 'bar', '', '', false, true)];
     const interactor = new ConfirmImportInteractor(mockRepository, mockPresenter);
+    interactor.setPendingRules(validatedRules);
 
-    await interactor.confirmImport(new ConfirmImportInputData(validatedRules));
+    await interactor.confirmImport();
 
     expect(mockPresenter.presentError).toHaveBeenCalledTimes(1);
     const errorData = (mockPresenter.presentError as ReturnType<typeof vi.fn>).mock
