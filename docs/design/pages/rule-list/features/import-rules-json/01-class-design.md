@@ -126,7 +126,7 @@
 | ImportRulesJsonUI | Organism。ImportButton＋プレビュー確認ダイアログを統合 |
 | ToastNotification | UIコンポーネント。トースト通知（既存） |
 | RulesApp | View。ルール一覧画面。isImportingフラグでインポート中の重複実行を防止（既存、変更対象） |
-| useImportRulesJson | カスタムフック。useMemoによるController初期化・isImporting/previewData状態管理・onPreview/onSuccess/onErrorコールバックを担う。ファイルはFileオブジェクトのままControllerへ渡す（FileSizeValidator/FileTextReader/BlobByteSizeCalculatorはInteractor層で使用） |
+| useImportRulesJson | カスタムフック。useMemoによるController初期化・isImporting/previewData状態管理・onPreview/onSuccess/showErrorInViewコールバックを担う。ファイルはFileオブジェクトのままControllerへ渡す（FileSizeValidator/FileTextReader/BlobByteSizeCalculatorはInteractor層で使用） |
 | JsonParser | IJsonParserの実装。JSON.parseをラップしCA準拠でフレームワーク依存をこの層に閉じ込める（`frameworks-and-drivers/Json/JsonParser.ts`） |
 | FileTextReader | IFileTextReaderの実装。FileReader.readAsTextをラップしCA準拠でブラウザAPI依存をこの層に閉じ込める（`frameworks-and-drivers/File/FileTextReader.ts`） |
 | FileSizeValidator | IFileSizeValidatorの実装。File.sizeチェックをラップしCA準拠でブラウザAPI依存をこの層に閉じ込める（`frameworks-and-drivers/File/FileSizeValidator.ts`） |
