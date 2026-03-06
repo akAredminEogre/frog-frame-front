@@ -23,7 +23,7 @@ export class ConfirmImportInteractor implements IConfirmImportUseCase {
    * Phase1のプレビュー完了後に呼び出し、確定対象ルールを保持する
    */
   setPendingRules(inputData: RewriteRule[]): void {
-    this.pendingRules = inputData;
+    this.pendingRules = [...inputData];
   }
 
   async confirmImport(): Promise<void> {
@@ -43,6 +43,7 @@ export class ConfirmImportInteractor implements IConfirmImportUseCase {
       return;
     }
 
+    this.pendingRules = null;
     this.presenter.present(
       new ImportRulesJsonOutputData(rulesToImport.length, previousCount)
     );
