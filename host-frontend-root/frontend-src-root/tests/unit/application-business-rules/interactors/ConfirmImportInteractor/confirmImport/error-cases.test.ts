@@ -46,6 +46,7 @@ describe('ConfirmImportInteractor.confirmImport - 異常系', () => {
     const errorData = (mockPresenter.presentError as ReturnType<typeof vi.fn>).mock
       .calls[0][0] as ImportRulesJsonErrorOutputData;
     expect(errorData.errorType).toBe('storage');
+    expect(mockRepository.replaceAll).not.toHaveBeenCalled();
     expect(mockPresenter.present).not.toHaveBeenCalled();
   });
 
