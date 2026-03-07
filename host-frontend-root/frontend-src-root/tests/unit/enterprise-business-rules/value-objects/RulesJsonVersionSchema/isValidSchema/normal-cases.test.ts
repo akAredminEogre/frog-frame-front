@@ -19,6 +19,10 @@ describe('RulesJsonVersionSchema.isValidSchema', () => {
         description: '余分なフィールドがあってもtrueを返す（exportedAt等）',
         input: { version: '1.0', exportedAt: '2026-01-01T00:00:00+09:00', rules: [] },
       },
+      {
+        description: 'versionが空文字列でもスキーマ構造としては有効（バージョン互換性はisSupportedVersionで検証）',
+        input: { version: '', rules: [] },
+      },
     ];
 
     validCases.forEach((testCase) => {

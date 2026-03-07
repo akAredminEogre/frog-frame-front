@@ -40,7 +40,7 @@ export class RulesJsonVersionSchema {
 
   /**
    * バージョン互換性チェック（サポート対象バージョンかどうか）
-   * 事前に isValidSchema() が true であることを確認してから呼び出すこと
+   * コンストラクタでスキーマ検証済みのため、常に安全に呼び出し可能
    */
   isSupportedVersion(): boolean {
     return this.data.version === SUPPORTED_RULES_JSON_VERSION;
