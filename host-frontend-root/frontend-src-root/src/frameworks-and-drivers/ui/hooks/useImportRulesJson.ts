@@ -79,10 +79,12 @@ export const useImportRulesJson = (onRulesChanged: () => void): UseImportRulesJs
     if (!file) return;
     setImportError(null);
     setImportSuccess(null);
+    setPreviewData(null);
 
     try {
       await previewController.previewRulesJson(file);
     } catch (err) {
+      setPreviewData(null);
       setImportError(err instanceof Error ? err.message : 'ファイルの読み取りに失敗しました');
     }
   }, [previewController]);
