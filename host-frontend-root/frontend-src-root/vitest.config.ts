@@ -18,6 +18,11 @@ export default defineConfig({
     // tests/ ディレクトリのVitestテストファイル（.ts, .tsx形式）を対象とする
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
     // Playwrightテストファイルとnode_modulesを明示的に除外
-    exclude: ['**/*.spec.ts', 'e2e/**/*', 'node_modules/**/*']
+    exclude: ['**/*.spec.ts', 'e2e/**/*', 'node_modules/**/*'],
+    poolOptions: {
+      forks: {
+        maxForks: 2
+      }
+    }
   },
 });
