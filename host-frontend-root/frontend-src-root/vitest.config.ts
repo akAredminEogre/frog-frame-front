@@ -3,7 +3,9 @@ import { WxtVitest } from 'wxt/testing';
 import path from 'path';
 
 // WSL2環境の検出（WSL_DISTRO_NAMEはWSL2でのみ設定される）
-const isWSL2 = process.env.WSL_DISTRO_NAME !== undefined;
+const isWSL2 =
+  process.env.CI === undefined &&
+  process.env.WSL_DISTRO_NAME !== undefined;
 
 export default defineConfig({
   plugins: [WxtVitest()],
