@@ -25,7 +25,8 @@ import { InvalidRulesJsonSchemaError, RulesJsonVersionSchema } from 'src/enterpr
 /**
  * ルールJSONプレビューのInteractor（ステートレス）
  * Phase 1のみを担当: ファイル読み取り → バリデーション → presentPreview()
- * pendingRules を保持しない設計（React 側の useRef で管理）
+ * pendingRules は ConfirmImportInteractor が保持する設計
+ * （プレビュー確定後に Factory 経由で ConfirmImportInteractor.setPendingRules() をコール）
  */
 export class PreviewRulesJsonInteractor implements IPreviewRulesJsonUseCase {
   constructor(
@@ -45,13 +46,22 @@ export class PreviewRulesJsonInteractor implements IPreviewRulesJsonUseCase {
       const jsonString = await this.fileTextReader.readAsText(file);
 
       // L1: JSON構文チェック + Objectチェック
+      // SyntaxError: 不正なJSON → parseエラー（「不正なJSONファイルです」）
+      // TypeError: トップレベルが配列/null/プリミティブ → validationエラー（スキーマ不正）
       let parsed: Record<string, unknown>;
       try {
         parsed = this.jsonParser.parseAsObject(jsonString);
-      } catch {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(new InvalidJsonImportError(), 'parse')
-        );
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          this.presenter.presentError(
+            new ImportRulesJsonErrorOutputData(new InvalidJsonImportError(), 'parse')
+          );
+        } else {
+          // TypeError: 解析結果がオブジェクト型でない（null・配列・プリミティブ値）
+          this.presenter.presentError(
+            new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
+          );
+        }
         return;
       }
 

@@ -49,6 +49,29 @@ describe('PreviewRulesJsonInteractor.previewRulesJson - 異常系', () => {
 
   const makeFile = (): File => new File([''], 'rules.json', { type: 'application/json' });
 
+  it('JSONパース成功後にトップレベルが配列/null/プリミティブでpresentErrorが呼ばれる（validationエラー種別）', async () => {
+    const file = makeFile();
+    (mockFileTextReader.readAsText as ReturnType<typeof vi.fn>).mockResolvedValue('[1,2,3]');
+    (mockJsonParser.parseAsObject as ReturnType<typeof vi.fn>).mockImplementation(() => {
+      throw new TypeError('Expected a JSON object, but got: array');
+    });
+
+    const interactor = new PreviewRulesJsonInteractor(
+      mockRepository,
+      mockPresenter,
+      mockJsonParser,
+      mockFileTextReader
+    );
+
+    await interactor.previewRulesJson(new PreviewRulesJsonInputData(file));
+
+    expect(mockPresenter.presentError).toHaveBeenCalledTimes(1);
+    const errorData = (mockPresenter.presentError as ReturnType<typeof vi.fn>).mock
+      .calls[0][0] as ImportRulesJsonErrorOutputData;
+    expect(errorData.errorType).toBe('validation');
+    expect(mockPresenter.presentPreview).not.toHaveBeenCalled();
+  });
+
   it('JSONパースエラーでpresentErrorが呼ばれる（parseエラー種別）', async () => {
     const file = makeFile();
     (mockFileTextReader.readAsText as ReturnType<typeof vi.fn>).mockResolvedValue('invalid json');

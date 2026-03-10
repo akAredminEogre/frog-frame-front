@@ -3,7 +3,7 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 /**
  * ルールJSONプレビュー確認ダイアログ用データ
  * 現在のルール件数・インポート後の件数に加え、バリデーション済みルール配列を保持する。
- * validatedRules は React 側（useRef）で pendingRules として管理される。
+ * validatedRules はプレビュー確定後に Factory 経由で ConfirmImportInteractor.setPendingRules() に渡される。
  */
 export class PreviewRulesJsonPreviewOutputData {
   constructor(
