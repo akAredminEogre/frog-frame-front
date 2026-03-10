@@ -6,8 +6,8 @@ if command -v flock &>/dev/null; then
   echo "[vitest-run] flock検出 → 排他制御モード（$LOCK_FILE）"
   exec flock -w 120 "$LOCK_FILE" \
     sh -c 'echo "[vitest-run] ロック取得成功（PID=$$）"; exec "$@"' -- \
-    env NODE_OPTIONS="--max-old-space-size=2048" npx vitest run "$@"
+    env NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--max-old-space-size=2048" npx vitest run "$@"
 else
   echo "[vitest-run] flock未検出 → 直接実行モード（CI/Cloud環境）"
-  exec env NODE_OPTIONS="--max-old-space-size=2048" npx vitest run "$@"
+  exec env NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--max-old-space-size=2048" npx vitest run "$@"
 fi
