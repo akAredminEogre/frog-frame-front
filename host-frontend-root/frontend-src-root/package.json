@@ -15,7 +15,7 @@
     "build:firefox": "wxt build -b firefox",
     "storybook": "storybook dev -p 6006 --host 0.0.0.0 --no-open",
     "build-storybook": "storybook build",
-    "test:unit": "vitest --run",
+    "test:unit": "sh scripts/vitest-run.sh",
     "test:e2e": "playwright test --retries=2",
     "test:all": "npm run test:unit && npm run test:e2e",
     "zip": "wxt zip",
