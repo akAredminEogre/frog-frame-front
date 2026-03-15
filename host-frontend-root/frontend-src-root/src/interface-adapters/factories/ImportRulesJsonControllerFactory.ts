@@ -1,23 +1,21 @@
-import { ConfirmImportInteractor } from 'src/application-business-rules/interactors/ConfirmImportInteractor';
-import { PreviewRulesJsonInteractor } from 'src/application-business-rules/interactors/PreviewRulesJsonInteractor';
+import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
+import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
+import {
+  IImportRulesJsonPresenter,
+  ImportRulesJsonInteractor,
+} from 'src/application-business-rules/interactors/ImportRulesJsonInteractor';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
-import { ConfirmImportController } from 'src/interface-adapters/controllers/ConfirmImportController';
-import { IConfirmImportController } from 'src/interface-adapters/controllers/IConfirmImportController';
-import { IPreviewRulesJsonController } from 'src/interface-adapters/controllers/IPreviewRulesJsonController';
-import { PreviewRulesJsonController } from 'src/interface-adapters/controllers/PreviewRulesJsonController';
 import {
+  IImportRulesJsonController,
   IImportRulesJsonControllerFactory,
   ImportErrorCallback,
   ImportSuccessCallback,
-  PreviewCallback,
 } from 'src/interface-adapters/factories/IImportRulesJsonControllerFactory';
-import { ConfirmImportPresenter } from 'src/interface-adapters/presenters/ConfirmImportPresenter';
-import { PreviewRulesJsonPresenter } from 'src/interface-adapters/presenters/PreviewRulesJsonPresenter';
 
 /**
- * Preview/Confirm 2コントローラーを生成するFactory
+ * ImportRulesJsonコントローラーを生成するFactory
  * ADR-005: ReactコールバックをPresenterに注入するためのFactoryパターン
  */
 export class ImportRulesJsonControllerFactory implements IImportRulesJsonControllerFactory {
@@ -28,34 +26,27 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
   ) {}
 
   create(
-    onPreview: PreviewCallback,
     onSuccess: ImportSuccessCallback,
     onError: ImportErrorCallback
-  ): {
-    previewController: IPreviewRulesJsonController;
-    confirmController: IConfirmImportController;
-  } {
-    // confirmInteractorを先に生成し、Phase1完了時にpendingRulesをセットできるよう配線
-    const confirmPresenter = new ConfirmImportPresenter(onSuccess, onError);
-    const confirmInteractor = new ConfirmImportInteractor(this.repository, confirmPresenter);
-    const confirmController = new ConfirmImportController(confirmInteractor);
-
-    const previewPresenter = new PreviewRulesJsonPresenter(
-      (currentCount, importCount, validatedRules) => {
-        // Phase1完了: pendingRulesをconfirmInteractorに保持させてからUI通知
-        confirmInteractor.setPendingRules(validatedRules);
-        onPreview(currentCount, importCount);
+  ): IImportRulesJsonController {
+    const presenter: IImportRulesJsonPresenter = {
+      present(output: ImportRulesJsonOutputData): void {
+        onSuccess(`${output.importedCount}件のルールをインポートしました`);
       },
-      onError
-    );
-    const previewInteractor = new PreviewRulesJsonInteractor(
+      presentError(errorData: ImportRulesJsonErrorOutputData): void {
+        onError(errorData.message);
+      },
+    };
+
+    const interactor = new ImportRulesJsonInteractor(
       this.repository,
-      previewPresenter,
+      presenter,
       this.jsonParser,
       this.fileTextReader
     );
-    const previewController = new PreviewRulesJsonController(previewInteractor);
 
-    return { previewController, confirmController };
+    return {
+      importRulesJson: (file: File) => interactor.importRulesJson(file),
+    };
   }
 }

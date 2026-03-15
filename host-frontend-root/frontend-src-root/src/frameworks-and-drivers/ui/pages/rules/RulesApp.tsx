@@ -63,10 +63,7 @@ function RulesApp() {
 
   const {
     handleFileSelect,
-    confirmImport,
-    cancelImport,
     isImporting,
-    previewData,
     importError,
     importSuccess,
     dismissImportError,
@@ -155,10 +152,7 @@ function RulesApp() {
 
       <ImportRulesJsonUI
         onImportClick={(file) => { void handleFileSelect(file); }}
-        onConfirm={() => { void confirmImport(); }}
-        onCancel={cancelImport}
         isImporting={isImporting}
-        previewData={previewData}
         importError={importError}
         importSuccess={importSuccess}
         onDismissError={dismissImportError}

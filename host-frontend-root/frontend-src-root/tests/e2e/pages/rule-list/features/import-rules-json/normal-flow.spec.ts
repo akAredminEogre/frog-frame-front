@@ -7,7 +7,7 @@ import {
   setupConsoleErrorMonitoring,
 } from 'tests/e2e/pages/rule-list/features/import-rules-json/helpers';
 
-test('インポートボタンクリック後にJSONファイルを選択すると確認ダイアログが表示され、インポート実行後にルールが反映される', async ({
+test('インポートボタンクリック後にJSONファイルを選択するとルールがインポートされる', async ({
   rulesPage,
   popupPage,
 }) => {
@@ -48,29 +48,16 @@ test('インポートボタンクリック後にJSONファイルを選択する�
     buffer: Buffer.from(jsonContent, 'utf-8'),
   });
 
-  // 5. Assert: プレビュー確認ダイアログが表示される
-  const previewDialog = rulesPage.locator('[data-testid="import-preview-dialog"]');
-  await expect(previewDialog).toBeVisible({ timeout: DEFAULT_TIMEOUT });
-
-  // 6. Assert: プレビューダイアログに件数情報が表示される（0件 → 1件）
-  await expect(previewDialog).toContainText('0件');
-  await expect(previewDialog).toContainText('1件');
-
-  // 7. Act: 「インポート実行」ボタンをクリック
-  const confirmButton = rulesPage.locator('[data-testid="import-confirm-button"]');
-  await expect(confirmButton).toBeEnabled({ timeout: DEFAULT_TIMEOUT });
-  await confirmButton.click();
-
-  // 8. Assert: 成功トースト通知が表示される
+  // 5. Assert: 成功トースト通知が表示される
   const successToast = rulesPage.locator('[data-type="success"]');
   await expect(successToast).toBeVisible({ timeout: DEFAULT_TIMEOUT });
   await expect(successToast).toContainText('インポートしました');
 
-  // 9. Assert: ルール一覧にインポートされたルールが反映される（リロードして確認）
+  // 6. Assert: ルール一覧にインポートされたルールが反映される（リロードして確認）
   await reloadAndWaitForTable(rulesPage);
   const rulesTable = rulesPage.locator('[data-testid="rules-table"]');
   await expect(rulesTable).toContainText('インポートテスト前');
 
-  // 10. Assert: コンソールエラーが発生していないこと
+  // 7. Assert: コンソールエラーが発生していないこと
   assertNoConsoleErrors(consoleErrors);
 });
