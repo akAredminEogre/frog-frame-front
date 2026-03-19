@@ -65,3 +65,55 @@ docs/user-stories/
 - **共通ルール（必読）**: [common/index.md](./common/index.md) - マークダウン記法、文体など全ドキュメント共通のルール
 - 設計ドキュメント: `docs/design/pages/{画面名}/features/{機能名}/`
 - ADR: `docs/adr/`
+
+---
+
+## 新規ユーザーストーリー（YAML形式）
+
+2026-03-20以降に新規作成するユーザーストーリーは全てYAML形式とする。
+既存のMD形式ドキュメントは変換不要・永久維持。
+
+### ファイル命名規則
+
+- ファイル名: `user-story-{連番3桁}.yaml`（例: `user-story-023.yaml`）
+- 格納先: `docs/user-stories/`
+- 完了後: `docs/user-stories/completed/` に移動
+
+### 連番確認コマンド（MD/YAML両方チェック）
+
+```bash
+ls docs/user-stories/ | grep -E 'user-story-[0-9]+' | sort
+```
+
+### 必須フィールド（YAMLスキーマ）
+
+```yaml
+id: user-story-023
+type: feature             # feature | bugfix | refactor | scope-out | template
+title: "ユーザーストーリータイトル"
+created_at: "2026-03-20"
+status: pending           # pending | in-progress | done | deferred | wont-fix
+story: |
+  ストーリー本文
+acceptance_criteria:
+  - "受け入れ条件1"
+  - "受け入れ条件2"
+related_prs:
+  source_pr: null         # スコープ外指摘の場合: 指摘元PR番号
+  implementation_pr: null # 実装PR番号（未定はnull）
+```
+
+### type別最小フィールド
+
+| type | 最小必須フィールド |
+|------|-----------------|
+| feature | id, type, title, created_at, status, story, acceptance_criteria |
+| scope-out | id, type, title, created_at, status, story, related_prs.source_pr |
+| bugfix | id, type, title, created_at, status, story, acceptance_criteria |
+
+### スコープ外指摘フロー
+
+1. PRレビューでスコープ外指摘受信
+2. `docs/user-stories/user-story-{次番号}.yaml` を作成（type: scope-out）
+3. レビュアーへ返信: 「user-story-NNN.yamlで追跡します。別PRで対応します。」
+4. 対応PR完了後 → `completed/` に移動
