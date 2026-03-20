@@ -1,3 +1,4 @@
+import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/input/ImportRulesJsonInputData';
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import {
@@ -46,7 +47,7 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
     );
 
     return {
-      importRulesJson: (file: File) => interactor.importRulesJson(file),
+      importRulesJson: (file: File) => interactor.importRulesJson(new ImportRulesJsonInputData(file)),
     };
   }
 }

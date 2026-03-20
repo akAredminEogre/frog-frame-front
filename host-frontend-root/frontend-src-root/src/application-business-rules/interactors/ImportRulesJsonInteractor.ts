@@ -1,3 +1,4 @@
+import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/input/ImportRulesJsonInputData';
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import { RulesJsonRuleEntryRaw } from 'src/application-business-rules/dto/RulesJsonSchema';
@@ -36,13 +37,13 @@ export class ImportRulesJsonInteractor {
     private readonly fileTextReader: IFileTextReader
   ) {}
 
-  async importRulesJson(fileInputData: File): Promise<void> {
+  async importRulesJson(inputData: ImportRulesJsonInputData): Promise<void> {
     try {
       // ファイルサイズチェック
-      new ImportFileSize(fileInputData.size);
+      new ImportFileSize(inputData.file.size);
 
       // テキスト読み取り
-      const jsonString = await this.fileTextReader.readAsText(fileInputData);
+      const jsonString = await this.fileTextReader.readAsText(inputData.file);
 
       // JSON解析
       let parsed: Record<string, unknown>;
