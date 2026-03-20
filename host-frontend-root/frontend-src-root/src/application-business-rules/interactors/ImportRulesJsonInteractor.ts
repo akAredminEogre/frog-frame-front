@@ -36,13 +36,13 @@ export class ImportRulesJsonInteractor {
     private readonly fileTextReader: IFileTextReader
   ) {}
 
-  async importRulesJson(file: File): Promise<void> {
+  async importRulesJson(fileInputData: File): Promise<void> {
     try {
       // ファイルサイズチェック
-      new ImportFileSize(file.size);
+      new ImportFileSize(fileInputData.size);
 
       // テキスト読み取り
-      const jsonString = await this.fileTextReader.readAsText(file);
+      const jsonString = await this.fileTextReader.readAsText(fileInputData);
 
       // JSON解析
       let parsed: Record<string, unknown>;
