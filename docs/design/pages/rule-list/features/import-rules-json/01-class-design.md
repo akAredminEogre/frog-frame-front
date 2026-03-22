@@ -10,14 +10,13 @@
 │  │     - インポートボタンクリックを受け取る                              │ │
 │  │     - ルール0件時もボタンを表示（EmptyState対応）                    │ │
 │  │     - isImportingフラグで重複実行を防止                              │ │
-│  │     - Controllerを呼び出す（ファイル選択後 / 確認後）                │ │
-│  │     - Presenterからのプレビュー/成功/エラー通知を反映                │ │
+│  │     - Controllerを呼び出す（ファイル選択後）                         │ │
+│  │     - Presenterからの成功/エラー通知を反映                           │ │
 │  └────────────────────────────────────────────────────────────────────┘ │
 │  ┌────────────────────────────────────────────────────────────────────┐ │
 │  │ ui/components/organisms/ImportRulesJsonUI/ImportRulesJsonUI.tsx    │ │
-│  │     - ImportButtonとプレビュー確認ダイアログを統合したUI             │ │
-│  │     - プレビュー状態（currentCount / importCount）を表示            │ │
-│  │     - [キャンセル] / [インポート実行] ボタンを提供                   │ │
+│  │     - ImportButtonを内包したOrganismコンポーネント                   │ │
+│  │     - isImporting/importError/importSuccessをpropsで受け取る         │ │
 │  └────────────────────────────────────────────────────────────────────┘ │
 │  ┌────────────────────────────────────────────────────────────────────┐ │
 │  │ ui/components/atoms/ImportButton/ImportButton.tsx                  │ │
@@ -35,12 +34,10 @@
 │  │ ImportRulesJson          │    │ ImportRulesJson          │          │
 │  │ Controller               │    │ Presenter                │          │
 │  │                          │    │                          │          │
-│  │ - FileオブジェクトをInput │    │ - PreviewDataを受け取る   │          │
-│  │   Dataに変換し渡す        │    │ - OutputDataを受け取る    │          │
-│  │ (2メソッド:               │    │ - エラーを通知            │          │
-│  │   importRulesJson /      │    │ (3メソッド:               │          │
-│  │   confirmImport)         │    │   presentPreview /       │          │
-│  │                          │    │   present /              │          │
+│  │ - FileオブジェクトをInput │    │ - OutputDataを受け取る    │          │
+│  │   Dataに変換し渡す        │    │ - エラーを通知            │          │
+│  │ (1メソッド:               │    │ (2メソッド:               │          │
+│  │   importRulesJson)       │    │   present /              │          │
 │  │                          │    │   presentError)          │          │
 │  └────────────┬─────────────┘    └──────────▲───────────────┘          │
 └───────────────┼──────────────────────────────┼──────────────────────────┘
@@ -51,16 +48,13 @@
 │                   application-business-rules/ (第2層)                    │
 │  ┌──────────────────────────────────────────────────────────────────┐   │
 │  │ interactors/rule/ImportRulesJsonInteractor                       │   │
-│  │ ※ Rules Pageコンテキストで実行                                     │   │
+│  │ ※ Rules Pageコンテキストで実行（1フェーズ）                         │   │
 │  │                                                                  │   │
-│  │ Phase 1: importRulesJson(inputData)                              │   │
+│  │ importRulesJson(inputData)                                       │   │
 │  │   - new ImportFileSize(file.size) でサイズチェック                │   │
 │  │   - jsonParser.parse() → バリデーション                           │   │
-│  │   - getAll()でcurrentCount取得                                   │   │
-│  │   - PreviewData生成 → Presenter.presentPreview()                 │   │
-│  │                                                                  │   │
-│  │ Phase 2: confirmImport()                                         │   │
-│  │   - replaceAll(pendingRules) で原子的置換                         │   │
+│  │   - getAll()でpreviousCount取得                                   │   │
+│  │   - replaceAll(validatedRules) で原子的置換                       │   │
 │  │   - OutputData生成 → Presenter.present()                         │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────────────┘
@@ -93,16 +87,14 @@
 | クラス | 責務 |
 |--------|------|
 | ImportRulesJsonInputData | 入力DTO。file（Fileオブジェクト）を保持。frameworks-and-drivers層からCA準拠で注入 |
-| ImportRulesJsonPreviewOutputData | プレビューDTO。currentRuleCount / importRuleCountを保持 |
 | ImportRulesJsonOutputData | 出力DTO。importedCount / previousCountを保持 |
 | ImportRulesJsonErrorOutputData | エラー出力DTO。error / errorType ('parse'\|'validation'\|'storage') / messageを保持 |
-| IImportRulesJsonUseCase | Input Port。インポート処理のインターフェース（2メソッド） |
-| IImportRulesJsonPresenter | Output Port。結果通知のインターフェース（3メソッド） |
+| IImportRulesJsonPresenter | Output Port。結果通知のインターフェース（2メソッド） |
 | IJsonParser | Service Port。JSON解析のインターフェース。CA準拠でInteractorがJSON.parseに直接依存しないよう抽象化 |
 | IFileTextReader | Service Port。ファイルテキスト読み取りのインターフェース。CA準拠でFileReader APIへの依存をF&D層に限定 |
 | IFileSizeValidator | Service Port。ファイルサイズ検証のインターフェース。CA準拠でFile.size APIへの依存をF&D層に限定 |
 | IByteSizeCalculator | Service Port。バイトサイズ計算のインターフェース。CA準拠でBlob APIへの依存をF&D層に限定 |
-| ImportRulesJsonInteractor | UseCase実装。バリデーション→プレビュー通知→一括上書き→結果通知を実行 |
+| ImportRulesJsonInteractor | UseCase実装。バリデーション→一括上書き→結果通知を1フェーズで実行 |
 | IRewriteRuleRepository | Gateway Interface。ルール永続化（replaceAllメソッドを追加。getAll/replaceAllを使用） |
 
 ### interface-adapters (第3層)
@@ -113,7 +105,7 @@
 | ImportRulesJsonController | IImportRulesJsonControllerの実装。UseCaseを呼び出す |
 | IImportRulesJsonControllerFactory | Controllerを生成するFactoryのインターフェース。ReactコールバックをPresenterに注入（ADR-005参照） |
 | ImportRulesJsonControllerFactory | IImportRulesJsonControllerFactoryの実装 |
-| ImportRulesJsonPresenter | PreviewData/OutputDataをViewに通知（プレビュー表示・成功通知・エラー通知） |
+| ImportRulesJsonPresenter | OutputDataをViewに通知（成功通知・エラー通知） |
 | RewriteRuleMapper | Entity ↔ DTO 変換（既存、変更なし） |
 | IRewriteRuleMessagingPort | MessagingServiceの抽象化（既存、変更なし） |
 
@@ -123,10 +115,10 @@
 |--------|------|
 | ImportButton | UIコンポーネント。インポートボタン。disabled propで操作制御。hidden inputを内包 |
 | UploadIcon | インポートボタン用アイコン（DownloadIconとの対） |
-| ImportRulesJsonUI | Organism。ImportButton＋プレビュー確認ダイアログを統合 |
+| ImportRulesJsonUI | Organism。ImportButtonを内包。isImporting/importError/importSuccessをpropsで受け取る |
 | ToastNotification | UIコンポーネント。トースト通知（既存） |
 | RulesApp | View。ルール一覧画面。isImportingフラグでインポート中の重複実行を防止（既存、変更対象） |
-| useImportRulesJson | カスタムフック。useMemoによるController初期化・isImporting/previewData状態管理・onPreview/onSuccess/showErrorInViewコールバックを担う。ファイルはFileオブジェクトのままControllerへ渡す（FileSizeValidator/FileTextReader/BlobByteSizeCalculatorはInteractor層で使用） |
+| useImportRulesJson | カスタムフック。useMemoによるController初期化・isImporting/importError/importSuccess状態管理・onSuccess/onErrorコールバックを担う。ファイルはFileオブジェクトのままControllerへ渡す（FileSizeValidator/FileTextReader/BlobByteSizeCalculatorはInteractor層で使用） |
 | JsonParser | IJsonParserの実装。JSON.parseをラップしCA準拠でフレームワーク依存をこの層に閉じ込める（`frameworks-and-drivers/Json/JsonParser.ts`） |
 | FileTextReader | IFileTextReaderの実装。FileReader.readAsTextをラップしCA準拠でブラウザAPI依存をこの層に閉じ込める（`frameworks-and-drivers/File/FileTextReader.ts`） |
 | FileSizeValidator | IFileSizeValidatorの実装。File.sizeチェックをラップしCA準拠でブラウザAPI依存をこの層に閉じ込める（`frameworks-and-drivers/File/FileSizeValidator.ts`） |
@@ -142,37 +134,29 @@
 | Interactor | ワークフロー調整 | バリデーション→プレビュー→全件削除→新規作成→Presenter通知 |
 | Presenter | View通知のみ | onPreview/onSuccess/showErrorInViewコールバック経由 |
 | View (RulesApp) | ボタン状態管理 | isImportingによる重複防止 |
-| Hook (useImportRulesJson) | 状態管理・ファイルI/O | FileReader、プレビュー状態、onPreview/onSuccess/showErrorInViewコールバック |
+| Hook (useImportRulesJson) | 状態管理・ファイルI/O | FileReader、isImporting/importError/importSuccess状態管理 |
 
-### 2フェーズ制御フロー
+### 1フェーズ制御フロー
 
-インポートは2フェーズで実行される:
+インポートはファイル選択から完了まで1フェーズで実行される（プレビュー確認なし）:
 
 ```text
-Phase 1: ファイル選択→バリデーション→プレビュー
+Phase 1: ファイル選択→バリデーション→一括置換
   ImportButton クリック
     → <input type="file"> 発火
     → Controller.importRulesJson(file)
-    → Interactor: new ImportFileSize(file.size) でサイズチェック + FileReader.readAsText() + jsonParser.parse() + バリデーション + getAll()
-    → Presenter.presentPreview(previewData)
-    → Hook(onPreview): プレビューダイアログ表示
-
-Phase 2: ユーザー確認→実行
-  [インポート実行] ボタンクリック
-    → Controller.confirmImport()
-    → Interactor: replaceAll(pendingRules) による原子的一括置換
+    → Interactor: new ImportFileSize(file.size) でサイズチェック + FileReader.readAsText() + jsonParser.parse() + バリデーション
+    → Interactor: getAll()でpreviousCount取得 + replaceAll(validatedRules) による原子的一括置換
     → Presenter.present(outputData)
     → Hook(onSuccess): 成功トースト + ルール一覧リフレッシュ
 ```
 
-### Presenter設計（3コールバック）
+### Presenter設計（2コールバック）
 
-ADR-005 Factoryパターン準拠。エクスポートの2コールバック（onSuccess/onError）に対し、
-インポートはプレビューのためのコールバックを追加した3コールバック構成:
+ADR-005 Factoryパターン準拠。エクスポートと同様の2コールバック構成（プレビュー廃止により整合）:
 
 ```typescript
 interface IImportRulesJsonPresenter {
-  presentPreview(preview: ImportRulesJsonPreviewOutputData): void;  // onPreview
   present(output: ImportRulesJsonOutputData): void;           // onSuccess
   presentError(error: ImportRulesJsonErrorOutputData): void;  // onError
 }
@@ -183,7 +167,7 @@ interface IImportRulesJsonPresenter {
 インポート処理はreplaceAllによる原子的置換で実現する:
 
 ```text
-getAll()          → 全件取得（プレビュー用件数表示）
+getAll()          → 全件取得（previousCount算出用）
 replaceAll(rules) → 全件原子的置換（トランザクション保護付き）
 ```
 
@@ -220,7 +204,7 @@ Chrome拡張のルール件数規模での一貫性を保証するため、delet
 | Hook | useExportRulesJson | useImportRulesJson |
 | Controller | ExportRulesJsonController | ImportRulesJsonController |
 | Interactor | ExportRulesJsonInteractor | ImportRulesJsonInteractor |
-| Presenterコールバック | onSuccess, onError | onPreview, onSuccess, showErrorInView |
+| Presenterコールバック | onSuccess, onError | onSuccess, onError |
 | Repository操作 | getAll() | getAll(), replaceAll() |
 
 ## クラス図
@@ -260,11 +244,10 @@ Chrome拡張のルール件数規模での一貫性を保証するため、delet
 │                                                                             │
 │  ┌─────────────────────────────┐    ┌──────────────────────────────────┐   │
 │  │ <<interface>>               │    │ <<interface>>                    │   │
-│  │ IImportRulesJsonUseCase     │    │ IImportRulesJsonPresenter        │   │
-│  │ ─────────────────────────── │    │ ────────────────────────────────│   │
-│  │ + importRulesJson(          │    │ + presentPreview(preview)       │   │
-│  │     inputData): void        │    │ + present(output)               │   │
-│  │ + confirmImport(): void     │    │ + presentError(errorData)       │   │
+│  │ IImportRulesJsonPresenter   │    │                                  │   │
+│  │ ────────────────────────────│    │                                  │   │
+│  │ + present(output)           │    │                                  │   │
+│  │ + presentError(errorData)   │    │                                  │   │
 │  └──────────▲──────────────────┘    └───────────▲──────────────────────┘   │
 │             │                                   │                          │
 │             │ implements                        │ uses                     │
@@ -275,10 +258,9 @@ Chrome拡張のルール件数規模での一貫性を保証するため、delet
 │  │ - repository: IRewriteRuleRepository                     │              │
 │  │ - presenter: IImportRulesJsonPresenter                    │              │
 │  │ - jsonParser: IJsonParser                                │              │
-│  │ - pendingRules: RewriteRules | null  ← Phase間保持(FCC)   │              │
+│  │ - fileTextReader: IFileTextReader                        │              │
 │  │ ──────────────────────────────────────────────────────── │              │
 │  │ + importRulesJson(inputData): Promise<void>              │              │
-│  │ + confirmImport(): Promise<void>                         │              │
 │  └──────────────────────────────────────────────────────────┘              │
 │                                                                             │
 │  ┌──────────────────────┐                                                   │
@@ -315,9 +297,8 @@ Chrome拡張のルール件数規模での一貫性を保証するため、delet
 │  │ <<interface>>                      │  │ <<interface>>              │    │
 │  │ IImportRulesJsonControllerFactory  │  │ IImportRulesJsonController │    │
 │  │ ────────────────────────────────── │  │ ────────────────────────── │    │
-│  │ + create(onPreview,               │  │ + importRulesJson(         │    │
-│  │   onSuccess,                      │  │   file: File): void        │    │
-│  │   onError): IImportRules...       │  │ + confirmImport(): void    │    │
+│  │ + create(onSuccess,               │  │ + importRulesJson(         │    │
+│  │   onError): IImportRules...       │  │   file: File): void        │    │
 │  └──────────▲─────────────────────────┘  └──────────▲─────────────────┘    │
 │             │ implements                            │ implements           │
 │  ┌──────────┴─────────────────────────┐  ┌──────────┴─────────────────┐    │
@@ -325,19 +306,16 @@ Chrome拡張のルール件数規模での一貫性を保証するため、delet
 │  │ ────────────────────────────────── │  │ ────────────────────────── │    │
 │  │ - repository: IRewriteRule...      │  │ - useCase: IImportRules... │    │
 │  │ ────────────────────────────────── │  │ ────────────────────────── │    │
-│  │ + create(onPreview,               │  │ + importRulesJson(         │    │
-│  │   onSuccess,                      │  │   file: File): void        │    │
-│  │   onError): IImportRules...       │  │ + confirmImport(): void    │    │
+│  │ + create(onSuccess,               │  │ + importRulesJson(         │    │
+│  │   onError): IImportRules...       │  │   file: File): void        │    │
 │  └────────────────────────────────────┘  └────────────────────────────┘    │
 │                                                                             │
 │                                          ┌────────────────────────────┐    │
 │                                          │ ImportRulesJsonPresenter   │    │
 │                                          │ ────────────────────────── │    │
-│                                          │ - onPreview: Func          │    │
 │                                          │ - onSuccess: Func          │    │
-│                                          │ - showErrorInView: Func    │    │
+│                                          │ - onError: Func            │    │
 │                                          │ ────────────────────────── │    │
-│                                          │ + presentPreview(preview)  │    │
 │                                          │ + present(outputData)      │    │
 │                                          │ + presentError(errorData)  │    │
 │                                          └────────────────────────────┘    │
@@ -349,13 +327,12 @@ Chrome拡張のルール件数規模での一貫性を保証するため、delet
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
 │  │ ImportButton                │    │ ImportRulesJsonUI            │        │
 │  │ ─────────────────────────── │    │ ─────────────────────────── │        │
-│  │ + onFileSelect: (           │    │ + onImportClick: () => void  │        │
-│  │     file: File) => void     │    │ + onConfirm: () => void      │        │
-│  │ + disabled?: boolean        │    │ + onCancel: () => void       │        │
-│  │ (hidden <input type="file"> │    │ + isImporting: boolean       │        │
-│  │  を内包)                    │    │ + previewData: PreviewData   │        │
-│  └─────────────────────────────┘    │     | null                  │        │
-│                                     └─────────────────────────────┘        │
+│  │ + onFileSelect: (           │    │ + onFileSelect: (f) => void  │        │
+│  │     file: File) => void     │    │ + isImporting: boolean       │        │
+│  │ + disabled?: boolean        │    │ + importError: string|null   │        │
+│  │ (hidden <input type="file"> │    │ + importSuccess: string|null │        │
+│  │  を内包)                    │    │                              │        │
+│  └─────────────────────────────┘    └─────────────────────────────┘        │
 │  ┌─────────────────────────────┐    ┌─────────────────────────────┐        │
 │  │ UploadIcon                  │    │ ToastNotification           │        │
 │  │ ─────────────────────────── │    │ ─────────────────────────── │        │
