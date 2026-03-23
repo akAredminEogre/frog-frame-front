@@ -126,11 +126,13 @@ else isImporting = false
   activate Interactor
 
   Interactor -> JsonParser : parse(jsonString)
+  activate JsonParser
   note right of JsonParser
     CA準拠: JSON.parseはframeworks-and-drivers層に委譲
     SyntaxError発生時はInteractorがcatchしてpresentError
   end note
   JsonParser --> Interactor : parsedJson or throws SyntaxError
+  deactivate JsonParser
 
   alt バリデーション失敗
     note over Interactor
@@ -139,7 +141,9 @@ else isImporting = false
       version不一致 or ルール0件 or 件数上限超過
     end note
     Interactor -> ErrorOutputData : new(\n  error,\n  errorType)
+    activate ErrorOutputData
     ErrorOutputData --> Interactor : errorOutputData
+    deactivate ErrorOutputData
 
     Interactor -> IPresenter : presentError(\n  errorOutputData)
     activate IPresenter
@@ -166,6 +170,9 @@ else isImporting = false
     group finally [エラー時]
       Hook -> Hook : setIsImporting(false)
     end
+
+    deactivate Hook
+    deactivate View
 
   else バリデーション成功
     == 現在ルール件数取得 ==
