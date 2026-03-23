@@ -122,6 +122,7 @@ else isImporting = false
   activate Controller
 
   Controller -> IUseCase : importRulesJson(\n  new ImportRulesJsonInputData(file))
+  activate IUseCase
   IUseCase -> Interactor : importRulesJson(inputData)
   activate Interactor
 
@@ -164,6 +165,7 @@ else isImporting = false
     deactivate Presenter
     deactivate IPresenter
     deactivate Interactor
+    deactivate IUseCase
     deactivate Controller
     deactivate IController
 
@@ -262,6 +264,7 @@ else isImporting = false
     deactivate Presenter
     deactivate IPresenter
     deactivate Interactor
+    deactivate IUseCase
     deactivate Controller
     deactivate IController
 
@@ -298,6 +301,7 @@ IController -> Controller : confirmImport()
 activate Controller
 
 Controller -> IUseCase : confirmImport()
+activate IUseCase
 IUseCase -> Interactor : confirmImport()
 activate Interactor
 
@@ -344,6 +348,7 @@ alt 成功
   deactivate Presenter
   deactivate IPresenter
   deactivate Interactor
+  deactivate IUseCase
   deactivate Controller
   deactivate IController
 
@@ -373,6 +378,7 @@ else Storage操作失敗
   deactivate Presenter
   deactivate IPresenter
   deactivate Interactor
+  deactivate IUseCase
   deactivate Controller
   deactivate IController
 
