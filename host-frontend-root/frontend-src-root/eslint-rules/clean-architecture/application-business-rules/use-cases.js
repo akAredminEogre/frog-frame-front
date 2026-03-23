@@ -29,4 +29,20 @@ const useCaseInputDataConfig = {
   },
 };
 
-export default [useCaseInputDataConfig];
+// InteractorクラスはUseCaseインターフェースをimplementsすること
+const interactorImplementsUseCaseConfig = {
+  files: ['**/application-business-rules/interactors/**/*.ts'],
+  rules: {
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector:
+          "ClassDeclaration[id.name=/Interactor$/]:not(:has(TSClassImplements[expression.name=/UseCase$/]))",
+        message:
+          "Interactorクラスは対応するUseCaseインターフェース（I*UseCase）をimplementsしなければなりません。",
+      },
+    ],
+  },
+};
+
+export default [useCaseInputDataConfig, interactorImplementsUseCaseConfig];
