@@ -13,6 +13,7 @@ import {
   UnsupportedVersionImportError,
 } from 'src/application-business-rules/errors/ImportRulesJsonErrors';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
+import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
@@ -29,7 +30,7 @@ export interface IImportRulesJsonPresenter {
  * ルールJSONインポートのInteractor（1フェーズ）
  * ファイル読み取り → バリデーション → 全件置換 → 完了通知を一連で実行する
  */
-export class ImportRulesJsonInteractor {
+export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
   constructor(
     private readonly repository: IRewriteRuleRepository,
     private readonly presenter: IImportRulesJsonPresenter,

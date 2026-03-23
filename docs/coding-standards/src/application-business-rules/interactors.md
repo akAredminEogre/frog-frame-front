@@ -4,6 +4,41 @@ Interactor（UseCase実装）のコーディング規約。
 
 ---
 
+## 0. UseCaseインターフェースの実装
+
+### 規約
+
+`application-business-rules/interactors/` 直下の `*Interactor` クラスは、必ず対応する `I*UseCase` インターフェースを `implements` しなければならない。
+
+### 理由
+
+- Clean Architecture における Interactor は UseCase Input Port の実装であるため、インターフェース（`I*UseCase`）を明示的に implements することで依存の方向を保証する
+- Controller は具象クラスではなくインターフェース型に依存し、テスト時のモック差し替えを容易にする
+
+### 実装パターン
+
+```typescript
+// ports/input/IFooUseCase.ts
+export interface IFooUseCase {
+  execute(inputData: FooInputData): Promise<void>;
+}
+
+// interactors/FooInteractor.ts
+import { IFooUseCase } from 'src/application-business-rules/ports/input/IFooUseCase';
+
+export class FooInteractor implements IFooUseCase {
+  async execute(inputData: FooInputData): Promise<void> {
+    // ...
+  }
+}
+```
+
+### ESLintルール
+
+`host-frontend-root/frontend-src-root/eslint-rules/clean-architecture/application-business-rules/use-cases.js` の `interactorImplementsUseCaseConfig` にて自動検出。
+
+---
+
 ## 1. 部分的成功パターン
 
 ### 概要
