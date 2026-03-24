@@ -12,6 +12,7 @@ import {
   StorageImportError,
   UnsupportedVersionImportError,
 } from 'src/application-business-rules/errors/ImportRulesJsonErrors';
+import { JsonStructureError, JsonSyntaxError } from 'src/application-business-rules/errors/JsonParserErrors';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
@@ -51,9 +52,13 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       try {
         parsed = this.jsonParser.parseAsObject(jsonString);
       } catch (e) {
-        if (e instanceof SyntaxError) {
+        if (e instanceof JsonSyntaxError) {
           this.presenter.presentError(
             new ImportRulesJsonErrorOutputData(new InvalidJsonImportError(), 'parse')
+          );
+        } else if (e instanceof JsonStructureError) {
+          this.presenter.presentError(
+            new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
           );
         } else {
           this.presenter.presentError(

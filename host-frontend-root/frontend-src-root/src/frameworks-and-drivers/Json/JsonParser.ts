@@ -1,3 +1,4 @@
+import { JsonStructureError, JsonSyntaxError } from 'src/application-business-rules/errors/JsonParserErrors';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 
 /**
@@ -6,21 +7,38 @@ import { IJsonParser } from 'src/application-business-rules/ports/services/IJson
  */
 export class JsonParser implements IJsonParser {
   parse<T = unknown>(jsonString: string): T {
-    return JSON.parse(jsonString) as T;
+    try {
+      return JSON.parse(jsonString) as T;
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        throw new JsonSyntaxError(e.message);
+      }
+      throw e;
+    }
   }
 
   /**
    * JSON文字列を解析し、結果がnull非許容のオブジェクトであることを検証する
-   * @throws SyntaxError 不正なJSONの場合
-   * @throws TypeError 解析結果がオブジェクト型でない場合（null・配列・プリミティブ値）
+   * @throws JsonSyntaxError 不正なJSONの場合
+   * @throws JsonStructureError 解析結果がオブジェクト型でない場合（null・配列・プリミティブ値）
    */
   parseAsObject(jsonString: string): Record<string, unknown> {
-    const parsed: unknown = JSON.parse(jsonString);
-    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
-      throw new TypeError(
-        `Expected a JSON object, but got: ${parsed === null ? 'null' : Array.isArray(parsed) ? 'array' : typeof parsed}`
-      );
+    try {
+      const parsed: unknown = JSON.parse(jsonString);
+      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+        throw new JsonStructureError(
+          `Expected a JSON object, but got: ${parsed === null ? 'null' : Array.isArray(parsed) ? 'array' : typeof parsed}`
+        );
+      }
+      return parsed as Record<string, unknown>;
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        throw new JsonSyntaxError(e.message);
+      }
+      if (e instanceof JsonStructureError) {
+        throw e;
+      }
+      throw e;
     }
-    return parsed as Record<string, unknown>;
   }
 }
