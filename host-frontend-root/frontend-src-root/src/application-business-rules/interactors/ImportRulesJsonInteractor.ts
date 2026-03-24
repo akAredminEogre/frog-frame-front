@@ -48,25 +48,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       const jsonString = await this.fileTextReader.readAsText(inputData.file);
 
       // JSON解析
-      let parsed: Record<string, unknown>;
-      try {
-        parsed = this.jsonParser.parseAsObject(jsonString);
-      } catch (e) {
-        if (e instanceof JsonSyntaxError) {
-          this.presenter.presentError(
-            new ImportRulesJsonErrorOutputData(new InvalidJsonImportError(), 'parse')
-          );
-        } else if (e instanceof JsonStructureError) {
-          this.presenter.presentError(
-            new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
-          );
-        } else {
-          this.presenter.presentError(
-            new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
-          );
-        }
-        return;
-      }
+      const parsed = this.jsonParser.parseAsObject(jsonString);
 
       // バージョンチェック
       const versionSchema = new RulesJsonVersionSchema(parsed);
@@ -132,6 +114,18 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         new ImportRulesJsonOutputData(validatedRules.length, previousCount)
       );
     } catch (error) {
+      if (error instanceof JsonSyntaxError) {
+        this.presenter.presentError(
+          new ImportRulesJsonErrorOutputData(new InvalidJsonImportError(), 'parse')
+        );
+        return;
+      }
+      if (error instanceof JsonStructureError) {
+        this.presenter.presentError(
+          new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
+        );
+        return;
+      }
       if (error instanceof ImportFileSizeError) {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(error, 'validation')
