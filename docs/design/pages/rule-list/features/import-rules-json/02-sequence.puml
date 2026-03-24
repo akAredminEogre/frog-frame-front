@@ -28,6 +28,7 @@ box "application-business-rules" #LightYellow
   participant "<<interface>>\nIImportRulesJson\nPresenter" as IPresenter
   participant "ImportRulesJson\nInteractor" as Interactor
   participant "<<interface>>\nIRewriteRule\nRepository" as IRepository
+  participant "<<interface>>\nIJsonParser" as IJsonParser
 end box
 
 box "frameworks-and-drivers" #LightCyan
@@ -126,14 +127,18 @@ else isImporting = false
   IUseCase -> Interactor : importRulesJson(inputData)
   activate Interactor
 
-  Interactor -> JsonParser : parse(jsonString)
-  activate JsonParser
-  note right of JsonParser
+  Interactor -> IJsonParser : parse(jsonString)
+  activate IJsonParser
+  note right of IJsonParser
     CA準拠: JSON.parseはframeworks-and-drivers層に委譲
     SyntaxError発生時はInteractorがcatchしてpresentError
   end note
-  JsonParser --> Interactor : parsedJson or throws SyntaxError
+  IJsonParser -> JsonParser : parse(jsonString)
+  activate JsonParser
+  JsonParser --> IJsonParser : parsedJson or throws SyntaxError
   deactivate JsonParser
+  IJsonParser --> Interactor : parsedJson or throws SyntaxError
+  deactivate IJsonParser
 
   alt バリデーション失敗
     note over Interactor
