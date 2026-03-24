@@ -169,7 +169,6 @@ else isImporting = false
     deactivate Hook
     deactivate Presenter
     deactivate IPresenter
-    deactivate Interactor
     deactivate IUseCase
     deactivate Controller
     deactivate IController
@@ -182,6 +181,7 @@ else isImporting = false
     deactivate View
 
   else バリデーション成功
+    activate Interactor
     == 現在ルール件数取得 ==
 
     Interactor -> IRepository : getAll()
