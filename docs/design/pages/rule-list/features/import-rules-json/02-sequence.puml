@@ -184,7 +184,6 @@ else isImporting = false
   else バリデーション成功
     == 現在ルール件数取得 ==
 
-    activate Interactor
     Interactor -> IRepository : getAll()
     activate IRepository
 
