@@ -1,7 +1,7 @@
 // Application Business Rules UseCase naming conventions
 // ControllerからUseCaseへの呼び出し時にはInputDataを受け渡すことをerrorレベルで定める（殿指示 2026-03-02）
 
-const useCaseInputDataConfig = {
+const useCaseConfig = {
   files: ['**/application-business-rules/interactors/**/*.ts'],
   rules: {
     '@typescript-eslint/naming-convention': [
@@ -11,31 +11,19 @@ const useCaseInputDataConfig = {
         selector: 'parameterProperty',
         format: null,
       },
-      {
-        // UseCaseメソッドのパラメータはInputDataで終わること
-        // catchバインディング変数（error, err, e, exception）は除外する
-        selector: 'parameter',
-        format: null,
-        filter: {
-          regex: '^(error|err|e|exception)$',
-          match: false,
-        },
-        custom: {
-          regex: 'InputData$|inputData$',
-          match: true,
-        },
-      },
     ],
-  },
-};
-
-// InteractorクラスはUseCaseインターフェースをimplementsすること
-const interactorImplementsUseCaseConfig = {
-  files: ['**/application-business-rules/interactors/**/*.ts'],
-  rules: {
     'no-restricted-syntax': [
       'error',
       {
+        // UseCaseのexecuteメソッドパラメータはInputDataで終わること
+        // AST: executeメソッドの直接パラメータのみを対象（コールバック・プライベートメソッドは除外）
+        selector:
+          "MethodDefinition[key.name='execute'] > FunctionExpression > .params[type='Identifier']:not([name=/InputData$/]):not([name=/^(error|err|e|exception|_.*)$/])",
+        message:
+          "UseCaseメソッドのパラメータはInputDataで終わること（例: exportRulesJsonInputData）",
+      },
+      {
+        // InteractorクラスはUseCaseインターフェースをimplementsすること
         selector:
           "ClassDeclaration[id.name=/Interactor$/]:not(:has(TSClassImplements[expression.name=/UseCase$/]))",
         message:
@@ -45,4 +33,4 @@ const interactorImplementsUseCaseConfig = {
   },
 };
 
-export default [useCaseInputDataConfig, interactorImplementsUseCaseConfig];
+export default [useCaseConfig];

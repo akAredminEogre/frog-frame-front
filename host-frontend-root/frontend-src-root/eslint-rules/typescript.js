@@ -8,6 +8,7 @@ export default {
       {
         vars: 'all',
         args: 'after-used',
+        argsIgnorePattern: '^_',
         ignoreRestSiblings: true,
         caughtErrors: 'all',
       },
@@ -19,6 +20,7 @@ export default {
       {
         vars: 'all',
         args: 'after-used',
+        argsIgnorePattern: '^_',
         ignoreRestSiblings: true,
         caughtErrors: 'all',
       },

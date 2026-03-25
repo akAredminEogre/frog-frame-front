@@ -46,7 +46,7 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
    * Content Scriptでは作成操作は使用しないため、エラーをthrow
    * @param _rule 作成するRewriteRule
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
+
   async create(_rule: RewriteRule): Promise<void> {
     throw new Error('ChromeRuntimeRewriteRuleRepository does not support create operation in content script context');
   }
@@ -56,7 +56,7 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
    * Content Scriptでは更新操作は使用しないため、エラーをthrow
    * @param _rule 更新するRewriteRule
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
+
   async update(_rule: RewriteRule): Promise<void> {
     throw new Error('ChromeRuntimeRewriteRuleRepository does not support update operation in content script context');
   }
@@ -102,7 +102,7 @@ export class ChromeRuntimeRewriteRuleRepository implements IRewriteRuleRepositor
    * Content ScriptではreplaceAll操作は使用しないため、エラーをthrow
    * @param _rules 新規に設定するRewriteRuleの配列
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
+
   async replaceAll(_rules: RewriteRule[]): Promise<void> {
     throw new Error('ChromeRuntimeRewriteRuleRepository does not support replaceAll operation in content script context');
   }

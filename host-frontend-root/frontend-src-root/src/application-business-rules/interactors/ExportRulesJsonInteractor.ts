@@ -16,8 +16,7 @@ export class ExportRulesJsonInteractor implements IExportRulesJsonUseCase {
     private readonly presenter: IExportRulesJsonPresenter
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
-  async execute(inputData: ExportRulesJsonInputData): Promise<void> {
+  async execute(_inputData: ExportRulesJsonInputData): Promise<void> {
     try {
       const rewriteRules = await this.repository.getAll();
       const rules = rewriteRules.toArray();
@@ -30,7 +29,6 @@ export class ExportRulesJsonInteractor implements IExportRulesJsonUseCase {
       const exportData: RulesJsonFileSchema = {
         version: '1.0',
         exportedAt,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         rules: rules.map((rule) => ({
           id: rule.id,
           oldString: rule.oldString,
@@ -54,7 +52,6 @@ export class ExportRulesJsonInteractor implements IExportRulesJsonUseCase {
    * ISO 8601形式のローカルタイム文字列を生成（タイムゾーンオフセット付き）
    * 例: 2026-02-23T10:30:00+09:00
    */
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   private formatLocalISO(date: Date): string {
     const offset = -date.getTimezoneOffset();
     const sign = offset >= 0 ? '+' : '-';
@@ -75,7 +72,6 @@ export class ExportRulesJsonInteractor implements IExportRulesJsonUseCase {
    * ファイル名用のローカルタイム文字列を生成
    * 例: 20260223_103000
    */
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   private formatLocalDateTime(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
