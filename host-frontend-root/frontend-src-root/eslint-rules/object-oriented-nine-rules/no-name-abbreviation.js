@@ -1,5 +1,5 @@
 // Rule 5: 名前を省略しないこと — 識別子名の最低文字数制限
-// 例外: forループ変数（i, j, k）、catch節変数（e）
+// 例外: forループ変数（i, j, k）、catch節変数（e）、識別子（id）
 // See: docs/coding-standards/src/object-oriented-nine-rules.md
 
 export default {
@@ -8,6 +8,6 @@ export default {
     '**/application-business-rules/interactors/**/*.ts',
   ],
   rules: {
-    'id-length': ['warn', { min: 3, exceptions: ['i', 'j', 'k', 'e'] }],
+    'id-length': ['warn', { min: 3, exceptions: ['i', 'j', 'k', 'e', 'id'] }],
   },
 };
