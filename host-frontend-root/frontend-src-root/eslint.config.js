@@ -11,6 +11,7 @@ import general from '#eslint-rules/general.js';
 import noRelativePaths from '#eslint-rules/no-relative-paths.js';
 import noRelativePathsTests from '#eslint-rules/tests/no-relative-paths-tests.js';
 import cleanArchitecture from '#eslint-rules/clean-architecture/main.js';
+import objectOrientedNineRules from '#eslint-rules/object-oriented-nine-rules/main.js';
 import ignores from '#eslint-rules/ignores.js';
 
 export default [
@@ -23,6 +24,7 @@ export default [
   noRelativePaths,
   noRelativePathsTests,
   ...cleanArchitecture,
+  ...objectOrientedNineRules,
   ignores,
   ...storybook.configs["flat/recommended"],
 ];
