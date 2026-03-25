@@ -1,26 +1,29 @@
 import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/input/ImportRulesJsonInputData';
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
-import { RulesJsonRuleEntryRaw } from 'src/application-business-rules/dto/RulesJsonSchema';
 import {
-  EmptyRulesImportError,
   InvalidJsonImportError,
   InvalidSchemaImportError,
-  MAX_RULE_COUNT,
-  MissingFieldImportError,
-  RuleCountExceededImportError,
   StorageImportError,
-  UnsupportedVersionImportError,
 } from 'src/application-business-rules/errors/ImportRulesJsonErrors';
 import { JsonStructureError, JsonSyntaxError } from 'src/application-business-rules/errors/JsonParserErrors';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
-import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { ImportFileSizeError } from 'src/enterprise-business-rules/errors/ImportFileSizeError';
 import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
-import { InvalidRulesJsonSchemaError, RulesJsonVersionSchema } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
+import {
+  EmptyRulesCollectionError,
+  ImportRulesCollection,
+  RulesCollectionCountExceededError,
+  RulesCollectionMissingFieldError,
+} from 'src/enterprise-business-rules/value-objects/ImportRulesCollection';
+import {
+  InvalidRulesJsonSchemaError,
+  RulesJsonVersionSchema,
+  UnsupportedRulesJsonVersionError,
+} from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
 
 export interface IImportRulesJsonPresenter {
   present(output: ImportRulesJsonOutputData): void;
@@ -47,55 +50,13 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       // テキスト読み取り
       const jsonString = await this.fileTextReader.readAsText(inputData.file);
 
-      // JSON解析
+      // JSON解析・スキーマ/バージョンチェック
       const parsed = this.jsonParser.parseAsObject(jsonString);
+      new RulesJsonVersionSchema(parsed);
 
-      // バージョンチェック
-      const versionSchema = new RulesJsonVersionSchema(parsed);
-      if (!versionSchema.isSupportedVersion()) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(new UnsupportedVersionImportError(parsed.version), 'validation')
-        );
-        return;
-      }
-
-      const data = parsed as { version: string; rules: RulesJsonRuleEntryRaw[] };
-
-      // 0件チェック
-      if (data.rules.length === 0) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(new EmptyRulesImportError(), 'validation')
-        );
-        return;
-      }
-
-      // 件数上限チェック
-      if (data.rules.length > MAX_RULE_COUNT) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(new RuleCountExceededImportError(), 'validation')
-        );
-        return;
-      }
-
-      // 各ルールの必須フィールドチェック → RewriteRule[] 構築
-      const validatedRules: RewriteRule[] = [];
-      for (let i = 0; i < data.rules.length; i++) {
-        const ruleData = data.rules[i];
-        if (ruleData.oldString === null || ruleData.oldString === undefined || ruleData.oldString === '') {
-          this.presenter.presentError(
-            new ImportRulesJsonErrorOutputData(new MissingFieldImportError(i + 1), 'validation')
-          );
-          return;
-        }
-        validatedRules.push(new RewriteRule(
-          typeof ruleData.id === 'number' ? ruleData.id : 0,
-          String(ruleData.oldString),
-          String(ruleData.newString ?? ''),
-          String(ruleData.urlPattern ?? ''),
-          typeof ruleData.isRegex === 'boolean' ? ruleData.isRegex : false,
-          typeof ruleData.isActive === 'boolean' ? ruleData.isActive : true
-        ));
-      }
+      // ルール件数・フィールドチェック → RewriteRule[] 構築
+      const collection = new ImportRulesCollection(parsed.rules as unknown[]);
+      const validatedRules = collection.toArray();
 
       // 現在のルール件数を取得して全件置換
       let previousCount = 0;
@@ -135,6 +96,22 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       if (error instanceof InvalidRulesJsonSchemaError) {
         this.presenter.presentError(
           new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
+        );
+        return;
+      }
+      if (error instanceof UnsupportedRulesJsonVersionError) {
+        this.presenter.presentError(
+          new ImportRulesJsonErrorOutputData(error, 'validation')
+        );
+        return;
+      }
+      if (
+        error instanceof EmptyRulesCollectionError ||
+        error instanceof RulesCollectionCountExceededError ||
+        error instanceof RulesCollectionMissingFieldError
+      ) {
+        this.presenter.presentError(
+          new ImportRulesJsonErrorOutputData(error, 'validation')
         );
         return;
       }

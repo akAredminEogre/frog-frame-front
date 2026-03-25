@@ -14,15 +14,29 @@ export class InvalidRulesJsonSchemaError extends Error {
 }
 
 /**
+ * 未対応バージョンエラー
+ * コンストラクタがバージョン互換性検証に失敗した場合にスローする
+ */
+export class UnsupportedRulesJsonVersionError extends Error {
+  constructor(version: unknown) {
+    super(`未対応のバージョンです: ${String(version)}`);
+    this.name = 'UnsupportedRulesJsonVersionError';
+  }
+}
+
+/**
  * ルールJSONのバージョン/スキーマ検証Value Object
  * スキーマ整合性チェック・バージョン互換性チェックはドメインルールのため
  * enterprise-business-rules層に配置する
- * コンストラクタでスキーマ検証を行い、不正な場合は InvalidRulesJsonSchemaError をスロー
+ * コンストラクタでスキーマ検証・バージョン検証を行い、不正な場合は各エラーをスロー
  */
 export class RulesJsonVersionSchema {
   constructor(private readonly data: Record<string, unknown>) {
     if (!this.isValidSchema()) {
       throw new InvalidRulesJsonSchemaError();
+    }
+    if (!this.isSupportedVersion()) {
+      throw new UnsupportedRulesJsonVersionError(this.data.version);
     }
   }
 
