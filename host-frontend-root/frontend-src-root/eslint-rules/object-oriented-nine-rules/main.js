@@ -4,6 +4,7 @@
 import indentDepth from '#eslint-rules/object-oriented-nine-rules/indent-depth.js';
 import noElse from '#eslint-rules/object-oriented-nine-rules/no-else.js';
 import noGetterSetter from '#eslint-rules/object-oriented-nine-rules/no-getter-setter.js';
+import noNameAbbreviation from '#eslint-rules/object-oriented-nine-rules/no-name-abbreviation.js';
 import oneDotPerLine from '#eslint-rules/object-oriented-nine-rules/one-dot-per-line.js';
 
 export default [
@@ -11,4 +12,5 @@ export default [
   oneDotPerLine,
   noGetterSetter,
   ...indentDepth,
+  noNameAbbreviation,
 ];
