@@ -1,6 +1,7 @@
 // Object-Oriented Nine Rules ESLint configuration
 // See: docs/coding-standards/src/object-oriented-nine-rules.md
 
+import entitySize from '#eslint-rules/object-oriented-nine-rules/entity-size.js';
 import indentDepth from '#eslint-rules/object-oriented-nine-rules/indent-depth.js';
 import noElse from '#eslint-rules/object-oriented-nine-rules/no-else.js';
 import noGetterSetter from '#eslint-rules/object-oriented-nine-rules/no-getter-setter.js';
@@ -13,4 +14,5 @@ export default [
   noGetterSetter,
   ...indentDepth,
   noNameAbbreviation,
+  ...entitySize,
 ];
