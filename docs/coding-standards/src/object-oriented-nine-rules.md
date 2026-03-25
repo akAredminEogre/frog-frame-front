@@ -26,6 +26,7 @@
 
 ## 対象ファイル
 - src/frameworks-and-drivers/browser以下のコード
+- src/application-business-rules/interactors/以下のコード
 
 ## eslint-rule
 
