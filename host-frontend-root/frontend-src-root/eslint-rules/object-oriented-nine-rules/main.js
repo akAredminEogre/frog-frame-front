@@ -6,6 +6,7 @@ import indentDepth from '#eslint-rules/object-oriented-nine-rules/indent-depth.j
 import noElse from '#eslint-rules/object-oriented-nine-rules/no-else.js';
 import noGetterSetter from '#eslint-rules/object-oriented-nine-rules/no-getter-setter.js';
 import noNameAbbreviation from '#eslint-rules/object-oriented-nine-rules/no-name-abbreviation.js';
+import noSwitchCase from '#eslint-rules/object-oriented-nine-rules/no-switch-case.js';
 import oneDotPerLine from '#eslint-rules/object-oriented-nine-rules/one-dot-per-line.js';
 
 export default [
@@ -13,6 +14,7 @@ export default [
   oneDotPerLine,
   noGetterSetter,
   ...indentDepth,
+  ...noSwitchCase,
   noNameAbbreviation,
   ...entitySize,
 ];
