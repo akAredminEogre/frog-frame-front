@@ -18,7 +18,7 @@ jobs:
         run: |
           BASE=${{ github.event.pull_request.base.sha }}
           HEAD=${{ github.event.pull_request.head.sha }}
-          DIFF=$(git diff "$BASE" "$HEAD" -- '*.ts' '*.tsx' | grep '^\+' | grep -v '^\+\+\+')
+          DIFF=$(git diff "$BASE" "$HEAD" -- '*.ts' '*.tsx' | grep '^\+' | grep -v '^\+\+\+' || true)
           if echo "$DIFF" | grep -qE 'eslint-disable(-next-line)?'; then
             echo "❌ ESLint ignore comment detected in this PR."
             echo "Use ignorePattern in ESLint config instead of eslint-disable comments."
