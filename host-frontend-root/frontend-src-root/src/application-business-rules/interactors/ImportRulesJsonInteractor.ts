@@ -1,29 +1,15 @@
 import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/input/ImportRulesJsonInputData';
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
-import {
-  InvalidJsonImportError,
-  InvalidSchemaImportError,
-  StorageImportError,
-} from 'src/application-business-rules/errors/ImportRulesJsonErrors';
-import { JsonStructureError, JsonSyntaxError } from 'src/application-business-rules/errors/JsonParserErrors';
+import { StorageImportError } from 'src/application-business-rules/errors/ImportRulesJsonErrors';
+import { ImportRulesJsonErrorOutputDataFactory } from 'src/application-business-rules/interactors/ImportRulesJsonErrorOutputDataFactory';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
-import { ImportFileSizeError } from 'src/enterprise-business-rules/errors/ImportFileSizeError';
 import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
-import {
-  EmptyRulesCollectionError,
-  ImportRulesCollection,
-  RulesCollectionCountExceededError,
-  RulesCollectionMissingFieldError,
-} from 'src/enterprise-business-rules/value-objects/ImportRulesCollection';
-import {
-  InvalidRulesJsonSchemaError,
-  RulesJsonVersionSchema,
-  UnsupportedRulesJsonVersionError,
-} from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
+import { ImportRulesCollection } from 'src/enterprise-business-rules/value-objects/ImportRulesCollection';
+import { RulesJsonVersionSchema } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
 
 export interface IImportRulesJsonPresenter {
   present(output: ImportRulesJsonOutputData): void;
@@ -75,49 +61,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         new ImportRulesJsonOutputData(validatedRules.length, previousCount)
       );
     } catch (error) {
-      if (error instanceof JsonSyntaxError) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(new InvalidJsonImportError(), 'parse')
-        );
-        return;
-      }
-      if (error instanceof JsonStructureError) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
-        );
-        return;
-      }
-      if (error instanceof ImportFileSizeError) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(error, 'validation')
-        );
-        return;
-      }
-      if (error instanceof InvalidRulesJsonSchemaError) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')
-        );
-        return;
-      }
-      if (error instanceof UnsupportedRulesJsonVersionError) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(error, 'validation')
-        );
-        return;
-      }
-      if (
-        error instanceof EmptyRulesCollectionError ||
-        error instanceof RulesCollectionCountExceededError ||
-        error instanceof RulesCollectionMissingFieldError
-      ) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(error, 'validation')
-        );
-        return;
-      }
-      this.presenter.presentError(
-        new ImportRulesJsonErrorOutputData(new StorageImportError(error), 'storage')
-      );
+      this.presenter.presentError(new ImportRulesJsonErrorOutputDataFactory().create(error));
     }
   }
 }
