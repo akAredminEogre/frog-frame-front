@@ -2,7 +2,7 @@ import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/inp
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import { StorageImportError } from 'src/application-business-rules/errors/ImportRulesJsonErrors';
-import { ImportRulesJsonErrorOutputDataFactory } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputDataFactory';
+import { ImportRulesJsonErrorOutputDataFactory } from 'src/application-business-rules/interactors/ImportRulesJsonErrorOutputDataFactory';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
