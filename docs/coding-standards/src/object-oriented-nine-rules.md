@@ -4,12 +4,12 @@
 
 | # | ルール | ESLint |
 |---|--------|--------|
-| 1 | 1つのメソッドにつきインデントは1段階までにすること | ❌ 未実装（複雑） |
+| 1 | 1つのメソッドにつきインデントは1段階までにすること | ✅ 実装済 |
 | 2 | else句を使用しないこと | ✅ 実装済 |
 | 3 | すべてのプリミティブ型と文字列型をラップすること | ❌ 未実装（複雑） |
 | 4 | 1行につきドットは1つまでにすること | ✅ 実装済 |
-| 5 | 名前を省略しないこと | ❌ 未実装（複雑） |
-| 6 | すべてのエンティティを小さくすること | ❌ 未実装（複雑） |
+| 5 | 名前を省略しないこと | ✅ 実装済 |
+| 6 | すべてのエンティティを小さくすること | ✅ 実装済 |
 | 7 | 1つのクラスにつきインスタンス変数は2つまでにすること | ❌ 未実装（複雑） |
 | 8 | ファーストクラスコレクションを使用すること | ❌ 未実装（複雑） |
 | 9 | Getter、Setter、プロパティを使用しないこと | ✅ 実装済 |
@@ -32,8 +32,12 @@
 
 | ルール | ESLintファイル |
 |--------|----------------|
+| Rule 1: インデント1段階 | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/indent-depth.js` |
 | Rule 2: else句禁止 | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/no-else.js` |
+| Rule 2: switch-case分離 | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/no-switch-case.js` |
 | Rule 4: 1行1ドット | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/one-dot-per-line.js` |
+| Rule 5: 名前省略禁止 | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/no-name-abbreviation.js` |
+| Rule 6: エンティティサイズ | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/entity-size.js` |
 | Rule 9: Getter/Setter禁止 | `host-frontend-root/frontend-src-root/eslint-rules/object-oriented-nine-rules/no-getter-setter.js` |
 
-その他のルール（1, 3, 5, 6, 7, 8）は実装が複雑なため、PRレビューで確認。
+その他のルール（3, 7, 8）は実装が複雑なため、PRレビューで確認。
