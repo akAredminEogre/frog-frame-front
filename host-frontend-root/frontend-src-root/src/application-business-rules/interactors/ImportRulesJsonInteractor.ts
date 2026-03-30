@@ -2,7 +2,6 @@ import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/inp
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import { StorageImportError } from 'src/application-business-rules/errors/ImportRulesJsonErrors';
-import { ImportRulesJsonErrorOutputDataFactory } from 'src/application-business-rules/interactors/ImportRulesJsonErrorOutputDataFactory';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
@@ -61,7 +60,7 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
         new ImportRulesJsonOutputData(validatedRules.length, previousCount)
       );
     } catch (error) {
-      this.presenter.presentError(new ImportRulesJsonErrorOutputDataFactory().create(error));
+      this.presenter.presentError(ImportRulesJsonErrorOutputData.fromError(error));
     }
   }
 }
