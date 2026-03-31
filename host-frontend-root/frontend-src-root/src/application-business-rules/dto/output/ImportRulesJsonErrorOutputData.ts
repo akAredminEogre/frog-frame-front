@@ -50,12 +50,11 @@ export class ImportRulesJsonErrorOutputData {
   }
 
   static fromError(error: unknown): ImportRulesJsonErrorOutputData {
-    for (const [ErrorClass, handler] of ImportRulesJsonErrorOutputData.strategies) {
-      if (error instanceof ErrorClass) {
-        return handler(error);
-      }
-    }
-    return new ImportRulesJsonErrorOutputData(new StorageImportError(error), 'storage');
+    const errorConstructor = error instanceof Object ? error.constructor : undefined;
+    const handler = ImportRulesJsonErrorOutputData.strategies.get(errorConstructor as Function);
+    return handler
+      ? handler(error)
+      : new ImportRulesJsonErrorOutputData(new StorageImportError(error), 'storage');
   }
 
   get message(): string {
