@@ -1,7 +1,6 @@
 import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/input/ImportRulesJsonInputData';
 import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
-import { StorageImportError } from 'src/application-business-rules/errors/ImportRulesJsonErrors';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
@@ -45,16 +44,9 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
 
       // 現在のルール件数を取得して全件置換
       let previousCount = 0;
-      try {
-        const currentRules = await this.repository.getAll();
-        previousCount = currentRules.toArray().length;
-        await this.repository.replaceAll(validatedRules);
-      } catch (error) {
-        this.presenter.presentError(
-          new ImportRulesJsonErrorOutputData(new StorageImportError(error), 'storage')
-        );
-        return;
-      }
+      const currentRules = await this.repository.getAll();
+      previousCount = currentRules.toArray().length;
+      await this.repository.replaceAll(validatedRules);
 
       this.presenter.present(
         new ImportRulesJsonOutputData(validatedRules.length, previousCount)
