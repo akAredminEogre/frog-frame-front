@@ -47,11 +47,8 @@ export class ImportRulesCollection {
     if (rawRules.length > MAX_IMPORT_RULES_COUNT) {
       throw new RulesCollectionCountExceededError();
     }
-    this._rules = rawRules.map((raw, index) => {
+    this._rules = rawRules.map((raw, _index) => {
       const ruleData = raw as Record<string, unknown>;
-      if (typeof ruleData.oldString !== 'string' || ruleData.oldString === '') {
-        throw new RulesCollectionMissingFieldError(index + 1);
-      }
       return new RewriteRule(
         typeof ruleData.id === 'number' ? ruleData.id : 0,
         String(ruleData.oldString),
