@@ -49,7 +49,7 @@ export class ImportRulesCollection {
     }
     this._rules = rawRules.map((raw, index) => {
       const ruleData = raw as Record<string, unknown>;
-      if (ruleData.oldString === null || ruleData.oldString === undefined || ruleData.oldString === '') {
+      if (typeof ruleData.oldString !== 'string' || ruleData.oldString === '') {
         throw new RulesCollectionMissingFieldError(index + 1);
       }
       return new RewriteRule(
