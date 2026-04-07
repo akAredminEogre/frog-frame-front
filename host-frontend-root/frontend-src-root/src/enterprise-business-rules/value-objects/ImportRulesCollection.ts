@@ -49,13 +49,15 @@ export class ImportRulesCollection {
     }
     this._rules = rawRules.map((raw, _index) => {
       const ruleData = raw as Record<string, unknown>;
-      return new RewriteRule(
+      return RewriteRule.fromParams(
         typeof ruleData.id === 'number' ? ruleData.id : 0,
-        String(ruleData.oldString),
-        String(ruleData.newString ?? ''),
-        String(ruleData.urlPattern ?? ''),
-        typeof ruleData.isRegex === 'boolean' ? ruleData.isRegex : false,
-        typeof ruleData.isActive === 'boolean' ? ruleData.isActive : true
+        {
+          oldString: String(ruleData.oldString),
+          newString: String(ruleData.newString ?? ''),
+          urlPattern: String(ruleData.urlPattern ?? ''),
+          isRegex: typeof ruleData.isRegex === 'boolean' ? ruleData.isRegex : false,
+          isActive: typeof ruleData.isActive === 'boolean' ? ruleData.isActive : true,
+        }
       );
     });
   }
