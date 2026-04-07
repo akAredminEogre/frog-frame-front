@@ -1,3 +1,4 @@
+import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 export const MAX_IMPORT_RULES_COUNT = 1000;
@@ -48,16 +49,10 @@ export class ImportRulesCollection {
       throw new RulesCollectionCountExceededError();
     }
     this._rules = rawRules.map((raw, _index) => {
-      const ruleData = raw as Record<string, unknown>;
+      const { id, ...params } = raw as Record<string, unknown>;
       return RewriteRule.fromParams(
-        typeof ruleData.id === 'number' ? ruleData.id : 0,
-        {
-          oldString: String(ruleData.oldString),
-          newString: String(ruleData.newString ?? ''),
-          urlPattern: String(ruleData.urlPattern ?? ''),
-          isRegex: typeof ruleData.isRegex === 'boolean' ? ruleData.isRegex : false,
-          isActive: typeof ruleData.isActive === 'boolean' ? ruleData.isActive : true,
-        }
+        typeof id === 'number' ? id : 0,
+        params as unknown as RewriteRuleParams
       );
     });
   }
