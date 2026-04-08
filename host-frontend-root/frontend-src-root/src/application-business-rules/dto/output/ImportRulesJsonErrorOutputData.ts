@@ -8,7 +8,6 @@ import { ImportFileSizeError } from 'src/enterprise-business-rules/errors/Import
 import {
   EmptyRulesCollectionError,
   RulesCollectionCountExceededError,
-  RulesCollectionMissingFieldError,
 } from 'src/enterprise-business-rules/value-objects/ImportRulesCollection';
 import {
   InvalidRulesJsonSchemaError,
@@ -36,7 +35,6 @@ export class ImportRulesJsonErrorOutputData {
       [UnsupportedRulesJsonVersionError, validationPassthrough],
       [EmptyRulesCollectionError, validationPassthrough],
       [RulesCollectionCountExceededError, validationPassthrough],
-      [RulesCollectionMissingFieldError, validationPassthrough],
     ]);
   })();
 

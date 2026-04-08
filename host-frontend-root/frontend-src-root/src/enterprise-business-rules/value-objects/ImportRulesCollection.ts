@@ -24,19 +24,10 @@ export class RulesCollectionCountExceededError extends Error {
 }
 
 /**
- * 必須フィールド欠落エラー
- */
-export class RulesCollectionMissingFieldError extends Error {
-  constructor(ruleIndex: number) {
-    super(`ルール #${ruleIndex}: oldStringが欠落または空白です`);
-    this.name = 'RulesCollectionMissingFieldError';
-  }
-}
-
-/**
  * インポートルール集合のValue Object
- * コンストラクタで0件チェック・件数上限チェック・各ルールの必須フィールド検証を行い、
+ * コンストラクタで0件チェック・件数上限チェックを行い、
  * RewriteRule[] を構築する。各チェック失敗時は対応するエラーをスローする。
+ * 各ルールのフィールドバリデーションは RewriteRule.fromParams() に委譲する。
  */
 export class ImportRulesCollection {
   private readonly _rules: RewriteRule[];
@@ -48,11 +39,8 @@ export class ImportRulesCollection {
     if (rawRules.length > MAX_IMPORT_RULES_COUNT) {
       throw new RulesCollectionCountExceededError();
     }
-    this._rules = rawRules.map((raw, index) => {
+    this._rules = rawRules.map((raw) => {
       const ruleData = raw as Record<string, unknown>;
-      if (typeof ruleData.oldString !== 'string' || ruleData.oldString === '') {
-        throw new RulesCollectionMissingFieldError(index + 1);
-      }
       return RewriteRule.fromParams(
         ruleData.id,
         ruleData as unknown as RewriteRuleParams
