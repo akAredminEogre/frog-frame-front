@@ -35,9 +35,9 @@ export class RewriteRule {
    * @param params RewriteRuleParamsオブジェクト
    * @returns RewriteRuleインスタンス
    */
-  static fromParams(id: number, params: RewriteRuleParams): RewriteRule {
+  static fromParams(id: unknown, params: RewriteRuleParams): RewriteRule {
     return new RewriteRule(
-      id,
+      typeof id === 'number' ? id : 0,
       params.oldString,
       params.newString,
       params.urlPattern,

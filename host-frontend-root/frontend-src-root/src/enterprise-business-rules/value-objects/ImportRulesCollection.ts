@@ -49,10 +49,10 @@ export class ImportRulesCollection {
       throw new RulesCollectionCountExceededError();
     }
     this._rules = rawRules.map((raw, _index) => {
-      const { id, ...params } = raw as Record<string, unknown>;
+      const ruleData = raw as Record<string, unknown>;
       return RewriteRule.fromParams(
-        typeof id === 'number' ? id : 0,
-        params as unknown as RewriteRuleParams
+        ruleData.id,
+        ruleData as unknown as RewriteRuleParams
       );
     });
   }
