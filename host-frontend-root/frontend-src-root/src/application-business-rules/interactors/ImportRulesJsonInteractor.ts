@@ -43,9 +43,8 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       const validatedRules = collection.toArray();
 
       // 現在のルール件数を取得して全件置換
-      let previousCount = 0;
       const currentRules = await this.repository.getAll();
-      previousCount = currentRules.toArray().length;
+      const previousCount = currentRules.toArray().length;
       await this.repository.replaceAll(validatedRules);
 
       this.presenter.present(
