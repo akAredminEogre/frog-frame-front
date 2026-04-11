@@ -1,4 +1,5 @@
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 
 /**
  * テスト用RewriteRuleを生成するヘルパー
@@ -14,7 +15,7 @@ export const createTestRule = (overrides: {
   isActive?: boolean;
 } = {}): RewriteRule => {
   return new RewriteRule(
-    overrides.id ?? 1,
+    createRuleId(overrides.id ?? 1),
     overrides.oldString ?? 'oldString',
     overrides.newString ?? 'newString',
     overrides.urlPattern ?? 'https://example.com',

@@ -1,0 +1,7 @@
+@startuml
+' user-story-023: Branded Type 移行 Stage 2〜4 依存ネットワーク図
+
+[Stage2_EntityIds] --> [Stage3_ZodBoundary]
+[Stage3_ZodBoundary] --> [Stage4_EslintEnforce]
+
+@enduml

@@ -1,6 +1,7 @@
 import { RewriteRuleParams } from "src/application/types/RewriteRuleParams";
 import { RegexConstants } from "src/domain/constants/RegexConstants";
 import { PatternProcessingStrategyFactory } from "src/domain/entities/RewriteRule/PatternProcessingStrategyFactory";
+import { createRuleId, RuleId } from "src/enterprise-business-rules/value-objects/ids/RuleId";
 
 export class RewriteRule {
   // HTML要素間改行コード無視処理用の正規表現定数をメンバ変数として保持
@@ -12,7 +13,7 @@ export class RewriteRule {
   public readonly isActive: boolean;
 
   constructor(
-    public readonly id: number,
+    public readonly id: RuleId,
     public readonly oldString: string,
     public readonly newString: string,
     public readonly urlPattern: string,
@@ -35,9 +36,10 @@ export class RewriteRule {
    * @param params RewriteRuleParamsオブジェクト
    * @returns RewriteRuleインスタンス
    */
-  static fromParams(id: number, params: RewriteRuleParams): RewriteRule {
+  static fromParams(id: unknown, params: RewriteRuleParams): RewriteRule {
+    const ruleId = createRuleId(id);
     return new RewriteRule(
-      id,
+      ruleId,
       params.oldString,
       params.newString,
       params.urlPattern,
@@ -69,7 +71,7 @@ export class RewriteRule {
     }
 
     return new RewriteRule(
-      ruleData.id,
+      createRuleId(ruleData.id),
       ruleData.oldString,
       ruleData.newString,
       ruleData.urlPattern,

@@ -2,6 +2,7 @@
  * RuleTableRow テスト用モックRewriteRuleファクトリ
  */
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 
 interface CreateMockRewriteRuleOptions {
   id?: number;
@@ -21,7 +22,7 @@ export function createMockRewriteRule(
   options: CreateMockRewriteRuleOptions = {}
 ): RewriteRule {
   return new RewriteRule(
-    options.id ?? 1,
+    createRuleId(options.id ?? 1),
     options.oldString ?? 'old-string',
     options.newString ?? 'new-string',
     options.urlPattern ?? 'https://example.com',
