@@ -47,6 +47,18 @@
 
 **対応テスト**: `createRuleId.test.ts`（`it('non-numberを拒否する')` に3 `expect` を配列/連結せずインライン記述）
 
+### 4. 異常系（Number.isInteger違反：小数・NaN・Infinity）
+
+`RuleId.ts:6` の `!Number.isInteger(raw)` 条件を発火させる代表値をテストする。
+
+| 分類 | テストケース | 根拠 |
+|------|-------------|------|
+| 小数 | `createRuleId(1.5)` → `throw 'Invalid RuleId: 1.5'` | `Number.isInteger(1.5) === false`。型は `number` だが整数性違反を単体検証 |
+| `NaN` | `createRuleId(NaN)` → `throw 'Invalid RuleId: NaN'` | `Number.isInteger(NaN) === false`。数値演算失敗値の拒否を明示 |
+| `Infinity` | `createRuleId(Infinity)` → `throw 'Invalid RuleId: Infinity'` | `Number.isInteger(Infinity) === false`。無限大の拒否を明示 |
+
+**対応テスト**: `createRuleId.test.ts`（`it('小数（Number.isInteger違反）を拒否する')`, `it('NaNを拒否する')`, `it('Infinityを拒否する')`）
+
 ## 網羅性チェック
 
 - [x] 正の整数で成功（代表値）
@@ -56,20 +68,20 @@
 - [x] `null` で失敗（型違反：`typeof` が `'object'` となる仕様）
 - [x] `undefined` で失敗（型違反：未定義）
 - [x] エラーメッセージが仕様通り（`Invalid RuleId: <raw>` 形式）であること
-- [ ] `Number.isInteger` 違反（小数 `1.5` 等） → **未網羅（TODO: テスト追加推奨）**
-  - **根拠**: `RuleId.ts:6` の `!Number.isInteger(raw)` 条件の単体検証ケースがない。現状は `typeof raw !== 'number'` と `raw < 0` でしか失敗しないため、`createRuleId(1.5)` や `createRuleId(NaN)` の挙動が仕様書上明示されていない
-- [ ] `NaN` / `Infinity` での挙動 → **未網羅（TODO）**
-  - **根拠**: `Number.isInteger(NaN) === false`, `Number.isInteger(Infinity) === false` により現行実装では拒否されるが、テストコードでの検証がない
+- [x] `Number.isInteger` 違反（小数 `1.5` 等） → `createRuleId(1.5)` → `throw 'Invalid RuleId: 1.5'`
+  - **根拠**: `RuleId.ts:6` の `!Number.isInteger(raw)` 条件を単体検証。PR#394 レビュー対応で追加済み
+- [x] `NaN` / `Infinity` での挙動 → `createRuleId(NaN)` → `throw 'Invalid RuleId: NaN'`, `createRuleId(Infinity)` → `throw 'Invalid RuleId: Infinity'`
+  - **根拠**: `Number.isInteger(NaN) === false`, `Number.isInteger(Infinity) === false` により拒否されることをテストで検証済み（PR#394 レビュー対応で追加）
 - [ ] 型レベルの `Opaque` 検証（別の `Id` 型に代入できないこと） → 不要（TypeScript コンパイル時検証で保証され、ランタイムテストの対象外）
 - [ ] 可変性 → 不要（プリミティブ `number` のため本質的にイミュータブル）
 
-**優先度**: 上記TODO 2項目は PR#394 レビュー対応の範囲外とし、別タスクで補完することを推奨する。本PR時点での最小受入基準（「現在テストされている挙動」のドキュメント化）は満たす。
+上記TODO 2項目は PR#394 レビュー対応の範囲内で対応済み（本PR内でテスト追加・ドキュメント更新完了）。
 
 ## テストファイル構成
 
 ```text
 tests/unit/enterprise-business-rules/value-objects/ids/RuleId/
-└── createRuleId.test.ts   # 正常系（2ケース）+ 異常系（負数1ケース + non-number 3ケース）
+└── createRuleId.test.ts   # 正常系（2ケース）+ 異常系（負数1ケース + non-number 3ケース + Number.isInteger違反3ケース）
 ```
 
 **ファイル配置の根拠**:
@@ -102,15 +114,18 @@ tests/unit/enterprise-business-rules/value-objects/ids/RuleId/
  * 2. 0は正常に生成できる
  * 3. 負数は拒否される
  * 4. non-numberは拒否される
+ * 5. 小数（Number.isInteger違反）は拒否される
+ * 6. NaNは拒否される
+ * 7. Infinityは拒否される
  */
 ```
 
 | 観点 | 評価 |
 |------|------|
 | JSDoc 1行=1ケース | ✅ 遵守（`jsdoc-rule.md` §8.2） |
-| JSDoc と `it()` 説明の一致 | ✅ 4ケースで厳密一致（`test-strategy-consistency.md` §7.1） |
-| テスト戦略書の「テスト分類」との対応 | ✅ 本仕様書の分類 1〜3（4ケース）と順番・名前一致（§7.2） |
-| 抽象表現の回避 | ✅ 「正の整数」「0」「負数」「non-number」は具体的検証内容 |
+| JSDoc と `it()` 説明の一致 | ✅ 7ケースで厳密一致（`test-strategy-consistency.md` §7.1） |
+| テスト戦略書の「テスト分類」との対応 | ✅ 本仕様書の分類 1〜4（7ケース）と順番・名前一致（§7.2） |
+| 抽象表現の回避 | ✅ 「正の整数」「0」「負数」「non-number」「小数」「NaN」「Infinity」は具体的検証内容 |
 
 ## 機能要件トレーサビリティ
 
