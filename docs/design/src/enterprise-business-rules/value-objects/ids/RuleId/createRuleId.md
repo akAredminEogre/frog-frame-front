@@ -23,7 +23,7 @@
 | 正の整数（代表値） | `createRuleId(42)` → `42` | 一般的な有効値。数値がそのまま `RuleId` として返ることを検証 |
 | 境界値（下限） | `createRuleId(0)` → `0` | `raw < 0` 判定の等号側境界。`0` は有効・falsy値であるため専用ケースが必要 |
 
-**対応テスト**: `createRuleId.test.ts`（describe `createRuleId` 内の `it('正の整数を正常に生成できる')`, `it('0を正常に生成できる')`）
+**対応テスト**: `createRuleId/normal-cases.test.ts`
 
 ### 2. 異常系（境界値・同値分割：負数）
 
@@ -33,7 +33,7 @@
 |------|-------------|------|
 | 境界値（下限を下回る） | `createRuleId(-1)` → `throw 'Invalid RuleId: -1'` | 負数拒否。`0` との境界直下を選択することで比較演算子（`<` vs `<=`）のオフバイワン誤りを検出可能 |
 
-**対応テスト**: `createRuleId.test.ts`（`it('負数を拒否する')`）
+**対応テスト**: `createRuleId/Abend/negative-validation.test.ts`
 
 ### 3. 異常系（型チェック：non-number）
 
@@ -45,7 +45,7 @@
 | `null` | `createRuleId(null)` → `throw 'Invalid RuleId: null'` | 欠損値。`typeof null === 'object'` のJavaScript仕様に対する明示的拒否 |
 | `undefined` | `createRuleId(undefined)` → `throw 'Invalid RuleId: undefined'` | 未定義入力。オプショナルプロパティ経由での混入に対するガード |
 
-**対応テスト**: `createRuleId.test.ts`（`it('non-numberを拒否する')` に3 `expect` を配列/連結せずインライン記述）
+**対応テスト**: `createRuleId/Abend/type-validation.test.ts`（文字列）、`createRuleId/Abend/null-undefined-validation.test.ts`（null・undefined）
 
 ### 4. 異常系（Number.isInteger違反：小数・NaN・Infinity）
 
@@ -57,7 +57,7 @@
 | `NaN` | `createRuleId(NaN)` → `throw 'Invalid RuleId: NaN'` | `Number.isInteger(NaN) === false`。数値演算失敗値の拒否を明示 |
 | `Infinity` | `createRuleId(Infinity)` → `throw 'Invalid RuleId: Infinity'` | `Number.isInteger(Infinity) === false`。無限大の拒否を明示 |
 
-**対応テスト**: `createRuleId.test.ts`（`it('小数（Number.isInteger違反）を拒否する')`, `it('NaNを拒否する')`, `it('Infinityを拒否する')`）
+**対応テスト**: `createRuleId/Abend/integer-validation.test.ts`
 
 ## 網羅性チェック
 
@@ -80,14 +80,19 @@
 ## テストファイル構成
 
 ```text
-tests/unit/enterprise-business-rules/value-objects/ids/RuleId/
-└── createRuleId.test.ts   # 正常系（2ケース）+ 異常系（負数1ケース + non-number 3ケース + Number.isInteger違反3ケース）
+tests/unit/enterprise-business-rules/value-objects/ids/RuleId/createRuleId/
+├── normal-cases.test.ts                   # 正常系（正の整数・0）
+└── Abend/
+    ├── type-validation.test.ts            # 型バリデーション（文字列）
+    ├── null-undefined-validation.test.ts  # null/undefinedバリデーション
+    ├── integer-validation.test.ts         # 整数バリデーション（小数・NaN・Infinity）
+    └── negative-validation.test.ts        # 負数バリデーション
 ```
 
 **ファイル配置の根拠**:
-- `docs-rules/design/05-test-strategy.md:42-50` の「ディレクトリ構造原則」に準拠（`tests/unit/[layer]/[category]/[service-name]/[method-name]/` のミラー）
-- 現PRでは `createRuleId` のみを対象とするため `Abend/` サブディレクトリへの異常系分離は省略（ケース数少数・ファイル分割不要）
-- 配列ベーステストは未使用（各 `it` は独立した記述）
+- `docs-rules/design/05-test-strategy.md:80-96` の「ディレクトリ構造原則」に準拠（1メソッドごとにサブディレクトリ・異常系は `Abend/` 分離）
+- 各 `it` は独立した記述で1アサーション（OO9ルール準拠）
+- 配列ベーステストは未使用（各ケースのArrange/Act構造が同一のため分離基準を満たすが、TabId等既存の同層テストに倣い個別 `it` を採用）
 
 ## モック戦略
 
@@ -105,27 +110,22 @@ tests/unit/enterprise-business-rules/value-objects/ids/RuleId/
 
 ## JSDocとの一貫性（§8 / §7 チェック）
 
-現テストコード先頭 JSDoc:
+各テストファイル先頭にJSDocを配置（`jsdoc-rule.md` §8.2準拠）。
 
-```typescript
-/**
- * createRuleId - バリデーションテスト
- * 1. 正の整数は正常に生成できる
- * 2. 0は正常に生成できる
- * 3. 負数は拒否される
- * 4. non-numberは拒否される
- * 5. 小数（Number.isInteger違反）は拒否される
- * 6. NaNは拒否される
- * 7. Infinityは拒否される
- */
-```
+| ファイル | JSDoc内容 | 評価 |
+|---------|----------|------|
+| `normal-cases.test.ts` | 正の整数・0の正常生成（2ケース） | ✅ |
+| `Abend/negative-validation.test.ts` | 負数エラー（1ケース） | ✅ |
+| `Abend/type-validation.test.ts` | 文字列エラー（1ケース） | ✅ |
+| `Abend/null-undefined-validation.test.ts` | null/undefinedエラー（2ケース） | ✅ |
+| `Abend/integer-validation.test.ts` | 小数・NaN・Infinityエラー（3ケース） | ✅ |
 
 | 観点 | 評価 |
 |------|------|
 | JSDoc 1行=1ケース | ✅ 遵守（`jsdoc-rule.md` §8.2） |
-| JSDoc と `it()` 説明の一致 | ✅ 7ケースで厳密一致（`test-strategy-consistency.md` §7.1） |
-| テスト戦略書の「テスト分類」との対応 | ✅ 本仕様書の分類 1〜4（7ケース）と順番・名前一致（§7.2） |
-| 抽象表現の回避 | ✅ 「正の整数」「0」「負数」「non-number」「小数」「NaN」「Infinity」は具体的検証内容 |
+| JSDoc と `it()` 説明の一致 | ✅ 全9ケースで厳密一致（`test-strategy-consistency.md` §7.1） |
+| テスト戦略書の「テスト分類」との対応 | ✅ 本仕様書の分類 1〜4（9ケース）と順番・名前一致（§7.2） |
+| 抽象表現の回避 | ✅ 「正の整数」「0」「負数」「文字列」「null」「undefined」「小数」「NaN」「Infinity」は具体的検証内容 |
 
 ## 機能要件トレーサビリティ
 
@@ -135,6 +135,6 @@ tests/unit/enterprise-business-rules/value-objects/ids/RuleId/
 ## 関連ドキュメント
 
 - 実装: `host-frontend-root/frontend-src-root/src/enterprise-business-rules/value-objects/ids/RuleId.ts`
-- テスト: `host-frontend-root/frontend-src-root/tests/unit/enterprise-business-rules/value-objects/ids/RuleId/createRuleId.test.ts`
+- テスト: `host-frontend-root/frontend-src-root/tests/unit/enterprise-business-rules/value-objects/ids/RuleId/createRuleId/`
 - 上位規約: `docs-rules/design/05-test-strategy.md`
 - 分岐型規約: `docs/coding-standards/branded-types.md`（`Opaque` 利用全般）
