@@ -92,7 +92,10 @@ tests/unit/enterprise-business-rules/value-objects/ids/RuleId/createRuleId/
 **ファイル配置の根拠**:
 - `docs-rules/design/05-test-strategy.md:80-96` の「ディレクトリ構造原則」に準拠（1メソッドごとにサブディレクトリ・異常系は `Abend/` 分離）
 - 各 `it` は独立した記述で1アサーション（OO9ルール準拠）
-- 配列ベーステストは未使用（各ケースのArrange/Act構造が同一のため分離基準を満たすが、TabId等既存の同層テストに倣い個別 `it` を採用）
+- 配列ベーステスト（`docs/coding-standards/tests/array-based-test.md`）に準拠:
+  - Arrange/Act/Assert が同一な複数ケースを含むファイル（`normal-cases.test.ts` 2件・`Abend/null-undefined-validation.test.ts` 2件・`Abend/integer-validation.test.ts` 3件）は `testCases.forEach` の配列ベース形式で記述
+  - 単一ケースのみのファイル（`Abend/negative-validation.test.ts`・`Abend/type-validation.test.ts`）は配列化の適用条件（3件以上）に該当しないため個別 `it` を維持
+  - 1ファイル1配列の原則（`array-based-test.md` 手順6）を遵守
 
 ## モック戦略
 

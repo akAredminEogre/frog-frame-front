@@ -7,13 +7,23 @@ import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/Ru
  * 2. 0を正常に生成できる
  */
 describe('createRuleId - 正常系', () => {
-  it('正の整数を正常に生成できる', () => {
-    const id = createRuleId(42);
-    expect(id).toBe(42);
-  });
+  const testCases = [
+    {
+      description: '正の整数を正常に生成できる',
+      input: 42,
+      expected: 42,
+    },
+    {
+      description: '0を正常に生成できる',
+      input: 0,
+      expected: 0,
+    },
+  ];
 
-  it('0を正常に生成できる', () => {
-    const id = createRuleId(0);
-    expect(id).toBe(0);
+  testCases.forEach(({ description, input, expected }) => {
+    it(description, () => {
+      const id = createRuleId(input);
+      expect(id).toBe(expected);
+    });
   });
 });

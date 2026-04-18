@@ -8,15 +8,27 @@ import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/Ru
  * 3. Infinityの場合はエラーをthrowする
  */
 describe('createRuleId - 整数バリデーション', () => {
-  it('小数（Number.isInteger違反）の場合はエラーをthrowする', () => {
-    expect(() => createRuleId(1.5)).toThrow('Invalid RuleId: 1.5');
-  });
+  const testCases = [
+    {
+      description: '小数（Number.isInteger違反）の場合はエラーをthrowする',
+      input: 1.5,
+      expectedMessage: 'Invalid RuleId: 1.5',
+    },
+    {
+      description: 'NaNの場合はエラーをthrowする',
+      input: NaN,
+      expectedMessage: 'Invalid RuleId: NaN',
+    },
+    {
+      description: 'Infinityの場合はエラーをthrowする',
+      input: Infinity,
+      expectedMessage: 'Invalid RuleId: Infinity',
+    },
+  ];
 
-  it('NaNの場合はエラーをthrowする', () => {
-    expect(() => createRuleId(NaN)).toThrow('Invalid RuleId: NaN');
-  });
-
-  it('Infinityの場合はエラーをthrowする', () => {
-    expect(() => createRuleId(Infinity)).toThrow('Invalid RuleId: Infinity');
+  testCases.forEach(({ description, input, expectedMessage }) => {
+    it(description, () => {
+      expect(() => createRuleId(input)).toThrow(expectedMessage);
+    });
   });
 });
