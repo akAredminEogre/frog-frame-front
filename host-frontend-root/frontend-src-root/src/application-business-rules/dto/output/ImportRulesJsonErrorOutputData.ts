@@ -5,6 +5,7 @@ import {
 } from 'src/application-business-rules/errors/ImportRulesJsonErrors';
 import { JsonStructureError, JsonSyntaxError } from 'src/application-business-rules/errors/JsonParserErrors';
 import { ImportFileSizeError } from 'src/enterprise-business-rules/errors/ImportFileSizeError';
+import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/InvalidRuleIdError';
 import {
   EmptyRulesCollectionError,
   RulesCollectionCountExceededError,
@@ -35,6 +36,7 @@ export class ImportRulesJsonErrorOutputData {
       [UnsupportedRulesJsonVersionError, validationPassthrough],
       [EmptyRulesCollectionError, validationPassthrough],
       [RulesCollectionCountExceededError, validationPassthrough],
+      [InvalidRuleIdError, validationPassthrough],
     ]);
   })();
 
