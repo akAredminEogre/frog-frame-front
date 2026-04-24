@@ -48,7 +48,11 @@ jobs:
         id: baseline
         run: |
           if [ -f ".eslint-disable-baseline" ]; then
-            BASELINE=$(cat .eslint-disable-baseline)
+            BASELINE=$(grep -E '^[0-9]+$' .eslint-disable-baseline | head -n 1)
+            if [ -z "$BASELINE" ]; then
+              echo "❌ .eslint-disable-baseline に数値行が見つからない"
+              exit 1
+            fi
             echo "baseline_count=$BASELINE" >> "$GITHUB_OUTPUT"
             echo "Baseline count: $BASELINE"
           else
