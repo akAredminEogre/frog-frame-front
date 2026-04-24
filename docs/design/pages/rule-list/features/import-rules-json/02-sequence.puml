@@ -1,420 +1,262 @@
 @startuml ImportRulesJson
 
-title ルールJSONインポート機能
+title ルールJSONインポート機能（1フェーズ設計）
 
 box "Rules Page - UI" #LightBlue
   participant "ImportButton" as ImportBtn
   participant "ImportRulesJsonUI" as ImportUI
   participant "RulesApp" as View
   participant "useImportRulesJson\n(Hook)" as Hook
-  participant "Toast\nNotification" as Toast
+  participant "ToastNotification" as Toast
 end box
 
 box "interface-adapters" #LightGreen
   participant "<<interface>>\nIImportRulesJson\nControllerFactory" as IFactory
-  participant "ImportRulesJson\nController\nFactory" as Factory
-  participant "<<interface>>\nIImportRulesJson\nController" as IController
-  participant "ImportRulesJson\nController" as Controller
-  participant "ImportRulesJson\nPresenter" as Presenter
-  participant "RewriteRule\nMapper" as Mapper
-  participant "<<interface>>\nIRewriteRule\nMessagingPort" as IMessagingPort
+  participant "ImportRulesJson\nControllerFactory" as Factory
+  participant "<<anonymous impl>>\nIImportRulesJson\nController" as Controller
 end box
 
 box "application-business-rules" #LightYellow
-  participant "ImportRulesJson\nPreviewOutputData" as PreviewOutputData
-  participant "ImportRulesJson\nOutputData" as OutputData
-  participant "ImportRulesJson\nError\nOutputData" as ErrorOutputData
-  participant "<<interface>>\nIImportRulesJson\nUseCase" as IUseCase
-  participant "<<interface>>\nIImportRulesJson\nPresenter" as IPresenter
-  participant "ImportRulesJson\nInteractor" as Interactor
-  participant "<<interface>>\nIRewriteRule\nRepository" as IRepository
+  participant "<<anonymous impl>>\nIImportRulesJson\nPresenter" as Presenter
+  participant "ImportRulesJson\nInputData" as InputData
+  participant "ImportRulesJson\nInteractor\n(IImportRulesJsonUseCase)" as Interactor
   participant "<<interface>>\nIJsonParser" as IJsonParser
-end box
-
-box "frameworks-and-drivers" #LightCyan
-  participant "JsonParser" as JsonParser
-  participant "FileTextReader" as FileTextReader
-  participant "FileSizeValidator" as FileSizeValidator
-  participant "BlobByteSize\nCalculator" as BlobCalc
-  participant "ChromeRuntime\nRewriteRule\nRepository" as MessagingRepo
-  participant "RewriteRule\nMessaging\nService" as MessagingService
-  participant "<<interface>>\nIRewriteRule\nProxyService" as IProxyService
-end box
-
-box "Background" #LightGray
-  participant "RewriteRule\nProxyService" as ProxyService
-  participant "RewriteRule\nProxyService\nImpl" as ProxyServiceImpl
-  participant "Dexie\nRewriteRule\nRepository" as DexieRepo
+  participant "<<interface>>\nIFileTextReader" as IFileTextReader
+  participant "<<interface>>\nIRewriteRule\nRepository" as IRepository
+  participant "ImportRulesJson\nOutputData" as OutputData
+  participant "ImportRulesJson\nErrorOutputData" as ErrorOutputData
 end box
 
 box "enterprise-business-rules" #LightPink
-  participant "RewriteRule" as Entity
+  participant "ImportFileSize" as FileSize
+  participant "RulesJsonVersionSchema" as VersionSchema
+  participant "ImportRulesCollection" as RulesCollection
+  participant "RewriteRule\n.fromParams" as RewriteRule
 end box
 
-== 初期化(useMemo内) ==
+box "frameworks-and-drivers" #LightCyan
+  participant "FileTextReader" as FileTextReader
+  participant "JsonParser" as JsonParser
+  participant "DexieRewriteRule\nRepository" as DexieRepo
+end box
 
-View -> Hook : useImportRulesJson()
+== 初期化（useMemo 内） ==
+
+View -> Hook : useImportRulesJson(onRulesChanged)
 activate Hook
+
 note right of Hook
-  useMemo内でFactory初期化
-  onPreview/onSuccess/onErrorコールバックを定義
-  isImporting/previewData状態を管理
+  useMemo で 1 回だけ factory.create() を呼ぶ
+  onSuccess / onError コールバックを注入する
 end note
 
-Hook -> IFactory : create(\n  onPreview,\n  onSuccess,\n  onError)
+Hook -> IFactory : create(onSuccess, onError)
 activate IFactory
-
-IFactory -> Factory : create(\n  onPreview,\n  onSuccess,\n  onError)
+IFactory -> Factory : create(onSuccess, onError)
 activate Factory
 
-Factory -> Presenter : new(\n  onPreview,\n  onSuccess,\n  onError)
-Factory -> Interactor : new(\n  repository,\n  presenter,\n  jsonParser)
-note right of Factory
-  Interactor は
-  IImportRulesJsonUseCase を実装
-  jsonParser: IJsonParser (CA準拠)
-end note
-Factory -> Controller : new(useCase)
-Factory --> IFactory : controller
+Factory -> Presenter : 無名オブジェクト生成\n{ present, presentError }
+Factory -> Interactor : new(repository, presenter,\n  jsonParser, fileTextReader)
+Factory --> IFactory : 無名 IImportRulesJsonController\n{ importRulesJson(file) }
 deactivate Factory
-
 IFactory --> Hook : controller
 deactivate IFactory
 
-Hook --> View : { importRulesJson,\n  confirmImport,\n  cancelImport,\n  isImporting,\n  previewData }
+Hook --> View : { handleFileSelect, isImporting,\n  importError, importSuccess,\n  dismissImportError,\n  dismissImportSuccess }
 
 note right of Hook
-  ADR-005: Factoryパターンにより
-  ReactコールバックをPresenterに注入
-  onPreview: プレビューダイアログ表示
-  onSuccess: 成功トースト + リフレッシュ
-  onError: エラートースト表示
+  ADR-005: Factoryパターンで React コールバックを
+  Presenter（無名実装）に注入する
+  onSuccess → setIsImporting(false) + setImportSuccess + onRulesChanged()
+  onError   → setIsImporting(false) + setImportError
+end note
+deactivate Hook
+
+== ファイル選択 → バリデーション → 一括置換（1フェーズ） ==
+
+ImportBtn -> ImportUI : onFileSelect(file)
+activate ImportUI
+note over ImportBtn
+  hidden <input type="file" accept=".json">
+  同一ファイル再選択のため onChange 後に value をリセット
 end note
 
-== Phase 1: ファイル選択 → バリデーション → プレビュー ==
-
-ImportBtn -> View : onFileSelect(file)
+ImportUI -> View : onImportClick(file)
 activate View
-note right of View
-  <input type="file" accept=".json">
-  ファイル選択後に発火
-end note
 
-View -> Hook : importRulesJson(file)
+View -> Hook : handleFileSelect(file)
 activate Hook
 
-alt isImporting = true
-  note over Hook
-    **重複実行防止**
-    既にインポート処理中のため
-    早期リターン
-  end note
-  Hook --> View : 早期リターン
-  deactivate Hook
-  deactivate View
+Hook -> Hook : setImportError(null)\nsetImportSuccess(null)\nsetIsImporting(true)
 
-else isImporting = false
-  Hook -> Hook : setIsImporting(true)
-
-  Hook -> IController : importRulesJson(file)
-  activate IController
-
-  IController -> Controller : importRulesJson(file)
-  activate Controller
-
-  Controller -> IUseCase : importRulesJson(\n  new ImportRulesJsonInputData(file))
-  activate IUseCase
-  IUseCase -> Interactor : importRulesJson(inputData)
-  activate Interactor
-
-  Interactor -> IJsonParser : parse(jsonString)
-  activate IJsonParser
-  note right of IJsonParser
-    CA準拠: JSON.parseはframeworks-and-drivers層に委譲
-    SyntaxError発生時はInteractorがcatchしてpresentError
-  end note
-  IJsonParser -> JsonParser : parse(jsonString)
-  activate JsonParser
-  JsonParser --> IJsonParser : parsedJson or throws SyntaxError
-  deactivate JsonParser
-  IJsonParser --> Interactor : parsedJson or throws SyntaxError
-  deactivate IJsonParser
-
-  alt バリデーション失敗
-    note over Interactor
-      new ImportFileSize(file.size) での5MB超過 or
-      jsonParser.parse() 失敗 or スキーマ不正 or
-      version不一致 or ルール0件 or 件数上限超過
-    end note
-    Interactor -> ErrorOutputData : new(\n  error,\n  errorType)
-    activate ErrorOutputData
-    ErrorOutputData --> Interactor : errorOutputData
-    deactivate ErrorOutputData
-
-    Interactor -> IPresenter : presentError(\n  errorOutputData)
-    activate IPresenter
-
-    IPresenter -> Presenter : presentError(\n  errorOutputData)
-    activate Presenter
-
-    Presenter -> Hook : showErrorInView(\n  message)
-    activate Hook
-
-    Hook -> Toast : show(\n  message,\n  type: "error")
-    activate Toast
-    Toast --> Hook : 表示
-    deactivate Toast
-
-    Hook --> Presenter : エラー表示完了
-    deactivate Hook
-    deactivate Presenter
-    deactivate IPresenter
-    deactivate IUseCase
-    deactivate Controller
-    deactivate IController
-
-    group finally [エラー時]
-      Hook -> Hook : setIsImporting(false)
-    end
-
-    deactivate Hook
-    deactivate View
-
-  else バリデーション成功
-    activate Interactor
-    == 現在ルール件数取得 ==
-
-    Interactor -> IRepository : getAll()
-    activate IRepository
-
-    IRepository -> MessagingRepo : getAll()
-    activate MessagingRepo
-
-    MessagingRepo -> Mapper : getAll()
-    activate Mapper
-
-    Mapper -> IMessagingPort : getAll()
-    activate IMessagingPort
-
-    IMessagingPort -> MessagingService : getAll()
-    activate MessagingService
-
-    MessagingService -> IProxyService : getAll()
-    activate IProxyService
-
-    IProxyService -> ProxyService : getAll()
-    activate ProxyService
-
-    ProxyService -> ProxyServiceImpl : getAll()
-    activate ProxyServiceImpl
-
-    ProxyServiceImpl -> DexieRepo : getAll()
-    activate DexieRepo
-    DexieRepo --> ProxyServiceImpl : DTO[]
-    deactivate DexieRepo
-
-    ProxyServiceImpl --> ProxyService : DTO[]
-    deactivate ProxyServiceImpl
-
-    ProxyService --> IProxyService : DTO[]
-    deactivate ProxyService
-
-    IProxyService --> MessagingService : DTO[]
-    deactivate IProxyService
-
-    MessagingService --> IMessagingPort : DTO[]
-    deactivate MessagingService
-
-    IMessagingPort --> Mapper : DTO[]
-    deactivate IMessagingPort
-
-    loop 各DTO
-      Mapper -> Entity : fromDTO(dto)
-      Entity --> Mapper : rule
-    end
-
-    Mapper --> MessagingRepo : currentRules
-    deactivate Mapper
-
-    MessagingRepo --> IRepository : currentRules
-    deactivate MessagingRepo
-
-    IRepository --> Interactor : currentRules
-    deactivate IRepository
-
-    == プレビューデータ生成・通知 ==
-
-    note over Interactor
-      pendingRulesにインポートルールを保持
-      currentRuleCount = currentRules.length
-      importRuleCount = jsonRules.length
-    end note
-
-    Interactor -> PreviewOutputData : new(\n  currentRuleCount,\n  importRuleCount)
-    PreviewOutputData --> Interactor : previewData
-
-    Interactor -> IPresenter : presentPreview(\n  previewData)
-    activate IPresenter
-
-    IPresenter -> Presenter : presentPreview(\n  previewData)
-    activate Presenter
-
-    Presenter -> Hook : onPreview(\n  previewData)
-    note right of Hook
-      onPreviewコールバック実行(ADR-005):
-      setPreviewData(previewData)
-      → 確認ダイアログ表示
-    end note
-
-    deactivate Presenter
-    deactivate IPresenter
-    deactivate Interactor
-    deactivate IUseCase
-    deactivate Controller
-    deactivate IController
-
-    Hook -> Hook : setIsImporting(false)
-    note right of Hook
-      プレビュー表示中はisImporting=false
-      ユーザーの確認待ち状態
-    end note
-
-    Hook --> View : previewData更新
-    deactivate Hook
-    deactivate View
-
-  end
-end
-
-== Phase 2: ユーザー確認 → インポート実行 ==
-
-ImportUI -> View : onConfirm()
-activate View
-note right of View
-  [インポート実行] ボタンクリック
-end note
-
-View -> Hook : confirmImport()
-activate Hook
-
-Hook -> Hook : setIsImporting(true)
-
-Hook -> IController : confirmImport()
-activate IController
-
-IController -> Controller : confirmImport()
+Hook -> Controller : importRulesJson(file)
 activate Controller
 
-Controller -> IUseCase : confirmImport()
-activate IUseCase
-IUseCase -> Interactor : confirmImport()
+Controller -> InputData : new ImportRulesJsonInputData(file)
+Controller -> Interactor : importRulesJson(inputData)
 activate Interactor
 
 note over Interactor
-  pendingRulesからインポートルールを取得
-  replaceAll() で原子的置換
+  try { 下記 A〜G を順に実行 } catch(error) {
+    presenter.presentError(ImportRulesJsonErrorOutputData.fromError(error))
+  }
+  各ステップの throw は即座に catch に分岐する
 end note
 
-== 全ルール原子的置換 ==
+== A. ファイルサイズ検証（EBR VO） ==
+Interactor -> FileSize : new ImportFileSize(inputData.file.size)
+note right of FileSize
+  コンストラクタで 5MB 超過を検査
+  超過時: ImportFileSizeError を throw
+end note
 
-Interactor -> IRepository : replaceAll(pendingRules)
+== B. テキスト読み取り（F&D 経由） ==
+Interactor -> IFileTextReader : readAsText(inputData.file)
+activate IFileTextReader
+IFileTextReader -> FileTextReader : readAsText(file)
+activate FileTextReader
+FileTextReader --> IFileTextReader : Promise<string>
+deactivate FileTextReader
+IFileTextReader --> Interactor : jsonString
+deactivate IFileTextReader
+
+== C. JSON 解析（F&D 経由） ==
+Interactor -> IJsonParser : parseAsObject(jsonString)
+activate IJsonParser
+IJsonParser -> JsonParser : parseAsObject(jsonString)
+activate JsonParser
+note right of JsonParser
+  JSON.parse 後に型検査
+  構文不正: JsonSyntaxError を throw
+  非オブジェクト/配列/null: JsonStructureError を throw
+end note
+JsonParser --> IJsonParser : Record<string, unknown>
+deactivate JsonParser
+IJsonParser --> Interactor : parsed
+deactivate IJsonParser
+
+== D. スキーマ／バージョン検証（EBR VO） ==
+Interactor -> VersionSchema : new RulesJsonVersionSchema(parsed)
+note right of VersionSchema
+  version/rules 欠落: InvalidRulesJsonSchemaError を throw
+  version != "1.0": UnsupportedRulesJsonVersionError を throw
+end note
+
+== E. ルール集合の検証（EBR VO + Entity） ==
+Interactor -> RulesCollection : new ImportRulesCollection(parsed.rules)
+activate RulesCollection
+note right of RulesCollection
+  0件: EmptyRulesCollectionError を throw
+  >1000件: RulesCollectionCountExceededError を throw
+end note
+
+loop 各 rawRule
+  RulesCollection -> RewriteRule : fromParams(raw.id, raw)
+  RewriteRule --> RulesCollection : RewriteRule
+  note right of RewriteRule
+    不正 id: InvalidRuleIdError を throw
+  end note
+end
+
+RulesCollection --> Interactor : collection
+deactivate RulesCollection
+
+Interactor -> RulesCollection : toArray()
+RulesCollection --> Interactor : validatedRules: RewriteRule[]
+
+== F. 現在件数取得（ページコンテキスト） ==
+Interactor -> IRepository : getAll()
 activate IRepository
-IRepository -> MessagingRepo : replaceAll(pendingRules)
-activate MessagingRepo
-note right of MessagingRepo
-  トランザクション保護付き原子的置換
-  既存ルール全削除 → 新ルール全作成
+IRepository -> DexieRepo : getAll()
+activate DexieRepo
+DexieRepo --> IRepository : RewriteRules
+deactivate DexieRepo
+IRepository --> Interactor : currentRules
+deactivate IRepository
+
+Interactor -> Interactor : previousCount = currentRules.toArray().length
+
+== G. 原子的一括置換 ==
+Interactor -> IRepository : replaceAll(validatedRules)
+activate IRepository
+IRepository -> DexieRepo : replaceAll(rules)
+activate DexieRepo
+note right of DexieRepo
+  Dexie.transaction('rw') 内で
+  clear() → bulkAdd() を原子的に実行
+  失敗時は自動ロールバック（storage 例外）
 end note
-MessagingRepo --> IRepository : 完了
-deactivate MessagingRepo
+DexieRepo --> IRepository : Promise<void>
+deactivate DexieRepo
 IRepository --> Interactor : 完了
 deactivate IRepository
 
-== 結果通知 ==
+== 通知（try の末尾 or catch 節） ==
 
-alt 成功
-  Interactor -> OutputData : new(\n  importedCount,\n  previousCount)
+alt 正常完了（A〜G すべて throw なし）
+  Interactor -> OutputData : new(validatedRules.length, previousCount)
   OutputData --> Interactor : outputData
 
-  Interactor -> IPresenter : present(outputData)
-  activate IPresenter
-
-  IPresenter -> Presenter : present(outputData)
+  Interactor -> Presenter : present(outputData)
   activate Presenter
-
-  Presenter -> Hook : onSuccess(\n  outputData)
+  Presenter -> Hook : onSuccess(`${importedCount}件のルールをインポートしました`)
   note right of Hook
-    onSuccessコールバック実行(ADR-005):
-    トースト通知「M件のルールをインポートしました（旧N件を置換）」
-    + ルール一覧リフレッシュ
-    + previewData = null（ダイアログ閉じる）
+    setIsImporting(false)
+    setImportSuccess(msg)
+    onRulesChangedRef.current()  // 一覧再取得
   end note
-
-  deactivate Presenter
-  deactivate IPresenter
-  deactivate Interactor
-  deactivate IUseCase
-  deactivate Controller
-  deactivate IController
-
-else Storage操作失敗
-  note over Interactor
-    replaceAll() でエラー発生
-  end note
-  Interactor -> ErrorOutputData : new(\n  error,\n  'storage')
-  ErrorOutputData --> Interactor : errorOutputData
-
-  Interactor -> IPresenter : presentError(\n  errorOutputData)
-  activate IPresenter
-
-  IPresenter -> Presenter : presentError(\n  errorOutputData)
-  activate Presenter
-
-  Presenter -> Hook : showErrorInView(\n  message)
-  activate Hook
-
-  Hook -> Toast : show(\n  "インポート処理中にエラーが発生しました",\n  type: "error")
-  activate Toast
+  Hook -> Toast : 成功トースト表示（props 経由）
   Toast --> Hook : 表示
-  deactivate Toast
-
-  Hook --> Presenter : エラー表示完了
-  deactivate Hook
+  Presenter --> Interactor : void
   deactivate Presenter
-  deactivate IPresenter
-  deactivate Interactor
-  deactivate IUseCase
-  deactivate Controller
-  deactivate IController
 
-end
-
-group finally [成功・エラー共通]
-  Hook -> Hook : setIsImporting(false)
-  note right of Hook
-    処理中フラグを解除(finally節)
-    ImportButton.disabled = false
+else いずれかの段で例外が throw
+  Interactor -> ErrorOutputData : fromError(error)
+  activate ErrorOutputData
+  note right of ErrorOutputData
+    Strategy Map により errorType を決定
+    parse / validation / storage の 3 種
+    マップ未登録のエラーは StorageImportError でラップ
   end note
+  ErrorOutputData --> Interactor : errorOutputData
+  deactivate ErrorOutputData
+
+  Interactor -> Presenter : presentError(errorOutputData)
+  activate Presenter
+  Presenter -> Hook : onError(errorOutputData.message)
+  note right of Hook
+    setIsImporting(false)
+    setImportError(msg)
+  end note
+  Hook -> Toast : エラートースト表示（props 経由）
+  Toast --> Hook : 表示
+  Presenter --> Interactor : void
+  deactivate Presenter
 end
 
-deactivate Hook
-deactivate View
+Interactor --> Controller : Promise<void>
+deactivate Interactor
+Controller --> Hook : Promise<void>
+deactivate Controller
 
-== キャンセル ==
-
-ImportUI -> View : onCancel()
-activate View
-View -> Hook : cancelImport()
-activate Hook
-Hook -> Hook : setPreviewData(null)
 note right of Hook
-  確認ダイアログを閉じる
-  既存ルールは変更しない
-  pendingRulesはInteractor内で保持されたまま
-  （次回ファイル選択で上書き）
+  handleFileSelect 側の try/catch は防御的ガード
+  Interactor は内部で catch → presenter.presentError に委譲するため
+  通常このパスで例外が伝搬することはない
 end note
-Hook --> View : previewData = null
+
+Hook --> View : state 更新
 deactivate Hook
+View --> ImportUI : props 更新（isImporting / importError / importSuccess）
 deactivate View
+ImportUI --> ImportBtn : ImportButton.disabled 反映
+deactivate ImportUI
+
+== トースト閉じる ==
+
+ImportUI -> Hook : dismissImportError() / dismissImportSuccess()
+activate Hook
+Hook -> Hook : setImportError(null) / setImportSuccess(null)
+deactivate Hook
 
 @enduml
