@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import RulesTable from 'src/components/organisms/RulesTable/RulesTable';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 
 const meta: Meta<typeof RulesTable> = {
   title: 'Organisms/RulesTable',
@@ -25,9 +26,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const sampleRules: RewriteRule[] = [
-  new RewriteRule(1, '旧文字列', '新文字列', 'https://example.com', false, true),
-  new RewriteRule(2, 'oldText', 'newText', 'https://api.example.com', false, true),
-  new RewriteRule(3, '\\d{4}-\\d{2}-\\d{2}', '日付', 'https://example.com/date', true, true),
+  new RewriteRule(createRuleId(1), '旧文字列', '新文字列', 'https://example.com', false, true),
+  new RewriteRule(createRuleId(2), 'oldText', 'newText', 'https://api.example.com', false, true),
+  new RewriteRule(createRuleId(3), '\\d{4}-\\d{2}-\\d{2}', '日付', 'https://example.com/date', true, true),
 ];
 
 export const Default: Story = {
@@ -39,16 +40,16 @@ export const Default: Story = {
 export const SingleRule: Story = {
   args: {
     rules: [
-      new RewriteRule(1, 'find', 'replace', 'https://example.com', false, true),
+      new RewriteRule(createRuleId(1), 'find', 'replace', 'https://example.com', false, true),
     ],
   },
 };
 
 export const ManyRules: Story = {
   args: {
-    rules: Array.from({ length: 10 }, (_, i) => 
+    rules: Array.from({ length: 10 }, (_, i) =>
       new RewriteRule(
-        i + 1,
+        createRuleId(i + 1),
         `oldString${i + 1}`,
         `newString${i + 1}`,
         `https://example${i + 1}.com`,
@@ -62,11 +63,11 @@ export const ManyRules: Story = {
 export const MixedContent: Story = {
   args: {
     rules: [
-      new RewriteRule(1, 'こんにちは', 'おはよう', 'https://ja.example.com', false, true),
-      new RewriteRule(2, 'Hello', 'Hi', 'https://en.example.com', false, true),
-      new RewriteRule(3, '[0-9]+', 'NUMBER', 'https://regex.example.com', true, true),
-      new RewriteRule(4, '<div>', '<section>', 'https://html.example.com', false, true),
-      new RewriteRule(5, 'long_variable_name_that_might_overflow', 'short', 'https://code.example.com', false, true),
+      new RewriteRule(createRuleId(1), 'こんにちは', 'おはよう', 'https://ja.example.com', false, true),
+      new RewriteRule(createRuleId(2), 'Hello', 'Hi', 'https://en.example.com', false, true),
+      new RewriteRule(createRuleId(3), '[0-9]+', 'NUMBER', 'https://regex.example.com', true, true),
+      new RewriteRule(createRuleId(4), '<div>', '<section>', 'https://html.example.com', false, true),
+      new RewriteRule(createRuleId(5), 'long_variable_name_that_might_overflow', 'short', 'https://code.example.com', false, true),
     ],
   },
 };
@@ -75,7 +76,7 @@ export const WithLongUrls: Story = {
   args: {
     rules: [
       new RewriteRule(
-        1,
+        createRuleId(1),
         'text1',
         'replacement1',
         'https://example.com/very/long/url/pattern/that/exceeds/thirty/characters/limit',
@@ -83,7 +84,7 @@ export const WithLongUrls: Story = {
         true
       ),
       new RewriteRule(
-        2,
+        createRuleId(2),
         'text2',
         'replacement2',
         'https://another-example.com/api/v2/resources/items',
@@ -91,7 +92,7 @@ export const WithLongUrls: Story = {
         true
       ),
       new RewriteRule(
-        3,
+        createRuleId(3),
         'text3',
         'replacement3',
         'https://short.com',
@@ -105,9 +106,9 @@ export const WithLongUrls: Story = {
 export const AllRegexRules: Story = {
   args: {
     rules: [
-      new RewriteRule(1, '^https?://', 'protocol://', 'https://example.com', true, true),
-      new RewriteRule(2, '\\w+@\\w+\\.\\w+', 'email', 'https://mail.example.com', true, true),
-      new RewriteRule(3, '\\d{3}-\\d{4}-\\d{4}', '電話番号', 'https://tel.example.com', true, true),
+      new RewriteRule(createRuleId(1), '^https?://', 'protocol://', 'https://example.com', true, true),
+      new RewriteRule(createRuleId(2), '\\w+@\\w+\\.\\w+', 'email', 'https://mail.example.com', true, true),
+      new RewriteRule(createRuleId(3), '\\d{3}-\\d{4}-\\d{4}', '電話番号', 'https://tel.example.com', true, true),
     ],
   },
 };
@@ -121,9 +122,9 @@ export const EmptyTable: Story = {
 export const InactiveRules: Story = {
   args: {
     rules: [
-      new RewriteRule(1, 'active1', 'replacement1', 'https://example.com', false, true),
-      new RewriteRule(2, 'inactive', 'replacement2', 'https://example.com', false, false),
-      new RewriteRule(3, 'active2', 'replacement3', 'https://example.com', false, true),
+      new RewriteRule(createRuleId(1), 'active1', 'replacement1', 'https://example.com', false, true),
+      new RewriteRule(createRuleId(2), 'inactive', 'replacement2', 'https://example.com', false, false),
+      new RewriteRule(createRuleId(3), 'active2', 'replacement3', 'https://example.com', false, true),
     ],
   },
 };

@@ -2,6 +2,7 @@ import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gat
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 import { dexieDatabase, RewriteRuleSchema } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 
 /**
@@ -155,7 +156,7 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
    */
   private convertSchemaToRule(schema: RewriteRuleSchema): RewriteRule {
     return new RewriteRule(
-      schema.id!,
+      createRuleId(schema.id!),
       schema.oldString,
       schema.newString,
       schema.urlPattern,
