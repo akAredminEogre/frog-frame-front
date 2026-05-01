@@ -140,4 +140,4 @@ tests/unit/enterprise-business-rules/value-objects/ids/RuleId/createRuleId/
 - 実装: `host-frontend-root/frontend-src-root/src/enterprise-business-rules/value-objects/ids/RuleId.ts`
 - テスト: `host-frontend-root/frontend-src-root/tests/unit/enterprise-business-rules/value-objects/ids/RuleId/createRuleId/`
 - 上位規約: `docs-rules/design/05-test-strategy.md`
-- 分岐型規約: `docs/coding-standards/branded-types.md`（`Opaque` 利用全般）
+- 分岐型規約: `docs/coding-standards/enterprise-business-rules/branded-types.md`（`Opaque` 利用全般）

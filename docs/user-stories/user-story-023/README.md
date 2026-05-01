@@ -6,7 +6,7 @@
 
 ## 前提
 
-PR #394 マージ済 = `RuleId` パイロット実装 + type-fest/zod 依存導入 + `docs/coding-standards/branded-types.md` 策定完了。
+PR #394 マージ済 = `RuleId` パイロット実装 + type-fest/zod 依存導入 + `docs/coding-standards/enterprise-business-rules/branded-types.md` 策定完了。
 
 ## スコープ
 
