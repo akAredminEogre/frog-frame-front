@@ -1,5 +1,6 @@
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/InvalidRuleIdError';
 
 export const MAX_IMPORT_RULES_COUNT = 1000;
 
@@ -40,6 +41,9 @@ export class ImportRulesCollection {
       throw new RulesCollectionCountExceededError();
     }
     this._rules = rawRules.map((raw) => {
+      if (typeof raw !== 'object' || raw === null) {
+        throw new InvalidRuleIdError(raw);
+      }
       const ruleData = raw as Record<string, unknown>;
       return RewriteRule.fromParams(
         ruleData.id,

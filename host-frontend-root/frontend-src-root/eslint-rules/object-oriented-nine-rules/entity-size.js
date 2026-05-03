@@ -1,9 +1,10 @@
-// Rule 6: エンティティを小さく — メソッド行数・クラス行数制限
+// Rule 6: エンティティを小さく — メソッド行数・ファイル行数制限
 // 閾値定義:
-//   - メソッド10行超: warning
 //   - メソッド100行超: error
-//   - クラス80行超: warning
-//   - クラス300行超: error
+//   - ファイル300行超: error
+// Note: ESLint flat config では同一ルール・同一ファイル対象に warn→error の2段階 severity を
+//       設定しても後発エントリが先行エントリを上書きするため実現不可。
+//       warn 段階（メソッド10行・ファイル80行）は別途カスタムルール化で補完すること。
 // See: docs/coding-standards/src/object-oriented-nine-rules.md
 
 const TARGET_FILES = [
@@ -13,15 +14,7 @@ const TARGET_FILES = [
 
 export default [
   {
-    // warning閾値: メソッド10行超 / クラス80行超
-    files: TARGET_FILES,
-    rules: {
-      'max-lines-per-function': ['warn', { max: 10, skipBlankLines: true, skipComments: true }],
-      'max-lines': ['warn', { max: 80, skipBlankLines: true, skipComments: true }],
-    },
-  },
-  {
-    // error閾値: メソッド100行超 / クラス300行超
+    // error閾値: メソッド100行超 / ファイル300行超
     files: TARGET_FILES,
     rules: {
       'max-lines-per-function': ['error', { max: 100, skipBlankLines: true, skipComments: true }],

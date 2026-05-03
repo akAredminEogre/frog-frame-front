@@ -1,4 +1,4 @@
-// Rule 1: インデント1段階 — switch-case使用禁止
+// Rule 2: else句禁止 — switch-case使用禁止
 // See: docs/coding-standards/src/object-oriented-nine-rules.md
 
 export default [
@@ -14,7 +14,7 @@ export default [
         {
           selector: 'SwitchStatement',
           message:
-            'switch-case is not allowed (Rule 1: インデント1段階). Use if/else or polymorphism instead.',
+            'switch-case is not allowed (Rule 2: else句禁止/switch-case分離). Use early return, guard clauses, or polymorphism instead.',
         },
       ],
     },
