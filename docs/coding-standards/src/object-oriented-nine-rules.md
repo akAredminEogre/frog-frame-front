@@ -22,7 +22,7 @@
 ## 除外パターン
 
 - **ルール3**: テストコードのモック関連コード、sendMessageのmessageパラメータ、catch節のerrorオブジェクト
-- **ルール4**: chrome APIの呼び出しコード
+- **ルール4**: chrome APIの呼び出しコード、`this.xxx.yyy()` 形式の依存注入オブジェクトへのメソッド呼び出し
 
 ## 対象ファイル
 - src/frameworks-and-drivers/browser以下のコード

@@ -115,7 +115,7 @@ src/frameworks-and-drivers/
 | `src/frameworks-and-drivers/ui/components/atoms/ImportButton/ImportButton.module.css` | 第4層 | インポートボタンスタイル |
 | `src/frameworks-and-drivers/ui/components/atoms/ImportButton/UploadIcon.tsx` | 第4層 | アップロードアイコン（DownloadIconと対） |
 | `src/frameworks-and-drivers/ui/components/organisms/ImportRulesJsonUI/ImportRulesJsonUI.tsx` | 第4層 | ImportButton + 確認ダイアログ統合Organism |
-| `src/frameworks-and-drivers/ui/hooks/useImportRulesJson.ts` | 第4層 | カスタムHook（状態管理・ファイルI/O） |
+| `src/frameworks-and-drivers/ui/hooks/useImportRulesJson.ts` | 第4層 | カスタムHook（状態管理・FileオブジェクトをControllerへ委譲） |
 | `src/application-business-rules/ports/services/IJsonParser.ts` | 第2層 | JSON解析 Service Port インターフェース |
 | `src/application-business-rules/ports/services/IFileTextReader.ts` | 第2層 | FileReader API Service Port インターフェース |
 | `src/application-business-rules/ports/services/IFileSizeValidator.ts` | 第2層 | File.size API Service Port インターフェース |
@@ -136,7 +136,7 @@ src/frameworks-and-drivers/
 ## ドキュメント対象範囲（ガイドライン）
 
 > **このドキュメントはプロダクションコード（`src/` 配下）の設計書です。**
-> E2E テストファイル（`e2e/` 配下）は対象外です。
+> E2E テストファイル（`tests/e2e/` 配下）は対象外です。
 > テストコードのディレクトリ構造は [e2e-test-strategy.md](./e2e-test-strategy.md) を参照してください。
 >
 > **新規ファイル一覧を記載する際は、`src/` 配下のファイルのみを記載し、E2E テストファイルは含めないこと。**

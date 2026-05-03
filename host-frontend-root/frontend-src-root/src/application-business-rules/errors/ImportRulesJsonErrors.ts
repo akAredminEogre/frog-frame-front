@@ -9,6 +9,7 @@
 export class InvalidJsonImportError extends Error {
   constructor() {
     super('不正なJSONファイルです');
+    Object.setPrototypeOf(this, InvalidJsonImportError.prototype);
     this.name = 'InvalidJsonImportError';
   }
 }
@@ -17,6 +18,7 @@ export class InvalidJsonImportError extends Error {
 export class InvalidSchemaImportError extends Error {
   constructor() {
     super('JSONスキーマが不正です（versionとrulesが必要です）');
+    Object.setPrototypeOf(this, InvalidSchemaImportError.prototype);
     this.name = 'InvalidSchemaImportError';
   }
 }
@@ -25,6 +27,7 @@ export class InvalidSchemaImportError extends Error {
 export class StorageImportError extends Error {
   constructor(cause: unknown) {
     super(`インポート処理中にエラーが発生しました: ${cause instanceof Error ? cause.message : String(cause)}`);
+    Object.setPrototypeOf(this, StorageImportError.prototype);
     this.name = 'StorageImportError';
   }
 }

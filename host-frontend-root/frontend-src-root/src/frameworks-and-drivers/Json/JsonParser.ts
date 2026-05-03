@@ -23,22 +23,12 @@ export class JsonParser implements IJsonParser {
    * @throws JsonStructureError 解析結果がオブジェクト型でない場合（null・配列・プリミティブ値）
    */
   parseAsObject(jsonString: string): Record<string, unknown> {
-    try {
-      const parsed: unknown = JSON.parse(jsonString);
-      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
-        throw new JsonStructureError(
-          `Expected a JSON object, but got: ${parsed === null ? 'null' : Array.isArray(parsed) ? 'array' : typeof parsed}`
-        );
-      }
-      return parsed as Record<string, unknown>;
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        throw new JsonSyntaxError(e.message);
-      }
-      if (e instanceof JsonStructureError) {
-        throw e;
-      }
-      throw e;
+    const parsed: unknown = this.parse(jsonString);
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      throw new JsonStructureError(
+        `Expected a JSON object, but got: ${parsed === null ? 'null' : Array.isArray(parsed) ? 'array' : typeof parsed}`
+      );
     }
+    return parsed as Record<string, unknown>;
   }
 }

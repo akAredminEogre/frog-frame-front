@@ -53,6 +53,6 @@ export class ImportRulesCollection {
   }
 
   toArray(): RewriteRule[] {
-    return this._rules;
+    return [...this._rules];
   }
 }
