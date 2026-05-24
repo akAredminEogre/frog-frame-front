@@ -1,0 +1,12 @@
+.ruleRow {
+  border-bottom: 1px solid var(--colors-border);
+}
+
+.ruleRow:hover {
+  background-color: var(--colors-bg-hover);
+}
+
+.actionCell {
+  text-align: center;
+  vertical-align: middle;
+}

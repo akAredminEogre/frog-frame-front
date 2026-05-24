@@ -1,0 +1,108 @@
+@startuml
+!theme plain
+title User Story 001: ルールトグル機能 - タスク依存ネットワーク図（更新版）
+
+' ノード定義（タスク）
+rectangle "3A-1\nRewriteRule\n.withActive()\n実装\n[完了]" as withActive #green
+rectangle "3A-2\nRewriteRule\n.matchesUrl()\n実装\n[完了]" as matchesUrl #green
+
+rectangle "3B-1\nDTO実装\n(Input/Output/\nErrorOutputData)\n[完了]" as dto #green
+rectangle "3B-2\nITabsGateway\n実装\n[完了]" as tabsGateway #green
+rectangle "3B-3\nToggleRuleActive\nInteractor実装\n[完了・テスト済]" as interactor #green
+
+rectangle "3C-1\nRewriteRuleMapper\n実装\n[完了・テスト済]" as mapper #green
+rectangle "3C-2\nToggleRuleActive\nController実装\n[完了・テスト済]" as controller #green
+rectangle "3C-3\nToggleRuleActive\nPresenter実装\n[完了・テスト済]" as presenter #green
+
+rectangle "3D-1\nメッセージング\n関連DTO実装\n[完了]" as msgDto #green
+rectangle "3D-2\nChromeTabsGateway\n実装\n[完了・developマージ]" as chromeTabs #green
+rectangle "3D-3\nRewriteRule\nMessagingService\n実装\n[完了・テスト済]" as messaging #green
+
+rectangle "3E-1\nToggleSwitch\nUIコンポーネント\n実装\n[完了・テスト済]" as toggleUI #green
+
+rectangle "4-1\nDI登録追加\n[完了]" as di #green
+rectangle "4-2\nChromeRuntime\nRewriteRule\nRepository改修\n[完了]" as repoFix #green
+rectangle "4-3\nRulesApp.tsx\n統合\n[完了]" as appIntegration #green
+
+' 新規追加: テストタスク
+rectangle "TEST-1\nInteractor\nテスト実装\n[完了]" as testInteractor #green
+rectangle "TEST-2\nController/Presenter\nテスト実装\n[完了]" as testControllerPresenter #green
+rectangle "TEST-3\nMapper/Gateway\nテスト実装\n[完了]" as testMapperGateway #green
+rectangle "TEST-4\nUI/Messaging\nテスト実装\n[完了]" as testUIMessaging #green
+
+' 依存関係（矢印）
+' 実装完了済みの依存関係（グレー）
+withActive -[#gray]-> dto : 完了済み
+withActive -[#gray]-> interactor : 完了済み
+matchesUrl -[#gray]-> interactor : 完了済み
+dto -[#gray]-> mapper : 完了済み
+dto -[#gray]-> controller : 完了済み
+dto -[#gray]-> presenter : 完了済み
+tabsGateway -[#gray]-> interactor : 完了済み
+tabsGateway -[#gray]-> chromeTabs : 完了済み
+msgDto -[#gray]-> messaging : 完了済み
+di -[#gray]-> controller : 完了済み
+di -[#gray]-> presenter : 完了済み
+
+' 新規追加: テスト依存関係（全て完了済み）
+interactor -[#gray]-> testInteractor : テスト完了済み
+controller -[#gray]-> testControllerPresenter : テスト完了済み
+presenter -[#gray]-> testControllerPresenter : テスト完了済み
+mapper -[#gray]-> testMapperGateway : テスト完了済み
+toggleUI -[#gray]-> testUIMessaging : テスト完了済み
+messaging -[#gray]-> testUIMessaging : テスト完了済み
+
+' 残りの主要依存関係（統合タスク）
+mapper -[#gray]-> repoFix : 完了済み
+messaging -[#gray]-> repoFix : 完了済み
+controller -[#gray]-> appIntegration : 完了済み
+presenter -[#gray]-> appIntegration : 完了済み
+toggleUI -[#gray]-> appIntegration : 完了済み
+repoFix -[#gray]-> appIntegration : 完了済み
+
+' 色分け凡例
+note top of withActive
+**完了済み**
+#green
+end note
+
+note top of interactor
+**完了済み**
+#green
+end note
+
+note top of testInteractor
+**完了済み**
+#green
+end note
+
+note top of appIntegration
+**全タスク完了**
+#green
+end note
+
+' 完了状況
+note bottom
+**最新状況 (2025-12-25):**
+- ✅ developマージ完了（7回目）
+- ✅ 全ての実装完了（Business Logic、Infrastructure、UI Components）
+- ✅ 全てのテスト実装完了（Unit、Integration、UI、Messaging）
+- ✅ ChromeRuntimeRewriteRuleRepository改修完了
+- ✅ RewriteRuleProxyService実装完了（Mapper委譲方式）
+- ✅ ToggleSwitchUIコンポーネント完成（テスト済み）
+- ✅ RewriteRuleMessagingService完成（テスト済み）
+- ✅ RulesApp.tsx UI統合完了
+- ✅ ToggleRuleActiveErrorOutputData実装完了（エラーハンドリング）
+
+**完了ステータス:**
+✅ **100% 完成** - 全タスク完了
+
+**進捗状況:**
+- ✅ 完了: 全実装、全テスト、Repository改修
+- ✅ 完了: DTO（Input/Output/ErrorOutputData）、DI設定、Gateway、Messaging
+- ✅ 完了: UI Components、Controller、Presenter
+- ✅ 完了: RulesApp.tsx統合
+- ✅ 完了: エラーハンドリング（部分的成功、競合状態防止）
+end note
+
+@enduml

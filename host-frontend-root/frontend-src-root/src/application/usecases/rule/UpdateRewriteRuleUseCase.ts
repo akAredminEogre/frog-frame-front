@@ -1,18 +1,13 @@
-import { inject,injectable } from 'tsyringe';
-
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { Tab } from 'src/domain/value-objects/Tab';
 import { Tabs } from 'src/domain/value-objects/Tabs';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
-@injectable()
 export class UpdateRewriteRuleUseCase {
   constructor(
-    @inject('IRewriteRuleRepository')
     private readonly rewriteRuleRepository: IRewriteRuleRepository,
-    @inject('IChromeTabsService')
     private readonly chromeTabsService: IChromeTabsService
   ) {}
 

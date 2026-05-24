@@ -1,7 +1,7 @@
-import { beforeEach,describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * 1. すべてのルールを配列として取得できることを確認
@@ -13,8 +13,8 @@ describe('RewriteRules.toArray - 正常系', () => {
   let rulesObject: Record<string, RewriteRule>;
 
   beforeEach(() => {
-    rule1 = new RewriteRule(1, 'old1', 'new1', 'https://example.com/*', false);
-    rule2 = new RewriteRule(2, 'old2', 'new2', 'https://test.com/*', true);
+    rule1 = RewriteRule.fromParams(1, { oldString: 'old1', newString: 'new1', urlPattern: 'https://example.com/*', isRegex: false });
+    rule2 = RewriteRule.fromParams(2, { oldString: 'old2', newString: 'new2', urlPattern: 'https://test.com/*', isRegex: true });
     rulesObject = {
       1: rule1,
       2: rule2,

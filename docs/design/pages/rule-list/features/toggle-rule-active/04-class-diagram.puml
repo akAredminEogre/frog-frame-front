@@ -1,0 +1,163 @@
+@startuml ToggleRuleActiveClassDiagram
+
+' === Entity ===
+class RewriteRule <<Entity>> {
+  - id: RuleId
+  - urlPattern: UrlPattern
+  - isActive: boolean
+  + withActive(isActive: boolean): RewriteRule
+  + matchesUrl(url: string): boolean
+}
+
+' === Application Layer ===
+interface IToggleRuleActiveUseCase <<Input Port>> {
+  + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+}
+
+interface IToggleRuleActivePresenter <<Output Port>> {
+  + present(outputData: ToggleRuleActiveOutputData): void
+  + presentError(errorData: ToggleRuleActiveErrorOutputData): void
+}
+
+class ToggleRuleActiveInputData <<Input Data>> {
+  + ruleId: number
+}
+
+class ToggleRuleActiveOutputData <<Output Data>> {
+  + toggledRule: RewriteRule
+}
+
+class ToggleRuleActiveErrorOutputData <<Error Output Data>> {
+  + ruleId: number
+  + message: string
+}
+
+class ToggleRuleActiveInteractor <<Use Case>> {
+  - repository: IRewriteRuleRepository
+  - tabsGateway: ITabsGateway
+  - presenter: IToggleRuleActivePresenter
+  + execute(inputData: ToggleRuleActiveInputData): Promise<void>
+}
+
+interface IRewriteRuleRepository <<Gateway Interface>> {
+  + getById(id: number): Promise<RewriteRule>
+  + update(rule: RewriteRule): Promise<void>
+}
+
+interface ITabsGateway <<Gateway Interface>> {
+  + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+}
+
+' === Interface Adapters ===
+interface IToggleRuleActiveController <<Controller Interface>> {
+  + toggleActive(ruleId: number): Promise<void>
+}
+
+class ToggleRuleActiveController <<Controller>> {
+  - useCase: IToggleRuleActiveUseCase
+  + toggleActive(ruleId: number): Promise<void>
+}
+
+interface IToggleRuleActiveControllerFactory <<Factory Interface>> {
+  + create(onSuccess, onError): IToggleRuleActiveController
+}
+
+class ToggleRuleActiveControllerFactory <<Factory>> {
+  - repository: IRewriteRuleRepository
+  - tabsGateway: ITabsGateway
+  + create(onSuccess, onError): IToggleRuleActiveController
+}
+
+class ToggleRuleActivePresenter <<Presenter>> {
+  - updateRuleInView: (rule: RewriteRule) => void
+  - showErrorInView: (ruleId: number, message: string) => void
+  + present(outputData: ToggleRuleActiveOutputData): void
+  + presentError(errorData: ToggleRuleActiveErrorOutputData): void
+}
+
+class RewriteRuleMapper <<Mapper>> {
+  - messagingPort: IRewriteRuleMessagingPort
+  + getById(id: number): Promise<RewriteRule>
+  + update(rule: RewriteRule): Promise<void>
+}
+
+interface IRewriteRuleMessagingPort <<Port>> {
+  + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+  + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+}
+
+' === Frameworks & Drivers ===
+class RulesApp <<View>> {
+  + onToggle(ruleId: number): void
+}
+
+class ChromeRuntimeRewriteRuleRepository <<Repository>> {
+  - mapper: RewriteRuleMapper
+  + getById(id: number): Promise<RewriteRule>
+  + update(rule: RewriteRule): Promise<void>
+}
+
+class ChromeTabsGateway <<Gateway>> {
+  + reloadMatchingTabs(rule: RewriteRule): Promise<void>
+}
+
+class RewriteRuleProxyService <<Proxy Service>> {
+  + getById(dto: GetByIdRequestDTO): Promise<RewriteRuleDTO>
+  + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+}
+
+class DexieRewriteRuleRepository <<Repository>> {
+  + getById(id: number): Promise<RewriteRuleDTO>
+  + updateActive(dto: UpdateRuleActiveRequestDTO): Promise<void>
+}
+
+class RewriteRuleDTO <<DTO>> {
+  + id: number
+  + urlPattern: string
+  + isActive: boolean
+}
+
+class GetByIdRequestDTO <<DTO>> {
+  + id: number
+}
+
+class UpdateRuleActiveRequestDTO <<DTO>> {
+  + id: number
+  + isActive: boolean
+}
+
+' === Relationships ===
+RulesApp ..> IToggleRuleActiveControllerFactory : uses
+ToggleRuleActiveControllerFactory ..|> IToggleRuleActiveControllerFactory : implements
+ToggleRuleActiveControllerFactory ..> ToggleRuleActiveController : creates
+ToggleRuleActiveControllerFactory ..> ToggleRuleActivePresenter : creates
+ToggleRuleActiveControllerFactory ..> ToggleRuleActiveInteractor : creates
+ToggleRuleActiveController ..|> IToggleRuleActiveController : implements
+RulesApp ..> IToggleRuleActiveController : uses
+ToggleRuleActiveController ..> IToggleRuleActiveUseCase : uses
+ToggleRuleActiveInteractor ..|> IToggleRuleActiveUseCase : implements
+ToggleRuleActiveInteractor ..> ToggleRuleActiveInputData : uses
+ToggleRuleActiveInteractor ..> IRewriteRuleRepository : uses
+ToggleRuleActiveInteractor ..> ITabsGateway : uses
+ToggleRuleActiveInteractor ..> IToggleRuleActivePresenter : uses
+ToggleRuleActiveInteractor ..> ToggleRuleActiveOutputData : creates
+ToggleRuleActiveInteractor ..> ToggleRuleActiveErrorOutputData : creates
+ToggleRuleActiveInteractor ..> RewriteRule : uses
+ToggleRuleActivePresenter ..|> IToggleRuleActivePresenter : implements
+ToggleRuleActivePresenter ..> RulesApp : updates
+ChromeRuntimeRewriteRuleRepository ..|> IRewriteRuleRepository : implements
+ChromeRuntimeRewriteRuleRepository ..> RewriteRuleMapper : delegates
+ChromeTabsGateway ..|> ITabsGateway : implements
+ChromeTabsGateway ..> RewriteRule : calls matchesUrl()
+RewriteRuleMapper ..> IRewriteRuleMessagingPort : uses
+RewriteRuleMapper ..> RewriteRule : creates
+RewriteRuleMapper ..> GetByIdRequestDTO : creates
+RewriteRuleMapper ..> UpdateRuleActiveRequestDTO : creates
+RewriteRuleMapper ..> RewriteRuleDTO : converts
+RewriteRuleProxyService ..|> IRewriteRuleMessagingPort : implements
+RewriteRuleProxyService ..> DexieRewriteRuleRepository : delegates
+RewriteRuleProxyService ..> GetByIdRequestDTO : receives
+RewriteRuleProxyService ..> UpdateRuleActiveRequestDTO : receives
+RewriteRuleProxyService ..> RewriteRuleDTO : returns
+
+@enduml

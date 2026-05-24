@@ -6,4 +6,5 @@ export interface RewriteRuleParams {
   newString: string;
   urlPattern: string;
   isRegex: boolean;
+  isActive?: boolean;
 }

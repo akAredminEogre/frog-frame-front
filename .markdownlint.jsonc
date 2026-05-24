@@ -1,0 +1,31 @@
+// markdownlint configuration
+// https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+{
+  // Disable all rules by default, enable only specific rules
+  "default": false,
+
+  // MD001: Heading levels should only increment by one level at a time
+  "MD001": true,
+
+  // MD040: Fenced code blocks should have a language specified
+  "MD040": {
+    "allowed_languages": [
+      "typescript",
+      "javascript",
+      "tsx",
+      "jsx",
+      "css",
+      "scss",
+      "bash",
+      "sh",
+      "json",
+      "yaml",
+      "markdown",
+      "text",
+      "dockerfile",
+      "plaintext",
+      "cline-instructions"
+    ],
+    "language_only": false
+  }
+}

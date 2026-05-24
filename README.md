@@ -75,7 +75,7 @@ make testlint     # 包括的なテストとリント
 
 ## プロジェクト構造
 
-```
+```text
 frog-frame-front/
 ├── .gitconfig.template    # Git設定テンプレート
 ├── Makefile              # セットアップ・開発コマンド

@@ -6,7 +6,7 @@ cline-instructionsの手順をチャットスレッドに表示してから実�
 
 ```cline-instructions
 - issue番号、プルリクエスト番号の取得
-  - nnn=(カレントブランチ名からissue番号を取得)
+  - nnn=$(scripts/.clinerules/get-issue-number.sh)
   - pr_no=(カレントブランチが出しているプルリクエストの番号)
 - マージ前定型作業
   - ドキュメントテンプレートの削除

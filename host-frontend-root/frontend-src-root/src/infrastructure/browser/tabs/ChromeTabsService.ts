@@ -1,24 +1,13 @@
-import { injectable } from 'tsyringe';
-
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
 import { Tab } from 'src/domain/value-objects/Tab';
 import { Tabs } from 'src/domain/value-objects/Tabs';
+import { sendToContentScript } from 'src/frameworks-and-drivers/messaging/messaging';
 
 /**
  * Chrome Tabs APIを使用して現在のタブにメッセージを送信するサービスの実装
+ * @webext-core/messaging を使用してContent Scriptと通信する
  */
-@injectable()
 export class ChromeTabsService implements IChromeTabsService {
-  async sendMessage(tabId: number, message: any): Promise<any> {
-    try {
-      const response = await chrome.tabs.sendMessage(tabId, message);
-      return response;
-    } catch (error) {
-      console.error('[ChromeTabsService] sendMessage error:', error);
-      throw error;
-    }
-  }
-
   async queryTabs(queryInfo: any): Promise<Tabs> {
     try {
       const tabs = await chrome.tabs.query(queryInfo);
@@ -32,16 +21,21 @@ export class ChromeTabsService implements IChromeTabsService {
 
   async sendApplyAllRulesMessage(tab: Tab): Promise<any> {
     try {
-      const response = await chrome.tabs.sendMessage(
-        tab.getTabId().value,
-        {
-          type: 'applyAllRules',
-          tabUrl: tab.getTabUrl().value
-        }
-      );
+      const tabId = tab.getTabId().value;
+      const response = await sendToContentScript('applyAllRules', undefined, tabId);
       return response;
     } catch (error) {
       console.error('[ChromeTabsService] sendApplyAllRulesMessage error:', error);
+      throw error;
+    }
+  }
+
+  async sendGetElementSelectionMessage(tabId: number): Promise<{ selection: string }> {
+    try {
+      const response = await sendToContentScript('getElementSelection', undefined, tabId);
+      return response;
+    } catch (error) {
+      console.error('[ChromeTabsService] sendGetElementSelectionMessage error:', error);
       throw error;
     }
   }

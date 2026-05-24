@@ -1,103 +1,195 @@
-import 'src/infrastructure/di/container';
+import { describe, expect, it } from 'vitest';
 
-import { container } from 'tsyringe';
-import { afterEach,beforeEach, describe, expect, it } from 'vitest';
+import { container } from 'src/frameworks-and-drivers/di/container';
 
 /**
- * DIコンテナの完全自動化インターフェース登録確認テスト
- * container.tsに登録されているインターフェースを動的に取得して自動検証する
+ * containerの内部プロパティからinterfaceToKeyMapを動的に取得する
+ * tsyringeの_registry._registryMapと同様のアクセスパターン
  */
-describe('DI Container - 完全自動化インターフェース登録確認テスト', () => {
-  beforeEach(() => {
-    container.clearInstances();
-  });
+function getInterfaceToKeyMap(): Record<string, string> {
+  return (container as any)._interfaceToKeyMap;
+}
 
-  afterEach(() => {
-    container.clearInstances();
-  });
+/**
+ * containerの内部プロパティからawilixContainerを動的に取得する
+ */
+function getAwilixContainer(): { registrations: Record<string, unknown> } {
+  return (container as any)._awilixContainer;
+}
 
+/**
+ * DIコンテナから登録済みインターフェースキーの一覧を取得する
+ * awilixContainerのregistrationsから動的に取得し、インターフェース関連のキーのみをフィルタ
+ */
+function getRegisteredInterfaceKeys(): string[] {
+  const allKeys = Object.keys(getAwilixContainer().registrations);
+  const interfaceKeys = Object.values(getInterfaceToKeyMap());
+  return allKeys.filter(key => interfaceKeys.includes(key));
+}
+
+/**
+ * DIコンテナのインターフェース登録確認テスト (Awilix)
+ * container.resolve()でインターフェーストークンを解決できることを検証する
+ */
+describe('DI Container - インターフェース登録確認テスト (Awilix)', () => {
   /**
-   * DIコンテナから動的にインターフェーストークンを取得する
+   * インターフェース解決テストケース
+   * 各インターフェーストークンが正しい実装クラスに解決されることを検証する
    */
-  function getRegisteredInterfaceTokens(): Array<{ token: string; isInterface: boolean }> {
-    const registryMap = (container as any)._registry._registryMap as Map<any, any>;
-    
-    return Array.from(registryMap.keys())
-      .filter(token => typeof token === 'string')
-      .map(token => ({ token, isInterface: true }));
-  }
-
-  const expectedInterfaceRegistrations = [
+  const testCases = [
     {
-      interface: 'IChromeTabsService',
-      implementationName: 'ChromeTabsService'
+      description: 'IChromeTabsServiceをChromeTabsServiceに解決できること',
+      input: { interfaceToken: 'IChromeTabsService' as const },
+      expected: { implementationName: 'ChromeTabsService' }
     },
     {
-      interface: 'IPopupService',
-      implementationName: 'ChromePopupService'
+      description: 'IPopupServiceをChromePopupServiceに解決できること',
+      input: { interfaceToken: 'IPopupService' as const },
+      expected: { implementationName: 'ChromePopupService' }
     },
     {
-      interface: 'IRewriteRuleRepository',
-      implementationName: 'DexieRewriteRuleRepository'
+      description: 'IRewriteRuleRepositoryをDexieRewriteRuleRepositoryに解決できること',
+      input: { interfaceToken: 'IRewriteRuleRepository' as const },
+      expected: { implementationName: 'DexieRewriteRuleRepository' }
     },
     {
-      interface: 'IWindowService',
-      implementationName: 'ChromeWindowService'
+      description: 'IWindowServiceをChromeWindowServiceに解決できること',
+      input: { interfaceToken: 'IWindowService' as const },
+      expected: { implementationName: 'ChromeWindowService' }
     },
     {
-      interface: 'ISelectedPageTextRepository',
-      implementationName: 'SelectedPageTextRepository'
+      description: 'ISelectedPageTextRepositoryをSelectedPageTextRepositoryに解決できること',
+      input: { interfaceToken: 'ISelectedPageTextRepository' as const },
+      expected: { implementationName: 'SelectedPageTextRepository' }
     },
     {
-      interface: 'ICurrentTabService',
-      implementationName: 'ChromeCurrentTabService'
+      description: 'ICurrentTabServiceをChromeCurrentTabServiceに解決できること',
+      input: { interfaceToken: 'ICurrentTabService' as const },
+      expected: { implementationName: 'ChromeCurrentTabService' }
     },
     {
-      interface: 'IChromeRuntimeService',
-      implementationName: 'ChromeRuntimeService'
+      description: 'IChromeRuntimeServiceをChromeRuntimeServiceに解決できること',
+      input: { interfaceToken: 'IChromeRuntimeService' as const },
+      expected: { implementationName: 'ChromeRuntimeService' }
     },
     {
-      interface: 'IGetSelectionService',
-      implementationName: 'GetSelectionService'
+      description: 'IGetSelectionServiceをGetSelectionServiceに解決できること',
+      input: { interfaceToken: 'IGetSelectionService' as const },
+      expected: { implementationName: 'GetSelectionService' }
+    },
+    {
+      description: 'IToggleRuleActiveControllerFactoryをToggleRuleActiveControllerFactoryに解決できること',
+      input: { interfaceToken: 'IToggleRuleActiveControllerFactory' as const },
+      expected: { implementationName: 'ToggleRuleActiveControllerFactory' }
+    },
+    {
+      description: 'IDeleteRuleControllerFactoryをDeleteRuleControllerFactoryに解決できること',
+      input: { interfaceToken: 'IDeleteRuleControllerFactory' as const },
+      expected: { implementationName: 'DeleteRuleControllerFactory' }
+    },
+    {
+      description: 'IExportRulesJsonControllerFactoryをExportRulesJsonControllerFactoryに解決できること',
+      input: { interfaceToken: 'IExportRulesJsonControllerFactory' as const },
+      expected: { implementationName: 'ExportRulesJsonControllerFactory' }
+    },
+    {
+      description: 'IImportRulesJsonControllerFactoryをImportRulesJsonControllerFactoryに解決できること',
+      input: { interfaceToken: 'IImportRulesJsonControllerFactory' as const },
+      expected: { implementationName: 'ImportRulesJsonControllerFactory' }
+    },
+    {
+      description: 'ITabsGatewayをChromeTabsGatewayに解決できること',
+      input: { interfaceToken: 'ITabsGateway' as const },
+      expected: { implementationName: 'ChromeTabsGateway' }
+    },
+    {
+      description: 'IFileTextReaderをFileTextReaderに解決できること',
+      input: { interfaceToken: 'IFileTextReader' as const },
+      expected: { implementationName: 'FileTextReader' }
     }
   ];
 
-  it('should verify expected interfaces are registered and can be resolved', () => {
-    // Arrange - 開発者の意図する期待値を定義
-    const expectedRegistrations = expectedInterfaceRegistrations;
-    
-    // Act - DIコンテナから登録済みインターフェーストークンを動的取得
-    const actualRegisteredTokens = getRegisteredInterfaceTokens();
-    
-    console.log('=== Expected vs Actual Interface Registration Verification ===');
-    console.log(`Expected registrations: ${expectedRegistrations.length}`);
-    console.log(`Actual registrations: ${actualRegisteredTokens.length}`);
+  /**
+   * proxy-service経由で解決されるテストケース
+   * proxy-serviceはProxyオブジェクトを返すため、constructor.nameではなく
+   * インターフェースのメソッドが存在することを確認する
+   */
+  const proxyServiceTestCases = [
+    {
+      description: 'IRewriteRuleMessagingPortをproxy-service経由で解決できること',
+      input: { interfaceToken: 'IRewriteRuleMessagingPort' as const },
+      expected: { methods: ['getById', 'updateActive'] }
+    }
+  ];
 
-    // Assert - 期待される登録数と一致することを確認
-    expect(actualRegisteredTokens).toHaveLength(expectedRegistrations.length);
+  testCases.forEach((testCase) => {
+    it(testCase.description, () => {
+      // Arrange
+      const { interfaceToken } = testCase.input;
+      const { implementationName } = testCase.expected;
 
-    // Assert - 期待される各インターフェースが登録されていることを確認
-    expectedRegistrations.forEach(({ interface: expectedInterface, implementationName }) => {
-      // 期待されるインターフェースがDIコンテナに登録されているかを確認
-      const isRegistered = (container as any).isRegistered(expectedInterface);
-      expect(isRegistered).toBe(true);
-      
-      // 期待されるインターフェースが実際の登録リストに含まれているかを確認
-      const foundToken = actualRegisteredTokens.find(({ token }) => token === expectedInterface);
-      expect(foundToken).toBeDefined();
-      expect(foundToken?.token).toBe(expectedInterface);
-      
-      // 期待されるインターフェースのresolveテスト
-      expect(() => {
-        const resolved = container.resolve(expectedInterface) as any;
-        expect(resolved).toBeDefined();
-        expect(resolved).not.toBeNull();
-        expect(typeof resolved).toBe('object');
-        expect(resolved.constructor).toBeDefined();
-        expect(resolved.constructor.name).toBe(implementationName);
-        console.log(`Expected interface ${expectedInterface} resolved to ${implementationName} successfully`);
-      }).not.toThrow();
+      // Act
+      const resolved = container.resolve(interfaceToken) as any;
+
+      // Assert
+      expect(resolved).toBeDefined();
+      expect(resolved).not.toBeNull();
+      expect(typeof resolved).toBe('object');
+      expect(resolved.constructor).toBeDefined();
+      expect(resolved.constructor.name).toBe(implementationName);
     });
   });
 
+  proxyServiceTestCases.forEach((testCase) => {
+    it(testCase.description, () => {
+      // Arrange
+      const { interfaceToken } = testCase.input;
+      const { methods } = testCase.expected;
+
+      // Act
+      const resolved = container.resolve(interfaceToken) as any;
+
+      // Assert - proxy-serviceはProxyオブジェクトを返すため、メソッドの存在を確認
+      expect(resolved).toBeDefined();
+      expect(resolved).not.toBeNull();
+      methods.forEach((method) => {
+        expect(typeof resolved[method]).toBe('function');
+      });
+    });
+  });
+
+  /**
+   * DIコンテナに登録されているインターフェース数と、テストケースで期待する数が一致することを検証
+   * これにより、DIコンテナに新しいインターフェースが追加された場合にテストケースの追加漏れを検出できる
+   */
+  it('DIコンテナ登録数とテストケース数が一致すること', () => {
+    // Act - DIコンテナから登録済みインターフェースキーを動的取得
+    const actualRegisteredKeys = getRegisteredInterfaceKeys();
+
+    // 全テストケースの合計（通常のケース + proxy-serviceケース）
+    const allTestCases = [...testCases, ...proxyServiceTestCases];
+
+    // Assert - 期待される登録数と一致することを確認
+    expect(actualRegisteredKeys).toHaveLength(allTestCases.length);
+
+    // Assert - 各テストケースのインターフェースがDIコンテナに登録されていることを確認
+    const interfaceMapping = getInterfaceToKeyMap();
+    const actualKeySet = new Set(actualRegisteredKeys);
+    allTestCases.forEach(({ input: { interfaceToken } }) => {
+      const expectedKey = interfaceMapping[interfaceToken];
+      expect(actualKeySet.has(expectedKey),
+        `Test case exists for ${interfaceToken} but key '${expectedKey}' is not registered in awilixContainer`
+      ).toBe(true);
+    });
+
+    // Assert - DIコンテナに登録されている各インターフェースキーにテストケースが存在することを確認
+    const testCaseKeySet = new Set<string>(
+      allTestCases.map(tc => interfaceMapping[tc.input.interfaceToken])
+    );
+    actualRegisteredKeys.forEach((key) => {
+      expect(testCaseKeySet.has(key),
+        `Key '${key}' is registered in awilixContainer but missing a test case`
+      ).toBe(true);
+    });
+  });
 });

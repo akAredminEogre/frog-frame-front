@@ -1,0 +1,49 @@
+@import 'src/components/tokens.module.css';
+
+/* オーバーレイ（背景） */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* ダイアログ本体 */
+.dialog {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  max-width: 400px;
+  width: 90%;
+  padding: var(--spacing-xl);
+}
+
+/* タイトル */
+.title {
+  margin: 0 0 var(--spacing-md) 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+/* 説明文 */
+.description {
+  margin: 0 0 var(--spacing-xl) 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition: none;
+  }
+}

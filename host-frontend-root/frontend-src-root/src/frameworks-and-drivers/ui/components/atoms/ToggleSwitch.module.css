@@ -1,0 +1,67 @@
+@import 'src/components/tokens.module.css';
+
+.toggleContainer {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggleContainer:has(input:disabled) {
+  cursor: not-allowed;
+}
+
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background-color: var(--color-border);
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+  border: none;
+  padding: 0;
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-background);
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: var(--shadow-toggle-knob);
+}
+
+.toggle[data-selected='true'] {
+  background-color: var(--color-primary);
+}
+
+.toggle[data-selected='true']::after {
+  transform: translateX(20px);
+}
+
+.toggle:hover:not([data-disabled='true']) {
+  background-color: var(--color-border-hover);
+}
+
+.toggle[data-selected='true']:hover:not([data-disabled='true']) {
+  background-color: var(--color-hover);
+}
+
+.toggle.focusVisible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.toggle[data-disabled='true'] {
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle,
+  .toggle::after {
+    transition: none;
+  }
+}

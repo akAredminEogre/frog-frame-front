@@ -1,299 +1,95 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、リポジトリ内のコードを扱う際のClaude Code (claude.ai/code) へのガイダンスを提供します。
 
-## Project Overview
+## プロジェクト概要
 
-**frog-frame-front** is a Chrome extension project built with the WXT framework that manipulates DOM elements. The project follows Clean Architecture principles with Domain-Driven Design (DDD) patterns.
+**frog-frame-front** は、DOMエレメントを操作するWXTフレームワーク製のChrome拡張機能プロジェクトです。Clean ArchitectureおよびDomain-Driven Design（DDD）パターンに基づいて設計されています。
 
-- **Main Tech Stack**: TypeScript, React, WXT (Chrome extension framework)
-- **Architecture**: Clean Architecture + DDD
-- **DI Container**: tsyringe with reflect-metadata
-- **Testing**: Vitest (unit tests), Playwright (E2E tests)
-- **Development**: Docker-based development environment
+- **主要技術スタック**: TypeScript、React、WXT（Chrome拡張機能フレームワーク）
+- **アーキテクチャ**: Clean Architecture + DDD
+- **DIコンテナ**: tsyringe（reflect-metadata使用）
+- **テスト**: Vitest（ユニットテスト）、Playwright（E2Eテスト）
+- **開発環境**: Dockerベースの開発環境
 
-## Project-Specific Rules and Workflows
+## プロジェクト固有のルールとワークフロー
 
-This project includes additional guidelines and automated workflows defined in the `.clinerules/` directory:
+### コーディング規約
 
-### Coding Standards
-- **`.clinerules/01-coding-standards.md`** - Core coding conventions including:
-  - Import path rules (absolute paths from `src`)
-  - Object-oriented design rules (ThoughtWorks Anthology 9 principles)
-  - Clean Architecture layer dependencies
-  - System design principles
+- **`docs/coding-standards/`** - コアコーディング規約（テスト規約・モック配置ルール等）
+- **`.clinerules/02-workflow-automation/`** - 自動化ワークフロー定義
 
-### Test Standards
-- **`.clinerules/03-test-coding-standards.md`** - Test coding conventions
-- **`.clinerules/03-test-coding-standards/`** - Detailed test guidelines:
-  - Common test rules (array-based tests, JSDoc requirements)
-  - E2E test rules (console error handling)
+**注意**: このプロジェクトで作業する際は、詳細なガイダンスのために `.clinerules/` ファイルを必ず参照してください。
 
-### Project-Specific Configuration
-- **`.clinerules/05-project-specific-rules.md`** - Project-specific constraints:
-  - WXT framework requirements
-  - Repository information (branch strategy, PR process)
-  - Pre-completion checks (`testcheck` workflow)
+## 共通開発コマンド
 
-### Workflow Automation
-The **`.clinerules/02-workflow-automation/`** directory contains automated workflow definitions:
-- **01-issue-launches/** - Issue and branch creation workflows
-- **02-daily-scrum-starts/** - Daily scrum start workflows, coding guidelines
-- **03-daily-scrum-finishes/** - Progress recording, review workflows
-- **04-pull-request/** - PR creation and merge workflows
+→ セットアップ手順・利用可能なコマンド一覧は [README.md](README.md) を参照
 
-These workflows define standardized processes for:
-- Creating branches and planning issues
-- Starting daily scrum iterations
-- Recording progress and handling code reviews
-- Creating and merging pull requests
+### タスク完了前の確認
 
-**Note**: When working on this project, always refer to these `.clinerules/` files for detailed guidance on coding standards, testing requirements, and workflow processes.
+→ 詳細は [.AI/testing-requirements.md](.AI/testing-requirements.md) を参照
 
-## Common Development Commands
+## タスク別チェックリスト
 
-All commands should be run from the repository root unless otherwise specified.
+### 新規メソッド/クラスを追加する場合・既存メソッドを修正する場合
 
-### Initial Setup (First Time Only)
-```bash
-make init-config    # Apply Git configuration
-make init-dev       # Build containers, install dependencies, generate .wxt/tsconfig.json, and start dev server
-```
+→ 詳細は [.AI/testing-requirements.md](.AI/testing-requirements.md) を参照
 
-### Development (After Initial Setup)
-```bash
-make dev            # Start development server (stops containers, restarts, and runs dev server)
-make down           # Stop Docker containers
-make ps             # List running containers
-```
+### docs/・docs/design/ 配下のドキュメントを作成・編集する場合・ADRを作成・編集する場合
 
-### Inside Container Commands
-After `make dev` is running, open a new terminal for these commands:
+→ 詳細は [.AI/docs/editing-guide.md](.AI/docs/editing-guide.md) を参照
 
-```bash
-# Testing and linting (REQUIRED before completing any task)
-make testlint
+### E2E specファイルを分割・統合・リネームする場合
 
-# Quick check (tests with warnings, softer than make testlint)
-make testcheck
+→ 詳細は [.AI/tests/e2e/consistency-maintenance-guideline.md](.AI/tests/e2e/consistency-maintenance-guideline.md) を参照
 
-# Individual test commands
-make unit         # Unit tests only
-make e2e          # E2E tests only
-make testall      # Both unit and E2E tests
+### CLAUDE.mdを編集する場合
 
-# Code quality checks
-docker compose exec frontend npm run compile        # TypeScript compilation check
-docker compose exec frontend npm run lint           # Run ESLint
-docker compose exec frontend npm run lint:fix       # Auto-fix ESLint issues
+→ 詳細は [.AI/docs/claude-md-editing-guide.md](.AI/docs/claude-md-editing-guide.md) を参照
 
-# Unused code detection and cleanup
-docker compose exec frontend npm run unused:complete    # Remove unused code
-docker compose exec frontend npm run knip:all           # Check for unused exports/dependencies
-```
+## アーキテクチャ概要
 
-### Critical Pre-Completion Check
-**IMPORTANT**: Before marking any task as complete, you MUST run:
-```bash
-make testlint
-```
-This command runs comprehensive checks including tests, unused code detection, and linting. Do NOT proceed if this command fails.
+→ 詳細は [.AI/architecture.md](.AI/architecture.md) を参照
 
-## Architecture Overview
+## インポートパスルール
 
-### Clean Architecture Layers
+**重要**: 全インポートは設定済みエイリアスを使った絶対パスを使用すること。
 
-```
-src/
-├── entrypoints/          # WXT entry points (background.ts, content.ts, popup/, etc.)
-├── components/           # React components (Atomic Design)
-│   ├── atoms/
-│   ├── molecules/
-│   ├── organisms/
-│   └── pages/
-├── application/          # Application layer (Use Cases)
-│   ├── usecases/
-│   ├── ports/           # Interfaces for infrastructure dependencies
-│   └── types/
-├── domain/              # Domain layer (Business logic, NO external dependencies)
-│   ├── entities/
-│   ├── value-objects/
-│   ├── constants/
-│   └── errors/
-└── infrastructure/      # Infrastructure layer (External dependencies)
-    ├── browser/         # Chrome API wrappers (tabs, runtime, popup, window)
-    ├── persistance/     # Storage services
-    ├── selection/       # Browser selection services
-    └── di/             # Dependency injection container
+→ 詳細は [.AI/import-paths.md](.AI/import-paths.md) を参照
 
-tests/
-├── unit/               # Vitest unit tests (mirrors src/ structure)
-│   ├── domain/
-│   ├── application/
-│   └── infrastructure/
-└── e2e/               # Playwright E2E tests (*.spec.ts)
-```
+## オブジェクト指向設計ルール（ThoughtWorksアンソロジー）
 
-### Key Architectural Rules
+→ 詳細は [.AI/oo-design-rules.md](.AI/oo-design-rules.md) を参照
 
-**Domain Layer Isolation**:
-- Domain layer MUST NOT depend on any other layer
-- No Chrome APIs, window objects, or infrastructure code in domain layer
-- Domain contains pure business logic only
+## テスト要件
 
-**Infrastructure Layer**:
-- ONLY infrastructure layer may use Chrome APIs and browser-specific code
-- All external dependencies must be wrapped in infrastructure services
-- Services implement interfaces (ports) defined in application layer
+→ 詳細は [.AI/testing-requirements.md](.AI/testing-requirements.md) を参照
 
-**Application Layer**:
-- Use Cases coordinate between domain and infrastructure
-- Dependencies resolved via `container.ts` (tsyringe)
-- One component method should call ideally one UseCase method
+## WXTフレームワーク詳細
 
-**Component Layer**:
-- Cannot directly call Chrome APIs or window objects
-- Must go through UseCases in application layer
-- Follow Atomic Design pattern
+→ 詳細は [.AI/wxt-framework.md](.AI/wxt-framework.md) を参照
 
-### Dependency Injection
+## 開発フロー
 
-- **Container**: `src/infrastructure/di/container.ts`
-- **Pattern**: Register interfaces and concrete implementations
-- All application layer dependencies are injected via constructor using `@inject()` decorator
-- Use `reflect-metadata` for decorator metadata
+→ 詳細は [.AI/development-flow.md](.AI/development-flow.md) を参照
 
-## Import Path Rules
+- スケルトン実装フェーズ廃止・E2E 1パターン実装直行
+- 並行開発: [.AI/parallel-branch-development.md](.AI/parallel-branch-development.md)
 
-**CRITICAL**: All imports MUST use absolute paths starting from `src`:
+## Gitワークフロー
 
-```typescript
-// ✅ Correct
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
+→ 詳細は [README.md の「開発ワークフロー」セクション](README.md#開発ワークフロー) を参照
 
-// ❌ Wrong
-import { RewriteRule } from '../domain/entities/RewriteRule/RewriteRule';
-import { RewriteRule } from '@/domain/entities/RewriteRule/RewriteRule';
-```
+- **Git Worktree（並行開発）**: [docs/GIT_WORKTREE.md](docs/GIT_WORKTREE.md) を参照（`make wt-dev`・`make wt-disable`・`make wt-remove`）
 
-Path aliases configured in `tsconfig.json`:
-- `src/*` → `./src/*`
-- `tests/*` → `./tests/*`
-- `entrypoints/*` → `./src/entrypoints/*`
+## PR運用
 
-## Object-Oriented Design Rules (ThoughtWorks Anthology)
+→ 詳細は [.AI/pr-policy.md](.AI/pr-policy.md) を参照
 
-These 9 rules are strictly enforced:
+## Claude Code Web専用ワークフロー
 
-1. One level of indentation per method
-2. Don't use else clauses
-3. Wrap all primitives and strings (exceptions: test mocks, sendMessage parameters, catch error objects)
-4. One dot per line (exception: Chrome API calls)
-5. Don't abbreviate names
-6. Keep all entities small
-7. Maximum 2 instance variables per class
-8. Use first-class collections
-9. No getters/setters/properties
+→ 詳細は [.AI/claude-code-web-workflow.md](.AI/claude-code-web-workflow.md) を参照
 
-**Method Design**:
-- Methods MUST use instance variables (exception: infrastructure layer)
-- Don't create unused methods (no speculative coding like `isValid()` or `equals()`)
+## トラブルシューティング
 
-**Class Design**:
-- When adding a class, add unit tests too
-- Prefer modifying methods to use instance variables rather than adding new ones
-
-## Testing Requirements
-
-### Test Structure
-- **Location**: Tests mirror `src/` directory structure in `tests/`
-- **Granularity**: One test file per method minimum (split further if needed)
-- **DO NOT group tests by class** - always split by method
-
-### Test File Organization (Infrastructure Layer Example)
-```
-tests/unit/infrastructure/[category]/[ServiceName]/
-├── [methodName]/
-│   ├── normal-cases.test.ts
-│   ├── edge-cases.test.ts
-│   ├── multiple-calls.test.ts
-│   └── Abend/                      # Abnormal cases subdirectory
-│       ├── error-cases.test.ts
-│       ├── null-undefined-validation.test.ts
-│       └── [external-api]-undefined-cases.test.ts
-```
-
-### Testing Standards
-- **Required**: Add/update tests for ANY method you add or modify
-- **Before PR**: MUST run tests and ensure they pass
-- Infrastructure layer: Only test `di/` and `persistance/` subdirectories (others optional)
-- Error case tests are optional but recommended for infrastructure layer
-
-### Test Implementation Principles
-- Consolidate redundant test cases with same input patterns
-- Use `beforeEach` for setup, `afterEach` for cleanup
-- Use `vi.clearAllMocks()` in beforeEach, `vi.resetAllMocks()` in afterEach
-- For validation tests: test return value patterns, not detailed validation logic (covered in subclass tests)
-
-### Test Frameworks
-- **Unit tests**: Vitest with happy-dom (files: `*.test.ts` in `tests/`)
-- **E2E tests**: Playwright (files: `*.spec.ts` in `tests/e2e/`)
-- Run both: `make testall` or comprehensive `make testlint`
-
-## WXT Framework Specifics
-
-### Configuration
-- Config file: `host-frontend-root/frontend-src-root/wxt.config.ts`
-- **Required**: `srcDir: 'src'` must be set in config
-- Dev server: Configurable via `WXT_DEV_HOST` and `WXT_DEV_PORT` env vars (default: localhost:3000)
-
-### Entry Points
-All entry points in `src/entrypoints/`:
-- `background.ts` - Background service worker
-- `content.ts` - Content script
-- `popup/` - Popup UI directory
-- `rules/` - Rules page directory
-- `edit/` - Edit page directory
-
-### Special Files
-- `.wxt/tsconfig.json` - Generated by `npx wxt prepare` (DO NOT manually create)
-- `matchUrl.ts` - Must be created from `matchUrl.ts.example` during setup
-
-## Git Workflow
-
-### Branch Strategy
-- **Base branch**: `develop`
-- **Branch naming**: Issue-based branches (e.g., `issue-086-docs-how-to-set-up`)
-- See `.clinerules/02-workflow-automation/01-issue-launches/workflow-create-branch.md` for branch creation workflow
-
-### Documentation Structure
-```
-docs/
-├── issue-XXX/              # In-progress issue documentation
-├── completed/issue-XXX/    # Completed issue documentation
-└── issue-000/             # Template for new issues
-```
-
-### Files to Exclude from Commits
-- `WITH_CLINE.md` - Work-in-progress instructions
-- `issues.md` - Task management file
-
-### Pull Requests
-- Create PRs using `gh` CLI
-- Base PRs against `develop` branch
-- Repository: `akAredminEogre/frog-frame-front`
-
-## Troubleshooting
-
-### `.wxt/tsconfig.json` Not Found
-This file is auto-generated. Run:
-```bash
-docker compose exec frontend npx wxt prepare
-```
-
-### Docker Layer Cache Optimization
-The Dockerfile copies `package.json` and `package-lock.json` first, runs `npm install`, then copies source code. The `postinstall` script is designed to skip during build and run after full source code is available.
-
-### Permission Issues
-The Docker setup includes a `fix-permissions.sh` script that runs on container start to handle file permission issues between host and container.
+→ 詳細は [.AI/troubleshooting.md](.AI/troubleshooting.md) を参照

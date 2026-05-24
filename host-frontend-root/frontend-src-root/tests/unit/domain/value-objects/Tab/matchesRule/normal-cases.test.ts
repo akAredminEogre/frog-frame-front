@@ -1,7 +1,7 @@
-import { describe, expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { Tab } from 'src/domain/value-objects/Tab';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * Tab.matchesRule メソッドの正常系テスト
@@ -40,13 +40,12 @@ describe('Tab.matchesRule - 正常系', () => {
   testCases.forEach((testCase) => {
     it(testCase.description, () => {
       const tab = new Tab(1, testCase.input.tabUrl);
-      const rule = new RewriteRule(
-        1,
-        'oldText',
-        'newText',
-        testCase.input.urlPattern,
-        false
-      );
+      const rule = RewriteRule.fromParams(1, {
+        oldString: 'oldText',
+        newString: 'newText',
+        urlPattern: testCase.input.urlPattern,
+        isRegex: false,
+      });
 
       const result = tab.matchesRule(rule);
       expect(result).toBe(testCase.expected.result);

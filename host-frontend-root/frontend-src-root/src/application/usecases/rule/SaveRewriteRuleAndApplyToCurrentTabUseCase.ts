@@ -1,11 +1,8 @@
-import { inject,injectable } from 'tsyringe';
-
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
-import { Tab } from 'src/domain/value-objects/Tab';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 interface SaveRewriteRuleAndApplyResult {
   success: boolean;
@@ -16,12 +13,11 @@ interface SaveRewriteRuleAndApplyResult {
 /**
  * リライトルールを保存し、現在のタブに適用するUseCase
  */
-@injectable()
 export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
   constructor(
-    @inject('IRewriteRuleRepository') private repository: IRewriteRuleRepository,
-    @inject('ICurrentTabService') private currentTabService: ICurrentTabService,
-    @inject('IChromeRuntimeService') private chromeRuntimeService: IChromeRuntimeService
+    private rewriteRuleRepository: IRewriteRuleRepository,
+    private currentTabService: ICurrentTabService,
+    private chromeRuntimeService: IChromeRuntimeService
   ) {}
 
   async execute(params: RewriteRuleParams): Promise<SaveRewriteRuleAndApplyResult> {
@@ -36,23 +32,25 @@ export class SaveRewriteRuleAndApplyToCurrentTabUseCase {
 
   private async saveRule(params: RewriteRuleParams): Promise<RewriteRule> {
     const rule = RewriteRule.fromParams(Date.now(), params);
-    await this.repository.create(rule);
+    await this.rewriteRuleRepository.create(rule);
     return rule;
   }
 
   private async applyRuleToCurrentTab(): Promise<SaveRewriteRuleAndApplyResult> {
     try {
       const currentTab = await this.currentTabService.getCurrentTab();
-      return await this.processRuleApplication(currentTab);
+      const tabId = currentTab.getTabId().value;
+      const tabUrl = currentTab.getTabUrl().value!;
+      return await this.processRuleApplication(tabId, tabUrl);
     } catch (error) {
       console.error('Failed to get current tab:', error);
       return this.createErrorResult('現在のタブを取得できませんでした。');
     }
   }
 
-  private async processRuleApplication(currentTab: Tab): Promise<SaveRewriteRuleAndApplyResult> {
+  private async processRuleApplication(tabId: number, tabUrl: string): Promise<SaveRewriteRuleAndApplyResult> {
 
-    const applyResult = await this.chromeRuntimeService.sendApplyRewriteRuleMessage(currentTab);
+    const applyResult = await this.chromeRuntimeService.sendApplyRewriteRuleMessage(tabId, tabUrl);
     if (!applyResult.success) {
       return this.createSuccessResult('保存しましたが、適用に失敗しました。', true);
     }

@@ -1,0 +1,291 @@
+@startuml ToggleRuleActive
+
+title ルールトグル機能 シーケンス図
+
+box "Rules Page - UI" #LightBlue
+  participant "ToggleSwitch" as UI
+  participant "RulesApp" as View
+end box
+
+box "interface-adapters" #LightGreen
+  participant "<<interface>>\nIToggleRuleActive\nControllerFactory" as IFactory
+  participant "ToggleRuleActive\nControllerFactory" as Factory
+  participant "<<interface>>\nIToggleRuleActive\nController" as IController
+  participant "ToggleRuleActive\nController" as Controller
+  participant "ToggleRuleActive\nPresenter" as Presenter
+  participant "RewriteRule\nMapper" as Mapper
+  participant "<<interface>>\nIRewriteRule\nMessagingPort" as IMessagingPort
+end box
+
+box "application-business-rules" #LightYellow
+  participant "<<interface>>\nIToggleRuleActive\nUseCase" as IUseCase
+  participant "ToggleRuleActive\nInteractor" as Interactor
+  participant "<<interface>>\nIRewriteRule\nRepository" as IRepository
+  participant "<<interface>>\nITabsGateway" as ITabsGateway
+end box
+
+box "frameworks-and-drivers" #LightCyan
+  participant "ChromeRuntime\nRewriteRule\nRepository" as MessagingRepo
+  participant "ChromeTabs\nGateway" as TabsGateway
+  participant "RewriteRule\nMessagingService" as MessagingService
+  participant "<<interface>>\nIRewriteRule\nProxyService" as IProxyService
+end box
+
+box "Background" #LightGray
+  participant "RewriteRule\nProxyService" as ProxyService
+  participant "RewriteRule\nProxyServiceImpl" as ProxyServiceImpl
+  participant "DexieRewriteRule\nRepository" as DexieRepo
+end box
+
+box "enterprise-business-rules" #LightPink
+  participant "RewriteRule" as Entity
+end box
+
+== 初期化（useMemo内） ==
+
+View -> IFactory : create(onSuccess, onError)
+activate IFactory
+
+IFactory -> Factory : create(onSuccess, onError)
+activate Factory
+
+Factory -> Presenter : new(onSuccess, onError)
+Factory -> Interactor : new(repository, tabsGateway, presenter)
+note right of Factory : Interactor は IToggleRuleActiveUseCase を実装
+Factory -> Controller : new(useCase: IToggleRuleActiveUseCase)
+Factory --> IFactory : controller
+deactivate Factory
+
+IFactory --> View : controller
+deactivate IFactory
+
+note right of View
+  ADR-005: Factoryパターンにより
+  ReactコールバックをPresenterに注入
+end note
+
+== トグル操作 ==
+
+UI -> View : onToggle(ruleId)
+activate View
+
+note over View
+  **競合状態防止チェック**
+  togglingIds.has(ruleId) の場合は
+  早期リターン（連続操作防止）
+end note
+
+View -> View : togglingIds.add(ruleId)
+note right of View
+  処理中フラグを設定
+  ToggleSwitch.disabled = true
+end note
+
+View -> IController : toggleActive(ruleId)
+activate IController
+
+IController -> Controller : toggleActive(ruleId)
+activate Controller
+
+Controller -> IUseCase : execute(inputData)
+note right of Controller : 依存性逆転: Controller は IUseCase に依存
+IUseCase -> Interactor : execute(inputData)
+activate Interactor
+
+Interactor -> IRepository : getById(ruleId)
+activate IRepository
+
+IRepository -> MessagingRepo : getById(ruleId)
+activate MessagingRepo
+
+MessagingRepo -> Mapper : getById(ruleId)
+activate Mapper
+
+Mapper -> IMessagingPort : getById(dto)
+activate IMessagingPort
+
+IMessagingPort -> MessagingService : getById(dto)
+activate MessagingService
+
+MessagingService -> IProxyService : getById(dto)
+activate IProxyService
+
+IProxyService -> ProxyService : getById(dto)
+activate ProxyService
+
+ProxyService -> ProxyServiceImpl : getById(dto)
+activate ProxyServiceImpl
+
+ProxyServiceImpl -> DexieRepo : getById(ruleId)
+activate DexieRepo
+DexieRepo --> ProxyServiceImpl : DTO
+deactivate DexieRepo
+
+ProxyServiceImpl --> ProxyService : DTO
+deactivate ProxyServiceImpl
+
+ProxyService --> IProxyService : DTO
+deactivate ProxyService
+
+IProxyService --> MessagingService : DTO
+deactivate IProxyService
+
+MessagingService --> IMessagingPort : DTO
+deactivate MessagingService
+
+IMessagingPort --> Mapper : DTO
+deactivate IMessagingPort
+
+Mapper -> Entity : new(...)
+Entity --> Mapper : rule
+
+Mapper --> MessagingRepo : rule
+deactivate Mapper
+
+MessagingRepo --> IRepository : rule
+deactivate MessagingRepo
+
+IRepository --> Interactor : rule
+deactivate IRepository
+
+Interactor -> Entity : withActive(!isActive)
+Entity --> Interactor : updatedRule
+
+Interactor -> IRepository : update(updatedRule)
+activate IRepository
+
+IRepository -> MessagingRepo : update(updatedRule)
+activate MessagingRepo
+
+MessagingRepo -> Mapper : update(updatedRule)
+activate Mapper
+
+Mapper -> IMessagingPort : updateActive(dto)
+activate IMessagingPort
+
+IMessagingPort -> MessagingService : updateActive(dto)
+activate MessagingService
+
+MessagingService -> IProxyService : updateActive(dto)
+activate IProxyService
+
+IProxyService -> ProxyService : updateActive(dto)
+activate ProxyService
+
+ProxyService -> ProxyServiceImpl : updateActive(dto)
+activate ProxyServiceImpl
+
+ProxyServiceImpl -> DexieRepo : updateActive(dto)
+activate DexieRepo
+DexieRepo --> ProxyServiceImpl : void
+deactivate DexieRepo
+
+ProxyServiceImpl --> ProxyService : void
+deactivate ProxyServiceImpl
+
+ProxyService --> IProxyService : void
+deactivate ProxyService
+
+IProxyService --> MessagingService : void
+deactivate IProxyService
+
+MessagingService --> IMessagingPort : void
+deactivate MessagingService
+
+IMessagingPort --> Mapper : void
+deactivate IMessagingPort
+
+Mapper --> MessagingRepo : void
+deactivate Mapper
+
+MessagingRepo --> IRepository : void
+deactivate MessagingRepo
+
+IRepository --> Interactor : void
+deactivate IRepository
+
+Interactor -> ITabsGateway : reloadMatchingTabs(rule)
+activate ITabsGateway
+
+ITabsGateway -> TabsGateway : reloadMatchingTabs(rule)
+activate TabsGateway
+
+loop 各タブ
+  TabsGateway -> Entity : matchesUrl(url)
+  Entity --> TabsGateway : boolean
+end
+
+TabsGateway --> ITabsGateway : void
+deactivate TabsGateway
+
+ITabsGateway --> Interactor : void
+deactivate ITabsGateway
+
+Interactor -> Presenter : present(outputData)
+activate Presenter
+
+Presenter -> View : updateRuleInView(rule)
+View --> UI : 状態更新
+
+deactivate Presenter
+deactivate Interactor
+deactivate Controller
+deactivate IController
+
+View -> View : togglingIds.delete(ruleId)
+note right of View
+  処理中フラグを解除
+  ToggleSwitch.disabled = false
+end note
+
+deactivate View
+
+== エラーケース ==
+
+note over Interactor, Presenter
+  エラー発生時のフロー
+  - ルール取得失敗: UIは変更なし
+  - ルール更新失敗: UIは変更なし
+  - タブリロード失敗: DB更新は成功済みのため、
+    UIはトグル後の状態を表示（部分的成功）
+end note
+
+alt ルール取得失敗 または ルール更新失敗
+  Interactor -> Presenter : presentError(errorOutputData)
+  activate Presenter
+  note right of Presenter
+    ToggleRuleActiveErrorOutputData を使用
+    - ruleId: 数値（対象ルールID）
+    - message: 文字列（エラーメッセージ）
+  end note
+  Presenter -> View : showErrorInView(ruleId, message)
+  View --> UI : エラーメッセージ表示（状態変更なし）
+  deactivate Presenter
+  View -> View : togglingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
+
+else タブリロード失敗（部分的成功）
+  note over Interactor
+    **順序保証**
+    present() は reloadMatchingTabs() の
+    前に同期的に呼び出されるため、
+    present() → presentError() の順序が保証される
+  end note
+  Interactor -> Presenter : present(outputData)
+  activate Presenter
+  note right of Presenter : DB更新成功を反映
+  Presenter -> View : updateRuleInView(rule)
+  View --> UI : 状態更新（トグル後の状態）
+  deactivate Presenter
+
+  Interactor -> Presenter : presentError(errorOutputData)
+  activate Presenter
+  note right of Presenter : タブリロード失敗を通知
+  Presenter -> View : showErrorInView(ruleId, message)
+  View --> UI : エラーメッセージ表示
+  deactivate Presenter
+  View -> View : togglingIds.delete(ruleId)
+  note right of View : 処理中フラグを解除
+end
+
+@enduml

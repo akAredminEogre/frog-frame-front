@@ -1,0 +1,148 @@
+/* ルール一覧テーブル */
+.rulesTableContainer {
+  margin: 20px 0;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e1e5e9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rulesTable {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.rulesTable thead th {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 600;
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 2px solid #e1e5e9;
+  position: sticky;
+  top: 0;
+}
+
+/* テーブルヘッダーの幅指定 */
+.rulesTable thead th:nth-child(1),
+.rulesTable thead th:nth-child(2),
+.rulesTable thead th:nth-child(3) {
+  width: 1%;  /* 有効・編集・削除列: ボタンの最小幅 */
+  white-space: nowrap;
+  text-align: center;
+}
+
+.rulesTable thead th:nth-child(4) {
+  width: 200px; /* URLパターン列 */
+}
+
+/* 置換前・置換後列は残りの幅を自動配分（ブラウザによる自動計算） */
+
+.rulesTable tbody tr {
+  background-color: #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+.rulesTable tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.rulesTable tbody tr:nth-child(even) {
+  background-color: #f1f3f5;
+}
+
+.rulesTable tbody tr:nth-child(even):hover {
+  background-color: #e9ecef;
+}
+
+.rulesTable td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #f1f3f4;
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* テーブルデータセルの幅指定（nth-childでより確実に適用） */
+.rulesTable tbody td:nth-child(1),
+.rulesTable tbody td:nth-child(2),
+.rulesTable tbody td:nth-child(3) {
+  width: 1%;  /* 有効・編集・削除列: ボタンの最小幅 */
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.rulesTable tbody td:nth-child(4) {
+  width: 200px; /* URLパターン列 */
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  color: #3498db;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rulesTable tbody td:nth-child(5) {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  color: #e74c3c;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.rulesTable tbody td:nth-child(6) {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  color: #27ae60;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+
+
+.editButton {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.editButton:hover {
+  background-color: #2980b9;
+}
+
+.editButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 600px) {
+  .rulesTableContainer {
+    font-size: 12px;
+  }
+
+  /* URLパターン・置換前・置換後列のレスポンシブ対応 */
+  .rulesTable tbody td:nth-child(4),
+  .rulesTable tbody td:nth-child(5),
+  .rulesTable tbody td:nth-child(6) {
+    min-width: 100px;
+  }
+
+  .rulesTable td {
+    padding: 8px 4px;
+  }
+
+  .rulesTable thead th {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+}

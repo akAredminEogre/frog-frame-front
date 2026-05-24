@@ -1,1 +1,10 @@
 .env
+.env.worktree
+node_modules/
+docker-compose.override.yml
+
+# Git worktree directories
+worktrees/
+
+# Claude Code local settings
+.claude/settings.local.json

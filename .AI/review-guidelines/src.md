@@ -1,0 +1,10 @@
+# src/ ディレクトリ レビューガイドライン
+
+ソースコードの変更時は以下を確認してください：
+
+## 確認項目
+
+- 新規クラス/メソッド追加時はdocs/design/に対応するテスト戦略書が必要
+- publicなAPI変更時はCLAUDE.mdの更新が必要か確認
+- Clean Architectureのレイヤー依存関係が守られているか
+- docs/coding-standards/src/ のコーディング規約が守られているか

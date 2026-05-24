@@ -1,8 +1,8 @@
-import { describe, expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
 import { Tab } from 'src/domain/value-objects/Tab';
 import { Tabs } from 'src/domain/value-objects/Tabs';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * Tabs.filterByRule メソッドの正常系テスト
@@ -103,13 +103,12 @@ describe('Tabs.filterByRule - 正常系', () => {
         (tab) => new Tab(tab.tabId, tab.tabUrl)
       );
       const tabs = new Tabs(tabInstances);
-      const rule = new RewriteRule(
-        1,
-        'oldText',
-        'newText',
-        testCase.input.urlPattern,
-        false
-      );
+      const rule = RewriteRule.fromParams(1, {
+        oldString: 'oldText',
+        newString: 'newText',
+        urlPattern: testCase.input.urlPattern,
+        isRegex: false,
+      });
 
       const result = tabs.filterByRule(rule);
       const resultArray = result.toArray();

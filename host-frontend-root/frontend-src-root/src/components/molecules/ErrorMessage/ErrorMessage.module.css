@@ -1,0 +1,36 @@
+.errorMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-l);
+  gap: var(--spacing-s);
+  background-color: var(--colors-error-bg);
+  border: 1px solid var(--colors-error);
+  border-radius: var(--border-radius);
+}
+
+.icon {
+  font-size: var(--font-size-large);
+}
+
+.message {
+  margin: 0;
+  font-size: var(--font-size-small);
+  color: var(--colors-error);
+  text-align: center;
+}
+
+.retryButton {
+  background-color: var(--colors-error);
+  color: var(--colors-white);
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-s);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+}
+
+.retryButton:hover {
+  background-color: var(--colors-error-dark);
+}

@@ -1,0 +1,20 @@
+// markdownlint-cli2 configuration
+// https://github.com/DavidAnson/markdownlint-cli2
+{
+  // Use existing markdownlint config
+  "config": {
+    "extends": ".markdownlint.jsonc"
+  },
+
+  // Ignore patterns
+  "ignores": [
+    "node_modules/**",
+    ".git/**",
+    ".output/**",
+    "dist/**",
+    "host-frontend-root/**",
+    "worktrees/**",
+    "docs/user-stories/completed/**",
+    "docs/issues/completed/**"
+  ]
+}

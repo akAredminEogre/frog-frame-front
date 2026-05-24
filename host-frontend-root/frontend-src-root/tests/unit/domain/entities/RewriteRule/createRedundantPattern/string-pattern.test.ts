@@ -1,6 +1,6 @@
-import { describe, expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * RewriteRule.createRedundantPattern 文字列パターンテストケース
@@ -70,13 +70,12 @@ describe('RewriteRule.createRedundantPattern - 文字列パターン', () => {
   stringPatternTestCases.forEach((testCase) => {
     it(testCase.description, () => {
       // Arrange
-      const rule = new RewriteRule(
-        1,
-        testCase.input.oldString,
-        'replacement',
-        '',
-        testCase.input.isRegex
-      );
+      const rule = RewriteRule.fromParams(1, {
+        oldString: testCase.input.oldString,
+        newString: 'replacement',
+        urlPattern: '',
+        isRegex: testCase.input.isRegex ?? false,
+      });
 
       // Act
       const result = rule.createRedundantPattern();

@@ -3,12 +3,38 @@
 /* カラーパレット（既存App.tsxのスタイルを参考） */
 :root {
   --color-primary: #1ea7fd;
+  --color-primary-hover: #0e7fcd;
+  --color-primary-contrast: #fff;
   --color-secondary: #666;
   --color-text: #333;
   --color-text-light: #666;
+  --color-text-primary: var(--color-text);
   --color-background: #fff;
   --color-border: rgba(0, 0, 0, 0.15);
+  /* トグルスイッチのトラック用ホバー色 */
+  --color-toggle-track-hover: rgba(0, 0, 0, 0.25);
+  /* 後方互換用: 汎用ボーダーホバー色のトークンはトグル用ホバー色を参照する */
+  --color-border-hover: var(--color-toggle-track-hover);
   --color-hover: #0e7fcd;
+  --color-surface-hover: rgba(0, 0, 0, 0.05);
+  /* 危険なアクション用（削除、警告など） */
+  /* WCAG AA準拠: #c53030 + #fff = 約5.47:1 (基準4.5:1以上, WebAIM Contrast Checkerで確認) */
+  --color-danger: #c53030;
+  --color-danger-hover: #a52828;
+  --color-danger-contrast: #fff;
+  --color-danger-bg: rgba(220, 53, 69, 0.1);
+  /* 成功アクション用（完了、保存など） */
+  /* WCAG AA準拠: #2f855a + #fff = 約4.52:1 (基準4.5:1以上, WebAIM Contrast Checkerで確認) */
+  --color-success: #2f855a;
+  --color-success-hover: #276749;
+  --color-success-contrast: #fff;
+  --color-success-bg: rgba(47, 133, 90, 0.1);
+}
+
+/* シャドウ */
+:root {
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-toggle-knob: var(--shadow-sm);
 }
 
 /* サイズ */

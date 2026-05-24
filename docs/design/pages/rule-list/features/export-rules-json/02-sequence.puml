@@ -1,0 +1,292 @@
+@startuml ExportRulesJson
+
+title ルールJSONエクスポート機能
+
+box "Rules Page - UI" #LightBlue
+  participant "ExportButton" as ExportBtn
+  participant "RulesApp" as View
+  participant "useExportRulesJson\n(Hook)" as Hook
+  participant "Toast\nNotification" as Toast
+end box
+
+box "interface-adapters" #LightGreen
+  participant "<<interface>>\nIExportRulesJson\nControllerFactory" as IFactory
+  participant "ExportRulesJson\nController\nFactory" as Factory
+  participant "<<interface>>\nIExportRulesJson\nController" as IController
+  participant "ExportRulesJson\nController" as Controller
+  participant "ExportRulesJson\nPresenter" as Presenter
+  participant "RewriteRule\nMapper" as Mapper
+  participant "<<interface>>\nIRewriteRule\nMessagingPort" as IMessagingPort
+end box
+
+box "application-business-rules" #LightYellow
+  participant "ExportRulesJson\nInputData" as InputData
+  participant "ExportRulesJson\nOutputData" as OutputData
+  participant "ExportRulesJson\nError\nOutputData" as ErrorOutputData
+  participant "<<interface>>\nIExportRulesJson\nUseCase" as IUseCase
+  participant "<<interface>>\nIExportRulesJson\nPresenter" as IPresenter
+  participant "ExportRulesJson\nInteractor" as Interactor
+  participant "<<interface>>\nIRewriteRule\nRepository" as IRepository
+end box
+
+box "frameworks-and-drivers" #LightCyan
+  participant "ChromeRuntime\nRewriteRule\nRepository" as MessagingRepo
+  participant "RewriteRule\nMessaging\nService" as MessagingService
+  participant "<<interface>>\nIRewriteRule\nProxyService" as IProxyService
+end box
+
+box "Background" #LightGray
+  participant "RewriteRule\nProxyService" as ProxyService
+  participant "RewriteRule\nProxyService\nImpl" as ProxyServiceImpl
+  participant "Dexie\nRewriteRule\nRepository" as DexieRepo
+end box
+
+box "enterprise-business-rules" #LightPink
+  participant "RewriteRule" as Entity
+end box
+
+== 初期化(useMemo内) ==
+
+View -> Hook : useExportRulesJson()
+activate Hook
+note right of Hook
+  useMemo内でFactory初期化
+  onSuccess/onErrorコールバックを定義
+  isExporting状態を管理
+end note
+
+Hook -> IFactory : create(\n  onSuccess,\n  onError)
+activate IFactory
+
+IFactory -> Factory : create(\n  onSuccess,\n  onError)
+activate Factory
+
+Factory -> Presenter : new(\n  onSuccess,\n  onError)
+Factory -> Interactor : new(\n  repository,\n  presenter)
+note right of Factory
+  Interactor は
+  IExportRulesJsonUseCase を実装
+end note
+Factory -> Controller : new(useCase)
+Factory --> IFactory : controller
+deactivate Factory
+
+IFactory --> Hook : controller
+deactivate IFactory
+
+Hook --> View : { exportRulesJson,\n  isExporting }
+
+note right of Hook
+  ADR-005: Factoryパターンにより
+  ReactコールバックをPresenterに注入
+  ダウンロード実行はHookのonSuccess内
+end note
+
+== エクスポート実行 ==
+
+ExportBtn -> View : onExportClick()
+activate View
+View -> Hook : exportRulesJson()
+activate Hook
+
+alt isExporting = true
+  note over Hook
+    **重複実行防止**
+    既にエクスポート処理中のため
+    早期リターン
+  end note
+  Hook --> View : 早期リターン
+  View --> ExportBtn : 早期リターン
+  deactivate Hook
+  deactivate View
+
+else isExporting = false
+  Hook -> Hook : setIsExporting(true)
+  note right of Hook
+    処理中フラグを設定
+    ExportButtonをdisabledにする
+  end note
+
+  Hook -> IController : exportRulesJson()
+  activate IController
+
+  IController -> Controller : exportRulesJson()
+  activate Controller
+
+  Controller -> InputData : new()
+  InputData --> Controller : inputData
+
+  Controller -> IUseCase : execute(inputData)
+  note right of Controller
+    依存性逆転:
+    Controller は
+    IExportRulesJsonUseCase に依存
+  end note
+  IUseCase -> Interactor : execute(inputData)
+  activate Interactor
+
+  note over Interactor, Presenter
+    エラー発生時のフロー
+    - ルール取得失敗: ダウンロードなし
+    - ダウンロード処理失敗: トースト通知
+
+    ※ isExportingフラグはfinally節で解除
+      (成功・エラー両パス共通)
+  end note
+
+  alt 成功
+    == 全ルール取得 ==
+
+    Interactor -> IRepository : getAll()
+    activate IRepository
+
+    IRepository -> MessagingRepo : getAll()
+    activate MessagingRepo
+
+    MessagingRepo -> Mapper : getAll()
+    activate Mapper
+
+    Mapper -> IMessagingPort : getAll()
+    activate IMessagingPort
+
+    IMessagingPort -> MessagingService : getAll()
+    activate MessagingService
+
+    MessagingService -> IProxyService : getAll()
+    activate IProxyService
+
+    IProxyService -> ProxyService : getAll()
+    activate ProxyService
+
+    ProxyService -> ProxyServiceImpl : getAll()
+    activate ProxyServiceImpl
+
+    ProxyServiceImpl -> DexieRepo : getAll()
+    activate DexieRepo
+    DexieRepo --> ProxyServiceImpl : DTO[]
+    deactivate DexieRepo
+
+    ProxyServiceImpl --> ProxyService : DTO[]
+    deactivate ProxyServiceImpl
+
+    ProxyService --> IProxyService : DTO[]
+    deactivate ProxyService
+
+    IProxyService --> MessagingService : DTO[]
+    deactivate IProxyService
+
+    MessagingService --> IMessagingPort : DTO[]
+    deactivate MessagingService
+
+    IMessagingPort --> Mapper : DTO[]
+    deactivate IMessagingPort
+
+    loop 各DTO
+      Mapper -> Entity : fromDTO(dto)
+      Entity --> Mapper : rule
+    end
+
+    Mapper --> MessagingRepo : rules
+    deactivate Mapper
+
+    MessagingRepo --> IRepository : rules
+    deactivate MessagingRepo
+
+    IRepository --> Interactor : rules
+    deactivate IRepository
+
+    == JSON構築・結果通知 ==
+
+    note over Interactor
+      エクスポートJSON構築:
+      - version: "1.0"
+      - exportedAt: ISO 8601日時（ローカルタイム + タイムゾーンオフセット、例: 2026-02-23T10:30:00+09:00）
+      - rules: IDを含む全属性の配列
+      - fileName: frog-frame-front-rules-YYYYMMDD_hhmmss.json（ローカルタイム）
+    end note
+
+    Interactor -> OutputData : new(\n  jsonContent,\n  fileName)
+    OutputData --> Interactor : outputData
+
+    Interactor -> IPresenter : present(outputData)
+    activate IPresenter
+
+    IPresenter -> Presenter : present(outputData)
+    activate Presenter
+
+    Presenter -> Hook : triggerDownload(\n  jsonContent,\n  fileName)
+    note right of Hook
+      onSuccessコールバック実行(ADR-005):
+      Blob生成 →
+      URL.createObjectURL →
+      aタグクリック →
+      URL.revokeObjectURL
+    end note
+
+    deactivate Presenter
+    deactivate IPresenter
+    deactivate Interactor
+    deactivate Controller
+    deactivate IController
+
+    Hook --> View : 完了
+
+  else ルール取得失敗
+    note over Interactor
+      getAll()でエラー発生
+    end note
+    Interactor -> ErrorOutputData : new(message)
+    ErrorOutputData --> Interactor : errorOutputData
+
+    Interactor -> IPresenter : presentError(\n  errorOutputData)
+    activate IPresenter
+
+    IPresenter -> Presenter : presentError(\n  errorOutputData)
+    activate Presenter
+
+    Presenter -> Hook : showErrorInView(\n  message)
+    activate Hook
+
+    Hook -> Toast : show(\n  "エクスポートに失敗しました",\n  type: "error")
+    activate Toast
+    Toast --> Hook : 表示
+    deactivate Toast
+
+    Hook --> Presenter : エラー表示完了
+    deactivate Hook
+    deactivate Presenter
+    deactivate IPresenter
+    deactivate Interactor
+    deactivate Controller
+    deactivate IController
+
+  else ダウンロード処理失敗
+    note over Hook
+      Blob生成/URL.createObjectURL等で
+      例外発生
+    end note
+
+    Hook -> Toast : show(\n  "エクスポートに失敗しました",\n  type: "error")
+    activate Toast
+    Toast --> Hook : 表示
+    deactivate Toast
+    deactivate Interactor
+    deactivate Controller
+    deactivate IController
+
+  end
+
+  group finally [成功・エラー共通]
+    Hook -> Hook : setIsExporting(false)
+    note right of Hook
+      処理中フラグを解除(finally節)
+      ExportButton.disabled = false
+    end note
+  end
+
+  deactivate Hook
+  deactivate View
+
+end
+
+@enduml

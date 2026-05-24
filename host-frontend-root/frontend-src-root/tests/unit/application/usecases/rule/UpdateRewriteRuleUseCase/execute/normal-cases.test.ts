@@ -1,12 +1,12 @@
-import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/createMockTabsService';
-import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createMockTabsService } from 'tests/unit/application/ports/IChromeTabsService/mocks/createMockTabsService';
+import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { Tabs } from 'src/domain/value-objects/Tabs';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * UpdateRewriteRuleUseCase.execute - 正常系テスト
@@ -20,6 +20,8 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
   let mockChromeTabsService: IChromeTabsService;
 
   beforeEach(() => {
+    vi.clearAllMocks();
+
     // モックリポジトリの初期化
     mockRepository = createMockRewriteRuleRepository();
 
@@ -29,6 +31,10 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
 
     // テスト対象の初期化
     useCase = new UpdateRewriteRuleUseCase(mockRepository, mockChromeTabsService);
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
   });
 
   it.each([
@@ -41,13 +47,12 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         urlPattern: 'https://example.com',
         isRegex: false
       },
-      expectedRule: new RewriteRule(
-        1,
-        'oldText',
-        'newText',
-        'https://example.com',
-        false
-      ),
+      expectedRule: RewriteRule.fromParams(1, {
+        oldString: 'oldText',
+        newString: 'newText',
+        urlPattern: 'https://example.com',
+        isRegex: false,
+      }),
     },
     {
       description: '正規表現を含むルールが正常に更新できる',
@@ -58,13 +63,12 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         urlPattern: 'https://example.com',
         isRegex: true
       },
-      expectedRule: new RewriteRule(
-        2,
-        '\\d{4}-\\d{13}',
-        '<a href="https://example.com/$1">$1</a>',
-        'https://example.com',
-        true
-      ),
+      expectedRule: RewriteRule.fromParams(2, {
+        oldString: '\\d{4}-\\d{13}',
+        newString: '<a href="https://example.com/$1">$1</a>',
+        urlPattern: 'https://example.com',
+        isRegex: true,
+      }),
     },
     {
       description: 'URLパターンを持つルールが正常に更新できる',
@@ -75,13 +79,12 @@ describe('UpdateRewriteRuleUseCase.execute - 正常系', () => {
         urlPattern: 'https://.*\\.example\\.com/.*',
         isRegex: false
       },
-      expectedRule: new RewriteRule(
-        3,
-        'search',
-        'replace',
-        'https://.*\\.example\\.com/.*',
-        false
-      ),
+      expectedRule: RewriteRule.fromParams(3, {
+        oldString: 'search',
+        newString: 'replace',
+        urlPattern: 'https://.*\\.example\\.com/.*',
+        isRegex: false,
+      }),
     },
   ])('$description', async ({ id, params, expectedRule }) => {
     // Arrange

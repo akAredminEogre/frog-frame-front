@@ -1,5 +1,5 @@
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 export class GetAllRewriteRulesUseCase {
   constructor(

@@ -1,9 +1,9 @@
-import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/createMockRewriteRuleRepository';
+import { createMockRewriteRuleRepository } from 'tests/unit/application/ports/IRewriteRuleRepository/mocks/createMockRewriteRuleRepository';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { IRewriteRuleRepository } from 'src/application/ports/IRewriteRuleRepository';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
-import { RewriteRule } from 'src/domain/entities/RewriteRule/RewriteRule';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
+import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 
 /**
  * LoadRewriteRuleForEditUseCase.execute - 正常系テスト
@@ -26,24 +26,22 @@ describe('LoadRewriteRuleForEditUseCase.execute - 正常系', () => {
     {
       description: '存在するルールIDでルールが正常に取得できる',
       ruleId: 1,
-      mockRule: new RewriteRule(
-        1,
-        'oldText',
-        'newText',
-        'https://example.com',
-        false
-      ),
+      mockRule: RewriteRule.fromParams(1, {
+        oldString: 'oldText',
+        newString: 'newText',
+        urlPattern: 'https://example.com',
+        isRegex: false,
+      }),
     },
     {
       description: '正規表現を含むルールが正常に取得できる',
       ruleId: 2,
-      mockRule: new RewriteRule(
-        2,
-        '\\d{4}-\\d{13}',
-        '<a href="https://example.com/$1">$1</a>',
-        'https://example.com',
-        true
-      ),
+      mockRule: RewriteRule.fromParams(2, {
+        oldString: '\\d{4}-\\d{13}',
+        newString: '<a href="https://example.com/$1">$1</a>',
+        urlPattern: 'https://example.com',
+        isRegex: true,
+      }),
     },
   ])('$description', async ({ ruleId, mockRule }) => {
     // Arrange
