@@ -1,5 +1,9 @@
 # User Story 016: ImportRulesJsonUI ModalDialogBase 移行（アクセシビリティ完全対応）
 
+> ⚠️ **前提見直し注記（CodeRabbit PR#405 指摘対応）**
+> 本ストーリーは「`ImportRulesJsonUI` に**プレビューダイアログが存在する**」ことを前提に書かれているが、確定設計（`00-overview.md`「プレビュー確認なし・1フェーズ一括上書き」/ `01-class-design.md`）および**実装コードにはプレビューダイアログが存在しない**（`ImportRulesJsonUI` は ImportButton + ToastNotification 構成、確認ダイアログなし）。
+> したがって本ストーリー（プレビューダイアログの ModalDialogBase 移行）は**現行実装には直接適用できず、再スコープが必要**。将来プレビュー UI を導入する場合のアクセシビリティ指針として保留する。以下本文中「現在 `div role="dialog"` で実装されており」等の記述は旧設計前提であり、現行実装の状態を表すものではない。
+
 ## ストーリー
 
 > ルールJSONインポート機能のプレビューダイアログを ModalDialogBase に移行することで、アクセシビリティ要件（ADR-007）を完全に満たしたい

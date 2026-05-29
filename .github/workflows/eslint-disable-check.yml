@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+# 最小権限化（CodeRabbit PR#405 指摘）: 当ワークフローは PR diff の読み取りのみで足りる
+permissions:
+  contents: read
+
 jobs:
   check-eslint-disable-diff:
     name: Check ESLint Disable Comments in PR Diff
@@ -13,6 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Check for eslint-disable in diff
         run: |
@@ -36,6 +41,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Count eslint-disable occurrences
         id: count

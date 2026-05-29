@@ -23,9 +23,10 @@ const useCaseConfig = {
           "UseCaseメソッドのパラメータはInputDataで終わること（例: exportRulesJsonInputData）",
       },
       {
-        // InteractorクラスはUseCaseインターフェースをimplementsすること
+        // InteractorクラスはUseCaseインターフェース（I*UseCase）をimplementsすること
+        // メッセージ仕様に合わせ I 始まりの UseCase IF のみ許可（素の FooUseCase 命名は不可）
         selector:
-          "ClassDeclaration[id.name=/Interactor$/]:not(:has(TSClassImplements[expression.name=/UseCase$/]))",
+          "ClassDeclaration[id.name=/Interactor$/]:not(:has(TSClassImplements[expression.name=/^I[A-Za-z0-9]*UseCase$/]))",
         message:
           "Interactorクラスは対応するUseCaseインターフェース（I*UseCase）をimplementsしなければなりません。",
       },

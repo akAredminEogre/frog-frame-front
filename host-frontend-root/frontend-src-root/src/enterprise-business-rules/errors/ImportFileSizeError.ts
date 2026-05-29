@@ -14,3 +14,15 @@ export class ImportFileSizeError extends Error {
     this.name = 'ImportFileSizeError';
   }
 }
+
+/**
+ * 不正なインポートファイルサイズエラー
+ * 負数・NaN・Infinity 等、ファイルサイズとして成立しない値を拒否する。
+ * 「上限超過」とは区別されるドメイン値の不正状態を表す。
+ */
+export class InvalidImportFileSizeError extends Error {
+  constructor(fileSizeBytes: number) {
+    super(`ファイルサイズが不正です (${fileSizeBytes})`);
+    this.name = 'InvalidImportFileSizeError';
+  }
+}

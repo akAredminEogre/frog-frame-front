@@ -12,9 +12,11 @@
 | 1-4 | id が正の整数の場合は許可 | `{"id": 42, "oldString": "a", ...}` | バリデーション通過 |
 | 1-5 | id が負数の場合はエラー | `{"id": -1, "oldString": "a", ...}` | `presentError` が呼ばれ、"0 以上の整数" を含むエラーメッセージが返る |
 | 1-6 | id が小数の場合はエラー | `{"id": 1.5, "oldString": "a", ...}` | `presentError` が呼ばれ、エラーメッセージが返る |
-| 1-7 | id が NaN の場合はエラー | `{"id": NaN, ...}` | `presentError` が呼ばれ、エラーメッセージが返る |
-| 1-8 | id が Infinity の場合はエラー | `{"id": Infinity, ...}` | `presentError` が呼ばれ、エラーメッセージが返る |
+| 1-7 | id が NaN の場合はエラー（※パース後オブジェクト値） | パース後の `id` が `NaN` | `presentError` が呼ばれ、エラーメッセージが返る |
+| 1-8 | id が Infinity の場合はエラー（※パース後オブジェクト値） | パース後の `id` が `Infinity` | `presentError` が呼ばれ、エラーメッセージが返る |
 | 1-9 | id が文字列の場合はエラー | `{"id": "123", "oldString": "a", ...}` | `presentError` が呼ばれ、エラーメッセージが返る |
+
+> **注**: `NaN` / `Infinity` は JSON リテラルとしては不正（`JSON.parse('{"id": NaN}')` は SyntaxError）。1-7 / 1-8 は「JSON 入力例」ではなく、**パース後オブジェクトの `id` がそれらの値だった場合**（または非標準パーサ経由で混入した場合）の `createRuleId` バリデーション挙動を表す。生 JSON 文字列としての不正は L0〜L1（JSON 構文/スキーマ）で別途検出される。
 
 ### AC-2: 重複 id のバリデーション
 

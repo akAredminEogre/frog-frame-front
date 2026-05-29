@@ -10,8 +10,16 @@
 エクスポート機能（user-story-015）で出力したJSONファイルと互換性のある形式で取り込みを行い、
 プレビュー確認後に確定することでルールを上書き保存する。
 
-本ユーザーストーリーは PR#394（feat/rule-json-import）にて、設計から実装・CA準拠リファクタリングまでの
-全フェーズを完了した。将来フェーズで実装する改善項目は、下記「子タスク（別PR対応）」に記載する。
+本ユーザーストーリーは PR#394（現行は後継 PR#405・`feat/rule-json-import`）にて、設計から実装・CA準拠リファクタリングまでの
+主要フェーズを完了した。将来フェーズで実装する改善項目は、下記「子タスク（別PR対応）」に記載する。
+
+> ⚠️ **完了状態の整合注記（CodeRabbit PR#405 指摘対応）**
+> 以下「開発フロー」の各 Phase チェックリストは**初期計画時の作業項目**を網羅列挙したものであり、`[ ]` 未チェックのまま残っている。一方で**確定実装はよりリーンな構成**を採用したため、計画項目の一部は**採用されず**（チェックされないのが正）である。具体的に**本PRで実装されていない計画項目**:
+> - Phase 3 の `IFileSizeValidator` / `IByteSizeCalculator` / `FileSizeValidator` / `BlobByteSizeCalculator`（ファイルサイズ検証は EBR `ImportFileSize` value-object に集約。F&D 抽出は US-022 の別PRスコープ）
+> - 独立 `ImportRulesJsonController` / `ImportRulesJsonPresenter` クラス（Factory 内無名オブジェクトに集約。標準クラス化は未実施）
+> - プレビュー / 確認ダイアログ（`importRulesJson` 単一メソッドの1フェーズ一括上書き。`previewImport`/`confirmImport` は不採用）
+>
+> **実際に出荷された実装の正は「実装済みコンポーネント」表（下記）と `00-overview.md` / `01-class-design.md` + `src/` コード**である。Phase チェックリストは履歴・計画記録として残し、出荷実態と差異がある旨を本注記で明示する。
 
 ## 設計ドキュメント
 

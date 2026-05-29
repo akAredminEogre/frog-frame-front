@@ -1,5 +1,11 @@
 # ディレクトリ構造設計
 
+> ⚠️ **整合性注記（CodeRabbit PR#405 指摘対応）**
+> 本ファイルの一部記述は**初期計画時のフル設計**を反映しており、実装フェーズで採用された**よりリーンな確定設計**（`00-overview.md` / `01-class-design.md` および実装コードを正とする）と差異がある。**現行の正は `00-overview.md` / `01-class-design.md` + `src/` 実装**であり、相違時はそちらを優先すること。具体的な未採用項目:
+> - **Controller / Presenter は独立クラスではなく Factory 内の無名オブジェクト**（`ImportRulesJsonControllerFactory` に集約）。`interface-adapters/controllers/{I,}ImportRulesJsonController.ts` および `interface-adapters/presenters/ImportRulesJsonPresenter.ts`、`ports/output/IImportRulesJsonPresenter.ts` は**未作成**（Presenter IF は Interactor 同一ファイル内定義）。
+> - **`IFileSizeValidator` / `IByteSizeCalculator` / `FileSizeValidator` / `BlobByteSizeCalculator` は本PRでは未実装**（ファイルサイズ検証は EBR 層 `ImportFileSize` value-object に集約）。これらの抽出は将来 user-story（US-022 等）の別PRスコープ。
+> - **プレビュー確認なし・1フェーズ一括上書き**（`importRulesJson(inputData)` 単一メソッド。`previewImport` / `confirmImport` や確認ダイアログは存在しない）。`ImportRulesJsonUI` は ToastNotification 統合であり「確認ダイアログ統合」ではない。
+
 <!-- 本ドキュメントは機能実装に伴うディレクトリ構造の設計ドキュメントです。
      ADR（Architecture Decision Record）ではなく、実装ガイド・補足資料として機能します。
      docs/design 配下に配置しているのは、同機能の他設計ドキュメント（00-overview.md, 01-class-design.md 等）との

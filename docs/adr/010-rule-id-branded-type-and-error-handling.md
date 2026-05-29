@@ -2,7 +2,9 @@
 
 ## ステータス
 
-承認済み（PR #394 マージ予定・本ADRは事後整理）
+承認済み（PR #394 で決定・本ADRは事後整理）。
+
+> **現行PR**: PR #394 は git 履歴整流（filter-repo による SHA 変更）のため close され、内容同一の後継 **PR #405**（`feat/rule-json-import`）が現行PRとして本ADRを継承する。以降の `#394` 参照は決定経緯の履歴であり、本PRでの取り込みは #405 を指す。
 
 ## コンテキスト
 
@@ -146,7 +148,8 @@ Branded Type 規約文書は層別ディレクトリ `docs/coding-standards/ente
 
 ## 関連リンク
 
-- PR: [frog-frame-front PR #394](https://github.com/akAredminEogre/frog-frame-front/pull/394)
+- 現行PR: [frog-frame-front PR #405](https://github.com/akAredminEogre/frog-frame-front/pull/405)（`feat/rule-json-import`・本ADRを取り込む現行PR）
+- 旧PR（決定経緯）: [frog-frame-front PR #394](https://github.com/akAredminEogre/frog-frame-front/pull/394)（git 履歴整流のため close・#405 へ継承）
 - 規約文書: [`docs/coding-standards/enterprise-business-rules/branded-types.md`](../coding-standards/enterprise-business-rules/branded-types.md)
 - 後続 user-story: [`docs/user-stories/user-story-023/README.md`](../user-stories/user-story-023/README.md)
 - 主要 inline review threads:

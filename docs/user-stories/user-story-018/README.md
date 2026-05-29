@@ -1,5 +1,9 @@
 # User Story 018: UseCase/Controller InputData 注入パターン統一（ImportRulesJsonInputData 活用）
 
+> ⚠️ **I/F 名整合注記（CodeRabbit PR#405 指摘対応）**
+> 本文中の `previewImport()` / `execute()` は旧設計のメソッド名であり、**確定実装の I/F とは異なる**。現行 `IImportRulesJsonUseCase` の唯一のメソッドは **`importRulesJson(inputData: ImportRulesJsonInputData)`**（`previewImport` / `confirmImport` は存在しない・プレビューなし1フェーズ設計）。`ImportRulesJsonController` は Factory 内無名オブジェクトで、現状 `importRulesJson(file: File)` を持ち内部で InputData を生成する。
+> 本ストーリーの目的（Controller も `ImportRulesJsonInputData` を直接受け取る形に統一）は将来課題として有効だが、対象メソッド名は上記の現行 I/F（`importRulesJson`）を正として読み替えること。
+
 ## ストーリー
 
 > UseCase および Controller が InputData DTO を通じて入力を受け取るパターンに統一することで、コードベースの一貫性を高め、テスト容易性を向上させたい

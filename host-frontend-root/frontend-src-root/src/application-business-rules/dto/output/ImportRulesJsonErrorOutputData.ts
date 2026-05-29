@@ -4,7 +4,10 @@ import {
   StorageImportError,
 } from 'src/application-business-rules/errors/ImportRulesJsonErrors';
 import { JsonStructureError, JsonSyntaxError } from 'src/application-business-rules/errors/JsonParserErrors';
-import { ImportFileSizeError } from 'src/enterprise-business-rules/errors/ImportFileSizeError';
+import {
+  ImportFileSizeError,
+  InvalidImportFileSizeError,
+} from 'src/enterprise-business-rules/errors/ImportFileSizeError';
 import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/InvalidRuleIdError';
 import {
   EmptyRulesCollectionError,
@@ -32,6 +35,7 @@ export class ImportRulesJsonErrorOutputData {
       [JsonSyntaxError, () => new ImportRulesJsonErrorOutputData(new InvalidJsonImportError(), 'parse')],
       [JsonStructureError, () => new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')],
       [ImportFileSizeError, validationPassthrough],
+      [InvalidImportFileSizeError, validationPassthrough],
       [InvalidRulesJsonSchemaError, () => new ImportRulesJsonErrorOutputData(new InvalidSchemaImportError(), 'validation')],
       [UnsupportedRulesJsonVersionError, validationPassthrough],
       [EmptyRulesCollectionError, validationPassthrough],
