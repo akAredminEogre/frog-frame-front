@@ -12,7 +12,7 @@
 ## 技術要件
 
 - [x] AC-7: Clean Architecture（ADR-001）に準拠した層構造で実装されている
-- [x] AC-8: DIコンテナ（tsyringe）に ImportRulesJsonControllerFactory が登録されている
+- [x] AC-8: DIコンテナ（awilix）に ImportRulesJsonControllerFactory が登録されている
 - [x] AC-9: ADR-005（ControllerFactoryパターン）に準拠している
 - [x] AC-10: ファイルサイズ上限（5MB）を超えるファイルを選択した場合、エラーが表示される
 
