@@ -25,7 +25,8 @@
 
 ## 背景
 
-PR#394 レビュー（line 130: `typeof ruleData.id === 'number' ? ruleData.id : 0`）において、
+本ストーリーを扱う現行PRは **PR#405**（git 履歴整流（filter-repo による SHA 変更）で close された旧 **PR#394** を内容同一で継承・置換）である。
+その決定経緯となった旧 PR#394 レビュー（line 130: `typeof ruleData.id === 'number' ? ruleData.id : 0`）において、
 CodeRabbit コメント（id: 2856697486）が「JSONの id を RewriteRule に設定しているが、
 DexieRewriteRuleRepository.create() はIDを無視する」点を指摘した。
 
