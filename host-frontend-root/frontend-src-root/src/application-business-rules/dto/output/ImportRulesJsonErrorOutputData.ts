@@ -10,7 +10,9 @@ import {
 } from 'src/enterprise-business-rules/errors/ImportFileSizeError';
 import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/InvalidRuleIdError';
 import {
+  DuplicateRuleIdError,
   EmptyRulesCollectionError,
+  InvalidRuleEntryError,
   RulesCollectionCountExceededError,
 } from 'src/enterprise-business-rules/value-objects/ImportRulesCollection';
 import {
@@ -40,6 +42,8 @@ export class ImportRulesJsonErrorOutputData {
       [UnsupportedRulesJsonVersionError, validationPassthrough],
       [EmptyRulesCollectionError, validationPassthrough],
       [RulesCollectionCountExceededError, validationPassthrough],
+      [InvalidRuleEntryError, validationPassthrough],
+      [DuplicateRuleIdError, validationPassthrough],
       [InvalidRuleIdError, validationPassthrough],
     ]);
   })();

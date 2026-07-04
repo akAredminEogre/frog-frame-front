@@ -63,8 +63,10 @@
 | L3 | バージョン（"1.0" 以外） | 「未対応のバージョンです: X.X」 |
 | L4 | ルール件数 0件 | 「インポートするルールがありません」 |
 | L5 | ルール件数上限（1000件） | 「ルール件数が上限（1000件）を超えています」 |
-| L6 | 各ルールの id 整合性（branded type） | InvalidRuleIdError の message（例: 整数でない / NaN / Infinity 等） |
-| L7 | Storage 例外（原子的置換時） | 「インポート処理中にエラーが発生しました: {cause.message}」 |
+| L6 | rules 配列エントリの構造（オブジェクトであること） | 「rules配列に不正なエントリが含まれています: {entry}」 |
+| L7 | ルール id の重複（id 指定ありのエントリのみ対象） | 「インポートJSON内のルールIDが重複しています: {ids}」 |
+| L8 | 各ルールの id 整合性（branded type・id 未指定は自動採番のため対象外） | InvalidRuleIdError の message（例: 整数でない / NaN / Infinity 等） |
+| L9 | Storage 例外（原子的置換時） | 「インポート処理中にエラーが発生しました: {cause.message}」 |
 
 ### セキュリティ
 

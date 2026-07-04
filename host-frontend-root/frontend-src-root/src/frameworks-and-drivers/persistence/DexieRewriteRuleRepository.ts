@@ -2,7 +2,7 @@ import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gat
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
+import { createRuleId, isUnassignedRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 import { dexieDatabase, RewriteRuleSchema } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 
 /**
@@ -108,14 +108,34 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
    * 全ルールをアトミックに置換する
    * Dexie.jsのトランザクション内で全削除→全作成を実行するため、
    * 途中でエラーが発生した場合は自動的にロールバックされる
+   *
+   * ID採用ルール（リストアユースケース）:
+   * - id有り: RewriteRuleのIDをそのまま保持して投入する（clear()後のbulkAddのため衝突しない）
+   * - id無し（UNASSIGNED_RULE_ID）: idを含めずDB側で自動採番する
    * @param rules 新規に設定するRewriteRuleの配列
    */
   async replaceAll(rules: RewriteRule[]): Promise<void> {
     await this.database.transaction('rw', this.database.rewriteRules, async () => {
       await this.database.rewriteRules.clear();
-      const schemas = rules.map(rule => this.convertToSchemaForCreate(rule));
+      const schemas = this.convertToSchemasForRestore(rules);
       await this.database.rewriteRules.bulkAdd(schemas);
     });
+  }
+
+  /**
+   * リストア用にRewriteRule配列をRewriteRuleSchema配列へ変換する
+   * id採番済ルールはIDを保持し、未採番ルールはidを含めずDB側で自動採番する。
+   * 自動採番されるIDが明示IDと衝突しないよう、id採番済ルールを先頭に並べて投入する
+   * （IndexedDBのキージェネレータは明示キー投入時にそのキーより大きい値へ更新されるため）
+   * @param rules 変換元のRewriteRule配列
+   * @returns 変換されたRewriteRuleSchema配列（id採番済→未採番の順）
+   */
+  private convertToSchemasForRestore(rules: RewriteRule[]): RewriteRuleSchema[] {
+    const assignedRules = rules.filter(rule => !isUnassignedRuleId(rule.id));
+    const unassignedRules = rules.filter(rule => isUnassignedRuleId(rule.id));
+    const assignedSchemas = assignedRules.map(rule => this.convertToSchemaForUpdate(rule));
+    const unassignedSchemas = unassignedRules.map(rule => this.convertToSchemaForCreate(rule));
+    return [...assignedSchemas, ...unassignedSchemas];
   }
 
   /**
