@@ -24,10 +24,15 @@ export const isUnassignedRuleId = (ruleId: RuleId): boolean => ruleId === UNASSI
  * インポートJSON用のRuleId生成。
  * id 未指定（undefined/null）の場合は UNASSIGNED_RULE_ID を返しDB側の自動採番に委ねる。
  * id 指定がある場合は createRuleId と同一の検証を行い、そのIDを採用する（リストアユースケース）。
+ * ただし 0 は未採番sentinel（UNASSIGNED_RULE_ID）と衝突するため拒否する（実データのIDは1始まり）。
  */
 export const createImportRuleId = (raw: unknown): RuleId => {
   if (raw === undefined || raw === null) {
     return UNASSIGNED_RULE_ID;
   }
-  return createRuleId(raw);
+  const ruleId = createRuleId(raw);
+  if (isUnassignedRuleId(ruleId)) {
+    throw new InvalidRuleIdError(raw);
+  }
+  return ruleId;
 };

@@ -26,7 +26,8 @@ export class RulesCollectionCountExceededError extends Error {
 
 /**
  * rules配列エントリ構造不正エラー
- * rules 配列にオブジェクト以外（null/プリミティブ/配列）が混入した場合にスローする
+ * rules 配列にオブジェクト以外（null/プリミティブ/配列）が混入した場合、
+ * または必須フィールド（oldString/newString/urlPattern/isRegex）の欠落・型不正の場合にスローする
  */
 export class InvalidRuleEntryError extends Error {
   constructor(rawEntry: unknown) {
@@ -51,7 +52,7 @@ export class DuplicateRuleIdError extends Error {
  * コンストラクタで0件チェック・件数上限チェック・エントリ構造チェック・ID重複チェックを行い、
  * RewriteRule[] を構築する。各チェック失敗時は対応するエラーをスローする。
  * ID採用ルール（リストアユースケース）: id有り=JSON内IDをそのまま採用 / id無し=UNASSIGNED_RULE_ID（DB側で自動採番）。
- * 各ルールのフィールドバリデーションは RewriteRule.fromParams() に委譲する。
+ * 各ルールの必須フィールド（oldString/newString/urlPattern/isRegex）の有無・型もコンストラクタで検証する。
  */
 export class ImportRulesCollection {
   private readonly _rules: RewriteRule[];
@@ -64,6 +65,7 @@ export class ImportRulesCollection {
       throw new RulesCollectionCountExceededError();
     }
     ImportRulesCollection.validateEntriesAreObjects(rawRules);
+    ImportRulesCollection.validateEntryFields(rawRules);
     ImportRulesCollection.validateNoDuplicateIds(rawRules);
     this._rules = rawRules.map((raw) => ImportRulesCollection.toRewriteRule(raw));
   }
@@ -82,6 +84,30 @@ export class ImportRulesCollection {
         throw new InvalidRuleEntryError(raw);
       }
     });
+  }
+
+  /**
+   * rules 配列の各エントリが RewriteRule 構築に必要なフィールドを持つことを検証する
+   * 必須: oldString/newString/urlPattern（文字列）・isRegex（真偽値）。isActive は省略可（指定時は真偽値）
+   * @throws {InvalidRuleEntryError} 必須フィールドの欠落・型不正の場合
+   */
+  private static validateEntryFields(rawRules: unknown[]): void {
+    rawRules.forEach((raw) => {
+      const record = raw as Record<string, unknown>;
+      if (!ImportRulesCollection.hasValidRuleFields(record)) {
+        throw new InvalidRuleEntryError(raw);
+      }
+    });
+  }
+
+  private static hasValidRuleFields(record: Record<string, unknown>): boolean {
+    const hasValidStringFields =
+      typeof record.oldString === 'string' &&
+      typeof record.newString === 'string' &&
+      typeof record.urlPattern === 'string';
+    const hasValidIsRegex = typeof record.isRegex === 'boolean';
+    const hasValidIsActive = record.isActive === undefined || typeof record.isActive === 'boolean';
+    return hasValidStringFields && hasValidIsRegex && hasValidIsActive;
   }
 
   /**
