@@ -172,7 +172,7 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
   /**
    * RewriteRuleSchemaをRewriteRuleに変換する
    * @param schema 変換元のRewriteRuleSchema
-   * @returns 変換されたRewriteRule（number型のidをそのまま使用）
+   * @returns 変換されたRewriteRule（idはcreateRuleId()で検証しRuleIdとして生成）
    */
   private convertSchemaToRule(schema: RewriteRuleSchema): RewriteRule {
     return new RewriteRule(

@@ -8,7 +8,13 @@ export class FileTextReader implements IFileTextReader {
   readAsText(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          resolve(reader.result);
+        } else {
+          reject(new Error('ファイルの読み取りに失敗しました'));
+        }
+      };
       reader.onerror = () => reject(new Error('ファイルの読み取りに失敗しました'));
       reader.readAsText(file);
     });
