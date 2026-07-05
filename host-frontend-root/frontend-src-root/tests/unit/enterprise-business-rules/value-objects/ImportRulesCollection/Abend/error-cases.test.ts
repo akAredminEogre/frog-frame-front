@@ -84,4 +84,24 @@ describe('ImportRulesCollection - 異常系', () => {
     const rules = [{ id: 0, ...baseRuleFields }];
     expect(() => new ImportRulesCollection(rules)).toThrow('Invalid RuleId: 0');
   });
+
+  it('id: 0 が重複していても、重複検知より先に未採番sentinel衝突の InvalidRuleIdError を優先する', () => {
+    const rules = [
+      { id: 0, ...baseRuleFields },
+      { id: 0, ...baseRuleFields },
+    ];
+    // 重複検知は「採番済みの有効なID（正の整数）」のみ対象のため 0 はスキップされ、
+    // 後段の createImportRuleId で InvalidRuleIdError（メッセージ検証）となる。
+    expect(() => new ImportRulesCollection(rules)).toThrow('Invalid RuleId: 0');
+    expect(() => new ImportRulesCollection(rules)).not.toThrow(DuplicateRuleIdError);
+  });
+
+  it('id が型不正（文字列）で重複していても、DuplicateRuleIdError ではなく InvalidRuleIdError を優先する', () => {
+    const rules = [
+      { id: '5', ...baseRuleFields },
+      { id: '5', ...baseRuleFields },
+    ];
+    expect(() => new ImportRulesCollection(rules)).toThrow('Invalid RuleId: 5');
+    expect(() => new ImportRulesCollection(rules)).not.toThrow(DuplicateRuleIdError);
+  });
 });

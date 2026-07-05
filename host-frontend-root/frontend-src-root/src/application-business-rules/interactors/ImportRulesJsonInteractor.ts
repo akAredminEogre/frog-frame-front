@@ -42,14 +42,10 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
       const collection = new ImportRulesCollection(parsed.rules as unknown[]);
       const validatedRules = collection.toArray();
 
-      // 現在のルール件数を取得して全件置換
-      const currentRules = await this.repository.getAll();
-      const previousCount = currentRules.toArray().length;
+      // 全件置換
       await this.repository.replaceAll(validatedRules);
 
-      this.presenter.present(
-        new ImportRulesJsonOutputData(validatedRules.length, previousCount)
-      );
+      this.presenter.present(new ImportRulesJsonOutputData(validatedRules.length));
     } catch (error) {
       this.presenter.presentError(ImportRulesJsonErrorOutputData.fromError(error));
     }

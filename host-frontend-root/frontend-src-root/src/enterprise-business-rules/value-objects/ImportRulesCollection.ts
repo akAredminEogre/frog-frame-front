@@ -111,14 +111,19 @@ export class ImportRulesCollection {
   }
 
   /**
-   * インポートJSON内の id 重複を事前検証する（id 未指定のエントリは対象外）
-   * @throws {DuplicateRuleIdError} 同一 id が複数存在する場合
+   * インポートJSON内の id 重複を事前検証する
+   * 重複検知は「採番済みの有効なID（正の整数）」のみを対象とし、
+   * 未採番sentinel(0)・型不正・undefined/null は後段の createImportRuleId/createRuleId の
+   * 検証（InvalidRuleIdError）に委ねる。これによりエラーメッセージの責務を分離する。
+   * @throws {DuplicateRuleIdError} 同一の採番済みIDが複数存在する場合
    */
   private static validateNoDuplicateIds(rawRules: unknown[]): void {
     const records = rawRules.map((raw) => raw as Record<string, unknown>);
     const ids = records.map((record) => record.id);
-    const definedIds = ids.filter((id) => id !== undefined && id !== null);
-    const duplicatedIds = definedIds.filter((id, index) => definedIds.indexOf(id) !== index);
+    const assignedIds = ids.filter(
+      (id): id is number => typeof id === 'number' && Number.isInteger(id) && id > 0
+    );
+    const duplicatedIds = assignedIds.filter((id, index) => assignedIds.indexOf(id) !== index);
     if (duplicatedIds.length === 0) {
       return;
     }
