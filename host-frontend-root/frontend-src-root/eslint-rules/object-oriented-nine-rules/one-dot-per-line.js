@@ -14,7 +14,7 @@ export default {
         // メソッドチェーン（a.b.c()）を検出
         // 除外1: chrome.xxx.yyy() — Chrome API呼び出し
         // 除外2: this.xxx.yyy() — 依存注入オブジェクトへのメソッド呼び出し（ビルダーパターン）
-        selector: 'CallExpression > MemberExpression > MemberExpression:not([object.object.name="chrome"]):not([object.type="ThisExpression"])',
+        selector: 'CallExpression > MemberExpression > MemberExpression:not([object.name="chrome"]):not([object.type="ThisExpression"])',
         message: 'Method chaining with more than one dot is not allowed (Rule 4: 1行につきドットは1つまで). Exceptions: chrome API calls, this.xxx.yyy() dependency injection calls.',
       },
     ],
