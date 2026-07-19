@@ -97,7 +97,7 @@ Controller -> Interactor : importRulesJson(inputData)
 activate Interactor
 
 note over Interactor
-  try { 下記 A〜G を順に実行 } catch(error) {
+  try { 下記 A〜F を順に実行 } catch(error) {
     presenter.presentError(ImportRulesJsonErrorOutputData.fromError(error))
   }
   各ステップの throw は即座に catch に分岐する
@@ -164,19 +164,7 @@ deactivate RulesCollection
 Interactor -> RulesCollection : toArray()
 RulesCollection --> Interactor : validatedRules: RewriteRule[]
 
-== F. 現在件数取得（ページコンテキスト） ==
-Interactor -> IRepository : getAll()
-activate IRepository
-IRepository -> DexieRepo : getAll()
-activate DexieRepo
-DexieRepo --> IRepository : RewriteRules
-deactivate DexieRepo
-IRepository --> Interactor : currentRules
-deactivate IRepository
-
-Interactor -> Interactor : previousCount = currentRules.toArray().length
-
-== G. 原子的一括置換 ==
+== F. 原子的一括置換 ==
 Interactor -> IRepository : replaceAll(validatedRules)
 activate IRepository
 IRepository -> DexieRepo : replaceAll(rules)
@@ -193,8 +181,8 @@ deactivate IRepository
 
 == 通知（try の末尾 or catch 節） ==
 
-alt 正常完了（A〜G すべて throw なし）
-  Interactor -> OutputData : new(validatedRules.length, previousCount)
+alt 正常完了（A〜F すべて throw なし）
+  Interactor -> OutputData : new(validatedRules.length)
   OutputData --> Interactor : outputData
 
   Interactor -> Presenter : present(outputData)
