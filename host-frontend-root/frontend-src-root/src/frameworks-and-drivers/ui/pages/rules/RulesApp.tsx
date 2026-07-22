@@ -150,25 +150,29 @@ function RulesApp() {
         />
       )}
 
-      <ImportRulesJsonUI
-        onImportClick={(file) => { void handleFileSelect(file); }}
-        isImporting={isImporting}
-        importError={importError}
-        importSuccess={importSuccess}
-        onDismissError={dismissImportError}
-        onDismissSuccess={dismissImportSuccess}
-      />
+      <div className="rules-toolbar">
+        <ImportRulesJsonUI
+          onImportClick={(file) => { void handleFileSelect(file); }}
+          isImporting={isImporting}
+          importError={importError}
+          importSuccess={importSuccess}
+          onDismissError={dismissImportError}
+          onDismissSuccess={dismissImportSuccess}
+        />
+
+        {rules.length !== 0 && (
+          <ExportRulesJsonUI
+            onExport={() => { void exportRulesJson(); }}
+            isExporting={isExporting}
+            exportError={exportError}
+            onDismissError={dismissExportError}
+          />
+        )}
+      </div>
 
       {rules.length === 0 ? (
         <EmptyStateMessage />
       ) : (
-        <>
-        <ExportRulesJsonUI
-          onExport={() => { void exportRulesJson(); }}
-          isExporting={isExporting}
-          exportError={exportError}
-          onDismissError={dismissExportError}
-        />
         <RulesTable
           rules={rules}
           onEdit={handleEdit}
@@ -177,7 +181,6 @@ function RulesApp() {
           togglingIds={togglingIds}
           deletingIds={deletingIds}
         />
-        </>
       )}
 
       <div className="footer" data-testid="rules-footer">
