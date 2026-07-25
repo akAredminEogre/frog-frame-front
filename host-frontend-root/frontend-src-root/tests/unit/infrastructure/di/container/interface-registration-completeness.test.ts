@@ -106,6 +106,11 @@ describe('DI Container - インターフェース登録確認テスト (Awilix)'
       description: 'IFileTextReaderをFileTextReaderに解決できること',
       input: { interfaceToken: 'IFileTextReader' as const },
       expected: { implementationName: 'FileTextReader' }
+    },
+    {
+      description: 'IJsonParserをJsonParserに解決できること',
+      input: { interfaceToken: 'IJsonParser' as const },
+      expected: { implementationName: 'JsonParser' }
     }
   ];
 

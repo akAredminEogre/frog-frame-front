@@ -15,6 +15,7 @@ import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usec
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
+import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
 import { FileTextReader } from 'src/frameworks-and-drivers/File/FileTextReader';
 import { JsonParser } from 'src/frameworks-and-drivers/Json/JsonParser';
@@ -137,6 +138,7 @@ awilixContainer.register({
   // Import Rules JSON feature
   importRulesJsonControllerFactory: asValue(importRulesJsonControllerFactory),
   fileTextReader: asValue(fileTextReader),
+  jsonParser: asValue(jsonParser),
 
   // Export Rules JSON feature
   exportRulesJsonControllerFactory: asValue(exportRulesJsonControllerFactory)
@@ -179,6 +181,7 @@ interface ContainerCradle {
   // Import Rules JSON feature
   importRulesJsonControllerFactory: IImportRulesJsonControllerFactory;
   fileTextReader: FileTextReader;
+  jsonParser: IJsonParser;
 
   // Export Rules JSON feature
   exportRulesJsonControllerFactory: IExportRulesJsonControllerFactory;
@@ -200,7 +203,8 @@ type InterfaceToken =
   | 'IExportRulesJsonControllerFactory'
   | 'ITabsGateway'
   | 'IRewriteRuleMessagingPort'
-  | 'IFileTextReader';
+  | 'IFileTextReader'
+  | 'IJsonParser';
 
 const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeTabsService': 'chromeTabsService',
@@ -217,7 +221,8 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IExportRulesJsonControllerFactory': 'exportRulesJsonControllerFactory',
   'ITabsGateway': 'chromeTabsGateway',
   'IRewriteRuleMessagingPort': 'rewriteRuleMessagingService',
-  'IFileTextReader': 'fileTextReader'
+  'IFileTextReader': 'fileTextReader',
+  'IJsonParser': 'jsonParser'
 };
 
 // Class to key mappings for class-based resolution
