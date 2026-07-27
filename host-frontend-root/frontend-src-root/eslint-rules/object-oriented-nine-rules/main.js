@@ -2,6 +2,7 @@
 // See: docs/coding-standards/src/object-oriented-nine-rules.md
 
 import entitySize from '#eslint-rules/object-oriented-nine-rules/entity-size.js';
+import { BROWSER_GLOB, INTERACTORS_GLOB } from '#eslint-rules/object-oriented-nine-rules/globs.js';
 import indentDepth from '#eslint-rules/object-oriented-nine-rules/indent-depth.js';
 import noElse, { noElseRestrictedSyntax } from '#eslint-rules/object-oriented-nine-rules/no-else.js';
 import { noGetterSetterRestrictedSyntax } from '#eslint-rules/object-oriented-nine-rules/no-getter-setter.js';
@@ -18,8 +19,9 @@ import { oneDotPerLineRestrictedSyntax } from '#eslint-rules/object-oriented-nin
 // Fix: aggregate every OO9 `no-restricted-syntax` selector into a single config per glob so all
 // selectors coexist. Browser and interactors globs are disjoint, so exactly one of these configs
 // matches any file — no clobbering between them.
-const BROWSER_GLOB = '**/frameworks-and-drivers/browser/**/*.ts';
-const INTERACTORS_GLOB = '**/application-business-rules/interactors/**/*.ts';
+//
+// BROWSER_GLOB / INTERACTORS_GLOB come from globs.js (single source of truth) — the same constants
+// each rule file uses for its `*Files` export, so the applied-file range can never drift.
 
 // one-dot-per-line is excluded from test files ONLY: fluent assertions such as
 // `expect(x).not.toHaveBeenCalledWith(y)` structurally cannot satisfy the rule. Every other

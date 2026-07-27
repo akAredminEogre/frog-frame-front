@@ -1,6 +1,8 @@
 // Rule 9: Getter、Setter、プロパティを使用しないこと
 // See: docs/coding-standards/src/object-oriented-nine-rules.md
 
+import { BROWSER_GLOB } from '#eslint-rules/object-oriented-nine-rules/globs.js';
+
 // no-restricted-syntax selectors for this rule (aggregated per glob in main.js — see main.js).
 export const noGetterSetterRestrictedSyntax = [
   {
@@ -14,4 +16,4 @@ export const noGetterSetterRestrictedSyntax = [
 ];
 
 // files glob this rule applies to (browser layer only).
-export const noGetterSetterFiles = ['**/frameworks-and-drivers/browser/**/*.ts'];
+export const noGetterSetterFiles = [BROWSER_GLOB];

@@ -1,6 +1,8 @@
 // Rule 2: else句禁止 — switch-case使用禁止
 // See: docs/coding-standards/src/object-oriented-nine-rules.md
 
+import { BROWSER_GLOB, INTERACTORS_GLOB } from '#eslint-rules/object-oriented-nine-rules/globs.js';
+
 // no-restricted-syntax selectors for this rule (aggregated per glob in main.js — see main.js).
 export const noSwitchCaseRestrictedSyntax = [
   {
@@ -11,7 +13,4 @@ export const noSwitchCaseRestrictedSyntax = [
 ];
 
 // files globs this rule applies to (browser + interactors layers).
-export const noSwitchCaseFiles = [
-  '**/frameworks-and-drivers/browser/**/*.ts',
-  '**/application-business-rules/interactors/**/*.ts',
-];
+export const noSwitchCaseFiles = [BROWSER_GLOB, INTERACTORS_GLOB];

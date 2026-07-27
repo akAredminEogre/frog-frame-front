@@ -2,6 +2,8 @@
 // 除外パターン: chrome APIの呼び出しコード、this経由の依存注入メソッド呼び出し（this.xxx.yyy()）
 // See: docs/coding-standards/src/object-oriented-nine-rules.md
 
+import { BROWSER_GLOB, INTERACTORS_GLOB } from '#eslint-rules/object-oriented-nine-rules/globs.js';
+
 // no-restricted-syntax selectors for this rule (aggregated per glob in main.js — see main.js).
 export const oneDotPerLineRestrictedSyntax = [
   {
@@ -14,7 +16,4 @@ export const oneDotPerLineRestrictedSyntax = [
 ];
 
 // files globs this rule applies to (browser + interactors layers).
-export const oneDotPerLineFiles = [
-  '**/frameworks-and-drivers/browser/**/*.ts',
-  '**/application-business-rules/interactors/**/*.ts',
-];
+export const oneDotPerLineFiles = [BROWSER_GLOB, INTERACTORS_GLOB];
