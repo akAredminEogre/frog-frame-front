@@ -1,6 +1,7 @@
 // Object-Oriented Nine Rules ESLint configuration
 // See: docs/coding-standards/src/object-oriented-nine-rules.md
 
+import { useCaseRestrictedSyntax } from '#eslint-rules/clean-architecture/application-business-rules/use-cases.js';
 import entitySize from '#eslint-rules/object-oriented-nine-rules/entity-size.js';
 import { BROWSER_GLOB, INTERACTORS_GLOB } from '#eslint-rules/object-oriented-nine-rules/globs.js';
 import indentDepth from '#eslint-rules/object-oriented-nine-rules/indent-depth.js';
@@ -16,12 +17,14 @@ import { oneDotPerLineRestrictedSyntax } from '#eslint-rules/object-oriented-nin
 // (browser / interactors), so only no-switch-case (last in the array) stayed effective and the
 // other selectors were silently clobbered (verified via `eslint --print-config`).
 //
-// Fix: aggregate every OO9 `no-restricted-syntax` selector into a single config per glob so all
-// selectors coexist. Browser and interactors globs are disjoint, so exactly one of these configs
-// matches any file — no clobbering between them.
+// Fix: aggregate every `no-restricted-syntax` selector into a single config per glob so all
+// selectors coexist. This includes OO9 selectors AND clean-architecture interactor selectors
+// (useCaseRestrictedSyntax), because eslint.config.js spreads ...objectOrientedNineRules after
+// ...cleanArchitecture — without aggregation the OO9 interactors config would clobber the
+// clean-architecture use-cases no-restricted-syntax rules.
 //
-// BROWSER_GLOB / INTERACTORS_GLOB come from globs.js (single source of truth) — the same constants
-// each rule file uses for its `*Files` export, so the applied-file range can never drift.
+// Browser and interactors globs are disjoint, so exactly one of these configs matches any file.
+// BROWSER_GLOB / INTERACTORS_GLOB come from globs.js (single source of truth).
 
 // one-dot-per-line is excluded from test files ONLY: fluent assertions such as
 // `expect(x).not.toHaveBeenCalledWith(y)` structurally cannot satisfy the rule. Every other
@@ -64,6 +67,7 @@ const noRestrictedSyntaxInteractorsSrc = {
       'error',
       ...oneDotPerLineRestrictedSyntax,
       ...noSwitchCaseRestrictedSyntax,
+      ...useCaseRestrictedSyntax,
     ],
   },
 };
