@@ -5,6 +5,7 @@ import { RulesJsonFileSchema } from 'src/application-business-rules/dto/RulesJso
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IExportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IExportRulesJsonUseCase';
 import { IExportRulesJsonPresenter } from 'src/application-business-rules/ports/output/IExportRulesJsonPresenter';
+import { SUPPORTED_RULES_JSON_VERSION } from 'src/enterprise-business-rules/value-objects/RulesJsonVersionSchema';
 
 /**
  * ルールJSONエクスポートのInteractor
@@ -27,7 +28,7 @@ export class ExportRulesJsonInteractor implements IExportRulesJsonUseCase {
 
       // RulesJsonFileSchema に型付けすることでインポート機能との整合性を保証する
       const exportData: RulesJsonFileSchema = {
-        version: '1.0',
+        version: SUPPORTED_RULES_JSON_VERSION,
         exportedAt,
         rules: rules.map((rule) => ({
           id: rule.id,
