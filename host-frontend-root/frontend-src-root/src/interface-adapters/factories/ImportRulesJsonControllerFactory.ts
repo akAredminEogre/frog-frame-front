@@ -8,6 +8,7 @@ import {
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
+import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
 import {
   IImportRulesJsonController,
   IImportRulesJsonControllerFactory,
@@ -47,8 +48,15 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
 
     return {
       importRulesJson: async (file: File) => {
-        const fileText = await this.fileTextReader.readAsText(file);
-        return interactor.importRulesJson(new ImportRulesJsonInputData(file.size, fileText));
+        try {
+          // サイズ検査を読取の【前】に実施（早期リジェクト）
+          new ImportFileSize(file.size);
+          const fileText = await this.fileTextReader.readAsText(file);
+          return interactor.importRulesJson(new ImportRulesJsonInputData(file.size, fileText));
+        } catch (error) {
+          // サイズ超過エラー・読取失敗エラーをPresenter経由で整形表示
+          presenter.presentError(ImportRulesJsonErrorOutputData.fromError(error));
+        }
       },
     };
   }
