@@ -68,6 +68,10 @@ describe('ImportRulesJsonControllerFactory - ファイルサイズ検査順序',
       ],
     });
     const normalFile = new File([validJson], 'rules.json', { type: 'application/json' });
+    Object.defineProperty(normalFile, 'size', {
+      value: MAX_IMPORT_FILE_SIZE_BYTES,
+      configurable: true,
+    });
 
     (mockFileTextReader.readAsText as ReturnType<typeof vi.fn>).mockResolvedValue(validJson);
     (mockJsonParser.parseAsObject as ReturnType<typeof vi.fn>).mockReturnValue(
