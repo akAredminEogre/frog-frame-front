@@ -3,7 +3,6 @@ import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/d
 import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { IImportRulesJsonUseCase } from 'src/application-business-rules/ports/input/IImportRulesJsonUseCase';
-import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
 import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
 import { ImportRulesCollection } from 'src/enterprise-business-rules/value-objects/ImportRulesCollection';
@@ -22,17 +21,16 @@ export class ImportRulesJsonInteractor implements IImportRulesJsonUseCase {
   constructor(
     private readonly repository: IRewriteRuleRepository,
     private readonly presenter: IImportRulesJsonPresenter,
-    private readonly jsonParser: IJsonParser,
-    private readonly fileTextReader: IFileTextReader
+    private readonly jsonParser: IJsonParser
   ) {}
 
   async importRulesJson(inputData: ImportRulesJsonInputData): Promise<void> {
     try {
-      // ファイルサイズチェック
-      new ImportFileSize(inputData.file.size);
+      // ファイルサイズチェック（F&D 境界で number に変換済み）
+      new ImportFileSize(inputData.fileSizeBytes);
 
-      // テキスト読み取り
-      const jsonString = await this.fileTextReader.readAsText(inputData.file);
+      // テキスト読み取り済み文字列を利用
+      const jsonString = inputData.fileText;
 
       // JSON解析・スキーマ/バージョンチェック
       const parsed = this.jsonParser.parseAsObject(jsonString);

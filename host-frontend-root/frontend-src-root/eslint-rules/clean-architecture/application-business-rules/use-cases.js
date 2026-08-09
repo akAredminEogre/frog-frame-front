@@ -1,6 +1,8 @@
 // Application Business Rules UseCase naming conventions
 // ControllerからUseCaseへの呼び出し時にはInputDataを受け渡すことをerrorレベルで定める（殿指示 2026-03-02）
 
+import { INTERACTORS_GLOB } from '#eslint-rules/object-oriented-nine-rules/globs.js';
+
 // no-restricted-syntax selectors are exported and aggregated into
 // object-oriented-nine-rules/main.js to avoid ESLint flat-config clobber
 // (last matching config for a given rule key wins; OO9 comes after cleanArchitecture
@@ -26,7 +28,7 @@ export const useCaseRestrictedSyntax = [
 ];
 
 const useCaseConfig = {
-  files: ['**/application-business-rules/interactors/**/*.ts'],
+  files: [INTERACTORS_GLOB],
   rules: {
     '@typescript-eslint/naming-convention': [
       'error',

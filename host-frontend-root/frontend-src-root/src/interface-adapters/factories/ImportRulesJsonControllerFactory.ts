@@ -42,12 +42,14 @@ export class ImportRulesJsonControllerFactory implements IImportRulesJsonControl
     const interactor = new ImportRulesJsonInteractor(
       this.repository,
       presenter,
-      this.jsonParser,
-      this.fileTextReader
+      this.jsonParser
     );
 
     return {
-      importRulesJson: (file: File) => interactor.importRulesJson(new ImportRulesJsonInputData(file)),
+      importRulesJson: async (file: File) => {
+        const fileText = await this.fileTextReader.readAsText(file);
+        return interactor.importRulesJson(new ImportRulesJsonInputData(file.size, fileText));
+      },
     };
   }
 }

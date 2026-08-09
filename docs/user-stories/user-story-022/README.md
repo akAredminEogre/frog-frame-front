@@ -4,11 +4,11 @@
 
 > ルールJSONインポート時に使用するブラウザ固有API（FileReader、File.size、Blob）を
 > frameworks-and-drivers 層の専用モジュールに移動し、
-> CA（クリーンアーキテクチャ）の依存方向ルールを完全に遵守してほしい
+> CA（クリーンアーキテクチャ）の依存方向ルールを完全に遵守した
 
 ## 概要
 
-`useImportRulesJson.ts` はカスタムフックでありながら、ブラウザ固有APIを直接使用していた:
+`useImportRulesJson.ts` はカスタムフックでありながら、ブラウザ固有APIを直接使用していた（実装前）:
 
 | ブラウザAPI | 使用箇所 | 問題 |
 |------------|---------|------|
@@ -82,8 +82,10 @@ export class ImportFileSize {
 
 > 補足: 当初案の `IFileSizeValidator` / `FileSizeValidator` / `IByteSizeCalculator` /
 > `BlobByteSizeCalculator` は導入していない。ファイルサイズ検証は上記 `ImportFileSize`
-> 値オブジェクトに集約し、Blob による再シリアライズ後のバイト計算は行わない
-> （`Interactor` が `file.size` を直接検証する）。
+> 値オブジェクトに集約し、Blob による再シリアライズ後のバイト計算は行わない。
+> CA 準拠のため、`ImportRulesJsonControllerFactory`（IA 層）が `file.size` と
+> `fileTextReader.readAsText(file)` 結果を `ImportRulesJsonInputData(fileSizeBytes, fileText)`
+> として変換し、Interactor（ABR 層）には DOM File を渡さない。
 
 ### 修正ファイル
 
