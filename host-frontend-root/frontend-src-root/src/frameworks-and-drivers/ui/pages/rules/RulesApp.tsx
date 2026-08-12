@@ -77,6 +77,10 @@ function RulesApp() {
     dismissExportError,
   } = useExportRulesJson();
 
+  const handleDeleteGuarded = useCallback((ruleId: number) => {
+    if (!isImporting) handleDelete(ruleId);
+  }, [isImporting, handleDelete]);
+
   const toggleController = useMemo(() => {
     const factory = container.resolve<IToggleRuleActiveControllerFactory>('IToggleRuleActiveControllerFactory');
     return factory.create(
@@ -118,12 +122,14 @@ function RulesApp() {
   }
 
   const handleEdit = async (ruleId: string | number) => {
+    if (isImporting) return;
     const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
     const openRuleEditPageUseCase = new OpenRuleEditPageUseCase(chromeTabsService);
     await openRuleEditPageUseCase.execute(ruleId);
   };
 
   const handleToggle = async (ruleId: number) => {
+    if (isImporting) return;
     if (togglingIds.has(ruleId)) {
       return;
     }
@@ -177,9 +183,10 @@ function RulesApp() {
           rules={rules}
           onEdit={handleEdit}
           onToggle={handleToggle}
-          onDelete={handleDelete}
+          onDelete={handleDeleteGuarded}
           togglingIds={togglingIds}
           deletingIds={deletingIds}
+          isImporting={isImporting}
         />
       )}
 

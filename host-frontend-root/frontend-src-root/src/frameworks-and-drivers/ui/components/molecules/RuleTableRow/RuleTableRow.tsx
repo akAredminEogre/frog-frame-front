@@ -4,8 +4,8 @@ import { Button } from 'src/components/atoms/Button';
 import { TruncatedText } from 'src/components/atoms/TruncatedText';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
 import { DeleteButton } from 'src/frameworks-and-drivers/ui/components/atoms/DeleteButton';
-import styles from 'src/frameworks-and-drivers/ui/components/molecules/RuleTableRow/RuleTableRow.module.css';
 import { ToggleSwitch } from 'src/frameworks-and-drivers/ui/components/atoms/ToggleSwitch';
+import styles from 'src/frameworks-and-drivers/ui/components/molecules/RuleTableRow/RuleTableRow.module.css';
 
 interface RuleTableRowProps {
   rule: RewriteRule;
@@ -14,6 +14,7 @@ interface RuleTableRowProps {
   onDelete: (ruleId: number) => void;
   isToggling: boolean;
   isDeleting: boolean;
+  isImporting?: boolean;
 }
 
 const RuleTableRow: React.FC<RuleTableRowProps> = ({
@@ -23,6 +24,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({
   onDelete,
   isToggling,
   isDeleting,
+  isImporting = false,
 }) => {
   return (
     <tr className={styles.ruleRow}>
@@ -31,7 +33,7 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({
           checked={rule.isActive}
           onChange={() => onToggle(rule.id)}
           ariaLabel={`ルール ${rule.id} の有効/無効を切り替え`}
-          disabled={isToggling}
+          disabled={isImporting || isToggling}
         />
       </td>
       <td>
@@ -39,12 +41,13 @@ const RuleTableRow: React.FC<RuleTableRowProps> = ({
           onClick={() => onEdit(rule.id)}
           data-testid="edit-button"
           aria-label={`ルール ${rule.id} を編集`}
+          disabled={isImporting}
         >
           編集
         </Button>
       </td>
       <td className={styles.actionCell}>
-        <DeleteButton onClick={() => onDelete(rule.id)} disabled={isDeleting} />
+        <DeleteButton onClick={() => onDelete(rule.id)} disabled={isImporting || isDeleting} />
       </td>
       <td title={rule.urlPattern || ''} className="rule-url-pattern">
         <TruncatedText text={rule.urlPattern} maxLength={30} />

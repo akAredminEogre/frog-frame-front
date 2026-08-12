@@ -11,6 +11,7 @@ interface RulesTableProps {
   onDelete: (ruleId: number) => void;
   togglingIds: Set<number>;
   deletingIds: Set<number>;
+  isImporting?: boolean;
 }
 
 const RulesTable: React.FC<RulesTableProps> = ({
@@ -20,6 +21,7 @@ const RulesTable: React.FC<RulesTableProps> = ({
   onDelete,
   togglingIds,
   deletingIds,
+  isImporting = false,
 }) => {
   return (
     <div className={styles.rulesTableContainer} data-testid="rules-table-container">
@@ -44,6 +46,7 @@ const RulesTable: React.FC<RulesTableProps> = ({
               onDelete={onDelete}
               isToggling={togglingIds.has(rule.id)}
               isDeleting={deletingIds.has(rule.id)}
+              isImporting={isImporting}
             />
           ))}
         </tbody>

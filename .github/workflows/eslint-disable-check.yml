@@ -47,7 +47,7 @@ jobs:
       - name: Count eslint-disable occurrences
         id: count
         run: |
-          COUNT=$(grep -r "eslint-disable" --include="*.ts" --include="*.tsx" . --exclude-dir=node_modules | wc -l)
+          COUNT=$(grep -r "eslint-disable" --include="*.ts" --include="*.tsx" . --exclude-dir=node_modules | wc -l || true)
           echo "current_count=$COUNT" >> "$GITHUB_OUTPUT"
           echo "Current eslint-disable count: $COUNT"
 
