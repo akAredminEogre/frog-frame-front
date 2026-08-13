@@ -5,7 +5,10 @@ import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/Invalid
 export type RuleId = Opaque<number, 'RuleId'>;
 
 export const createRuleId = (raw: unknown): RuleId => {
-  if (typeof raw !== 'number' || !Number.isInteger(raw) || raw < 0) {
+  // Number.isSafeInteger を用いる: Number.isInteger は安全整数範囲(±2^53-1)外も許可するが、
+  // その範囲外の値は JSON.parse で丸められ元IDを保持できず、リストア時にID同一性が壊れうる。
+  // 安全整数のみ受け入れることで、丸めによるID衝突/取り違えを防ぐ。
+  if (typeof raw !== 'number' || !Number.isSafeInteger(raw) || raw < 0) {
     throw new InvalidRuleIdError(raw);
   }
   return raw as RuleId;
