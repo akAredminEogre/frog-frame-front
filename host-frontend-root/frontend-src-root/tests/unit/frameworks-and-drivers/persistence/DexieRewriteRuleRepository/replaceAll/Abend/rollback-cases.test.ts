@@ -3,6 +3,8 @@ import 'tests/unit/infrastructure/persistence/indexeddb/setup';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/InvalidRuleIdError';
+import { UNASSIGNED_RULE_ID } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
 import { dexieDatabase } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 
@@ -65,5 +67,28 @@ describe('DexieRewriteRuleRepository.replaceAll - 異常系（ロールバック
     expect(oldStrings).toEqual(['original-1', 'original-2']);
     // 失敗した置換内容（dup-*）は1件も混入していない
     expect(stored.some((r) => r.oldString.startsWith('dup-'))).toBe(false);
+  });
+
+  /**
+   * 回帰（PR#405 Copilot 指摘）:
+   * 採番済IDが安全整数上限(Number.MAX_SAFE_INTEGER)付近で、かつ未採番ルールが混在する場合、
+   * 未採番ルールに割り当てる maxAssignedId+1 が安全整数範囲外(2^53)になる。
+   * この場合 createRuleId() が InvalidRuleIdError を投げ、replaceAll は reject し、
+   * 不正なIDのレコードは永続化されず置換前の状態が保たれることを検証する。
+   */
+  it('採番済ID=MAX_SAFE_INTEGER + 未採番ルール混在は InvalidRuleIdError で reject しロールバックする', async () => {
+    const overflowRules = [
+      RewriteRule.fromParams(Number.MAX_SAFE_INTEGER, { ...baseParams, oldString: 'max-safe' }),
+      RewriteRule.fromParams(UNASSIGNED_RULE_ID, { ...baseParams, oldString: 'unassigned' }),
+    ];
+
+    await expect(repository.replaceAll(overflowRules)).rejects.toThrow(InvalidRuleIdError);
+
+    // 置換前の2件がそのまま残り、overflow 内容は1件も混入していない
+    const stored = (await repository.getAll()).toArray();
+    expect(stored).toHaveLength(2);
+    const oldStrings = stored.map((r) => r.oldString).sort();
+    expect(oldStrings).toEqual(['original-1', 'original-2']);
+    expect(stored.some((r) => r.oldString === 'max-safe' || r.oldString === 'unassigned')).toBe(false);
   });
 });
