@@ -35,7 +35,11 @@ export class FooInteractor implements IFooUseCase {
 
 ### ESLintルール
 
-`host-frontend-root/frontend-src-root/eslint-rules/clean-architecture/application-business-rules/use-cases.js` の `interactorImplementsUseCaseConfig` にて自動検出。
+`host-frontend-root/frontend-src-root/eslint-rules/clean-architecture/application-business-rules/use-cases.js` が export する `useCaseRestrictedSyntax`（`no-restricted-syntax` セレクタ配列）の第2セレクタ
+`ClassDeclaration[id.name=/Interactor$/]:not(:has(TSClassImplements[expression.name=/^I[A-Za-z0-9]*UseCase$/]))`
+にて「`*Interactor` が `I*UseCase` を implements していないこと」を error 検出する。
+
+**適用経路**: `useCaseRestrictedSyntax` は `eslint-rules/object-oriented-nine-rules/main.js` に import され、`INTERACTORS_GLOB` 向けの `no-restricted-syntax` 設定（`noRestrictedSyntaxInteractorsSrc` / `noRestrictedSyntaxInteractorsTests`）へ他の OO9 セレクタと共に集約される。集約している理由は、ESLint flat config が同一ルールキー（`no-restricted-syntax`）を最後にマッチした設定で全上書きするため。`eslint.config.js` は `...cleanArchitecture` の後に `...objectOrientedNineRules` を spread する順序ゆえ、use-cases.js 側で単独に `no-restricted-syntax` を定義すると OO9 側に握り潰される。そのため use-cases.js は本 `useCaseConfig` では `no-restricted-syntax` を宣言せず、セレクタ配列を OO9 main.js へ集約している。
 
 ---
 

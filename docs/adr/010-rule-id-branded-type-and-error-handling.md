@@ -42,6 +42,11 @@ export const createRuleId = (raw: unknown): RuleId => {
 };
 ```
 
+> **更新（PR#405 Copilotレビュー対応）**: 上記は当ADR決定時点のコード。以後、実装は次の2点で更新済み。
+> - `type-fest` 5.x で `Opaque` が非推奨（`Tagged` への別名）となったため、現行実装は `RuleId = Tagged<number, 'RuleId'>` を用いる。
+> - 整数判定を `Number.isInteger` から `Number.isSafeInteger` へ変更（安全整数範囲外IDは `JSON.parse` で丸められID同一性が壊れるため拒否）。
+> 現行の正は `src/enterprise-business-rules/value-objects/ids/RuleId.ts` を参照。
+
 - factory `createRuleId(raw: unknown): RuleId` を `RuleId` を生む唯一の窓口とし、境界検証（型・整数性・非負）を集約する。
 - `as RuleId` キャストは factory 内部・テスト fixture ヘルパ・DTO↔Entity 境界マッパー・repository 内部に限定する（規約は [`docs/coding-standards/enterprise-business-rules/branded-types.md`](../coding-standards/enterprise-business-rules/branded-types.md) で詳述）。
 

@@ -114,7 +114,7 @@ if (uniqueIds.size !== nonZeroIds.length) {
 ### Phase 3: テスト整備
 
 - [ ] バリデーションロジックのユニットテスト（NaN・Infinity・負数・小数・重複id）
-- [ ] 正常系: id 省略・id=0・正の整数 id が通過すること
+- [ ] 正常系: id 省略・null・正の整数 id が通過すること（明示的な id=0 は未採番sentinel衝突により拒否）
 - [ ] 異常系: 各バリデーションエラーが `presentError` で正しいメッセージとともに報告されること
 
 ## 受け入れ条件

@@ -1,8 +1,9 @@
-import type { Opaque } from 'type-fest';
+import type { Tagged } from 'type-fest';
 
 import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/InvalidRuleIdError';
 
-export type RuleId = Opaque<number, 'RuleId'>;
+// type-fest 5.x では Opaque は非推奨（Tagged への別名）。後継の Tagged を用いる。
+export type RuleId = Tagged<number, 'RuleId'>;
 
 export const createRuleId = (raw: unknown): RuleId => {
   // Number.isSafeInteger を用いる: Number.isInteger は安全整数範囲(±2^53-1)外も許可するが、

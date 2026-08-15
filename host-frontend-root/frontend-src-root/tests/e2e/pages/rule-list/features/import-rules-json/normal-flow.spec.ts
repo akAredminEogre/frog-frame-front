@@ -40,9 +40,14 @@ test('インポートボタンクリック後にJSONファイルを選択する�
   await expect(importButton).toBeVisible({ timeout: DEFAULT_TIMEOUT });
   await expect(importButton).toBeEnabled();
 
-  // 4. Act: hidden file inputに直接JSONファイルをセット（ファイル選択ダイアログをバイパス）
-  const fileInput = rulesPage.locator('[data-testid="import-file-input"]');
-  await fileInput.setInputFiles({
+  // 4. Act: 実ボタンをクリックし、発火する filechooser イベントを待ってファイルを渡す。
+  //    hidden input へ直接 setInputFiles するとボタン → input の接続が壊れても通過してしまう
+  //    （偽陰性）ため、ボタンクリックが filechooser を発火することまで検証する。
+  const [fileChooser] = await Promise.all([
+    rulesPage.waitForEvent('filechooser', { timeout: DEFAULT_TIMEOUT }),
+    importButton.click(),
+  ]);
+  await fileChooser.setFiles({
     name: 'import-test.json',
     mimeType: 'application/json',
     buffer: Buffer.from(jsonContent, 'utf-8'),

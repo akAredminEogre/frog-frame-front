@@ -1,6 +1,7 @@
-import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
-import { createImportRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
+import { RewriteRuleParams } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRuleParams';
+import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/InvalidRuleIdError';
+import { createImportRuleId, RuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 
 export const MAX_IMPORT_RULES_COUNT = 1000;
 
@@ -48,6 +49,29 @@ export class DuplicateRuleIdError extends Error {
 }
 
 /**
+ * インポート境界のルールID不正エラー（日本語・対象ルール番号付き）
+ * US-021 AC-3-1 対応。低層 `createRuleId`/`createImportRuleId` は英語契約の
+ * `InvalidRuleIdError`（型・メッセージ・error-strategy Map キー）を維持したまま、
+ * index が既知の `ImportRulesCollection` 境界でのみ日本語のユーザー向け文言と
+ * 「ルール#N」（1始まり）を付与して本エラーへラップする。
+ * 低層の英語エラーは `cause` として保持し、契約・既存テストを非破壊に保つ。
+ */
+export class ImportRuleIdError extends Error {
+  public readonly ruleNumber: number;
+  public readonly cause?: InvalidRuleIdError;
+
+  constructor(ruleNumber: number, rawId: unknown, cause: InvalidRuleIdError) {
+    super(
+      `ルール#${ruleNumber} の ID「${String(rawId)}」は無効です（IDは安全整数の範囲内の正の整数である必要があり、未採番を表す 0 は指定できません）`
+    );
+    Object.setPrototypeOf(this, ImportRuleIdError.prototype);
+    this.name = 'ImportRuleIdError';
+    this.ruleNumber = ruleNumber;
+    this.cause = cause;
+  }
+}
+
+/**
  * インポートルール集合のValue Object
  * コンストラクタで0件チェック・件数上限チェック・エントリ構造チェック・ID重複チェックを行い、
  * RewriteRule[] を構築する。各チェック失敗時は対応するエラーをスローする。
@@ -67,7 +91,7 @@ export class ImportRulesCollection {
     ImportRulesCollection.validateEntriesAreObjects(rawRules);
     ImportRulesCollection.validateEntryFields(rawRules);
     ImportRulesCollection.validateNoDuplicateIds(rawRules);
-    this._rules = rawRules.map((raw) => ImportRulesCollection.toRewriteRule(raw));
+    this._rules = rawRules.map((raw, index) => ImportRulesCollection.toRewriteRule(raw, index));
   }
 
   toArray(): RewriteRule[] {
@@ -112,16 +136,19 @@ export class ImportRulesCollection {
 
   /**
    * インポートJSON内の id 重複を事前検証する
-   * 重複検知は「採番済みの有効なID（正の整数）」のみを対象とし、
-   * 未採番sentinel(0)・型不正・undefined/null は後段の createImportRuleId/createRuleId の
-   * 検証（InvalidRuleIdError）に委ねる。これによりエラーメッセージの責務を分離する。
-   * @throws {DuplicateRuleIdError} 同一の採番済みIDが複数存在する場合
+   * 重複検知は「採番済みの有効なID（安全整数範囲内の正の整数）」のみを対象とし、
+   * 未採番sentinel(0)・型不正・安全整数範囲外(Number.isSafeInteger=false)・undefined/null は
+   * 後段の createImportRuleId/createRuleId の検証（InvalidRuleIdError）に委ねる。
+   * createRuleId は Number.isSafeInteger で範囲外IDを拒否するため、ここでも同一基準を用いる。
+   * これにより、安全整数範囲外の重複IDが DuplicateRuleIdError より先に検出される不整合を防ぎ、
+   * エラーメッセージの責務（範囲外=InvalidRuleIdError / 範囲内重複=DuplicateRuleIdError）を分離する。
+   * @throws {DuplicateRuleIdError} 同一の採番済みID（安全整数範囲内の正の整数）が複数存在する場合
    */
   private static validateNoDuplicateIds(rawRules: unknown[]): void {
     const records = rawRules.map((raw) => raw as Record<string, unknown>);
     const ids = records.map((record) => record.id);
     const assignedIds = ids.filter(
-      (id): id is number => typeof id === 'number' && Number.isInteger(id) && id > 0
+      (id): id is number => typeof id === 'number' && Number.isSafeInteger(id) && id > 0
     );
     const duplicatedIds = assignedIds.filter((id, index) => assignedIds.indexOf(id) !== index);
     if (duplicatedIds.length === 0) {
@@ -131,9 +158,24 @@ export class ImportRulesCollection {
     throw new DuplicateRuleIdError(uniqueDuplicatedIds.map(String).join(', '));
   }
 
-  private static toRewriteRule(raw: unknown): RewriteRule {
+  /**
+   * 1エントリを RewriteRule へ変換する。
+   * ルールID生成で低層の英語 `InvalidRuleIdError` が発生した場合、index が既知の本境界で
+   * 日本語＋「ルール#N」（1始まり）を付与した `ImportRuleIdError` にラップして再throwする。
+   * @param ruleIndex rawRules 配列内の0始まりindex（メッセージには +1 した1始まり番号を用いる）
+   * @throws {ImportRuleIdError} ルールID不正時（低層 InvalidRuleIdError を cause に保持）
+   */
+  private static toRewriteRule(raw: unknown, ruleIndex: number): RewriteRule {
     const ruleData = raw as Record<string, unknown>;
-    const ruleId = createImportRuleId(ruleData.id);
+    let ruleId: RuleId;
+    try {
+      ruleId = createImportRuleId(ruleData.id);
+    } catch (error) {
+      if (error instanceof InvalidRuleIdError) {
+        throw new ImportRuleIdError(ruleIndex + 1, ruleData.id, error);
+      }
+      throw error;
+    }
     return RewriteRule.fromParams(ruleId, ruleData as unknown as RewriteRuleParams);
   }
 }

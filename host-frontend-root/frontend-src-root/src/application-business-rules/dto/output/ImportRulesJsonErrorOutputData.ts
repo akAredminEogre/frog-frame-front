@@ -12,6 +12,7 @@ import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/Invalid
 import {
   DuplicateRuleIdError,
   EmptyRulesCollectionError,
+  ImportRuleIdError,
   InvalidRuleEntryError,
   RulesCollectionCountExceededError,
 } from 'src/enterprise-business-rules/value-objects/ImportRulesCollection';
@@ -45,6 +46,7 @@ export class ImportRulesJsonErrorOutputData {
       [InvalidRuleEntryError, validationPassthrough],
       [DuplicateRuleIdError, validationPassthrough],
       [InvalidRuleIdError, validationPassthrough],
+      [ImportRuleIdError, validationPassthrough],
     ]);
   })();
 

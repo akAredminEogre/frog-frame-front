@@ -1,9 +1,9 @@
 import { IChromeTabsService } from 'src/application/ports/IChromeTabsService';
-import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { Tab } from 'src/domain/value-objects/Tab';
 import { Tabs } from 'src/domain/value-objects/Tabs';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { RewriteRuleParams } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRuleParams';
 
 export class UpdateRewriteRuleUseCase {
   constructor(

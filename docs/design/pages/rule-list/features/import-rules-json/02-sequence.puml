@@ -56,7 +56,11 @@ IFactory -> Factory : create(onSuccess, onError)
 activate Factory
 
 Factory -> Presenter : 無名オブジェクト生成\n{ present, presentError }
-Factory -> Interactor : new(repository, presenter,\n  jsonParser, fileTextReader)
+note over Factory
+  fileTextReader は Factory が保持し、生成される Controller の
+  importRulesJson(file) 内で使用する（Interactor には渡さない）
+end note
+Factory -> Interactor : new(repository, presenter, jsonParser)
 Factory --> IFactory : 無名 IImportRulesJsonController\n{ importRulesJson(file) }
 deactivate Factory
 IFactory --> Hook : controller
@@ -92,33 +96,53 @@ Hook -> Hook : setImportError(null)\nsetImportSuccess(null)\nsetIsImporting(true
 Hook -> Controller : importRulesJson(file)
 activate Controller
 
-Controller -> InputData : new ImportRulesJsonInputData(file)
-Controller -> Interactor : importRulesJson(inputData)
-activate Interactor
-
-note over Interactor
-  try { 下記 A〜F を順に実行 } catch(error) {
-    presenter.presentError(ImportRulesJsonErrorOutputData.fromError(error))
-  }
-  各ステップの throw は即座に catch に分岐する
+note over Controller
+  Controller（無名 IImportRulesJsonController）が
+  File / ブラウザ API（file.size・readAsText）をこの層で完結させ、
+  ABR（Interactor）へは number（fileSizeBytes）と string（fileText）のみを渡す。
+  try { A. サイズ検証 → B. 本文読取 → InputData 生成 → Interactor 呼出 }
+  catch(error) { presenter.presentError(ImportRulesJsonErrorOutputData.fromError(error)) }
 end note
 
-== A. ファイルサイズ検証（EBR VO） ==
-Interactor -> FileSize : new ImportFileSize(inputData.file.size)
+== A. ファイルサイズ検証（IA 境界・EBR VO） ==
+Controller -> FileSize : new ImportFileSize(file.size)
 note right of FileSize
-  コンストラクタで 5MB 超過を検査
+  コンストラクタで 5MB 超過を検査（読取の【前】に早期リジェクト）
   超過時: ImportFileSizeError を throw
 end note
 
-== B. テキスト読み取り（F&D 経由） ==
-Interactor -> IFileTextReader : readAsText(inputData.file)
+== B. テキスト読み取り（IA → F&D 経由） ==
+Controller -> IFileTextReader : readAsText(file)
 activate IFileTextReader
 IFileTextReader -> FileTextReader : readAsText(file)
 activate FileTextReader
 FileTextReader --> IFileTextReader : Promise<string>
 deactivate FileTextReader
-IFileTextReader --> Interactor : jsonString
+IFileTextReader --> Controller : fileText
 deactivate IFileTextReader
+
+Controller -> InputData : new ImportRulesJsonInputData(file.size, fileText)
+Controller -> Interactor : importRulesJson(inputData)
+activate Interactor
+
+note over Interactor
+  inputData は { fileSizeBytes: number, fileText: string } のみ（DOM File 非依存）
+  try { 下記 A'〜F を順に実行 } catch(error) {
+    presenter.presentError(ImportRulesJsonErrorOutputData.fromError(error))
+  }
+  各ステップの throw は即座に catch に分岐する
+end note
+
+== A'. ファイルサイズ再検証（ABR・多層防御） ==
+Interactor -> FileSize : new ImportFileSize(inputData.fileSizeBytes)
+note right of FileSize
+  ABR 層でも number を再検証（境界での早期リジェクトと二重化）
+  超過時: ImportFileSizeError を throw
+end note
+
+note over Interactor
+  jsonString ← inputData.fileText（既読テキストをそのまま利用・再読取なし）
+end note
 
 == C. JSON 解析（F&D 経由） ==
 Interactor -> IJsonParser : parseAsObject(jsonString)

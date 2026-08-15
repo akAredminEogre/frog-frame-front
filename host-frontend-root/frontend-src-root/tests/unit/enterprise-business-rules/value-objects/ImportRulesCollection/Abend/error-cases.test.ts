@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   DuplicateRuleIdError,
   EmptyRulesCollectionError,
+  ImportRuleIdError,
   ImportRulesCollection,
   InvalidRuleEntryError,
   MAX_IMPORT_RULES_COUNT,
@@ -26,7 +27,10 @@ const baseRuleFields = {
  * 5. rules 配列に配列混入は InvalidRuleEntryError（論点3）
  * 6. JSON内でIDが重複する場合は DuplicateRuleIdError（案A: 事前重複検証）
  * 7. 必須フィールド欠落・型不正は InvalidRuleEntryError（フィールド単位検証）
- * 8. id: 0 は未採番sentinelと衝突するため InvalidRuleIdError（メッセージで検証）
+ * 8. id: 0 は未採番sentinelと衝突するため境界で ImportRuleIdError（日本語・ルール#N）に
+ *    ラップして throw（低層 InvalidRuleIdError を cause 保持）
+ * 9. 安全整数範囲外(Number.isSafeInteger=false)の重複IDは、重複検知の対象外となり
+ *    境界の ImportRuleIdError を優先（重複検知基準を createRuleId と揃えた回帰テスト）
  */
 describe('ImportRulesCollection - 異常系', () => {
   it('0件の場合は EmptyRulesCollectionError をthrowする', () => {
@@ -80,28 +84,47 @@ describe('ImportRulesCollection - 異常系', () => {
     expect(() => new ImportRulesCollection(rules)).toThrow(InvalidRuleEntryError);
   });
 
-  it('id: 0 は未採番sentinelと衝突するためエラーをthrowする', () => {
+  it('id: 0 は未採番sentinelと衝突するため境界で ImportRuleIdError（日本語・ルール#N付与）をthrowする', () => {
     const rules = [{ id: 0, ...baseRuleFields }];
-    expect(() => new ImportRulesCollection(rules)).toThrow('Invalid RuleId: 0');
+    // 低層 createImportRuleId は英語 InvalidRuleIdError を投げるが、index が既知の
+    // ImportRulesCollection 境界で日本語＋「ルール#1」付与の ImportRuleIdError にラップされる。
+    expect(() => new ImportRulesCollection(rules)).toThrow(ImportRuleIdError);
+    expect(() => new ImportRulesCollection(rules)).toThrow('ルール#1 の ID「0」は無効です');
   });
 
-  it('id: 0 が重複していても、重複検知より先に未採番sentinel衝突の InvalidRuleIdError を優先する', () => {
+  it('id: 0 が重複していても、重複検知より先に未採番sentinel衝突の ImportRuleIdError を優先する', () => {
     const rules = [
       { id: 0, ...baseRuleFields },
       { id: 0, ...baseRuleFields },
     ];
     // 重複検知は「採番済みの有効なID（正の整数）」のみ対象のため 0 はスキップされ、
-    // 後段の createImportRuleId で InvalidRuleIdError（メッセージ検証）となる。
-    expect(() => new ImportRulesCollection(rules)).toThrow('Invalid RuleId: 0');
+    // 後段の createImportRuleId 由来の InvalidRuleIdError が境界で ImportRuleIdError にラップされる。
+    expect(() => new ImportRulesCollection(rules)).toThrow(ImportRuleIdError);
+    expect(() => new ImportRulesCollection(rules)).toThrow('ルール#1 の ID「0」は無効です');
     expect(() => new ImportRulesCollection(rules)).not.toThrow(DuplicateRuleIdError);
   });
 
-  it('id が型不正（文字列）で重複していても、DuplicateRuleIdError ではなく InvalidRuleIdError を優先する', () => {
+  it('id が型不正（文字列）で重複していても、DuplicateRuleIdError ではなく ImportRuleIdError を優先する', () => {
     const rules = [
       { id: '5', ...baseRuleFields },
       { id: '5', ...baseRuleFields },
     ];
-    expect(() => new ImportRulesCollection(rules)).toThrow('Invalid RuleId: 5');
+    expect(() => new ImportRulesCollection(rules)).toThrow(ImportRuleIdError);
+    expect(() => new ImportRulesCollection(rules)).toThrow('ルール#1 の ID「5」は無効です');
+    expect(() => new ImportRulesCollection(rules)).not.toThrow(DuplicateRuleIdError);
+  });
+
+  it('id が安全整数範囲外で重複していても、DuplicateRuleIdError ではなく ImportRuleIdError を優先する', () => {
+    // Number.isSafeInteger(unsafeId) === false のため重複検知の対象外となり、
+    // createRuleId の Number.isSafeInteger ガードで InvalidRuleIdError → 境界で ImportRuleIdError となる。
+    // （重複検知が Number.isInteger だと DuplicateRuleIdError が先に発火し優先順位が壊れる回帰）
+    const unsafeId = Number.MAX_SAFE_INTEGER + 1;
+    const rules = [
+      { id: unsafeId, ...baseRuleFields },
+      { id: unsafeId, ...baseRuleFields },
+    ];
+    expect(() => new ImportRulesCollection(rules)).toThrow(ImportRuleIdError);
+    expect(() => new ImportRulesCollection(rules)).toThrow(`ルール#1 の ID「${unsafeId}」は無効です`);
     expect(() => new ImportRulesCollection(rules)).not.toThrow(DuplicateRuleIdError);
   });
 });

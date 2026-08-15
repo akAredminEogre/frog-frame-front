@@ -18,6 +18,7 @@ import { ImportFileSizeError } from 'src/enterprise-business-rules/errors/Import
 import { InvalidRuleIdError } from 'src/enterprise-business-rules/errors/InvalidRuleIdError';
 import {
   EmptyRulesCollectionError,
+  ImportRuleIdError,
   RulesCollectionCountExceededError,
 } from 'src/enterprise-business-rules/value-objects/ImportRulesCollection';
 import {
@@ -92,6 +93,15 @@ describe('ImportRulesJsonErrorOutputData.fromError - マッピング正常系', 
       expected: {
         errorType: 'validation',
         message: 'Invalid RuleId: -1',
+      },
+    },
+    {
+      description: 'ImportRuleIdError → validation / 日本語・ルール#N 付きメッセージをそのまま保持',
+      input: { error: new ImportRuleIdError(2, -1, new InvalidRuleIdError(-1)) },
+      expected: {
+        errorType: 'validation',
+        message:
+          'ルール#2 の ID「-1」は無効です（IDは安全整数の範囲内の正の整数である必要があり、未採番を表す 0 は指定できません）',
       },
     },
     {

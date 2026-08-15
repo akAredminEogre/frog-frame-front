@@ -1,6 +1,6 @@
-import { RewriteRuleParams } from "src/application/types/RewriteRuleParams";
 import { RegexConstants } from "src/domain/constants/RegexConstants";
 import { PatternProcessingStrategyFactory } from "src/domain/entities/RewriteRule/PatternProcessingStrategyFactory";
+import { RewriteRuleParams } from "src/enterprise-business-rules/entities/RewriteRule/RewriteRuleParams";
 import { createRuleId, RuleId } from "src/enterprise-business-rules/value-objects/ids/RuleId";
 
 export class RewriteRule {

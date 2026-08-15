@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 import { LoadRewriteRuleForEditUseCase } from 'src/application/usecases/rule/LoadRewriteRuleForEditUseCase';
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 import { RewriteRuleForm } from 'src/components/organisms/RewriteRuleForm';
+import { RewriteRuleParams } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRuleParams';
 import { container } from 'src/frameworks-and-drivers/di/container';
 
 interface EditRulePageProps {

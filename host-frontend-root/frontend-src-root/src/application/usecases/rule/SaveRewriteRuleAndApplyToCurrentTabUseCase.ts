@@ -1,8 +1,8 @@
 import { IChromeRuntimeService } from 'src/application/ports/IChromeRuntimeService';
 import { ICurrentTabService } from 'src/application/ports/ICurrentTabService';
-import { RewriteRuleParams } from 'src/application/types/RewriteRuleParams';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { RewriteRuleParams } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRuleParams';
 
 interface SaveRewriteRuleAndApplyResult {
   success: boolean;

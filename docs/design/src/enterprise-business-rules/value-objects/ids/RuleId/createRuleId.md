@@ -2,12 +2,12 @@
 
 ## 目的
 
-値オブジェクト `RuleId`（`Opaque<number, 'RuleId'>`）のスマートコンストラクタ。
-`unknown` 型の入力を検証し、「**0 以上の整数**」のみを `RuleId` として返し、それ以外は `Error('Invalid RuleId: <raw>')` をスローする。
+値オブジェクト `RuleId`（`Tagged<number, 'RuleId'>`）のスマートコンストラクタ。
+`unknown` 型の入力を検証し、「**0 以上の安全整数**」のみを `RuleId` として返し、それ以外は `Error('Invalid RuleId: <raw>')` をスローする。
 
 **責務範囲**:
 - 入力が `number` 型であること
-- `Number.isInteger` が真であること
+- `Number.isSafeInteger` が真であること（安全整数範囲 ±(2^53−1) 外は `JSON.parse` で丸められ元IDを保持できないため拒否）
 - 値が 0 以上であること（`raw < 0` を拒否）
 
 これにより、`RuleId` を受け取る上流レイヤー（Interactor / UseCase / Repository）では型レベルで整数性・非負性を保証できる。
@@ -47,17 +47,18 @@
 
 **対応テスト**: `createRuleId/Abend/type-validation.test.ts`（文字列）、`createRuleId/Abend/null-undefined-validation.test.ts`（null・undefined）
 
-### 4. 異常系（Number.isInteger違反：小数・NaN・Infinity）
+### 4. 異常系（Number.isSafeInteger違反：小数・NaN・Infinity・安全整数範囲外）
 
-`RuleId.ts:6` の `!Number.isInteger(raw)` 条件を発火させる代表値をテストする。
+`RuleId.ts` の `!Number.isSafeInteger(raw)` 条件を発火させる代表値をテストする。
 
 | 分類 | テストケース | 根拠 |
 |------|-------------|------|
-| 小数 | `createRuleId(1.5)` → `throw 'Invalid RuleId: 1.5'` | `Number.isInteger(1.5) === false`。型は `number` だが整数性違反を単体検証 |
-| `NaN` | `createRuleId(NaN)` → `throw 'Invalid RuleId: NaN'` | `Number.isInteger(NaN) === false`。数値演算失敗値の拒否を明示 |
-| `Infinity` | `createRuleId(Infinity)` → `throw 'Invalid RuleId: Infinity'` | `Number.isInteger(Infinity) === false`。無限大の拒否を明示 |
+| 小数 | `createRuleId(1.5)` → `throw 'Invalid RuleId: 1.5'` | `Number.isSafeInteger(1.5) === false`。型は `number` だが整数性違反を単体検証 |
+| `NaN` | `createRuleId(NaN)` → `throw 'Invalid RuleId: NaN'` | `Number.isSafeInteger(NaN) === false`。数値演算失敗値の拒否を明示 |
+| `Infinity` | `createRuleId(Infinity)` → `throw 'Invalid RuleId: Infinity'` | `Number.isSafeInteger(Infinity) === false`。無限大の拒否を明示 |
+| 安全整数範囲外 | `createRuleId(Number.MAX_SAFE_INTEGER + 2)` → `throw 'Invalid RuleId: <値>'` | `Number.isSafeInteger(MAX_SAFE_INTEGER + 2) === false`。安全整数範囲外は `JSON.parse` で丸められ元IDを保持できず、リストア時のID同一性が壊れるため拒否 |
 
-**対応テスト**: `createRuleId/Abend/integer-validation.test.ts`
+**対応テスト**: `createRuleId/Abend/integer-validation.test.ts`（4ケース：小数・NaN・Infinity・安全整数範囲外）
 
 ## 網羅性チェック
 
@@ -68,14 +69,16 @@
 - [x] `null` で失敗（型違反：`typeof` が `'object'` となる仕様）
 - [x] `undefined` で失敗（型違反：未定義）
 - [x] エラーメッセージが仕様通り（`Invalid RuleId: <raw>` 形式）であること
-- [x] `Number.isInteger` 違反（小数 `1.5` 等） → `createRuleId(1.5)` → `throw 'Invalid RuleId: 1.5'`
-  - **根拠**: `RuleId.ts:6` の `!Number.isInteger(raw)` 条件を単体検証。PR#394 レビュー対応で追加済み
+- [x] `Number.isSafeInteger` 違反（小数 `1.5` 等） → `createRuleId(1.5)` → `throw 'Invalid RuleId: 1.5'`
+  - **根拠**: `RuleId.ts` の `!Number.isSafeInteger(raw)` 条件を単体検証。PR#394 レビュー対応で追加済み
 - [x] `NaN` / `Infinity` での挙動 → `createRuleId(NaN)` → `throw 'Invalid RuleId: NaN'`, `createRuleId(Infinity)` → `throw 'Invalid RuleId: Infinity'`
-  - **根拠**: `Number.isInteger(NaN) === false`, `Number.isInteger(Infinity) === false` により拒否されることをテストで検証済み（PR#394 レビュー対応で追加）
-- [—] 型レベルの `Opaque` 検証（別の `Id` 型に代入できないこと） → **ランタイムテスト対象外**（TypeScript コンパイル時検証で保証されるため、本チェックリスト（単体テスト網羅）の範囲外。チェック不可項目として `[—]` で表記）
+  - **根拠**: `Number.isSafeInteger(NaN) === false`, `Number.isSafeInteger(Infinity) === false` により拒否されることをテストで検証済み（PR#394 レビュー対応で追加）
+- [x] 安全整数範囲外（`Number.MAX_SAFE_INTEGER + 2`） → `createRuleId(Number.MAX_SAFE_INTEGER + 2)` → `throw 'Invalid RuleId: <値>'`
+  - **根拠**: `Number.isSafeInteger(MAX_SAFE_INTEGER + 2) === false`。安全整数範囲外は `JSON.parse` で丸められ元IDを保持できず、リストア時のID同一性が壊れるため拒否。`integer-validation.test.ts` に4件目として追加済み
+- [—] 型レベルの `Tagged` 検証（別の `Id` 型に代入できないこと） → **ランタイムテスト対象外**（TypeScript コンパイル時検証で保証されるため、本チェックリスト（単体テスト網羅）の範囲外。チェック不可項目として `[—]` で表記）
 - [—] 可変性 → **ランタイムテスト対象外**（プリミティブ `number` のため本質的にイミュータブル。検証不要のためチェック不可項目として `[—]` で表記）
 
-※ `[x]` の各項目（`Number.isInteger` 違反・`NaN` / `Infinity`）は PR#394 レビュー対応で単体テストを追加済み（本PR内でテスト追加・ドキュメント更新完了）。直上 2 項目はランタイム検証の対象外（不要）であり、未対応の `[ ]` ではなく「対象外」を意味する `[—]` で明示する。
+※ `[x]` の各項目（`Number.isSafeInteger` 違反・`NaN` / `Infinity`・安全整数範囲外）は PR#394 レビュー対応以降で単体テストを追加済み（`integer-validation.test.ts` は小数・NaN・Infinity・安全整数範囲外の4ケース）。`[—]` の 2 項目はランタイム検証の対象外（不要）であり、未対応の `[ ]` ではなく「対象外」を意味する `[—]` で明示する。
 
 ## テストファイル構成
 
@@ -108,7 +111,7 @@ tests/unit/enterprise-business-rules/value-objects/ids/RuleId/createRuleId/
 ### 根拠
 
 - `createRuleId` は `unknown` → `RuleId` の純粋関数。外部依存・副作用なし
-- `type-fest` の `Opaque` 型はコンパイル時のみ存在し、ランタイム挙動に影響しない
+- `type-fest` の `Tagged` 型はコンパイル時のみ存在し、ランタイム挙動に影響しない
 - `beforeEach` / `afterEach` のライフサイクル管理不要（現テストコードでも未定義で妥当）
 
 ## JSDocとの一貫性（§8 / §7 チェック）
@@ -140,4 +143,4 @@ tests/unit/enterprise-business-rules/value-objects/ids/RuleId/createRuleId/
 - 実装: `host-frontend-root/frontend-src-root/src/enterprise-business-rules/value-objects/ids/RuleId.ts`
 - テスト: `host-frontend-root/frontend-src-root/tests/unit/enterprise-business-rules/value-objects/ids/RuleId/createRuleId/`
 - 上位規約: `docs-rules/design/05-test-strategy.md`
-- 分岐型規約: `docs/coding-standards/enterprise-business-rules/branded-types.md`（`Opaque` 利用全般）
+- 分岐型規約: `docs/coding-standards/enterprise-business-rules/branded-types.md`（`Tagged` 利用全般）
