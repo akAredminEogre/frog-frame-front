@@ -23,7 +23,7 @@ Favorite Keyword Link Frogは、ブラウザに表示したDOMを操作し、要
   - Vitest (単体テスト)
   - Playwright (E2Eテスト)
 - **UI開発**: Storybook
-- **DI**: tsyringe
+- **DI**: awilix
 - **アーキテクチャ**: Clean Architecture
 
 ## プロジェクト構造

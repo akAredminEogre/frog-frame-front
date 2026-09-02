@@ -16,17 +16,17 @@ export class DeleteRuleInteractor implements IDeleteRuleUseCase {
     private readonly presenter: IDeleteRulePresenter
   ) {}
 
-  async execute(inputData: DeleteRuleInputData): Promise<void> {
+  async execute(deleteRuleInputData: DeleteRuleInputData): Promise<void> {
     try {
-      const rule = await this.repository.getById(inputData.ruleId);
-      await this.repository.delete(inputData.ruleId);
-      const outputData = new DeleteRuleOutputData(inputData.ruleId);
+      const rule = await this.repository.getById(deleteRuleInputData.ruleId);
+      await this.repository.delete(deleteRuleInputData.ruleId);
+      const outputData = new DeleteRuleOutputData(deleteRuleInputData.ruleId);
       // 部分的成功パターン: 副次操作（タブリロード）の前にpresentを呼び出すことで、
       // 副次操作が失敗しても主要操作（削除）の成功をUIに反映する
       this.presenter.present(outputData);
       await this.tabsGateway.reloadMatchingTabs(rule);
     } catch (error) {
-      const errorData = new DeleteRuleErrorOutputData(inputData.ruleId, error);
+      const errorData = new DeleteRuleErrorOutputData(deleteRuleInputData.ruleId, error);
       this.presenter.presentError(errorData);
     }
   }

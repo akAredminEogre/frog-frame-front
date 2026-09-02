@@ -1,4 +1,5 @@
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 import { RewriteRuleDTO } from 'src/frameworks-and-drivers/messaging/dto/RewriteRuleDTO';
 import { IRewriteRuleMessagingPort } from 'src/interface-adapters/ports/IRewriteRuleMessagingPort';
 
@@ -30,7 +31,7 @@ export class RewriteRuleMapper {
    */
   toEntity(dto: RewriteRuleDTO): RewriteRule {
     return new RewriteRule(
-      dto.id,
+      createRuleId(dto.id),
       dto.oldString,
       dto.newString,
       dto.urlPattern,

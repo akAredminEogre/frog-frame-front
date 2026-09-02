@@ -15,7 +15,10 @@ import { SaveRewriteRuleAndApplyToCurrentTabUseCase } from 'src/application/usec
 import { UpdateRewriteRuleUseCase } from 'src/application/usecases/rule/UpdateRewriteRuleUseCase';
 import { CloseCurrentWindowUseCase } from 'src/application/usecases/window/CloseCurrentWindowUseCase';
 import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
+import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
 import { ChromeTabsGateway } from 'src/frameworks-and-drivers/browser/ChromeTabsGateway';
+import { FileTextReader } from 'src/frameworks-and-drivers/File/FileTextReader';
+import { JsonParser } from 'src/frameworks-and-drivers/Json/JsonParser';
 import { RewriteRuleMessagingService } from 'src/frameworks-and-drivers/messaging/RewriteRuleMessagingService';
 import { DexieRewriteRuleRepository } from 'src/frameworks-and-drivers/persistence/DexieRewriteRuleRepository';
 import { ChromePopupService } from 'src/infrastructure/browser/popup/ChromePopupService';
@@ -29,6 +32,8 @@ import { DeleteRuleControllerFactory } from 'src/interface-adapters/factories/De
 import { ExportRulesJsonControllerFactory } from 'src/interface-adapters/factories/ExportRulesJsonControllerFactory';
 import { IDeleteRuleControllerFactory } from 'src/interface-adapters/factories/IDeleteRuleControllerFactory';
 import { IExportRulesJsonControllerFactory } from 'src/interface-adapters/factories/IExportRulesJsonControllerFactory';
+import { IImportRulesJsonControllerFactory } from 'src/interface-adapters/factories/IImportRulesJsonControllerFactory';
+import { ImportRulesJsonControllerFactory } from 'src/interface-adapters/factories/ImportRulesJsonControllerFactory';
 import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 import { ToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/ToggleRuleActiveControllerFactory';
 import { RewriteRuleMapper } from 'src/interface-adapters/mappers/RewriteRuleMapper';
@@ -79,6 +84,14 @@ const deleteRuleControllerFactory = new DeleteRuleControllerFactory(
   rewriteRuleRepository,
   chromeTabsGateway
 );
+// Import Rules JSON feature
+const jsonParser = new JsonParser();
+const fileTextReader = new FileTextReader();
+const importRulesJsonControllerFactory = new ImportRulesJsonControllerFactory(
+  rewriteRuleRepository,
+  jsonParser,
+  fileTextReader
+);
 // Export Rules JSON feature
 const exportRulesJsonControllerFactory = new ExportRulesJsonControllerFactory(
   rewriteRuleRepository
@@ -122,6 +135,11 @@ awilixContainer.register({
   // Delete Rule feature
   deleteRuleControllerFactory: asValue(deleteRuleControllerFactory),
 
+  // Import Rules JSON feature
+  importRulesJsonControllerFactory: asValue(importRulesJsonControllerFactory),
+  fileTextReader: asValue(fileTextReader),
+  jsonParser: asValue(jsonParser),
+
   // Export Rules JSON feature
   exportRulesJsonControllerFactory: asValue(exportRulesJsonControllerFactory)
 });
@@ -160,6 +178,11 @@ interface ContainerCradle {
   // Delete Rule feature
   deleteRuleControllerFactory: IDeleteRuleControllerFactory;
 
+  // Import Rules JSON feature
+  importRulesJsonControllerFactory: IImportRulesJsonControllerFactory;
+  fileTextReader: FileTextReader;
+  jsonParser: IJsonParser;
+
   // Export Rules JSON feature
   exportRulesJsonControllerFactory: IExportRulesJsonControllerFactory;
 }
@@ -176,9 +199,12 @@ type InterfaceToken =
   | 'IGetSelectionService'
   | 'IToggleRuleActiveControllerFactory'
   | 'IDeleteRuleControllerFactory'
+  | 'IImportRulesJsonControllerFactory'
   | 'IExportRulesJsonControllerFactory'
   | 'ITabsGateway'
-  | 'IRewriteRuleMessagingPort';
+  | 'IRewriteRuleMessagingPort'
+  | 'IFileTextReader'
+  | 'IJsonParser';
 
 const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IChromeTabsService': 'chromeTabsService',
@@ -191,9 +217,12 @@ const interfaceToKeyMap: Record<InterfaceToken, keyof ContainerCradle> = {
   'IGetSelectionService': 'getSelectionService',
   'IToggleRuleActiveControllerFactory': 'toggleRuleActiveControllerFactory',
   'IDeleteRuleControllerFactory': 'deleteRuleControllerFactory',
+  'IImportRulesJsonControllerFactory': 'importRulesJsonControllerFactory',
   'IExportRulesJsonControllerFactory': 'exportRulesJsonControllerFactory',
   'ITabsGateway': 'chromeTabsGateway',
-  'IRewriteRuleMessagingPort': 'rewriteRuleMessagingService'
+  'IRewriteRuleMessagingPort': 'rewriteRuleMessagingService',
+  'IFileTextReader': 'fileTextReader',
+  'IJsonParser': 'jsonParser'
 };
 
 // Class to key mappings for class-based resolution
@@ -210,6 +239,7 @@ const classToKeyMap = new Map<Function, keyof ContainerCradle>([
   [ChromeCurrentTabService, 'chromeCurrentTabService'],
   [ToggleRuleActiveControllerFactory, 'toggleRuleActiveControllerFactory'],
   [DeleteRuleControllerFactory, 'deleteRuleControllerFactory'],
+  [ImportRulesJsonControllerFactory, 'importRulesJsonControllerFactory'],
   [ExportRulesJsonControllerFactory, 'exportRulesJsonControllerFactory'],
   [RewriteRuleMapper, 'rewriteRuleMapper'],
   [ChromeTabsGateway, 'chromeTabsGateway'],
@@ -230,6 +260,7 @@ interface Container {
   resolve(token: typeof ChromeCurrentTabService): ChromeCurrentTabService;
   resolve(token: typeof ToggleRuleActiveControllerFactory): ToggleRuleActiveControllerFactory;
   resolve(token: typeof DeleteRuleControllerFactory): DeleteRuleControllerFactory;
+  resolve(token: typeof ImportRulesJsonControllerFactory): ImportRulesJsonControllerFactory;
   resolve(token: typeof ExportRulesJsonControllerFactory): ExportRulesJsonControllerFactory;
   resolve(token: typeof RewriteRuleMapper): RewriteRuleMapper;
   resolve(token: typeof ChromeTabsGateway): ChromeTabsGateway;

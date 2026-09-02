@@ -67,5 +67,5 @@ tests/unit/application/ports/IRewriteRuleRepository/
 
 ### モック対象の理由
 
-- container.resolve: DIコンテナはtsyringeに依存し、実際のリポジトリ実装（DexieRewriteRuleRepository等）を返すため、単体テストではモック化が必須
+- container.resolve: DIコンテナはawilixに依存し、実際のリポジトリ実装（DexieRewriteRuleRepository等）を返すため、単体テストではモック化が必須
 - IRewriteRuleRepository: DB操作を伴うため、単体テストではモック化

@@ -2,6 +2,7 @@ import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gat
 import { RewriteRuleNotFoundError } from 'src/domain/errors/RewriteRuleNotFoundError';
 import { RewriteRules } from 'src/domain/value-objects/RewriteRules';
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { createRuleId, isUnassignedRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 import { dexieDatabase, RewriteRuleSchema } from 'src/infrastructure/persistence/indexeddb/DexieDatabase';
 
 /**
@@ -104,6 +105,53 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
   }
 
   /**
+   * 全ルールをアトミックに置換する
+   * Dexie.jsのトランザクション内で全削除→全作成を実行するため、
+   * 途中でエラーが発生した場合は自動的にロールバックされる
+   *
+   * ID採用ルール（リストアユースケース）:
+   * - id有り: RewriteRuleのIDをそのまま保持して投入する（clear()後のbulkAddのため衝突しない）
+   * - id無し（UNASSIGNED_RULE_ID）: 採番済IDの最大値+1から連番を明示割当する
+   *   （DB側の自動採番に委ねると安全整数範囲外のIDが採番されうるため。詳細は
+   *   convertToSchemasForRestore を参照）
+   * @param rules 新規に設定するRewriteRuleの配列
+   */
+  async replaceAll(rules: RewriteRule[]): Promise<void> {
+    await this.database.transaction('rw', this.database.rewriteRules, async () => {
+      await this.database.rewriteRules.clear();
+      const schemas = this.convertToSchemasForRestore(rules);
+      await this.database.rewriteRules.bulkAdd(schemas);
+    });
+  }
+
+  /**
+   * リストア用にRewriteRule配列をRewriteRuleSchema配列へ変換する
+   * id採番済ルールはIDを保持し、未採番ルールには採番済IDの最大値+1から連番を明示割当する。
+   *
+   * DB側の自動採番に委ねない理由:
+   * IndexedDBのキージェネレータは明示キー投入時にそのキーより大きい値へ更新されるため、
+   * 採番済IDが安全整数の上限(Number.MAX_SAFE_INTEGER = 2^53-1)付近だと、後続の未採番ルールに
+   * 安全整数範囲外(2^53以上)のIDが自動採番されうる。その場合、次回 getAll() の createRuleId() が
+   * InvalidRuleIdError を投げ、保存済み一覧が読めなくなる。
+   * よって未採番ルールにはアプリ側で決定的にIDを採番し、createRuleId() で安全整数検証する。
+   * 安全整数範囲を超える場合は createRuleId() が InvalidRuleIdError を投げ、
+   * replaceAll のトランザクションがロールバックされる（不正状態で永続化しない）。
+   * @param rules 変換元のRewriteRule配列
+   * @returns 変換されたRewriteRuleSchema配列（id採番済→未採番の順）
+   */
+  private convertToSchemasForRestore(rules: RewriteRule[]): RewriteRuleSchema[] {
+    const assignedRules = rules.filter(rule => !isUnassignedRuleId(rule.id));
+    const unassignedRules = rules.filter(rule => isUnassignedRuleId(rule.id));
+    const assignedSchemas = assignedRules.map(rule => this.convertToSchemaForUpdate(rule));
+    const maxAssignedId = assignedRules.reduce((max, rule) => Math.max(max, rule.id), 0);
+    const unassignedSchemas = unassignedRules.map((rule, index) => ({
+      ...this.convertToSchemaForCreate(rule),
+      id: createRuleId(maxAssignedId + index + 1)
+    }));
+    return [...assignedSchemas, ...unassignedSchemas];
+  }
+
+  /**
    * RewriteRuleをRewriteRuleSchemaに変換する（新規作成用）
    * @param rule 変換元のRewriteRule
    * @returns 変換されたRewriteRuleSchema（idフィールドなし - DB側で自動採番）
@@ -137,11 +185,11 @@ export class DexieRewriteRuleRepository implements IRewriteRuleRepository {
   /**
    * RewriteRuleSchemaをRewriteRuleに変換する
    * @param schema 変換元のRewriteRuleSchema
-   * @returns 変換されたRewriteRule（number型のidをそのまま使用）
+   * @returns 変換されたRewriteRule（idはcreateRuleId()で検証しRuleIdとして生成）
    */
   private convertSchemaToRule(schema: RewriteRuleSchema): RewriteRule {
     return new RewriteRule(
-      schema.id!,
+      createRuleId(schema.id!),
       schema.oldString,
       schema.newString,
       schema.urlPattern,

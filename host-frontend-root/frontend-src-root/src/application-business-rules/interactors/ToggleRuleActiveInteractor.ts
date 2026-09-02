@@ -16,9 +16,9 @@ export class ToggleRuleActiveInteractor implements IToggleRuleActiveUseCase {
     private readonly presenter: IToggleRuleActivePresenter
   ) {}
 
-  async execute(inputData: ToggleRuleActiveInputData): Promise<void> {
+  async execute(toggleRuleActiveInputData: ToggleRuleActiveInputData): Promise<void> {
     try {
-      const rule = await this.repository.getById(inputData.ruleId);
+      const rule = await this.repository.getById(toggleRuleActiveInputData.ruleId);
       const toggledRule = rule.withActive(!rule.isActive);
       await this.repository.update(toggledRule);
       const outputData = new ToggleRuleActiveOutputData(toggledRule);
@@ -27,7 +27,7 @@ export class ToggleRuleActiveInteractor implements IToggleRuleActiveUseCase {
       this.presenter.present(outputData);
       await this.tabsGateway.reloadMatchingTabs(toggledRule);
     } catch (error) {
-      const errorData = new ToggleRuleActiveErrorOutputData(inputData.ruleId, error);
+      const errorData = new ToggleRuleActiveErrorOutputData(toggleRuleActiveInputData.ruleId, error);
       this.presenter.presentError(errorData);
     }
   }

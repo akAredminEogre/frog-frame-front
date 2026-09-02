@@ -1,0 +1,63 @@
+import { ImportRulesJsonInputData } from 'src/application-business-rules/dto/input/ImportRulesJsonInputData';
+import { ImportRulesJsonErrorOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonErrorOutputData';
+import { ImportRulesJsonOutputData } from 'src/application-business-rules/dto/output/ImportRulesJsonOutputData';
+import {
+  IImportRulesJsonPresenter,
+  ImportRulesJsonInteractor,
+} from 'src/application-business-rules/interactors/ImportRulesJsonInteractor';
+import { IRewriteRuleRepository } from 'src/application-business-rules/ports/gateway/IRewriteRuleRepository';
+import { IFileTextReader } from 'src/application-business-rules/ports/services/IFileTextReader';
+import { IJsonParser } from 'src/application-business-rules/ports/services/IJsonParser';
+import { ImportFileSize } from 'src/enterprise-business-rules/value-objects/ImportFileSize';
+import {
+  IImportRulesJsonController,
+  IImportRulesJsonControllerFactory,
+  ImportErrorCallback,
+  ImportSuccessCallback,
+} from 'src/interface-adapters/factories/IImportRulesJsonControllerFactory';
+
+/**
+ * ImportRulesJsonコントローラーを生成するFactory
+ * ADR-005: ReactコールバックをPresenterに注入するためのFactoryパターン
+ */
+export class ImportRulesJsonControllerFactory implements IImportRulesJsonControllerFactory {
+  constructor(
+    private readonly repository: IRewriteRuleRepository,
+    private readonly jsonParser: IJsonParser,
+    private readonly fileTextReader: IFileTextReader
+  ) {}
+
+  create(
+    onSuccess: ImportSuccessCallback,
+    onError: ImportErrorCallback
+  ): IImportRulesJsonController {
+    const presenter: IImportRulesJsonPresenter = {
+      present(output: ImportRulesJsonOutputData): void {
+        onSuccess(`${output.importedCount}件のルールをインポートしました`);
+      },
+      presentError(errorData: ImportRulesJsonErrorOutputData): void {
+        onError(errorData.message);
+      },
+    };
+
+    const interactor = new ImportRulesJsonInteractor(
+      this.repository,
+      presenter,
+      this.jsonParser
+    );
+
+    return {
+      importRulesJson: async (file: File) => {
+        try {
+          // サイズ検査を読取の【前】に実施（早期リジェクト）
+          new ImportFileSize(file.size);
+          const fileText = await this.fileTextReader.readAsText(file);
+          return interactor.importRulesJson(new ImportRulesJsonInputData(file.size, fileText));
+        } catch (error) {
+          // サイズ超過エラー・読取失敗エラーをPresenter経由で整形表示
+          presenter.presentError(ImportRulesJsonErrorOutputData.fromError(error));
+        }
+      },
+    };
+  }
+}

@@ -1,0 +1,81 @@
+name: ESLint Disable Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# 最小権限化（CodeRabbit PR#405 指摘）: 当ワークフローは PR diff の読み取りのみで足りる
+permissions:
+  contents: read
+
+jobs:
+  check-eslint-disable-diff:
+    name: Check ESLint Disable Comments in PR Diff
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check for eslint-disable in diff
+        run: |
+          BASE=${{ github.event.pull_request.base.sha }}
+          HEAD=${{ github.event.pull_request.head.sha }}
+          DIFF=$(git diff "$BASE" "$HEAD" -- '*.ts' '*.tsx' | grep '^\+' | grep -v '^\+\+\+' || true)
+          if echo "$DIFF" | grep -qE 'eslint-disable(-next-line|-line)?'; then
+            echo "❌ ESLint ignore comment detected in this PR."
+            echo "Use ignorePattern in ESLint config instead of eslint-disable comments."
+            echo ""
+            echo "Detected lines:"
+            echo "$DIFF" | grep -E 'eslint-disable(-next-line|-line)?'
+            exit 1
+          else
+            echo "✅ No eslint-disable comments added in this PR."
+          fi
+
+  check-eslint-disable-baseline:
+    name: Check ESLint Disable Baseline Count
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Count eslint-disable occurrences
+        id: count
+        run: |
+          COUNT=$(grep -r "eslint-disable" --include="*.ts" --include="*.tsx" . --exclude-dir=node_modules | wc -l || true)
+          echo "current_count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "Current eslint-disable count: $COUNT"
+
+      - name: Read baseline
+        id: baseline
+        run: |
+          if [ -f ".eslint-disable-baseline" ]; then
+            BASELINE=$(grep -E '^[0-9]+$' .eslint-disable-baseline | head -n 1)
+            if [ -z "$BASELINE" ]; then
+              echo "❌ .eslint-disable-baseline に数値行が見つからない"
+              exit 1
+            fi
+            echo "baseline_count=$BASELINE" >> "$GITHUB_OUTPUT"
+            echo "Baseline count: $BASELINE"
+          else
+            echo "baseline_count=0" >> "$GITHUB_OUTPUT"
+            echo "No baseline file found, treating baseline as 0"
+          fi
+
+      - name: Fail if count exceeds baseline
+        run: |
+          CURRENT=${{ steps.count.outputs.current_count }}
+          BASELINE=${{ steps.baseline.outputs.baseline_count }}
+          echo "Current: $CURRENT, Baseline: $BASELINE"
+          if [ "$CURRENT" -gt "$BASELINE" ]; then
+            echo "❌ eslint-disable count ($CURRENT) exceeds baseline ($BASELINE)."
+            echo "Do not add new eslint-disable comments. Use ignorePattern in ESLint config instead."
+            exit 1
+          else
+            echo "✅ eslint-disable count ($CURRENT) is within baseline ($BASELINE)."
+          fi

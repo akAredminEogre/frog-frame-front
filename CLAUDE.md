@@ -8,7 +8,7 @@
 
 - **主要技術スタック**: TypeScript、React、WXT（Chrome拡張機能フレームワーク）
 - **アーキテクチャ**: Clean Architecture + DDD
-- **DIコンテナ**: tsyringe（reflect-metadata使用）
+- **DIコンテナ**: awilix（createContainer による手動登録）
 - **テスト**: Vitest（ユニットテスト）、Playwright（E2Eテスト）
 - **開発環境**: Dockerベースの開発環境
 

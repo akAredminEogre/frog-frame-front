@@ -14,8 +14,10 @@ import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/
 import { container } from 'src/frameworks-and-drivers/di/container';
 import { DeleteRuleUI } from 'src/frameworks-and-drivers/ui/components/organisms/DeleteRuleUI';
 import { ExportRulesJsonUI } from 'src/frameworks-and-drivers/ui/components/organisms/ExportRulesJsonUI';
+import { ImportRulesJsonUI } from 'src/frameworks-and-drivers/ui/components/organisms/ImportRulesJsonUI/ImportRulesJsonUI';
 import { useDeleteRule } from 'src/frameworks-and-drivers/ui/hooks/useDeleteRule';
 import { useExportRulesJson } from 'src/frameworks-and-drivers/ui/hooks/useExportRulesJson';
+import { useImportRulesJson } from 'src/frameworks-and-drivers/ui/hooks/useImportRulesJson';
 import { IToggleRuleActiveControllerFactory } from 'src/interface-adapters/factories/IToggleRuleActiveControllerFactory';
 
 function RulesApp() {
@@ -24,6 +26,22 @@ function RulesApp() {
   const [error, setError] = useState<string | null>(null);
   const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
   const [toggleError, setToggleError] = useState<{ ruleId: number; message: string } | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const loadRules = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
+      const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
+      const loadedRules = await getAllRulesUseCase.execute();
+      setRules(loadedRules);
+    } catch (err) {
+      setError('ルールの読み込みに失敗しました: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const onDeleteSuccess = useCallback((ruleId: number) => {
     setRules((prevRules) => prevRules.filter((r) => r.id !== ruleId));
@@ -39,12 +57,29 @@ function RulesApp() {
     dismissDeleteError,
   } = useDeleteRule(onDeleteSuccess);
 
+  const onImportSuccess = useCallback(() => {
+    setRefreshKey((k) => k + 1);
+  }, []);
+
+  const {
+    handleFileSelect,
+    isImporting,
+    importError,
+    importSuccess,
+    dismissImportError,
+    dismissImportSuccess,
+  } = useImportRulesJson(onImportSuccess);
+
   const {
     exportRulesJson,
     isExporting,
     exportError,
     dismissExportError,
   } = useExportRulesJson();
+
+  const handleDeleteGuarded = useCallback((ruleId: number) => {
+    if (!isImporting) handleDelete(ruleId);
+  }, [isImporting, handleDelete]);
 
   const toggleController = useMemo(() => {
     const factory = container.resolve<IToggleRuleActiveControllerFactory>('IToggleRuleActiveControllerFactory');
@@ -61,22 +96,8 @@ function RulesApp() {
   }, []);
 
   useEffect(() => {
-    const loadRules = async () => {
-      try {
-        setLoading(true);
-        const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
-        const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
-        const loadedRules = await getAllRulesUseCase.execute();
-        setRules(loadedRules);
-      } catch (err) {
-        setError('ルールの読み込みに失敗しました: ' + (err instanceof Error ? err.message : String(err)));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadRules();
-  }, []);
+    void loadRules();
+  }, [loadRules, refreshKey]);
 
   if (loading) {
     return (
@@ -93,20 +114,7 @@ function RulesApp() {
           message={error}
           onRetry={() => {
             setError(null);
-            setLoading(true);
-            const loadRules = async () => {
-              try {
-                const repository = container.resolve<IRewriteRuleRepository>('IRewriteRuleRepository');
-                const getAllRulesUseCase = new GetAllRewriteRulesUseCase(repository);
-                const loadedRules = await getAllRulesUseCase.execute();
-                setRules(loadedRules);
-              } catch (err) {
-                setError('ルールの読み込みに失敗しました: ' + (err instanceof Error ? err.message : String(err)));
-              } finally {
-                setLoading(false);
-              }
-            };
-            loadRules();
+            void loadRules();
           }}
         />
       </div>
@@ -114,12 +122,14 @@ function RulesApp() {
   }
 
   const handleEdit = async (ruleId: string | number) => {
+    if (isImporting) return;
     const chromeTabsService = container.resolve<IChromeTabsService>('IChromeTabsService');
     const openRuleEditPageUseCase = new OpenRuleEditPageUseCase(chromeTabsService);
     await openRuleEditPageUseCase.execute(ruleId);
   };
 
   const handleToggle = async (ruleId: number) => {
+    if (isImporting) return;
     if (togglingIds.has(ruleId)) {
       return;
     }
@@ -146,25 +156,38 @@ function RulesApp() {
         />
       )}
 
+      <div className="rules-toolbar">
+        <ImportRulesJsonUI
+          onImportClick={(file) => { void handleFileSelect(file); }}
+          isImporting={isImporting}
+          importError={importError}
+          importSuccess={importSuccess}
+          onDismissError={dismissImportError}
+          onDismissSuccess={dismissImportSuccess}
+        />
+
+        {rules.length !== 0 && (
+          <ExportRulesJsonUI
+            onExport={() => { void exportRulesJson(); }}
+            isExporting={isExporting}
+            exportError={exportError}
+            onDismissError={dismissExportError}
+          />
+        )}
+      </div>
+
       {rules.length === 0 ? (
         <EmptyStateMessage />
       ) : (
-        <>
-        <ExportRulesJsonUI
-          onExport={() => { void exportRulesJson(); }}
-          isExporting={isExporting}
-          exportError={exportError}
-          onDismissError={dismissExportError}
-        />
         <RulesTable
           rules={rules}
           onEdit={handleEdit}
           onToggle={handleToggle}
-          onDelete={handleDelete}
+          onDelete={handleDeleteGuarded}
           togglingIds={togglingIds}
           deletingIds={deletingIds}
+          isImporting={isImporting}
         />
-        </>
       )}
 
       <div className="footer" data-testid="rules-footer">

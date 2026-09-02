@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 import RuleTableRow from 'src/frameworks-and-drivers/ui/components/molecules/RuleTableRow/RuleTableRow';
 
 const meta: Meta<typeof RuleTableRow> = {
@@ -46,7 +47,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     rule: new RewriteRule(
-      1,
+      createRuleId(1),
       '旧文字列',
       '新文字列',
       'https://example.com',
@@ -59,7 +60,7 @@ export const Default: Story = {
 export const WithRegex: Story = {
   args: {
     rule: new RewriteRule(
-      2,
+      createRuleId(2),
       '\\d{4}-\\d{2}-\\d{2}',
       '日付',
       'https://example.com/api',
@@ -72,7 +73,7 @@ export const WithRegex: Story = {
 export const LongUrl: Story = {
   args: {
     rule: new RewriteRule(
-      3,
+      createRuleId(3),
       'oldText',
       'newText',
       'https://example.com/very/long/url/pattern/that/exceeds/thirty/characters',
@@ -85,7 +86,7 @@ export const LongUrl: Story = {
 export const EmptyUrlPattern: Story = {
   args: {
     rule: new RewriteRule(
-      4,
+      createRuleId(4),
       'find',
       'replace',
       '',
@@ -98,7 +99,7 @@ export const EmptyUrlPattern: Story = {
 export const JapaneseContent: Story = {
   args: {
     rule: new RewriteRule(
-      5,
+      createRuleId(5),
       'こんにちは',
       'おはよう',
       'https://ja.example.com',
@@ -111,7 +112,7 @@ export const JapaneseContent: Story = {
 export const LongStrings: Story = {
   args: {
     rule: new RewriteRule(
-      6,
+      createRuleId(6),
       'This is a very long old string that might be displayed in the table row',
       'This is a very long new string that might be displayed in the table row',
       'https://example.com/articles',
@@ -124,7 +125,7 @@ export const LongStrings: Story = {
 export const InactiveRule: Story = {
   args: {
     rule: new RewriteRule(
-      7,
+      createRuleId(7),
       'disabled',
       'rule',
       'https://example.com',
@@ -137,7 +138,7 @@ export const InactiveRule: Story = {
 export const Deleting: Story = {
   args: {
     rule: new RewriteRule(
-      8,
+      createRuleId(8),
       'deleting',
       'rule',
       'https://example.com',
@@ -151,7 +152,7 @@ export const Deleting: Story = {
 export const Toggling: Story = {
   args: {
     rule: new RewriteRule(
-      9,
+      createRuleId(9),
       'toggling',
       'rule',
       'https://example.com',

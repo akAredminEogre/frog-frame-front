@@ -66,11 +66,19 @@ h1 {
   color: #5a6c7d;
 }
 
-/* エクスポートボタンコンテナ */
-.export-button-container {
+/* ルール操作ツールバー（インポート・エクスポートボタンを横並び配置） */
+.rules-toolbar {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
+}
+
+/* インポート・エクスポートボタンコンテナ（ツールバー内の各ボタンラッパー） */
+.import-button-container,
+.export-button-container {
+  display: flex;
 }
 
 /* ルール一覧テーブル */

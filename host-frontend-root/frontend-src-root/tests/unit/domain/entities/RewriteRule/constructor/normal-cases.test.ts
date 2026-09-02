@@ -8,10 +8,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { RewriteRule } from 'src/enterprise-business-rules/entities/RewriteRule/RewriteRule';
+import { createRuleId } from 'src/enterprise-business-rules/value-objects/ids/RuleId';
 
 describe('RewriteRule.constructor - 正常系', () => {
   it('should create RewriteRule instance with required parameters', () => {
-    const rule = new RewriteRule(1, 'old', 'new', '');
+    const rule = new RewriteRule(createRuleId(1), 'old', 'new', '');
 
     expect(rule.id).toBe(1);
     expect(rule.oldString).toBe('old');
@@ -22,7 +23,7 @@ describe('RewriteRule.constructor - 正常系', () => {
   });
 
   it('should create RewriteRule instance with all parameters', () => {
-    const rule = new RewriteRule(1, 'old', 'new', 'https://example.com', true);
+    const rule = new RewriteRule(createRuleId(1), 'old', 'new', 'https://example.com', true);
 
     expect(rule.id).toBe(1);
     expect(rule.oldString).toBe('old');
@@ -33,19 +34,19 @@ describe('RewriteRule.constructor - 正常系', () => {
   });
 
   it('should set isRegex to false by default', () => {
-    const rule = new RewriteRule(1, 'old', 'new', 'https://example.com');
+    const rule = new RewriteRule(createRuleId(1), 'old', 'new', 'https://example.com');
     
     expect(rule.isRegex).toBe(false);
   });
 
   it('should set isActive to true by default', () => {
-    const rule = new RewriteRule(1, 'old', 'new', 'https://example.com');
+    const rule = new RewriteRule(createRuleId(1), 'old', 'new', 'https://example.com');
     
     expect(rule.isActive).toBe(true);
   });
 
   it('should set isActive to false when explicitly specified', () => {
-    const rule = new RewriteRule(1, 'old', 'new', 'https://example.com', false, false);
+    const rule = new RewriteRule(createRuleId(1), 'old', 'new', 'https://example.com', false, false);
     
     expect(rule.isActive).toBe(false);
   });
