@@ -8,11 +8,14 @@ project:
   language: "typescript"
   frameworks: []
 
-# ai_command は codd upstream 既定値のまま維持（PyPI codd-dev 3.37.0 の
-# codd/templates/codd.yaml.tmpl:11 由来・cmd_2616 R1 裁定=upstream既定は維持）。
-# 本リポでは codd scaffold/generate/repair/extract --ai は使用禁止のため
-# このコマンドが実行されることはない（CLAUDE.md「codd 使用規約」参照）。
-ai_command: "claude --print --permission-mode bypassPermissions --dangerously-skip-permissions --model claude-opus-4-8 --effort max --tools \"\""
+# ai_command から危険フラグ（--permission-mode bypassPermissions /
+# --dangerously-skip-permissions）を除去（殿裁可 cmd_2616 R1・2026-09-02＝
+# 防御多重化によるnull化）。CLAUDE.md 使用規約は技術的強制力を持たぬため、
+# 出所（upstream 既定）不問で設定側からも危険フラグを一切コミットしない。
+# 本リポでは codd scaffold/generate/repair/extract --ai は使用禁止のため当
+# コマンドは実行経路に乗らない（inert）が、万一 generate/repair が誤実行され
+# ても危険フラグは発火しない（CLAUDE.md「codd 使用規約」参照）。
+ai_command: "claude --print --model claude-opus-4-8 --effort max --tools \"\""
 
 # codex_app_server:
 #   enabled: false
@@ -99,7 +102,7 @@ ci:
   provider: github_actions   # github_actions | gitlab_ci | none
   # GitHub Actions loads BOTH .yml and .yaml; the default spans both (comma-
   # separated union). Narrow to a single pattern to scope to one extension.
-  workflow_glob: .github/workflows/*.yml,.github/workflows/*.yaml
+  workflow_glob: .github/workflows/*.yml
   required_triggers:
     - push
     - pull_request
